@@ -40,6 +40,9 @@ public class QuestionFactionMemberBo implements Serializable {
     /**职务**varchar(64)**/
     private String duty;
 
+    /**等级**varchar(64)**/
+    private String memberGrade;
+
     /**回答次数**int(11)**/
     private Integer answerNum;
 
@@ -175,5 +178,13 @@ public class QuestionFactionMemberBo implements Serializable {
 
     public void setIsAttention(Integer isAttention) {
         this.isAttention = isAttention;
+    }
+
+    public String getMemberGrade() {
+        return memberGrade;
+    }
+
+    public void setMemberGrade(String memberGrade) {
+        this.memberGrade = memberGrade;
     }
 }

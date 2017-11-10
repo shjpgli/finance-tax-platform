@@ -4,9 +4,10 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryActivityprizeMapper">
 <insert id="insert" parameterType="com.abc12366.uc.model.LotteryActivityprize">
 insert into uc_lottery_activityprize(
-id,activityId,lotteryId,val1,description,status,createTime,lastTime,startTime,endTime,luck,balance,amount
+id,activityId,lotteryId,val1,description,status,createTime,lastTime,startTime,endTime,luck,balance,amount,timeStock,timeCount,timeDay
 )values(
-#{id},#{activityId},#{lotteryId},#{val1},#{description},#{status},#{createTime},#{lastTime},#{startTime},#{endTime},#{luck},#{balance}),#{amount}))
+#{id},#{activityId},#{lotteryId},#{val1},#{description},#{status},#{createTime},#{lastTime},#{startTime},#{endTime},#{luck},#{balance},#{amount}
+,#{timeStock},#{timeCount},#{timeDay})
 </insert>
 <update id="update" parameterType="com.abc12366.uc.model.LotteryActivityprize">
 update  uc_lottery_activityprize 
@@ -22,6 +23,9 @@ update  uc_lottery_activityprize
     <if test="amount!=null">amount=#{amount},</if>
     <if test="luck!=null">luck=#{luck},</if>
     <if test="startTime!=null">startTime=#{startTime},</if>
+    <if test="timeStock!=null">timeStock=#{timeStock},</if>
+    <if test="timeCount!=null">timeCount=#{timeCount},</if>
+    <if test="timeDay!=null">timeDay=#{timeDay},</if>
     <if test="endTime!=null">endTime=#{endTime}</if>
 </set>
 where id=#{id}

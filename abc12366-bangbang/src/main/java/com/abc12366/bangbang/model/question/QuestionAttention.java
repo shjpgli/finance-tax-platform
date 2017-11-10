@@ -22,9 +22,13 @@ public class QuestionAttention implements Serializable {
 	/**关注时间**datetime**/
 	private java.util.Date attentionTime;
 
+    /**是否已读**int(1)**/
+    private Integer isRead;
 
 
-	public void setAttentionId(String attentionId){
+
+
+    public void setAttentionId(String attentionId){
 		this.attentionId = attentionId;
 	}
 
@@ -56,4 +60,11 @@ public class QuestionAttention implements Serializable {
 		return this.attentionTime;
 	}
 
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
+    }
 }

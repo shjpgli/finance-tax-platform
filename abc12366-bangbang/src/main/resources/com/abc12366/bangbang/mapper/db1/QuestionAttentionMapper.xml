@@ -18,9 +18,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionAttention">
 		 INSERT INTO bb_question_attention
- 		(attentionId,attentionUserId,userId,attentionTime) 
+ 		(attentionId,attentionUserId,userId,isRead,attentionTime)
 		 VALUES 
- 		(#{attentionId},#{attentionUserId},#{userId},#{attentionTime}) 
+ 		(#{attentionId},#{attentionUserId},#{userId},#{isRead},#{attentionTime})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -84,5 +84,10 @@
 			 attentionTime = #{attentionTime}
 		 WHERE attentionId = #{attentionId}
 	</update>
+
+    <!-- 修 改 为已读-->
+    <update id="updateIsRead" parameterType="java.lang.String">
+        UPDATE bb_question_attention SET isRead = 1 WHERE attentionId = #{attentionId}
+    </update>
 
 </mapper>

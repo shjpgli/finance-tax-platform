@@ -2,10 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
-import com.abc12366.bangbang.model.question.bo.MyQuestionTjBo;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionjbBo;
-import com.abc12366.bangbang.model.question.bo.QuestionryBo;
+import com.abc12366.bangbang.model.question.bo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -82,7 +79,7 @@ public interface QuestionRoMapper {
     /**
      * 我的帮帮
      **/
-    List<MyQuestionTjBo> selectMybangbang(String userId);
+    MyQuestionTjBo selectMybangbang(String userId);
 
     /**
      * 查询我的提问
@@ -103,5 +100,10 @@ public interface QuestionRoMapper {
      * 我管理的话题
      **/
     List<QuestionBo> selectMyManageQuesList(String userId);
+
+    /**
+     * 我的动态
+     **/
+    List<QuestionDtBo> selectQcDtList(String userId);
 
 }

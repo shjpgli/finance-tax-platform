@@ -2,6 +2,7 @@ package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.mapper.db2.QuestionTagRoMapper;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
+import com.abc12366.bangbang.model.question.QuestionInvite;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -190,9 +192,9 @@ public class QuestionController {
      * 问题新增
      */
     @PostMapping
-    public ResponseEntity save(@Valid @RequestBody QuestionBo questionBo) {
+    public ResponseEntity save(@Valid @RequestBody QuestionBo questionBo, HttpServletRequest request) {
         //新增问题信息
-        questionBo = questionService.save(questionBo);
+        questionBo = questionService.save(questionBo,request);
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
 
@@ -351,16 +353,9 @@ public class QuestionController {
      * 我的帮帮
      */
     @GetMapping(path = "/selectMybangbang/{userId}")
-    public ResponseEntity selectMybangbang(@PathVariable String userId,
-                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}", userId, page, size);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<MyQuestionTjBo> questionBoList = questionService.selectMybangbang(userId);
-        return (questionBoList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
-                        ()));
+    public ResponseEntity selectMybangbang(@PathVariable String userId) {
+        MyQuestionTjBo myQuestionTjBo = questionService.selectMybangbang(userId);
+        return ResponseEntity.ok(Utils.kv("data", myQuestionTjBo));
     }
 
     /**
@@ -412,4 +407,31 @@ public class QuestionController {
         questionTagListBo = questionService.updateQuesTag(questionTagListBo);
         return ResponseEntity.ok(Utils.kv("data", questionTagListBo));
     }
+
+    /**
+     * 更新问题为已读
+     */
+    @PutMapping(path = "/updateIsRead")
+    public ResponseEntity updateIsRead(@RequestBody QuestionInvite invite) {
+        //更新问题为已读
+        invite = questionService.updateIsRead(invite);
+        return ResponseEntity.ok(Utils.kv("data", invite));
+    }
+
+    /**
+     * 查询我的动态
+     */
+    @GetMapping(path = "/selectQcDtList/{userId}")
+    public ResponseEntity selectQcDtList(@PathVariable String userId,
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}", userId, page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionDtBo> questionBoList = questionService.selectQcDtList(userId);
+        return (questionBoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionBoList, "total", ((Page) questionBoList).getTotal
+                        ()));
+    }
+
 }

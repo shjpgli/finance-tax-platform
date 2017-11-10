@@ -4,10 +4,9 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
 import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.bo.TradeBillBO;
-import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.order.TradeLogService;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
-import com.abc12366.uc.util.DataUtils;
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import org.slf4j.Logger;
@@ -42,7 +41,11 @@ public class PayReturnController {
     @Autowired
     private OrderService orderService;
 
-    //uc支付宝回调信息签名校验
+    /**
+     * uc支付宝回调信息签名校验
+     * @param params  参数
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PostMapping("/validate")
     public ResponseEntity validate(@RequestBody Map<String, String> params) {
@@ -55,7 +58,11 @@ public class PayReturnController {
         }
     }
 
-    //UC前段回调更新支付状态，订单状态
+    /**
+     * UC前段回调更新支付状态，订单状态
+     * @param request  上下文
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @RequestMapping("/alipay")
     public ResponseEntity aliPayReturn(HttpServletRequest request) {
@@ -119,28 +126,32 @@ public class PayReturnController {
                     tradeLogUpdate.setPayMethod("ALIPAY");
                     tradeLogService.update(tradeLogUpdate);
                 } else {
-                    TradeLog tradeLog = new TradeLog();
-                    tradeLog.setTradeNo(out_trade_no);
-                    tradeLog.setAliTrandeNo(trade_no);
-                    tradeLog.setTradeNo(DataUtils.getJYLSH());
-                    tradeLog.setTradeStatus("1");
-                    tradeLog.setTradeType("1");
-                    tradeLog.setAmount(Double.parseDouble(total_amount));
-                    tradeLog.setTradeTime(new SimpleDateFormat(
-                            "yyyy-MM-dd HH:mm:ss").parse(date));
-                    Timestamp now = new Timestamp(new Date().getTime());
-                    tradeLog.setCreateTime(now);
-                    tradeLog.setLastUpdate(now);
-                    tradeLog.setPayMethod("ALIPAY");
-                    tradeLogService.insertTradeLog(tradeLog);
-                    LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
+                    TradeBillBO data = new TradeBillBO();
+                    data.setTradeNo(out_trade_no);
+                    TradeLog log = tradeLogService.selectOne(data);
+                    if(log != null){
+                        TradeLog tradeLog = new TradeLog();
+                        tradeLog.setTradeNo(out_trade_no);
+                        tradeLog.setAliTrandeNo(trade_no);
+                        tradeLog.setTradeStatus("1");
+                        tradeLog.setTradeType("1");
+                        tradeLog.setAmount(Double.parseDouble(total_amount));
+                        tradeLog.setTradeTime(new SimpleDateFormat(
+                                "yyyy-MM-dd HH:mm:ss").parse(date));
+                        Timestamp now = new Timestamp(new Date().getTime());
+                        tradeLog.setCreateTime(now);
+                        tradeLog.setLastUpdate(now);
+                        tradeLog.setPayMethod("ALIPAY");
+                        tradeLogService.update(tradeLog);
+                        LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
+                        OrderPayBO orderPayBO = new OrderPayBO();
+                        orderPayBO.setTradeNo(out_trade_no);
+                        orderPayBO.setIsPay(2);
+                        orderPayBO.setPayMethod("ALIPAY");
+                        orderService.paymentOrder(orderPayBO,"RMB", request);
+                        LOGGER.info("更新订单状态:{}", out_trade_no);
+                    }
 
-                    OrderPayBO orderPayBO = new OrderPayBO();
-                    orderPayBO.setTradeNo(out_trade_no);
-                    orderPayBO.setIsPay(2);
-                    orderPayBO.setPayMethod("ALIPAY");
-                    orderService.paymentOrder(orderPayBO,"RMB", request);
-                    LOGGER.info("更新订单状态:{}", out_trade_no);
                 }
             }
             return ResponseEntity.ok(Utils.kv("data", "OK"));

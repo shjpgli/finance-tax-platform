@@ -1,16 +1,20 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db1.WxMsgMapper;
+import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.mapper.db2.WxMsgRoMapper;
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.weixin.bo.message.*;
 import com.abc12366.uc.model.weixin.bo.person.WxPerson;
 import com.abc12366.uc.model.weixin.bo.template.ImgMaterial;
 import com.abc12366.uc.service.IWxMsgService;
+import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.util.wx.MsgMap;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
@@ -53,6 +57,12 @@ public class WxMsgServiceImpl implements IWxMsgService {
     
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private TodoTaskService todoTaskService;
+    
+    @Autowired
+    private UserRoMapper userRoMapper;
 
     @Override
     public ImgMaterial uploadWxImag(FileContent fileContent) {
@@ -94,20 +104,32 @@ public class WxMsgServiceImpl implements IWxMsgService {
                     int eventCode = MsgMap.getEventType(map.get("Event"));
                     switch (eventCode) {
                         case 0://关注
-                        	if(map.get("Ticket")!=null){//扫公众号生成二维码关注
+                        	/*if(map.get("Ticket")!=null){//扫公众号生成二维码关注
                         		String eventKey=map.get("EventKey");
                         		String[] infos=eventKey.split(",");
                         		LOGGER.info("用户扫码关注(EventKey):" +eventKey);
                         		if("qrscene_AA".equals(infos[0])){//用户关注以及自动绑定
                         			smbd(map,infos);
                         		}
-                        	}else{//其他渠道关注
+                        	}else{*///其他渠道关注
+                        	    //关注公众号，完成任务
+		                       	UserBO userBO= userRoMapper.selectByopenid(map.get("FromUserName"));
+		                       	if(userBO!=null){
+		                       	     LOGGER.info("用户关注公众号，做任务，USERID:"+userBO.getId());
+		                       		 todoTaskService.doTask(userBO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
+		                       	}
+                        	
+                        	
                         		ReturnMsg newmsg = getReMsgOneBysetting("0");
                                 if (newmsg != null) {
                                     return newmsg.toWxXml( map.get("FromUserName"),map.get("ToUserName"), System
     										.currentTimeMillis());
                                 }
-                        	}
+                        	//}
+                        	
+                        	
+                        	 
+                        	
                         case 1://取消关注
 
                         case 2://微信已关注公众号并扫码

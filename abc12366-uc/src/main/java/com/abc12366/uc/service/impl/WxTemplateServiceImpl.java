@@ -6,7 +6,9 @@ import com.abc12366.uc.mapper.db1.TemplateMapper;
 import com.abc12366.uc.mapper.db2.TemplateRoMapper;
 import com.abc12366.uc.mapper.db2.WxGzhRoMapper;
 import com.abc12366.uc.model.weixin.BaseWxRespon;
+import com.abc12366.uc.model.weixin.bo.template.QTemplateSendLog;
 import com.abc12366.uc.model.weixin.bo.template.Template;
+import com.abc12366.uc.model.weixin.bo.template.TemplateSendLog;
 import com.abc12366.uc.model.weixin.bo.template.WxTemplates;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.util.wx.WechatUrl;
@@ -90,6 +92,12 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
         List<Template> templates = templateRoMapper.selectList(template);
         return templates;
     }
+    
+    
+    public List<QTemplateSendLog> wxTemplateSendList(int page, int size,Map<String,Object> map){
+    	 PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+    	 return templateRoMapper.selectLog(map);
+    }
 
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity templateSend(String temp_id, Map<String, String> dataList) {
@@ -97,10 +105,15 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
 		if(info==null){
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "没有找到对应的模板消息!"));
 		}else{
+			String msg=info.toSendJson(dataList);
 			Map<String, String> headparamters = new HashMap<String, String>();
 			headparamters.put("access_token", WxGzhClient.getInstanceToken());
-			BaseWxRespon wxRespon=WxConnectFactory.post(WechatUrl.TEMPLATEMSG_SEND, headparamters,
-					info.toSendJson(dataList), BaseWxRespon.class);
+			BaseWxRespon wxRespon=WxConnectFactory.post(WechatUrl.TEMPLATEMSG_SEND, headparamters,msg, BaseWxRespon.class);
+			
+			//记录微信模板消息发送日志
+			Date now =new Date();
+			templateMapper.insertLog(new TemplateSendLog(Utils.uuid(), temp_id, dataList.get("userId"), dataList.get("openId"), msg, wxRespon.getErrcode().toString(), wxRespon.getErrmsg(), now, now));
+			
 			if(wxRespon.getErrcode()!=0){
 				return ResponseEntity.ok(Utils.bodyStatus(9999, wxRespon.getErrmsg()));
 			}else{

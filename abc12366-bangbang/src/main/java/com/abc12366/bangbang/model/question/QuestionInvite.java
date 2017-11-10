@@ -19,6 +19,9 @@ public class QuestionInvite implements Serializable {
 	/**邀请用户ID**varchar(64)**/
 	private String userId;
 
+    /**是否已读**int(1)**/
+    private Integer isRead;
+
 
 
 	public void setId(String id){
@@ -45,4 +48,11 @@ public class QuestionInvite implements Serializable {
 		return this.userId;
 	}
 
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
+    }
 }

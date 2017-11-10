@@ -39,4 +39,30 @@
     AND mu.createTime > date_sub(now(), interval '181 0:0:0' day_second)
     ORDER BY mu.createTime DESC
     </select>
+
+    <select id="selectListByUsername" parameterType="java.util.Map"
+            resultType="com.abc12366.message.model.bo.UserMessageAdmin">
+        SELECT
+        mu.id, mu.fromUserId, mu.toUserId, mu.content, mu.status, mu.type, mu.createTime, mu.lastUpdate,
+        u1.username fromuser,u1.userPicturePath fromUserPic,u2.username touser,u2.userPicturePath toUserPic
+        FROM msg_user_message mu join msg_uc_user u1 on mu.fromUserId=u1.id join msg_uc_user u2 on mu.toUserId=u2.id
+        WHERE 1=1
+        <if test="fromuser!=null and fromuser!=''">AND u1.username = #{fromuser}</if>
+        <if test="touser!=null and touser!=''">AND u2.username = #{touser}</if>
+        <if test="status!=null and status!=''">AND mu.status = #{status}</if>
+        <if test="startDate!=null">and <![CDATA[  mu.createTime >= #{startDate}]]></if>
+        <if test="endDate!=null">and <![CDATA[  mu.createTime < #{endDate}]]></if>
+        ORDER BY mu.createTime DESC
+    </select>
+
+    <!-- 只查询半年内的记录 -->
+    <select id="unreadCount" parameterType="com.abc12366.message.model.UserMessage"
+            resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM msg_user_message
+        WHERE toUserId = #{userId}
+        <if test="type != null and type != ''">AND type = #{type}</if>
+        AND status = '1'
+        AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
+    </select>
 </mapper>

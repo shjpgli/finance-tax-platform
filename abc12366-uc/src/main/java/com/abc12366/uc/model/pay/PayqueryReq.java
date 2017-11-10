@@ -1,14 +1,18 @@
 package com.abc12366.uc.model.pay;
 
 import java.io.Serializable;
-
+/**
+ * 二维码请求
+ * @author zhushuai 2017-11-6
+ *
+ */
 public class PayqueryReq implements Serializable{
      /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String out_trade_no;
-    private String trade_no;
+	private String out_trade_no; //订单号
+    private String trade_no; //交易流水
 	public String getOut_trade_no() {
 		return out_trade_no;
 	}

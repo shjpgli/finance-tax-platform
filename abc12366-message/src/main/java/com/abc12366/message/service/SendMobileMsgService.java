@@ -12,5 +12,5 @@ public interface SendMobileMsgService {
 
     void sendMsgByUppyun(MobileMsgBO mobileMsgBO);
 
-    void sendMsgByAliyun(MobileMsgBO mobileMsgBO);
+    //void sendMsgByAliyun(MobileMsgBO mobileMsgBO);
 }

@@ -39,11 +39,16 @@ public interface InvoiceService {
 
     InvoiceBO selectUserInvoice(Invoice invoice);
 
+    /**
+     * 管理员开票、拒绝开票
+     * @param invoiceCheckBO
+     * @param request
+     */
     void billing(InvoiceCheckBO invoiceCheckBO, HttpServletRequest request);
 
     List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice);
 
-    void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId);
+    void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId, HttpServletRequest request);
 
     void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList);
 

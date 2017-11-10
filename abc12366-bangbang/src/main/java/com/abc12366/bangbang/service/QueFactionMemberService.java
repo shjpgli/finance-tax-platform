@@ -21,6 +21,8 @@ public interface QueFactionMemberService {
 
     String updateStatus(String memberId, String status);
 
+    String updateDuty(String memberId, String duty);
+
     String delete(String memberId);
 
 }

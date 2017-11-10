@@ -40,21 +40,21 @@ public class DzfpClient {
 	
 	public static final  Double SL=0.06; //税率固定
 	
-	public static final String XSF_NSRSBH=SpringCtxHolder.getProperty("XSF_NSRSBH");
+	public static final String XSF_NSRSBH=SpringCtxHolder.getProperty("XSF_NSRSBH");//消费方纳税人识别号
 	
-	public static final String XSF_MC=SpringCtxHolder.getProperty("XSF_MC");
+	public static final String XSF_MC=SpringCtxHolder.getProperty("XSF_MC");//消费方名称
 	
-	public static final String TXSF_DZDH=SpringCtxHolder.getProperty("TXSF_DZDH");
+	public static final String TXSF_DZDH=SpringCtxHolder.getProperty("TXSF_DZDH");//消费方地址
 	
-	public static final String XSF_YHZH=SpringCtxHolder.getProperty("XSF_YHZH");
+	public static final String XSF_YHZH=SpringCtxHolder.getProperty("XSF_YHZH");//账号
 	
-	public static final String ssl_pwd=SpringCtxHolder.getProperty("SSL_PWD");
+	public static final String ssl_pwd=SpringCtxHolder.getProperty("SSL_PWD"); //证书密码
 	
-    private static String endpoint=SpringCtxHolder.getProperty("ENDPOINT");
+    private static String endpoint=SpringCtxHolder.getProperty("ENDPOINT");//webservice地址
 	
-	private static String namepace=SpringCtxHolder.getProperty("NAMEPACE");
+	private static String namepace=SpringCtxHolder.getProperty("NAMEPACE");//命名空间
 	
-	private static String appid=SpringCtxHolder.getProperty("DZFP_APPID");
+	private static String appid=SpringCtxHolder.getProperty("DZFP_APPID");//商户ID
 	
 	private static InputStream ssl_store =null;
 	

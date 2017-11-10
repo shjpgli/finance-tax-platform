@@ -52,6 +52,9 @@ public class QuestionAnswerBo implements Serializable {
     /**ip**varchar(45)**/
     private String ip;
 
+    /**问题浏览数**int(11)**/
+    private Integer browseNum;
+
     /**回复次数**int(11)**/
     private Integer answerNum;
 
@@ -78,6 +81,9 @@ public class QuestionAnswerBo implements Serializable {
 
     /**邦派ID**/
     private String factionId;
+
+    /**是否已读**int(1)**/
+    private Integer isRead;
 
 
     public void setId(String id){
@@ -263,5 +269,21 @@ public class QuestionAnswerBo implements Serializable {
 
     public void setIsTrample(Integer isTrample) {
         this.isTrample = isTrample;
+    }
+
+    public Integer getBrowseNum() {
+        return browseNum;
+    }
+
+    public void setBrowseNum(Integer browseNum) {
+        this.browseNum = browseNum;
+    }
+
+    public Integer getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(Integer isRead) {
+        this.isRead = isRead;
     }
 }

@@ -1,7 +1,10 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionFactionHonor;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionPhBo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 
@@ -18,6 +21,16 @@ public interface QuestionFactionHonorRoMapper {
 	 * 
 	 **/
 	QuestionFactionHonor selectByPrimaryKey(@Param("id") String id);
+
+    /**
+     * 查询邦派排行
+     **/
+    List<QuestionFactionPhBo> selectList(String honorTime);
+
+    /**
+     * 查询邦派累计排行
+     **/
+    List<QuestionFactionPhBo> selectljList();
 
 
 }

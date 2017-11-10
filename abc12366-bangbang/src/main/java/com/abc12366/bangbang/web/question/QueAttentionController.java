@@ -90,4 +90,16 @@ public class QueAttentionController {
         int count = Integer.parseInt(attentionService.selectExist(id,request));
         return ResponseEntity.ok(Utils.kv("data", count));
     }
+
+    /**
+     * 更新粉丝为已读
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping(path = "/updateIsRead/{id}")
+    public ResponseEntity updateIsRead(@PathVariable("id") String id) {
+        attentionService.updateIsRead(id);
+        return ResponseEntity.ok(Utils.kv("data", id));
+    }
 }

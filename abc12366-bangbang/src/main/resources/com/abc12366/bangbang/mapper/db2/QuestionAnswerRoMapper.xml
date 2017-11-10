@@ -61,9 +61,9 @@
     <!-- 我的回答 -->
     <select id="selectMyAnswerList" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.util.Map">
         SELECT
-        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title,q.browseNum,
+        a.id,	parentId,	questionId,	a.userId,u.userPicturePath,u.nickname,title questionTitle,q.browseNum,
         u1.nickname answerNickname,
-        answerUserId,a.ip,	shortAnswer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
+        answerUserId,a.ip,	shortAnswer,answer,answerImage,	a.status,	a.createTime,	a.lastUpdate,	isAccept,
         a.likeNum,a.commentNum,a.trampleNum,a.reportNum,
         q.browseNum,q.answerNum
         FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
@@ -95,6 +95,14 @@
         count(id)
         FROM bb_question_answer
         WHERE questionId = #{questionId} AND userId = #{userId}
+    </select>
+
+    <!-- 查询问题是否采纳过 -->
+    <select id="selectAcceptCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(id)
+        FROM bb_question_answer
+        WHERE questionId = #{questionId} AND isAccept = 1
     </select>
 
 

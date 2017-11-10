@@ -13,7 +13,7 @@ public class WxMenu extends BaseWxRespon {
      *
      */
     private static final long serialVersionUID = 1L;
-    private Button[] button;
+    private Button[] button; //菜单列表
 
     public Button[] getButton() {
         return button;

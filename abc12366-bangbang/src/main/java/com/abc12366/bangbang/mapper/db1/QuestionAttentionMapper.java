@@ -50,4 +50,11 @@ public interface QuestionAttentionMapper{
 	 **/
 	int updateByPrimaryKey(QuestionAttention record);
 
+    /**
+     *
+     * 修改为已读(根据主键ID)
+     *
+     **/
+    int updateIsRead(@Param("attentionId") String attentionId);
+
 }

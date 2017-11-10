@@ -2,9 +2,11 @@ package com.abc12366.message.web;
 
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BusinessMessageAdmin;
 import com.abc12366.message.service.BusinessMsgService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 /**
  * 业务消息服务
@@ -63,7 +65,32 @@ public class BusinessMsgController {
             List<BusinessMessage> dataList = businessMsgService.selectList(bm, page, size);
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
-            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
+                    "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 查询业务消息未读数量
+     *
+     * @param type     消息类型，默认查询所有类型消息
+     * @param busiType 业务类型，默认查询所有类型
+     * @return 消息未读总数
+     */
+    @GetMapping("/unread/count")
+    public ResponseEntity unreadCount(@RequestParam(value = "type", required = false) String type,
+                                      @RequestParam(value = "busiType", required = false) String busiType) {
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = Utils.getUserId();
+
+        if (!StringUtils.isEmpty(userId)) {
+            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).build();
+            int count = businessMsgService.unreadCount(bm);
+            responseEntity = ResponseEntity.ok(Utils.kv("data", count));
         }
 
         LOGGER.info("{}", responseEntity);
@@ -169,7 +196,7 @@ public class BusinessMsgController {
      * @param data BusinessMessage
      * @return ResponseEntity
      */
-    @PostMapping(path="/system")
+    @PostMapping(path = "/system")
     public ResponseEntity insertBySystem(@Valid @RequestBody BusinessMessage data) {
         LOGGER.info("{}", data);
 
@@ -177,6 +204,57 @@ public class BusinessMsgController {
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 根据用户名查询业务消息列表
+     *
+     * @param type     消息类型
+     * @param busiType 业务类型
+     * @param status   状态
+     * @param page     当前页
+     * @param size     每页大小
+     * @param request  HttpServletRequest
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/username")
+    public ResponseEntity selectListByUsername(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String busiType,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+            HttpServletRequest request) {
+        LOGGER.info("根据用户名查询业务消息列表：username：{}，{},{}", username, page, size);
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", username.trim());
+        map.put("type", type == null ? null : type.trim());
+        map.put("busiType", busiType == null ? null : busiType.trim());
+        map.put("status", status == null ? null : status.trim());
+        if (!StringUtils.isEmpty(startDate)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.StrToDate(startDate));
+            map.put("startDate", calendar.getTime());
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.StrToDate(endDate));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            map.put("endDate", calendar.getTime());
+        }
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        List<BusinessMessageAdmin> dataList = businessMsgService.selectListByUsername(map, page, size);
+
+        if (!StringUtils.isEmpty(dataList) && dataList.size() > 0) {
+            PageInfo<BusinessMessageAdmin> pageInfo = new PageInfo<>(dataList);
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("发送给{}的消息有：{}", username, dataList);
         return responseEntity;
     }
 }

@@ -1,10 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionTipOff;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
-import com.abc12366.bangbang.service.QuestionSysBlockService;
 import com.abc12366.bangbang.service.QuestionTipOffService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -44,8 +41,11 @@ public class QuestionTipOffController {
     /*
     * 修改状态 接口
     */
-    @PutMapping(path = "/changeStatus")
-    public ResponseEntity modifyStatus(@RequestBody QuestionTipOff questionTipOff) {
+    @PutMapping(path = "/{id}/{status}")
+    public ResponseEntity modifyStatus(@PathVariable(value = "id") String id,@PathVariable(value = "status") String status) {
+        QuestionTipOff questionTipOff = new QuestionTipOff();
+        questionTipOff.setId(id);
+        questionTipOff.setStatus(status);
         questionTipOffService.changeStatus(questionTipOff);
         return ResponseEntity.ok(Utils.kv());
     }

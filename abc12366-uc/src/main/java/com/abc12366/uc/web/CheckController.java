@@ -34,41 +34,44 @@ public class CheckController {
 
     /**
      * 用户签到接口
-     * @param check
-     * @return 签到获取的积分值
+     * @param check {@linkplain com.abc12366.uc.model.Check}
+     * @return ResponseEntity 签到获取的积分值
      */
     @PostMapping(path = "/check")
     public ResponseEntity check(@Valid @RequestBody Check check){
-        LOGGER.info("{}", check);
+        LOGGER.info("用户签到：{}", check);
         int points = checkService.check(check);
+        LOGGER.info("用户签到获取的积分：{}", points);
         return ResponseEntity.ok(Utils.kv("data", points));
     }
 
     /**
      * 用户补签接口
-     * @param check
-     * @return
+     * @param check {@linkplain com.abc12366.uc.model.ReCheck}
+     * @return ResponseEntity
      */
     @PostMapping(path = "/recheck")
     public ResponseEntity reCheck(@Valid @RequestBody ReCheck check){
-        LOGGER.info("{}", check);
+        LOGGER.info("用户补签到：{}", check);
         checkService.reCheck(check);
         return ResponseEntity.ok(Utils.kv());
     }
 
     /**
      * 用户签到排行列表
-     * @param year
-     * @param page
-     * @param size
-     * @return
+     * @param year 年份
+     * @param page 页码
+     * @param size 每页数据条数
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.CheckRank}
      */
     @GetMapping(path = "/check/rank")
     public ResponseEntity rankingList(@RequestParam(required = false) String year,
                                         @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        LOGGER.info("获取用户签到排行列表：{}", year);
         List<CheckRank> rankList = checkService.rank(year);
+        LOGGER.info("获取用户签到排行列表返回结果：{}", rankList);
         return (rankList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) rankList, "total", ((Page) rankList).getTotal()));
@@ -76,14 +79,27 @@ public class CheckController {
 
     /**
      * 获取用户的签到情况
-     * @param yearMonth
-     * @param
-     * @return
+     * @param yearMonth 年月：2017-09
+     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.CheckListBO}
      */
     @GetMapping(path = "/check/list")
     public ResponseEntity checklist(@RequestParam(required = true) String yearMonth){
-        LOGGER.info("{}", yearMonth);
+        LOGGER.info("获取用户签到列表{}", yearMonth);
         List<CheckListBO> checkList = checkService.checklist(yearMonth);
+        LOGGER.info("获取用户签到列表{}", checkList);
         return ResponseEntity.ok(Utils.kv("dataList", checkList));
+    }
+
+    /**
+     * 查询用户本年度累计签到天数
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/check/total")
+    public ResponseEntity checkTotal(@RequestParam(required = false) String year){
+        String userId = Utils.getUserId();
+        LOGGER.info("用户获取本年累计签到天数：{},{}", userId, year);
+        int total = checkService.checkTotal(userId, year);
+        LOGGER.info("用户获取本年累计签到天数返回结果：{}", total);
+        return ResponseEntity.ok(Utils.kv("data", total));
     }
 }

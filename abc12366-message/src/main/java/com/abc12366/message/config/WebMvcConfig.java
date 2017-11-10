@@ -53,6 +53,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
+                .excludePathPatterns("/hngs/getpublickey")
+                //.excludePathPatterns("/wsbs/login")
                 .excludePathPatterns("/test");
 
         //前台用户访问拦截器迁移到网关后的
@@ -66,6 +68,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/getcode","/verify","/regis/code")
                 .excludePathPatterns("/mobile/msg")
                 .excludePathPatterns("/business/system")
+                .excludePathPatterns("/hngs/getpublickey","/hngs/get")
+                //.excludePathPatterns("/wsbs/login")
                 .excludePathPatterns("/test");
     }
 }

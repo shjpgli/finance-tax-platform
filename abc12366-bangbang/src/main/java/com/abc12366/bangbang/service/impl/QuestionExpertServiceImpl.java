@@ -56,7 +56,7 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
             questionExpertMapper.insert(questionExpert);
         }catch (Exception e){
             LOGGER.error("QuestionExpertServiceImpl.add():" + e);
-            throw new ServiceException(4503);
+            throw new ServiceException(6390);
         }
     }
 
@@ -67,7 +67,7 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
             questionExpertMapper.updateByPrimaryKeySelective(questionExpert);
         }catch (Exception e){
             LOGGER.error("QuestionExpertServiceImpl.modify():" + e);
-            throw new ServiceException(4503);
+            throw new ServiceException(6391);
         }
     }
 
@@ -77,7 +77,12 @@ public class QuestionExpertServiceImpl implements QuestionExpertService{
             questionExpertMapper.deleteByPrimaryKey(id);
         }catch (Exception e){
             LOGGER.error("QuestionExpertServiceImpl.delete():" + e);
-            throw new ServiceException(4503);
+            throw new ServiceException(6392);
         }
+    }
+
+    @Override
+    public List<QuestionExpertBO> selectListByUserId(String userId) {
+        return questionExpertRoMapper.selectListByUserId(userId);
     }
 }

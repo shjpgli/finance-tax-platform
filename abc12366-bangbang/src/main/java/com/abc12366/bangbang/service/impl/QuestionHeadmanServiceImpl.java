@@ -1,11 +1,14 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionHeadmanClassifyRelMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionHeadmanMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionHeadmanRoMapper;
 import com.abc12366.bangbang.model.question.QuestionHeadman;
 import com.abc12366.bangbang.model.question.QuestionHeadmanClassifyRel;
 import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
 import com.abc12366.bangbang.service.QuestionHeadmanService;
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
 
     @Autowired
     private QuestionHeadmanMapper questionHeadmanMapper;
+
+    @Autowired
+    private QuestionHeadmanRoMapper questionHeadmanRoMapper;
 
 //    @Autowired
 //    private QuestionHeadmanClassifyRelMapper questionHeadmanClassifyRelMapper;
@@ -44,7 +50,14 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         QuestionHeadman headman = new QuestionHeadman();
         BeanUtils.copyProperties(headmanBo, headman);
         headman.setId(Utils.uuid());
-        headman.setUserId(Utils.getUserId());
+        headman.setUserId(UcUserCommon.getUserId());
+        headman.setStatus("apply");
+        int cnt = questionHeadmanRoMapper.selectExist(headman.getUserId());
+        if(cnt >0){
+            //已申请过掌门人，请勿重复申请
+            throw new ServiceException(6192);
+        }
+
         questionHeadmanMapper.insert(headman);
 //        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
 //        for (String classifyId:headmanBo.getClassifyIds()){

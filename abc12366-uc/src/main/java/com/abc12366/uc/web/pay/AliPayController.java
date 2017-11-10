@@ -3,10 +3,12 @@ package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.bo.TradeLogBO;
 import com.abc12366.uc.model.pay.*;
 import com.abc12366.uc.model.pay.bo.AliCodePay;
 import com.abc12366.uc.model.pay.bo.AliRefund;
-import com.abc12366.uc.service.TradeLogService;
+import com.abc12366.uc.service.order.TradeLogService;
+import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.QRCodeUtil;
 import com.alibaba.fastjson.JSON;
@@ -37,7 +39,11 @@ public class AliPayController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AliPayController.class);
 	@Autowired
 	private TradeLogService tradeLogService;
-    
+
+	@Autowired
+	private OrderService orderService;
+
+
 	/**
 	 * 支付宝支付接口,返回支付页面
 	 * @return
@@ -63,17 +69,20 @@ public class AliPayController {
 		}
 		
 	}
-	
-	
+
+
 	/**
 	 * 支付宝支付接口,返回二维码
-	 * @param payReq
+	 * @param payReq 支付内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/paycode")
 	public ResponseEntity aliPayCode(@RequestBody AliCodePay payReq){
 		try {
+			//查询订单库存
+            orderService.selectStock(payReq.getOut_trade_no());
+
 			LOGGER.info("支付宝二维码支付接收信息{}",JSON.toJSONString(payReq));
 			AlipayClient alipayClient = AliPayConfig.getInstance();
 			AlipayTradePrecreateRequest request = new AlipayTradePrecreateRequest();
@@ -101,7 +110,7 @@ public class AliPayController {
 	
 	/**
 	 * 支付宝交易结果查询
-	 * @param payqueryReq
+	 * @param payqueryReq 结果内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -125,10 +134,25 @@ public class AliPayController {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "支付宝支付结果查询"));
 		}
 	}
-	
+
+	/**
+	 * 订单交易结果查询
+	 * @param payqueryReq 查询内容
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/orderpayquery")
+	public ResponseEntity orderPayQuery(PayqueryReq payqueryReq){
+        LOGGER.info("订单交易结果查询{}",payqueryReq);
+        TradeLog data = new TradeLog();
+        data.setAliTrandeNo(payqueryReq.getTrade_no());
+        TradeLogBO tradeLog = tradeLogService.selectByAliNo(data);
+        return ResponseEntity.ok(Utils.kv("data", tradeLog));
+	}
+
 	/**
 	 * 支付宝退款
-	 * @param aliRefund
+	 * @param aliRefund 退款内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -172,8 +196,8 @@ public class AliPayController {
 	
 	/**
 	 * 退款结果查询
-	 * @param out_trade_no
-	 * @param out_request_no
+	 * @param out_trade_no 交易ID
+	 * @param out_request_no 交易流水号
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -200,7 +224,7 @@ public class AliPayController {
 	}
 	/**
 	 * 交易关闭
-	 * @param payqueryReq
+	 * @param payqueryReq 关闭内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -224,7 +248,7 @@ public class AliPayController {
 	
 	/**
 	 * 交易取消
-	 * @param payqueryReq
+	 * @param payqueryReq 取消内容
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -248,7 +272,7 @@ public class AliPayController {
 	
 	/**
 	 * 交易对账单
-	 * @param bill_date
+	 * @param bill_date 对账日期
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")

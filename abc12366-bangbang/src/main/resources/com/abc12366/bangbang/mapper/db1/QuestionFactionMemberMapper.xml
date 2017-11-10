@@ -13,9 +13,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionMember">
 		 INSERT INTO bb_question_faction_member
- 		(memberId,factionId,userId,username,nickname,status,duty,createTime,lastUpdate)
+ 		(memberId,factionId,userId,username,nickname,status,duty,memberGrade,createTime,lastUpdate)
 		 VALUES 
- 		(#{memberId},#{factionId},#{userId},#{username},#{nickname},#{status},#{duty},#{createTime},#{lastUpdate})
+ 		(#{memberId},#{factionId},#{userId},#{username},#{nickname},#{status},#{duty},#{memberGrade},#{createTime},#{lastUpdate})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -42,6 +42,9 @@
 			</if>
              <if test="duty != null">
                  duty,
+             </if>
+             <if test="memberGrade != null">
+                 memberGrade,
              </if>
 			<if test="createTime != null">
 				 createTime,
@@ -72,6 +75,9 @@
 			</if>
              <if test="duty!=null">
                  #{duty},
+             </if>
+             <if test="memberGrade!=null">
+                 #{memberGrade},
              </if>
 			<if test="createTime!=null">
 				 #{createTime},
@@ -104,6 +110,9 @@
              <if test="duty != null">
                  duty = #{duty},
              </if>
+             <if test="memberGrade != null">
+                 memberGrade = #{memberGrade},
+             </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
 			</if>
@@ -125,9 +134,15 @@
 			 nickname = #{nickname},
 			 status = #{status},
 			 duty = #{duty},
+			 memberGrade = #{memberGrade},
 			 createTime = #{createTime},
 			 lastUpdate = #{lastUpdate}
 		 WHERE memberId = #{memberId}
 	</update>
+
+    <update id="updateDuty" parameterType="java.util.Map">
+        UPDATE bb_question_faction_member SET duty = #{duty}
+        where  memberId = #{memberId}
+    </update>
 
 </mapper>

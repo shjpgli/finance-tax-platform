@@ -4,18 +4,13 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.web.BaseController;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.UserReturnBO;
-import com.abc12366.uc.model.bo.VerifyingCodeBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
-import com.abc12366.uc.service.IpService;
-import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -40,10 +35,7 @@ public class AuthController extends BaseController {
     private AuthService authService;
 
     @Autowired
-    private IpService ipService;
-
-    @Autowired
-    private TodoTaskService todoTaskService;
+    private UserService userService;
 
     public AuthController(RestTemplate restTemplate) {
         super(restTemplate);
@@ -59,10 +51,6 @@ public class AuthController extends BaseController {
     @PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) {
         LOGGER.info("{}", registerBO);
-        // 记录用户IP归属
-        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
-            ipService.merge(request.getHeader(Constant.CLIENT_IP));
-        }
 
         //进行手机验证码验证
         VerifyingCodeBO verifyBO = new VerifyingCodeBO();
@@ -82,21 +70,12 @@ public class AuthController extends BaseController {
      * 用户登录方法：用于java做接口调用进行登录
      *
      * @param loginBO LoginBO
-     * @param request HttpServletRequest
      * @return 用户基本信息、用户token、token有效时间
-     * @throws Exception Exception
      */
     @PostMapping(path = "/login")
-    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
+    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO){
         LOGGER.info("{}", loginBO);
-        // 记录用户IP归属
-        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
-            ipService.merge(request.getHeader(Constant.CLIENT_IP));
-        }
-        //如果用户当天定时任务没有完成，就在登录的时候生成
-        todoTaskService.generateAllTodoTaskList(loginBO);
-
-        Map token = authService.login(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+        Map token = authService.login(loginBO, "1");
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
     }
@@ -105,21 +84,12 @@ public class AuthController extends BaseController {
      * 用户登录方法：用于js做接口调用进行登录(此场景多用于移动客户端登录)
      *
      * @param loginBO LoginBO
-     * @param request HttpServletRequest
      * @return 用户基本信息、用户token、token有效时间
-     * @throws Exception Exception
      */
     @PostMapping(path = "/login/js")
-    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) throws Exception {
+    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO) {
         LOGGER.info("{}", loginBO);
-        // 记录用户IP归属
-        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
-            ipService.merge(request.getHeader(Constant.CLIENT_IP));
-        }
-        //如果用户当天定时任务没有完成，就在登录的时候生成
-        todoTaskService.generateAllTodoTaskList(loginBO);
-
-        Map token = authService.loginJs(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+        Map token = authService.login(loginBO, "2");
         LOGGER.info("{}", token);
         return ResponseEntity.ok(Utils.kv("data", token));
     }
@@ -130,30 +100,88 @@ public class AuthController extends BaseController {
      * @param loginBO VerifyingCodeBO
      * @param request HttpServletRequest
      * @return 用户基本信息、用户token、token有效时间
-     * @throws Exception Exception
      */
     @PostMapping(path = "/verifylogin")
-    public ResponseEntity loginByVerifyingCode(@Valid @RequestBody VerifyingCodeBO loginBO, HttpServletRequest
-            request) throws Exception {
+    public ResponseEntity verifylogin(@Valid @RequestBody VerifyingCodeBO loginBO, HttpServletRequest request) {
         LOGGER.info("{}", loginBO);
-        // 记录用户IP归属
-        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
-            ipService.merge(request.getHeader(Constant.CLIENT_IP));
-        }
+
         //进行手机验证码验证
         if (authService.verifyCode(loginBO, request)) {
             //如果用户当天定时任务没有完成，就在登录的时候生成
             LoginBO login = new LoginBO();
             login.setUsernameOrPhone(loginBO.getPhone());
-            todoTaskService.generateAllTodoTaskList(login);
-
-            Map token = authService.loginByVerifyingCode(loginBO, request.getHeader(Constant.APP_TOKEN_HEAD));
+            Map token = authService.login(login, "3");
             LOGGER.info("{}", token);
             return ResponseEntity.ok(Utils.kv("data", token));
         } else {
             authService.loginByVerifyFail(loginBO);
             return null;
         }
+    }
+
+    @GetMapping(path = "/user/u/openid/{openid}")
+    public ResponseEntity loginByOpenId(@PathVariable String openid, HttpServletRequest request) {
+        LOGGER.info("{}", openid);
+        UserBO user = userService.selectByopenid(openid);
+        if (user == null) {
+            throw new ServiceException(4018);
+        }
+        LoginBO bo = new LoginBO();
+        bo.setUsernameOrPhone(user.getUsername());
+        Map token = authService.login(bo, "4");
+        LOGGER.info("{}", user);
+        return ResponseEntity.ok(Utils.kv("data", token));
+    }
+
+    /**
+     * 登陆成功之后需要处理的业务
+     *
+     * @param request HttpServletRequest
+     * @return 无
+     */
+    @GetMapping(path = "/login/todo")
+    public ResponseEntity todoAfterLogin(HttpServletRequest request) {
+        authService.todoAfterLogin(request);
+        LOGGER.info("todoAfterLogin");
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 用户通过手机号码+验证码的方式身份验证
+     *
+     * @param loginBO 手机号、验证码、验证码类型
+     * @param request HttpServletRequest
+     * @return token 重置密码时需要带上的token
+     * @throws Exception md5加密异常
+     */
+    @PostMapping(path = "/verifyphone")
+    public ResponseEntity verifyPhone(@Valid @RequestBody VerifyingCodeBO loginBO,
+                                      HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", loginBO);
+
+        //进行手机验证码验证
+        if (authService.verifyCode(loginBO, request)) {
+            String token = authService.verifyPhone(loginBO.getPhone());
+            LOGGER.info("{}", token);
+            return ResponseEntity.ok(Utils.kv("data", token));
+        } else {
+            throw new ServiceException(4201);
+        }
+    }
+
+    /**
+     * 通过手机号修改密码
+     *
+     * @param bo ResetPasswordBO
+     * @return true:成功, false:失败
+     * @throws Exception md5加密异常
+     */
+    @PostMapping(path = "/resetpassword")
+    public ResponseEntity resetPasswordByPhone(@Valid @RequestBody ResetPasswordBO bo) throws Exception {
+        LOGGER.info("{}", bo);
+        boolean result = authService.resetPasswordByPhone(bo);
+        LOGGER.info("{}", result);
+        return ResponseEntity.ok(Utils.kv("data", result));
     }
 
     /**

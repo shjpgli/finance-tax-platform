@@ -18,9 +18,9 @@ public class News {
     private int articleCount;//
     // 多条图文消息信息，默认第一个item为大图
     @NotNull
-    private List<Article> articles;
-    private Date creatDate;
-    private Date lastUpdate;
+    private List<Article> articles; //图文列表
+    private Date creatDate; //创建时间
+    private Date lastUpdate;//跟新时间
 
 
     public Date getCreatDate() {

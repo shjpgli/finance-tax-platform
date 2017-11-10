@@ -16,6 +16,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
 import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
 import com.abc12366.bangbang.service.QueLikeService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.UcUserCommon;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -54,20 +56,23 @@ public class QueLikeServiceImpl implements QueLikeService {
     @Autowired
     private QuestionLikeRoMapper likeRoMapper;
 
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
+
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
 
-        QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
+                QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
-        int flag = 0;
+        int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
             questionId = answer.getQuestionId();
         }
         QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
         if(comment != null && "".equals(questionId)){
-            flag = 1;
+            likeTarget = 2;
             questionId = comment.getQuestionId();
         }
 
@@ -75,7 +80,9 @@ public class QueLikeServiceImpl implements QueLikeService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
         like.setLikeId(uuid);
+        like.setLikeTime(new Date());
         like.setLikeType(1);
+        like.setLikeTarget(likeTarget);
         like.setQuestionId(questionId);
         like.setId(id);
 
@@ -88,11 +95,17 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         int likeCnt = likeRoMapper.selectLikeCnt(id)+1;
 
-        if(flag == 0){
+        if(likeTarget == 1){
             QuestionAnswer answer1 = new QuestionAnswer();
             answer1.setLikeNum(likeCnt);
             answer1.setId(id);
             answerMapper.updateByPrimaryKeySelective(answer1);
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(5,1, like.getQuestionId(), like.getId(), like.getLikeId(),"", like.getUserId(), "");
+
+
         }else{
             QuestionComment comment1 = new QuestionComment();
             comment1.setLikeNum(likeCnt);
@@ -114,13 +127,13 @@ public class QueLikeServiceImpl implements QueLikeService {
         String userId = UcUserCommon.getUserId(request);
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
-        int flag = 0;
+        int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
             questionId = answer.getQuestionId();
         }
         QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
         if(comment != null && "".equals(questionId)){
-            flag = 1;
+            likeTarget = 2;
             questionId = comment.getQuestionId();
         }
         QuestionLike like = new QuestionLike();
@@ -128,6 +141,8 @@ public class QueLikeServiceImpl implements QueLikeService {
         like.setUserId(userId);
         like.setLikeId(uuid);
         like.setLikeType(2);
+        like.setLikeTime(new Date());
+        like.setLikeTarget(likeTarget);
         like.setQuestionId(questionId);
         like.setId(id);
 
@@ -140,7 +155,7 @@ public class QueLikeServiceImpl implements QueLikeService {
 
         int trampleNum = likeRoMapper.selectLikeCnt(id)+1;
 
-        if(flag == 0){
+        if(likeTarget == 1){
             QuestionAnswer answer1 = new QuestionAnswer();
             answer1.setTrampleNum(trampleNum);
             answer1.setId(id);

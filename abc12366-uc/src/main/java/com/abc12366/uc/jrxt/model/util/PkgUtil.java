@@ -2,6 +2,8 @@ package com.abc12366.uc.jrxt.model.util;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.jrxt.model.tiripPackage.*;
+import com.alibaba.fastjson.JSONObject;
+
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class PkgUtil extends BaseObject{
         String result = null;
         String serviceId = map.get("serviceid").toUpperCase();
         if(serviceId.equalsIgnoreCase("TY11")){
-            result = makeTiripPackageBytdps(makeTY11(map), serviceId, "CSZJ_NEW");
+            result = makeTiripPackageBytdpsTY11(makeTY11(map), serviceId, "CSZJ_NEW");
 //            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
         if(serviceId.equalsIgnoreCase("TY03")){
@@ -39,18 +41,105 @@ public class PkgUtil extends BaseObject{
         if(serviceId.equalsIgnoreCase("TY21")){
             result = makeTiripPackageBytdps(makeTY21(map), serviceId, "CSZJ_NEW");
         }
+        if(serviceId.equalsIgnoreCase("GY01")){
+        	map.remove("serviceid");
+            result = makeTiripPackageByGY01tdps(JSONObject.toJSONString(map), serviceId, "ABC_4000");
+        }
 
         return result;
     }
+    
+    /**
+     * 业务消息查询专用XML组装
+     * @param contentStr
+     * @param serviceId
+     * @param yhmc
+     * @return
+     */
+    public String makeTiripPackageByGY01tdps(String contentStr, String serviceId, String yhmc){
+        _log.info("subPackage: \n" + contentStr);
+        String mm=CommonUtils.getRandom();
+
+        String jmmm=cryptutiltdps.b64AsymmetricEncrypt(mm);
+        String content = processBusinessPkgBytdps(contentStr, "abc",mm);
+        TiripPackage tiripPackage = new TiripPackage();
+
+        // make Identity
+        Identity identity = new Identity();
+        identity.setServiceId(serviceId);
+        identity.setChannelId(yhmc);
+        identity.setPassword("888888");
+        tiripPackage.setIdentity(identity);
+
+        // make ContentControl
+        ContentControl contentControl = new ContentControl();
+        Control control1 = new Control();
+        control1.setId("1");
+        control1.setType("zip");
+        control1.setImpl("Zlib");
+        contentControl.addControl(control1);
+
+        Control control2 = new Control();
+        control2.setId("2");
+        control2.setType("crypt");
+        control2.setImpl("SBMMJM");
+        contentControl.addControl(control2);
+
+        Control control3 = new Control();
+        control3.setId("3");
+        control3.setType("code");
+        control3.setImpl("Base64");
+        contentControl.addControl(control3);
+        tiripPackage.setContentControl(contentControl);
+
+        //make RouterSession
+        RouterSession routerSession = new RouterSession();
+        
+        ParamList paramList = new ParamList();
+        paramList.setName("SENDER");
+        paramList.setValue("cszjnew");
+        routerSession.addParamList(paramList);
+        
+        ParamList paramList2 = new ParamList();
+        paramList2.setName("MM");
+        paramList2.setValue(jmmm);
+        routerSession.addParamList(paramList2);
+        tiripPackage.setRouterSession(routerSession);
+
+        // make BussinessContent
+        BusinessContent businessContent =  new BusinessContent();
+        SubPackage subPackage = new SubPackage();
+        subPackage.setId("1");
+        subPackage.setContent(content);
+        businessContent.addSubPackage(subPackage);
+        tiripPackage.setBusinessContent(businessContent);
+        tiripPackage.setVersion("1.0");
+        String xml = null;
+        try {
+            xml = XmlJavaParser.parseObjectToXml(tiripPackage);
+        } catch (IOException e) {
+            _log.error("IOException: " + e);
+            e.printStackTrace();
+        } catch (MarshalException e) {
+            _log.error("MarshalException: " + e);
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            _log.error("ValidationException: " + e);
+            e.printStackTrace();
+        }
+        _log.info("tiripPackage:\n" + xml);
+        return xml;
+    }
+    
 
 
     private static String makeTY11(final Map<String, String> map){
         com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
-        request.setNSRSBH(map.get("nsrsbh"));
+        request.setNSRSBH(map.get("NSRSBH"));
         com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX nsrjbxx=new  com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX();
         com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
         mxxx.setCODE("NSRSBH");
-        mxxx.setVALUE(map.get("nsrsbh"));
+        mxxx.setVALUE(map.get("NSRSBH"));
 
         nsrjbxx.addMXXX(mxxx);
         request.setNSRJBXX(nsrjbxx);
@@ -280,6 +369,74 @@ public class PkgUtil extends BaseObject{
         return xml;
     }
 
+    public String makeTiripPackageBytdpsTY11(String contentStr, String serviceId, String yhmc){
+        _log.info("subPackage: \n" + contentStr);
+        String mm=CommonUtils.getRandom();
+        //���ܺ������
+        String jmmm=cryptutiltdps.b64AsymmetricEncrypt(mm);
+        String content = processBusinessPkgBytdps(contentStr, "abc",mm);
+        TiripPackage tiripPackage = new TiripPackage();
+
+        // make Identity
+        Identity identity = new Identity();
+        identity.setServiceId(serviceId);
+        identity.setChannelId(yhmc);
+        identity.setPassword("qqqqqq");
+        tiripPackage.setIdentity(identity);
+
+        // make ContentControl
+        ContentControl contentControl = new ContentControl();
+        Control control1 = new Control();
+        control1.setId("1");
+        control1.setType("zip");
+        control1.setImpl("Zlib");
+        contentControl.addControl(control1);
+
+        Control control2 = new Control();
+        control2.setId("2");
+        control2.setType("crypt");
+        control2.setImpl("SBMMJM");
+        contentControl.addControl(control2);
+
+        Control control3 = new Control();
+        control3.setId("3");
+        control3.setType("code");
+        control3.setImpl("Base64");
+        contentControl.addControl(control3);
+        tiripPackage.setContentControl(contentControl);
+
+        //make RouterSession
+        RouterSession routerSession = new RouterSession();
+        ParamList paramList = new ParamList();
+        paramList.setName("MM");
+        paramList.setValue(jmmm);
+        routerSession.addParamList(paramList);
+        tiripPackage.setRouterSession(routerSession);
+
+        // make BussinessContent
+        BusinessContent businessContent =  new BusinessContent();
+        SubPackage subPackage = new SubPackage();
+        subPackage.setId("1");
+        subPackage.setContent(content);
+        businessContent.addSubPackage(subPackage);
+        tiripPackage.setBusinessContent(businessContent);
+        tiripPackage.setVersion("1.0");
+        String xml = null;
+        try {
+            xml = XmlJavaParser.parseObjectToXml(tiripPackage);
+        } catch (IOException e) {
+            _log.error("IOException: " + e);
+            e.printStackTrace();
+        } catch (MarshalException e) {
+            _log.error("MarshalException: " + e);
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            _log.error("ValidationException: " + e);
+            e.printStackTrace();
+        }
+        _log.info("tiripPackage:\n" + xml);
+        return xml;
+    }
 
     private static String processBusinessPkg(String pkgStr, String name){
         HashMap<String, String> map = new HashMap<String, String>();

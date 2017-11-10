@@ -21,10 +21,10 @@
 	<!-- 添加 -->
 	<insert id="insertBatch" parameterType="java.util.List">
 		INSERT INTO bb_knowledge_attachment
-		(id,knowledgeId,fileName,filePath)
+		(id,knowledgeId,fileName,filePath,sort)
 		VALUES
 		<foreach collection="list" item="item" index="index" separator=",">
-			(#{item.id},#{item.knowledgeId},#{item.fileName},#{item.filePath})
+			(#{item.id},#{item.knowledgeId},#{item.fileName},#{item.filePath},#{item.sort})
 		</foreach>
 	</insert>
 

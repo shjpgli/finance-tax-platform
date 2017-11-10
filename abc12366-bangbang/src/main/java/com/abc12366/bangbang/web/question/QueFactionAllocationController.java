@@ -2,6 +2,7 @@ package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
+import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationsBo;
 import com.abc12366.bangbang.service.QueFactionAllocationService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -90,6 +91,22 @@ public class QueFactionAllocationController {
         //删除邦派奖励分配信息
         String rtn = queFactionAllocationService.delete(id);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 我管理的邦派成员奖励分配
+     */
+    @GetMapping(path = "/allocationList")
+    public ResponseEntity selectAllocationList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                           @RequestParam(value = "factionId", required = false) String factionId,
+                                           @RequestParam(value = "status", required = false) String status) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("factionId", factionId);
+        dataMap.put("status", status);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionAllocationsBo> dataList = queFactionAllocationService.selectAllocationList(dataMap);
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
 
 

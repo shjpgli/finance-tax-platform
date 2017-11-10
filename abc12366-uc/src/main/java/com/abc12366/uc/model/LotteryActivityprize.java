@@ -9,8 +9,46 @@ import java.util.Date;
 
 
 public class LotteryActivityprize{
+    /** 时段投库存 */
+    private Integer timeStock;
+    /** 时段段时间 */
+    private Date timeDay;
+    /** 时间段已发数量 */
+    private Integer timeCount;
+
+    public Integer getTimeStock() {
+        return timeStock;
+    }
+
+    public void setTimeStock(Integer timeStock) {
+        this.timeStock = timeStock;
+    }
+
+    public Date getTimeDay() {
+        return timeDay;
+    }
+
+    public void setTimeDay(Date timeDay) {
+        this.timeDay = timeDay;
+    }
+
+    public Integer getTimeCount() {
+        return timeCount;
+    }
+
+    public void setTimeCount(Integer timeCount) {
+        this.timeCount = timeCount;
+    }
     private Integer balance;
     private Integer amount;
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
 
     public Integer getBalance() {
         return balance;

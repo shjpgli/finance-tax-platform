@@ -31,9 +31,9 @@ public class Button implements Serializable {
     private String pagepath; //小程序的页面路径
     private Button[] sub_button;//二级菜单
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date lastUpdate;
+    private Date lastUpdate;//更新时间
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private Date createTime;//创建时间
 
     private Integer wxStatus;
 

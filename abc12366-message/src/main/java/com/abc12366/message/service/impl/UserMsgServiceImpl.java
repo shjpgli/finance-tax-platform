@@ -6,6 +6,7 @@ import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
 import com.alibaba.fastjson.JSON;
@@ -14,13 +15,12 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户消息服务
@@ -51,7 +51,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         if (data != null) {
             data.setId(Utils.uuid());
             data.setStatus("1");
-            Timestamp now = new Timestamp(new Date().getTime());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             data.setCreateTime(now);
             data.setLastUpdate(now);
             userMsgMapper.insert(data);
@@ -71,7 +71,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         UserMessage um = userMsgRoMapper.selectOne(data.getId());
         if (um != null) {
             um.setStatus(data.getStatus());
-            um.setLastUpdate(new Timestamp(new Date().getTime()));
+            um.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             userMsgMapper.update(um);
         }
         return um;
@@ -80,7 +80,8 @@ public class UserMsgServiceImpl implements UserMsgService {
     @Override
     public UserMessage selectOne(String id) {
         UserMessage data = userMsgRoMapper.selectOne(id);
-        if ("1".equals(data.getStatus())) { // 如果消息未读，置为已读
+        // 如果消息未读，置为已读
+        if ("1".equals(data.getStatus())) {
             data.setStatus("2");
             this.update(data);
         }
@@ -90,7 +91,8 @@ public class UserMsgServiceImpl implements UserMsgService {
     @Override
     public BodyStatus delete(UserMessage data) {
         UserMessage um = this.selectOne(data.getId());
-        if (data.getToUserId().equals(um.getToUserId())) { // 是否为本人操作
+        // 是否为本人操作
+        if (data.getToUserId().equals(um.getToUserId())) {
             um.setStatus("0");
             this.update(um);
             return Utils.bodyStatus(2000);
@@ -105,7 +107,7 @@ public class UserMsgServiceImpl implements UserMsgService {
         if (data != null && data.getToUserIds().size() > 0) {
             dataList = new ArrayList<>();
             for (String userId: data.getToUserIds()) {
-                Timestamp now = new Timestamp(new Date().getTime());
+                Timestamp now = new Timestamp(System.currentTimeMillis());
                 UserMessage bm = new UserMessage.Builder()
                         .id(Utils.uuid())
                         .fromUserId(data.getFromUserId())
@@ -127,5 +129,16 @@ public class UserMsgServiceImpl implements UserMsgService {
     public List<UserMessageForBangbang> selectListForBangbang(String userId, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return userMsgRoMapper.UserMessageForBangbang(userId);
+    }
+
+    @Override
+    public List<UserMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        return userMsgRoMapper.selectListByUsername(map);
+    }
+
+    @Override
+    public int unreadCount(UserMessage data) {
+        return userMsgRoMapper.unreadCount(data);
     }
 }

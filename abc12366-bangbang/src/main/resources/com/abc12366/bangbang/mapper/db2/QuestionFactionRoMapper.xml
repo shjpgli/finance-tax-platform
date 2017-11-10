@@ -29,7 +29,7 @@
         FROM bb_question_faction
         WHERE 1=1
         <if test="userId != null and userId != ''">
-            AND factionId in(SELECT factionId FROM abc12366_bangbang.bb_question_faction_member where userId = #{userId})
+            AND factionId in(SELECT factionId FROM abc12366_bangbang.bb_question_faction_member where userId = #{userId} and duty = '1')
         </if>
     </select>
 
@@ -89,7 +89,7 @@
     <!-- 查询邦派动态 -->
     <select id="selectdtListByFactionId" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.lang.String">
        SELECT
-        a.id,	a.parentId,	a.questionId,q.title,	a.userId,u.nickname,	a.answerUserId,a.ip,	a.answer,	a.status,	a.createTime,	a.lastUpdate,	a.isAccept
+        a.id,	a.parentId,	a.questionId,q.title questionTitle,	a.userId,u.nickname,	a.answerUserId,a.ip,	a.answer,	a.status,	a.createTime,	a.lastUpdate,	a.isAccept
         FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
         WHERE a.status = '0' AND a.userId in(SELECT userId FROM bb_question_faction_member where factionId = #{factionId}) order by a.createTime desc
     </select>
@@ -99,9 +99,9 @@
         SELECT
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
 
-        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = 1) nickname,
+        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = '1') nickname,
 
-        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = 2) nickname2,
+        (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = '2' limit 1) nickname2,
 
         (SELECT count(memberId) from bb_question_faction_member where factionId = f.factionId) peopleNum,
 
@@ -163,6 +163,20 @@
             bb_question_answer a
         WHERE DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
             AND a.status = '0' AND factionId = #{factionId} and commentNum >2 and likeNum >6
+    </select>
+
+    <!-- 查询邦派名称是否存在 -->
+    <select id="selectFactionNameCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM bb_question_faction
+        WHERE 1=1
+        <if test="factionName != null and factionName != ''">
+            factionName = #{factionName}
+        </if>
+        <if test="factionId != null and factionId != ''">
+            factionId != #{factionId}
+        </if>
     </select>
 
 </mapper>

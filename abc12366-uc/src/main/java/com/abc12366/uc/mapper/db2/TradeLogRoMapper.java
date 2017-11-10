@@ -24,4 +24,18 @@ public interface TradeLogRoMapper {
     TradeLog selectOne(TradeBillBO data);
 
     TradeLog selectByOrderNo(String OrderNo);
+
+    /**
+     * 根据Ali交易流水号查询
+     * @param tradeLog
+     * @return
+     */
+    TradeLogBO selectByAliNo(TradeLog tradeLog);
+
+    /**
+     * 查询订单交易流水记录列表
+     * @param tradeLog
+     * @return
+     */
+    List<TradeLogBO> selectBOList(TradeLog tradeLog);
 }

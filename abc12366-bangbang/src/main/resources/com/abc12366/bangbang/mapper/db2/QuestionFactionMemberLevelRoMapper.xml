@@ -14,6 +14,7 @@
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM bb_question_faction_member_level
+		ORDER BY code ASC
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->

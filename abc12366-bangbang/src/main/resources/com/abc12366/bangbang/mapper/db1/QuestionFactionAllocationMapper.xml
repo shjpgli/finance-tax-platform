@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 id,	factionId,	userId,	userRank,	proportion,	integral,	createUserId,	createTime,	updateTime,	state
+		 id,	factionId,	userId,	userRank,awardReason,	proportion,	integral,	createUserId,	createTime,	updateTime,	state
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -25,9 +25,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionFactionAllocation">
 		 INSERT INTO bb_question_faction_allocation
- 		(id,factionId,userId,userRank,proportion,integral,createUserId,createTime,updateTime,state) 
+ 		(id,factionId,userId,userRank,awardReason,proportion,integral,createUserId,createTime,updateTime,state)
 		 VALUES 
- 		(#{id},#{factionId},#{userId},#{userRank},#{proportion},#{integral},#{createUserId},#{createTime},#{updateTime},#{state}) 
+ 		(#{id},#{factionId},#{userId},#{userRank},#{awardReason},#{proportion},#{integral},#{createUserId},#{createTime},#{updateTime},#{state})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -113,6 +113,9 @@
 			<if test="userRank != null">
 				 userRank = #{userRank},
 			</if>
+             <if test="awardReason != null">
+                 awardReason = #{awardReason},
+             </if>
 			<if test="proportion != null">
 				 proportion = #{proportion},
 			</if>
@@ -143,6 +146,7 @@
 			 factionId = #{factionId},
 			 userId = #{userId},
 			 userRank = #{userRank},
+			 awardReason = #{awardReason},
 			 proportion = #{proportion},
 			 integral = #{integral},
 			 createUserId = #{createUserId},

@@ -33,7 +33,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -357,11 +356,12 @@ public class UserServiceImpl implements UserService {
         return userRoMapper.selectByopenid(openid);
     }
 
-    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public void automaticUserCancel() {
         List<User> userList = userRoMapper.selectUserVipList(new Date());
+        LOGGER.info("VIP到期，自动取消", userList);
         for (User user : userList) {
+            LOGGER.info("VIP到期，取消用户",user);
             // 更新会员状态
             user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
             user.setLastUpdate(new Date());
@@ -659,6 +659,8 @@ public class UserServiceImpl implements UserService {
             userMapper.qxwxbd(userUpdateDTO.getWxopenid());
             int n = userMapper.update(users);
             if (n >= 1) {
+            	LOGGER.info("用户关注公众号，做任务，USERID:"+userUpdateDTO.getId());
+           		todoTaskService.doTask(userUpdateDTO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
                 return 2;
             } else {
                 throw new ServiceException(4624);
@@ -666,4 +668,9 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+	@Override
+	public List<User> findByHngsNsrsbh(String nsrsbh) {
+		return userRoMapper.findByHngsNsrsbh(nsrsbh);
+	}
 }

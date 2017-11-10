@@ -4,6 +4,7 @@ package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public interface QueCommentService {
 
     List<QuestionCommentBo> selectList(Map<String, Object> map);
 
-    QuestionCommentBo save(QuestionCommentBo questionCommentBo);
+    QuestionCommentBo save(QuestionCommentBo questionCommentBo, HttpServletRequest request);
 
     QuestionCommentBo selectComment(String id);
 

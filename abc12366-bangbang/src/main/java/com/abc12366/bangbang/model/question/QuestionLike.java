@@ -19,8 +19,11 @@ public class QuestionLike implements Serializable {
 	/**用户ID**varchar(64)**/
 	private String userId;
 
-    /**用户ID**int**/
+    /**点赞类型**int**/
     private Integer likeType;
+
+    /**点赞来源**int**/
+    private Integer likeTarget;
 
 	/**点赞时间**datetime**/
 	private java.util.Date likeTime;
@@ -77,5 +80,14 @@ public class QuestionLike implements Serializable {
 
     public void setLikeType(Integer likeType) {
         this.likeType = likeType;
+    }
+
+
+    public Integer getLikeTarget() {
+        return likeTarget;
+    }
+
+    public void setLikeTarget(Integer likeTarget) {
+        this.likeTarget = likeTarget;
     }
 }

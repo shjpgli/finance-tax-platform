@@ -19,6 +19,9 @@ public class QuestionMedal implements Serializable {
 	/**勋章名称**/
 	private String name;
 
+	/**勋章类别**/
+	private String type;
+
 	/**获取条件**/
 	private String acquireCondition;
 
@@ -35,6 +38,14 @@ public class QuestionMedal implements Serializable {
 	private java.util.Date updateTime;
 
 
+	public String getType() {
+		return type;
+	}
+
+	public QuestionMedal setType(String type) {
+		this.type = type;
+		return this;
+	}
 
 	public void setId(String id){
 		this.id = id;

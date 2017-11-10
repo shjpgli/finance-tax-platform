@@ -87,12 +87,9 @@ public class AppServiceImpl implements AppService {
             throw new ServiceException(4094);
         }
         if (Utils.md5(app.getPassword()).equals(bo.getPassword())) {
-            long currentTime = System.currentTimeMillis();
-
-            if (!StringUtils.isEmpty(app.getAccessToken()) && app.getLastResetTokenTime() != null) {
+            if (!StringUtils.isEmpty(app.getAccessToken()) && !StringUtils.isEmpty(app.getLastResetTokenTime())) {
                 //判断app登录是否已过期
-                long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
-                if (currentTime > lastTime) {
+                if (new Date().after(app.getLastResetTokenTime())) {
                     LOGGER.warn("APP登录已过期，返回新的token：{}", app);
                     app.setAccessToken(Utils.token());
                 }
@@ -100,7 +97,7 @@ public class AppServiceImpl implements AppService {
                 app.setAccessToken(Utils.token());
             }
             //更新有效时间
-            app.setLastResetTokenTime(getLongToDate(currentTime + Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
+            app.setLastResetTokenTime(getLongToDate(System.currentTimeMillis() + Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
             app.setLastUpdate(new Date());
             int upd = appMapper.update(app);
             if (upd != 1) {

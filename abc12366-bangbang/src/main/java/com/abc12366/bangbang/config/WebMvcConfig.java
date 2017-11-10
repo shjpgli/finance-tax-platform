@@ -61,6 +61,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/test");
 
+
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
                 .excludePathPatterns("/")
@@ -124,6 +125,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/questionbb/selectListNew")
                         //0回答
                 .excludePathPatterns("/questionbb/selectListWait")
+                        //查询邦派动态
+                .excludePathPatterns("/questionbb/selectQcDtList/**")
                         //查询单个问题
                 .excludePathPatterns("/questionbb/selectQuestion/**")
                         //查询单个问题回复信息
@@ -132,12 +135,40 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/questionbb/updateBrowseNum/**")
                         //优秀邦派列表查询
                 .excludePathPatterns("/queFaction/selectListExcellent")
-                //江湖榜 统计
+                        //邦派上月排行列表查询
+                .excludePathPatterns("/queFaction/selecFactionPhList")
+                        //邦派累计列表查询
+                .excludePathPatterns("/queFaction/selecFactionljPhList")
+                        //个人主页
+                .excludePathPatterns("/questionbb/selectMybangbang/{userId}", "/questionExpert/listByUserId/{userId}",
+                        "/queAttention/selectUserList/{attentionUserId}", "/queAttention/selectAttentionUserList/{userId}",
+                        "/queAnswer/selectMyAnswerList")
+                        //江湖榜 统计
                 .excludePathPatterns("/queCount/**")
                         //潜力邦派列表查询
                 .excludePathPatterns("/queFaction/selectListPotential")
                         //问大侠列表查询
                 .excludePathPatterns("/questionExpert/listDX")
+                        //秘籍列表查询(最新)
+                .excludePathPatterns("/cheats/selectListNew")
+                        //推荐秘籍查询列表
+                .excludePathPatterns("/cheats/selectListRecommend")
+                        //查询推荐阅读(标题)
+                .excludePathPatterns("/cheats/selectListRecommendTitle")
+                        //查询你可能感兴趣的文章(标题)
+                .excludePathPatterns("/cheats/selectListByTag")
+                        //查询热门秘籍
+                .excludePathPatterns("/cheats/selectListByBrowseNum")
+                        //查询热议标签
+                .excludePathPatterns("/cheats/selectTagList")
+                        //查询单个秘籍信息
+                .excludePathPatterns("/cheats/selectCheats/**")
+                        //秘籍评论列表查询
+                .excludePathPatterns("/cheatsComment/selectList")
+                        //帮邦用户列表查询
+                .excludePathPatterns("/qcuser/selectList")
+                        /*帮邦搜索*/
+                .excludePathPatterns("/search/list","/search/cheats/list","/search/question/list")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",

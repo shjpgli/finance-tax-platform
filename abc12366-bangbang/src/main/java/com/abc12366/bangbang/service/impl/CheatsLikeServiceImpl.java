@@ -14,6 +14,7 @@ import com.abc12366.bangbang.model.question.CheatsLike;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.CheatsCommentBo;
 import com.abc12366.bangbang.service.CheatsLikeService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -50,6 +52,9 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
     @Autowired
     private CheatsLikeRoMapper likeRoMapper;
 
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
+
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
@@ -72,6 +77,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         like.setUserId(userId);
         like.setLikeId(uuid);
         like.setLikeType(1);
+        like.setLikeTime(new Date());
         like.setCheatsId(cheatsId);
         like.setLikeTarget(likeTarget);
         like.setId(id);
@@ -90,6 +96,11 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
             cheats1.setLikeNum(likeCnt);
             cheats1.setId(id);
             cheatsMapper.updateByPrimaryKeySelective(cheats1);
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(9,2, like.getCheatsId(), "", like.getLikeId(),"", like.getUserId(), "");
+
         }else{
             CheatsComment comment1 = new CheatsComment();
             comment1.setLikeNum(likeCnt);
@@ -123,6 +134,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         like.setUserId(userId);
         like.setLikeId(uuid);
         like.setLikeType(2);
+        like.setLikeTime(new Date());
         like.setLikeTarget(likeTarget);
         like.setCheatsId(cheatsId);
         like.setId(id);

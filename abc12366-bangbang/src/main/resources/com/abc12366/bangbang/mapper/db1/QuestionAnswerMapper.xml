@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionAnswer">
 		 INSERT INTO bb_question_answer
- 		(id,parentId,questionId,factionId,userId,ip,answerUserId,answer,shortAnswer,answerImage,status,createTime,lastUpdate,isAccept)
+ 		(id,parentId,questionId,factionId,userId,isRead,ip,answerUserId,answer,shortAnswer,answerImage,status,createTime,lastUpdate,isAccept)
 		 VALUES 
- 		(#{id},#{parentId},#{questionId},#{factionId},#{userId},#{ip},#{answerUserId},#{answer},#{shortAnswer},#{answerImage},#{status},#{createTime},#{lastUpdate},#{isAccept})
+ 		(#{id},#{parentId},#{questionId},#{factionId},#{userId},#{isRead},#{ip},#{answerUserId},#{answer},#{shortAnswer},#{answerImage},#{status},#{createTime},#{lastUpdate},#{isAccept})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -193,7 +193,17 @@
 
 	<!-- 修 改 举报数-->
 	<update id="updateReportNum" parameterType="java.lang.String">
-		UPDATE bb_question_answer SET reportNum = reportNum + 1 WHERE id = #{id}
+		UPDATE bb_question_answer SET reportNum = reportNum + 1, status ='3' WHERE id = #{id}
 	</update>
+
+    <!-- 修 改 为已读-->
+    <update id="updateIsRead" parameterType="java.lang.String">
+        UPDATE bb_question_answer SET isRead = 1 WHERE id = #{id}
+    </update>
+
+    <!-- 设置采纳-->
+    <update id="updateIsAccept" parameterType="java.lang.String">
+        UPDATE bb_question_answer SET isAccept = 1 WHERE id = #{id}
+    </update>
 
 </mapper>

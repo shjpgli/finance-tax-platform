@@ -19,8 +19,11 @@ public class CheatsTagBo implements Serializable {
 	/**标签ID**varchar(64)**/
 	private String tagId;
 
-    /**标签ID**/
+    /**标签名称**/
     private String tagName;
+
+    /**分类代码**/
+    private String classifyCode;
 
 
 
@@ -54,5 +57,13 @@ public class CheatsTagBo implements Serializable {
 
     public void setTagName(String tagName) {
         this.tagName = tagName;
+    }
+
+    public String getClassifyCode() {
+        return classifyCode;
+    }
+
+    public void setClassifyCode(String classifyCode) {
+        this.classifyCode = classifyCode;
     }
 }

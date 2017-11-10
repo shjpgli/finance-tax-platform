@@ -31,7 +31,10 @@ public class WxMenuController {
     @Autowired
     IWxMenuService iWxMenuService;
 
-    //从数据库获取菜单信息
+    /**
+     * 从数据库获取菜单信息
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxmenu/db/list")
     public ResponseEntity wxmenudbList() {
@@ -70,7 +73,12 @@ public class WxMenuController {
         return responseEntity;
     }
 
-    //编辑单个菜单信息
+    /**
+     * 编辑单个菜单信息
+     * @param id  菜单ID
+     * @param button 菜单
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PutMapping("/wxmenu/db/{id}")
     public ResponseEntity wxmenudbEdit(@PathVariable("id") String id, @Valid @RequestBody Button button) {
@@ -84,7 +92,11 @@ public class WxMenuController {
         return responseEntity;
     }
 
-    //删除单个菜单信息
+    /**
+     * 删除单个菜单信息
+     * @param id 菜单id
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @DeleteMapping("/wxmenu/db/{id}")
     public ResponseEntity wxmenudbDel(@PathVariable("id") String id) {
@@ -98,7 +110,10 @@ public class WxMenuController {
     }
 
 
-    //从微信服务器获取菜单信息
+    /**
+     * 从微信服务器获取菜单信息
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @GetMapping("/wxmenu/list")
     public ResponseEntity wxmenuList() {
@@ -109,7 +124,10 @@ public class WxMenuController {
         return responseEntity;
     }
 
-    //创建菜单到微信服务器
+    /**
+     * 创建菜单到微信服务器
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @PostMapping("/wxmenu/create")
     public ResponseEntity wxmenuCreate() {
@@ -134,7 +152,10 @@ public class WxMenuController {
         }
     }
 
-    //删除微信服务器菜单
+    /**
+     * 删除微信服务器菜单
+     * @return
+     */
     @SuppressWarnings("rawtypes")
     @DeleteMapping("/wxmenu/del")
     public ResponseEntity wxmenuDel() {

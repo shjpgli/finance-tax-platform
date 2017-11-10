@@ -43,7 +43,7 @@ public interface UserBindService {
 
     HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request)throws Exception;
 
-    HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException;
+//    HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException;
 
     boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request);
 

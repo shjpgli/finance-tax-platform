@@ -4,19 +4,12 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.MyTaskSurvey;
 import com.abc12366.uc.model.bo.MyTaskBO;
-import com.abc12366.uc.model.bo.UserTaskBO;
-import com.abc12366.uc.model.bo.UserTaskInsertBO;
-import com.abc12366.uc.model.bo.UserTaskUpdateBO;
 import com.abc12366.uc.service.UserTaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Admin: liuguiyao<435720953@qq.com.com>

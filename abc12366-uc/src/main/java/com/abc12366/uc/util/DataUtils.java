@@ -36,6 +36,17 @@ public class DataUtils {
     }
 
     /**
+     * 格式化时间
+     * @param date
+     * @return
+     */
+    public static String getFormatDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日";
+    }
+
+    /**
      * yyyyMMddHHmmssSSS+三位随机数
      *
      * @return

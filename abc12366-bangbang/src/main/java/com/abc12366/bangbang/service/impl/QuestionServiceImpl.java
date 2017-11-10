@@ -1,24 +1,33 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionInviteMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionLogMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
+import com.abc12366.bangbang.model.question.QuestionLog;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
+import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.UcUserCommon;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -54,6 +63,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
+
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
+
+    @Autowired
+    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
 
     @Override
     public List<QuestionBo> selectList(Map<String,Object> map) {
@@ -188,7 +203,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional("db1TxManager")
     @Override
-    public QuestionBo save(QuestionBo questionBo) {
+    public QuestionBo save(QuestionBo questionBo, HttpServletRequest request) {
 
         int ipcnt = questionDisableIpRoMapper.selectIpCnt(questionBo.getIp());
 
@@ -277,15 +292,30 @@ public class QuestionServiceImpl implements QuestionService {
                 for(QuestionInvite invite :inviteList){
                     invite.setId(UUID.randomUUID().toString().replace("-", ""));
                     invite.setQuestionId(uuid);
+                    invite.setIsRead(0);
                     inviteMapper.insert(invite);
                 }
             }
 
             questionMapper.insert(question);
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(1,1,question.getId(),"",question.getId(),"",question.getUserId(),"");
+
+
+            String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
+            String userId = UcUserCommon.getUserId();
+            String sysTaskId = UCConstant.SYS_TASK_MRYNTW_CODE;
+            bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+
+
+
         } catch (Exception e) {
             LOGGER.error("新增问题信息异常：{}", e);
             throw new ServiceException(6102);
         }
+
 
         return questionBo;
     }
@@ -479,7 +509,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<MyQuestionTjBo> selectMybangbang(String userId) {
+    public MyQuestionTjBo selectMybangbang(String userId) {
         //我的帮帮
         LOGGER.info("{}", userId);
         return questionRoMapper.selectMybangbang(userId);
@@ -503,6 +533,24 @@ public class QuestionServiceImpl implements QuestionService {
         //我管理的话题
         LOGGER.info("{}", userId);
         return questionRoMapper.selectMyManageQuesList(userId);
+    }
+
+    @Override
+    public QuestionInvite updateIsRead(QuestionInvite invite) {
+        try {
+            inviteMapper.updateIsRead(invite);
+        } catch (Exception e) {
+            LOGGER.error("更新问题信息异常：{}", e);
+            throw new ServiceException(6103);
+        }
+        return invite;
+    }
+
+    @Override
+    public List<QuestionDtBo> selectQcDtList(String userId) {
+        //我的动态
+        LOGGER.info("{}", userId);
+        return questionRoMapper.selectQcDtList(userId);
     }
 
 }

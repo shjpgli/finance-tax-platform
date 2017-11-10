@@ -114,6 +114,19 @@ public class QueFactionMemberController {
     }
 
     /**
+     * 设置职位
+     *
+     * @param duty
+     * @param memberId
+     * @return
+     */
+    @PutMapping(path = "/updateDuty/{memberId}")
+    public ResponseEntity updateDuty(@Valid @RequestBody String duty, @PathVariable("memberId") String memberId) {
+        queFactionMemberService.updateDuty(memberId, duty);
+        return ResponseEntity.ok(Utils.kv("data", memberId));
+    }
+
+    /**
      * 删除邦派成员信息
      */
     @DeleteMapping(path = "/{memberId}")

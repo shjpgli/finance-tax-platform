@@ -18,6 +18,7 @@ import com.abc12366.gateway.util.UCConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -77,6 +78,12 @@ public class CheckServiceImpl implements CheckService {
                 }
             }
         }
+        //记录签到
+        insert(check);
+
+        //签到统计
+        continuingCheck(check.getUserId());
+
         //完成任务埋点,如果任务不存在或失效则返回
         if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_CODE)) {
             return 0;
@@ -86,12 +93,6 @@ public class CheckServiceImpl implements CheckService {
         if (!pointsLog(check.getUserId(), points)) {
             return 0;
         }
-
-        //记录签到
-        insert(check);
-
-        //签到统计
-        continuingCheck(check.getUserId());
 
         PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
         if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
@@ -323,5 +324,14 @@ public class CheckServiceImpl implements CheckService {
         a.roll(Calendar.DATE, -1);
         int maxDate = a.get(Calendar.DATE);
         return maxDate;
+    }
+
+    @Override
+    public int checkTotal(String userId, String year) {
+        if (StringUtils.isEmpty(year)) {
+            year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        }
+        Integer total = checkRoMapper.checkTotal(userId, year);
+        return total == null ? 0 : total;
     }
 }

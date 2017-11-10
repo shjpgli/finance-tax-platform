@@ -52,7 +52,7 @@ public class CheatsLikeController {
     }
 
     /**
-     * 取消问题回复点赞
+     * 取消点赞
      */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id, HttpServletRequest request) {
@@ -62,7 +62,7 @@ public class CheatsLikeController {
     }
 
     /**
-     * 查询问题回复点赞列表
+     * 查询点赞列表
      */
     @GetMapping(path = "/{userId}")
     public ResponseEntity selectList(@PathVariable String userId,
@@ -78,7 +78,7 @@ public class CheatsLikeController {
     }
 
     /**
-     * 查询秘籍是否已点赞
+     * 查询是否已点赞
      */
     @GetMapping(path = "/count/{id}")
     public ResponseEntity selectExist(@PathVariable String id,HttpServletRequest request) {

@@ -40,7 +40,7 @@
     <select id="selectMyCommentList" resultType="com.abc12366.bangbang.model.question.bo.QuestionCommentBo" parameterType="java.util.Map">
         SELECT
         a.id,	a.answerId,	a.questionId,	a.userId,	a.commentUserId,	a.commentTxt,	a.status,	a.createTime,	a.lastUpdate,	a.ip,	a.factionId,	a.likeNum,	a.trampleNum,	a.reportNum
-        ,u.userPicturePath,u.nickname,
+        ,q.title questionTitle,u.userPicturePath,u.nickname,
         u1.nickname commentNickname
         FROM bb_question_comment a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
         left join bb_user u1 on a.commentUserId = u1.id

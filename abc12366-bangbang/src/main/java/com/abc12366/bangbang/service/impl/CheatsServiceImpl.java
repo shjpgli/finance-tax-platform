@@ -7,7 +7,9 @@ import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.CheatsTag;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.CheatsTagBo;
+import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
 import com.abc12366.bangbang.service.CheatsService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -50,15 +52,18 @@ public class CheatsServiceImpl implements CheatsService {
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
 
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
+
     @Override
     public List<CheatsBo> selectList(Map<String,Object> map) {
         List<CheatsBo> cheatsBoList;
         try {
-            //查询最新问题列表
+            //查询最新秘籍列表
             cheatsBoList = cheatsRoMapper.selectList(map);
         } catch (Exception e) {
-            LOGGER.error("查询问题列表信息异常：{}", e);
-            throw new ServiceException(6100);
+            LOGGER.error("查询秘籍列表信息异常：{}", e);
+            throw new ServiceException(6180);
         }
         return cheatsBoList;
     }
@@ -67,11 +72,11 @@ public class CheatsServiceImpl implements CheatsService {
     public List<CheatsBo> selectListByBrowseNum(Map<String,Object> map) {
         List<CheatsBo> cheatsBoList;
         try {
-            //查询热门问题列表
+            //查询热门秘籍列表
             cheatsBoList = cheatsRoMapper.selectListByBrowseNum(map);
         } catch (Exception e) {
-            LOGGER.error("查询热门问题信息异常：{}", e);
-            throw new ServiceException(6100);
+            LOGGER.error("查询热门秘籍信息异常：{}", e);
+            throw new ServiceException(6180);
         }
         return cheatsBoList;
     }
@@ -80,11 +85,37 @@ public class CheatsServiceImpl implements CheatsService {
     public List<CheatsBo> selectListRecommend(Map<String,Object> map) {
         List<CheatsBo> cheatsBoList;
         try {
-            //查询推荐问题列表
+            //查询推荐秘籍列表
             cheatsBoList = cheatsRoMapper.selectListRecommend(map);
         } catch (Exception e) {
-            LOGGER.error("查询问题列表信息异常：{}", e);
-            throw new ServiceException(6100);
+            LOGGER.error("查询秘籍列表信息异常：{}", e);
+            throw new ServiceException(6180);
+        }
+        return cheatsBoList;
+    }
+
+    @Override
+    public List<CheatstjydBo> selectListRecommendTitle(Map<String,Object> map) {
+        List<CheatstjydBo> cheatsBoList;
+        try {
+            //查询推荐秘籍列表
+            cheatsBoList = cheatsRoMapper.selectListRecommendTitle(map);
+        } catch (Exception e) {
+            LOGGER.error("查询秘籍列表信息异常：{}", e);
+            throw new ServiceException(6180);
+        }
+        return cheatsBoList;
+    }
+
+    @Override
+    public List<CheatstjydBo> selectListByTag(Map<String,Object> map) {
+        List<CheatstjydBo> cheatsBoList;
+        try {
+            //查询你可能感心情的文章
+            cheatsBoList = cheatsRoMapper.selectListByTag(map);
+        } catch (Exception e) {
+            LOGGER.error("查询秘籍列表信息异常：{}", e);
+            throw new ServiceException(6180);
         }
         return cheatsBoList;
     }
@@ -97,7 +128,7 @@ public class CheatsServiceImpl implements CheatsService {
             cheatsBoList = cheatsRoMapper.selectMyCheatsList(map);
         } catch (Exception e) {
             LOGGER.error("查询我的文章列表异常：{}", e);
-            throw new ServiceException(6100);
+            throw new ServiceException(6180);
         }
         return cheatsBoList;
     }
@@ -122,7 +153,7 @@ public class CheatsServiceImpl implements CheatsService {
 
         try {
             JSONObject jsonStu = JSONObject.fromObject(cheatsBo);
-            LOGGER.info("新增问题信息:{}", jsonStu.toString());
+            LOGGER.info("新增秘籍信息:{}", jsonStu.toString());
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", cheatsBo.getUserId());
@@ -190,9 +221,15 @@ public class CheatsServiceImpl implements CheatsService {
             }
 
             cheatsMapper.insert(cheats);
+
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(6,2, cheats.getId(), "", cheats.getId(),"", cheats.getUserId(), "");
+
+
         } catch (Exception e) {
-            LOGGER.error("新增问题信息异常：{}", e);
-            throw new ServiceException(6102);
+            LOGGER.error("新增秘籍信息异常：{}", e);
+            throw new ServiceException(6182);
         }
 
         return cheatsBo;
@@ -202,14 +239,16 @@ public class CheatsServiceImpl implements CheatsService {
     public CheatsBo selectCheats(String id) {
         CheatsBo cheatsBo;
         try {
-            LOGGER.info("查询单个问题信息:{}", id);
+            LOGGER.info("查询单个秘籍信息:{}", id);
             //查询问题信息
             cheatsBo = cheatsRoMapper.selectCheats(id);
             List<CheatsTag> tagList = tagRoMapper.selectList(id);
-            cheatsBo.setTagList(tagList);
+            if(tagList != null){
+                cheatsBo.setTagList(tagList);
+            }
         } catch (Exception e) {
-            LOGGER.error("查询单个问题信息异常：{}", e);
-            throw new ServiceException(6101);
+            LOGGER.error("查询单个秘籍信息异常：{}", e);
+            throw new ServiceException(6181);
         }
         return cheatsBo;
     }
@@ -222,7 +261,7 @@ public class CheatsServiceImpl implements CheatsService {
             tagList = tagRoMapper.selectTagList();
         } catch (Exception e) {
             LOGGER.error("查询热议标签列表信息异常：{}", e);
-            throw new ServiceException(6105);
+            throw new ServiceException(6185);
         }
         return tagList;
     }
@@ -244,11 +283,11 @@ public class CheatsServiceImpl implements CheatsService {
             throw new ServiceException(6373);
         }
 
-        //更新问题信息
+        //更新秘籍信息
         Cheats cheats = new Cheats();
         try {
             JSONObject jsonStu = JSONObject.fromObject(cheatsBo);
-            LOGGER.info("更新问题信息:{}", jsonStu.toString());
+            LOGGER.info("更新秘籍信息:{}", jsonStu.toString());
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", cheatsBo.getUserId());
@@ -304,20 +343,20 @@ public class CheatsServiceImpl implements CheatsService {
 
             cheatsMapper.updateByPrimaryKeySelective(cheats);
         } catch (Exception e) {
-            LOGGER.error("更新问题信息异常：{}", e);
-            throw new ServiceException(6103);
+            LOGGER.error("更新秘籍信息异常：{}", e);
+            throw new ServiceException(6183);
         }
         return cheatsBo;
     }
 
     @Override
     public String updateStatus(String id,String status) {
-        //更新课件信息
+        //更新秘籍信息
         try {
 
         } catch (Exception e) {
-            LOGGER.error("更新课件信息异常：{}", e);
-            throw new ServiceException(6103);
+            LOGGER.error("更新秘籍信息异常：{}", e);
+            throw new ServiceException(6183);
         }
         return "";
     }
@@ -326,12 +365,12 @@ public class CheatsServiceImpl implements CheatsService {
     @Override
     public String delete(String id) {
         try {
-            LOGGER.info("删除问题信息:{}", id);
+            LOGGER.info("删除秘籍信息:{}", id);
             tagMapper.deleteByPrimaryKey(id);
             cheatsMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
-            LOGGER.error("删除问题信息异常：{}", e);
-            throw new ServiceException(6104);
+            LOGGER.error("删除秘籍信息异常：{}", e);
+            throw new ServiceException(6184);
         }
         return "";
     }

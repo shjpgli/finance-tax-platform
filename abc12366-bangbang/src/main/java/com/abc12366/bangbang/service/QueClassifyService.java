@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service;
 
+import com.abc12366.bangbang.model.question.QuestionClassifyStatistics;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyBo;
 import com.abc12366.bangbang.model.question.bo.QuestionClassifyTagBo;
 
@@ -24,4 +25,7 @@ public interface QueClassifyService {
 
     /*修改分类标签关联关系*/
     void updateClassifyTag(QuestionClassifyBo classifyBo);
+
+
+    List<QuestionClassifyStatistics> selectClassifyStatistics(Map<String, Object> map);
 }

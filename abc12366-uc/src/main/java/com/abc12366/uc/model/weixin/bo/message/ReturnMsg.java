@@ -5,32 +5,39 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 
 public class ReturnMsg {
-    private String id;
-    private String toUserName;
-    private String fromUserName;
-    private long createTime;
+    private String id; //主键
+    private String toUserName; //接收人
+    private String fromUserName; //发送人
+    private long createTime; //创建时间
     @NotEmpty
     private String setting; //0:添加消息,1:回复消息,2:关键字消息
     private String keyString;//关键字
     private String searchTp;//匹配类型
     private Integer sort;//排序
     @NotEmpty
-    private String msgType;//text,image,news
+    private String msgType;//文件类型text,image,news
     //text
-    private String content;
+    private String content;//文本内容
 
     //image 
-    private String mediaId;
-    private String imgurl;
+    private String mediaId;//素材
+    private String imgurl;//图片地址
 
     //news
-    private String newsId;
-    private News news;
+    private String newsId;//图文
+    private News news;//图文内容
 
-    private Date createDate;
-    private Date lastUpdate;
+    private Date createDate; //创建日期
+    private Date lastUpdate;//更新日期
 
 
+    /**
+     * 内容转换XML
+     * @param toUserName 接收人
+     * @param fromUserName 发送人
+     * @param createTime 时间
+     * @return
+     */
 	public String toWxXml(String toUserName, String fromUserName, long createTime) {
         this.toUserName = toUserName;
         this.fromUserName = fromUserName;

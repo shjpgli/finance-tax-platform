@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.Cheats">
 		 INSERT INTO bb_cheats
- 		(id,userId,title,describe,detail,status,createTime,lastUpdate,classifyCode,browseNum,likeNum,trampleNum,isRecommend,recommendTime,tag,ip,factionId,commentNum,collectNum,reportNum)
+ 		(id,userId,title,describ,detail,status,createTime,lastUpdate,classifyCode,browseNum,likeNum,trampleNum,isRecommend,recommendTime,tag,ip,factionId,commentNum,collectNum,reportNum)
 		 VALUES 
- 		(#{id},#{userId},#{title},#{describe},#{detail},#{status},#{createTime},#{lastUpdate},#{classifyCode},#{browseNum},#{likeNum},#{trampleNum},#{isRecommend},#{recommendTime},#{tag},#{ip},#{factionId},#{commentNum},#{collectNum},#{reportNum})
+ 		(#{id},#{userId},#{title},#{describ},#{detail},#{status},#{createTime},#{lastUpdate},#{classifyCode},#{browseNum},#{likeNum},#{trampleNum},#{isRecommend},#{recommendTime},#{tag},#{ip},#{factionId},#{commentNum},#{collectNum},#{reportNum})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -30,8 +30,8 @@
 			<if test="title != null">
 				 title,
 			</if>
-			<if test="describe != null">
-				 describe,
+			<if test="describ != null">
+				 describ,
 			</if>
 			<if test="detail != null">
 				 detail,
@@ -93,8 +93,8 @@
 			<if test="title!=null">
 				 #{title},
 			</if>
-			<if test="describe!=null">
-				 #{describe},
+			<if test="describ!=null">
+				 #{describ},
 			</if>
 			<if test="detail!=null">
 				 #{detail},
@@ -157,8 +157,8 @@
 			<if test="title != null">
 				 title = #{title},
 			</if>
-			<if test="describe != null">
-				 describe = #{describe},
+			<if test="describ != null">
+				 describ = #{describ},
 			</if>
 			<if test="detail != null">
 				 detail = #{detail},
@@ -219,7 +219,7 @@
 		 SET 
 			 userId = #{userId},
 			 title = #{title},
-			 describe = #{describe},
+			 describ = #{describ},
 			 detail = #{detail},
 			 status = #{status},
 			 createTime = #{createTime},
@@ -246,5 +246,10 @@
         browseNum = browseNum + 1
         WHERE id = #{id}
     </update>
+
+	<!-- 修 改 举报数-->
+	<update id="updateReportNum" parameterType="java.lang.String">
+		UPDATE bb_cheats SET reportNum = reportNum + 1, status ='3' WHERE id = #{id}
+	</update>
 
 </mapper>

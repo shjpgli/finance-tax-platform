@@ -7,6 +7,7 @@ import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.CheatsComment;
 import com.abc12366.bangbang.model.question.bo.CheatsCommentBo;
 import com.abc12366.bangbang.service.CheatsCommentService;
+import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -46,15 +47,18 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
     @Autowired
     private QuestionDisableUserRoMapper questionDisableUserRoMapper;
 
+    @Autowired
+    private BangBangDtLogUtil bangBangDtLogUtil;
+
     @Override
     public List<CheatsCommentBo> selectList(Map<String,Object> map) {
         List<CheatsCommentBo> commentBoList;
         try {
-            //查询问题评论列表
+            //查询秘籍评论列表
             commentBoList = commentRoMapper.selectList(map);
         } catch (Exception e) {
-            LOGGER.error("查询问题评论列表信息异常：{}", e);
-            throw new ServiceException(6160);
+            LOGGER.error("查询秘籍评论列表信息异常：{}", e);
+            throw new ServiceException(6170);
         }
         return commentBoList;
     }
@@ -67,7 +71,7 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             commentBoList = commentRoMapper.selectMyCommentList(map);
         } catch (Exception e) {
             LOGGER.error("查询我的评论列表信息异常：{}", e);
-            throw new ServiceException(6160);
+            throw new ServiceException(6170);
         }
         return commentBoList;
     }
@@ -91,7 +95,7 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
 
         try {
             JSONObject jsonStu = JSONObject.fromObject(commentBo);
-            LOGGER.info("新增问题评论信息:{}", jsonStu.toString());
+            LOGGER.info("新增秘籍评论信息:{}", jsonStu.toString());
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", commentBo.getUserId());
@@ -137,12 +141,16 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
 
             commentMapper.insert(comment);
 
+            //帮邦日志记录表
+            //日志类型,问题或者秘籍ID,回复ID,来源ID,用户ID,被关注用户ID
+            bangBangDtLogUtil.insertLog(7,2, comment.getCheatsId(), "", comment.getId(),comment.getCommentTxt(),comment.getUserId(), "");
+
 
 
 
         } catch (Exception e) {
-            LOGGER.error("新增问题评论信息异常：{}", e);
-            throw new ServiceException(6162);
+            LOGGER.error("新增秘籍评论信息异常：{}", e);
+            throw new ServiceException(6172);
         }
 
         return commentBo;
@@ -152,12 +160,12 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
     public CheatsCommentBo selectComment(String id) {
         CheatsCommentBo commentBo = new CheatsCommentBo();
         try {
-            LOGGER.info("查询单个问题评论信息:{}", id);
-            //查询单个问题回复信息
+            LOGGER.info("查询单个秘籍评论信息:{}", id);
+            //查询单个秘籍评论信息
             commentBo = commentRoMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
-            LOGGER.error("查询单个问题评论信息异常：{}", e);
-            throw new ServiceException(6161);
+            LOGGER.error("查询单个秘籍评论信息异常：{}", e);
+            throw new ServiceException(6171);
         }
         return commentBo;
     }
@@ -180,11 +188,11 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             throw new ServiceException(6373);
         }
 
-        //更新问题评论信息
+        //更新秘籍评论信息
         CheatsComment comment = new CheatsComment();
         try {
             JSONObject jsonStu = JSONObject.fromObject(commentBo);
-            LOGGER.info("更新问题评论信息:{}", jsonStu.toString());
+            LOGGER.info("更新秘籍评论信息:{}", jsonStu.toString());
             commentBo.setLastUpdate(new Date());
             commentBo.setStatus("0");
 
@@ -204,20 +212,20 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             BeanUtils.copyProperties(commentBo, comment);
             commentMapper.updateByPrimaryKeySelective(comment);
         } catch (Exception e) {
-            LOGGER.error("更新问题评论信息异常：{}", e);
-            throw new ServiceException(6163);
+            LOGGER.error("更新秘籍评论信息异常：{}", e);
+            throw new ServiceException(6173);
         }
         return commentBo;
     }
 
     @Override
     public String updateStatus(String id,String status) {
-        //更新问题评论信息
+        //更新秘籍评论信息
         try {
 
         } catch (Exception e) {
-            LOGGER.error("更新问题评论信息异常：{}", e);
-            throw new ServiceException(6163);
+            LOGGER.error("更新秘籍评论信息异常：{}", e);
+            throw new ServiceException(6173);
         }
         return "";
     }
@@ -226,7 +234,7 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
     public String delete(String id) {
         int num = 0;
         try {
-            LOGGER.info("删除问题回复信息:{}", id);
+            LOGGER.info("删除秘籍评论信息:{}", id);
 
             CheatsCommentBo commentBo = commentRoMapper.selectByPrimaryKey(id);
 
@@ -242,8 +250,8 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
 
 
         } catch (Exception e) {
-            LOGGER.error("删除问题评论异常：{}", e);
-            throw new ServiceException(6164);
+            LOGGER.error("删除秘籍评论异常：{}", e);
+            throw new ServiceException(6174);
         }
         return num+"";
     }

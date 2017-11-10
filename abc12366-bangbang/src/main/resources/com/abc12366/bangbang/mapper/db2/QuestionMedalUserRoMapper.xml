@@ -19,9 +19,9 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectListByUserId" resultType="com.abc12366.bangbang.model.question.bo.QuestionMedalUserBo" parameterType="java.util.Map">
         SELECT
-            mu.id,	medalId,	userId,	medalTime,m.image,m.name
+            mu.id,	medalId,	mu.userId,	medalTime,m.image,m.name
         FROM bb_question_medal_user mu left join bb_question_medal m on mu.medalId = m.id
-        WHERE userId = #{userId}
+        WHERE mu.userId = #{userId}
         ORDER BY medalTime DESC
     </select>
 

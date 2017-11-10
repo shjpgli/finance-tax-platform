@@ -2,6 +2,8 @@ package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
@@ -13,7 +15,6 @@ import com.abc12366.uc.model.order.Trade;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
-import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -25,10 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @create 2017-10-19
@@ -120,6 +118,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PointsRuleService pointsRuleService;
 
+    @Autowired
+    private IWxTemplateService templateService;
+
+    @Autowired
+    private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -622,7 +625,6 @@ public class OrderServiceImpl implements OrderService {
             }
 
         } else if ("1".equals(orderBack.getStatus())) {
-            //TODO 需要确定状态
             Order order = new Order();
             order.setOrderNo(orderBack.getOrderNo());
             order.setOrderStatus("6");
@@ -667,6 +669,10 @@ public class OrderServiceImpl implements OrderService {
                             updOrder(order);
                             insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
+                            if(!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())){
+                                LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}",orderBO.getOrderStatus());
+                                throw new ServiceException(4925);
+                            }
                             //判断是否需要查询产品库存信息
                             setTodoTask(orderBO);
                             if (trading.equals("UCSC")) {
@@ -795,7 +801,8 @@ public class OrderServiceImpl implements OrderService {
         int stock = prBO.getStock() - num;
         if (stock < 0) {
             LOGGER.info("库存不足,请联系管理员：{}", stock);
-            throw new ServiceException(4905);
+            orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
+            //throw new ServiceException(4905);
         }
         prBO.setStock(stock);
         Product product = new Product();
@@ -816,33 +823,122 @@ public class OrderServiceImpl implements OrderService {
         productRepoMapper.insert(repo);
     }
 
+    @Override
+    public void selectStock(String tradeNo) {
+        LOGGER.info("根据交易流水号判断库存{}", tradeNo);
+        List<OrderBO> orderBOList = orderRoMapper.selectByTradeNo(tradeNo);
+
+        for (OrderBO orderBO : orderBOList) {
+            OrderProductBO pBO = new OrderProductBO();
+            String orderNo = orderBO.getOrderNo();
+            pBO.setOrderNo(orderNo);
+            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+            for (OrderProductBO orderProductBO : orderProductBOs) {
+                //查询产品库存信息
+                if(orderProductBO.getProductId() != null && !"".equals(orderProductBO.getProductId())){
+                    ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+                    orderProductBO.setOrderNo(orderBO.getOrderNo());
+                    //减去Product库存数量
+                    int num = orderProductBO.getNum();
+                    int stock = prBO.getStock() - num;
+                    if (stock < 0) {
+                        LOGGER.info("库存不足,请联系管理员：{}", stock);
+                        orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
+                        throw new ServiceException(4905);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * 购买会员，消息发送
      */
     private void sendMemberMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
-        Message message = new Message();
-        message.setBusinessId(order.getOrderNo());
-        message.setBusiType(MessageConstant.SPDD);
-        message.setType(MessageConstant.SYS_MESSAGE);
-        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX + orderProductBO.getName() + MessageConstant.BUYING_MEMBERS_SUFFIX);
-        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
-        message.setUserId(order.getUserId());
-        messageSendUtil.sendMessage(message, request);
+        User user = userRoMapper.selectOne(order.getUserId());
+        //查询会员特权-业务提醒
+        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+        obj.setLevelId(user.getVipLevel());
+        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
+        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+        //查看业务提醒是否启用
+        if(findObj != null && findObj.getStatus()){
+            Message message = new Message();
+            message.setBusinessId(order.getOrderNo());
+            message.setBusiType(MessageConstant.SPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
+            String content = MessageConstant.BUYING_MEMBERS_PREFIX.replaceAll("\\{#DATA.VIP\\}", orderProductBO.getName());
+            message.setContent(content);
+            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            message.setUserId(order.getUserId());
+
+            //web消息
+            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                messageSendUtil.sendMessage(message, request);
+            }
+
+
+            //微信消息
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "亲爱的" + user.getUsername() + "，恭喜您成功升级为 VIP 会员！");
+                map.put("remark", "感恩您的参与和支持，谢谢！。");
+                map.put("keyword1", user.getVipLevelName());
+                map.put("keyword2", orderProductBO.getName());
+                map.put("keyword3", DataUtils.dateToStr(new Date()));
+                templateService.templateSend("GrA5UnnYg39Rhs2nyDzwoFiYfmZh5sFkNXTZWGGmrkY", map);
+            }
+
+            //短信消息
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                sendPhoneMessage(request, content, user);
+            }
+        }
     }
 
     /**
      * 积分充值，消息发送
      */
     private void sendPointsMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
-        Message message = new Message();
-        message.setBusinessId(order.getOrderNo());
-        message.setBusiType(MessageConstant.SPDD);
-        message.setType(MessageConstant.SYS_MESSAGE);
         User user = userRoMapper.selectOne(order.getUserId());
-        message.setContent(MessageConstant.INTEGRAL_RECHARGE + orderProductBO.getName() + user.getPoints());
-        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
-        message.setUserId(order.getUserId());
-        messageSendUtil.sendMessage(message, request);
+        //查询会员特权-业务提醒
+        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+        obj.setLevelId(user.getVipLevel());
+        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
+        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+        //查看业务提醒是否启用
+        if(findObj != null && findObj.getStatus()){
+            Message message = new Message();
+            message.setBusinessId(order.getOrderNo());
+            message.setBusiType(MessageConstant.SPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
+            String content = MessageConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user.getPoints()));
+            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            message.setUserId(order.getUserId());
+            //web消息
+            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                messageSendUtil.sendMessage(message, request);
+            }
+
+            //微信消息
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "亲爱的"+user.getUsername()+"，你已兑换成功。");
+                map.put("remark", "感谢你的使用。");
+                map.put("keyword1", orderProductBO.getName());
+                map.put("keyword2", String.valueOf(order.getGiftPoints()));
+                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
+            }
+
+            //短信消息
+            if(findObj.getVal2() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal2())){
+                sendPhoneMessage(request, content, user);
+            }
+        }
     }
 
     /**
@@ -852,7 +948,7 @@ public class OrderServiceImpl implements OrderService {
         //加入交易日志
             TradeLog tradeLog = new TradeLog();
             tradeLog.setTradeNo(tradeNo);
-            tradeLog.setAliTrandeNo(order.getOrderNo());
+            tradeLog.setAliTrandeNo(tradeNo);
             tradeLog.setTradeStatus("2");
             tradeLog.setTradeType("1");
             tradeLog.setAmount(order.getTotalPrice());
@@ -919,7 +1015,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderListBO> selectExprotOrder(Order order) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
-        List<OrderBO> orderDataList = orderRoMapper.selectExprotOrder(order);
+        List<OrderBO> orderDataList = new ArrayList<>();
+        orderDataList.addAll(orderBOList);
         List<OrderListBO> orderListBOList = new ArrayList<>();
 
         for (OrderBO bo : orderBOList) {
@@ -1018,20 +1115,70 @@ public class OrderServiceImpl implements OrderService {
             updOrder(order);
             insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货", "0");
 
-            //发送消息
-            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
-            if (expressComp == null) {
-                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-                throw new ServiceException(4102, "物流公司查询失败");
+
+
+            //查询用户信息
+            User user = userRoMapper.selectOne(order.getUserId());
+            //查询会员特权
+            VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+            obj.setLevelId(user.getVipLevel());
+            obj.setPrivilegeId("A_YWTX");
+            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+            if(findObj != null && findObj.getStatus()){
+                //发送消息
+                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
+                if (expressComp == null) {
+                    LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                    throw new ServiceException(4102, "物流公司查询失败");
+                }
+                Message message = new Message();
+                String content = MessageConstant.DELIVER_GOODS_PREFIX+order.getOrderNo()+MessageConstant.DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX;
+
+                //web消息
+                if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
+                    message.setBusinessId(order.getOrderNo());
+                    message.setBusiType(MessageConstant.SPDD);
+                    message.setType(MessageConstant.SYS_MESSAGE);
+                    message.setContent(content);
+                    message.setUserId(order.getUserId());
+                    messageSendUtil.sendMessage(message, request);
+                }
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                    //发送微信消息
+                    Map<String, String> map = new HashMap<String, String>();
+                    map.put("userId", user.getId());
+                    map.put("openId", user.getWxopenid());
+                    map.put("first", "你有新的订单提醒：");
+                    map.put("remark", "详情请登录财税平台查看。");
+                    map.put("keyword1", order.getOrderNo());
+                    map.put("keyword2", UserUtil.getAdminInfo().getNickname());
+                    map.put("keyword3", DataUtils.dateToStr(new Date()));
+                    templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
+                }
+                //发送短信
+                if(findObj.getVal3() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal3())){
+                    sendPhoneMessage(request, content, user);
+
+                }
             }
-            Message message = new Message();
-            message.setBusinessId(order.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX);
-            message.setUserId(order.getUserId());
-            messageSendUtil.sendMessage(message, request);
         }
+    }
+
+    /**
+     * 发送短信公告方法
+     * @param request
+     * @param content
+     * @param user
+     */
+    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
+        //发送短信
+        Map<String, String> maps = new HashMap<String, String>();
+        maps.put("var", content);
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        list.add(maps);
+
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+        messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
     }
 
     @Transactional("db1TxManager")
@@ -1044,24 +1191,58 @@ public class OrderServiceImpl implements OrderService {
         //修改订单状态
         updOrder(order);
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(), "0");
-        //发送消息
-        ExpressComp expressComp = null;
-        if (order.getExpressCompId() != null && !"".equals(order.getExpressCompId())) {
-            expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-        }
-        Message message = new Message();
-        message.setBusinessId(order.getOrderNo());
-        message.setBusiType(MessageConstant.SPDD);
-        message.setType(MessageConstant.SYS_MESSAGE);
-        if (expressComp != null) {
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX);
-        } else {
-            message.setContent(MessageConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + MessageConstant.SUFFIX);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+
+
+        User user = userRoMapper.selectOne(order.getUserId());
+        //查询会员特权-业务提醒
+        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+        obj.setLevelId(user.getVipLevel());
+        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
+        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+        //查看业务提醒是否启用
+        if(findObj != null && findObj.getStatus()){
+            //发送普通业务消息
+            ExpressComp expressComp = null;
+            if (order.getExpressCompId() != null && !"".equals(order.getExpressCompId())) {
+                expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+            }
+            String content;
+            Message message = new Message();
+            message.setBusinessId(order.getOrderNo());
+            message.setBusiType(MessageConstant.SPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
+            if (expressComp != null) {
+                content = MessageConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX;
+                message.setContent(content);
+            } else {
+                content = MessageConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + MessageConstant.SUFFIX;
+                message.setContent(content);
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            }
+            //web消息
+            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
+                message.setUserId(order.getUserId());
+                messageSendUtil.sendMessage(message, request);
+            }
+            //微信消息
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("userId", user.getId());
+                map.put("openId", user.getWxopenid());
+                map.put("first", "你有新的订单提醒：");
+                map.put("remark", "详情请登录财税平台查看。");
+                map.put("keyword1", order.getOrderNo());
+                map.put("keyword2", UserUtil.getAdminInfo().getNickname());
+                map.put("keyword3", DataUtils.dateToStr(new Date()));
+                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
+            }
+
+            //短信消息
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                sendPhoneMessage(request, content, user);
+            }
         }
 
-        message.setUserId(order.getUserId());
-        messageSendUtil.sendMessage(message, request);
     }
 
     @Transactional("db1TxManager")
@@ -1129,7 +1310,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> oList = orderRoMapper.selectOrderList(order);
+        List<OrderBO> oList = orderRoMapper.selectOrderListByInvoice(order);
         return oList;
     }
 

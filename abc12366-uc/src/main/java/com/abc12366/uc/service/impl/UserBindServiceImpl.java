@@ -7,13 +7,13 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
-import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.PrivilegeItemService;
 import com.abc12366.uc.service.RSAService;
+import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
@@ -75,13 +75,13 @@ public class UserBindServiceImpl implements UserBindService {
     private AcceptClient client;
 
     @Autowired
-    private UserExtendRoMapper userExtendRoMapper;
-
-    @Autowired
     private RSAService rsaService;
 
     @Autowired
     private PrivilegeItemService privilegeItemService;
+
+    @Autowired
+    private TodoTaskService todoTaskService;
 
     protected static Map<String, Object> appCache = new ConcurrentHashMap<>();
 
@@ -165,115 +165,172 @@ public class UserBindServiceImpl implements UserBindService {
         }
         UserDzsbBO userDzsbBO1 = new UserDzsbBO();
         BeanUtils.copyProperties(userDzsb, userDzsbBO1);
+
+        //绑定税号任务埋点
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userDzsbBO1;
     }
 
     //登录网上报税接口
+//    @Override
+//    public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws
+//            Exception {
+//        HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
+//        if (hngsAppLoginResponse != null) {
+//            String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/login";
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
+//            headers.add("Content-Type", "application/json");
+//
+//            Map<String, Object> requestBody = new HashMap<>();
+//
+//            requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
+//            Timestamp timestamp = new Timestamp(new Date().getTime());
+//            requestBody.put("timestamp", Long.toString(timestamp.getTime()));
+//            requestBody.put("roleId", userHngsInsertBO.getRole());
+//            String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
+//            //String pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
+//            String pw = Utils.md5(userHngsInsertBO.getPassword());
+//            try {
+//                RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
+//                pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
+//                        ("iso-8859-1")), "iso-8859-1");
+//                nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")),
+//                        "iso-8859-1");
+////                nsrsbh = mainService.RSAEncrypt(request, new MD5(nsrsbh + timestamp.getTime()).compute());
+////                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
+//            } catch (Exception e) {
+//                String msg = "获取公钥并加密时异常。";
+//                LOGGER.error(msg, e);
+//                throw new ServiceException(4192);
+//            }
+//            requestBody.put("djm", pw);
+//            requestBody.put("nsrsbh", nsrsbh);
+//            //生成伪密码
+//            Random rd = new Random();
+//            int randomInt = rd.nextInt(10000);
+//            requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
+//
+//            HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+//            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+//            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+//                HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+//                if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
+//                    List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
+//                    List<AuthorizationDto> filteredAuthList = new ArrayList<>();
+//                    for (int i = 0; i < authList.size(); i++) {
+//                        AuthorizationDto auth = authList.get(i);
+//                        if (auth.getYyfwDm().trim().startsWith("FU")) {
+//                            filteredAuthList.add(auth);
+//                        }
+//                    }
+//                    nsrLoginResponse.setMenuList(filteredAuthList);
+//                }
+//                return nsrLoginResponse;
+//            }
+//        }
+//        return null;
+//    }
     @Override
-    public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws
-            Exception {
-        HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
-        if (hngsAppLoginResponse != null) {
-            String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/login";
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
-            headers.add("Content-Type", "application/json");
-
-            Map<String, Object> requestBody = new HashMap<>();
-
-            requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
-            Timestamp timestamp = new Timestamp(new Date().getTime());
-            requestBody.put("timestamp", Long.toString(timestamp.getTime()));
-            requestBody.put("roleId", userHngsInsertBO.getRole());
-            String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
-            String pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
-
-            try {
-                RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
-                pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
-                        ("iso-8859-1")), "iso-8859-1");
-                nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")),
-                        "iso-8859-1");
-//                nsrsbh = mainService.RSAEncrypt(request, new MD5(nsrsbh + timestamp.getTime()).compute());
-//                pw = mainService.RSAEncrypt(request, new MD5(pw + timestamp.getTime()).compute());
-            } catch (Exception e) {
-                String msg = "获取公钥并加密时异常。";
-                LOGGER.error(msg, e);
-                throw new ServiceException(4192);
-            }
-            requestBody.put("djm", pw);
-            requestBody.put("nsrsbh", nsrsbh);
-            //生成伪密码
-            Random rd = new Random();
-            int randomInt = rd.nextInt(10000);
-            requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
-
-            HttpEntity requestEntity = new HttpEntity(requestBody, headers);
-            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-            if (soaUtil.isExchangeSuccessful(responseEntity)) {
-                HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
-                if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
-                    List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
-                    List<AuthorizationDto> filteredAuthList = new ArrayList<>();
-                    for (int i = 0; i < authList.size(); i++) {
-                        AuthorizationDto auth = authList.get(i);
-                        if (auth.getYyfwDm().trim().startsWith("FU")) {
-                            filteredAuthList.add(auth);
-                        }
-                    }
-                    nsrLoginResponse.setMenuList(filteredAuthList);
-                }
-                return nsrLoginResponse;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
-        HngsAppLoginResponse hngsAppLoginResponse = new HngsAppLoginResponse();
-
-        //先到缓存里查看是否有有效accessToken
-        if (appCache.containsKey("accessToken") && !StringUtils.isEmpty(appCache.get("accessToken")) &&
-                appCache.containsKey("expiresIn") && !StringUtils.isEmpty(appCache.get("expiresIn"))) {
-            try {
-                Date expiredDate = (Date) appCache.get("expiresIn");
-                if (expiredDate != null && expiredDate.getTime() > System.currentTimeMillis()) {
-                    hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
-                    hngsAppLoginResponse.setExpiresTime(expiredDate);
-                }
-                request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
-                return hngsAppLoginResponse;
-            } catch (Exception e) {
-
-            }
-        }
-
-        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url");
+    public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
         HttpHeaders headers = new HttpHeaders();
-
+        headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+        headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
+        headers.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
+        String api = "/login";
+        String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/post?api="+api;
         Map<String, Object> requestBody = new HashMap<>();
-        String appId = SpringCtxHolder.getProperty("APPID");
-        String secret = SpringCtxHolder.getProperty("SECRET");
-        requestBody.put("appId", appId);
-        requestBody.put("secret", secret);
-
-//        String requestBody = "{\"appId\":\"ETAX_PC\",\"secret\":\"3A6ABF6B62EA0190E053550C483DD05A\"}";
+        requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
+        Timestamp timestamp = new Timestamp(new Date().getTime());
+        requestBody.put("timestamp", Long.toString(timestamp.getTime()));
+        requestBody.put("roleId", userHngsInsertBO.getRole());
+        String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
+        String pw;
+        try {
+            pw = Utils.md5(rsaService.decodeStringFromJs(userHngsInsertBO.getPassword()));
+            RSAPublicKey pbk = (RSAPublicKey) mainService.getRSAPublicKey(request);
+            pw = new String(RSAUtil.encrypt(pbk, new MD5(pw + timestamp.getTime()).compute().getBytes
+                    ("iso-8859-1")), "iso-8859-1");
+            nsrsbh = new String(RSAUtil.encrypt(pbk, (timestamp.getTime() + nsrsbh).getBytes("iso-8859-1")),
+                    "iso-8859-1");
+        } catch (Exception e) {
+            String msg = "获取公钥并加密时异常。";
+            LOGGER.error(msg, e);
+            throw new ServiceException(4192);
+        }
+        requestBody.put("djm", pw);
+        requestBody.put("nsrsbh", nsrsbh);
+        //生成伪密码
+        Random rd = new Random();
+        int randomInt = rd.nextInt(10000);
+        requestBody.put("p", new MD5(Integer.toString(randomInt)).compute());
 
         HttpEntity requestEntity = new HttpEntity(requestBody, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity responseEntity = restTemplate.exchange(url + "/app/login", HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
-                    HngsAppLoginResponse.class);
-            request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
-            appCache.put("accessToken", hngsAppLoginResponse.getAccessToken());
-            appCache.put("expiresIn", hngsAppLoginResponse.getExpiresTime());
-            LOGGER.info("uc调用电子税局应用登录接口成功，accessToken：{}", hngsAppLoginResponse.getAccessToken());
-            return hngsAppLoginResponse;
+            HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+            if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
+                List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
+                List<AuthorizationDto> filteredAuthList = new ArrayList<>();
+                for (int i = 0; i < authList.size(); i++) {
+                    AuthorizationDto auth = authList.get(i);
+                    if (auth.getYyfwDm().trim().startsWith("FU")) {
+                        filteredAuthList.add(auth);
+                    }
+                }
+                nsrLoginResponse.setMenuList(filteredAuthList);
+            }
+            return nsrLoginResponse;
         }
         return null;
     }
+
+//    @Override
+//    public HngsAppLoginResponse appLoginWsbs(HttpServletRequest request) throws IOException {
+//        HngsAppLoginResponse hngsAppLoginResponse = new HngsAppLoginResponse();
+//
+//        //先到缓存里查看是否有有效accessToken
+//        if (appCache.containsKey("accessToken") && !StringUtils.isEmpty(appCache.get("accessToken")) &&
+//                appCache.containsKey("expiresIn") && !StringUtils.isEmpty(appCache.get("expiresIn"))) {
+//            try {
+//                Date expiredDate = (Date) appCache.get("expiresIn");
+//                //加60分钟的缓冲时间减少误差
+//                if (expiredDate != null && expiredDate.getTime() > (System.currentTimeMillis() + 60 * 60 * 1000)) {
+//                    hngsAppLoginResponse.setAccessToken((String) appCache.get("accessToken"));
+//                    hngsAppLoginResponse.setExpiresTime(expiredDate);
+//                }
+//                request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
+//                return hngsAppLoginResponse;
+//            } catch (Exception e) {
+//
+//            }
+//        }
+//
+//        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url");
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        Map<String, Object> requestBody = new HashMap<>();
+//        String appId = SpringCtxHolder.getProperty("APPID");
+//        String secret = SpringCtxHolder.getProperty("SECRET");
+//        requestBody.put("appId", appId);
+//        requestBody.put("secret", secret);
+//
+////        String requestBody = "{\"appId\":\"ETAX_PC\",\"secret\":\"3A6ABF6B62EA0190E053550C483DD05A\"}";
+//
+//        HttpEntity requestEntity = new HttpEntity(requestBody, headers);
+//        RestTemplate restTemplate = new RestTemplate();
+//        ResponseEntity responseEntity = restTemplate.exchange(url + "/app/login", HttpMethod.POST, requestEntity, String.class);
+//        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+//            hngsAppLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()),
+//                    HngsAppLoginResponse.class);
+//            request.setAttribute("accessToken", hngsAppLoginResponse.getAccessToken());
+//            appCache.put("accessToken", hngsAppLoginResponse.getAccessToken());
+//            appCache.put("expiresIn", hngsAppLoginResponse.getExpiresTime());
+//            LOGGER.info("uc调用电子税局应用登录接口成功，accessToken：{}", hngsAppLoginResponse.getAccessToken());
+//            return hngsAppLoginResponse;
+//        }
+//        return null;
+//    }
 
     @Override
     public boolean isRealNameValidatedDzsj(String sfzjhm, String xm, HttpServletRequest request) {
@@ -282,26 +339,28 @@ public class UserBindServiceImpl implements UserBindService {
             return false;
         }
         try {
-            HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
-            if (hngsAppLoginResponse != null) {
-                HttpHeaders headers = new HttpHeaders();
-                headers.add("accessToken", hngsAppLoginResponse.getAccessToken());
-                headers.add("Content-Type", "application/json");
-                String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
-                HttpEntity requestEntity = new HttpEntity(null, headers);
-                ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-                if (soaUtil.isExchangeSuccessful(responseEntity)) {
-                    DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
-                    if (dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
-                        LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
-                        return true;
-                    }
+//            HngsAppLoginResponse hngsAppLoginResponse = appLoginWsbs(request);
+//            if (hngsAppLoginResponse != null) {
+//
+//            }
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+            headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
+            String api = "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
+            String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+Base64.getEncoder().encodeToString(api.getBytes());
+            HttpEntity requestEntity = new HttpEntity(null, headers);
+            ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+                DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
+                if (!StringUtils.isEmpty(dzsjSmrzBO.getSmrzbz())&&dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
                     LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
+                    return true;
                 }
+                LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.warn("uc调用电子税局实名认证查询接口失败，错误信息：{}", e.getCause());
+            LOGGER.warn("uc调用电子税局实名认证查询接口失败");
             return false;
         }
         return false;
@@ -311,11 +370,11 @@ public class UserBindServiceImpl implements UserBindService {
     public void automaticBindCancel() {
         Date date = DataUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
         List<String> ids = userBindRoMapper.selectListByDate(date);
-        Map<String,Object> map = new HashMap<>();
-        map.put("ids",ids);
+        Map<String, Object> map = new HashMap<>();
+        map.put("ids", ids);
         try {
             userBindMapper.updateBatch(map);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("automaticBindCancel.updateBatch(List<String> idList)", e);
             throw new ServiceException(4923);
         }
@@ -408,6 +467,8 @@ public class UserBindServiceImpl implements UserBindService {
         }
         UserHngsBO userHngsBO1 = new UserHngsBO();
         BeanUtils.copyProperties(userHngs, userHngsBO1);
+        //绑定税号任务埋点
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHngsBO1;
     }
 
@@ -451,6 +512,9 @@ public class UserBindServiceImpl implements UserBindService {
         }
         UserHndsBO userHndsBO1 = new UserHndsBO();
         BeanUtils.copyProperties(userHnds, userHndsBO1);
+        //绑定税号任务埋点
+        String userId = Utils.getUserId();
+        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHndsBO1;
     }
 
@@ -534,12 +598,19 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public void resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
-        //1.验证码校验
-//        VerifyingCodeBO param = new VerifyingCodeBO();
-//        param.setPhone(data.getPhone());
-//        param.setType(data.getType());
-//        param.setCode(data.getCode());
-//        authService.verifyCode(param, request);
+        //校验法人姓名和法人证件号
+        Map<String, String> mapVali = new HashMap<>();
+        mapVali.put("serviceid", "TY11");
+        mapVali.put("NSRSBH", data.getNsrsbh());
+        Map respMapVali = client.process(mapVali);
+        //调用tdps查询这个税号的基本信息，然后和输入的法人名称和法人证件号进行对比
+        TY21Xml2Object object = analyzeXmlTY11(respMapVali, data.getNsrsbh());
+        if (StringUtils.isEmpty(object.getFRXM()) || StringUtils.isEmpty(object.getFRZJH())) {
+            throw new ServiceException(4630);
+        }
+        if (!object.getFRXM().equals(data.getFrmc().trim()) || !object.getFRZJH().equals(data.getFrzjh().trim())) {
+            throw new ServiceException(4638);
+        }
 
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY12");
@@ -659,6 +730,84 @@ public class UserBindServiceImpl implements UserBindService {
         return object;
     }
 
+    public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException(4629);
+        }
+        if (!resMap.get("rescode").equals("00000000")) {
+            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
+        }
+        if (!resMap.containsKey("taxML_CRM_NSRXXCX_" + nsrsbh + ".xml")) {
+            throw new ServiceException(4634);
+        }
+        TY21Xml2Object object = new TY21Xml2Object();
+        com.abc12366.uc.jrxt.model.TY11Response.JBXXCX jbxxcx;
+        try {
+            jbxxcx = (com.abc12366.uc.jrxt.model.TY11Response.JBXXCX) XmlJavaParser.parseXmlToObject(com.abc12366.uc.jrxt.model.TY11Response.JBXXCX.class, String.valueOf(resMap.get("taxML_CRM_NSRXXCX_" + nsrsbh + ".xml")));
+        } catch (org.exolab.castor.xml.MarshalException e) {
+            e.printStackTrace();
+            throw new ServiceException(4633);
+        }
+        String cxjg = jbxxcx.getCXJG();
+        if ("1".equals(cxjg)) {
+            com.abc12366.uc.jrxt.model.TY11Response.MXXX[] mxxxes = jbxxcx.getMXXXS().getMXXX();
+            for (com.abc12366.uc.jrxt.model.TY11Response.MXXX mx : mxxxes) {
+                if ("FRXM".equals(mx.getCODE())) {
+                    object.setFRXM(mx.getVALUE());
+                }
+                if ("FRZJH".equals(mx.getCODE())) {
+                    object.setFRZJH(mx.getVALUE());
+                }
+
+//                if ("LOGINTOKEN".equals(mx.getCODE())) {
+//                    object.setLOGINTOKEN(mx.getVALUE());
+//                }
+//                if ("DLSJ".equals(mx.getCODE())) {
+//                    object.setDLSJ(mx.getVALUE());
+//                }
+//                if ("Y_NSRSBH".equals(mx.getCODE())) {
+//                    object.setY_NSRSBH(mx.getVALUE());
+//                }
+//                if ("NSRMC".equals(mx.getCODE())) {
+//                    object.setNSRMC(mx.getVALUE());
+//                }
+//                if ("SHXYDM".equals(mx.getCODE())) {
+//                    object.setSHXYDM(mx.getVALUE());
+//                }
+//                if ("SWJGDM".equals(mx.getCODE())) {
+//                    object.setSWJGDM(mx.getVALUE());
+//                }
+//                if ("SWJGMC".equals(mx.getCODE())) {
+//                    object.setSWJGMC(mx.getVALUE());
+//                }
+//                if ("DJXH".equals(mx.getCODE())) {
+//                    object.setDJXH(mx.getVALUE());
+//                }
+//                if ("FRXM".equals(mx.getCODE())) {
+//                    object.setFRXM(mx.getVALUE());
+//                }
+//                if ("FRZJH".equals(mx.getCODE())) {
+//                    object.setFRZJH(mx.getVALUE());
+//                }
+//                if ("RJDQR".equals(mx.getCODE())) {
+//                    object.setRJDQR(mx.getVALUE());
+//                }
+//                if ("YQDQR".equals(mx.getCODE())) {
+//                    object.setYQDQR(mx.getVALUE());
+//                }
+//                if ("NSRLX".equals(mx.getCODE())) {
+//                    object.setNSRLX(mx.getVALUE());
+//                }
+//                if ("SFGTJZH".equals(mx.getCODE())) {
+//                    object.setSFGTJZH(mx.getVALUE());
+//                }
+            }
+        } else {
+            throw new ServiceException("9999", jbxxcx.getCWYY());
+        }
+        return object;
+    }
+
     public String fwmmEncode(String code) throws Exception {
 //        String appointCode = "abchngs";
 //        String encodedCode = "";
@@ -698,11 +847,11 @@ public class UserBindServiceImpl implements UserBindService {
             if (xgjgs == null || xgjgs.getXGJG() == null) {
                 throw new ServiceException(4633);
             }
-            for (XGJG xgjg : xgjgs.getXGJG()) {
-                if (xgjg.getGSCG() != "0") {
-                    throw new ServiceException(xgjg.getGSCG(), xgjg.getCWYY());
-                }
-            }
+//            for (XGJG xgjg : xgjgs.getXGJG()) {
+//                if (xgjg.getGSCG() != "0") {
+//                    throw new ServiceException(xgjg.getGSCG(), xgjg.getCWYY());
+//                }
+//            }
         } catch (org.exolab.castor.xml.MarshalException e) {
             e.printStackTrace();
             throw new ServiceException(4633);

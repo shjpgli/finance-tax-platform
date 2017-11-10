@@ -146,10 +146,18 @@ public class QueFactionServiceImpl implements QueFactionService {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         QuestionFaction questionFaction = new QuestionFaction();
         questionFactionBo.setFactionId(uuid);
-        questionFactionBo.setFactionGrade("PO");//默认最低等级
+        questionFactionBo.setFactionGrade("P1");//默认最低等级
         questionFactionBo.setPeopleLimit(1000);//初始人数限制
         questionFactionBo.setAwardPoint(0);//初始奖励积分为0
         BeanUtils.copyProperties(questionFactionBo, questionFaction);
+
+        Map<String, Object> dataMap1 = new HashMap<>();
+        dataMap1.put("factionName", questionFactionBo.getFactionName());
+        int factionNameCnt = questionFactionRoMapper.selectFactionNameCnt(dataMap1);
+        if(factionNameCnt > 0){
+            //邦派名称已存在
+            throw new ServiceException(6127);
+        }
 
         int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
 
@@ -161,7 +169,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             userLevel = userBo.getLevel();
         }
 
-        if(factionCnt>4){
+        if(factionCnt>=4){
             //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
             throw new ServiceException(6126);
         }
@@ -199,7 +207,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             QuestionFactionMember member = new QuestionFactionMember();
             member.setFactionId(questionFaction.getFactionId());
             member.setUserId(questionFaction.getUserId());
-            member.setDuty("1");
+            member.setDuty("1");//默认创建人为帮主
             member.setCreateTime(new Date());
             member.setMemberId(UUID.randomUUID().toString().replace("-", ""));
             member.setStatus(1);
@@ -281,7 +289,14 @@ public class QueFactionServiceImpl implements QueFactionService {
             questionFactionBo.setUpdateTime(new Date());
             BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
-
+            Map<String, Object> dataMap1 = new HashMap<>();
+            dataMap1.put("factionName", questionFactionBo.getFactionName());
+            dataMap1.put("factionId", questionFactionBo.getFactionId());
+            int factionNameCnt = questionFactionRoMapper.selectFactionNameCnt(dataMap1);
+            if(factionNameCnt > 0){
+                //邦派名称已存在
+                throw new ServiceException(6127);
+            }
 
             tagMapper.deleteByPrimaryKey(questionFactionBo.getFactionId());
 

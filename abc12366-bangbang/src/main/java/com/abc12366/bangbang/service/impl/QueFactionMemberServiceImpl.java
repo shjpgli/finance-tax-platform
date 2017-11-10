@@ -117,6 +117,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
             LOGGER.info("更新邦派成员信息:{}", jsonStu.toString());
             factionMemberBo.setLastUpdate(new Date());
+            //factionMemberBo.setDuty("B1");
+            factionMemberBo.setMemberGrade("B1");
             BeanUtils.copyProperties(factionMemberBo, factionMember);
             memberMapper.updateByPrimaryKeySelective(factionMember);
         } catch (Exception e) {
@@ -133,6 +135,29 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
 
         } catch (Exception e) {
             LOGGER.error("更新邦派成员信息异常：{}", e);
+            throw new ServiceException(6133);
+        }
+        return "";
+    }
+
+    @Override
+    public String updateDuty(String memberId,String duty) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("memberId", memberId);//
+        dataMap.put("duty", duty);//
+        if("1".equals(duty)){
+            int dutyCnt = memberRoMapper.selectMemberDutyCnt(dataMap);
+            if(dutyCnt > 0){
+                //该帮的副帮主已达上限
+                throw new ServiceException(6191);
+            }
+        }
+        //设置职位
+        try {
+
+            memberMapper.updateDuty(dataMap);
+        } catch (Exception e) {
+            LOGGER.error("设置职位异常：{}", e);
             throw new ServiceException(6133);
         }
         return "";

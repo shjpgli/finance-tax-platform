@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 memberId,	factionId,	userId,	username,	nickname,	status,duty,	createTime,	lastUpdate
+		 memberId,	factionId,	userId,	username,	nickname,	status,duty,memberGrade,	createTime,	lastUpdate
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
@@ -27,7 +27,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo" parameterType="java.util.Map">
         SELECT
-        memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,	m.createTime,	m.lastUpdate
+        memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,memberGrade,	m.createTime,	m.lastUpdate
         FROM bb_question_faction_member m LEFT JOIN bb_user u on m.userId = u.id
         WHERE 1=1
         <if test="factionId != null and factionId != ''">
@@ -41,7 +41,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectListTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo" parameterType="java.util.Map">
         SELECT
-        memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,	m.createTime,	m.lastUpdate,
+        memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,memberGrade,	m.createTime,	m.lastUpdate,
         (SELECT count(*) FROM bb_question_attention where attentionUserId = m.userId and userId = #{userId})  isAttention,
         (SELECT count(id) FROM bb_question_answer where userId = m.userId and  factionId = m.factionId) answerNum,
         (SELECT count(id) FROM bb_question_comment where userId = m.userId and factionId = m.factionId) discussNum,
@@ -76,6 +76,14 @@
             parentId = '' and userId = #{userId}
             AND DATE_FORMAT(createTime, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
             AND factionId = #{factionId} ) b where b.plcnt >2 and b.likecnt >6;
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectMemberDutyCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM bb_question_faction_member
+        WHERE factionId = (select factionId from bb_question_faction_member m where m.memberId = #{factionId} limit 1) and duty = #{duty}
     </select>
 
 </mapper>

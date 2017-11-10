@@ -2,9 +2,11 @@ package com.abc12366.message.web;
 
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
 import com.github.pagehelper.PageInfo;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
+import java.util.*;
 
 /**
  * 用户消息服务
@@ -56,7 +58,30 @@ public class UserMsgController {
             List<UserMessage> dataList = userMsgService.selectList(um, page, size);
 
             PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
-            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
+                    "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 查询用户消息未读数量
+     *
+     * @param type 消息类型，默认查询所有消息
+     * @return 消息未读总数
+     */
+    @GetMapping("/unread/count")
+    public ResponseEntity unreadCount(@RequestParam(value = "type", required = false) String type) {
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = Utils.getUserId();
+
+        if (!StringUtils.isEmpty(userId)) {
+            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).build();
+            int count = userMsgService.unreadCount(um);
+            responseEntity = ResponseEntity.ok(Utils.kv("data", count));
         }
 
         LOGGER.info("{}", responseEntity);
@@ -117,8 +142,8 @@ public class UserMsgController {
     /**
      * 直接将'未读'消息置为'已读'，不需要进入消息
      *
-     * @param id
-     * @return
+     * @param id 消息主键
+     * @return 消息对象
      */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@PathVariable("id") String id) {
@@ -165,8 +190,9 @@ public class UserMsgController {
      */
     @GetMapping(path = "/bangbang")
     public ResponseEntity selectListForBangbang(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     HttpServletRequest request) {
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                        size,
+                                                HttpServletRequest request) {
         LOGGER.info("{},{}", page, size);
 
         // request USER_ID为空
@@ -181,6 +207,54 @@ public class UserMsgController {
         }
 
         LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 根据用户名c查询消息列表
+     *
+     * @param fromuser  发送者
+     * @param touser    接受者
+     * @param status    状态
+     * @param startDate 时间段下限
+     * @param endDate   时间段上限
+     * @param page      页码
+     * @param size      每页数据量
+     * @return ResponseEntity {@linkplain com.abc12366.message.model.bo.UserMessageForBangbang}
+     */
+    @GetMapping(path = "/username")
+    public ResponseEntity selectListByUsername(@RequestParam(required = false) String fromuser,
+                                               @RequestParam(required = false) String touser,
+                                               @RequestParam(required = false) String status,
+                                               @RequestParam(required = false) String startDate,
+                                               @RequestParam(required = false) String endDate,
+                                               @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
+    ) {
+        LOGGER.info("根据用户名查询发给这个用户的消息，username:{},{},{}", fromuser, touser);
+        Map<String, Object> map = new HashMap<>();
+        map.put("fromuser", fromuser == null ? null : fromuser.trim());
+        map.put("touser", touser == null ? null : touser.trim());
+        map.put("status", status == null ? null : status.trim());
+        if (!StringUtils.isEmpty(startDate)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.StrToDate(startDate));
+            map.put("startDate", calendar.getTime());
+        }
+        if (!StringUtils.isEmpty(endDate)) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.StrToDate(endDate));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            map.put("endDate", calendar.getTime());
+        }
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        List<UserMessageAdmin> dataList = userMsgService.selectListByUsername(map, page, size);
+        if (!StringUtils.isEmpty(dataList) && dataList.size() > 0) {
+            PageInfo<UserMessageAdmin> pageInfo = new PageInfo<>(dataList);
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+        }
+
+        LOGGER.info("查询到的用户的消息有：{}", dataList);
         return responseEntity;
     }
 }

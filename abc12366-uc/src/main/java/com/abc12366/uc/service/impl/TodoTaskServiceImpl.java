@@ -58,6 +58,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         //SysTaskBO sysTaskBO = sysTaskService.selectOne(sysTaskId);
         //新的查询系统任务方法：根据编码查询
         SysTaskBO sysTaskBO = sysTaskService.selectValidOneByCode(taskCode);
+        LOGGER.info("用户正在完成任务，用户ID：{},任务名称:{}", userId, sysTaskBO);
         if (sysTaskBO == null) {
             return;
         }
@@ -110,12 +111,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     @Override
-    public void generateAllTodoTaskList(LoginBO loginBO) {
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
-        if (user == null) {
-            return;
-        }
-        String userId = user.getId();
+    public void generateAllTodoTaskList(String userId) {
         //1.生成一次性任务
         generateOneTimeTaskList(userId);
 

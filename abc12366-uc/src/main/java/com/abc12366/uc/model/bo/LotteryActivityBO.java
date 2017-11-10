@@ -9,6 +9,47 @@ import java.util.Date;
 
 
 public class LotteryActivityBO{
+    /**用户中奖最大值*/
+    private Integer  userLotteryMax;
+    /**用户每天中奖最大值*/
+    private Integer  userLotteryMaxDay;
+    /**用户每天免费次数*/
+    private Integer  userFreeCount;
+    /**领奖截至天数*/
+    private Integer  getlotteyDay;
+
+    public Integer getUserLotteryMax() {
+        return userLotteryMax;
+    }
+
+    public void setUserLotteryMax(Integer userLotteryMax) {
+        this.userLotteryMax = userLotteryMax;
+    }
+
+    public Integer getUserLotteryMaxDay() {
+        return userLotteryMaxDay;
+    }
+
+    public void setUserLotteryMaxDay(Integer userLotteryMaxDay) {
+        this.userLotteryMaxDay = userLotteryMaxDay;
+    }
+
+    public Integer getUserFreeCount() {
+        return userFreeCount;
+    }
+
+    public void setUserFreeCount(Integer userFreeCount) {
+        this.userFreeCount = userFreeCount;
+    }
+
+    public Integer getGetlotteyDay() {
+        return getlotteyDay;
+    }
+
+    public void setGetlotteyDay(Integer getlotteyDay) {
+        this.getlotteyDay = getlotteyDay;
+    }
+
     /** 时段投库存 */
     private Integer timeStock;
     /** 时段段时间 */
@@ -165,21 +206,4 @@ public void setCreateTime(Date createTime){
    this.createTime = createTime;
 }
 
-@Override
-public String toString() {
-return "LotteryActivity {\r\n"+
-"\""+"id"+"\""+":"+"\""+id+"\""+",\r\n"+
-"\""+"name"+"\""+":"+"\""+name+"\""+",\r\n"+
-"\""+"types"+"\""+":"+"\""+types+"\""+",\r\n"+
-"\""+"description"+"\""+":"+"\""+description+"\""+",\r\n"+
-"\""+"count"+"\""+":"+"\""+count+"\""+",\r\n"+
-"\""+"label"+"\""+":"+"\""+label+"\""+",\r\n"+
-"\""+"userLevel"+"\""+":"+"\""+userLevel+"\""+",\r\n"+
-"\""+"url"+"\""+":"+"\""+url+"\""+",\r\n"+
-"\""+"startTime"+"\""+":"+"\""+startTime+"\""+",\r\n"+
-"\""+"endTime"+"\""+":"+"\""+endTime+"\""+",\r\n"+
-"\""+"status"+"\""+":"+"\""+status+"\""+",\r\n"+
-"\""+"templateId"+"\""+":"+"\""+templateId+"\""+",\r\n"+
-"\""+"createTime"+"\""+":"+"\""+createTime+"\""+"}";
-}
 }
