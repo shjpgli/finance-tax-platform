@@ -111,12 +111,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     @Override
-    public void generateAllTodoTaskList(LoginBO loginBO) {
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
-        if (user == null) {
-            return;
-        }
-        String userId = user.getId();
+    public void generateAllTodoTaskList(String userId) {
         //1.生成一次性任务
         generateOneTimeTaskList(userId);
 

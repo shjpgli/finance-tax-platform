@@ -47,8 +47,8 @@ public class UserController {
     @SuppressWarnings("rawtypes")
     @PutMapping("/changeheadbywx/{userid}/{mediaid}")
     public ResponseEntity changeHeadByWx(@PathVariable("userid") String userid, @PathVariable("mediaid") String mediaid
-    		, HttpServletRequest request) {
-        String filePath = iWxGzhService.getWxDownFilePath(userid, mediaid,request);
+            , HttpServletRequest request) {
+        String filePath = iWxGzhService.getWxDownFilePath(userid, mediaid, request);
 
         UserUpdateBO userUpdateDTO = new UserUpdateBO();
         userUpdateDTO.setId(userid);
@@ -178,25 +178,6 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv("data", user));
     }
 
-    //
-    @GetMapping(path = "/u/openid/{openid}")
-    public ResponseEntity loginByopenid(@PathVariable String openid, HttpServletRequest request) {
-        try {
-            LOGGER.info("{}", openid);
-            UserBO user = userService.selectByopenid(openid);
-            if (user == null) {
-                throw new ServiceException(4018);
-            } else {
-                Map token = authService.loginByopenid(user, request.getHeader(Constant.APP_TOKEN_HEAD));
-                LOGGER.info("{}", user);
-                return ResponseEntity.ok(Utils.kv("data", token));
-            }
-
-        } catch (Exception e) {
-            throw new ServiceException(4018);
-        }
-    }
-
     //用户更换手机号码
     @PutMapping(path = "/phone/{id}")
     public ResponseEntity updatePhone(@Valid @RequestBody UserPhoneBO bo, @PathVariable String id) {
@@ -322,14 +303,15 @@ public class UserController {
         IsRealNameBO isRealName = userService.isRealName();
         return ResponseEntity.ok(Utils.kv("data", isRealName));
     }
-    
+
     /**
      * 修改微信绑定信息
+     *
      * @return
      */
     @PostMapping(path = "/wx/changeWxBdxx")
     public ResponseEntity changeWxBdxx(@RequestBody UserUpdateBO userUpdateDTO) {
-    	int status=userService.changeWxBdxx(userUpdateDTO);
-    	return ResponseEntity.ok(Utils.kv("data", status));
+        int status = userService.changeWxBdxx(userUpdateDTO);
+        return ResponseEntity.ok(Utils.kv("data", status));
     }
 }

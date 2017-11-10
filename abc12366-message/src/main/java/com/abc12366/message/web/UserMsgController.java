@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户消息服务
@@ -61,7 +58,8 @@ public class UserMsgController {
             List<UserMessage> dataList = userMsgService.selectList(um, page, size);
 
             PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
-            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
+                    "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
         }
 
         LOGGER.info("{}", responseEntity);
@@ -192,8 +190,9 @@ public class UserMsgController {
      */
     @GetMapping(path = "/bangbang")
     public ResponseEntity selectListForBangbang(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     HttpServletRequest request) {
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                        size,
+                                                HttpServletRequest request) {
         LOGGER.info("{},{}", page, size);
 
         // request USER_ID为空
@@ -213,38 +212,39 @@ public class UserMsgController {
 
     /**
      * 根据用户名c查询消息列表
-     * @param fromuser 发送者
-     * @param touser 接受者
-     * @param status 状态
+     *
+     * @param fromuser  发送者
+     * @param touser    接受者
+     * @param status    状态
      * @param startDate 时间段下限
-     * @param endDate 时间段上限
-     * @param page 页码
-     * @param size 每页数据量
+     * @param endDate   时间段上限
+     * @param page      页码
+     * @param size      每页数据量
      * @return ResponseEntity {@linkplain com.abc12366.message.model.bo.UserMessageForBangbang}
      */
     @GetMapping(path = "/username")
     public ResponseEntity selectListByUsername(@RequestParam(required = false) String fromuser,
-                                           @RequestParam(required = false) String touser,
-                                           @RequestParam(required = false) String status,
-                                           @RequestParam(required = false) String startDate,
-                                           @RequestParam(required = false) String endDate,
-                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
-                                               ) {
-        LOGGER.info("根据用户名查询发给这个用户的消息，username:{},{},{}", fromuser,touser);
+                                               @RequestParam(required = false) String touser,
+                                               @RequestParam(required = false) String status,
+                                               @RequestParam(required = false) String startDate,
+                                               @RequestParam(required = false) String endDate,
+                                               @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
+    ) {
+        LOGGER.info("根据用户名查询发给这个用户的消息，username:{},{},{}", fromuser, touser);
         Map<String, Object> map = new HashMap<>();
         map.put("fromuser", fromuser == null ? null : fromuser.trim());
         map.put("touser", touser == null ? null : touser.trim());
         map.put("status", status == null ? null : status.trim());
-        if(!StringUtils.isEmpty(startDate)){
+        if (!StringUtils.isEmpty(startDate)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.StrToDate(startDate));
             map.put("startDate", calendar.getTime());
         }
-        if(!StringUtils.isEmpty(endDate)){
+        if (!StringUtils.isEmpty(endDate)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.StrToDate(endDate));
-            calendar.add(Calendar.DAY_OF_MONTH,1);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
             map.put("endDate", calendar.getTime());
         }
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());

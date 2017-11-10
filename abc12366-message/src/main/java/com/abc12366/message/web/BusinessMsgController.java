@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 业务消息服务
@@ -68,7 +65,8 @@ public class BusinessMsgController {
             List<BusinessMessage> dataList = businessMsgService.selectList(bm, page, size);
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
-            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
+                    "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
         }
 
         LOGGER.info("{}", responseEntity);
@@ -237,15 +235,15 @@ public class BusinessMsgController {
         map.put("type", type == null ? null : type.trim());
         map.put("busiType", busiType == null ? null : busiType.trim());
         map.put("status", status == null ? null : status.trim());
-        if(!StringUtils.isEmpty(startDate)){
+        if (!StringUtils.isEmpty(startDate)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.StrToDate(startDate));
             map.put("startDate", calendar.getTime());
         }
-        if(!StringUtils.isEmpty(endDate)){
+        if (!StringUtils.isEmpty(endDate)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.StrToDate(endDate));
-            calendar.add(Calendar.DAY_OF_MONTH,1);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
             map.put("endDate", calendar.getTime());
         }
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
