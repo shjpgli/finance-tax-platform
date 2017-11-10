@@ -14,7 +14,6 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -37,10 +36,10 @@ public class ReportDateJob implements Job {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportDateJob.class);
 
-    @Autowired
+
     private UserService userService;
-    @Autowired
-    private static IMsgSendService msgSendService;
+
+    private IMsgSendService msgSendService;
 
     private String shenqqix = "";//申报期限
 
