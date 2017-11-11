@@ -74,14 +74,6 @@ public interface OrderService {
     OrderBO submitOrder(OrderSubmitBO orderSubmitBO);
 
     /**
-     * 修改用户等级服务
-     *
-     * @param orderNo 订单编号
-     * @return VIP日志对象
-     */
-    VipLogBO updateVipLevel(String orderNo);
-
-    /**
      * 查询购物车列表
      *
      * @param order 订单对象

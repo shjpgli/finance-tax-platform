@@ -4,6 +4,8 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
+import com.abc12366.uc.service.IDzfpService;
+import com.abc12366.uc.service.UserService;
 import com.alibaba.fastjson.JSON;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
@@ -58,6 +60,8 @@ public class DzfpClient {
 	
 	private static InputStream ssl_store =null;
 	
+	private static IDzfpService dzfpService;
+	
 	/*public static final String XSF_NSRSBH="110109500321655";//消费方纳税人识别号
 	
 	public static final String XSF_MC="百旺电子测试2";//消费方名称
@@ -78,14 +82,12 @@ public class DzfpClient {
 	private static String namepace="http://dsqzjk.dzfpqz";
 	
 	private static String appid="6d29f136114544bcc73edcce960c430231183cc192c433e2b9ebcad56e8ceb08";*/
-	
+	static{
+		dzfpService = (IDzfpService) SpringCtxHolder.getApplicationContext().getBean("dzfpService");	
+	}
 	
 	@SuppressWarnings("rawtypes")
 	public static Object doSender(String interfaceCode,String content,Class _class) throws Exception{
-		
-		//ssl_store = ResourceUtils.getFile("classpath:cer/testclient.truststore").getAbsolutePath();
-		
-		//ssl_store= new ClassPathResource("cer/testclient.truststore");
 		
 		ssl_store=new ClassPathResource("cer/testclient.truststore").getInputStream();
 		
@@ -107,6 +109,15 @@ public class DzfpClient {
     	Object[] opArgs = new Object[] {xml };
     	Class<?>[] opReturnType = new Class[] { String.class };
     	Object[] ret = serviceClient.invokeBlocking(new QName(namepace, "doService"), opArgs,  opReturnType);
+    	
+    	if("DFXJ1001".equals(interfaceCode)){
+    		Einvocie einvocie=(Einvocie) xmlToObject(ret[0].toString(),Einvocie.class);
+    		if("0000".equals(einvocie.getReturnCode())){
+    			einvocie.setSendStr(content);
+    			dzfpService.insert(einvocie);
+    		}
+    	}
+    	
     	return xmlToObject(ret[0].toString(),_class);
 	}
 	

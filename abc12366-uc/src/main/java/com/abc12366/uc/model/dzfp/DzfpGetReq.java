@@ -81,6 +81,10 @@ public class DzfpGetReq implements Serializable {
 		this.kpr = kqr;
 	}
 	
+	/***
+	 * 生成电子发票所需XML
+	 * @return
+	 */
 	public String tosendXml(){
 		StringBuffer invoiceXmsStr=new StringBuffer();
 		
@@ -111,7 +115,7 @@ public class DzfpGetReq implements Serializable {
 		
 		
 		StringBuffer content=new StringBuffer("<REQUEST_COMMON_FPKJ class='REQUEST_COMMON_FPKJ'>");
-		content.append("<FPQQLSH>").append("ABC"+System.currentTimeMillis()).append("</FPQQLSH>").append("<KPLX>").append(kplx).append("</KPLX>")
+		content.append("<FPQQLSH>").append(this.fpqqlsh).append("</FPQQLSH>").append("<KPLX>").append(this.kplx).append("</KPLX>")
 		.append("<XSF_NSRSBH>").append(DzfpClient.XSF_NSRSBH).append("</XSF_NSRSBH>").append("<XSF_MC>").append(DzfpClient.XSF_MC).append("</XSF_MC>")
 		.append("<XSF_DZDH>").append(DzfpClient.TXSF_DZDH).append("</XSF_DZDH>").append("<XSF_YHZH>").append(DzfpClient.XSF_YHZH).append("</XSF_YHZH>")
 		.append("<GMF_NSRSBH>").append(gmf_nsrsbh).append("</GMF_NSRSBH>").append("<GMF_MC>").append(gmf_mc).append("</GMF_MC>")
