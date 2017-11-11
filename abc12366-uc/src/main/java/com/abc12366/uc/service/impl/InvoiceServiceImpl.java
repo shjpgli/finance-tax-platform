@@ -3,21 +3,20 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
-import com.abc12366.uc.model.weixin.bo.template.Template;
+import com.abc12366.uc.model.order.Order;
+import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.InvoiceService;
-import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.util.*;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.apache.commons.lang.StringUtils;
@@ -27,9 +26,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -406,7 +405,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Transactional("db1TxManager")
     @Override
-    public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId, HttpServletRequest request) {
+    public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId,
+                                              HttpServletRequest request) {
         for (InvoiceExpressExcel expressExcel : expressExcelList) {
             Invoice invoice = new Invoice();
             invoice.setStatus("4");
@@ -440,7 +440,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             obj.setPrivilegeId(MessageConstant.YWTX_CODE);
             VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
             //查看业务提醒是否启用
-            if(findObj != null && findObj.getStatus()){
+            if (findObj != null && findObj.getStatus()) {
                 //发送消息
                 ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
                 if (expressComp == null) {
@@ -452,16 +452,19 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceTemp.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}", invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
+                String content = MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}",
+                        invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
                         expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
-                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                        "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                 message.setContent(content);
                 message.setUserId(invoiceTemp.getUserId());
-                if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
                     messageSendUtil.sendMessage(message, request);
                 }
 
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
+                if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils
+                        .isNotEmpty(user.getWxopenid())) {
                     //发送微信消息
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
@@ -476,9 +479,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                     templateService.templateSend("lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas", map);
 
                 }
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
+                if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
+                        StringUtils.isNotEmpty(user.getPhone())) {
                     //发送短信
-                    sendPhoneMessage(request,content,user);
+                    sendPhoneMessage(request, content, user);
                 }
             }
 
@@ -576,7 +580,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             /*Message message = new Message();
             message.setBusinessId(invoice.getOrderNo());
             message.setType(MessageConstant.SPDD);
-            message.setContent(MessageConstant.AUTOMATIC_CONFIRMATION_RECEIPT+"<a href=\""+MessageConstant.ABCUC_URL+"/orderDetail/"+invoice.getOrderNo()+"\">"+invoice.getOrderNo()+"</a>");
+            message.setContent(MessageConstant.AUTOMATIC_CONFIRMATION_RECEIPT+"<a href=\""+MessageConstant
+            .ABCUC_URL+"/orderDetail/"+invoice.getOrderNo()+"\">"+invoice.getOrderNo()+"</a>");
             message.setUserId(invoice.getUserId());
             messageSendUtil.sendMessage(message);*/
         }
@@ -678,7 +683,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRoMapper.selectUserInvoice(invoice);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {ServiceException.class, SQLException.class})
     @Override
     public void billing(InvoiceCheckBO invoiceCheckBO, HttpServletRequest request) {
         Invoice invoice = new Invoice();
@@ -757,22 +762,25 @@ public class InvoiceServiceImpl implements InvoiceService {
                 obj.setPrivilegeId(MessageConstant.YWTX_CODE);
                 VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
                 //查看业务提醒是否启用
-                if(findObj != null && findObj.getStatus()){
+                if (findObj != null && findObj.getStatus()) {
                     //发送消息
                     Message message = new Message();
                     message.setBusinessId(invoiceBO.getId());
                     message.setBusiType(MessageConstant.ZZFPDD);
                     message.setType(MessageConstant.SYS_MESSAGE);
-                    String content = MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+                    String content = MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
+                            invoiceBO.getId());
                     message.setContent(content);
-                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                            "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                     message.setUserId(invoiceBO.getUserId());
                     //web消息
-                    if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                    if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
                         messageSendUtil.sendMessage(message, request);
                     }
 
-                    if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid()) ){
+                    if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) &&
+                            StringUtils.isNotEmpty(user.getWxopenid())) {
                         //发送微信消息
                         Map<String, String> dataList = new HashMap<String, String>();
                         dataList.put("userId", user.getId());
@@ -785,15 +793,17 @@ public class InvoiceServiceImpl implements InvoiceService {
                         dataList.put("keyword4", DataUtils.dateToStr(new Date()));
                         templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
                     }
-                    if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone()) ){
+                    if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
+                            StringUtils.isNotEmpty(user.getPhone())) {
                         //发送短信
-                        sendPhoneMessage(request,content,user);
+                        sendPhoneMessage(request, content, user);
                     }
                 }
 
             } else {
                 if (invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())) {
-                    InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
+                    InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId
+                            ());
                     if (invoiceDetail == null) {
                         LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
                         throw new ServiceException(4186);
@@ -816,23 +826,25 @@ public class InvoiceServiceImpl implements InvoiceService {
                 obj.setPrivilegeId(MessageConstant.YWTX_CODE);
                 VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
                 //查看业务提醒是否启用
-                if(findObj != null && findObj.getStatus()){
+                if (findObj != null && findObj.getStatus()) {
 
                     //发送消息
                     Message message = new Message();
                     message.setBusinessId(invoiceBO.getId());
                     message.setBusiType(MessageConstant.ZZFPDD);
                     message.setType(MessageConstant.SYS_MESSAGE);
-                    String content = MessageConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+                    String content = MessageConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+                            .getId());
                     message.setContent(content);
                     message.setUserId(invoiceBO.getUserId());
                     //web消息
-                    if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                    if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
                         messageSendUtil.sendMessage(message, request);
                     }
 
                     //微信消息
-                    if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
+                    if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) &&
+                            StringUtils.isNotEmpty(user.getWxopenid())) {
                         Map<String, String> map = new HashMap<String, String>();
                         map.put("userId", user.getId());
                         map.put("openId", user.getWxopenid());
@@ -844,8 +856,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                     }
 
                     //短信消息
-                    if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
-                        sendPhoneMessage(request,content,user);
+                    if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
+                            StringUtils.isNotEmpty(user.getPhone())) {
+                        sendPhoneMessage(request, content, user);
                     }
                 }
             }
@@ -870,6 +883,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     /**
      * 发送短信公告方法
+     *
      * @param request
      * @param content
      * @param user
@@ -888,7 +902,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     /**
      * 纸质发票审核不通过
      */
-    private void checkInvoiceRefuse(InvoiceCheckBO invoiceCheckBO, HttpServletRequest request, Invoice invoice, InvoiceBO invoiceBO) {
+    private void checkInvoiceRefuse(InvoiceCheckBO invoiceCheckBO, HttpServletRequest request, Invoice invoice,
+                                    InvoiceBO invoiceBO) {
         List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoiceCheckBO.getId());
         Order order = null;
         //修改订单是否已开发票状态
@@ -916,23 +931,26 @@ public class InvoiceServiceImpl implements InvoiceService {
             obj.setPrivilegeId(MessageConstant.YWTX_CODE);
             VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
             //查看业务提醒是否启用
-            if(findObj != null && findObj.getStatus()){
+            if (findObj != null && findObj.getStatus()) {
 
                 //发送消息
                 Message message = new Message();
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.DZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+                String content = MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}",
+                        invoiceBO.getId());
                 message.setContent(content);
-                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                 message.setUserId(invoiceBO.getUserId());
                 //web消息
-                if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
                     messageSendUtil.sendMessage(message, request);
                 }
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
+                if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils
+                        .isNotEmpty(user.getWxopenid())) {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -944,8 +962,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
-                    sendPhoneMessage(request,content,user);
+                if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
+                        StringUtils.isNotEmpty(user.getPhone())) {
+                    sendPhoneMessage(request, content, user);
                 }
             }
 
@@ -958,25 +977,28 @@ public class InvoiceServiceImpl implements InvoiceService {
             obj.setPrivilegeId(MessageConstant.YWTX_CODE);
             VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
             //查看业务提醒是否启用
-            if(findObj != null && findObj.getStatus()){
+            if (findObj != null && findObj.getStatus()) {
 
                 //发送消息
                 Message message = new Message();
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO.getId());
+                String content = MessageConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+                        .getId());
                 message.setContent(content);
-                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                 message.setUserId(invoiceBO.getUserId());
 
                 //web消息
-                if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
+                if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
                     messageSendUtil.sendMessage(message, request);
                 }
 
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
+                if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils
+                        .isNotEmpty(user.getWxopenid())) {
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -988,8 +1010,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
-                    sendPhoneMessage(request,content,user);
+                if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
+                        StringUtils.isNotEmpty(user.getPhone())) {
+                    sendPhoneMessage(request, content, user);
                 }
             }
         }

@@ -21,8 +21,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -69,7 +67,8 @@ public class SystemRecordServiceImpl implements SystemRecordService {
      */
     @Async
     @Override
-    public CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO,HttpServletRequest request) {
+    public CompletableFuture<SystemRecordBO> insert(SystemRecordInsertBO systemRecordInsertBO, HttpServletRequest
+            request) {
         if (systemRecordInsertBO == null) {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
@@ -100,7 +99,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
                     systemRecordMapper.updateStay(systemRecordBO);
                 }
             } catch (Exception e) {
-                LOGGER.error("错误：" + e.getMessage());
+                LOGGER.error("错误：{}", e);
             }
         }
         int result = systemRecordMapper.insert(systemRecord);
@@ -109,17 +108,18 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             throw new ServiceException(4101);
         }
 
-        // todo 如果规则代码有效，则新增用户经验值
+        // 如果规则代码有效，则新增用户经验值
         if (!StringUtils.isEmpty(systemRecord.getRuleCode()) && !StringUtils.isEmpty(systemRecord.getUserId())) {
             LOGGER.info("调用UC计算用户经验值接口，用户ID{}，经验值编码：{}", systemRecord.getUserId(), systemRecord.getRuleCode());
             String expCalculateUrl = SpringCtxHolder.getProperty("abc12366.uc.url") + "/experience/calculate";
-            Map<String,String> map = new HashMap<>();
+            Map<String, String> map = new HashMap<>();
             map.put("userId", systemRecord.getUserId());
             map.put("ruleCode", systemRecord.getRuleCode());
-            try{
-                restTemplateUtil.exchange(expCalculateUrl, HttpMethod.POST,map,request);
-            } catch (Exception e){
+            try {
+                restTemplateUtil.exchange(expCalculateUrl, HttpMethod.POST, map, request);
+            } catch (Exception e) {
                 e.printStackTrace();
+                LOGGER.error("错误：{}", e);
             }
         }
 
