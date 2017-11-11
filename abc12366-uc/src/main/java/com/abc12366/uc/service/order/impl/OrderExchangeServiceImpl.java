@@ -534,7 +534,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 orderExchangeMapper.update(oe);
 
                 // 插入订单日志-已退款
-                insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+                insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款。退款金额为："+data.getAmount(), "1", oe.getId());
 
                 //将订单状态改成已结束
                 order.setOrderStatus("7");
