@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.InvoiceRoMapper">
 
-    <resultMap id="invoiceBOResultMap" type="com.abc12366.uc.model.bo.InvoiceBO">
+    <resultMap id="invoiceBOResultMap" type="com.abc12366.uc.model.invoice.bo.InvoiceBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="invoiceNo" property="invoiceNo" jdbcType="VARCHAR"/>
@@ -43,7 +43,7 @@
                     select="getOrderBO"></collection>
     </resultMap>
 
-    <resultMap id="invoiceBOListResultMap" type="com.abc12366.uc.model.bo.InvoiceBO">
+    <resultMap id="invoiceBOListResultMap" type="com.abc12366.uc.model.invoice.bo.InvoiceBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="invoiceNo" property="invoiceNo" jdbcType="VARCHAR"/>
@@ -147,7 +147,7 @@
     </resultMap>
 
     <!--产品对象-->
-    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
+    <resultMap type="com.abc12366.uc.model.order.bo.ProductBO" id="productResultMap">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
@@ -221,7 +221,7 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByInvoiceOrderNo" resultType="com.abc12366.uc.model.Invoice" parameterType="com.abc12366.uc.model.Invoice">
+    <select id="selectByInvoiceOrderNo" resultType="com.abc12366.uc.model.invoice.Invoice" parameterType="com.abc12366.uc.model.invoice.Invoice">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
@@ -237,7 +237,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectInvoice" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.Invoice">
+    <select id="selectInvoice" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.invoice.Invoice">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
@@ -263,7 +263,7 @@
     </select>
 
     <!-- 查询（根据主键ID和UserId查询） -->
-    <select id="selectUserInvoice" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.Invoice">
+    <select id="selectUserInvoice" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.invoice.Invoice">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
@@ -271,14 +271,14 @@
     </select>
 
     <!-- 查询（根据主键ID和UserId查询） -->
-    <select id="selectByIdAndUserId" resultType="com.abc12366.uc.model.Invoice" parameterType="com.abc12366.uc.model.Invoice">
+    <select id="selectByIdAndUserId" resultType="com.abc12366.uc.model.invoice.Invoice" parameterType="com.abc12366.uc.model.invoice.Invoice">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
         WHERE id = #{id} AND userId = #{userId}
     </select>
 
-    <select id="selectAvailableInvoice" resultType="com.abc12366.uc.model.Invoice">
+    <select id="selectAvailableInvoice" resultType="com.abc12366.uc.model.invoice.Invoice">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
@@ -286,7 +286,7 @@
     </select>
 
     <!--查询需要自动确认收货的发票订单-->
-    <select id="selectReceiptInvoiceByDate" resultType="com.abc12366.uc.model.Invoice" parameterType="java.util.Date">
+    <select id="selectReceiptInvoiceByDate" resultType="com.abc12366.uc.model.invoice.Invoice" parameterType="java.util.Date">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice
@@ -305,7 +305,7 @@
     </sql>
 
     <!-- 后台查询（根据条件查询） -->
-    <select id="selectList" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.bo.InvoiceBO">
+    <select id="selectList" resultMap="invoiceBOResultMap" parameterType="com.abc12366.uc.model.invoice.bo.InvoiceBO">
         SELECT
         <include refid="InvoiceBO_Column_List"/>
         FROM uc_invoice i

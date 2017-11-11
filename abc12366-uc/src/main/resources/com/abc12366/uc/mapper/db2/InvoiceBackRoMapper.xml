@@ -7,7 +7,7 @@
     <sql id="Base_Column_List">
         id, userId, expressId, reason, remark, expressNo, expressComp, status, createTime, lastUpdate,invoiceId
     </sql>
-    <resultMap id="invoiceBackBOMap" type="com.abc12366.uc.model.bo.InvoiceBackBO">
+    <resultMap id="invoiceBackBOMap" type="com.abc12366.uc.model.invoice.bo.InvoiceBackBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="expressId" property="expressId" jdbcType="VARCHAR"/>
@@ -20,7 +20,7 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="invoiceId" property="invoiceId" jdbcType="VARCHAR"/>
         <result column="sendExpressNo" property="sendExpressNo" jdbcType="VARCHAR"/>
-        <association property="invoiceBO" javaType="com.abc12366.uc.model.bo.InvoiceBO">
+        <association property="invoiceBO" javaType="com.abc12366.uc.model.invoice.bo.InvoiceBO">
             <id column="id" property="id" jdbcType="VARCHAR"/>
             <result column="userId" property="userId" jdbcType="VARCHAR"/>
             <result column="invoiceNo" property="invoiceNo" jdbcType="VARCHAR"/>
@@ -52,7 +52,7 @@
         </association>
     </resultMap>
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectById" resultType="com.abc12366.uc.model.InvoiceBack" parameterType="java.lang.String">
+    <select id="selectById" resultType="com.abc12366.uc.model.invoice.InvoiceBack" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_invoice_back
@@ -71,7 +71,7 @@
         WHERE b.id = #{id}
     </select>
 
-    <select id="selectBOList" resultMap="invoiceBackBOMap" parameterType="com.abc12366.uc.model.bo.InvoiceBackBO">
+    <select id="selectBOList" resultMap="invoiceBackBOMap" parameterType="com.abc12366.uc.model.invoice.bo.InvoiceBackBO">
         SELECT
         b.id, b.userId, b.expressId, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime,
         b.lastUpdate,b.invoiceId,

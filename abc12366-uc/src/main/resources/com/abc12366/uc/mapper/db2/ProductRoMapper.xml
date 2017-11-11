@@ -8,7 +8,7 @@
         id, goodsId, marketPrice, sellingPrice, costPrice, createTime, lastUpdate,stock
     </sql>
 
-    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
+    <resultMap type="com.abc12366.uc.model.order.bo.ProductBO" id="productResultMap">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
@@ -36,7 +36,7 @@
         <result column="sort" property="sort" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="selectSpecByGoodsId" parameterType="com.abc12366.uc.model.bo.ProductBO" resultMap="oneDictBO">
+    <select id="selectSpecByGoodsId" parameterType="com.abc12366.uc.model.order.bo.ProductBO" resultMap="oneDictBO">
         SELECT
         d.id, d.dictId, d.dictName, d.fieldKey, d.fieldValue, d.status, d.createTime, d.createUser, d.lastUpdate,
         d.lastUser,d.sort
@@ -67,7 +67,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectById" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
+    <select id="selectById" resultType="com.abc12366.uc.model.order.Product" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product
@@ -75,7 +75,7 @@
     </select>
 
     <!-- 查询（根据主键ID和状态查询） -->
-    <select id="selectByIdAndStatus" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
+    <select id="selectByIdAndStatus" resultType="com.abc12366.uc.model.order.Product" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product
@@ -83,7 +83,7 @@
     </select>
 
     <!-- 查询条件根据） -->
-    <select id="selectList" resultType="com.abc12366.uc.model.Product" parameterType="com.abc12366.uc.model.Product">
+    <select id="selectList" resultType="com.abc12366.uc.model.order.Product" parameterType="com.abc12366.uc.model.order.Product">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product
@@ -97,7 +97,7 @@
     </select>
 
     <!-- 查询条件根据） -->
-    <select id="selectByGoodsId" resultType="com.abc12366.uc.model.Product" parameterType="java.lang.String">
+    <select id="selectByGoodsId" resultType="com.abc12366.uc.model.order.Product" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product
@@ -113,7 +113,7 @@
     </select>
 
     <!-- 查询条件根据） -->
-    <select id="selectBOList" resultMap="productResultMap" parameterType="com.abc12366.uc.model.bo.ProductBO">
+    <select id="selectBOList" resultMap="productResultMap" parameterType="com.abc12366.uc.model.order.bo.ProductBO">
         SELECT
         p.id, p.goodsId, p.marketPrice, p.sellingPrice, p.costPrice, p.createTime, p.lastUpdate,p.stock,g.name as
         goodsName
