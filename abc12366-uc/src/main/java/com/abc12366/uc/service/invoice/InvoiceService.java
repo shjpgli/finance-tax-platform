@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.invoice;
 
+import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.invoice.Invoice;
 import com.abc12366.uc.model.invoice.InvoiceBack;
 import com.abc12366.uc.model.invoice.bo.*;
@@ -14,14 +15,39 @@ import java.util.List;
 @Service
 public interface InvoiceService {
 
+    /**
+     * 查询发票订单列表
+     * @param invoice
+     * @return
+     */
     List<InvoiceBO> selectList(InvoiceBO invoice);
 
+    /**
+     * 查询发票订单详情
+     * @param id
+     * @return
+     */
     InvoiceBO selectOne(String id);
 
+    /**
+     * 更新发票订单信息
+     * @param invoiceBO
+     * @return
+     */
     InvoiceBO updateInvoice(InvoiceBO invoiceBO);
 
+    /**
+     * 删除发票信息
+     * @param invoiceBO
+     * @return
+     */
     int deleteByIdAndUserId(InvoiceBO invoiceBO);
 
+    /**
+     * 新增发票订单
+     * @param invoiceBO
+     * @return
+     */
     InvoiceBO addInvoice(InvoiceBO invoiceBO);
 
     /**
@@ -29,14 +55,39 @@ public interface InvoiceService {
      */
     List<InvoiceExcel> selectInvoicePrintExcelList(InvoiceBO invoice);
 
+    /**
+     * 发票退票
+     * @param invoiceBackBO
+     * @return
+     */
     InvoiceBackBO refund(InvoiceBackBO invoiceBackBO);
 
+    /**
+     * 发票退票审核
+     * @param invoiceBack
+     * @return
+     */
     InvoiceBackBO refundCheck(InvoiceBack invoiceBack);
 
+    /**
+     * 查询发票退票信息
+     * @param invoiceBackBO
+     * @return
+     */
     List<InvoiceBackBO> selectBOList(InvoiceBackBO invoiceBackBO);
 
+    /**
+     * 查询发票退票详情
+     * @param id
+     * @return
+     */
     InvoiceBackBO selectBackOne(String id);
 
+    /**
+     * 前台用户查询发票信息
+     * @param invoice
+     * @return
+     */
     InvoiceBO selectUserInvoice(Invoice invoice);
 
     /**
@@ -46,10 +97,25 @@ public interface InvoiceService {
      */
     void billing(InvoiceCheckBO invoiceCheckBO, HttpServletRequest request);
 
+    /**
+     * 发票导出寄送信息
+     * @param invoice
+     * @return
+     */
     List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice);
 
+    /**
+     * 发票导入寄送信息
+     * @param expressExcelList
+     * @param expressCompId
+     * @param request
+     */
     void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId, HttpServletRequest request);
 
+    /**
+     * 发票导入打印收的信息
+     * @param invoiceList
+     */
     void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList);
 
     /**
@@ -68,4 +134,11 @@ public interface InvoiceService {
      * @return Integer
      */
     Integer selectTodoListCount();
+
+    /**
+     * 电子发票开票核对
+     * @return 未通过核对的电子发票
+     */
+    void invoiceCheck();
+
 }
