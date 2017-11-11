@@ -2,6 +2,7 @@ package com.abc12366.uc.web.invoice;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.invoice.Invoice;
 import com.abc12366.uc.model.invoice.InvoiceBack;
 import com.abc12366.uc.model.invoice.bo.*;
@@ -200,6 +201,7 @@ public class InvoiceController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+
     /**
      * 发票导出打印机列表
      *
@@ -333,6 +335,17 @@ public class InvoiceController {
 
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 电子发票核对
+     * @return 未通过核对的电子发票
+     */
+    @PostMapping(path = "/dzfp/check")
+    public ResponseEntity refundCheck() {
+        LOGGER.info("refundCheck:{}");
+        invoiceService.invoiceCheck();
+        return ResponseEntity.ok(Utils.kv());
     }
 
 }

@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.invoice.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -11,6 +13,8 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class InvoiceCheckBO implements Serializable {
 
+	@NotEmpty
+	@Size(min = 2,max = 32)
 	private String id;
 	/**
 	 * 是否同意开票
