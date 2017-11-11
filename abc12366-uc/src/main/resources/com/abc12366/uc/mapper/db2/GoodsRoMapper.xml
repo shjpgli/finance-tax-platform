@@ -9,7 +9,7 @@
         recommendType, isShipping, isFreeShipping, tradeMethod,memberLevel
     </sql>
 
-    <resultMap id="goodsBoResultMap" type="com.abc12366.uc.model.bo.GoodsBO">
+    <resultMap id="goodsBoResultMap" type="com.abc12366.uc.model.order.bo.GoodsBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
@@ -38,7 +38,7 @@
     </resultMap>
 
     <!--根据goodsId查询产品-->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Goods" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.Goods" parameterType="java.lang.String">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
@@ -49,7 +49,7 @@
         WHERE g.id = #{id}
     </select>
 
-    <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
+    <select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.order.Goods">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
@@ -74,7 +74,7 @@
         order by g.lastUpdate DESC
     </select>
 
-    <resultMap id="goodsBoMap" type="com.abc12366.uc.model.bo.GoodsBO">
+    <resultMap id="goodsBoMap" type="com.abc12366.uc.model.order.bo.GoodsBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
@@ -99,11 +99,11 @@
         <result column="isReturn" property="isReturn" jdbcType="VARCHAR"/>
         <result column="isExchange" property="isExchange" jdbcType="VARCHAR"/>
         <result column="memberLevel" property="memberLevel" jdbcType="VARCHAR"/>
-        <collection property="productBOList" ofType="com.abc12366.uc.model.bo.ProductBO" column="{goodsId=id}"
+        <collection property="productBOList" ofType="com.abc12366.uc.model.order.bo.ProductBO" column="{goodsId=id}"
                     select="getProductBO"></collection>
     </resultMap>
 
-    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productBOMap">
+    <resultMap type="com.abc12366.uc.model.order.bo.ProductBO" id="productBOMap">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
@@ -113,7 +113,6 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <result column="startRepo" property="startRepo" jdbcType="INTEGER"/>
         <result column="endRepo" property="endRepo" jdbcType="INTEGER"/>
-        <!--<collection property="repoBOList" ofType="com.abc12366.uc.model.bo.ProductRepoBO" column="{productId=id,startRepo=startRepo,endRepo=endRepo}" select="getProductRepoBO"></collection>-->
         <collection property="dictBOList" ofType="com.abc12366.uc.model.bo.DictBO" column="productId"
                     select="getDictBO"></collection>
     </resultMap>
@@ -162,7 +161,7 @@
         WHERE s.productId = #{productId}
     </select>
 
-    <select id="selectProductRepoList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.bo.GoodsBO">
+    <select id="selectProductRepoList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.order.bo.GoodsBO">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
@@ -176,7 +175,7 @@
         </where>
     </select>
 
-    <select id="selectGoodsBOList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.Goods">
+    <select id="selectGoodsBOList" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.order.Goods">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
@@ -201,7 +200,7 @@
         order by g.sort asc
     </select>
 
-    <select id="selectUserGoods" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.bo.GoodsBO">
+    <select id="selectUserGoods" resultMap="goodsBoMap" parameterType="com.abc12366.uc.model.order.bo.GoodsBO">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
@@ -224,41 +223,8 @@
         WHERE p.id = #{id}
     </select>
 
-    <!--<select id="selectList" resultMap="goodsBoResultMap" parameterType="com.abc12366.uc.model.Goods">
-        SELECT
-        g.id,
-        g.name,
-        g.imageUrl,
-        g.introduction,
-        g.details,
-        g.categoryId,
-        gc.category as categoryName,
-        g.status,
-        g.createTime,
-        g.lastUpdate,
-        g.giftPoints,
-        g.sort,
-        g.unit,
-        g.recommendType,
-        up.goodsId,
-        up.totalStock,
-        up.totalPrice
-        FROM uc_goods g
-        left JOIN uc_goods_category gc on gc.id = g.categoryId
-        left join (
-        select p.goodsId as goodsId,min(sellingPrice) as totalPrice,sum(p.stock) as totalStock from uc_product p group by p.goodsId
-        ) up on g.id = up.goodsId
-        <where>
-            1=1
-            <if test="name != null  and name!=''"> AND g.name LIKE CONCAT('%',#{name},'%')</if>
-            <if test="categoryId != null  and categoryId!=''"> AND g.categoryId = #{categoryId}</if>
-            <if test="recommendType != null  and recommendType!=''"> AND g.recommendType = #{recommendType}</if>
-            <if test="status != null  and status!=''"> AND g.status = #{status}</if>
-        </where>
-    </select>-->
-
     <!--     单个产品查询 -->
-    <select id="selectGoodsList" resultType="com.abc12366.uc.model.Goods" parameterType="com.abc12366.uc.model.Goods">
+    <select id="selectGoodsList" resultType="com.abc12366.uc.model.order.Goods" parameterType="com.abc12366.uc.model.order.Goods">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_goods
@@ -267,40 +233,6 @@
             <if test="name != null  and name!=''">AND g.name LIKE CONCAT('%',#{name},'%')</if>
         </where>
     </select>
-
-    <!-- <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
-         SELECT
-         g.id,
-         g.name,
-         g.imageUrl,
-         g.introduction,
-         g.details,
-         g.categoryId,
-         gc.category as categoryName,
-         g.status,
-         g.createTime,
-         g.lastUpdate,
-         g.giftPoints,
-         g.sort,
-         g.unit,
-         g.recommendType,
-         p.goodsId,
-          p.dictId,
-          p.stock,
-          p.marketPrice,
-          p.sellingPrice,
-          p.costPrice,
-          p.finalPrice,
-          p.discount,
-          p.uvipLevel,
-          p.weight,
-          p.createTime,
-          p.lastUpdate
-         FROM uc_goods g
-         left JOIN uc_product p on g.id = p.goodsId
-         left JOIN uc_goods_category gc on gc.id = g.categoryId
-         WHERE g.id = #{id}
-     </select>-->
 
     <select id="selectGoods" resultMap="goodsBoResultMap" parameterType="java.lang.String">
         SELECT
@@ -313,7 +245,7 @@
         WHERE g.id = #{id}
     </select>
 
-    <select id="selectCurriculumGoods" resultType="com.abc12366.uc.model.bo.GoodsBO" parameterType="java.lang.String">
+    <select id="selectCurriculumGoods" resultType="com.abc12366.uc.model.order.bo.GoodsBO" parameterType="java.lang.String">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,

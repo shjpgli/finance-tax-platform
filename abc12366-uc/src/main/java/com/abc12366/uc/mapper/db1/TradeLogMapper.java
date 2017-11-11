@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
-import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.order.TradeLog;
 import org.apache.ibatis.annotations.Param;
 
 /**

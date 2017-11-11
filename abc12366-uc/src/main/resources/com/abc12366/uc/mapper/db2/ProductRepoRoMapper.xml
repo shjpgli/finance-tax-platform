@@ -7,7 +7,7 @@
         id, goodsId, productId, income, outcome, stock, remark, createTime, lastUpdate,optionUser
     </sql>
 
-    <resultMap id="productRepoBOResultMap" type="com.abc12366.uc.model.bo.ProductRepoBO">
+    <resultMap id="productRepoBOResultMap" type="com.abc12366.uc.model.order.bo.ProductRepoBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
@@ -18,7 +18,7 @@
         <result column="optionUser" property="optionUser" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <association property="goods" javaType="com.abc12366.uc.model.Goods">
+        <association property="goods" javaType="com.abc12366.uc.model.order.Goods">
             <id column="id" property="id"/>
             <result column="name" property="name"/>
         </association>
@@ -29,14 +29,14 @@
           SELECT s_id id, s_name name FROM student WHERE class_id=#{id}
     </select>-->
 
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.ProductRepo" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.ProductRepo" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product_repo
         WHERE id = #{id}
     </select>
 
-    <select id="selectList" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.ProductRepo">
+    <select id="selectList" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.order.ProductRepo">
         SELECT
         r.id, r.goodsId, r.productId, r.income, r.outcome, r.stock, r.remark, r.createTime, r.lastUpdate,r.optionUser
 
@@ -57,7 +57,7 @@
         WHERE id = #{id}
     </select>
     <!-- 根据goodsId和productId查询最后一条数据-->
-    <select id="selectByGoodsId" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.ProductRepo">
+    <select id="selectByGoodsId" resultMap="productRepoBOResultMap" parameterType="com.abc12366.uc.model.order.ProductRepo">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product_repo
@@ -66,7 +66,7 @@
 
     <!-- 根据goodsId和ProductId查询库存列表信息-->
     <select id="selectProductRepoDetail" resultMap="productRepoBOResultMap"
-            parameterType="com.abc12366.uc.model.ProductRepo">
+            parameterType="com.abc12366.uc.model.order.ProductRepo">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_product_repo

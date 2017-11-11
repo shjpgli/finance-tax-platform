@@ -9,7 +9,7 @@
         WHERE orderNo = #{orderNo}
     </delete>
 
-    <insert id="insert" parameterType="com.abc12366.uc.model.OrderProductSpec">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.OrderProductSpec">
         INSERT INTO uc_order_productspec
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderNo != null">
@@ -36,7 +36,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.OrderProductSpec">
+    <update id="update" parameterType="com.abc12366.uc.model.order.OrderProductSpec">
         UPDATE uc_order_productspec
         <set>
             <if test="productId != null">

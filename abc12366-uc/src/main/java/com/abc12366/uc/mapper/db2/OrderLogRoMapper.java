@@ -1,6 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.OrderLog;
+import com.abc12366.uc.model.order.OrderLog;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

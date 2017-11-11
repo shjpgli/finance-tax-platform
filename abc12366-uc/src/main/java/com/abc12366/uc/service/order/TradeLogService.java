@@ -1,8 +1,8 @@
 package com.abc12366.uc.service.order;
 
-import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.order.TradeLog;
 import com.abc12366.uc.model.bo.TradeBillBO;
-import com.abc12366.uc.model.bo.TradeLogBO;
+import com.abc12366.uc.model.order.bo.TradeLogBO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
