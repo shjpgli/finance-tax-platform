@@ -7,8 +7,14 @@ import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
-import com.abc12366.uc.model.*;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.Dict;
+import com.abc12366.uc.model.ExpressComp;
+import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.PointsLogBO;
+import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.*;
@@ -101,6 +107,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private TradeMapper tradeMapper;
+
+    @Autowired
+    private TradeRoMapper traderoMapper;
 
     @Autowired
     private UserAddressRoMapper userAddressRoMapper;
@@ -472,6 +481,16 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
+        //查询订单和交易记录对应关系
+        Trade trade = traderoMapper.selectOrderNo(bo.getOrderNo());
+        if(trade != null){
+            TradeLog tradeLog = new TradeLog();
+            tradeLog.setTradeNo(trade.getTradeNo());
+            tradeLog.setTradeStatus("4");
+            //更新交易记录信息
+            tradeLogMapper.update(tradeLog);
+        }
+
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单", "0");
         return bo;
     }

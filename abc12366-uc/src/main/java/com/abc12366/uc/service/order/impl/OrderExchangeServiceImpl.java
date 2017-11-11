@@ -462,7 +462,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
 
                                         // 插入订单日志-已完成
-                                        insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+                                        insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
 
                                         //发送消息
                                         if (order == null) {
@@ -532,6 +532,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 oe.setRefundRemark(data.getRefundRemark());
                 oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                 orderExchangeMapper.update(oe);
+
+                // 插入订单日志-已退款
+                insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
 
                 //将订单状态改成已结束
                 order.setOrderStatus("7");
