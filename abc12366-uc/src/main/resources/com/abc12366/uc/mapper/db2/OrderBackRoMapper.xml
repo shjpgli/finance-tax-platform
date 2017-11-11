@@ -9,7 +9,7 @@
     </sql>
 
     <!--订单退单对象-->
-    <resultMap id="orderBackBOMap" type="com.abc12366.uc.model.bo.OrderBackBO">
+    <resultMap id="orderBackBOMap" type="com.abc12366.uc.model.order.bo.OrderBackBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
@@ -58,14 +58,14 @@
     </resultMap>
 
 
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.OrderBack" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.OrderBack" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_back
         WHERE id = #{id}
     </select>
 
-    <select id="selectOrderBackList" resultMap="orderBackBOMap" parameterType="com.abc12366.uc.model.OrderBack">
+    <select id="selectOrderBackList" resultMap="orderBackBOMap" parameterType="com.abc12366.uc.model.order.OrderBack">
         SELECT
         b.id, b.userId, b.orderNo, b.reason, b.remark, b.expressNo, b.expressComp, b.status, b.createTime, b.lastUpdate,b.adminConfirmRemark,
         o.orderNo, o.userId, o.orderStatus, o.deliveryMethod, o.payMethod, o.nowVipLevel, o.createTime,

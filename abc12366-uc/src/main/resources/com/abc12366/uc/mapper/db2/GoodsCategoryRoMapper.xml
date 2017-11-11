@@ -7,7 +7,7 @@
     <sql id="Base_Column_List">
         id, category, parentId, sort, createTime, lastUpdate
     </sql>
-    <resultMap id="categoryBoResultMap" type="com.abc12366.uc.model.bo.GoodsCategoryBO">
+    <resultMap id="categoryBoResultMap" type="com.abc12366.uc.model.order.bo.GoodsCategoryBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="category" property="category" jdbcType="VARCHAR"/>
         <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
@@ -16,7 +16,7 @@
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
     </resultMap>
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.GoodsCategory" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.GoodsCategory" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_goods_category
@@ -51,7 +51,7 @@
     </select>
 
     <!-- 查询（根据条件查询） -->
-    <select id="selectList" resultMap="categoryBoResultMap" parameterType="com.abc12366.uc.model.GoodsCategory">
+    <select id="selectList" resultMap="categoryBoResultMap" parameterType="com.abc12366.uc.model.order.GoodsCategory">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_goods_category

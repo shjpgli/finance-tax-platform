@@ -1,6 +1,6 @@
 package com.abc12366.uc.service.order;
 
-import com.abc12366.uc.model.OrderBack;
+import com.abc12366.uc.model.order.OrderBack;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.*;
