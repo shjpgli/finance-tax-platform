@@ -9,7 +9,17 @@ import java.util.Date;
 
 
 public class LotteryActivityipBO{
- /** PK */
+    private String activityName;
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    /** PK */
 private String id;
  /** 抽奖活动id */
 private String activityId;
