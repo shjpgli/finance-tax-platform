@@ -47,6 +47,7 @@ public class ExperienceRuleController {
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) String code,
                                      @RequestParam(required = false) Boolean type,
+                                     @RequestParam(required = false) String status,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}", name, code, type, page, size);
@@ -60,9 +61,13 @@ public class ExperienceRuleController {
         if (type != null && StringUtils.isEmpty(type)) {
             type = null;
         }
+        if (status != null && StringUtils.isEmpty(status)) {
+            status = null;
+        }
         map.put("name", name);
         map.put("code", code);
         map.put("type", type);
+        map.put("status", status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ExperienceRuleBO> ruleList = experienceRuleService.selectList(map);
         LOGGER.info("{}", ruleList);

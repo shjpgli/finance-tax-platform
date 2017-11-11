@@ -312,7 +312,7 @@ public class UserServiceImpl implements UserService {
             userFeedbackMsgService.updatePasswordSuccessNotice();
             //首次修改密码任务埋点
             todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -333,6 +333,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserVipInfo(String userId, String vipLevel) {
+        if (StringUtils.isEmpty(vipLevel)) {
+            LOGGER.info("更新会员失败，因为传入的用户等级编码不在约定之中：{}", vipLevel);
+            return;
+        }
+        if (!vipLevel.trim().equals(Constant.USER_VIP_LEVEL_1) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_2)
+                && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_3) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_4)){
+            LOGGER.info("更新会员失败，因为传入的用户等级编码不在约定之中：{}", vipLevel);
+            return;
+        }
         //会员到期日为明年的今天
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 1); // 年份加1
@@ -371,7 +380,7 @@ public class UserServiceImpl implements UserService {
         List<User> userList = userRoMapper.selectUserVipList(new Date());
         LOGGER.info("VIP到期，自动取消", userList);
         for (User user : userList) {
-            LOGGER.info("VIP到期，取消用户",user);
+            LOGGER.info("VIP到期，取消用户", user);
             // 更新会员状态
             user.setVipLevel(Constant.USER_ORIGINAL_LEVEL);
             user.setLastUpdate(new Date());
@@ -669,8 +678,8 @@ public class UserServiceImpl implements UserService {
             userMapper.qxwxbd(userUpdateDTO.getWxopenid());
             int n = userMapper.update(users);
             if (n >= 1) {
-            	LOGGER.info("用户关注公众号，做任务，USERID:"+userUpdateDTO.getId());
-           		todoTaskService.doTask(userUpdateDTO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
+                LOGGER.info("用户关注公众号，做任务，USERID:" + userUpdateDTO.getId());
+                todoTaskService.doTask(userUpdateDTO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
                 return 2;
             } else {
                 throw new ServiceException(4624);
@@ -679,8 +688,8 @@ public class UserServiceImpl implements UserService {
 
     }
 
-	@Override
-	public List<User> findByHngsNsrsbh(String nsrsbh) {
-		return userRoMapper.findByHngsNsrsbh(nsrsbh);
-	}
+    @Override
+    public List<User> findByHngsNsrsbh(String nsrsbh) {
+        return userRoMapper.findByHngsNsrsbh(nsrsbh);
+    }
 }
