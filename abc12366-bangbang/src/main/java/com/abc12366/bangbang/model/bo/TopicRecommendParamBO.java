@@ -22,6 +22,17 @@ public class TopicRecommendParamBO {
     /*asc.desc*/
     private String sortName;
 
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public TopicRecommendParamBO setType(String type) {
+        this.type = type;
+        return this;
+    }
+
     public String getKeywords() {
         return keywords;
     }

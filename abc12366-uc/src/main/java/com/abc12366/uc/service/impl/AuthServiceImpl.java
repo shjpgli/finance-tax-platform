@@ -38,6 +38,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -222,15 +223,15 @@ public class AuthServiceImpl implements AuthService {
         String password;
         try {
             // 先前的加密版本
-//            password = Utils.md5(Utils.md5(bo.getPassword()) + user.getSalt());
+            password = Utils.md5(Utils.md5(bo.getPassword()) + user.getSalt());
             // 现在的加密版本
-            if ("1".equals(channel)) {
-                password = rsaService.decode(bo.getPassword());
-            } else if ("2".equals(channel)) {
-                password = rsaService.decodeStringFromJs(bo.getPassword());
-            } else {
-                password = user.getPassword();
-            }
+//            if ("1".equals(channel)) {
+//                password = rsaService.decode(bo.getPassword());
+//            } else if ("2".equals(channel)) {
+//                password = rsaService.decodeStringFromJs(bo.getPassword());
+//            } else {
+//                password = user.getPassword();
+//            }
             LOGGER.info("password:{}", password);
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
@@ -488,7 +489,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void todoAfterLogin(HttpServletRequest request) {
+    public CompletableFuture todoAfterLogin(HttpServletRequest request) {
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
@@ -522,6 +523,7 @@ public class AuthServiceImpl implements AuthService {
             e.printStackTrace();
             LOGGER.error("用户登录后发送消息提醒异常：{}", e);
         }
+        return CompletableFuture.completedFuture(null);
     }
 
     /**

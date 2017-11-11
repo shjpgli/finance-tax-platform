@@ -37,4 +37,6 @@ public interface CheatsService {
 
     String updateBrowseNum(String id);
 
+    void recommend(String id, Boolean isRecommend);
+
 }

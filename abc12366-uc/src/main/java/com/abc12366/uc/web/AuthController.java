@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * 用户注册、登录等行为控制器
@@ -141,7 +142,8 @@ public class AuthController extends BaseController {
      */
     @GetMapping(path = "/login/todo")
     public ResponseEntity todoAfterLogin(HttpServletRequest request) {
-        authService.todoAfterLogin(request);
+        CompletableFuture cf = authService.todoAfterLogin(request);
+        CompletableFuture.allOf(cf);
         LOGGER.info("todoAfterLogin");
         return ResponseEntity.ok(Utils.kv());
     }

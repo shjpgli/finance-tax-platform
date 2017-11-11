@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,6 +53,7 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         headman.setId(Utils.uuid());
         headman.setUserId(UcUserCommon.getUserId());
         headman.setStatus("apply");
+        headman.setCreateTime(new Date());
         int cnt = questionHeadmanRoMapper.selectExist(headman.getUserId());
         if(cnt >0){
             //已申请过掌门人，请勿重复申请
