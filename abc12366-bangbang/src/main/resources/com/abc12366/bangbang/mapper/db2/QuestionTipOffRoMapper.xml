@@ -24,7 +24,7 @@
         LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
         LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
         LEFT JOIN abc12366_uc.uc_user t3 ON t.createUser = t3.id
-        WHERE t1.id = #{id}
+        WHERE t.id = #{id}
     </select>
 
 
