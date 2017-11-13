@@ -44,17 +44,19 @@ public class UserMsgController {
      * @return ResponseEntity
      */
     @GetMapping()
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+    public ResponseEntity selectList(@RequestParam(required = false) String type,
+                                     @RequestParam(required = false) String status,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      HttpServletRequest request) {
-        LOGGER.info("{},{}", page, size);
+        LOGGER.info("{},{},{},{}", type, status, page, size);
 
         // request USER_ID为空
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
         String userId = (String) request.getAttribute(Constant.USER_ID);
 
         if (!StringUtils.isEmpty(userId)) {
-            UserMessage um = new UserMessage.Builder().toUserId(userId).build();
+            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).status(status).build();
             List<UserMessage> dataList = userMsgService.selectList(um, page, size);
 
             PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);

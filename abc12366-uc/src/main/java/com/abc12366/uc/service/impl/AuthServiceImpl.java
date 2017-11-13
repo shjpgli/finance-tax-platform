@@ -223,15 +223,15 @@ public class AuthServiceImpl implements AuthService {
         String password;
         try {
             // 先前的加密版本
-//            password = Utils.md5(Utils.md5(bo.getPassword()) + user.getSalt());
+            password = Utils.md5(Utils.md5(bo.getPassword()) + user.getSalt());
             // 现在的加密版本
-            if ("1".equals(channel)) {
-                password = rsaService.decode(bo.getPassword());
-            } else if ("2".equals(channel)) {
-                password = rsaService.decodeStringFromJs(bo.getPassword());
-            } else {
-                password = user.getPassword();
-            }
+//            if ("1".equals(channel)) {
+//                password = rsaService.decode(bo.getPassword());
+//            } else if ("2".equals(channel)) {
+//                password = rsaService.decodeStringFromJs(bo.getPassword());
+//            } else {
+//                password = user.getPassword();
+//            }
             LOGGER.info("password:{}", password);
         } catch (Exception e) {
             LOGGER.error(e.getMessage() + e);
