@@ -208,6 +208,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             member.setFactionId(questionFaction.getFactionId());
             member.setUserId(questionFaction.getUserId());
             member.setDuty("1");//默认创建人为帮主
+            member.setMemberGrade("B1");
             member.setCreateTime(new Date());
             member.setMemberId(UUID.randomUUID().toString().replace("-", ""));
             member.setStatus(1);
