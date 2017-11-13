@@ -7,10 +7,7 @@ import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
-import com.abc12366.uc.model.Express;
-import com.abc12366.uc.model.ExpressComp;
-import com.abc12366.uc.model.Message;
-import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.UserAddressBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
@@ -26,6 +23,8 @@ import com.abc12366.uc.model.order.OrderExchange;
 import com.abc12366.uc.model.order.OrderInvoice;
 import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.order.bo.OrderProductBO;
+import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
+import com.abc12366.uc.service.IActivityService;
 import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.invoice.InvoiceService;
@@ -111,6 +110,12 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
+
+    @Autowired
+    private DictRoMapper dictRoMapper;
+
+    @Autowired
+    private IActivityService iActivityService;
 
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
@@ -825,6 +830,24 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     /**
+     * 获取微信红包字典信息
+     */
+    private String selectWechatPassword(String dictId) {
+        Dict dict = new Dict();
+        dict.setDictId(dictId);
+        dict = dictRoMapper.selectOne(dict);
+        String password = "";
+        if(dict != null){
+            password = dict.getFieldValue();
+            WxRedEnvelopBO data = iActivityService.generateSecret(password);
+            if(data != null && data.getSecret() != null){
+                password = data.getSecret();
+            }
+        }
+        return password;
+    }
+
+    /**
      * 更新发票详情信息
      *
      * @param einvocie
@@ -918,13 +941,21 @@ public class InvoiceServiceImpl implements InvoiceService {
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
         //查看业务提醒是否启用
         if (findObj != null && findObj.getStatus()) {
+            String isRedPackage = SpringCtxHolder.getProperty("DZFP_IS_REDPACKAGE");
+            String redPackage = "";
+            if(isRedPackage != null && "1".equals(isRedPackage)){
+                //获取微信红包信息
+                redPackage = "微信红包口令："+selectWechatPassword("wechat_hongbao");
+            }
+
             //发送消息
             Message message = new Message();
             message.setBusinessId(invoiceBO.getId());
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
+
             String content = MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
-                    invoiceBO.getId());
+                    invoiceBO.getId())+redPackage;
             message.setContent(content);
             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
                     "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
@@ -941,7 +972,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dataList.put("userId", user.getId());
                 dataList.put("openId", user.getWxopenid());
                 dataList.put("first", "您申请的电子发票已开具");
-                dataList.put("remark", "请注意查收！");
+                dataList.put("remark", "请注意查收！"+redPackage);
                 dataList.put("keyword1", invoiceBO.getInvoiceCode());
                 dataList.put("keyword2", invoiceBO.getInvoiceNo());
                 dataList.put("keyword3", String.valueOf(invoiceBO.getAmount()));
