@@ -172,10 +172,10 @@
         FROM bb_question_faction
         WHERE 1=1
         <if test="factionName != null and factionName != ''">
-            factionName = #{factionName}
+            and factionName = #{factionName}
         </if>
         <if test="factionId != null and factionId != ''">
-            factionId != #{factionId}
+            and factionId != #{factionId}
         </if>
     </select>
 
