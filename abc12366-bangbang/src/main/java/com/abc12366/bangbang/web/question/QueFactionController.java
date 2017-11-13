@@ -184,6 +184,16 @@ public class QueFactionController {
     }
 
     /**
+     * 更新邦派信息(邦派设置，邦派公告)
+     */
+    @PutMapping(path = "/updateSelect")
+    public ResponseEntity updateSelect(@Valid @RequestBody QuestionFactionBo factionBo) {
+        //更新邦派信息(邦派设置，邦派公告)
+        factionBo = queFactionService.updateSelect(factionBo);
+        return ResponseEntity.ok(Utils.kv("data", factionBo));
+    }
+
+    /**
      * 更新邦派状态
      *
      * @param status
