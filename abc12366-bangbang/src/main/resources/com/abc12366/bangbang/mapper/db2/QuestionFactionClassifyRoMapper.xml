@@ -21,7 +21,7 @@
         SELECT
         count(*)
         FROM bb_question_faction_classify
-        WHERE factionId in(SELECT factionId FROM bb_question_faction_member where userId = #{userId} and status in(1,2)) and c.classifyId = #{classifyCode}
+        WHERE factionId in(SELECT factionId FROM bb_question_faction_member where userId = #{userId} and status in(1,2)) and classifyId = #{classifyCode}
     </select>
 
     <!-- 查询（根据主键ID查询） -->
