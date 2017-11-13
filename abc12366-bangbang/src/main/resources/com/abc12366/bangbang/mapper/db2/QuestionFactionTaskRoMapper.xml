@@ -9,7 +9,7 @@
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionFactionHonor" parameterType="java.lang.String">
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.question.QuestionFactionTask" parameterType="java.lang.String">
 		 SELECT
 		 <include refid="Base_Column_List" />
 		 FROM bb_question_faction_honor
@@ -24,7 +24,7 @@
     </select>
 
     <!-- 查询邦派任务情况 -->
-    <select id="selectListdt" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionTaskBo" parameterType="java.lang.String">
+    <select id="selectTaskList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionTaskBo" parameterType="java.lang.String">
         SELECT t.factionId,f.factionName,f.factionImg,taskTime,taskNum,taskFinishNum,taskType,t.createTime,t.updateTime,finishTime,isFinish FROM
         bb_question_faction_task t left join bb_question_faction f on t.factionId = f.factionId
         where 1=1

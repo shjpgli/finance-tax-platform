@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.mapper.db2;
 
-import com.abc12366.bangbang.model.question.QuestionFactionHonor;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionPhBo;
+import com.abc12366.bangbang.model.question.QuestionFactionTask;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionTaskBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,7 +21,7 @@ public interface QuestionFactionTaskRoMapper {
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	QuestionFactionHonor selectByPrimaryKey(@Param("id") String id);
+    QuestionFactionTask selectByPrimaryKey(@Param("id") String id);
 
     /**
      * 查询邦派任务动态
