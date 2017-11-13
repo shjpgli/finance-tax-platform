@@ -37,7 +37,7 @@ public interface QuestionService {
 
     String updateBrowseNum(String id);
 
-    List<QuestionBo> selectList(TopicRecommendParamBO param);
+    List<RecommendBo> selectList(TopicRecommendParamBO param);
 
     void recommend(String id, Boolean isRecommend);
 

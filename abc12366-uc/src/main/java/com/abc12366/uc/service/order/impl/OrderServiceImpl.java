@@ -7,11 +7,15 @@ import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
-import com.abc12366.uc.model.*;
-import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.OrderProduct;
-import com.abc12366.uc.model.order.Trade;
+import com.abc12366.uc.model.Dict;
+import com.abc12366.uc.model.ExpressComp;
+import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.PointsLogBO;
+import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
+import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
@@ -105,6 +109,9 @@ public class OrderServiceImpl implements OrderService {
     private TradeMapper tradeMapper;
 
     @Autowired
+    private TradeRoMapper traderoMapper;
+
+    @Autowired
     private UserAddressRoMapper userAddressRoMapper;
 
     @Autowired
@@ -184,14 +191,6 @@ public class OrderServiceImpl implements OrderService {
     public List<OrderBO> selectOrderList(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<OrderBO> orderBOList = orderRoMapper.selectOrderList(order);
-//        if (order != null && !"".equals(order.getOrderStatus())) {
-//            String status[] = order.getOrderStatus().split(",");
-//            for (String st : status) {
-//                order.setOrderStatus(st);
-//                List<OrderBO> oList = orderRoMapper.selectOrderList(order);
-//                orderBOList.addAll(oList);
-//            }
-//        }
         return orderBOList;
     }
 
@@ -220,10 +219,6 @@ public class OrderServiceImpl implements OrderService {
                 throw new ServiceException(4922);
             }
         }
-        //是否需要寄送：由是否存在地址判断
-        /*if(orderSubmitBO.getConsignee() != null && !"".equals(orderSubmitBO.getConsignee()) && orderSubmitBO.getContactNumber() != null && !"".equals(orderSubmitBO.getContactNumber())){
-            orderSubmitBO.setIsFreeShipping(1);
-        }*/
         Order order = new Order();
         //加入订单与产品关系信息
         List<OrderProductBO> orderProductBOs = orderSubmitBO.getOrderProductBOList();
@@ -305,36 +300,6 @@ public class OrderServiceImpl implements OrderService {
 
         return temp;
 
-    }
-
-    /**
-     * 更新会员等级
-     *
-     * @param orderNo 订单号
-     * @return 会员日志信息
-     */
-    @Transactional("db1TxManager")
-    @Override
-    public VipLogBO updateVipLevel(String orderNo) {
-        OrderProductBO bo = new OrderProductBO();
-        bo.setOrderNo(orderNo);
-        List<OrderProductBO> orderProductList = orderProductRoMapper.selectByOrderNo(bo);
-        if (orderProductList != null && orderProductList.size() > 0) {
-            for (OrderProductBO orderProductBO : orderProductList) {
-                if ("4".equals(orderProductBO.getGoodsType())) {
-                    OrderBO orderBO = selectByOrderNo(orderNo);
-                    GoodsBO goodsBO = goodsRoMapper.selectGoods(orderProductBO.getGoodsId());
-                    userService.updateUserVipInfo(orderBO.getUserId(), goodsBO.getMemberLevel());
-
-                    VipLogBO vipLogBO = new VipLogBO();
-                    vipLogBO.setLevelId(goodsBO.getMemberLevel());
-                    vipLogBO.setSource(orderNo);
-                    vipLogBO.setUserId(orderBO.getUserId());
-                    return vipLogBO;
-                }
-            }
-        }
-        return null;
     }
 
     /**
@@ -516,6 +481,16 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("修改失败：{}", order);
             throw new ServiceException(4102);
         }
+        //查询订单和交易记录对应关系
+        Trade trade = traderoMapper.selectOrderNo(bo.getOrderNo());
+        if(trade != null){
+            TradeLog tradeLog = new TradeLog();
+            tradeLog.setTradeNo(trade.getTradeNo());
+            tradeLog.setTradeStatus("4");
+            //更新交易记录信息
+            tradeLogMapper.update(tradeLog);
+        }
+
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单", "0");
         return bo;
     }
@@ -596,14 +571,6 @@ public class OrderServiceImpl implements OrderService {
             pBO.setOrderNo(orderBack.getOrderNo());
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
             for (OrderProductBO orderProductBO : orderProductBOs) {
-                /*orderProductBO.setOrderNo(orderNo);
-                OrderProduct orderProduct = new OrderProduct();
-                BeanUtils.copyProperties(orderProductBO, orderProduct);
-                int opInsert = orderProductMapper.insert(orderProduct);
-                if (opInsert != 1) {
-                    LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
-                    throw new ServiceException(4167);
-                }*/
                 //增加Product库存数量
                 ProductBO productBO = new ProductBO();
                 int stock = productBO.getStock() + orderProductBO.getNum();

@@ -9,7 +9,15 @@ import java.util.Date;
 
 
 public class LotteryBO{
+    private Boolean noluck;
 
+    public Boolean getNoluck() {
+        return noluck;
+    }
+
+    public void setNoluck(Boolean noluck) {
+        this.noluck = noluck;
+    }
  /** key */
 private String id;
  /** 活动id */

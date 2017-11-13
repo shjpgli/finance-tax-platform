@@ -9,14 +9,14 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.TradeLog" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.TradeLog" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
         WHERE tradeNo = #{tradeNo}
     </select>
 
-    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.TradeLog" parameterType="java.lang.String">
+    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.order.TradeLog" parameterType="java.lang.String">
         SELECT
         t.tradeNo, t.amount, t.tradeStatus, t.tradeTime, t.payMethod, t.createTime, t.lastUpdate, t.compareStatus, t.compareTime,t.tradeType,t.aliTrandeNo
         FROM uc_trade_log t
@@ -24,7 +24,7 @@
         WHERE d.orderNo = #{orderNo}
     </select>
 
-    <select id="selectOne" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.bo.TradeBillBO">
+    <select id="selectOne" resultType="com.abc12366.uc.model.order.TradeLog" parameterType="com.abc12366.uc.model.bo.TradeBillBO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
@@ -34,7 +34,7 @@
         </where>
     </select>
 
-    <select id="selectByAliNo" resultType="com.abc12366.uc.model.bo.TradeLogBO" parameterType="com.abc12366.uc.model.TradeLog">
+    <select id="selectByAliNo" resultType="com.abc12366.uc.model.order.bo.TradeLogBO" parameterType="com.abc12366.uc.model.order.TradeLog">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log
@@ -44,7 +44,7 @@
     </select>
 
     <!-- 查询（根据主键tradeNo查询） -->
-    <select id="selectList" resultType="com.abc12366.uc.model.TradeLog" parameterType="com.abc12366.uc.model.TradeLog">
+    <select id="selectList" resultType="com.abc12366.uc.model.order.TradeLog" parameterType="com.abc12366.uc.model.order.TradeLog">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_trade_log 
@@ -57,7 +57,7 @@
         ORDER BY tradeTime DESC
     </select>
     <!-- 查询（根据条件查询） -->
-    <select id="selectBOList" resultType="com.abc12366.uc.model.bo.TradeLogBO" parameterType="com.abc12366.uc.model.TradeLog">
+    <select id="selectBOList" resultType="com.abc12366.uc.model.order.bo.TradeLogBO" parameterType="com.abc12366.uc.model.order.TradeLog">
         SELECT
         t.tradeNo, t.amount, t.tradeStatus, t.tradeTime, t.payMethod, t.createTime, t.lastUpdate, t.compareStatus, t.compareTime,t.tradeType,t.aliTrandeNo,d.orderNo
         FROM uc_trade_log t

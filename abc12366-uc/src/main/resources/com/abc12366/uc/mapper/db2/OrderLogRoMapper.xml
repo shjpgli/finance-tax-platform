@@ -9,7 +9,7 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.OrderLog" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.OrderLog" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_log
@@ -17,7 +17,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.GoodsLogBO" parameterType="com.abc12366.uc.model.OrderLog">
+    <select id="selectList" resultType="com.abc12366.uc.model.order.bo.GoodsLogBO" parameterType="com.abc12366.uc.model.order.OrderLog">
         SELECT
         o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as createUserName,o.logType,o.exchangeId
         FROM uc_order_log o

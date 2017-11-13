@@ -216,14 +216,20 @@
 
 
     <!-- 话题推荐管理 -->
-    <select id="selectListTopicRecommend" resultType="com.abc12366.bangbang.model.question.bo.QuestionBo" parameterType="com.abc12366.bangbang.model.bo.TopicRecommendParamBO">
-        SELECT
-        q.id,	userId,	q.title,q.detail,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	q.isSolve,	classifyCode,	browseNum, isRecommend,
-        (SELECT count(likeId) FROM bb_question_like where questionId = q.id) likeNum,
-        q.answerNum,
-        (SELECT count(id) FROM bb_question_answer where questionId = q.id and parentId != '') commentNum
-        FROM bb_question q
+    <select id="selectListTopicRecommend" resultType="com.abc12366.bangbang.model.question.bo.RecommendBo" parameterType="com.abc12366.bangbang.model.bo.TopicRecommendParamBO">
+        SELECT * FROM (
+            SELECT id,	title,createTime,isRecommend,(SELECT COUNT(likeId) FROM bb_question_like WHERE questionId = q.id) likeNum,
+            q.answerNum,
+            (SELECT COUNT(id) FROM bb_question_answer WHERE questionId = q.id AND parentId != '') commentNum, 'question' AS type
+            FROM bb_question q
+            UNION ALL
+            SELECT  id,  title, createTime, isRecommend,likeNum,0 AS answerNum, commentNum, 'cheats' AS type    FROM bb_cheats
+        )
+        temp
         WHERE 1=1
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
         <if test="keywords != null and keywords != ''">
             AND title like CONCAT('%',#{keywords},'%')
         </if>

@@ -252,4 +252,10 @@
 		UPDATE bb_cheats SET reportNum = reportNum + 1, status ='3' WHERE id = #{id}
 	</update>
 
+	<!-- 话题推荐 -->
+	<update id="recommend">
+		UPDATE bb_cheats SET isRecommend = #{isRecommend},recommendTime = now() WHERE id = #{id}
+	</update>
+
+
 </mapper>

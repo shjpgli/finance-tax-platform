@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.LotteryRoMapper">
     <select id="selectList" resultType="com.abc12366.uc.model.bo.LotteryBO" parameterType="java.util.Map">
         SELECT
-        (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,
+        (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,noluck,
         id,activityId,level,stock,count,timeStock,timeCount,limits,name,description,image,cost,types,startTime,endTime,luck,createTime,status,send,timeDay
         from uc_lottery z
         <where>
@@ -18,14 +18,14 @@
         ORDER BY createTime DESC
     </select>
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.LotteryBO" parameterType="java.lang.String">
-SELECT   (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,
+SELECT   (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,noluck,
 id,activityId,level,stock,count,timeStock,timeCount,limits,name,description,image,cost,types,startTime,endTime,luck,createTime,status,send,timeDay
  from uc_lottery z
 where id=#{id}
 </select>
     <select id="findLotteryByActivity" resultType="com.abc12366.uc.model.bo.LotteryBO" parameterType="java.util.Map">
         SELECT
-        (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,
+        (select a.name from uc_lottery_activity a where a.id=z.activityId) as activityName,noluck,
         id,activityId,level,stock,count,timeStock,timeCount,limits,name,description,image,cost,types,startTime,endTime,luck,createTime,status,send,timeDay
         from uc_lottery z WHERE id IN(
         SELECT lotteryId  from uc_lottery_activityprize

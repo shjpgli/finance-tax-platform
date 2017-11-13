@@ -9,6 +9,15 @@ import java.util.Date;
 
 
 public class Lottery{
+private Boolean noluck;
+
+    public Boolean getNoluck() {
+        return noluck;
+    }
+
+    public void setNoluck(Boolean noluck) {
+        this.noluck = noluck;
+    }
 
     /** key */
     private String id;

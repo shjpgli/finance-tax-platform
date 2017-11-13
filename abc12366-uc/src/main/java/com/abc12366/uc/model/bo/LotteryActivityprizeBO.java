@@ -9,6 +9,15 @@ import java.util.Date;
 
 
 public class LotteryActivityprizeBO{
+    private Boolean noluck;
+
+    public Boolean getNoluck() {
+        return noluck;
+    }
+
+    public void setNoluck(Boolean noluck) {
+        this.noluck = noluck;
+    }
     private Integer sort;
 
     public Integer getSort() {

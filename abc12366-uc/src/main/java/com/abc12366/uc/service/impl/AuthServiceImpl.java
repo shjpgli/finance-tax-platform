@@ -38,6 +38,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -488,7 +489,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void todoAfterLogin(HttpServletRequest request) {
+    public CompletableFuture todoAfterLogin(HttpServletRequest request) {
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
@@ -522,6 +523,7 @@ public class AuthServiceImpl implements AuthService {
             e.printStackTrace();
             LOGGER.error("用户登录后发送消息提醒异常：{}", e);
         }
+        return CompletableFuture.completedFuture(null);
     }
 
     /**

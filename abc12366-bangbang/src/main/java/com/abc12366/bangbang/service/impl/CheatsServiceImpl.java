@@ -381,5 +381,10 @@ public class CheatsServiceImpl implements CheatsService {
         return "";
     }
 
+    @Override
+    public void recommend(String id, Boolean isRecommend) {
+        cheatsMapper.recommend(id, isRecommend);
+    }
+
 
 }

@@ -8,8 +8,8 @@
         toExpressNo, type,adminConfirmRemark,consignee,	contactNumber,	shippingAddress,refundRemark
     </sql>
 
-    <select id="selectList" parameterType="com.abc12366.uc.model.OrderExchange"
-            resultType="com.abc12366.uc.model.OrderExchange">
+    <select id="selectList" parameterType="com.abc12366.uc.model.order.OrderExchange"
+            resultType="com.abc12366.uc.model.order.OrderExchange">
         select e.id, e.userId, e.orderNo, e.name, e.imageUrl, e.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
         e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark,e.consignee,	e.contactNumber,	e.shippingAddress,e.refundRemark
         from (select c.*, d.productId, d.num, d.name, d.imageUrl, d.goodsType from (select b.username, b.createTime as orderTime, a.* from
@@ -26,8 +26,8 @@
         ORDER BY e.createTime DESC
     </select>
 
-    <select id="selectListForFinance" parameterType="com.abc12366.uc.model.OrderExchange"
-            resultType="com.abc12366.uc.model.OrderExchange">
+    <select id="selectListForFinance" parameterType="com.abc12366.uc.model.order.OrderExchange"
+            resultType="com.abc12366.uc.model.order.OrderExchange">
         select e.id, e.userId, e.orderNo, e.name, e.imageUrl, e.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
         e.expressNo, e.expressComp, e.toExpressNo, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark,e.consignee,	e.contactNumber,	e.shippingAddress,e.refundRemark
         from (select c.*, d.productId, d.num, d.name, d.imageUrl, d.goodsType from (select b.username, b.createTime as orderTime, a.* from
@@ -47,7 +47,7 @@
 
     <!-- 未完成换货申请，4-已完成 5-已拒绝 -->
     <select id="selectUndoneList" parameterType="java.lang.String"
-            resultType="com.abc12366.uc.model.OrderExchange">
+            resultType="com.abc12366.uc.model.order.OrderExchange">
         SELECT <include refid="Base_Column_List"/>
         FROM uc_order_exchange
         WHERE orderNo = #{orderNo}
@@ -55,7 +55,7 @@
         AND status != '5'
     </select>
 
-    <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
+    <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.OrderExchange">
        select e.id, e.userId, e.orderNo, e.name, e.imageUrl, e.goodsType, e.username, e.num, e.orderTime, e.type, e.reason, e.userRemark,
         e.expressNo, e.expressComp,e.toExpressNo,e.toExpressComp, m.compName as toExpressCompName, e.adminRemark, e.status, e.createTime, e.lastUpdate,e.adminConfirmRemark,e.consignee,	e.contactNumber,	e.shippingAddress,e.refundRemark
         from (select c.*, d.productId, d.num, d.name, d.imageUrl, d.goodsType from (select b.username, b.createTime as orderTime, a.* from
@@ -65,25 +65,25 @@
         WHERE e.id = #{id}
     </select>
 
-    <select id="selectById" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
+    <select id="selectById" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.OrderExchange">
         SELECT <include refid="Base_Column_List"/>
         FROM uc_order_exchange
         WHERE id = #{id}
     </select>
 
-    <select id="selectByOrderNo" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
+    <select id="selectByOrderNo" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.OrderExchange">
         SELECT <include refid="Base_Column_List"/>
         FROM uc_order_exchange
         WHERE status <![CDATA[!=]]> '5' and  orderNo = #{orderNo}
     </select>
 
-    <select id="selectByOrderNoAndStatus" parameterType="java.lang.String" resultType="com.abc12366.uc.model.OrderExchange">
+    <select id="selectByOrderNoAndStatus" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.OrderExchange">
         SELECT <include refid="Base_Column_List"/>
         FROM uc_order_exchange
         WHERE status = '6' and  orderNo = #{orderNo}
     </select>
 
-    <select id="export" parameterType="com.abc12366.uc.model.bo.OrderExchangeExportBO"
+    <select id="export" parameterType="com.abc12366.uc.model.order.bo.OrderExchangeExportBO"
             resultType="com.abc12366.uc.model.bo.SfExportBO">
         select h.orderNo, h.company, h.name, h.phone, h.address, j.name as content, 1 as num from (SELECT
         c.orderNo, c.consigneeTemp as name,c.consigneeTemp as company, c.contactNumberTemp as phone, c.shippingAddressTemp as address

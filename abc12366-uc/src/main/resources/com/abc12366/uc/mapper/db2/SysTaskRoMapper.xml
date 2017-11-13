@@ -108,6 +108,7 @@
         count,skipURL,ruleId,awardType,remark,dateType,code
         from uc_sys_task
         where ruleId = #{ruleId}
+        and status='1'
     </select>
 
     <select id="selectValidOneByCode" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">

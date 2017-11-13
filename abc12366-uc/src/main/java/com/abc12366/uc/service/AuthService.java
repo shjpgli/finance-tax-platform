@@ -4,6 +4,7 @@ import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -80,5 +81,5 @@ public interface AuthService {
     /**
      * 登陆之后需要处理的业务
      */
-    void todoAfterLogin(HttpServletRequest request);
+    CompletableFuture todoAfterLogin(HttpServletRequest request);
 }

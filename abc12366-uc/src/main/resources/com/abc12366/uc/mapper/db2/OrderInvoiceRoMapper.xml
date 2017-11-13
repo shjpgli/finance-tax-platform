@@ -8,7 +8,7 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectById" resultType="com.abc12366.uc.model.OrderInvoice" parameterType="java.lang.String">
+    <select id="selectById" resultType="com.abc12366.uc.model.order.OrderInvoice" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_invoice
@@ -16,7 +16,7 @@
     </select>
 
     <!-- 查询InvoiceId查找 -->
-    <select id="selectByInvoiceId" resultType="com.abc12366.uc.model.OrderInvoice" parameterType="java.lang.String">
+    <select id="selectByInvoiceId" resultType="com.abc12366.uc.model.order.OrderInvoice" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_invoice
@@ -24,7 +24,7 @@
     </select>
 
     <!-- 查询，根据 orderNo 查找 -->
-    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.OrderInvoice" parameterType="java.lang.String">
+    <select id="selectByOrderNo" resultType="com.abc12366.uc.model.order.OrderInvoice" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_order_invoice

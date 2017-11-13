@@ -49,9 +49,9 @@
         select="getTradeBO"></collection>
         <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
         select="getOrderProduct"></collection>
-        <collection property="orderLogBOList" ofType="com.abc12366.uc.model.bo.OrderLogBO" column="orderNo"
+        <collection property="orderLogBOList" ofType="com.abc12366.uc.model.order.bo.OrderLogBO" column="orderNo"
         select="getOrderLog"></collection>
-        <!--<collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO" column="orderNo"
+        <!--<collection property="tradeLogBOList" ofType="com.abc12366.uc.model.order.bo.TradeLogBO" column="orderNo"
                     select="getTradeLogBO"></collection>-->
     </resultMap>
 
@@ -159,7 +159,7 @@
     </resultMap>
 
     <!--订单日志对象-->
-    <resultMap id="orderLogMap" type="com.abc12366.uc.model.bo.OrderLogBO">
+    <resultMap id="orderLogMap" type="com.abc12366.uc.model.order.bo.OrderLogBO">
         <id column="orderLogId" property="id"/>
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="action" property="action" jdbcType="VARCHAR"/>
@@ -171,7 +171,7 @@
     </resultMap>
 
     <!--发票对象-->
-    <resultMap id="invoiceBOMap" type="com.abc12366.uc.model.bo.InvoiceBO">
+    <resultMap id="invoiceBOMap" type="com.abc12366.uc.model.invoice.bo.InvoiceBO">
         <id column="invoiceId" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="invoiceNo" property="invoiceNo" jdbcType="VARCHAR"/>
@@ -225,7 +225,7 @@
     </resultMap>
 
     <!-- 获取商品信息-->
-    <!--<select id="getGoodsBOList" resultType="com.abc12366.uc.model.bo.GoodsBO" parameterType="java.lang.String">
+    <!--<select id="getGoodsBOList" resultType="com.abc12366.uc.model.order.bo.GoodsBO" parameterType="java.lang.String">
         SELECT
         g.id, g.name, g.imageUrl, g.introduction, g.details, g.categoryId, g.status, g.createTime, g.lastUpdate,
         g.giftPoints,
@@ -294,7 +294,7 @@
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <collection property="tradeLogBOList" ofType="com.abc12366.uc.model.bo.TradeLogBO">
+        <collection property="tradeLogBOList" ofType="com.abc12366.uc.model.order.bo.TradeLogBO">
             <result column="tradeNo" property="tradeNo" jdbcType="VARCHAR"/>
             <result column="amount" property="amount" jdbcType="DOUBLE"/>
             <result column="tradeStatus" property="tradeStatus" jdbcType="VARCHAR"/>
@@ -352,7 +352,7 @@
     </resultMap>
 
     <!--订单日志对象-->
-    <resultMap type="com.abc12366.uc.model.bo.OrderLogBO" id="orderLogBOMap">
+    <resultMap type="com.abc12366.uc.model.order.bo.OrderLogBO" id="orderLogBOMap">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="action" property="action" jdbcType="VARCHAR"/>
@@ -363,7 +363,7 @@
 
 
     <!--产品对象-->
-    <resultMap type="com.abc12366.uc.model.bo.ProductBO" id="productResultMap">
+    <resultMap type="com.abc12366.uc.model.order.bo.ProductBO" id="productResultMap">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
         <result column="marketPrice" property="marketPrice" jdbcType="DOUBLE"/>
@@ -397,7 +397,7 @@
     </resultMap>
 
     <!--字典对象-->
-    <resultMap type="com.abc12366.uc.model.bo.OrderProductspecBO" id="orderProducctspecResultMap">
+    <resultMap type="com.abc12366.uc.model.order.bo.OrderProductspecBO" id="orderProducctspecResultMap">
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="VARCHAR"/>
         <result column="specId" property="specId" jdbcType="VARCHAR"/>
@@ -885,7 +885,7 @@
         WHERE orderStatus = '4'
     </select>
 
-    <select id="orderStat" resultType="com.abc12366.uc.model.bo.OrderStatBO">
+    <select id="orderStat" resultType="com.abc12366.uc.model.order.bo.OrderStatBO">
         SELECT
           sum(case when orderStatus = '3' then 1 else 0 end) as 'orderStatus3',
           sum(case when orderStatus = '4' then 1 else 0 end) as 'orderStatus4',
