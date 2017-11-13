@@ -42,7 +42,8 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
     private LotteryTimeService lotteryTimeService;
     @Autowired
     private LotteryActivityprizeService lotteryActivityprizeService;
-
+    @Autowired
+    private LotteryActivityipService lotteryActivityipService;
     @Override
     public LotteryActivityBO update(LotteryActivityBO lotteryActivityBO, String id) {
         LotteryActivity obj = new LotteryActivity();
@@ -185,6 +186,37 @@ private  boolean luckDo(LotteryActivityBO lottery){
     }
 
 }
+private boolean activityTimeStock(LotteryActivityBO lotteryActivityBO){
+    Date date = new Date();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    String oldDate = "";
+    if (lotteryActivityBO.getTimeDay() != null) {
+        oldDate = sdf.format(lotteryActivityBO.getTimeDay());
+    }
+    String nowDate = sdf.format(date);
+    if (!nowDate.equals(oldDate)) {
+        //假如不是当天
+        lotteryActivityBO.setTimeCount(0);
+        lotteryActivityBO.setTimeDay(date);
+    }
+    if (lotteryActivityBO.getTimeStock() <= lotteryActivityBO.getTimeCount()) {
+        //当天库存不足
+        return false;
+    }
+    return true            ;
+}
+private boolean    checkIp( String activityId, String ip){
+    Map<String, Object> map = new HashMap<>();
+    if(activityId != null && !activityId.isEmpty()){
+        map.put("activityId",activityId);
+        map.put("ip",ip);
+    }
+    List<LotteryActivityipBO> list = lotteryActivityipService.selectList(map);
+    if(list!= null && list.size()>0 ){
+        return true;
+    }
+    return false;
+}
     @Override
     public synchronized LotteryLogBO luckDraw(String userId, String activityId, String ip) {
         if (userId == null || userId.isEmpty()) {
@@ -210,12 +242,19 @@ private  boolean luckDo(LotteryActivityBO lottery){
             throw new ServiceException(9999, "抽奖活动已过期");
 
         }
+
+        if (checkIp(activityId,ip)){
+            throw new ServiceException(9999, "Ip屏蔽");
+        }
+
 //        P-hycj
 //        PointCodex pointCodex = pointsService.selectCodexByRuleCode("P-hycj");
 //        Integer point = pointCodex.getUpoint();
         //抽一个奖品
-       // LotteryActivityprizeBO obj = luckDrawEx(activityId);
-        LotteryActivityprizeBO obj =  lotteryOne(activityId);
+
+
+        LotteryActivityprizeBO obj = luckDrawEx(activityId);
+//        LotteryActivityprizeBO obj =  lotteryOne(activityId);
         PointCalculateBO pointCalculateBO = new PointCalculateBO();
         pointCalculateBO.setUserId(userId);
         pointCalculateBO.setRuleCode(UCConstant.POINT_RULE_LOTTERY_CODE);
@@ -225,16 +264,15 @@ private  boolean luckDo(LotteryActivityBO lottery){
         String remake = "";
         //库存 记日志
         //明天测试
-        LotteryBO lottery = null;
-        Random ra = new Random(System.currentTimeMillis());
-        int tmpRa = ra.nextInt(100);
-        if (tmpRa<50 || obj == null || !luckDo(lotteryActivityBO)) {//即使时间到了 也有百分之50的几率 不中奖
+
+        if (obj == null || obj.getNoluck()) {
             remake = "未抽中";
-        } else {
-             lottery =lotteryService.selectOne(obj.getLotteryId());
-            if(lottery==null){
-                return null;// 这种情况是  奖品被删除
-            }
+        } else if(!activityTimeStock(lotteryActivityBO)) {
+            remake = "活动当天库存不足";
+        }else  if  (obj.getStock()<=0) {
+            remake = "奖品总量不足";
+        }else{
+
          }
 
         LotteryLogBO lotteryLogBO = new LotteryLogBO();
@@ -243,12 +281,12 @@ private  boolean luckDo(LotteryActivityBO lottery){
         lotteryLogBO.setActivityId(activityId);
         lotteryLogBO.setRemake(remake);
         lotteryLogBO.setIp(ip);
-        if ("".equals(remake) && lottery != null)
+        if ("".equals(remake) )
         {//假如这个值为空 说明抽中了
             lotteryLogBO.setIsluck(1);
             lotteryLogBO.setState("未领取");
-            lotteryLogBO.setLotteryId(lottery.getId());
-            lotteryLogBO.setLotteryName(lottery.getName());
+            lotteryLogBO.setLotteryId(obj.getLotteryId());
+            lotteryLogBO.setLotteryName(obj.getLotteryName());
 
             if (obj.getBalance() == null || obj.getBalance()<0){
                 obj.setBalance(0);
@@ -278,7 +316,23 @@ private  boolean luckDo(LotteryActivityBO lottery){
 
         if (list.size() <= 0) {
             LOGGER.warn("必须拥有一个奖品");
-            throw new RuntimeException("奖品为空，出现错误，请联系管理员");
+            throw new RuntimeException("奖品为空，请联系管理员");
+        }
+
+        List<LotteryActivityprizeBO> listXXCY = new ArrayList<LotteryActivityprizeBO>();
+        List<LotteryActivityprizeBO> listBO = new ArrayList<LotteryActivityprizeBO>();
+        for (LotteryActivityprizeBO bo:list             ) {
+            if(bo.getNoluck() != null && bo.getNoluck()){
+                //是谢谢参与
+                listXXCY.add(bo);
+
+            }else{
+                listBO.add(bo);
+            }
+        }
+        if (listXXCY.size() <= 0) {
+            LOGGER.warn("必须拥有一个谢谢参与");
+            throw new RuntimeException("奖品的 谢谢参与 为空，请联系管理员");
         }
         final int randMax = 1000000;//100万
         Random random = new Random();
@@ -286,24 +340,24 @@ private  boolean luckDo(LotteryActivityBO lottery){
         random.setSeed(System.currentTimeMillis());
         int rand = random.nextInt(randMax);//100万
         //获取活动时间段概率
-        LotteryTimeBO lotteryTimeBO = lotteryTimeService.findbyTime(activityId,new Date());
-        int timeLuck = 100;
-        if (lotteryTimeBO != null) {
-            timeLuck = lotteryTimeBO.getLuck();
-        }
-        if (timeLuck > 100 || timeLuck < 0) {
-            timeLuck = 100;
-        }
-
-        if (rand > randMax * timeLuck / 100){
-            return null;//时间段排除
-        }
+//        LotteryTimeBO lotteryTimeBO = lotteryTimeService.findbyTime(activityId,new Date());
+//        int timeLuck = 100;
+//        if (lotteryTimeBO != null) {
+//            timeLuck = lotteryTimeBO.getLuck();
+//        }
+//        if (timeLuck > 100 || timeLuck < 0) {
+//            timeLuck = 100;
+//        }
+//
+//        if (rand > randMax * timeLuck / 100){
+//            return null;//时间段排除
+//        }
 
         random.setSeed(System.currentTimeMillis());
         rand = random.nextInt(randMax);//100万
         int oldLuck = 0;
-        Collections.shuffle(list);//随机打乱
-        for (LotteryActivityprizeBO obj : list) {
+        Collections.shuffle(listBO);//随机打乱
+        for (LotteryActivityprizeBO obj : listBO) {
             Double tmpdbl = (obj.getLuck() * 10000);//考虑4位小数
             int luck = tmpdbl.intValue();
             if (luck + oldLuck > rand) {
@@ -311,6 +365,7 @@ private  boolean luckDo(LotteryActivityBO lottery){
             }
             oldLuck += luck;
         }
-        return null;
+        Collections.shuffle(listXXCY);//随机打乱
+        return listXXCY.get(0);
     }
 }

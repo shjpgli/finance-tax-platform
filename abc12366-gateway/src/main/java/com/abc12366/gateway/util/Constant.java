@@ -73,8 +73,16 @@ public class Constant {
     // 获取微信二维码图片地址
     public final static String WEIXIN_QRCODE = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=";
 
-    //用户初始会员等级
+    //用户初始会员等级(普通会员)
     public final static String USER_ORIGINAL_LEVEL = "VIP0";
+    //银卡
+    public final static String USER_VIP_LEVEL_1 = "VIP1";
+    //金卡
+    public final static String USER_VIP_LEVEL_2 = "VIP2";
+    //钻石
+    public final static String USER_VIP_LEVEL_3 = "VIP3";
+    //超级
+    public final static String USER_VIP_LEVEL_4 = "VIP4";
 
     // 订单自动取消时间：小时
     public final static Integer ORDER_CANCEL_TIME = 2;

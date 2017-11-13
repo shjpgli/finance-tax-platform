@@ -48,6 +48,7 @@ public class PointsRuleController {
     public ResponseEntity selectList(@RequestParam(required = false) String name,
                                      @RequestParam(required = false) String code,
                                      @RequestParam(required = false) String type,
+                                     @RequestParam(required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
     ) {
@@ -62,9 +63,13 @@ public class PointsRuleController {
         if (type != null && StringUtils.isEmpty(type)) {
             type = null;
         }
+        if (status != null && StringUtils.isEmpty(status)) {
+            status = null;
+        }
         map.put("name", name);
         map.put("code", code);
         map.put("type", type);
+        map.put("status", status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<PointsRuleBO> ruleList = pointsRuleService.selectList(map);
         LOGGER.info("{}", ruleList);

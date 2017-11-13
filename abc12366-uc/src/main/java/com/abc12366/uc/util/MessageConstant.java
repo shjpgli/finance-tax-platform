@@ -9,15 +9,11 @@ public class MessageConstant {
 	
     //消息类型
     public static final String SYS_MESSAGE = "1";
-    public static final String BANGBANG_MESSAGE = "2";
 
     //UC访问地址
-    public static final String ABCUC_URL = "http://uc.abc12366.com";
     public static final String SPDD = "SPDD";//商品订单
     public static final String ZZFPDD = "ZZFPDD";//纸质发票订单
     public static final String DZFPDD = "DZFPDD";//电子发票订单
-    public static final String HYDQTX = "HYDQTX";//会员到期提醒
-    public static final String SBXQTX = "SBXQTX";//会员到期提醒
     public static final String XTTX = "XTTX";//系统提醒
 
     public static final String VIEW_DETAILS = "查看详情";
@@ -46,8 +42,6 @@ public class MessageConstant {
     //换货发货
     public static final String EXCHANGE_DELIVER_GOODS_PREFIX = "您更换的宝贝已发出，订单号：{#DATA.ORDER}，运单号：（{#DATA.COMP}+{#DATA.EXPRESSNO}），如有疑问请联系客服咨询4008873133；";
 
-    //自动确认收货
-    //public static final String AUTOMATIC_CONFIRMATION_RECEIPT = "您的订单已完成，订单号：";
     //退款
     public static final String REFUND_PREFIX = "您有一笔退款已完成，返回支付宝或微信";
     public static final String REFUND_SUFFIX = "元，请注意查收，订单号：";
@@ -59,8 +53,6 @@ public class MessageConstant {
     public static final String INVOICE_CHECK_ADOPT = "您申请的纸质发票已审批通过，发票订单号：{#DATA.INVOICE}，敬请关注发票寄送信息；";
     //审批拒绝
     public static final String INVOICE_CHECK_REFUSE = "很抱歉！您的纸质发票申请审核未通过，发票订单号：{#DATA.INVOICE}，具体原因请至发票申请详情里查询；";
-    //自动确认收货
-    //public static final String INVOICE_AUTOMATIC_CONFIRMATION_RECEIPT = "您的纸质发票申请已寄送完成，发票索取申请：（发票申请号链接到发票详情），如有疑问请联系客服咨询4008873133";
     /**电子发票**/
     //审批通过
     public static final String ELECTRON_INVOICE_CHECK_ADOPT = "您申请的电子发票已开具，发票订单号：{#DATA.DATE}，请至发票申请详情里下载发票；";
@@ -68,7 +60,7 @@ public class MessageConstant {
     public static final String ELECTRON_INVOICE_CHECK_REFUSE = "很抱歉！您的电子发票申请审核未通过，发票订单号：{#DATA.INVOICE}，具体原因请至发票申请详情里查询；";
     /**虚拟商品**/
     //购买会员
-    public static final String BUYING_MEMBERS_PREFIX = "恭喜您！您已成功升级为{#DATA.VIP}会员，请及时了解{#DATA.VIP}会员相关权益；";
+    public static final String BUYING_MEMBERS_PREFIX = "恭喜您！您已成功升级为{#DATA.VIP}，请及时了解{#DATA.VIP}相关权益；";
     public static final String BUYING_MEMBERS_SUFFIX = "查看详细会员权益";
     //积分充值
     public static final String INTEGRAL_RECHARGE = "恭喜您！您的积分已充值成功，当前积分为{#DATA.POINT}分，详情请查看积分明细；";

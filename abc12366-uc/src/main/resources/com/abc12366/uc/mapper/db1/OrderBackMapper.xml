@@ -8,7 +8,7 @@
         WHERE id = #{id}
     </delete>
 
-    <insert id="insert" parameterType="com.abc12366.uc.model.OrderBack">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.OrderBack">
         INSERT INTO uc_order_back
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -89,7 +89,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.OrderBack">
+    <update id="update" parameterType="com.abc12366.uc.model.order.OrderBack">
         UPDATE uc_order_back
         <set>
             <if test="userId != null">

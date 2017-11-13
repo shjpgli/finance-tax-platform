@@ -14,8 +14,8 @@ import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
-import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.Trade;
+import com.abc12366.uc.model.order.*;
+import com.abc12366.uc.model.order.bo.OrderExchangeExportBO;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.*;
@@ -462,7 +462,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
 
                                         // 插入订单日志-已完成
-                                        insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+                                        insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
 
                                         //发送消息
                                         if (order == null) {
@@ -532,6 +532,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 oe.setRefundRemark(data.getRefundRemark());
                 oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                 orderExchangeMapper.update(oe);
+
+                // 插入订单日志-已退款
+                insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款。退款金额为："+data.getAmount(), "1", oe.getId());
 
                 //将订单状态改成已结束
                 order.setOrderStatus("7");

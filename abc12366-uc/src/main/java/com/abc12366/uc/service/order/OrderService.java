@@ -1,6 +1,6 @@
 package com.abc12366.uc.service.order;
 
-import com.abc12366.uc.model.OrderBack;
+import com.abc12366.uc.model.order.OrderBack;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.*;
@@ -72,14 +72,6 @@ public interface OrderService {
      * @return 订单对象
      */
     OrderBO submitOrder(OrderSubmitBO orderSubmitBO);
-
-    /**
-     * 修改用户等级服务
-     *
-     * @param orderNo 订单编号
-     * @return VIP日志对象
-     */
-    VipLogBO updateVipLevel(String orderNo);
 
     /**
      * 查询购物车列表

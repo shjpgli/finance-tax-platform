@@ -13,14 +13,14 @@
         WHERE productId = #{productId}
     </delete>
 
-    <insert id="insert" parameterType="com.abc12366.uc.model.ProductSpec">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.ProductSpec">
         INSERT INTO uc_product_spec
         (id,productId,specId)
         VALUES
         (#{id},#{productId},#{specId})
     </insert>
 
-    <insert id="insertSelective" parameterType="com.abc12366.uc.model.ProductSpec">
+    <insert id="insertSelective" parameterType="com.abc12366.uc.model.order.ProductSpec">
         INSERT INTO uc_product_spec
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -47,7 +47,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.ProductSpec">
+    <update id="update" parameterType="com.abc12366.uc.model.order.ProductSpec">
         UPDATE uc_product_spec
         <set>
             <if test="productId != null">

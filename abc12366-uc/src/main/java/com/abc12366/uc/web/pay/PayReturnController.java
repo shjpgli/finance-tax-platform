@@ -1,7 +1,7 @@
 package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.TradeLog;
+import com.abc12366.uc.model.order.TradeLog;
 import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.bo.TradeBillBO;
 import com.abc12366.uc.service.order.TradeLogService;

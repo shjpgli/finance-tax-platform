@@ -189,8 +189,8 @@ public class ExperienceRuleServiceImpl implements ExperienceRuleService {
 
     @Override
     public void isValidSysTaskRelatedTheRule(String ruleId) {
-        SysTask sysTask = sysTaskRoMapper.selectValidSysTaskByRuleId(ruleId);
-        if (sysTask != null && !StringUtils.isEmpty(sysTask.getStatus()) && sysTask.getStatus()) {
+        List<SysTask> sysTasks = sysTaskRoMapper.selectValidSysTaskByRuleId(ruleId);
+        if (sysTasks != null && sysTasks.size() > 0) {
             throw new ServiceException(4713);
         }
     }

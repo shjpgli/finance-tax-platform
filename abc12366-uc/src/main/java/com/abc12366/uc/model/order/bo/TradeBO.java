@@ -1,8 +1,5 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.abc12366.uc.model.TradeLog;
-import com.abc12366.uc.model.bo.TradeLogBO;
-
 import java.io.Serializable;
 import java.util.List;
 
