@@ -22,7 +22,8 @@
         (select muu.nickname from msg_uc_user muu where muu.id=mu.fromUserId) nickname
         FROM msg_user_message mu
         WHERE toUserId = #{toUserId}
-        AND status != '0'
+        <if test="status != null and status != ''"> AND status = #{status}</if>
+        <if test="type != null and type != ''"> AND type = #{type}</if>
         AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
         ORDER BY createTime DESC
     </select>

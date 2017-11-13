@@ -39,6 +39,11 @@ public class User {
     private String bdqudao;
     private String level;
     private String levelName;
+    /**
+     * 老系统中的ID
+     */
+    private String oldId;
+
     public String getWxopenid() {
 		return wxopenid;
 	}
@@ -266,6 +271,14 @@ public class User {
         this.levelName = levelName;
     }
 
+    public String getOldId() {
+        return oldId;
+    }
+
+    public void setOldId(String oldId) {
+        this.oldId = oldId;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -297,6 +310,7 @@ public class User {
                 ", bdqudao='" + bdqudao + '\'' +
                 ", level='" + level + '\'' +
                 ", levelName='" + levelName + '\'' +
+                ", oldId='" + oldId + '\'' +
                 '}';
     }
 }
