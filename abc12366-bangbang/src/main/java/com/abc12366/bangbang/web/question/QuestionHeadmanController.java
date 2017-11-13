@@ -45,9 +45,9 @@ public class QuestionHeadmanController {
     }
 
     /* 掌门人 审核 */
-    @PutMapping(path = "/modifyStatus/{id}/{status}")
-    public ResponseEntity modifyStatus(@PathVariable String id, @PathVariable String status) {
-        questionHeadmanService.changeStatus(id, status);
+    @PutMapping(path = "/modifyStatus")
+    public ResponseEntity modifyStatus(@RequestBody QuestionHeadmanBo headmanBo) {
+        questionHeadmanService.modify(headmanBo);
         return ResponseEntity.ok(Utils.kv());
     }
 

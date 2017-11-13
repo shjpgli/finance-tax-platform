@@ -129,7 +129,10 @@
 				classifyCode = #{classifyCode},
 			</if>
 			<if test="status != null">
-				 status = #{status},
+				status = #{status},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
 			</if>
 			<if test="updateAdmin != null">
 				 updateAdmin = #{updateAdmin},
