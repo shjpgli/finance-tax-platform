@@ -47,7 +47,8 @@ public class QuestionHeadman  {
 	/**后台操作人**/
 	private String updateAdmin;
 
-
+	/**备注**/
+	private String remark;
 
 	public void setId(String id){
 		this.id = id;
@@ -156,4 +157,12 @@ public class QuestionHeadman  {
 		return this.updateAdmin;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public QuestionHeadman setRemark(String remark) {
+		this.remark = remark;
+		return this;
+	}
 }

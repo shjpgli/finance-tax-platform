@@ -24,6 +24,9 @@ public class QuestionHeadmanBo {
     /**申请理由**/
     private String applyReason;
 
+    /**备注**/
+    private String remark;
+
     /**申请时间**/
     private java.util.Date createTime;
 
@@ -210,6 +213,15 @@ public class QuestionHeadmanBo {
 
     public QuestionHeadmanBo setCommentNum(Integer commentNum) {
         this.commentNum = commentNum;
+        return this;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public QuestionHeadmanBo setRemark(String remark) {
+        this.remark = remark;
         return this;
     }
 }
