@@ -25,6 +25,7 @@ import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.OrderExchange;
 import com.abc12366.uc.model.order.OrderInvoice;
 import com.abc12366.uc.model.order.bo.OrderBO;
+import com.abc12366.uc.model.order.bo.OrderProductBO;
 import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.invoice.InvoiceService;
@@ -614,7 +615,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         List<Einvocie> dataList = new ArrayList<>();
         for(Einvocie data : list){
             //更新发票库存信息
-            boolean isUpd = updInvoiceDetail(einvocie);
+            boolean isUpd = updInvoiceDetail(data);
             if(isUpd){
                 data.setTBSTATUS("1");
                 iDzfpService.update(data);
@@ -748,6 +749,21 @@ public class InvoiceServiceImpl implements InvoiceService {
             } else if ("2".equals(invoiceBO.getName())) {
                 dzfpGetReq.setGmf_mc(invoiceBO.getNsrmc());
                 dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
+            }
+            dzfpGetReq.setGmf_dzyx(invoiceBO.getEmail());
+            List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
+            StringBuffer buffer = new StringBuffer();
+            if(orderBOs != null && orderBOs.size() > 0){
+                for(OrderBO orderBO : orderBOs){
+                    List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
+                    if(productBOs != null && productBOs.size() > 0){
+                        for (OrderProductBO pBO : productBOs){
+                            buffer.append(pBO.getName());
+                            buffer.append(",");
+                        }
+                    }
+                }
+                dzfpGetReq.setBz(buffer.toString());
             }
             dzfpGetReq.setInvoiceXms(invoiceXmList);
             Einvocie einvocie = null;

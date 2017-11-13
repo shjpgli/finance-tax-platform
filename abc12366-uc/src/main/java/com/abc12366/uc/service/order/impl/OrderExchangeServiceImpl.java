@@ -445,7 +445,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         tradeLog.setAliTrandeNo(refundRes.getTrade_no());
                                         tradeLog.setTradeStatus("1");
                                         tradeLog.setTradeType("2");
-                                        tradeLog.setAmount(Double.parseDouble("-" + refundRes.getRefund_fee()));
+                                        tradeLog.setAmount(Double.parseDouble(refundRes.getRefund_fee()));
                                         tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
                                         Timestamp now = new Timestamp(System.currentTimeMillis());
                                         tradeLog.setCreateTime(now);
@@ -554,7 +554,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 tradeLog.setAliTrandeNo(oe.getOrderNo());
                 tradeLog.setTradeStatus("1");
                 tradeLog.setTradeType("2");
-                tradeLog.setAmount(Double.parseDouble("-" + order.getTotalPrice()));
+                tradeLog.setAmount(data.getAmount());
                 tradeLog.setCreateTime(date);
                 tradeLog.setLastUpdate(date);
                 tradeLog.setPayMethod("POINTS");

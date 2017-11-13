@@ -1081,12 +1081,12 @@ public class OrderServiceImpl implements OrderService {
             order.setLastUpdate(new Date());
             //修改订单状态
             updOrder(order);
-            insertOrderLog(order.getUserId(), order.getOrderNo(), "5", "管理员已发货", "0");
+            insertOrderLog(data.getUserId(), order.getOrderNo(), "5", "管理员已发货", "0");
 
 
 
             //查询用户信息
-            User user = userRoMapper.selectOne(order.getUserId());
+            User user = userRoMapper.selectOne(data.getUserId());
             //查询会员特权
             VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
             obj.setLevelId(user.getVipLevel());
@@ -1104,11 +1104,11 @@ public class OrderServiceImpl implements OrderService {
 
                 //web消息
                 if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                    message.setBusinessId(order.getOrderNo());
+                    message.setBusinessId(data.getOrderNo());
                     message.setBusiType(MessageConstant.SPDD);
                     message.setType(MessageConstant.SYS_MESSAGE);
                     message.setContent(content);
-                    message.setUserId(order.getUserId());
+                    message.setUserId(data.getUserId());
                     messageSendUtil.sendMessage(message, request);
                 }
                 if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
@@ -1118,7 +1118,7 @@ public class OrderServiceImpl implements OrderService {
                     map.put("openId", user.getWxopenid());
                     map.put("first", "你有新的订单提醒：");
                     map.put("remark", "详情请登录财税平台查看。");
-                    map.put("keyword1", order.getOrderNo());
+                    map.put("keyword1", data.getOrderNo());
                     map.put("keyword2", UserUtil.getAdminInfo().getNickname());
                     map.put("keyword3", DataUtils.dateToStr(new Date()));
                     templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
