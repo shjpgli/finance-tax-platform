@@ -15,6 +15,9 @@ public interface QuestionTipOffService {
     /* 列表查询 */
     List<QuestionTipOffBo> selectList();
 
+    /* 举报详情 */
+    QuestionTipOffBo selectOne(String id);
+
     /* 审核 */
     void changeStatus(QuestionTipOff questionTipOff);
 
