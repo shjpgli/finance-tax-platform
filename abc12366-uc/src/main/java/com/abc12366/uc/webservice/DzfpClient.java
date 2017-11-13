@@ -5,7 +5,6 @@ import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.service.IDzfpService;
-import com.abc12366.uc.service.UserService;
 import com.alibaba.fastjson.JSON;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
