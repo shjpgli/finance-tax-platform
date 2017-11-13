@@ -33,11 +33,12 @@ public class LotteryActivityipController {
     private LotteryActivityipService lotteryActivityipService;
 
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(required = false)String activityId ,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+    public ResponseEntity selectList(@RequestParam(required = false)String activityId ,
+                                     @RequestParam(required = false)String ip ,
+                                     @RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
-        if(activityId != null && !activityId.isEmpty()){
-            map.put("activityId",activityId);
-        }
+        if(activityId != null && !activityId.isEmpty()){            map.put("activityId",activityId);        }
+        if(ip != null && !ip.isEmpty()){            map.put("ip",ip);        }
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LotteryActivityipBO> list = lotteryActivityipService.selectList(map);
         LOGGER.info("selectList:{}", list);

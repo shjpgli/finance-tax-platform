@@ -8,6 +8,7 @@ import com.abc12366.bangbang.model.question.QuestionFactionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QueFactionHonorService;
 import com.abc12366.bangbang.service.QueFactionService;
+import com.abc12366.bangbang.service.QueFactionTaskService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
@@ -39,6 +40,9 @@ public class QueFactionController {
 
     @Autowired
     private QueFactionHonorService honorService;
+
+    @Autowired
+    private QueFactionTaskService taskService;
 
     @Autowired
     private QuestionFactionTagRoMapper tagRoMapper;
@@ -234,6 +238,46 @@ public class QueFactionController {
                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionPhBo> dataList = honorService.selectljList();
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 邦派任务动态列表查询
+     */
+    @GetMapping(path = "/selectListdt")
+    public ResponseEntity selectListdt(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionTaskBo> dataList = taskService.selectListdt();
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+
+    }
+
+    /**
+     * 邦派排行列表查询
+     */
+    @GetMapping(path = "/selectTaskList")
+    public ResponseEntity selectTaskList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                         @RequestParam(value = "factionId", required = false) String factionId,
+                                             @RequestParam(value = "taskTime", required = false) String taskTime) {
+        if(taskTime == null || "".equals(taskTime)){
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+//            Calendar c = Calendar.getInstance();
+//
+//            //过去一月
+//            c.setTime(new Date());
+//            c.add(Calendar.MONTH, -1);
+//            Date m = c.getTime();
+            taskTime = format.format(new Date());
+        }
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("factionId", factionId);//邦派ID
+        dataMap.put("taskTime", taskTime);//年月201711
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionFactionTaskBo> dataList = taskService.selectTaskList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

@@ -55,7 +55,7 @@ public class QuartzConfig {
      */
     public Properties quartzProperties() throws IOException {
         Properties prop = new Properties();
-        prop.put("org.quartz.scheduler.instanceName", "ServerScheduler");
+//        prop.put("org.quartz.scheduler.instanceName", "ServerScheduler");
         prop.put("org.quartz.scheduler.instanceId", "AUTO");
         prop.put("org.quartz.scheduler.skipUpdateCheck", "true");
         prop.put("org.quartz.scheduler.instanceId", "NON_CLUSTERED");

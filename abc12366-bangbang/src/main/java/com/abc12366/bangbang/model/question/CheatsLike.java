@@ -31,7 +31,8 @@ public class CheatsLike implements Serializable {
 	/**类型：1、点赞，2、踩**int(11)**/
 	private Integer likeType;
 
-
+    /**邦派ID**varchar(64)**/
+    private String factionId;
 
 	public void setLikeId(String likeId){
 		this.likeId = likeId;
@@ -89,4 +90,11 @@ public class CheatsLike implements Serializable {
 		return this.likeType;
 	}
 
+    public String getFactionId() {
+        return factionId;
+    }
+
+    public void setFactionId(String factionId) {
+        this.factionId = factionId;
+    }
 }

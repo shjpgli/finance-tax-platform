@@ -139,6 +139,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/queFaction/selecFactionPhList")
                         //邦派累计列表查询
                 .excludePathPatterns("/queFaction/selecFactionljPhList")
+                        //邦派任务动态列表查询
+                .excludePathPatterns("/queFaction/selectListdt")
+                        //邦派任务情况列表查询
+                .excludePathPatterns("/queFaction/selectTaskList")
                         //个人主页
                 .excludePathPatterns("/questionbb/selectMybangbang/{userId}", "/questionExpert/listByUserId/{userId}",
                         "/queAttention/selectUserList/{attentionUserId}", "/queAttention/selectAttentionUserList/{userId}",

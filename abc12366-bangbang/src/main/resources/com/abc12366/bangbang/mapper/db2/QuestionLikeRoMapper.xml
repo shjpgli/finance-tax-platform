@@ -5,7 +5,7 @@
 
 	<!-- 通用查询结果列-->
 	<sql id="Base_Column_List">
-		 likeId,	id,questionId,	userId,	likeTime
+		 likeId,	id,questionId,factionId,	userId,	likeTime
 	</sql>
 
 	<!-- 查询（根据主键ID查询） -->

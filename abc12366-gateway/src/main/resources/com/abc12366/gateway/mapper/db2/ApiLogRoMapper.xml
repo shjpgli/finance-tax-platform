@@ -47,6 +47,7 @@
               AND  appId = #{appId}
             </if>
         </where>
+        order by inTime desc
     </select>
 
     <!--根据列表查询-->

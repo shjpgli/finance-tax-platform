@@ -14,19 +14,6 @@ import java.util.List;
 
 public interface QuestionHeadmanMapper{
 
-	/**
-	 *
-	 * 列表查询
-	 *
-	 **/
-	List<QuestionHeadman> selectList();
-
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	QuestionHeadmanBo selectByPrimaryKey(@Param("id") String id);
 
 	/**
 	 * 

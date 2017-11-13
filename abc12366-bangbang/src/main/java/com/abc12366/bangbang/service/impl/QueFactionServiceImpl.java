@@ -192,10 +192,10 @@ public class QueFactionServiceImpl implements QueFactionService {
                 classify.setFactionId(uuid);
                 Map<String, Object> dataMap = new HashMap<>();
                 dataMap.put("userId", questionFactionBo.getUserId());//
-                dataMap.put("factionId", classify.getFactionId());//
+                dataMap.put("classifyCode", classify.getClassifyId());//
                 int cnt = classifyRoMapper.selectClassifyCnt(dataMap);
                 if(cnt > 0){
-                    //该用户创建的帮派所选话题分类不允许重叠
+                    //该用户创建或加入的帮派所选话题分类不允许重叠
                     throw new ServiceException(6125);
                 }
 
@@ -208,6 +208,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             member.setFactionId(questionFaction.getFactionId());
             member.setUserId(questionFaction.getUserId());
             member.setDuty("1");//默认创建人为帮主
+            member.setMemberGrade("B1");
             member.setCreateTime(new Date());
             member.setMemberId(UUID.randomUUID().toString().replace("-", ""));
             member.setStatus(1);

@@ -33,10 +33,10 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
     private CheatsCommentRoMapper commentRoMapper;
 
     @Autowired
-    private QuestionRoMapper questionRoMapper;
+    private CheatsMapper cheatsMapper;
 
     @Autowired
-    private CheatsMapper cheatsMapper;
+    private CheatsRoMapper cheatsRoMapper;
 
     @Autowired
     private SensitiveWordsRoMapper sensitiveWordsRoMapper;
@@ -97,10 +97,12 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             JSONObject jsonStu = JSONObject.fromObject(commentBo);
             LOGGER.info("新增秘籍评论信息:{}", jsonStu.toString());
 
+            String classifyCode = cheatsRoMapper.selectclassifyCode(commentBo.getCheatsId());
+
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", commentBo.getUserId());
-            dataMap.put("CheatsId", commentBo.getCheatsId());
-            String factionId = questionRoMapper.selectfactionId(dataMap);
+            dataMap.put("classifyCode", classifyCode);
+            String factionId = cheatsRoMapper.selectfactionId(dataMap);
             if(factionId == null){
                 factionId = "";
             }

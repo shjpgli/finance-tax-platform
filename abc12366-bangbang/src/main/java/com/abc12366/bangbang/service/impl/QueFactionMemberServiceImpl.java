@@ -74,6 +74,14 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             //已申请加入邦派，请勿重复申请
             throw new ServiceException(6135);
         }
+
+        int cnt1 = memberRoMapper.selectClassifyCnt(dataMap);
+        if(cnt1 > 0){
+            //该用户创建或加入的帮派所选话题分类不允许重叠
+            throw new ServiceException(6125);
+        }
+
+
         try {
             factionMemberBo.setCreateTime(new Date());
             factionMemberBo.setLastUpdate(new Date());

@@ -70,7 +70,7 @@
         left join bb_user u1 on a.answerUserId = u1.id
         WHERE 1=1
         <if test="isTip != null and isTip != ''">
-            a.reportNum > 0
+            and a.reportNum > 0
         </if>
         <if test="isAccept != null and isAccept != ''">
             AND isAccept = #{isAccept}

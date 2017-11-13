@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
 
     @Override
     public QuestionHeadmanBo selectByPrimaryKey(String id) {
-        return questionHeadmanMapper.selectByPrimaryKey(id);
+        return questionHeadmanRoMapper.selectByPrimaryKey(id);
     }
 
     @Transactional("db1TxManager")

@@ -41,6 +41,9 @@ public class QueCommentServiceImpl implements QueCommentService {
     private QuestionAnswerMapper answerMapper;
 
     @Autowired
+    private QuestionRoMapper questionRoMapper;
+
+    @Autowired
     private QuestionCommentRoMapper commentRoMapper;
 
     @Autowired
@@ -108,10 +111,12 @@ public class QueCommentServiceImpl implements QueCommentService {
             JSONObject jsonStu = JSONObject.fromObject(commentBo);
             LOGGER.info("新增问题评论信息:{}", jsonStu.toString());
 
+            String classifyCode = questionRoMapper.selectclassifyCode(commentBo.getQuestionId());
+
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", commentBo.getUserId());
-            dataMap.put("questionId", commentBo.getQuestionId());
-            String factionId = answerRoMapper.selectfactionId(dataMap);
+            dataMap.put("classifyCode", classifyCode);
+            String factionId = questionRoMapper.selectfactionId(dataMap);
             if(factionId == null){
                 factionId = "";
             }

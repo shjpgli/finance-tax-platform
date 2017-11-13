@@ -20,6 +20,13 @@ public interface QuestionTipOffRoMapper {
      **/
     List<QuestionTipOffBo> selectList();
 
+    /**
+     *
+     * 查询（根据主键ID查询）
+     *
+     **/
+    QuestionTipOffBo selectOne(String id);
+
 
     /**
      *

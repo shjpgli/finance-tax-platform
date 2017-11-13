@@ -30,5 +30,4 @@
             where 1=1 group by factionId order by honor desc
     </select>
 
-
 </mapper>

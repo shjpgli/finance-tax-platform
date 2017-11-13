@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.CheatsLike">
 		 INSERT INTO bb_cheats_like
- 		(likeId,id,likeTarget,userId,likeTime,cheatsId,likeType) 
+ 		(likeId,id,likeTarget,userId,likeTime,cheatsId,likeType,factionId)
 		 VALUES 
- 		(#{likeId},#{id},#{likeTarget},#{userId},#{likeTime},#{cheatsId},#{likeType}) 
+ 		(#{likeId},#{id},#{likeTarget},#{userId},#{likeTime},#{cheatsId},#{likeType},#{factionId})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

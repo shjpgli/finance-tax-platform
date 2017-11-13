@@ -16,7 +16,7 @@ public class QuestionFactionClassifyBo implements Serializable {
 	/**邦派ID**varchar(64)**/
 	private String factionId;
 
-	/**分类ID**varchar(64)**/
+	/**分类代码(请传分类代码不是ID)**varchar(64)**/
 	private String classifyId;
 
     /**分类名称**varchar(64)**/
