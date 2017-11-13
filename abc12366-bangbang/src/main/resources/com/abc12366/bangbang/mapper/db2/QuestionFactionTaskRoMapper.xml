@@ -29,10 +29,10 @@
         bb_question_faction_task t left join bb_question_faction f on t.factionId = f.factionId
         where 1=1
         <if test="factionId != null and factionId != ''">
-            factionId = #{factionId}
+            and factionId = #{factionId}
         </if>
         <if test="taskTime != null and taskTime != ''">
-            taskTime = #{taskTime}
+            and taskTime = #{taskTime}
         </if>
          order by t.taskType desc
     </select>

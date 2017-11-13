@@ -38,6 +38,13 @@ public class QuestionTipOffController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
+    /* 查询 */
+    @GetMapping(path = "/view/{id}")
+    public ResponseEntity selectOne(@PathVariable String id){
+        QuestionTipOffBo tipOff = questionTipOffService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data", tipOff));
+    }
+
     /*
     * 修改状态 接口
     */

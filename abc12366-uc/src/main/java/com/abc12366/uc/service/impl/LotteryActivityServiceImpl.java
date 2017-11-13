@@ -287,7 +287,7 @@ private boolean    checkIp( String activityId, String ip){
             lotteryLogBO.setState("未领取");
             lotteryLogBO.setLotteryId(obj.getLotteryId());
             lotteryLogBO.setLotteryName(obj.getLotteryName());
-
+            lotteryLogBO.setLotteryLevel(obj.getVal1());
             if (obj.getBalance() == null || obj.getBalance()<0){
                 obj.setBalance(0);
             }

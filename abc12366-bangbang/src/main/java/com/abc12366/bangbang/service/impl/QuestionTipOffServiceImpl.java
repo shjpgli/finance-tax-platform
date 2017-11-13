@@ -56,6 +56,11 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         return questionTipOffRoMapper.selectList();
     }
 
+    @Override
+    public QuestionTipOffBo selectOne(String id) {
+        return questionTipOffRoMapper.selectOne(id);
+    }
+
 
     @Transactional("db1TxManager")
     @Override
