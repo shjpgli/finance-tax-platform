@@ -289,7 +289,7 @@
         select
         (SELECT COUNT(1) FROM bb_question WHERE userId = #{userId}) questionNum,
         (SELECT COUNT(1) FROM bb_question_like WHERE likeType = 1 and  userId = #{userId}) likeNum,
-        (SELECT COUNT(1) FROM bb_question_like WHERE likeType = 1 and toUserId = #{userId}) quiltLikeNum
+        (SELECT COUNT(1) FROM bb_question_like WHERE likeType = 1 and toUserId = #{userId}) quiltLikeNum,
         (SELECT COUNT(1) FROM bb_question_collect WHERE userId = #{userId}) collectNum,
         (SELECT COUNT(1) FROM bb_question_attention WHERE userId = #{userId}) attentionNum,
         (SELECT count(*) FROM bb_question_attention where attentionUserId = #{userId}) fansNum,
