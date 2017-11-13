@@ -211,7 +211,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             member.setMemberGrade("B1");
             member.setCreateTime(new Date());
             member.setMemberId(UUID.randomUUID().toString().replace("-", ""));
-            member.setStatus(1);
+            member.setStatus(2);//1、申请，2、通过
             memberFactionMapper.insert(member);
 
             questionFactionMapper.insert(questionFaction);
