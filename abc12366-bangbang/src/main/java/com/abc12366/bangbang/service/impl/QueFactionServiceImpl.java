@@ -332,6 +332,25 @@ public class QueFactionServiceImpl implements QueFactionService {
         return questionFactionBo;
     }
 
+    @Transactional("db1TxManager")
+    @Override
+    public QuestionFactionBo updateSelect(QuestionFactionBo questionFactionBo) {
+        //更新邦派信息
+        QuestionFaction questionFaction = new QuestionFaction();
+        try {
+            JSONObject jsonStu = JSONObject.fromObject(questionFactionBo);
+            LOGGER.info("更新邦派信息:{}", jsonStu.toString());
+            questionFactionBo.setUpdateTime(new Date());
+            BeanUtils.copyProperties(questionFactionBo, questionFaction);
+
+            questionFactionMapper.updateByPrimaryKeySelective(questionFaction);
+        } catch (Exception e) {
+            LOGGER.error("更新邦派信息异常：{}", e);
+            throw new ServiceException(6123);
+        }
+        return questionFactionBo;
+    }
+
     @Override
     public String updateStatus(String factionId,String status) {
         //更新邦派信息
