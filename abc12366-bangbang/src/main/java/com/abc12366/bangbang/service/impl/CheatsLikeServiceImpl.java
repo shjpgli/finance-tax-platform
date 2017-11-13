@@ -56,18 +56,20 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
-
+        String toUserId = "";
         Cheats cheats = cheatsRoMapper.selectByPrimaryKey(id);
         String cheatsId = "";
         int likeTarget = 1;//点赞来源1为秘籍，2为评论
         if(cheats != null){
             cheatsId = cheats.getId();
+            toUserId = cheats.getUserId();
         }
         if("".equals(cheatsId)){
             CheatsCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
             if(comment != null){
                 likeTarget = 2;
                 cheatsId = comment.getCheatsId();
+                toUserId = comment.getUserId();
             }
         }
 
@@ -84,6 +86,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         CheatsLike like = new CheatsLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
+        like.setToUserId(toUserId);
         like.setLikeId(uuid);
         like.setLikeType(1);
         like.setLikeTime(new Date());
@@ -128,23 +131,27 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
     public String inserttrample(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
+        String toUserId = "";
         Cheats cheats = cheatsRoMapper.selectByPrimaryKey(id);
         String cheatsId = "";
         int likeTarget = 1;//点赞来源1为秘籍，2为评论
         if(cheats != null){
             cheatsId = cheats.getId();
+            toUserId = cheats.getUserId();
         }
         if("".equals(cheatsId)){
             CheatsCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
             if(comment != null){
                 likeTarget = 2;
                 cheatsId = comment.getCheatsId();
+                toUserId = comment.getUserId();
             }
         }
 
         CheatsLike like = new CheatsLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
+        like.setToUserId(toUserId);
         like.setLikeId(uuid);
         like.setLikeType(2);
         like.setLikeTime(new Date());
