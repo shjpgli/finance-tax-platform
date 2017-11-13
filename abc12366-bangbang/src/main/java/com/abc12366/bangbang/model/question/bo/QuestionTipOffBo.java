@@ -45,6 +45,27 @@ public class QuestionTipOffBo {
     /**审核中auditing，审核通过approved，拒绝refuse**/
     private String status;
 
+    private String rewardsPoints;
+
+    private String refuseReason;
+
+    public String getRewardsPoints() {
+        return rewardsPoints;
+    }
+
+    public QuestionTipOffBo setRewardsPoints(String rewardsPoints) {
+        this.rewardsPoints = rewardsPoints;
+        return this;
+    }
+
+    public String getRefuseReason() {
+        return refuseReason;
+    }
+
+    public QuestionTipOffBo setRefuseReason(String refuseReason) {
+        this.refuseReason = refuseReason;
+        return this;
+    }
 
     public String getContent() {
         return content;
