@@ -117,6 +117,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private IActivityService iActivityService;
 
+    @Autowired
+    private DzfpRoMapper dzfpRoMapper;
+
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
         return invoiceRoMapper.selectList(invoice);
@@ -730,57 +733,62 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceBO invoiceBO = invoiceRoMapper.selectById(invoiceCheckBO.getId());
         //1：纸质发票，2：电子发票；电子发票直接把发票信息插入
         if (invoiceCheckBO.getIsBilling()) if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
-            List<InvoiceXm> invoiceXmList = new ArrayList<InvoiceXm>();
-            InvoiceXm invoiceXm = new InvoiceXm();
-            //发票信息填充
-            DzfpGetReq dzfpGetReq = new DzfpGetReq();
+
             String id = invoiceCheckBO.getId();
-            dzfpGetReq.setFpqqlsh(id.substring(5,id.length()));
-            dzfpGetReq.setZsfs("0"); //
-            dzfpGetReq.setKplx("0"); //开票0，退票1
-            dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
-            invoiceXm.setXmmc(invoiceBO.getContentDetail());
-            //商品编码
-            invoiceXm.setSpbm("1010105000000000000");
-            //价格
-            invoiceXm.setTotalAmt(invoiceBO.getAmount());
-            //数量
-            invoiceXm.setXmsl(Double.valueOf(1));
-            invoiceXm.setFphxz("0");
-            invoiceXm.setYhzcbs("0");
-            invoiceXmList.add(invoiceXm);
-            if ("1".equals(invoiceBO.getName())) {
-                dzfpGetReq.setGmf_mc("个人");
-            } else if ("2".equals(invoiceBO.getName())) {
-                dzfpGetReq.setGmf_mc(invoiceBO.getNsrmc());
-                dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
-            }
-            dzfpGetReq.setGmf_dzyx(invoiceBO.getEmail());
-            List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
-            StringBuffer buffer = new StringBuffer();
-            if(orderBOs != null && orderBOs.size() > 0){
-                for(OrderBO orderBO : orderBOs){
-                    List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
-                    if(productBOs != null && productBOs.size() > 0){
-                        for (OrderProductBO pBO : productBOs){
-                            buffer.append(pBO.getName());
-                            buffer.append(",");
+            String fpqqlsh = id.substring(5, id.length());
+            Einvocie einvocie = dzfpRoMapper.selectOne(fpqqlsh);
+            if(einvocie == null){
+                List<InvoiceXm> invoiceXmList = new ArrayList<InvoiceXm>();
+                InvoiceXm invoiceXm = new InvoiceXm();
+                //发票信息填充
+                DzfpGetReq dzfpGetReq = new DzfpGetReq();
+
+                dzfpGetReq.setFpqqlsh(fpqqlsh);
+                dzfpGetReq.setZsfs("0"); //
+                dzfpGetReq.setKplx("0"); //开票0，退票1
+                dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
+                invoiceXm.setXmmc(invoiceBO.getContentDetail());
+                //商品编码
+                invoiceXm.setSpbm("1010105000000000000");
+                //价格
+                invoiceXm.setTotalAmt(invoiceBO.getAmount());
+                //数量
+                invoiceXm.setXmsl(Double.valueOf(1));
+                invoiceXm.setFphxz("0");
+                invoiceXm.setYhzcbs("0");
+                invoiceXmList.add(invoiceXm);
+                if ("1".equals(invoiceBO.getName())) {
+                    dzfpGetReq.setGmf_mc("个人");
+                } else if ("2".equals(invoiceBO.getName())) {
+                    dzfpGetReq.setGmf_mc(invoiceBO.getNsrmc());
+                    dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
+                }
+                dzfpGetReq.setGmf_dzyx(invoiceBO.getEmail());
+                List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
+                StringBuffer buffer = new StringBuffer();
+                if(orderBOs != null && orderBOs.size() > 0){
+                    for(OrderBO orderBO : orderBOs){
+                        List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
+                        if(productBOs != null && productBOs.size() > 0){
+                            for (OrderProductBO pBO : productBOs){
+                                buffer.append(pBO.getName());
+                                buffer.append(",");
+                            }
                         }
                     }
+                    dzfpGetReq.setBz(buffer.toString());
                 }
-                dzfpGetReq.setBz(buffer.toString());
-            }
-            dzfpGetReq.setInvoiceXms(invoiceXmList);
-            Einvocie einvocie = null;
-            try {
-                einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
-            } catch (Exception e) {
-                LOGGER.error("电子发票webservice调用异常,原因：", e);
-                throw new ServiceException(4908);
-            }
-            if (!"0000".equals(einvocie.getReturnCode())) {
-                LOGGER.error("发票开票异常：{}", einvocie);
-                throw new ServiceException(4908, einvocie.getReturnMessage());
+                dzfpGetReq.setInvoiceXms(invoiceXmList);
+                try {
+                    einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
+                } catch (Exception e) {
+                    LOGGER.error("电子发票webservice调用异常,原因：", e);
+                    throw new ServiceException(4908);
+                }
+                if (!"0000".equals(einvocie.getReturnCode())) {
+                    LOGGER.error("发票开票异常：{}", einvocie);
+                    throw new ServiceException(4908, einvocie.getReturnMessage());
+                }
             }
             invoiceNo = einvocie.getFP_HM();
             invoiceCode = einvocie.getFP_DM();
