@@ -68,6 +68,9 @@ public class InvoiceUseApplyBO implements Serializable {
      **/
     private String remark;
 
+    //申请本数总和
+    private String applyBook;
+
     private List<InvoiceUseDetailBO> invoiceUseDetailBOList;
     private List<InvoiceApprovalLog> invoiceApprovalLogList;
     private List<InvoiceDistributeBO> invoiceDistributeBOList;
@@ -218,5 +221,13 @@ public class InvoiceUseApplyBO implements Serializable {
 
     public void setDistributeUserName(String distributeUserName) {
         this.distributeUserName = distributeUserName;
+    }
+
+    public String getApplyBook() {
+        return applyBook;
+    }
+
+    public void setApplyBook(String applyBook) {
+        this.applyBook = applyBook;
     }
 }

@@ -19,6 +19,7 @@
         <result column="signUser" property="signUser" jdbcType="VARCHAR"/>
         <result column="signTime" property="signTime" jdbcType="TIMESTAMP"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="applyBook" property="applyBook" jdbcType="VARCHAR"/>
         <collection property="invoiceUseDetailBOList" ofType="com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO" column="id"
                     select="getInvoiceUseDetailBO">
         </collection>
@@ -82,7 +83,7 @@
     <select id="selectUsableShare" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT sum(share) as usableShare
         FROM uc_invoice_repo
-        where invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
+        where status != '1' and invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
     </select>
     <!-- 发票领用明细表对象-->
     <resultMap id="invoiceApprovalLogMap" type="com.abc12366.uc.model.invoice.bo.InvoiceApprovalLogBO">
@@ -144,7 +145,8 @@
             parameterType="com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO">
         SELECT
         a.id,	a.applyUser,	a.applyTime,	a.issueStatus,	a.examineStatus,	a.distributeUser,
-        a.distributeTime,	a.signUser,	a.signTime,	a.remark,u.nickname as applyUserName
+        a.distributeTime,	a.signUser,	a.signTime,	a.remark,u.nickname as applyUserName,
+        (SELECT sum(d.applyNum) from uc_invoice_use_detail d where d.useId = a.id) as applyBook
         FROM uc_invoice_use_apply a
         LEFT JOIN uc_admin u on u.id = a.applyUser
         <where>
