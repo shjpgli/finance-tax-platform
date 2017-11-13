@@ -2,6 +2,9 @@ package com.abc12366.uc.service;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
+
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 
 /**
@@ -20,4 +23,12 @@ public interface IMsgSendService {
 	 * @param dxmsg //短信消息
 	 */
 	public void sendMsg(User user,String sysMsg,String  templateid,Map<String, String> dataList,String dxmsg);
+	
+	/**
+	 * 前段发送消息
+	 * @param messageSendBo 消息实体
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity sendMsgByQq(MessageSendBo messageSendBo);
 }
