@@ -117,7 +117,7 @@ public class AuthServiceImpl implements AuthService {
 
         LoginBO loginBO = new LoginBO();
         if (!StringUtils.isEmpty(registerBO.getPhone())) {
-            loginBO.setUsernameOrPhone(registerBO.getPhone());
+            loginBO.setUsernameOrPhone(registerBO.getPhone().trim().toLowerCase());
         }
         User user = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (user != null) {
@@ -207,7 +207,7 @@ public class AuthServiceImpl implements AuthService {
         LOGGER.info("loginBO:{}, channel:{}", bo, channel);
 
         // 根据用户名查看用户是否存在
-        bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim());
+        bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim().toLowerCase());
         User user = userRoMapper.selectByUsernameOrPhone(bo);
         if (user == null) {
             LOGGER.warn("登录失败，参数:{}:{}", bo, channel);

@@ -7,6 +7,7 @@ import com.abc12366.bangbang.mapper.db1.QuestionLikeMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCommentRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
 import com.abc12366.bangbang.model.Answer;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionComment;
@@ -26,10 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/9/15.
@@ -48,6 +46,9 @@ public class QueLikeServiceImpl implements QueLikeService {
     private QuestionAnswerRoMapper answerRoMapper;
 
     @Autowired
+    private QuestionRoMapper questionRoMapper;
+
+    @Autowired
     private QuestionCommentMapper commentMapper;
 
     @Autowired
@@ -64,18 +65,29 @@ public class QueLikeServiceImpl implements QueLikeService {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
 
-                QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
+        QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
         int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
             questionId = answer.getQuestionId();
         }
-        QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
-        if(comment != null && "".equals(questionId)){
-            likeTarget = 2;
-            questionId = comment.getQuestionId();
+        if("".equals(questionId)){
+            QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
+            if(comment != null){
+                likeTarget = 2;
+                questionId = comment.getQuestionId();
+            }
         }
 
+        String classifyCode = questionRoMapper.selectclassifyCode(questionId);
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);
+        dataMap.put("classifyCode", classifyCode);
+        String factionId = questionRoMapper.selectfactionId(dataMap);
+        if(factionId == null){
+            factionId = "";
+        }
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
@@ -85,6 +97,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         like.setLikeTarget(likeTarget);
         like.setQuestionId(questionId);
         like.setId(id);
+        like.setFactionId(factionId);
 
         Map map = MapUtil.kv("id", id, "userId", userId);
         int cnt =  likeRoMapper.selectExist(map);
@@ -131,11 +144,14 @@ public class QueLikeServiceImpl implements QueLikeService {
         if(answer != null){
             questionId = answer.getQuestionId();
         }
-        QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
-        if(comment != null && "".equals(questionId)){
-            likeTarget = 2;
-            questionId = comment.getQuestionId();
+        if("".equals(questionId)){
+            QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
+            if(comment != null){
+                likeTarget = 2;
+                questionId = comment.getQuestionId();
+            }
         }
+
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);

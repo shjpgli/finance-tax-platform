@@ -3,10 +3,7 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionLogMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionDisableIpRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionDisableUserRoMapper;
-import com.abc12366.bangbang.mapper.db2.SensitiveWordsRoMapper;
+import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionLog;
@@ -42,6 +39,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionRoMapper questionRoMapper;
 
     @Autowired
     private QuestionAnswerRoMapper answerRoMapper;
@@ -123,14 +123,18 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("userId", answerBo.getUserId());
         dataMap.put("questionId", answerBo.getQuestionId());
+        //查询是否已回复
         int answerCnt = answerRoMapper.selectMyAnswerCnt(dataMap);
         if(answerCnt >0){
             //已回复，请勿重复回复
             throw new ServiceException(6118);
         }
         try {
-
-            String factionId = answerRoMapper.selectfactionId(dataMap);
+            String classifyCode = questionRoMapper.selectclassifyCode(answerBo.getQuestionId());
+            Map<String, Object> dataMap1 = new HashMap<>();
+            dataMap1.put("userId", answerBo.getUserId());
+            dataMap1.put("classifyCode", classifyCode);
+            String factionId = questionRoMapper.selectfactionId(dataMap1);
             if(factionId == null){
                 factionId = "";
             }

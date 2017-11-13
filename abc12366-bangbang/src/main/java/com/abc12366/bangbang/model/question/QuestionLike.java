@@ -31,6 +31,9 @@ public class QuestionLike implements Serializable {
     /**问题ID**varchar(64)**/
     private String questionId;
 
+    /**邦派ID**varchar(64)**/
+    private String factionId;
+
 
 
 	public void setLikeId(String likeId){
@@ -89,5 +92,13 @@ public class QuestionLike implements Serializable {
 
     public void setLikeTarget(Integer likeTarget) {
         this.likeTarget = likeTarget;
+    }
+
+    public String getFactionId() {
+        return factionId;
+    }
+
+    public void setFactionId(String factionId) {
+        this.factionId = factionId;
     }
 }

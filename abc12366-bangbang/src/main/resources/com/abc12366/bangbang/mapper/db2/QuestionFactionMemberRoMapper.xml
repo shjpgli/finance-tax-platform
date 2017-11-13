@@ -86,4 +86,14 @@
         WHERE factionId = (select factionId from bb_question_faction_member m where m.memberId = #{factionId} limit 1) and duty = #{duty}
     </select>
 
+    <!-- 查询加入的邦派分类是否重复 -->
+    <select id="selectClassifyCnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(*)
+        FROM bb_question_faction_classify c
+        WHERE  factionId in(SELECT factionId FROM bb_question_faction_member where userId = #{userId} and status in(1,2))
+        and c.classifyId in(select classifyId from bb_question_faction_classify where factionId = #{factionId})
+
+    </select>
+
 </mapper>

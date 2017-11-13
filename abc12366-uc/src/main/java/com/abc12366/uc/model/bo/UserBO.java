@@ -38,8 +38,10 @@ public class UserBO {
     private String wxopenid;
     private String wxheadimg;
     private String wxnickname;
-    
-    
+    /**
+     * 老系统中的ID
+     */
+    private String oldId;
 
     public String getWxopenid() {
 		return wxopenid;
@@ -268,6 +270,14 @@ public class UserBO {
         this.levelName = levelName;
     }
 
+    public String getOldId() {
+        return oldId;
+    }
+
+    public void setOldId(String oldId) {
+        this.oldId = oldId;
+    }
+
     @Override
     public String toString() {
         return "UserBO{" +
@@ -299,6 +309,7 @@ public class UserBO {
                 ", wxopenid='" + wxopenid + '\'' +
                 ", wxheadimg='" + wxheadimg + '\'' +
                 ", wxnickname='" + wxnickname + '\'' +
+                ", oldId='" + oldId + '\'' +
                 '}';
     }
 }

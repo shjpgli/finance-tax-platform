@@ -66,5 +66,12 @@ public interface QuestionFactionMemberRoMapper {
      **/
     int selectMemberDutyCnt(Map<String, Object> map);
 
+    /**
+     *
+     * 查询加入的邦派分类是否重复
+     *
+     **/
+    int selectClassifyCnt(Map<String, Object> map);
+
 
 }

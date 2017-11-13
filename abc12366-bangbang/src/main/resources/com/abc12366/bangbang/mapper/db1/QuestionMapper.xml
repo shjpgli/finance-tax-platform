@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.Question">
 		 INSERT INTO bb_question
- 		(id,userId,title,detail,status,tag,ip,createTime,lastUpdate,points,isSolve,classifyCode,browseNum)
+ 		(id,userId,title,detail,status,tag,factionId,ip,createTime,lastUpdate,points,isSolve,classifyCode,browseNum)
 		 VALUES 
- 		(#{id},#{userId},#{title},#{detail},#{status},#{tag},#{ip},#{createTime},#{lastUpdate},#{points},#{isSolve},#{classifyCode},#{browseNum})
+ 		(#{id},#{userId},#{title},#{detail},#{status},#{tag},#{factionId},#{ip},#{createTime},#{lastUpdate},#{points},#{isSolve},#{classifyCode},#{browseNum})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

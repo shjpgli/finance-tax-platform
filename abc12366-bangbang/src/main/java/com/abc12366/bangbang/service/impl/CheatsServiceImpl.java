@@ -157,8 +157,8 @@ public class CheatsServiceImpl implements CheatsService {
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", cheatsBo.getUserId());
-            dataMap.put("classifyId", cheatsBo.getClassifyCode());
-            String factionId = questionRoMapper.selectfactionId(dataMap);
+            dataMap.put("classifyCode", cheatsBo.getClassifyCode());
+            String factionId = cheatsRoMapper.selectfactionId(dataMap);
             if(factionId == null){
                 factionId = "";
             }

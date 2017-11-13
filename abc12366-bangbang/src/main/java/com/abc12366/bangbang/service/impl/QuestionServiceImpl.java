@@ -223,7 +223,7 @@ public class QuestionServiceImpl implements QuestionService {
 
             Map<String, Object> dataMap = new HashMap<>();
             dataMap.put("userId", questionBo.getUserId());
-            dataMap.put("classifyId", questionBo.getClassifyCode());
+            dataMap.put("classifyCode", questionBo.getClassifyCode());
             String factionId = questionRoMapper.selectfactionId(dataMap);
             if(factionId == null){
                 factionId = "";

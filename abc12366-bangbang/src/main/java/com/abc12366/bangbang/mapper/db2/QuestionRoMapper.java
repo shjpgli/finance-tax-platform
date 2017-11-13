@@ -87,11 +87,6 @@ public interface QuestionRoMapper {
     List<QuestionBo> selectMyQuestionList(Map<String, Object> map);
 
     /**
-     * 查询(根据查询条件查询)
-     **/
-    String selectfactionId(Map<String, Object> map);
-
-    /**
      * 查询(话题推荐管理)
      **/
     List<RecommendBo> selectListTopicRecommend(TopicRecommendParamBO param);
@@ -105,5 +100,15 @@ public interface QuestionRoMapper {
      * 我的动态
      **/
     List<QuestionDtBo> selectQcDtList(String userId);
+
+    /**
+     * 查询分类代码
+     **/
+    String selectclassifyCode(String questionId);
+
+    /**
+     * 查询邦派ID
+     **/
+    String selectfactionId(Map<String, Object> map);
 
 }
