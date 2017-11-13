@@ -62,4 +62,14 @@ public interface CheatsRoMapper {
      **/
     List<CheatsBo> selectMyCheatsList(Map<String, Object> map);
 
+    /**
+     * 查询分类代码
+     **/
+    String selectclassifyCode(String cheatsId);
+
+    /**
+     * 查询邦派ID
+     **/
+    String selectfactionId(Map<String, Object> map);
+
 }

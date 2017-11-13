@@ -22,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by xieyanmao on 2017/9/15.
@@ -66,10 +63,22 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         if(cheats != null){
             cheatsId = cheats.getId();
         }
-        CheatsCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
-        if(comment != null && "".equals(cheatsId)){
-            likeTarget = 2;
-            cheatsId = comment.getCheatsId();
+        if("".equals(cheatsId)){
+            CheatsCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
+            if(comment != null){
+                likeTarget = 2;
+                cheatsId = comment.getCheatsId();
+            }
+        }
+
+        String classifyCode = cheatsRoMapper.selectclassifyCode(cheatsId);
+
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);
+        dataMap.put("classifyCode", classifyCode);
+        String factionId = cheatsRoMapper.selectfactionId(dataMap);
+        if(factionId == null){
+            factionId = "";
         }
 
         CheatsLike like = new CheatsLike();
@@ -81,6 +90,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         like.setCheatsId(cheatsId);
         like.setLikeTarget(likeTarget);
         like.setId(id);
+        like.setFactionId(factionId);
 
         Map map = MapUtil.kv("id", id, "userId", userId);
         int cnt =  likeRoMapper.selectExist(map);
@@ -124,11 +134,14 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
         if(cheats != null){
             cheatsId = cheats.getId();
         }
-        CheatsCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
-        if(comment != null && "".equals(cheatsId)){
-            likeTarget = 2;
-            cheatsId = comment.getCheatsId();
+        if("".equals(cheatsId)){
+            CheatsCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
+            if(comment != null){
+                likeTarget = 2;
+                cheatsId = comment.getCheatsId();
+            }
         }
+
         CheatsLike like = new CheatsLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
