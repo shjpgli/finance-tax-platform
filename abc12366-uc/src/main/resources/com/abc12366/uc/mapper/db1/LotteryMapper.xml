@@ -3,15 +3,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db1.LotteryMapper">
     <insert id="insert" parameterType="com.abc12366.uc.model.Lottery">
-insert into uc_lottery(
+insert into uc_lottery(noluck,
 id,activityId,level,stock,count,timeStock,timeCount,limits,name,description,image,cost,types,startTime,endTime,luck,createTime,status,send,timeDay
-)values(
+)values(#{noluck},
 #{id},#{activityId},#{level},#{stock},#{count},#{timeStock},#{timeCount},#{limits},#{name},#{description},#{image},#{cost},#{types},#{startTime},#{endTime},#{luck},#{createTime},#{status},#{send},#{timeDay})
 </insert>
     <update id="update" parameterType="com.abc12366.uc.model.Lottery">
         update uc_lottery
         <set>
             <if test="activityId!=null">activityId=#{activityId},</if>
+            <if test="noluck!=null">noluck=#{noluck},</if>
             <if test="level!=null">level=#{level},</if>
             <if test="stock!=null">stock=#{stock},</if>
             <if test="count!=null">count=#{count},</if>

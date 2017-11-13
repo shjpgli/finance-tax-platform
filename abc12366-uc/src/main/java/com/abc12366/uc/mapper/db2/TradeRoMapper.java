@@ -17,5 +17,10 @@ public interface TradeRoMapper{
 	 * 查询（根据主键ID查询）
 	 * 
 	 **/
-	Trade  selectById(@Param("id") String id);
+	Trade  selectById(@Param("tradeNo") String tradeNo);
+
+	/**
+	 * 根据订单号查询
+	 */
+	Trade  selectOrderNo(@Param("orderNo") String orderNo);
 }

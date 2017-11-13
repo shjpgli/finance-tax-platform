@@ -18,7 +18,7 @@
         WHERE productId = #{productId}
     </delete>
 
-    <insert id="insert" parameterType="com.abc12366.uc.model.ProductRepo">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.ProductRepo">
         INSERT INTO uc_product_repo
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -87,7 +87,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.ProductRepo">
+    <update id="update" parameterType="com.abc12366.uc.model.order.ProductRepo">
         UPDATE uc_product_repo
         <set>
             <if test="goodsId != null">

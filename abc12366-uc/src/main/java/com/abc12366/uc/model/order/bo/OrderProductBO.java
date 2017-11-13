@@ -1,7 +1,5 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.abc12366.uc.model.bo.GoodsBO;
-import com.abc12366.uc.model.bo.ProductBO;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;

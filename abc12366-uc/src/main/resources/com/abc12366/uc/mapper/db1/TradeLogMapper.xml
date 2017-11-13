@@ -13,14 +13,14 @@
         WHERE tradeNo = #{tradeNo}
     </delete>
     
-    <insert id="insertTradeLog" parameterType="com.abc12366.uc.model.TradeLog">
+    <insert id="insertTradeLog" parameterType="com.abc12366.uc.model.order.TradeLog">
         INSERT INTO uc_trade_log (<include refid="Base_Column_List"/>)
         VALUES (#{tradeNo},#{amount},#{tradeStatus},#{tradeTime},#{payMethod},#{createTime},#{lastUpdate},#{compareStatus},#{compareTime},#{tradeType},#{aliTrandeNo})
     </insert>
     
     
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.TradeLog">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.TradeLog">
         INSERT INTO uc_trade_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="tradeNo != null">
@@ -84,7 +84,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.TradeLog">
+    <update id="update" parameterType="com.abc12366.uc.model.order.TradeLog">
         UPDATE uc_trade_log
         <set>
             <if test="amount != null">

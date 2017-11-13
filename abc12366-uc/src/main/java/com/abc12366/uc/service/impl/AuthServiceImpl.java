@@ -38,6 +38,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -95,6 +96,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private IpService ipService;
 
+    @Autowired
+    private UserFeedbackMsgService userFeedbackMsgService;
+
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
      * 3、用户ID作为平台内部字段永久有效且不可更改，平台自动产生的用户名可以允许修改一次且平台内唯一，用户名不能为中文，只能为字母+数字。
@@ -113,7 +117,7 @@ public class AuthServiceImpl implements AuthService {
 
         LoginBO loginBO = new LoginBO();
         if (!StringUtils.isEmpty(registerBO.getPhone())) {
-            loginBO.setUsernameOrPhone(registerBO.getPhone());
+            loginBO.setUsernameOrPhone(registerBO.getPhone().trim().toLowerCase());
         }
         User user = userRoMapper.selectByUsernameOrPhone(loginBO);
         if (user != null) {
@@ -203,7 +207,7 @@ public class AuthServiceImpl implements AuthService {
         LOGGER.info("loginBO:{}, channel:{}", bo, channel);
 
         // 根据用户名查看用户是否存在
-        bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim());
+        bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim().toLowerCase());
         User user = userRoMapper.selectByUsernameOrPhone(bo);
         if (user == null) {
             LOGGER.warn("登录失败，参数:{}:{}", bo, channel);
@@ -485,7 +489,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void todoAfterLogin(HttpServletRequest request) {
+    public CompletableFuture todoAfterLogin(HttpServletRequest request) {
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
@@ -509,6 +513,17 @@ public class AuthServiceImpl implements AuthService {
         if (!StringUtils.isEmpty(user.getPhone())) {
             todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
         }
+
+        try{
+            //发消息
+            userFeedbackMsgService.unrealname();
+            userFeedbackMsgService.check();
+            userFeedbackMsgService.undotask();
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("用户登录后发送消息提醒异常：{}", e);
+        }
+        return CompletableFuture.completedFuture(null);
     }
 
     /**

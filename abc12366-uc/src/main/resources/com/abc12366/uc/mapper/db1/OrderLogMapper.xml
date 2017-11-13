@@ -10,7 +10,7 @@
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.OrderLog">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.OrderLog">
         INSERT INTO uc_order_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -68,7 +68,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.OrderLog">
+    <update id="update" parameterType="com.abc12366.uc.model.order.OrderLog">
         UPDATE uc_order_log
         <set>
             <if test="orderNo != null">

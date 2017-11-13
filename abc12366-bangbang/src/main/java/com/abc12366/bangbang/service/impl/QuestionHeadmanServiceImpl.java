@@ -1,11 +1,9 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.common.UcUserCommon;
-import com.abc12366.bangbang.mapper.db1.QuestionHeadmanClassifyRelMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionHeadmanMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionHeadmanRoMapper;
 import com.abc12366.bangbang.model.question.QuestionHeadman;
-import com.abc12366.bangbang.model.question.QuestionHeadmanClassifyRel;
 import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
 import com.abc12366.bangbang.service.QuestionHeadmanService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,12 +30,9 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
     @Autowired
     private QuestionHeadmanRoMapper questionHeadmanRoMapper;
 
-//    @Autowired
-//    private QuestionHeadmanClassifyRelMapper questionHeadmanClassifyRelMapper;
-
     @Override
     public List<QuestionHeadman> selectList() {
-        return questionHeadmanMapper.selectList();
+        return questionHeadmanRoMapper.selectList();
     }
 
     @Override
@@ -52,6 +48,7 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         headman.setId(Utils.uuid());
         headman.setUserId(UcUserCommon.getUserId());
         headman.setStatus("apply");
+        headman.setCreateTime(new Date());
         int cnt = questionHeadmanRoMapper.selectExist(headman.getUserId());
         if(cnt >0){
             //已申请过掌门人，请勿重复申请
@@ -59,14 +56,6 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         }
 
         questionHeadmanMapper.insert(headman);
-//        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
-//        for (String classifyId:headmanBo.getClassifyIds()){
-//            QuestionHeadmanClassifyRel rel = new QuestionHeadmanClassifyRel();
-//            rel.setId(Utils.uuid());
-//            rel.setHeadmanId(headman.getId());
-//            rel.setClassifyId(classifyId);
-//        }
-//        questionHeadmanClassifyRelMapper.insertBatch(relList);
     }
 
     @Transactional("db1TxManager")
@@ -75,22 +64,12 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         QuestionHeadman headman = new QuestionHeadman();
         BeanUtils.copyProperties(headmanBo, headman);
         questionHeadmanMapper.updateByPrimaryKeySelective(headman);
-//        questionHeadmanClassifyRelMapper.deleteByHeadmanId(headman.getId());
-//        List<QuestionHeadmanClassifyRel> relList = new ArrayList<>();
-//        for (String classifyId:headmanBo.getClassifyIds()){
-//            QuestionHeadmanClassifyRel rel = new QuestionHeadmanClassifyRel();
-//            rel.setId(Utils.uuid());
-//            rel.setHeadmanId(headman.getId());
-//            rel.setClassifyId(classifyId);
-//        }
-//        questionHeadmanClassifyRelMapper.insertBatch(relList);
     }
 
     @Transactional("db1TxManager")
     @Override
     public void delete(String id) {
         questionHeadmanMapper.deleteByPrimaryKey(id);
-//        questionHeadmanClassifyRelMapper.deleteByHeadmanId(id);
     }
 
     @Override

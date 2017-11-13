@@ -1,7 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.OrderBack;
-import com.abc12366.uc.model.bo.OrderBackBO;
+import com.abc12366.uc.model.order.OrderBack;
+import com.abc12366.uc.model.order.bo.OrderBackBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

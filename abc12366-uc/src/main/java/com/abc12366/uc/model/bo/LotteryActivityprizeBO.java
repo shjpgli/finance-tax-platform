@@ -9,6 +9,24 @@ import java.util.Date;
 
 
 public class LotteryActivityprizeBO{
+    private Boolean noluck;
+
+    public Boolean getNoluck() {
+        return noluck;
+    }
+
+    public void setNoluck(Boolean noluck) {
+        this.noluck = noluck;
+    }
+    private Integer sort;
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
 
     /** 时段投库存 */
     private Integer timeStock;

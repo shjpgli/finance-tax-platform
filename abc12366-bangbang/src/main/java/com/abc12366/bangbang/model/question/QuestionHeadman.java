@@ -17,6 +17,9 @@ public class QuestionHeadman  {
 	/**掌门人电话**/
 	private String phone;
 
+    /**自我介绍**/
+    private String introduce;
+
 	/**申请理由**/
 	private String applyReason;
 
@@ -70,7 +73,15 @@ public class QuestionHeadman  {
 		return this.phone;
 	}
 
-	public void setApplyReason(String applyReason){
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public void setApplyReason(String applyReason){
 		this.applyReason = applyReason;
 	}
 

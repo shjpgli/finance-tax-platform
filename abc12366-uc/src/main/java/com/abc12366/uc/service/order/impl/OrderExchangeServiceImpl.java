@@ -14,8 +14,8 @@ import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
-import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.Trade;
+import com.abc12366.uc.model.order.*;
+import com.abc12366.uc.model.order.bo.OrderExchangeExportBO;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.*;
@@ -29,6 +29,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -270,7 +271,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
 
                         //微信消息
-                        if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                        if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                             Map<String, String> map = new HashMap<String, String>();
                             map.put("userId", user.getId());
                             map.put("openId", user.getWxopenid());
@@ -285,7 +286,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         }
 
                         //短信消息
-                        if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                        if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                             sendPhoneMessage(request,content,user);
                         }
                     }
@@ -461,7 +462,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
 
                                         // 插入订单日志-已完成
-                                        insertLog(oe.getOrderNo(), "4", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+                                        insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
 
                                         //发送消息
                                         if (order == null) {
@@ -493,7 +494,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                             }
 
                                             //微信消息
-                                            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                                            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                                                 Map<String, String> map = new HashMap<String, String>();
                                                 map.put("userId", user.getId());
                                                 map.put("openId", user.getWxopenid());
@@ -506,7 +507,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                             }
 
                                             //短信消息
-                                            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                                            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                                                 sendPhoneMessage(httpServletRequest,content,user);
                                             }
                                         }
@@ -531,6 +532,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 oe.setRefundRemark(data.getRefundRemark());
                 oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                 orderExchangeMapper.update(oe);
+
+                // 插入订单日志-已退款
+                insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款。退款金额为："+data.getAmount(), "1", oe.getId());
 
                 //将订单状态改成已结束
                 order.setOrderStatus("7");
@@ -694,7 +698,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -706,7 +710,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request,content,user);
                 }
             }
@@ -769,7 +773,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //微信消息
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())){
+                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
                     Map<String, String> map = new HashMap<String, String>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
@@ -781,7 +785,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 }
 
                 //短信消息
-                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())){
+                if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
                     sendPhoneMessage(request, content, user);
                 }
             }
