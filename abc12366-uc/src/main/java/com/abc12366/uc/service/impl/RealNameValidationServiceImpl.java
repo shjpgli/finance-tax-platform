@@ -72,7 +72,6 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         userExtendUpdate.setValidStatus(validStatus);
         if(validStatus.equals(UCConstant.USER_REALNAME_VALIDATED)){
             userExtendUpdate.setValidTime(new Date());
-            userFeedbackMsgService.realNameValidate("2");
         }
         int result = userExtendMapper.update(userExtendUpdate);
         if (result < 1) {
@@ -87,6 +86,8 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         UserExtendBO userExtendBO = new UserExtendBO();
         UserExtend userExtend1 = userExtendRoMapper.selectOne(userExtendUpdate.getUserId());
         BeanUtils.copyProperties(userExtend1, userExtendBO);
+
+        userFeedbackMsgService.realNameValidate(validStatus);
         return userExtendBO;
     }
 
