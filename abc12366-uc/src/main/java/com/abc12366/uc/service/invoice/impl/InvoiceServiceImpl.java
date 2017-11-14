@@ -779,7 +779,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                             }
                         }
                     }
-                    dzfpGetReq.setBz(buffer.toString());
+                    if(buffer.length() > 0){
+                        dzfpGetReq.setBz(buffer.deleteCharAt(buffer.length()-1).toString());
+                    }
                 }
                 dzfpGetReq.setInvoiceXms(invoiceXmList);
                 try {
