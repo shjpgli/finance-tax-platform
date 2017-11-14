@@ -1,14 +1,14 @@
 package com.abc12366.uc.web.order;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Dict;
-import com.abc12366.uc.model.order.OrderExchange;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.OrderExchange;
 import com.abc12366.uc.model.order.bo.OrderExchangeExportBO;
-import com.abc12366.uc.service.order.OrderExchangeService;
 import com.abc12366.uc.service.admin.DictService;
-import com.abc12366.uc.util.DataUtils;
+import com.abc12366.uc.service.order.OrderExchangeService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -328,7 +328,7 @@ public class OrderExchangeController {
             startTime = "2017-01-01 00:00:01";
         }
         if (StringUtils.isEmpty(endTime)) {
-            endTime = DataUtils.dateToStr(new Date());
+            endTime = DateUtils.dateToStr(new Date());
         }
         OrderExchangeExportBO bo = new OrderExchangeExportBO();
         bo.setStartTime(startTime);

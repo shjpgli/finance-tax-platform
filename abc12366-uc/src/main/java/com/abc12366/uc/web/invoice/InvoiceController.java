@@ -1,13 +1,12 @@
 package com.abc12366.uc.web.invoice;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.invoice.Invoice;
 import com.abc12366.uc.model.invoice.InvoiceBack;
 import com.abc12366.uc.model.invoice.bo.*;
 import com.abc12366.uc.service.invoice.InvoiceService;
-import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -62,10 +61,10 @@ public class InvoiceController {
         invoice.setProperty(property);
         invoice.setWaybillNum(waybillNum);
         if (startTime != null && !"".equals(startTime)) {
-            invoice.setStartTime(DataUtils.StrToDate(startTime));
+            invoice.setStartTime(DateUtils.StrToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            invoice.setEndTime(DataUtils.StrToDate(endTime));
+            invoice.setEndTime(DateUtils.StrToDate(endTime));
         }
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);

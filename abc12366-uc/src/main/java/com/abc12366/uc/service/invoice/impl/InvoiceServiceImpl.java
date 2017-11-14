@@ -3,6 +3,7 @@ package com.abc12366.uc.service.invoice.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
@@ -28,7 +29,10 @@ import com.abc12366.uc.service.IActivityService;
 import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.invoice.InvoiceService;
-import com.abc12366.uc.util.*;
+import com.abc12366.uc.util.CharUtil;
+import com.abc12366.uc.util.MessageConstant;
+import com.abc12366.uc.util.MessageSendUtil;
+import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -203,7 +207,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceBO addInvoice(InvoiceBO invoiceBO) {
 
-        String invoiceId = DataUtils.getInvoiceOrderString();
+        String invoiceId = DateUtils.getInvoiceOrderString();
         invoiceBO.setId(invoiceId);
         Date date = new Date();
         invoiceBO.setCreateTime(date);
@@ -591,7 +595,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void automaticReceiptInvoice() {
-        Date date = DataUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
+        Date date = DateUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
         //查询15天之前未确认的订单
         List<Invoice> orderList = invoiceRoMapper.selectReceiptInvoiceByDate(date);
         for (Invoice invoice : orderList) {
@@ -834,7 +838,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ServiceException(4102);
         }
         //加入发票日志
-        insertInvoiceLog(invoiceCheckBO.getId(), UserUtil.getAdminId(), invoiceCheckBO.getRemark());
+        insertInvoiceLog(invoiceCheckBO.getId(), Utils.getAdminId(), invoiceCheckBO.getRemark());
     }
 
     /**
@@ -995,7 +999,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dataList.put("keyword1", invoiceBO.getInvoiceCode());
                 dataList.put("keyword2", invoiceBO.getInvoiceNo());
                 dataList.put("keyword3", String.valueOf(invoiceBO.getAmount()));
-                dataList.put("keyword4", DataUtils.dateToStr(new Date()));
+                dataList.put("keyword4", DateUtils.dateToStr(new Date()));
                 templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
             }
             if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&

@@ -3,11 +3,16 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
-import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.PrivilegeItem;
+import com.abc12366.uc.model.UserDzsb;
+import com.abc12366.uc.model.UserHnds;
+import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
@@ -16,15 +21,9 @@ import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
-import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
-import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
-import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.MD5;
@@ -96,7 +95,7 @@ public class UserBindServiceImpl implements UserBindService {
 //        isRealnameValidated(request);
 
         //用户会员绑定企业数量限制
-        String userId = UserUtil.getUserId(request);
+        String userId = Utils.getUserId(request);
         bindLimit(userId);
 
         //查看是否重复绑定
@@ -368,7 +367,7 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public void automaticBindCancel() {
-        Date date = DataUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
+        Date date = DateUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
         List<String> ids = userBindRoMapper.selectListByDate(date);
         Map<String, Object> map = new HashMap<>();
         map.put("ids", ids);
@@ -406,10 +405,10 @@ public class UserBindServiceImpl implements UserBindService {
 //        isRealnameValidated(request);
 
         //用户会员绑定企业数量限制
-        String userId = UserUtil.getUserId(request);
+        String userId = Utils.getUserId(request);
         bindLimit(userId);
 
-        userHngsInsertBO.setUserId(UserUtil.getUserId(request));
+        userHngsInsertBO.setUserId(Utils.getUserId(request));
         //查看是否重复绑定
         List<UserHngs> userHngsList = userBindRoMapper.userHngsListExist(userHngsInsertBO);
         if (userHngsList != null && userHngsList.size() >= 1) {
@@ -458,7 +457,7 @@ public class UserBindServiceImpl implements UserBindService {
         userHngs.setStatus(true);
         userHngs.setCreateTime(date);
         userHngs.setLastUpdate(date);
-        userHngs.setUserId(UserUtil.getUserId(request));
+        userHngs.setUserId(Utils.getUserId(request));
         userHngs.setRoleId(hngsNsrLoginResponse.getRoleId());
         int result = userBindMapper.hngsBind(userHngs);
         if (result < 1) {
@@ -504,7 +503,7 @@ public class UserBindServiceImpl implements UserBindService {
         userHnds.setStatus(true);
         userHnds.setCreateTime(date);
         userHnds.setLastUpdate(date);
-        userHnds.setUserId(UserUtil.getUserId(request));
+        userHnds.setUserId(Utils.getUserId(request));
         int result = userBindMapper.hndsBind(userHnds);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userHnds);
@@ -551,7 +550,7 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
-        String userId = UserUtil.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY21");
         map.put("nsrsbh", login.getNsrsbhOrShxydm());
