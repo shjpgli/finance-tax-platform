@@ -136,7 +136,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
     public void expLevelUp() {
         //发信息
         //1.系统消息
-        String sysMsg = "恭喜您！您的经验已达到X等级，详情请查看经验值明细；" +
+        String sysMsg = "恭喜您！您的经验值等级提升了，详情请查看经验值明细；" +
                 "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/expLog.php'>查看详情</a>";
         //2.微信消息,不做
         //3.短信消息，不做

@@ -97,6 +97,12 @@ public class Constant {
     // 订单自动确认收货，单位：天
     public final static Integer ORDER_RECEIPT_DAYS = 15;
 
+    //template_id,发送验证码模板
+    public final static String MESSAGE_UPYUN_TEMPLATEID = "296";
+
+    //template_id,发送业务通知短信模板
+    public final static String MESSAGE_UPYUN_INFORM_TEMPLATE_ID = "529";
+
     /**
      * 获取当前系统当天日期String
      *

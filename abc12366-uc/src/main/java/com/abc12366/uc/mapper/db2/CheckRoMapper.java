@@ -18,13 +18,13 @@ public interface CheckRoMapper {
 
     List<Check> selectRecheck(Check checkTmp);
 
-    List<CheckRank> selectRankList(String year);
+    List<CheckRank> selectRankList(Map<String, Object> map);
 
-    List<CheckRank> selectOneRank(Map<String, String> map);
+    //List<CheckRank> selectOneRank(Map<String, String> map);
 
     List<Check> selectIsRecheck(Check check);
 
     List<Check> selectCheckList(CheckListParam c);
 
-    Integer checkTotal(@Param("userId") String userId, @Param("year") String year);
+    Integer checkTotal(@Param("userId") String userId);
 }

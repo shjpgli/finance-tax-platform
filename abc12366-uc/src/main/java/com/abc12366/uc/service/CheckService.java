@@ -23,7 +23,6 @@ public interface CheckService {
     /**
      * 用户补签接口
      * @param check {@linkplain com.abc12366.uc.model.ReCheck}
-     * @return
      */
     void reCheck(ReCheck check);
 
@@ -44,8 +43,7 @@ public interface CheckService {
     /**
      * 查询用户本年度累计签到天数
      * @param userId 用户ID
-     * @param year 年份
      * @return 用户年度累计签到天数
      */
-    int checkTotal(String userId, String year);
+    int checkTotal(String userId);
 }

@@ -19,4 +19,6 @@ public interface PointsLogService {
     List<PointsLogUcBO> selectListByUser(Map<String, Object> map);
 
     PointsLogBO insertNoVip(PointsLogBO pointsLogBO);
+
+    PointsLogBO insertByConsume(PointsLogBO pointsLogBO);
 }
