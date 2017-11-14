@@ -631,8 +631,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             //根据发票号码和发票代码查找发票详细信息表
             InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
             if (detail == null) {
-                LOGGER.info("发票详情信息不能为空：{}", detail);
-                throw new ServiceException(4186);
+                LOGGER.info("发票号码为XXX的未找到库存，请入库再进行同步：{}", detail);
+                throw new ServiceException(4186,"发票号码为"+einvocie.getFP_HM()+"的未找到库存，请入库后再进行同步");
             }
             if (detail.getStatus() != null && "3".equals(detail.getStatus())) {
                 tail.setId(detail.getId());
@@ -645,7 +645,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
             }else{
                 LOGGER.info("发票详情信息未签收，请去发票仓库签收：{}", tail);
-                throw new ServiceException(4964,"发票号码 "+einvocie.getFP_HM()+" 未签收，请先去发票仓库走签收流程");
+                throw new ServiceException(4964,"发票号码为： "+einvocie.getFP_HM()+"的未领用完成，请签收后再进行同步");
             }
             //更新电子发票开票日志信息
             data.setTBSTATUS("1");
