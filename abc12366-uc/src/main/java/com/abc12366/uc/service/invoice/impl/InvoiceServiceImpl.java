@@ -856,6 +856,16 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     /**
+     * 电子发票是否生成红包口令,0：否；1：是
+     */
+    private String selectFieldValue(String dictId) {
+        Dict dict = new Dict();
+        dict.setDictId(dictId);
+        dict = dictRoMapper.selectOne(dict);
+        return dict != null ? dict.getFieldValue() : "";
+    }
+
+    /**
      * 更新发票详情信息
      *
      * @param einvocie
@@ -949,11 +959,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
         //查看业务提醒是否启用
         if (findObj != null && findObj.getStatus()) {
-            String isRedPackage = SpringCtxHolder.getProperty("DZFP_IS_REDPACKAGE");
+            //查询是否发红包
+            String isRedPackage = selectFieldValue("dzfp_is_redpackage");
             String redPackage = "";
             if(isRedPackage != null && "1".equals(isRedPackage)){
                 //获取微信红包信息
-                redPackage = "微信红包口令："+selectWechatPassword("wechat_hongbao");
+                redPackage = MessageConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",selectWechatPassword("wechat_hongbao"));
             }
 
             //发送消息
