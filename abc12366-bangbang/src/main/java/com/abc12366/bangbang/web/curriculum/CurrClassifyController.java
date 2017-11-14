@@ -94,8 +94,12 @@ public class CurrClassifyController {
      * 根据分类查询相关标签
      */
     @GetMapping(path = "/selectClassifyTagList")
-    public ResponseEntity selectClassifyTagList(@RequestParam(value = "classifyId", required = false) String classifyId) {
-        List<CurriculumClassifyTagBo> dataList = classifyService.selectClassifyTagList(classifyId);
+    public ResponseEntity selectClassifyTagList(@RequestParam(value = "classifyId", required = false) String classifyId,
+                                                @RequestParam(value = "tagName", defaultValue = "") String tagName) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("classifyId",classifyId);
+        map.put("tagName",tagName);
+        List<CurriculumClassifyTagBo> dataList = classifyService.selectClassifyTagList(map);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
 
     }
