@@ -2,6 +2,7 @@ package com.abc12366.gateway.util;
 
 import com.abc12366.gateway.exception.ServiceException;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -393,5 +394,58 @@ public class DateUtils {
      */
     public static Date getLongToDate(long lt) {
         return new Date(lt);
+    }
+
+    /**
+     * 获取当前系统当天日期String
+     *
+     * @return String
+     */
+    public static String getTodaySting() {
+        Date date = new Date();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    /**
+     * 获取当前系统当天日期
+     *
+     * @param date Date
+     * @return Date
+     */
+    public static Date getToday(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, 0);
+        date = calendar.getTime();
+        return date;
+    }
+
+    /**
+     * 获取当前系统前一天日期
+     *
+     * @param date Date
+     * @return Date
+     */
+    public static Date getYesterDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        date = calendar.getTime();
+        return date;
+    }
+
+    /**
+     * 获取当前系统下一天日期
+     *
+     * @param date Date
+     * @return Date
+     */
+    public static Date getNextDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        date = calendar.getTime();
+        return date;
     }
 }

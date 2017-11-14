@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
@@ -11,6 +11,7 @@ import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.service.UserExtendService;
+import com.abc12366.uc.service.UserFeedbackMsgService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -44,6 +45,9 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Autowired
     private TodoTaskService todoTaskService;
 
+    @Autowired
+    private UserFeedbackMsgService userFeedbackMsgService;
+
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
@@ -51,9 +55,9 @@ public class UserExtendServiceImpl implements UserExtendService {
         if (userExtend == null) {
             return null;
         }
-        if(userExtend.getValidStatus().equals(UCConstant.USER_REALNAME_VALIDATED)){
+        if(userExtend.getValidStatus().equals(TaskConstant.USER_REALNAME_VALIDATED)){
             //首次实名认证任务埋点
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
+            todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
         }
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);
@@ -87,6 +91,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             if(userBindService.isRealNameValidatedDzsj(userExtendBO.getIdcard(), userExtendBO.getRealName(), request)){
                 userExtend.setValidStatus("2");
                 userExtend.setValidTime(new Date());
+                userFeedbackMsgService.realNameValidate("2");
             }
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {
@@ -145,6 +150,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
             if(userBindService.isRealNameValidatedDzsj(userExtendUpdateBO.getIdcard(),userExtendUpdateBO.getRealName(), request)){
                 userExtendSecond.setValidStatus("2");
+                userFeedbackMsgService.realNameValidate("2");
             }
             int result = userExtendMapper.update(userExtendSecond);
             UserExtendBO userExtendBO = new UserExtendBO();

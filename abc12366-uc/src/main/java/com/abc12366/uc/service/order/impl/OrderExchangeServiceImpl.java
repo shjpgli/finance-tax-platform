@@ -2,10 +2,7 @@ package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
@@ -22,6 +19,7 @@ import com.abc12366.uc.model.order.bo.OrderExchangeExportBO;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.IWxTemplateService;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.order.OrderExchangeService;
@@ -265,7 +263,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         Message message = new Message();
                         message.setBusinessId(order.getOrderNo());
                         message.setType("SPDD");
-                        String content = MessageConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo()).replaceAll("\\{#DATA.COMP\\}", expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", data.getExpressNo());
+                        String content = RemindConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo()).replaceAll("\\{#DATA.COMP\\}", expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", data.getExpressNo());
                         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                         message.setContent(content);
                         message.setUserId(order.getUserId());
@@ -490,7 +488,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                             message.setBusinessId(oe.getOrderNo());
                                             message.setBusiType(MessageConstant.SPDD);
                                             message.setType(MessageConstant.SYS_MESSAGE);
-                                            String content = MessageConstant.REFUND_PREFIX + refundRes.getRefund_fee() + MessageConstant.REFUND_SUFFIX + order.getOrderNo();
+                                            String content = RemindConstant.REFUND_PREFIX + refundRes.getRefund_fee() + RemindConstant.REFUND_SUFFIX + order.getOrderNo();
                                             message.setContent(content);
                                             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                                             message.setUserId(order.getUserId());
@@ -581,7 +579,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
      */
     private void insertPoints(Order orderBO,Double amount) {
         //如果积分规则为空则返回
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_ORDER_RETURN_CODE);
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_ORDER_RETURN_CODE);
         if (pointsRuleBO == null) {
             return;
         }
@@ -687,9 +685,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 Message message = new Message();
                 String content = "";
                 if ("1".equals(oe.getType())) {
-                    content = MessageConstant.EXCHANGE_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                    content = RemindConstant.EXCHANGE_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
                 } else if ("2".equals(oe.getType())) {
-                    content = MessageConstant.RETREAT_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                    content = RemindConstant.RETREAT_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
                 }
                 message.setContent(content);
                 message.setBusinessId(oe.getOrderNo());
@@ -762,9 +760,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 String content = "";
                 //服务类型：1-换货 2-退货
                 if ("1".equals(oe.getType())) {
-                    content = MessageConstant.EXCHANGE_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                    content = RemindConstant.EXCHANGE_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
                 } else if ("2".equals(oe.getType())) {
-                    content = MessageConstant.RETREAT_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
+                    content = RemindConstant.RETREAT_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
                 }
                 //web消息
                 if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){

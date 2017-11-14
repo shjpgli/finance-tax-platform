@@ -10,13 +10,11 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.uc.mapper.db1.LotteryActivityMapper;
 import com.abc12366.uc.mapper.db2.LotteryActivityRoMapper;
-import com.abc12366.uc.model.Lottery;
 import com.abc12366.uc.model.LotteryActivity;
-import com.abc12366.uc.model.LotteryActivityprize;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -268,7 +266,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
             //扣积分
             PointCalculateBO pointCalculateBO = new PointCalculateBO();
             pointCalculateBO.setUserId(userId);
-            pointCalculateBO.setRuleCode(UCConstant.POINT_RULE_LOTTERY_CODE);
+            pointCalculateBO.setRuleCode(TaskConstant.POINT_RULE_LOTTERY_CODE);
 
             point = pointsService.calculate(pointCalculateBO);
             if (point==null || point == 0) {

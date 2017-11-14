@@ -1,6 +1,7 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Express;
 import com.abc12366.uc.model.ExpressComp;
@@ -66,10 +67,10 @@ public class ExpressCompController {
         expressBO.setUser(user);
         expressBO.setExpressNo(expressId);
         if (startTime == null || "".equals(startTime)) {
-            expressBO.setStartTime(Constant.getToday(new Date()));
+            expressBO.setStartTime(DateUtils.getToday(new Date()));
         }
         if (endTime == null || "".equals(endTime)) {
-            expressBO.setEndTime(Constant.getToday(new Date()));
+            expressBO.setEndTime(DateUtils.getToday(new Date()));
         }
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<ExpressBO> expressList = expressService.selectList(expressBO);

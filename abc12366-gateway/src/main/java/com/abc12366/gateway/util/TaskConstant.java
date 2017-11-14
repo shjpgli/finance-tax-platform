@@ -1,12 +1,13 @@
 package com.abc12366.gateway.util;
 
 /**
- * UC常用静态变量
- * User: liuguiyao<435720953@qq.com>
- * Date: 20170912
- * Time: 15:24
+ * 用户任务、积分、经验值常量
+ *
+ * @author lijun <ljun51@outlook.com>
+ * @create 2017-04-06 11:38 AM
+ * @since 1.0.0
  */
-public class UCConstant {
+public class TaskConstant {
     //uc用户新手任务类型(多为一次性任务)
     public final static String NEW_USER_TASK_TYPE = "1";
     //uc用户日常任务类型
@@ -32,22 +33,10 @@ public class UCConstant {
     //uc用户任务状态：未完成状态
     public final static String TASK_FINISHED = "1";
 
-    // 订单自动确认收货，单位：天
-    public final static Integer ORDER_RECEIPT_DAYS = 15;
-
-    // 订单自动取消时间：小时
-    public final static Integer ORDER_CANCEL_TIME = 2;
-
 
     //UC用户任务奖励类型：0：经验值，1：积分
     public final static String AWARD_TYPE_EXP = "0";
     public final static String AWARD_TYPE_POINT = "1";
-
-    //会员时间，单位：年
-    public final static Integer USER_VIP_EXPIRE_DATE = 1;
-
-    //电子申报绑定时间，单位：月
-    public final static Integer DZSB_BIND_DATE = 3;
 
     //系统任务编码
     //1.首次修改登录密码
@@ -330,16 +319,4 @@ public class UCConstant {
     public final static String PRIVILEGE_TYPE_YHJFZR = "yhjfzr";
     //8.商品/发票免邮券
     public final static String PRIVILEGE_TYPE_SPFPMYQ = "spfpmyq";
-
-
-    //用户连续输错密码阈值
-    public final static int USER_CONTINUE_PASSWORD_WRONG_MAX = 5;
-    //用户连续输错密码超过阈值锁定时间，单位：毫秒
-    public final static int LOCK_TIME = 10 * 60 * 1000;
-
-    //消息类型，1：系统消息，2：帮帮消息
-    public final static String BUSI_MSG_TYPE_SYSTEM = "1";
-    public final static String BUSI_MSG_TYPE_BANGBANG = "2";
-    //业务类型：帮帮
-    public final static String BUSI_TYPE_BANGBANG = "BANGBANG-AWARD";
 }

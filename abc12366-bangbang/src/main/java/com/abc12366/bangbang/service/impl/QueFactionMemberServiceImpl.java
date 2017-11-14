@@ -8,6 +8,8 @@ import com.abc12366.bangbang.model.question.QuestionFactionMember;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo;
 import com.abc12366.bangbang.service.QueFactionMemberService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +89,39 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             throw new ServiceException(6125);
         }
 
+        int peopleLimit = faction.getPeopleLimit();
+        //已通过的人数
+        int passcnt = memberRoMapper.selectPassMemberCnt(factionMemberBo.getFactionId());
+        if(passcnt >= peopleLimit){
+            //邦派人数已达上限
+            throw new ServiceException(6136);
+        }
+        UCUserBO userBo = Utils.getUserInfo();
+        String vipLevel = "";
+        String userLevel = "";
+        if(userBo != null){
+            vipLevel = userBo.getVipLevel();
+            userLevel = userBo.getLevel();
+        }
+        int minGrad = faction.getMinGrade();
+        if(userLevel != null && userLevel.length() > 2){
+            String userLevel1 = userLevel.substring(2);
+            int userLevel2 = Integer.parseInt(userLevel1);
+            if(minGrad != 0 && userLevel2 < minGrad){
+                //用户等级小于入帮最低等级,不能申请入帮
+                throw new ServiceException(6138);
+            }
+        }else{
+            throw new ServiceException(6132);
+        }
 
+        int auto = faction.getAuto();//是否自动入帮，1为是，0为否
+        int status = 1;
+        if(auto == 1){
+            status = 2;
+            factionMemberBo.setMemberGrade("B1");
+            factionMemberBo.setDuty("B1");
+        }
         try {
             factionMemberBo.setCreateTime(new Date());
             factionMemberBo.setLastUpdate(new Date());
@@ -95,7 +129,7 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             QuestionFactionMember factionMember = new QuestionFactionMember();
             factionMemberBo.setMemberId(uuid);
-            factionMemberBo.setStatus(1);
+            factionMemberBo.setStatus(status);
             BeanUtils.copyProperties(factionMemberBo, factionMember);
             memberMapper.insert(factionMember);
         } catch (Exception e) {

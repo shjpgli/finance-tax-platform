@@ -9,7 +9,7 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceLog;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.uc.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,7 +148,7 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
 
         if (newExp >= Integer.parseInt(myExperienceBO.getNextLevelExp())) {
             //如果积分规则为空则返回
-            PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_EXP_UP_CODE);
+            PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_EXP_UP_CODE);
             if (pointsRuleBO == null || pointsRuleBO.getPoints() > 0) {
                 return;
             }

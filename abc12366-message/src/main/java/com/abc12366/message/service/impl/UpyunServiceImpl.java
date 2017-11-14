@@ -2,6 +2,7 @@ package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.UpyunMapper;
@@ -10,7 +11,6 @@ import com.abc12366.message.model.UpyunTemplate;
 import com.abc12366.message.model.bo.UpyunTemplateAcceptBaseBO;
 import com.abc12366.message.model.bo.UpyunTemplatesAcceptBO;
 import com.abc12366.message.service.UpyunService;
-import com.abc12366.message.util.soaUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,7 @@ public class UpyunServiceImpl implements UpyunService {
         UpyunTemplatesAcceptBO templates = null;
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+            if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
                 templates = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunTemplatesAcceptBO.class);
             }
             LOGGER.info("从又拍获取到的模板数据是：{}", String.valueOf(responseEntity.getBody()));

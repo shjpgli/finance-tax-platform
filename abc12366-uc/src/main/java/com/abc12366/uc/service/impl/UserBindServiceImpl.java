@@ -4,7 +4,7 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
@@ -166,7 +166,7 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userDzsb, userDzsbBO1);
 
         //绑定税号任务埋点
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userDzsbBO1;
     }
 
@@ -367,7 +367,7 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public void automaticBindCancel() {
-        Date date = DateUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
+        Date date = DateUtils.getAddMonth(Constant.DZSB_BIND_DATE);
         List<String> ids = userBindRoMapper.selectListByDate(date);
         Map<String, Object> map = new HashMap<>();
         map.put("ids", ids);
@@ -467,7 +467,7 @@ public class UserBindServiceImpl implements UserBindService {
         UserHngsBO userHngsBO1 = new UserHngsBO();
         BeanUtils.copyProperties(userHngs, userHngsBO1);
         //绑定税号任务埋点
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHngsBO1;
     }
 
@@ -513,7 +513,7 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userHnds, userHndsBO1);
         //绑定税号任务埋点
         String userId = Utils.getUserId();
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHndsBO1;
     }
 
@@ -826,7 +826,7 @@ public class UserBindServiceImpl implements UserBindService {
 //        return encodedCode;
 
         String frist_sbmm = new MD5(code).compute().toUpperCase();
-        String second_gssbmm = new MD5(frist_sbmm + UCConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
+        String second_gssbmm = new MD5(frist_sbmm + TaskConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
         return second_gssbmm;
     }
 

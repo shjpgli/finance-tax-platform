@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.StringUtil;
+import com.abc12366.bangbang.util.StringUtil;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper;
 import com.abc12366.bangbang.model.KnowledgeCategory;
