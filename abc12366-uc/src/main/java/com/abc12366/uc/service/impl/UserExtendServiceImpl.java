@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
@@ -51,9 +51,9 @@ public class UserExtendServiceImpl implements UserExtendService {
         if (userExtend == null) {
             return null;
         }
-        if(userExtend.getValidStatus().equals(UCConstant.USER_REALNAME_VALIDATED)){
+        if(userExtend.getValidStatus().equals(TaskConstant.USER_REALNAME_VALIDATED)){
             //首次实名认证任务埋点
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
+            todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
         }
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);

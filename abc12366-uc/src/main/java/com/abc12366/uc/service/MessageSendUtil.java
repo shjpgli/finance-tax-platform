@@ -1,10 +1,12 @@
-package com.abc12366.bangbang.util;
+package com.abc12366.uc.service;
 
-import com.abc12366.bangbang.model.Message;
-import com.abc12366.bangbang.model.bo.MessageBO;
+import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.bo.MessageBO;
 import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,12 +20,20 @@ public interface MessageSendUtil {
      */
     MessageBO sendMessage(Message message, HttpServletRequest request);
 
-    String send(String url, HttpMethod method, Map<String, Object> map, HttpServletRequest request);
     /**
      * 不需要验证token的发送
      */
     MessageBO sendMessage(Message message);
 
     String sendMsg(String url, HttpMethod method, Map<String, Object> map);
+    
+    MessageBO sendMessage(Message message,String accessToken);
+    
+    /**
+     * 短信发送
+     * @param phone
+     * @param accessToken
+     */
+	void sendPhoneMessage(String phone,String templateId,  List<Map<String,String>> list, String accessToken);
 
 }

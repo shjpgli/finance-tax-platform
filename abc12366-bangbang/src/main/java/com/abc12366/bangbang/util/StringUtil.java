@@ -1,4 +1,4 @@
-package com.abc12366.bangbang.common;
+package com.abc12366.bangbang.util;
 
 /**
  * @Author liuqi
@@ -13,6 +13,5 @@ public class StringUtil {
             return obj.toString();
         }
     }
-
 
 }

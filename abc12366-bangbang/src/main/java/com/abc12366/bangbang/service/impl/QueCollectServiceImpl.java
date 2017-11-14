@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.MapUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.QuestionCollectMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCollectRoMapper;
@@ -9,10 +9,10 @@ import com.abc12366.bangbang.model.question.QuestionCollect;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.service.QueCollectService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
-import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class QueCollectServiceImpl implements QueCollectService {
     private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Autowired
-    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public String insert(String id, HttpServletRequest request) {
@@ -84,8 +84,8 @@ public class QueCollectServiceImpl implements QueCollectService {
 
 
         String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
-        String sysTaskId = UCConstant.SYS_TASK_MRWDSC_CODE;
-        bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+        String sysTaskId = TaskConstant.SYS_TASK_MRWDSC_CODE;
+        restTemplateUtil.send(url, HttpMethod.POST, request, userId, sysTaskId);
 
         return collectCnt+"";
     }

@@ -5,7 +5,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.util.MessageConstant;
+import com.abc12366.gateway.util.RemindConstant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.quartz.Job;
@@ -162,7 +162,7 @@ public class ReportDateJob implements Job {
                 if (!"VIP0".equalsIgnoreCase(userBO.getVipLevel())
                         && chargeDate(userBO.getVipExpireDate())) {
                 	LOGGER.info("用户:" + userBO.getId() + ",会员过期信息提醒：" + userBO.getVipLevel()+";过期时间:"+userBO.getVipExpireDate());
-                    String sysMsg=MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
+                    String sysMsg= RemindConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
                     
                     Map<String, String> dataList = new HashMap<String, String>();
                     dataList.put("first", "您的会员即将过期");
@@ -173,7 +173,7 @@ public class ReportDateJob implements Job {
                     dataList.put("keyword2Color", "#00DB00");
                     dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
                    
-                    String vdxMsg = MessageConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO
+                    String vdxMsg = RemindConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO
 							.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
 							()));
                     
@@ -182,7 +182,7 @@ public class ReportDateJob implements Job {
 
                 //2.申报期信息发送
                 LOGGER.info("用户:" + userBO.getId() + ",申报期信息提醒：" + userBO.getVipLevel());
-                String sysMsg=MessageConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
+                String sysMsg= RemindConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
                 
                 Map<String, String> dataList = new HashMap<String, String>();
                 dataList.put("first", "财税专家会员提醒，本月纳税申报可申报的报表种类如下：");
@@ -195,7 +195,7 @@ public class ReportDateJob implements Job {
                 dataList.put("keyword3Color", "#00DB00");
                 dataList.put("url", SpringCtxHolder.getProperty("mbxx.sbqx.url"));
                 
-                String vdxMsg = MessageConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
+                String vdxMsg = RemindConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
                 
                 msgSendService.sendMsg(user, sysMsg, "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, vdxMsg);
             }

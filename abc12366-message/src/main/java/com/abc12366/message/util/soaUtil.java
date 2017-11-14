@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
  * Date: 2017-07-28
  * Time: 17:05
  */
-public class soaUtil {
+public class SOAUtil {
     public static boolean isExchangeSuccessful(ResponseEntity response) {
         if (response != null && response.getStatusCode().is2xxSuccessful() && response.hasBody()) {
             return true;

@@ -28,27 +28,15 @@ public class RestTemplateUtil {
     @Autowired
     private RestTemplate restTemplate;
 
-    public String send(String url, HttpMethod method, HttpServletRequest request) {
+    public String send(String url, HttpMethod method, HttpServletRequest request, Object... uriVariables) {
         //请求头设置
-        HttpHeaders httpHeaders = new HttpHeaders();
-        if (!StringUtils.isEmpty(request.getHeader(Constant.APP_TOKEN_HEAD))) {
-            httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-        }
-        if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
-            httpHeaders.add(Constant.ADMIN_TOKEN_HEAD, request.getHeader(Constant.ADMIN_TOKEN_HEAD));
-        }
-        if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
-            httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
-        }
-        if (!StringUtils.isEmpty(request.getHeader(Constant.VERSION_HEAD))) {
-            httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
-        }
+        HttpHeaders httpHeaders = getHeaders(request);
 
         HttpEntity requestEntity = new HttpEntity(null, httpHeaders);
         LOGGER.info("Request: {}, {}", url, requestEntity);
-        ResponseEntity<String> responseEntity = null;
+        ResponseEntity<String> responseEntity;
         try {
-            responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
+            responseEntity = restTemplate.exchange(url, method, requestEntity, String.class, uriVariables);
         } catch (RestClientException e) {
             LOGGER.error("{}", e);
             throw new ServiceException("0000", "调用接口异常，地址：" + url);
@@ -63,7 +51,7 @@ public class RestTemplateUtil {
 
         HttpEntity requestEntity = new HttpEntity(o, httpHeaders);
         LOGGER.info("Request: {}, {}", url, requestEntity);
-        ResponseEntity<String> responseEntity = null;
+        ResponseEntity<String> responseEntity;
         try {
             responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
         } catch (RestClientException e) {

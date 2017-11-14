@@ -2,13 +2,11 @@ package com.abc12366.uc.service.invoice.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.UserAddressBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
@@ -30,8 +28,7 @@ import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.util.CharUtil;
-import com.abc12366.uc.util.MessageConstant;
-import com.abc12366.uc.util.MessageSendUtil;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -478,7 +475,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceTemp.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.ORDER\\}",
+                String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.ORDER\\}",
                         invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
                         expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -594,7 +591,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void automaticReceiptInvoice() {
-        Date date = DateUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
+        Date date = DateUtils.getAddDate(Constant.ORDER_RECEIPT_DAYS);
         //查询15天之前未确认的订单
         List<Invoice> orderList = invoiceRoMapper.selectReceiptInvoiceByDate(date);
         for (Invoice invoice : orderList) {
@@ -917,7 +914,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setBusinessId(invoiceBO.getId());
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            String content = MessageConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+            String content = RemindConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
                     .getId());
             message.setContent(content);
             message.setUserId(invoiceBO.getUserId());
@@ -967,7 +964,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             String redPackage = "";
             if(isRedPackage != null && "1".equals(isRedPackage)){
                 //获取微信红包信息
-                redPackage = MessageConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",selectWechatPassword("wechat_hongbao"));
+                redPackage = RemindConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",selectWechatPassword("wechat_hongbao"));
             }
 
             //发送消息
@@ -976,7 +973,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
 
-            String content = MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
+            String content = RemindConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
                     invoiceBO.getId())+redPackage;
             message.setContent(content);
             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -1066,7 +1063,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.DZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}",
+                String content = RemindConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}",
                         invoiceBO.getId());
                 message.setContent(content);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -1112,7 +1109,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+                String content = RemindConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
                         .getId());
                 message.setContent(content);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
