@@ -1,10 +1,9 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
@@ -16,14 +15,12 @@ import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -156,13 +153,13 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //发信息
         //1.系统消息
         String sysMsg = "您好，你提交的实名认证信息已通过审核," +
-                "认证结果：" + (status.trim().equals(UCConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过") +
+                "认证结果：" + (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过") +
                 ",时间：" + DateUtils.dateToStr(new Date())+
                 "了解更多信息，请前往官方网站，祝您使用愉快。";
         //2.微信消息
         Map<String, String> dataList = new HashMap<>();
         dataList.put("first", "您好，你提交的实名认证信息已通过审核,认证结果：");
-        dataList.put("keyword1", (status.trim().equals(UCConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"));
+        dataList.put("keyword1", (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"));
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", ",了解更多信息，请前往官方网站，祝您使用愉快。");
         //3.短信消息
