@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.PointMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
@@ -9,7 +10,6 @@ import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
-import com.abc12366.uc.util.DateUtils;
 import com.abc12366.gateway.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

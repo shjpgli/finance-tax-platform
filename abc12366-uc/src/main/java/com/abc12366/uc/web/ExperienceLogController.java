@@ -1,13 +1,12 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.ExpLogUcBO;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.ExperienceLogQueryBO;
 import com.abc12366.uc.service.ExperienceLogService;
-import com.abc12366.uc.util.DateUtils;
-import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -128,7 +127,7 @@ public class ExperienceLogController {
             endDate = calendar.getTime();
         }
 
-        map.put("userId", UserUtil.getUserId(request));
+        map.put("userId", Utils.getUserId(request));
         map.put("start", startDate);
         map.put("end", endDate);
 

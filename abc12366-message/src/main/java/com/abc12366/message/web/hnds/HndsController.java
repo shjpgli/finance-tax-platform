@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.model.bo.HndsLoginBo;
 import com.abc12366.message.service.IHndsBindService;
@@ -51,7 +52,7 @@ public class HndsController {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked", "static-access"})
 	@PostMapping("/login")
-	public @ResponseBody JSONObject wsbsLogin(@RequestBody HndsLoginBo loginBo){
+	public ResponseEntity wsbsLogin(@RequestBody HndsLoginBo loginBo){
 		String taxurl=loginBo.toLoginStr(cfg.getHndsUrl());
 		LOGGER.info("请求地址:"+taxurl);
 		HttpEntity httpEntity = new HttpEntity(new HttpHeaders());
@@ -73,11 +74,14 @@ public class HndsController {
             	if(n==-1){
             		LOGGER.info("湖南地税登录绑定关系已存在");
             	}
+            	return ResponseEntity.ok(Utils.kv("data",jsonObject));
+            }else{
+            	return ResponseEntity.ok(Utils.bodyStatus(jsonObject.getString("retcode"), jsonObject.getString("retinfo")));
             }
         } catch (Exception e) {
             LOGGER.error("RestClient调用服务出现异常: " + e.getMessage(), e);
+            return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
         }
-        return jsonObject;
 	}
 	
 	

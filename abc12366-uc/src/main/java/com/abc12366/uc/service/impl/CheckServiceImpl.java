@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.CheckMapper;
 import com.abc12366.uc.mapper.db2.CheckRoMapper;
@@ -13,7 +14,6 @@ import com.abc12366.uc.model.bo.CheckListParam;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.service.*;
-import com.abc12366.uc.util.DateUtils;
 import com.abc12366.gateway.util.UCConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

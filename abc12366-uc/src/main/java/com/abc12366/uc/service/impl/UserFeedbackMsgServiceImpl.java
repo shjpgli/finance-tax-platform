@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.model.TodoTaskFront;
@@ -13,7 +14,6 @@ import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
-import com.abc12366.uc.util.DataUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,12 +50,12 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
 
         //发信息
         //1.系统消息
-        String sysMsg = "您的密码于" + DataUtils.dateToStr(new Date()) + "被修改，请确认为本人操作，如有疑问请联系客服咨询4008873133。";
+        String sysMsg = "您的密码于" + DateUtils.dateToStr(new Date()) + "被修改，请确认为本人操作，如有疑问请联系客服咨询4008873133。";
         //2.微信消息
         Map<String, String> dataList = new HashMap<>();
         dataList.put("first", "您好,您的密码已通过，");
         dataList.put("keyword1", user.getUsername());
-        dataList.put("keyword2", DataUtils.dateToStr(new Date()));
+        dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", "完成修改，感谢您的使用！");
         //3.短信消息
         String dxmsg = sysMsg;
@@ -82,7 +82,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         Map<String, String> dataList = new HashMap<>();
         dataList.put("first", "根据国家网信办相关规定，互联网平台的注册用户必须实名认证,");
         dataList.put("keyword1", "未认证");
-        dataList.put("keyword2", DataUtils.dateToStr(new Date()));
+        dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", "请尽快完成实名认证，否则部分功能将无法使用。");
         //3.短信消息
         String dxmsg = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证，您还未进行实名认证，" +

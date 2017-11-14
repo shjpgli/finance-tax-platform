@@ -1,16 +1,16 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
-import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.service.UserExtendService;
-import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -129,7 +129,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             throw new ServiceException(4102);
         }
         //不允许修改非当前登录用户数据
-        if(!userExtendUpdateBO.getUserId().trim().equals(UserUtil.getUserId(request).trim())){
+        if(!userExtendUpdateBO.getUserId().trim().equals(Utils.getUserId(request).trim())){
             throw new ServiceException(4190);
         }
         if (!userExtendUpdateBO.getUserId().equals("")) {

@@ -3,6 +3,7 @@ package com.abc12366.uc.service.order.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
@@ -152,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
         //isValidate(orderBO);
         Order order = new Order();
         BeanUtils.copyProperties(orderBO, order);
-        order.setOrderNo(DataUtils.getDateToString());
+        order.setOrderNo(DateUtils.getDateToString());
         Date date = new Date();
         order.setCreateTime(date);
         order.setLastUpdate(date);
@@ -244,7 +245,7 @@ public class OrderServiceImpl implements OrderService {
                 }
                 BeanUtils.copyProperties(orderSubmitBO, order);
                 order.setOrderStatus("2");
-                String orderNo = DataUtils.getDateToString();
+                String orderNo = DateUtils.getDateToString();
                 order.setOrderNo(orderNo);
 
                 order.setCreateTime(date);
@@ -270,7 +271,7 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         //新增交易流水号
-        String tradeNo = DataUtils.getJYLSH();
+        String tradeNo = DateUtils.getJYLSH();
         TradeLog tradeLog = new TradeLog();
         tradeLog.setLastUpdate(date);
         tradeLog.setCreateTime(date);
@@ -855,7 +856,7 @@ public class OrderServiceImpl implements OrderService {
                 map.put("remark", "感恩您的参与和支持，谢谢！。");
                 map.put("keyword1", user.getVipLevelName());
                 map.put("keyword2", orderProductBO.getName());
-                map.put("keyword3", DataUtils.dateToStr(new Date()));
+                map.put("keyword3", DateUtils.dateToStr(new Date()));
                 templateService.templateSend("GrA5UnnYg39Rhs2nyDzwoFiYfmZh5sFkNXTZWGGmrkY", map);
             }
 
@@ -920,7 +921,7 @@ public class OrderServiceImpl implements OrderService {
             tradeLog.setTradeStatus("2");
             tradeLog.setTradeType("1");
             tradeLog.setAmount(order.getTotalPrice());
-            Timestamp now = new Timestamp(new Date().getTime());
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             tradeLog.setTradeTime(now);
             tradeLog.setCreateTime(now);
             tradeLog.setLastUpdate(now);
@@ -1120,7 +1121,7 @@ public class OrderServiceImpl implements OrderService {
                     map.put("remark", "详情请登录财税平台查看。");
                     map.put("keyword1", data.getOrderNo());
                     map.put("keyword2", UserUtil.getAdminInfo().getNickname());
-                    map.put("keyword3", DataUtils.dateToStr(new Date()));
+                    map.put("keyword3", DateUtils.dateToStr(new Date()));
                     templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
                 }
                 //发送短信
@@ -1201,7 +1202,7 @@ public class OrderServiceImpl implements OrderService {
                 map.put("remark", "详情请登录财税平台查看。");
                 map.put("keyword1", order.getOrderNo());
                 map.put("keyword2", UserUtil.getAdminInfo().getNickname());
-                map.put("keyword3", DataUtils.dateToStr(new Date()));
+                map.put("keyword3", DateUtils.dateToStr(new Date()));
                 templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
             }
 
@@ -1226,7 +1227,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticReceipt() {
-        Date date = DataUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
+        Date date = DateUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
         //查询15天之前未确认的订单
         List<Order> orderList = orderRoMapper.selectReceiptOrderByDate(date);
         for (Order order : orderList) {
@@ -1239,7 +1240,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticCancel() {
-        Date date = DataUtils.getAddTime(UCConstant.ORDER_CANCEL_TIME);
+        Date date = DateUtils.getAddTime(UCConstant.ORDER_CANCEL_TIME);
         //查询两个小时未支付的订单，自动取消
         List<Order> orderList = orderRoMapper.selectCancelOrderByDate(date);
         for (Order order : orderList) {

@@ -7,7 +7,6 @@ import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.UserExtendService;
-import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,7 @@ public class UserExtendController {
     public ResponseEntity update(@Valid @RequestBody UserExtendUpdateBO userExtendUpdateBO, @PathVariable String
             userId, HttpServletRequest request) throws IOException {
         LOGGER.info("用户更新扩展信息，{}:{}:{}", userExtendUpdateBO, userId, request);
-        if (!userId.trim().equals(UserUtil.getUserId(request))) {
+        if (!userId.trim().equals(Utils.getUserId(request))) {
             throw new ServiceException(4190);
         }
         userExtendUpdateBO.setUserId(userId.trim());
@@ -91,7 +90,7 @@ public class UserExtendController {
         String filePath2=iWxGzhService.getWxDownFilePath(userExtendUpdateBO.getUserId(), userExtendUpdateBO.getBackImage(),request);
         userExtendUpdateBO.setBackImage(filePath2);
         
-        if (!userId.trim().equals(UserUtil.getUserId(request))) {
+        if (!userId.trim().equals(Utils.getUserId(request))) {
             throw new ServiceException(4190);
         }
         userExtendUpdateBO.setUserId(userId.trim());
