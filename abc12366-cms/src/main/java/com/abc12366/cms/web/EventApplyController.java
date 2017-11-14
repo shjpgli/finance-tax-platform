@@ -43,10 +43,15 @@ public class EventApplyController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "eventId", required = false) String eventId,
                                      @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "tel", required = false) String tel,
+                                     @RequestParam(value = "email", required = false) String email,
                                      @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("eventId", eventId);//活动ID
-        dataMap.put("name", name);//姓名，手机号，邮箱
+        //姓名，手机号，邮箱
+        dataMap.put("name", name);
+        dataMap.put("tel", tel);
+        dataMap.put("email", email);
         dataMap.put("status", status);//状态
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<EventApplyBo> dataList = eventApplyService.selectList(dataMap);

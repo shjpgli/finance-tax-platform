@@ -36,9 +36,9 @@ public class MessageConstant {
     public static final String SEND_MSG_SUCCESS_CONTENT = "发送成功";
 
     // 又拍template_id,发送验证码模板
-    public final static String MESSAGE_UPYUN_TEMPLATEID = "296";
+    public final static String MESSAGE_UPYUN_TEMPLATE_296 = "296";
     // 又拍template_id,发送业务通知短信模板
-    public final static String MESSAGE_UPYUN_INFORM_TEMPLATE_ID = "529";
+    public final static String MESSAGE_UPYUN_TEMPLATE_529 = "529";
 
     //商品订单
     public static final String SPDD = "SPDD";

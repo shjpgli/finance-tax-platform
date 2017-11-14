@@ -615,6 +615,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRoMapper.selectTodoListCount();
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void invoiceCheck() {
         Einvocie einvocie = new Einvocie();
@@ -623,11 +624,33 @@ public class InvoiceServiceImpl implements InvoiceService {
         List<Einvocie> dataList = new ArrayList<>();
         for(Einvocie data : list){
             //更新发票库存信息
-            boolean isUpd = updInvoiceDetail(data);
-            if(isUpd){
-                data.setTBSTATUS("1");
-                iDzfpService.update(data);
+            InvoiceDetail tail = new InvoiceDetail();
+            tail.setInvoiceNo(einvocie.getFP_HM());
+            tail.setInvoiceCode(einvocie.getFP_DM());
+            tail.setSpUrl(einvocie.getSP_URL());
+            tail.setPdfUrl(einvocie.getPDF_URL());
+            //根据发票号码和发票代码查找发票详细信息表
+            InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
+            if (detail == null) {
+                LOGGER.info("发票详情信息不能为空：{}", detail);
+                throw new ServiceException(4186);
             }
+            if (detail.getStatus() != null && "3".equals(detail.getStatus())) {
+                tail.setId(detail.getId());
+                tail.setLastUpdate(new Date());
+                tail.setStatus("2");
+                int dUpdate = invoiceDetailMapper.update(tail);
+                if (dUpdate != 1) {
+                    LOGGER.info("发票详情信息修改失败：{}", tail);
+                    throw new ServiceException(4187);
+                }
+            }else{
+                LOGGER.info("发票详情信息未签收，请去发票仓库签收：{}", tail);
+                throw new ServiceException(4964,"发票号码 "+einvocie.getFP_HM()+" 未签收，请先去发票仓库走签收流程");
+            }
+            //更新电子发票开票日志信息
+            data.setTBSTATUS("1");
+            iDzfpService.update(data);
         }
     }
 
@@ -808,6 +831,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                     LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
                     throw new ServiceException(4186);
                 }
+                if(invoiceDetail.getStatus() != null && !"3".equals(invoiceDetail.getStatus())){
+                    LOGGER.info("发票只有在<已签收>后才能被使用：{}", invoiceDetail.getStatus());
+                    throw new ServiceException(4200);
+                }
                 invoiceDetail.setStatus("2");
                 int dUpdate = invoiceDetailMapper.update(invoiceDetail);
                 if (dUpdate != 1) {
@@ -880,7 +907,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         tail.setPdfUrl(einvocie.getPDF_URL());
         //根据发票号码和发票代码查找发票详细信息表
         InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
-        if (detail != null) {
+        if (detail != null && detail.getStatus() != null && "3".equals(detail.getStatus())) {
             tail.setId(detail.getId());
             tail.setLastUpdate(new Date());
             tail.setStatus("2");
