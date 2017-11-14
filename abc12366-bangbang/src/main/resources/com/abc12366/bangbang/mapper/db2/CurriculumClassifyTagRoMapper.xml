@@ -17,6 +17,15 @@
 	</select>
 
     <!-- 查询（根据主键ID查询） -->
+    <select id="selectByClassifyAndTagId" resultType="com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM bb_curriculum_classify_tag
+        WHERE classifyId = #{classifyId} AND tagId = #{tagId} LIMIT 1
+    </select>
+
+
+    <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag" parameterType="java.lang.String">
         SELECT
             c.tagId,k.name tagName
