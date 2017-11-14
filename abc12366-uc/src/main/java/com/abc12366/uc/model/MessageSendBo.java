@@ -18,6 +18,8 @@ public class MessageSendBo implements Serializable{
 	
 	private String busiType;//业务类型
 	
+	private String businessId;//来源ID
+	
 	private String webMsg;//站内消息
 	
 	private String phoneMsg;//短信消息
@@ -72,6 +74,14 @@ public class MessageSendBo implements Serializable{
 
 	public void setBusiType(String busiType) {
 		this.busiType = busiType;
+	}
+
+	public String getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(String businessId) {
+		this.businessId = businessId;
 	}
 	
 	
