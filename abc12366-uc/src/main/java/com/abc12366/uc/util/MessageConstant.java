@@ -55,7 +55,10 @@ public class MessageConstant {
     public static final String INVOICE_CHECK_REFUSE = "很抱歉！您的纸质发票申请审核未通过，发票订单号：{#DATA.INVOICE}，具体原因请至发票申请详情里查询；";
     /**电子发票**/
     //审批通过
-    public static final String ELECTRON_INVOICE_CHECK_ADOPT = "您申请的电子发票已开具，发票订单号：{#DATA.DATE}，请至发票申请详情里下载发票；";
+    public static final String ELECTRON_INVOICE_CHECK_ADOPT = "您申请的电子发票已开具，发票订单号：{#DATA.INVOICE}，请至发票申请详情里下载发票；";
+    public static final String RED_PACKAGE = "您的微信红包口令是：{#DATA.PACKAGE}，请前往官方《财税专家》微信公众号上领取红包。";
+
+
     //审批拒绝
     public static final String ELECTRON_INVOICE_CHECK_REFUSE = "很抱歉！您的电子发票申请审核未通过，发票订单号：{#DATA.INVOICE}，具体原因请至发票申请详情里查询；";
     /**虚拟商品**/
