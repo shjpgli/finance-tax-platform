@@ -65,7 +65,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setLastUpdate(date);
         productRepoBO.setStock(stock);
         productRepoBO.setRemark(UserUtil.getAdminInfo().getNickname()+"-操作入库");
-        productRepoBO.setOptionUser(UserUtil.getAdminId());
+        productRepoBO.setOptionUser(Utils.getAdminId());
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);
@@ -99,7 +99,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
         productRepoBO.setLastUpdate(date);
         productRepoBO.setStock(stock);
         productRepoBO.setRemark(UserUtil.getAdminInfo().getNickname()+"-操作出库");
-        productRepoBO.setOptionUser(UserUtil.getAdminId());
+        productRepoBO.setOptionUser(Utils.getAdminId());
         ProductRepo productRepo = new ProductRepo();
         BeanUtils.copyProperties(productRepoBO, productRepo);
         int insert = productRepoMapper.insert(productRepo);

@@ -8,7 +8,10 @@ import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
-import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.Dict;
+import com.abc12366.uc.model.ExpressComp;
+import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
@@ -18,7 +21,9 @@ import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.OrderExchangeExportBO;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
-import com.abc12366.uc.service.*;
+import com.abc12366.uc.service.IWxTemplateService;
+import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.order.OrderExchangeService;
 import com.abc12366.uc.service.order.TradeLogService;
 import com.abc12366.uc.util.*;
@@ -432,7 +437,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         RefundRes refundRes = JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
 
                                         LOGGER.info("支付宝退款成功,插入退款流水记录");
-                                        String tradeNo = DataUtils.getJYLSH();
+                                        String tradeNo = DateUtils.getJYLSH();
                                         Trade trade = new Trade();
                                         trade.setOrderNo(oe.getOrderNo());
                                         trade.setTradeNo(tradeNo);
@@ -502,7 +507,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                                 map.put("remark", "感谢使用财税平台，祝您生活愉快！");
                                                 map.put("keyword1", content);
                                                 map.put("keyword2", refundRes.getRefund_fee());
-                                                map.put("keyword3", DataUtils.dateToStr(new Date()));
+                                                map.put("keyword3", DateUtils.dateToStr(new Date()));
                                                 templateService.templateSend("NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM", map);
                                             }
 
@@ -541,7 +546,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 orderMapper.update(order);
 
                 LOGGER.info("支付宝退款成功,插入退款流水记录");
-                String tradeNo = DataUtils.getJYLSH();
+                String tradeNo = DateUtils.getJYLSH();
                 Trade trade = new Trade();
                 trade.setOrderNo(oe.getOrderNo());
                 trade.setTradeNo(tradeNo);

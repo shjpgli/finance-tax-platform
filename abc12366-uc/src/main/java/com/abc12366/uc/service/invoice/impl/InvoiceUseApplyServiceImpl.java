@@ -91,7 +91,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         String id = Utils.uuid();
         invoiceUseApplyBO.setId(id);
         Date date = new Date();
-        invoiceUseApplyBO.setApplyUser(UserUtil.getAdminId());
+        invoiceUseApplyBO.setApplyUser(Utils.getAdminId());
         invoiceUseApplyBO.setApplyTime(date);
         InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
         BeanUtils.copyProperties(invoiceUseApplyBO,invoiceUseApply);
@@ -217,7 +217,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
         BeanUtils.copyProperties(invoiceUseCheckBO,invoiceUseApply);
         invoiceUseApply.setDistributeTime(new Date());
-        invoiceUseApply.setDistributeUser(UserUtil.getAdminId());
+        invoiceUseApply.setDistributeUser(Utils.getAdminId());
         invoiceUseApply.setIssueStatus("1");
         int aUpdate = invoiceUseApplyMapper.update(invoiceUseApply);
         if(aUpdate != 1){
@@ -263,7 +263,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
 
                 //更新发票库存状态
                 InvoiceRepo invoiceRepo = new InvoiceRepo();
-                invoiceRepo.setUpdateUser(UserUtil.getAdminId());
+                invoiceRepo.setUpdateUser(Utils.getAdminId());
                 invoiceRepo.setLastUpdate(date);
                 invoiceRepo.setId(invoiceDistribute.getInvoiceRepoId());
                 invoiceRepo.setStatus("1");
@@ -286,7 +286,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         for(InvoiceDistribute invoiceDistribute:invoiceDistributeList){
             invoiceDistribute.setStatus("2");
             invoiceDistribute.setSignTime(date);
-            invoiceDistribute.setSignUser(UserUtil.getAdminId());
+            invoiceDistribute.setSignUser(Utils.getAdminId());
             int update = invoiceDistributeMapper.update(invoiceDistribute);
             if(update != 1){
                 LOGGER.warn("修改失败，参数{}：" + invoiceDistribute);
@@ -297,7 +297,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             invoiceUseApply.setId(invoiceDistribute.getUseId());
             invoiceUseApply.setIssueStatus("2");
             invoiceUseApply.setSignTime(date);
-            invoiceUseApply.setSignUser(UserUtil.getAdminId());
+            invoiceUseApply.setSignUser(Utils.getAdminId());
             invoiceUseApplyMapper.update(invoiceUseApply);
         }
     }

@@ -6,15 +6,13 @@ package com.abc12366.uc.service.impl;
  */
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.uc.mapper.db1.LotteryActivityMapper;
 import com.abc12366.uc.mapper.db2.LotteryActivityRoMapper;
-import com.abc12366.uc.model.Lottery;
 import com.abc12366.uc.model.LotteryActivity;
-import com.abc12366.uc.model.LotteryActivityprize;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
-import com.abc12366.uc.util.LszUtil;
-import com.abc12366.gateway.util.UCConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -238,7 +236,7 @@ private boolean    checkIp( String activityId, String ip){
         }
 
 
-        if(!LszUtil.dateIn(lotteryActivityBO.getStartTime(),lotteryActivityBO.getEndTime(),new Date())){
+        if(!DateUtils.dateIn(lotteryActivityBO.getStartTime(), lotteryActivityBO.getEndTime(), new Date())){
             throw new ServiceException(9999, "抽奖活动已过期");
 
         }
