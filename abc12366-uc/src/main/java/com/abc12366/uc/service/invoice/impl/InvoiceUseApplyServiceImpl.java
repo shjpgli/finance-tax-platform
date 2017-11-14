@@ -3,10 +3,7 @@ package com.abc12366.uc.service.invoice.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
-import com.abc12366.uc.mapper.db2.InvoiceDistributeRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseApplyRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseDetailRoMapper;
+import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.invoice.*;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
@@ -286,6 +283,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             invoiceDistribute.setStatus("2");
             invoiceDistribute.setSignTime(date);
             invoiceDistribute.setSignUser(Utils.getAdminId());
+            //修改发票分发信息表
             int update = invoiceDistributeMapper.update(invoiceDistribute);
             if(update != 1){
                 LOGGER.warn("修改失败，参数{}：" + invoiceDistribute);
@@ -298,6 +296,13 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             invoiceUseApply.setSignTime(date);
             invoiceUseApply.setSignUser(Utils.getAdminId());
             invoiceUseApplyMapper.update(invoiceUseApply);
+            //更新发票详情信息，改成，3：已签收
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            invoiceDetail.setLastUpdate(date);
+            invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
+            invoiceDetail.setStatus("3");
+            invoiceDetailMapper.updateByRepoId(invoiceDetail);
+
         }
     }
 
