@@ -38,14 +38,14 @@ public class RealNameValidationController {
     /**
      * 查询用户实名认证列表
      *
-     * @param username
-     * @param status
-     * @param realName
-     * @param phone
-     * @param validStatus
-     * @param page
-     * @param size
-     * @return
+     * @param username 用户名
+     * @param status 用户状态
+     * @param realName 姓名
+     * @param phone 手机号码
+     * @param validStatus 实名认证状态
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
      */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String username,
