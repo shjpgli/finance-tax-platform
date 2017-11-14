@@ -154,7 +154,7 @@ public class CurrClassifyController {
     @PutMapping(path = "/addTagAndRefClassify")
     public ResponseEntity addTagAndRefClassify(@RequestBody List<CurriculumClassifyTag> tagList) {
         classifyService.addTagAndRefClassify(tagList);
-        return ResponseEntity.ok(Utils.kv("data", tagList));
+        return ResponseEntity.ok(Utils.kv("dataList", tagList));
     }
 
 }
