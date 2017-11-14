@@ -69,7 +69,7 @@ public class IpInterceptor extends HandlerInterceptorAdapter {
             Date date = new Date();
             bo.setCreateTime(date);
             bo.setStartTime(date);
-            bo.setEndTime(TimeUtil.getLongToDate(System.currentTimeMillis() + lockingTime));
+            bo.setEndTime(DateUtils.getLongToDate(System.currentTimeMillis() + lockingTime));
             bo.setStatus(true);
             bo.setRemark("系统自动锁定");
             blacklistService.insert(bo);

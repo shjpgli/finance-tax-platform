@@ -10,10 +10,7 @@ import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -51,7 +48,7 @@ public class CurrCollectServiceImpl implements CurrCollectService {
 
         CurriculumCollect collect = new CurriculumCollect();
 
-        String userId = UcUserCommon.getUserId();
+        String userId = Utils.getUserId();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         collect.setCollectId(uuid);
         collect.setCurriculumId(curriculumId);
@@ -82,7 +79,7 @@ public class CurrCollectServiceImpl implements CurrCollectService {
     @Override
     public void delete(String curriculumId, HttpServletRequest request) {
         LOGGER.info("{}:{}", curriculumId, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("curriculumId", curriculumId, "userId", userId);
         collectMapper.delete(map);
     }
@@ -96,7 +93,7 @@ public class CurrCollectServiceImpl implements CurrCollectService {
     @Override
     public String selectExist(String curriculumId, HttpServletRequest request) {
         LOGGER.info("{}", curriculumId);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("curriculumId", curriculumId, "userId", userId);
         String cnt = collectRoMapper.selectExist(map)+"";
         return cnt;

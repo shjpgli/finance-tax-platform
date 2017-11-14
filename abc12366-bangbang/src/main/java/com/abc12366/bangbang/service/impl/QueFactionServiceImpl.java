@@ -13,7 +13,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.UCUserBO;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,7 +161,7 @@ public class QueFactionServiceImpl implements QueFactionService {
 
         int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
 
-        UCUserBO userBo = UcUserCommon.getUserInfo();
+        UCUserBO userBo = Utils.getUserInfo();
         String vipLevel = "";
         String userLevel = "";
         if(userBo != null){

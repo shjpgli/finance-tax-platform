@@ -15,7 +15,7 @@ import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -303,7 +303,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
-            String userId = UcUserCommon.getUserId();
+            String userId = Utils.getUserId();
             String sysTaskId = UCConstant.SYS_TASK_MRYNTW_CODE;
             bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 

@@ -6,7 +6,6 @@ import com.abc12366.bangbang.model.View;
 import com.abc12366.bangbang.model.bo.ViewBO;
 import com.abc12366.bangbang.service.ViewService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public ViewBO insert(String askId, HttpServletRequest request) {
         LOGGER.info("{}:{}", askId, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Date date = new Date();
         View view = new View();
         view.setId(Utils.uuid());
@@ -58,7 +57,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public void delete(String askId, HttpServletRequest request) {
         LOGGER.info("{}:{}", askId, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         View view = new View();
         view.setAskId(askId);
         view.setUserId(userId);

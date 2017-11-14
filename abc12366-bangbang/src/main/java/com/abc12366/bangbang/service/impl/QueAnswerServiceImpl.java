@@ -1,12 +1,10 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionLogMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
-import com.abc12366.bangbang.model.question.QuestionLog;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
@@ -14,7 +12,7 @@ import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,7 +182,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             bangBangDtLogUtil.insertLog(2,1, answer.getQuestionId(), answer.getId(), answer.getId(),"", answer.getUserId(), "");
 
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
-            String userId = UcUserCommon.getUserId();
+            String userId = Utils.getUserId();
             String sysTaskId = UCConstant.SYS_TASK_MRHDWT_CODE;
             bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 
