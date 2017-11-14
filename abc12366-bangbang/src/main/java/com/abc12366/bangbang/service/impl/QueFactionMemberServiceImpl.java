@@ -2,6 +2,8 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionFactionMemberMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionMemberRoMapper;
+import com.abc12366.bangbang.mapper.db2.QuestionFactionRoMapper;
+import com.abc12366.bangbang.model.question.QuestionFaction;
 import com.abc12366.bangbang.model.question.QuestionFactionMember;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo;
 import com.abc12366.bangbang.service.QueFactionMemberService;
@@ -28,6 +30,9 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
 
     @Autowired
     private QuestionFactionMemberRoMapper memberRoMapper;
+
+    @Autowired
+    private QuestionFactionRoMapper factionRoMapper;
 
     @Override
     public List<QuestionFactionMemberBo> selectList(Map<String,Object> map) {
@@ -74,6 +79,7 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             //已申请加入邦派，请勿重复申请
             throw new ServiceException(6135);
         }
+        QuestionFaction faction = factionRoMapper.selectByPrimaryKey(factionMemberBo.getFactionId());
 
         int cnt1 = memberRoMapper.selectClassifyCnt(dataMap);
         if(cnt1 > 0){
@@ -125,9 +131,19 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
             LOGGER.info("更新邦派成员信息:{}", jsonStu.toString());
             factionMemberBo.setLastUpdate(new Date());
-            factionMemberBo.setDuty("B1");
-            factionMemberBo.setMemberGrade("B1");
             BeanUtils.copyProperties(factionMemberBo, factionMember);
+            QuestionFaction faction = factionRoMapper.selectByPrimaryKey(factionMemberBo.getFactionId());
+            int peopleLimit = faction.getPeopleLimit();
+            if("2".equals(factionMemberBo.getStatus())){
+                //已通过的人数
+                int cnt = memberRoMapper.selectPassMemberCnt(factionMemberBo.getFactionId());
+                if(cnt >= peopleLimit){
+                    //邦派人数已达上限
+                    throw new ServiceException(6136);
+                }
+                factionMemberBo.setDuty("B1");
+                factionMemberBo.setMemberGrade("B1");
+            }
             memberMapper.updateByPrimaryKeySelective(factionMember);
         } catch (Exception e) {
             LOGGER.error("更新邦派成员信息异常：{}", e);
