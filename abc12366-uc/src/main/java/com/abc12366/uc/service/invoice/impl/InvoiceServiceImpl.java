@@ -964,7 +964,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             String redPackage = "";
             if(isRedPackage != null && "1".equals(isRedPackage)){
                 //获取微信红包信息
-                redPackage = "微信红包口令："+selectWechatPassword("wechat_hongbao");
+                redPackage = MessageConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",selectWechatPassword("wechat_hongbao"));
             }
 
             //发送消息
