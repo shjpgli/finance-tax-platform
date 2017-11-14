@@ -145,9 +145,8 @@ public class CheckServiceImpl implements CheckService {
         check.setIsReCheck(true);
 
         recheckInsert(check);
-        int points = -20;
         //记日志
-        recheckPointsLog(recheck.getUserId(), points);
+        recheckPointsLog(recheck.getUserId());
     }
 
     @Override
@@ -191,14 +190,10 @@ public class CheckServiceImpl implements CheckService {
 
         Date startDate = DateUtils.StrToDate(yearMonth + "-01");
         Date endDate = DateUtils.StrToDate(year + "-" + (month + 1) + "-01");
-        Map<String, Object> map = new HashMap<>();
         CheckListParam checkListParam = new CheckListParam();
         checkListParam.setUserId(userId);
         checkListParam.setStartDate(startDate);
         checkListParam.setEndDate(endDate);
-        map.put("userId", userId);
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
         List<Check> checkList = checkRoMapper.selectCheckList(checkListParam);
 
         List<CheckListBO> checkListBOs = new ArrayList<>();
@@ -241,8 +236,9 @@ public class CheckServiceImpl implements CheckService {
         return true;
     }
 
-    private boolean recheckPointsLog(String userId, int points) {
+    private boolean recheckPointsLog(String userId) {
         PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_RECHECK_CODE);
+        LOGGER.info("用户补签积分规则：{}" ,pointsRuleBO);
         if (pointsRuleBO == null) {
             return false;
         }
@@ -251,7 +247,7 @@ public class CheckServiceImpl implements CheckService {
         pointsLog.setId(Utils.uuid());
         pointsLog.setCreateTime(new Date());
         pointsLog.setUserId(userId);
-        pointsLog.setOutgo(-points);
+        pointsLog.setOutgo(pointsRuleBO.getPoints());
         pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setLogType("RE_CHECK_IN");
         pointsLog.setRemark("用户补签消耗20积分");
@@ -355,8 +351,6 @@ public class CheckServiceImpl implements CheckService {
 
     @Override
     public int checkTotal(String userId) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("userId", userId);
         Integer total = checkRoMapper.checkTotal(userId);
         return total == null ? 0 : total;
     }
