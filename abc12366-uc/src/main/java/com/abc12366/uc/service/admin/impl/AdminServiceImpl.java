@@ -2,7 +2,7 @@ package com.abc12366.uc.service.admin.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.TimeUtil;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.AdminExtendMapper;
 import com.abc12366.uc.mapper.db1.AdminMapper;
@@ -245,8 +245,8 @@ public class AdminServiceImpl implements AdminService {
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(user.getId());
             loginInfo.setAppId(appId);
-            long lastLong = TimeUtil.getDateStringToLong(new Date()) + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
-            loginInfo.setLastResetTokenTime(TimeUtil.getLongToDate(lastLong));
+            long lastLong = DateUtils.getDateStringToLong(new Date()) + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+            loginInfo.setLastResetTokenTime(DateUtils.getLongToDate(lastLong));
             List<LoginInfo> info = loginInfoRoMapper.selectByAppList(loginInfo);
 
             //判断该用户是否存在此应用的登录信息
@@ -448,7 +448,7 @@ public class AdminServiceImpl implements AdminService {
         }
         //严重Token是否过期
         long datelong = System.currentTimeMillis();
-        long lastTime = TimeUtil.getDateStringToLong(info.getLastResetTokenTime());
+        long lastTime = DateUtils.getDateStringToLong(info.getLastResetTokenTime());
         if (datelong > lastTime) {
             LOGGER.warn("Admin-Token过期，请重新登录{}", info);
             throw new ServiceException(4127);
@@ -467,7 +467,7 @@ public class AdminServiceImpl implements AdminService {
             throw new ServiceException(4128);
         }
         long datelong = System.currentTimeMillis() + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
-        info.setLastResetTokenTime(TimeUtil.getLongToDate(datelong));
+        info.setLastResetTokenTime(DateUtils.getLongToDate(datelong));
         int upd = loginInfoMapper.update(info);
         if (upd != 1) {
             LOGGER.warn("修改Admin-token有效时间失败{}", info);
@@ -488,14 +488,14 @@ public class AdminServiceImpl implements AdminService {
         }
         //严重Token是否过期
         long dateLong = System.currentTimeMillis();
-        long lastTime = TimeUtil.getDateStringToLong(info.getLastResetTokenTime());
+        long lastTime = DateUtils.getDateStringToLong(info.getLastResetTokenTime());
         if (dateLong > lastTime) {
             LOGGER.warn("Admin-Token过期，请重新登录{}", info);
             throw new ServiceException(4127);
         }
 
         long refLong = dateLong + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
-        info.setLastResetTokenTime(TimeUtil.getLongToDate(refLong));
+        info.setLastResetTokenTime(DateUtils.getLongToDate(refLong));
         int upd = loginInfoMapper.update(info);
         if (upd != 1) {
             LOGGER.warn("修改Admin-token有效时间失败{}", info);

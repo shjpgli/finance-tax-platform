@@ -9,7 +9,7 @@ import com.abc12366.cms.util.CmsRestTemplateUtil;
 import com.abc12366.gateway.util.UCConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -768,7 +768,7 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public String updateViewsDayjf(String contentId, HttpServletRequest request) {
         contentMapper.updateViewsDay(contentId);
-        String userId = UcUserCommon.getUserId();
+        String userId = Utils.getUserId();
         String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
         String responseStr;
         String sysTaskId = UCConstant.SYS_TASK_BROSE_NEWS_CODE;

@@ -7,7 +7,6 @@ import com.abc12366.bangbang.model.bo.FeedbackParamBO;
 import com.abc12366.bangbang.model.bo.UCUserBO;
 import com.abc12366.bangbang.service.FeedbackService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ public class FeedbackServiceImpl implements FeedbackService {
             feedBack.setId(Utils.uuid());
             if(StringUtils.isEmpty(feedBack.getContactNumber())){
                 /* 如果没有填写手机号，  查询用户的手机号 */
-                UCUserBO user = questionAcceptedRoMapper.selectUCUser(UcUserCommon.getUserId());
+                UCUserBO user = questionAcceptedRoMapper.selectUCUser(Utils.getUserId());
                 feedBack.setContactNumber(user.getPhone());
             }
 

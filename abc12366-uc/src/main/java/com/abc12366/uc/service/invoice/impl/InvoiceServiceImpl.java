@@ -32,7 +32,6 @@ import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.util.CharUtil;
 import com.abc12366.uc.util.MessageConstant;
 import com.abc12366.uc.util.MessageSendUtil;
-import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -335,7 +334,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 excel.setAmount(bo.getAmount());
                 excel.setAmountBig(bo.getAmount());
                 excel.setAmountSmall(bo.getAmount());
-                excel.setDrawer(UserUtil.getAdminInfo().getNickname());
+                excel.setDrawer(Utils.getAdminInfo().getNickname());
                 List<OrderBO> orderBOList = bo.getOrderBOList();
                 StringBuffer remark = new StringBuffer();
                 for (OrderBO orderBO : orderBOList) {
@@ -750,7 +749,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dzfpGetReq.setFpqqlsh(fpqqlsh);
                 dzfpGetReq.setZsfs("0"); //
                 dzfpGetReq.setKplx("0"); //开票0，退票1
-                dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
+                dzfpGetReq.setKpr(Utils.getAdminInfo().getNickname());
                 invoiceXm.setXmmc(invoiceBO.getContentDetail());
                 //商品编码
                 invoiceXm.setSpbm("1010105000000000000");

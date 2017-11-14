@@ -9,7 +9,6 @@ import com.abc12366.bangbang.model.bo.CollectListBO;
 import com.abc12366.bangbang.model.bo.MyCollectListBO;
 import com.abc12366.bangbang.service.CollectService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ public class CollectServiceImpl implements CollectService {
     @Override
     public CollectBO insert(String askId, HttpServletRequest request) {
         LOGGER.info("{}:{}", askId, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         //判断是否已经收藏
         Map map = MapUtil.kv("askId", askId, "userId", userId);
         List<CollectBO> collectBOList = collectRoMapper.selectExist(map);
@@ -68,7 +67,7 @@ public class CollectServiceImpl implements CollectService {
     @Override
     public void delete(String askId, HttpServletRequest request) {
         LOGGER.info("{}:{}", askId, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("askId", askId, "userId", userId);
         collectMapper.delete(map);
     }

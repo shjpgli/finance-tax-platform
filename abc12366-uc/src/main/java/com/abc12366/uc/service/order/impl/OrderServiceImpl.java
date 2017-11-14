@@ -1120,7 +1120,7 @@ public class OrderServiceImpl implements OrderService {
                     map.put("first", "你有新的订单提醒：");
                     map.put("remark", "详情请登录财税平台查看。");
                     map.put("keyword1", data.getOrderNo());
-                    map.put("keyword2", UserUtil.getAdminInfo().getNickname());
+                    map.put("keyword2", Utils.getAdminInfo().getNickname());
                     map.put("keyword3", DateUtils.dateToStr(new Date()));
                     templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
                 }
@@ -1201,7 +1201,7 @@ public class OrderServiceImpl implements OrderService {
                 map.put("first", "你有新的订单提醒：");
                 map.put("remark", "详情请登录财税平台查看。");
                 map.put("keyword1", order.getOrderNo());
-                map.put("keyword2", UserUtil.getAdminInfo().getNickname());
+                map.put("keyword2", Utils.getAdminInfo().getNickname());
                 map.put("keyword3", DateUtils.dateToStr(new Date()));
                 templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
             }

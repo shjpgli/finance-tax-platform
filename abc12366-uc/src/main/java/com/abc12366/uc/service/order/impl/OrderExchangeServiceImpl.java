@@ -347,7 +347,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         }
                         req.setKplx("1");
                         req.setZsfs("0");
-                        req.setKpr(UserUtil.getAdminInfo().getNickname());
+                        req.setKpr(Utils.getAdminInfo().getNickname());
                         req.setHylx("0");
 
                         InvoiceXm xm = new InvoiceXm();
