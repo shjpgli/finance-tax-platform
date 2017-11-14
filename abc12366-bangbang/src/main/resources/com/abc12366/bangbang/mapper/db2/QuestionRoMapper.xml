@@ -259,7 +259,7 @@
         q.id,	q.userId,	q.title,	detail,u.userPicturePath,u.nickname,q.status,tag,ip,	q.createTime,	q.lastUpdate,	q.points,	isSolve,	classifyCode,	browseNum, isRecommend,
         q.answerNum
         FROM bb_question_invite i left join bb_question q on i.questionId = q.id left join bb_user u on q.userId = u.id
-        WHERE q.userId = #{userId}
+        WHERE i.userId = #{userId}
         ORDER BY q.createTime DESC
     </select>
 
