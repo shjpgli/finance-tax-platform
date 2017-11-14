@@ -29,4 +29,6 @@ public interface UserMapper {
 	void qxwxbd(String wxopenid);
 
     int updateBatch(Map<String, Object> map);
+
+    int updatePassword(User user);
 }

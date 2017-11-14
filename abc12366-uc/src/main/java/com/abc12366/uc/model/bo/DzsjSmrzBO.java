@@ -38,4 +38,13 @@ public class DzsjSmrzBO {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "DzsjSmrzBO{" +
+                "msg='" + msg + '\'' +
+                ", smrzbz='" + smrzbz + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }
