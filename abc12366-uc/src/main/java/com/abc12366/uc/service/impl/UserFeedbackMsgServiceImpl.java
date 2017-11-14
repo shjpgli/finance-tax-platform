@@ -15,6 +15,8 @@ import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -45,6 +47,8 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
 
     @Autowired
     private UserRoMapper userRoMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserFeedbackMsgServiceImpl.class);
 
     @Override
     public void updatePasswordSuccessNotice() {
@@ -145,16 +149,20 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
     }
 
     @Override
-    public void realNameValidate(String status) {
-        if (StringUtils.isEmpty(status)) {
+    public void realNameValidate(String userId, String status) {
+        if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(status)) {
+            LOGGER.info("给用户发送实名认证情况消息通知参数异常：userId:{},status:{}", userId, status);
             return;
         }
-        User user = getUser();
+        User user = userRoMapper.selectOne(userId);
+        if (user == null) {
+            LOGGER.info("给用户发送实名认证情况消息通知失败，因为用户不存在");
+        }
         //发信息
         //1.系统消息
         String sysMsg = "您好，你提交的实名认证信息已通过审核," +
                 "认证结果：" + (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过") +
-                ",时间：" + DateUtils.dateToStr(new Date())+
+                ",时间：" + DateUtils.dateToStr(new Date()) +
                 "了解更多信息，请前往官方网站，祝您使用愉快。";
         //2.微信消息
         Map<String, String> dataList = new HashMap<>();

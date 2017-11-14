@@ -169,12 +169,11 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
     }
 
     @Override
-    public List<CurriculumClassifyTagBo> selectClassifyTagList(String classifyId) {
+    public List<CurriculumClassifyTagBo> selectClassifyTagList(Map<String, Object> map) {
         List<CurriculumClassifyTagBo> classifyTagBoList;
         try {
-            LOGGER.info("查询单个课程分类标签信息:{}", classifyId);
             //查询课程分类标签信息
-            classifyTagBoList = tagRoMapper.selectClassifyTagList(classifyId);
+            classifyTagBoList = tagRoMapper.selectClassifyTagList(map);
         } catch (Exception e) {
             LOGGER.error("查询单个课程分类标签信息异常：{}", e);
             throw new ServiceException(4301);

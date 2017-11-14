@@ -87,7 +87,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         UserExtend userExtend1 = userExtendRoMapper.selectOne(userExtendUpdate.getUserId());
         BeanUtils.copyProperties(userExtend1, userExtendBO);
 
-        userFeedbackMsgService.realNameValidate(validStatus);
+        userFeedbackMsgService.realNameValidate(userId,validStatus);
         return userExtendBO;
     }
 

@@ -91,7 +91,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             if(userBindService.isRealNameValidatedDzsj(userExtendBO.getIdcard(), userExtendBO.getRealName(), request)){
                 userExtend.setValidStatus("2");
                 userExtend.setValidTime(new Date());
-                userFeedbackMsgService.realNameValidate("2");
+                userFeedbackMsgService.realNameValidate(userExtendBO.getUserId(),"2");
             }
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {
@@ -150,7 +150,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
             if(userBindService.isRealNameValidatedDzsj(userExtendUpdateBO.getIdcard(),userExtendUpdateBO.getRealName(), request)){
                 userExtendSecond.setValidStatus("2");
-                userFeedbackMsgService.realNameValidate("2");
+                userFeedbackMsgService.realNameValidate(userExtendUpdateBO.getUserId(),"2");
             }
             int result = userExtendMapper.update(userExtendSecond);
             UserExtendBO userExtendBO = new UserExtendBO();
