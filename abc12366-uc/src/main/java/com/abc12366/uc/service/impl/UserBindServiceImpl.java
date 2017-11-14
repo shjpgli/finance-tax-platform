@@ -49,7 +49,6 @@ import java.io.IOException;
 import java.security.interfaces.RSAPublicKey;
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -81,8 +80,6 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Autowired
     private TodoTaskService todoTaskService;
-
-    protected static Map<String, Object> appCache = new ConcurrentHashMap<>();
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
@@ -355,7 +352,7 @@ public class UserBindServiceImpl implements UserBindService {
                     LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
                     return true;
                 }
-                LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
+                LOGGER.warn("uc调用电子税局实名认证查询接口成功，返回结果：{}", dzsjSmrzBO);
             }
         } catch (Exception e) {
             e.printStackTrace();

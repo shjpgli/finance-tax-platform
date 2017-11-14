@@ -237,9 +237,10 @@ public class UserController {
     @PutMapping(path = "/password")
     public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest
             request) {
-        LOGGER.info("{}:{}", passwordUpdateBO, request);
+        LOGGER.info("用户修改密码：{}", passwordUpdateBO);
         Boolean message = userService.updatePassword(passwordUpdateBO, request);
         LOGGER.info("{}", message);
+        LOGGER.info("用户修改密码结果：{}",message);
         return ResponseEntity.ok(Utils.kv("data", message));
     }
 
