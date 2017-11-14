@@ -18,7 +18,7 @@ public interface CurrClassifyService {
 
     CurriculumClassifyBo selectClassify(String classifyId);
 
-    List<CurriculumClassifyTagBo> selectClassifyTagList(String classifyId);
+    List<CurriculumClassifyTagBo> selectClassifyTagList(Map<String, Object> map);
 
     CurriculumClassifyBo update(CurriculumClassifyBo classifyBo);
 
