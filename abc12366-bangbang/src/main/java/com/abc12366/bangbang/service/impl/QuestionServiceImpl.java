@@ -448,7 +448,11 @@ public class QuestionServiceImpl implements QuestionService {
     public String updateStatus(String id,String status) {
         //更新课件信息
         try {
-
+            //更新问题信息
+            Question question = new Question();
+            question.setId(id);
+            question.setStatus(status);
+            questionMapper.updateByPrimaryKeySelective(question);
         } catch (Exception e) {
             LOGGER.error("更新课件信息异常：{}", e);
             throw new ServiceException(6103);

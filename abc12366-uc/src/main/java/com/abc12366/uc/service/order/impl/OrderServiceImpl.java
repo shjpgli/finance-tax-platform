@@ -952,7 +952,7 @@ public class OrderServiceImpl implements OrderService {
             pointsLog.setIncome(orderBO.getGiftPoints());
             pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
             pointsLog.setLogType("ORDER_INCOME");
-            pointsLogService.insert(pointsLog);
+            pointsLogService.insertByConsume(pointsLog);
         }
     }
 
