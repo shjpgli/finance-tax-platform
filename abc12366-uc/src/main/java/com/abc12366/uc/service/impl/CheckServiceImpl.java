@@ -247,7 +247,7 @@ public class CheckServiceImpl implements CheckService {
         pointsLog.setId(Utils.uuid());
         pointsLog.setCreateTime(new Date());
         pointsLog.setUserId(userId);
-        pointsLog.setOutgo(pointsRuleBO.getPoints());
+        pointsLog.setIncome(pointsRuleBO.getPoints());
         pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setLogType("RE_CHECK_IN");
         pointsLog.setRemark("用户补签消耗20积分");
