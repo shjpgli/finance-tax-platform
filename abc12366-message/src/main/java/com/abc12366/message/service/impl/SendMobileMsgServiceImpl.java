@@ -2,6 +2,7 @@ package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.model.MessageSendLog;
 import com.abc12366.message.model.bo.MobileMsgBO;
@@ -10,7 +11,6 @@ import com.abc12366.message.model.bo.UpyunMessageResponse;
 import com.abc12366.message.service.SendMobileMsgService;
 import com.abc12366.message.service.SendMsgLogService;
 import com.abc12366.gateway.util.MessageConstant;
-import com.abc12366.message.util.SOAUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +103,7 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
             LOGGER.info("发送业务通知短信失败，号码：{}，通道：又拍", vars);
             throw new ServiceException(4204);
         }
-        if (SOAUtil.isExchangeSuccessful(responseEntity)) {
+        if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
             try {
                 UpyunMessageResponse essageResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
                 //记日志

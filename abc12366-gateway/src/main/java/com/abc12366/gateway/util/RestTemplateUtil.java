@@ -28,6 +28,13 @@ public class RestTemplateUtil {
     @Autowired
     private RestTemplate restTemplate;
 
+    public static boolean isExchangeSuccessful(ResponseEntity response) {
+        if (response != null && response.getStatusCode().is2xxSuccessful() && response.hasBody()) {
+            return true;
+        }
+        return false;
+    }
+
     public String send(String url, HttpMethod method, HttpServletRequest request, Object... uriVariables) {
         //请求头设置
         HttpHeaders httpHeaders = getHeaders(request);
