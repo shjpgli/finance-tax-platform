@@ -33,6 +33,8 @@ public interface UserFeedbackMsgService {
 
     /**
      * 用户提交实名认证请求后审核通过或未通过发送消息提醒用户
+     * @param userId 用户ID
+     * @param status 认证状态
      */
-    void realNameValidate(String status);
+    void realNameValidate(String userId,String status);
 }
