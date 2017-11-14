@@ -5,15 +5,16 @@
     <insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
 insert into uc_lottery_log(
 id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake,addressId
- ,kuaidiGS ,  kuaididanhao, sendRemake  ,sendRemake2
+ ,kuaidiGS ,  kuaididanhao, sendRemake  ,sendRemake2,endlqDate
 )values(
 #{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip},#{remake},#{addressId}
-,#{kuaidiGS},#{kuaididanhao},#{sendRemake},#{sendRemake2})
+,#{kuaidiGS},#{kuaididanhao},#{sendRemake},#{sendRemake2} ,#{endlqDate})
 </insert>
     <update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
         update uc_lottery_log
         <set>
             <if test="activityId!=null">activityId=#{activityId},</if>
+            <if test="endlqDate!=null">endlqDate=#{endlqDate},</if>
             <if test="lotteryId!=null">lotteryId=#{lotteryId},</if>
             <if test="createTime!=null">createTime=#{createTime},</if>
             <if test="lotteryName!=null">lotteryName=#{lotteryName},</if>

@@ -9,6 +9,15 @@ import java.util.Date;
 
 
 public class LotteryLog{
+    private Date endlqDate;
+
+    public Date getEndlqDate() {
+        return endlqDate;
+    }
+
+    public void setEndlqDate(Date endlqDate) {
+        this.endlqDate = endlqDate;
+    }
     private String kuaidiGS;
     private String kuaididanhao;
     private String sendRemake ;
