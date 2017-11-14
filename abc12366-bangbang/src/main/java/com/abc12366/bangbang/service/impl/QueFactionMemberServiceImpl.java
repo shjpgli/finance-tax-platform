@@ -127,23 +127,24 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
     public QuestionFactionMemberBo update(QuestionFactionMemberBo factionMemberBo) {
         //更新邦派成员信息
         QuestionFactionMember factionMember = new QuestionFactionMember();
+        QuestionFaction faction = factionRoMapper.selectByPrimaryKey(factionMemberBo.getFactionId());
+        int peopleLimit = faction.getPeopleLimit();
+        if("2".equals(factionMemberBo.getStatus())){
+            //已通过的人数
+            int cnt = memberRoMapper.selectPassMemberCnt(factionMemberBo.getFactionId());
+            if(cnt >= peopleLimit){
+                //邦派人数已达上限
+                throw new ServiceException(6136);
+            }
+            factionMemberBo.setDuty("B1");
+            factionMemberBo.setMemberGrade("B1");
+        }
         try {
             JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
             LOGGER.info("更新邦派成员信息:{}", jsonStu.toString());
             factionMemberBo.setLastUpdate(new Date());
             BeanUtils.copyProperties(factionMemberBo, factionMember);
-            QuestionFaction faction = factionRoMapper.selectByPrimaryKey(factionMemberBo.getFactionId());
-            int peopleLimit = faction.getPeopleLimit();
-            if("2".equals(factionMemberBo.getStatus())){
-                //已通过的人数
-                int cnt = memberRoMapper.selectPassMemberCnt(factionMemberBo.getFactionId());
-                if(cnt >= peopleLimit){
-                    //邦派人数已达上限
-                    throw new ServiceException(6136);
-                }
-                factionMemberBo.setDuty("B1");
-                factionMemberBo.setMemberGrade("B1");
-            }
+
             memberMapper.updateByPrimaryKeySelective(factionMember);
         } catch (Exception e) {
             LOGGER.error("更新邦派成员信息异常：{}", e);
