@@ -16,6 +16,8 @@ public class MessageSendBo implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String userId;//用户ID
 	
+	private String busiType;//业务类型
+	
 	private String webMsg;//站内消息
 	
 	private String phoneMsg;//短信消息
@@ -62,6 +64,14 @@ public class MessageSendBo implements Serializable{
 
 	public void setTemplateid(String templateid) {
 		this.templateid = templateid;
+	}
+
+	public String getBusiType() {
+		return busiType;
+	}
+
+	public void setBusiType(String busiType) {
+		this.busiType = busiType;
 	}
 	
 	
