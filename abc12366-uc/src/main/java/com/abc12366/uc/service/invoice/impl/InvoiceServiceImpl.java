@@ -525,9 +525,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4913, "发票号码或发票代码不存在");
             }
             if (!"0".equals(invoiceDetail.getStatus())) {
-                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + "未出库或已使用");
+                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在<已签收>后才能被使用");
             }
-
             Invoice ce = new Invoice();
             ce.setId(invoiceExcel.getInvoiceOrderNo());
             ce.setStatus("2");
@@ -830,10 +829,6 @@ public class InvoiceServiceImpl implements InvoiceService {
                 if (invoiceDetail == null) {
                     LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
                     throw new ServiceException(4186);
-                }
-                if(invoiceDetail.getStatus() != null && !"3".equals(invoiceDetail.getStatus())){
-                    LOGGER.info("发票只有在<已签收>后才能被使用：{}", invoiceDetail.getStatus());
-                    throw new ServiceException(4200);
                 }
                 invoiceDetail.setStatus("2");
                 int dUpdate = invoiceDetailMapper.update(invoiceDetail);
