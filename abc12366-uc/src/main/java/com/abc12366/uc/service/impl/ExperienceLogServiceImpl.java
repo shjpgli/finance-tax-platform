@@ -7,7 +7,6 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceLog;
-import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.gateway.util.UCConstant;
@@ -46,9 +45,6 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
     private UserMapper userMapper;
 
     @Autowired
-    private PrivilegeItemService privilegeItemService;
-
-    @Autowired
     private ExperienceService experienceService;
 
     @Autowired
@@ -59,6 +55,9 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
 
     @Autowired
     private UserFeedbackMsgService userFeedbackMsgService;
+
+    @Autowired
+    private VipPrivilegeLevelService vipPrivilegeLevelService;
 
     @Transactional("db1TxManager")
     @Override
@@ -71,21 +70,30 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         User user = userRoMapper.selectOne(experienceLogBO.getUserId());
         if (user == null) {
             LOGGER.warn("新增失败,userId为不存在用户的id,参数为：userId=" + experienceLogBO.getUserId());
-            throw new ServiceException(4101);
+            throw new ServiceException("23333", "新增失败,不存在的用户Id=" + experienceLogBO.getUserId());
         }
 
         //会员权限埋点（经验值加成）
-        if (experienceLogBO.getIncome() > 0 && experienceLogBO.getIncome() > experienceLogBO.getOutgo()) {
-            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(user.getId());
-            if (privilegeItem != null && privilegeItem.getHyjyzjc() > 1) {
-                //usableExp = (int) (usableExp * privilegeItem.getHyjyzjc());
-                experienceLogBO.setIncome((int) (experienceLogBO.getIncome() * privilegeItem.getHyjyzjc()));
+        if (!StringUtils.isEmpty(user.getVipLevel()) && (experienceLogBO.getIncome() - experienceLogBO.getOutgo() > 0)) {
+            VipPrivilegeLevelBO vipPrivilegeLevelBOPar = new VipPrivilegeLevelBO();
+            vipPrivilegeLevelBOPar.setLevelId(user.getVipLevel());
+            vipPrivilegeLevelBOPar.setPrivilegeId("A_YHDJJS");
+            VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectLevelIdPrivilegeId(vipPrivilegeLevelBOPar);
+            if (vipPrivilegeLevelBO != null && vipPrivilegeLevelBO.getStatus()) {
+                if (!StringUtils.isEmpty(vipPrivilegeLevelBO.getVal1())) {
+                    LOGGER.info("会员等级提速：{}", vipPrivilegeLevelBO.getVal1()+"倍");
+                    try{
+                        experienceLogBO.setIncome((int) ((experienceLogBO.getIncome() - experienceLogBO.getOutgo()) * Float.parseFloat(vipPrivilegeLevelBO.getVal1())));
+                    }catch (Exception e){
+                        LOGGER.error("经验值加成失败：{}",e);
+                    }
+                }
             }
         }
 
         //可用经验值=上一次的可用经验值+|-本次收入|支出
         int preExp = 0;
-        if(user.getExp()!=null){
+        if (user.getExp() != null) {
             preExp = user.getExp();
         }
         int usableExp = preExp + experienceLogBO.getIncome() - experienceLogBO.getOutgo();
@@ -128,33 +136,49 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         }
 
         MyExperienceBO myExperienceBO = experienceService.getMyExperience(id);
-        if (myExperienceBO == null || myExperienceBO.getNextLevelExp() == null) {
+        if (myExperienceBO == null || StringUtils.isEmpty(myExperienceBO.getNextLevelExp())) {
             return;
         }
 
-        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(id);
-        if (privilegeItem == null || privilegeItem.getYhsjjl() <= 0) {
-            return;
-        }
+//        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(id);
+//        if (privilegeItem == null || privilegeItem.getYhsjjl() <= 0) {
+//            return;
+//        }
+
 
         if (newExp >= Integer.parseInt(myExperienceBO.getNextLevelExp())) {
             //如果积分规则为空则返回
             PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_EXP_UP_CODE);
-            if (pointsRuleBO == null) {
+            if (pointsRuleBO == null || pointsRuleBO.getPoints() > 0) {
                 return;
+            }
+
+            //会员特权
+            float times = 1.0F;
+            if (!StringUtils.isEmpty(user.getVipLevel())) {
+                VipPrivilegeLevelBO vipPrivilegeLevelBOPar = new VipPrivilegeLevelBO();
+                vipPrivilegeLevelBOPar.setLevelId(user.getVipLevel());
+                vipPrivilegeLevelBOPar.setPrivilegeId("A_YHDJSJ");
+                VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectLevelIdPrivilegeId(vipPrivilegeLevelBOPar);
+                if (vipPrivilegeLevelBO != null && vipPrivilegeLevelBO.getStatus()) {
+                    if (!StringUtils.isEmpty(vipPrivilegeLevelBO.getVal1())) {
+                        //points = (int) (points * Float.parseFloat(vipPrivilegeLevelBO.getVal1()));
+                        times = Float.parseFloat(vipPrivilegeLevelBO.getVal1());
+                    }
+                }
             }
 
             PointsLogBO pointsLogBO = new PointsLogBO();
             pointsLogBO.setUserId(id);
-            pointsLogBO.setIncome(privilegeItem.getYhsjjl());
+            pointsLogBO.setIncome((int) (pointsRuleBO.getPoints() * times));
             pointsLogBO.setOutgo(0);
             pointsLogBO.setRuleId(pointsRuleBO.getId());
             pointsLogBO.setRemark("用户等级提升奖励");
             pointsLogService.insert(pointsLogBO);
 
-            try{
+            try {
                 userFeedbackMsgService.expLevelUp();
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

@@ -7,18 +7,19 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.PointsLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.PointsLog;
-import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsLogUcBO;
+import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.PrivilegeItemService;
+import com.abc12366.uc.service.VipPrivilegeLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class PointsLogServiceImpl implements PointsLogService {
     private UserMapper userMapper;
 
     @Autowired
-    private PrivilegeItemService privilegeItemService;
+    private VipPrivilegeLevelService vipPrivilegeLevelService;
 
     @Override
     public List<PointsLogBO> selectList(Map map) {
@@ -65,18 +66,9 @@ public class PointsLogServiceImpl implements PointsLogService {
             throw new ServiceException(4018);
         }
 
-        //会员权限埋点（积分加成）
-        if (pointsLogBO.getIncome() > 0 && pointsLogBO.getIncome() > pointsLogBO.getOutgo()) {
-            PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(user.getId());
-            if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
-                //usablePoints = (int) (usablePoints * privilegeItem.getHyjfjc());
-                pointsLogBO.setIncome((int) (pointsLogBO.getIncome() * privilegeItem.getHyjyzjc()));
-            }
-        }
-
         //可用积分=上一次的可用积分+|-本次收入|支出
         int priPoints = 0;
-        if(user.getPoints()!=null){
+        if (user.getPoints() != null) {
             priPoints = user.getPoints();
         }
         int usablePoints = priPoints + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
@@ -128,7 +120,7 @@ public class PointsLogServiceImpl implements PointsLogService {
 
         //可用积分=上一次的可用积分+|-本次收入|支出
         int priPoints = 0;
-        if(user.getPoints()!=null){
+        if (user.getPoints() != null) {
             priPoints = user.getPoints();
         }
         int usablePoints = priPoints + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
@@ -159,5 +151,34 @@ public class PointsLogServiceImpl implements PointsLogService {
         PointsLogBO pointsLogBOReturn = new PointsLogBO();
         BeanUtils.copyProperties(pointsLog, pointsLogBOReturn);
         return pointsLogBOReturn;
+    }
+
+    @Override
+    public PointsLogBO insertByConsume(PointsLogBO pointsLogBO) {
+        if (pointsLogBO == null || StringUtils.isEmpty(pointsLogBO.getUserId())) {
+            LOGGER.error("积分日志参数不正确：{}",pointsLogBO);
+            return null;
+        }
+        User user = userRoMapper.selectOne(pointsLogBO.getUserId());
+        if (user == null || StringUtils.isEmpty(user.getVipLevel())) {
+            LOGGER.error("不存在这个用户：{}", pointsLogBO.getUserId());
+            return null;
+        }
+        //会员权限埋点（产品消费获得积分加成）
+        if (!StringUtils.isEmpty(user.getVipLevel()) && (pointsLogBO.getIncome() - pointsLogBO.getOutgo() > 0)) {
+            VipPrivilegeLevelBO vipPrivilegeLevelBOPar = new VipPrivilegeLevelBO();
+            vipPrivilegeLevelBOPar.setLevelId(user.getVipLevel());
+            vipPrivilegeLevelBOPar.setPrivilegeId("A_XFJFJC");
+            VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectLevelIdPrivilegeId(vipPrivilegeLevelBOPar);
+            if (vipPrivilegeLevelBO != null && vipPrivilegeLevelBO.getStatus()) {
+                if (!StringUtils.isEmpty(vipPrivilegeLevelBO.getVal1())) {
+                    LOGGER.info("会员产品消费获得积分加成：{}", vipPrivilegeLevelBO.getVal1()+"倍");
+                    pointsLogBO.setIncome((int) ((pointsLogBO.getIncome()) * Float.parseFloat(vipPrivilegeLevelBO.getVal1())));
+                    pointsLogBO.setOutgo((int) ((pointsLogBO.getOutgo()) * Float.parseFloat(vipPrivilegeLevelBO.getVal1())));
+                }
+            }
+        }
+        insert(pointsLogBO);
+        return pointsLogBO;
     }
 }

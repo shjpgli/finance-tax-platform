@@ -54,11 +54,13 @@
     </select>
 
 
-    <select id="selectRankList" resultType="com.abc12366.uc.model.CheckRank" parameterType="java.lang.String">
-        select ucc.id, ucc.userId,uu.nickname,uu.userPicturePath, ucc.lastUpdate, ucc.count,ucc.year
-        from uc_continuing_check ucc join uc_user uu on ucc.userId=uu.id
-        where year = #{year}
-        order by count desc
+    <select id="selectRankList" resultType="com.abc12366.uc.model.CheckRank" parameterType="java.util.Map">
+        SELECT a.userId,uu.nickname,uu.userPicturePath,a.coun COUNT FROM
+        (SELECT uc.userId, COUNT(1) coun FROM uc_check uc
+        WHERE  <![CDATA[  uc.createTime>= #{startTime}]]>
+        AND  <![CDATA[  uc.createTime< #{endTime}]]>
+        GROUP BY uc.userId ORDER BY coun DESC) a
+        JOIN uc_user uu ON a.userId=uu.id
     </select>
 
     <select id="selectOneRank" resultType="com.abc12366.uc.model.CheckRank" parameterType="java.util.Map">
@@ -69,11 +71,10 @@
     </select>
 
     <select id="checkTotal" resultType="java.lang.Integer" parameterType="java.lang.String">
-        select a.count
-        from uc_continuing_check a
+        select count(1)
+        from uc_check a
         where a.userId=#{userId}
-        <if test="year!=null">
-            and a.year=#{year}
-        </if>
+        and a.createTime &gt;= (SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))
+        and a.createTime &lt;(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))
     </select>
 </mapper>

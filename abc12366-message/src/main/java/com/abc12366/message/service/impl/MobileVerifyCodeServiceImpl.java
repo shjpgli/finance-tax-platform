@@ -2,6 +2,7 @@ package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.MessageSendLogMapper;
@@ -289,7 +290,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         //调用又拍接口请求体设置
         LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("mobile", phone);
-        requestBody.add("template_id", SpringCtxHolder.getProperty("message.upyun.templateid"));
+        requestBody.add("template_id", Constant.MESSAGE_UPYUN_TEMPLATEID);
         requestBody.add("vars", type + "|" + code);
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity responseEntity;
