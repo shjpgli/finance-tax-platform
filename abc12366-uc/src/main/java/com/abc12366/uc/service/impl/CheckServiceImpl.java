@@ -250,7 +250,7 @@ public class CheckServiceImpl implements CheckService {
         pointsLog.setIncome(pointsRuleBO.getPoints());
         pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setLogType("RE_CHECK_IN");
-        pointsLog.setRemark("用户补签消耗20积分");
+        pointsLog.setRemark("用户补签消耗"+ -pointsRuleBO.getPoints()+"积分");
         pointsLogService.insert(pointsLog);
         return true;
     }
