@@ -291,7 +291,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         //调用又拍接口请求体设置
         LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("mobile", phone);
-        requestBody.add("template_id", MessageConstant.MESSAGE_UPYUN_TEMPLATEID);
+        requestBody.add("template_id", MessageConstant.MESSAGE_UPYUN_TEMPLATE_296);
         requestBody.add("vars", type + "|" + code);
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity responseEntity;
