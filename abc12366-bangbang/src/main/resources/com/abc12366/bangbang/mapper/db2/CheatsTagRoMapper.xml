@@ -28,6 +28,7 @@
     <select id="selectTagList" resultType="com.abc12366.bangbang.model.question.bo.CheatsTagBo" parameterType="java.lang.String">
         SELECT
         a.tagId,COUNT(a.tagId) priority,(select name from abc12366_bangbang.bb_knowledge_tag where id = a.tagId) tagName,
+        (select parentCode from bb_question_classify_tag t left join bb_question_classify c on t.classifyId = c.classifyCode where t.tagId = a.tagId limit 1) parentCode,
         (select classifyId from abc12366_bangbang.bb_question_classify_tag where tagId = a.tagId limit 1) classifyCode
         FROM bb_cheats_tag a
         WHERE 1=1

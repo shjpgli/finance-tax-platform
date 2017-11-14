@@ -64,18 +64,20 @@ public class QueLikeServiceImpl implements QueLikeService {
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
-
+        String toUserId = "";
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
         int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
             questionId = answer.getQuestionId();
+            toUserId = answer.getUserId();
         }
         if("".equals(questionId)){
             QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
             if(comment != null){
                 likeTarget = 2;
                 questionId = comment.getQuestionId();
+                toUserId = comment.getUserId();
             }
         }
 
@@ -91,6 +93,7 @@ public class QueLikeServiceImpl implements QueLikeService {
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
+        like.setToUserId(toUserId);
         like.setLikeId(uuid);
         like.setLikeTime(new Date());
         like.setLikeType(1);
@@ -138,23 +141,27 @@ public class QueLikeServiceImpl implements QueLikeService {
     public String inserttrample(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
         String userId = UcUserCommon.getUserId(request);
+        String toUserId = "";
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
         int likeTarget = 1;//点赞来源1为回答，2为评论
         if(answer != null){
             questionId = answer.getQuestionId();
+            toUserId = answer.getUserId();
         }
         if("".equals(questionId)){
             QuestionCommentBo comment = commentRoMapper.selectByPrimaryKey(id);
             if(comment != null){
                 likeTarget = 2;
                 questionId = comment.getQuestionId();
+                toUserId = comment.getUserId();
             }
         }
 
         QuestionLike like = new QuestionLike();
         String uuid = UUID.randomUUID().toString().replace("-", "");
         like.setUserId(userId);
+        like.setToUserId(toUserId);
         like.setLikeId(uuid);
         like.setLikeType(2);
         like.setLikeTime(new Date());

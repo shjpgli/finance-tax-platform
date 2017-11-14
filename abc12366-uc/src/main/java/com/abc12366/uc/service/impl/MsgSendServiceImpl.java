@@ -70,7 +70,7 @@ public class MsgSendServiceImpl implements IMsgSendService{
             	 if(messageSendBo.getWebMsg()!=null){
             		 Message message = new Message();
                      message.setBusinessId(user.getId());
-                     message.setBusiType(MessageConstant.XTTX);
+                     message.setBusiType(StringUtils.isEmpty(messageSendBo.getBusiType())?MessageConstant.XTTX:messageSendBo.getBusiType());
                      message.setType(MessageConstant.SYS_MESSAGE);
                      message.setContent(messageSendBo.getWebMsg());
                      message.setUserId(user.getId());

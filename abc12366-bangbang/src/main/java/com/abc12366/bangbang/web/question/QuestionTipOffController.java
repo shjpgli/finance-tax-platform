@@ -48,11 +48,8 @@ public class QuestionTipOffController {
     /*
     * 修改状态 接口
     */
-    @PutMapping(path = "/{id}/{status}")
-    public ResponseEntity modifyStatus(@PathVariable(value = "id") String id,@PathVariable(value = "status") String status) {
-        QuestionTipOff questionTipOff = new QuestionTipOff();
-        questionTipOff.setId(id);
-        questionTipOff.setStatus(status);
+    @PutMapping(path = "/modifyStatus")
+    public ResponseEntity modifyStatus(@RequestBody QuestionTipOff questionTipOff) {
         questionTipOffService.changeStatus(questionTipOff);
         return ResponseEntity.ok(Utils.kv());
     }

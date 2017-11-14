@@ -184,6 +184,16 @@ public class QueFactionController {
     }
 
     /**
+     * 更新邦派信息(邦派设置，邦派公告)
+     */
+    @PutMapping(path = "/updateSelect")
+    public ResponseEntity updateSelect(@Valid @RequestBody QuestionFactionBo factionBo) {
+        //更新邦派信息(邦派设置，邦派公告)
+        factionBo = queFactionService.updateSelect(factionBo);
+        return ResponseEntity.ok(Utils.kv("data", factionBo));
+    }
+
+    /**
      * 更新邦派状态
      *
      * @param status
@@ -255,7 +265,7 @@ public class QueFactionController {
     }
 
     /**
-     * 邦派排行列表查询
+     * 邦派任务情况查询
      */
     @GetMapping(path = "/selectTaskList")
     public ResponseEntity selectTaskList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,

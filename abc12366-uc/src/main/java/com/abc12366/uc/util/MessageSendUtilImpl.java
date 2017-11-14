@@ -166,6 +166,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         map.put("status", "1");
         map.put("type", message.getType());
         map.put("url", message.getUrl());
+        map.put("busiType", message.getBusiType());
         
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Access-Token", accessToken);

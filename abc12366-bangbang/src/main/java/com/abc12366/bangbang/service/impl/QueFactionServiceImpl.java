@@ -211,7 +211,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             member.setMemberGrade("B1");
             member.setCreateTime(new Date());
             member.setMemberId(UUID.randomUUID().toString().replace("-", ""));
-            member.setStatus(1);
+            member.setStatus(2);//1、申请，2、通过
             memberFactionMapper.insert(member);
 
             questionFactionMapper.insert(questionFaction);
@@ -323,6 +323,25 @@ public class QueFactionServiceImpl implements QueFactionService {
 //                }
 //            }
 
+
+            questionFactionMapper.updateByPrimaryKeySelective(questionFaction);
+        } catch (Exception e) {
+            LOGGER.error("更新邦派信息异常：{}", e);
+            throw new ServiceException(6123);
+        }
+        return questionFactionBo;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public QuestionFactionBo updateSelect(QuestionFactionBo questionFactionBo) {
+        //更新邦派信息
+        QuestionFaction questionFaction = new QuestionFaction();
+        try {
+            JSONObject jsonStu = JSONObject.fromObject(questionFactionBo);
+            LOGGER.info("更新邦派信息:{}", jsonStu.toString());
+            questionFactionBo.setUpdateTime(new Date());
+            BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
             questionFactionMapper.updateByPrimaryKeySelective(questionFaction);
         } catch (Exception e) {

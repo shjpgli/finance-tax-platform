@@ -19,6 +19,9 @@ public class QuestionLike implements Serializable {
 	/**用户ID**varchar(64)**/
 	private String userId;
 
+    /**被赞或被踩用户ID**varchar(64)**/
+    private String toUserId;
+
     /**点赞类型**int**/
     private Integer likeType;
 
@@ -100,5 +103,13 @@ public class QuestionLike implements Serializable {
 
     public void setFactionId(String factionId) {
         this.factionId = factionId;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
     }
 }

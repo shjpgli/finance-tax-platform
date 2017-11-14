@@ -29,7 +29,7 @@ public class SendMsgController {
 	 private IMsgSendService msgSendService;
      
 	 @SuppressWarnings("rawtypes")
-	@PostMapping("/byqd")
+	 @PostMapping("/byqd")
 	 public ResponseEntity sendByQd(@RequestBody MessageSendBo sendBo){
 		  LOGGER.info("接收到前端消息:"+JSONObject.toJSONString(sendBo));
 		  return msgSendService.sendMsgByQq(sendBo);
