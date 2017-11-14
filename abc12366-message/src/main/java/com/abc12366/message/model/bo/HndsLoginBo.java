@@ -1,13 +1,9 @@
 package com.abc12366.message.model.bo;
 
-import java.io.Serializable;
-
 import org.springframework.util.StringUtils;
-
-import com.abc12366.message.util.MD5;
-
-
 import sun.misc.BASE64Encoder;
+
+import java.io.Serializable;
 
 /**
  * 网上办税联合登录
@@ -107,7 +103,6 @@ public class HndsLoginBo implements Serializable {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(new MD5("111111").compute());
 	}
 
 	public String getNsrmc() {

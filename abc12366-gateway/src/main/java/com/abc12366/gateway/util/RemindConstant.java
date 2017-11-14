@@ -1,28 +1,13 @@
-package com.abc12366.uc.util;
+package com.abc12366.gateway.util;
 
 /**
- * Created by Administrator on 2017/9/18.
+ * 消息提醒相关常量定义
+ *
+ * @author lijun <ljun51@outlook.com>
+ * @create 2017-03-28 5:12 PM
+ * @since 1.0.0
  */
-public class MessageConstant {
-	//电子申报系统信息查询数量
-	public static final String DZSBQNUM="200";
-	
-    //消息类型
-    public static final String SYS_MESSAGE = "1";
-
-    //UC访问地址
-    public static final String SPDD = "SPDD";//商品订单
-    public static final String ZZFPDD = "ZZFPDD";//纸质发票订单
-    public static final String DZFPDD = "DZFPDD";//电子发票订单
-    public static final String XTTX = "XTTX";//系统提醒
-
-    public static final String VIEW_DETAILS = "查看详情";
-
-
-    public static final String YWTX_WEB = "web";    //web消息
-    public static final String YWTX_WECHAT = "wechat";  //微信消息
-    public static final String YWTX_MESSAGE = "message";    //短信消息
-    public static final String YWTX_CODE = "A_YWTX";    //业务提醒代码
+public class RemindConstant {
 
     /**实物商品**/
     //发货

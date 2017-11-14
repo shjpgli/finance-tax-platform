@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.MapUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionCommentMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionLikeMapper;

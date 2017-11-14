@@ -8,10 +8,10 @@ import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
-import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -57,7 +57,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Autowired
-    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
@@ -183,8 +183,8 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
             String userId = Utils.getUserId();
-            String sysTaskId = UCConstant.SYS_TASK_MRHDWT_CODE;
-            bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+            String sysTaskId = TaskConstant.SYS_TASK_MRHDWT_CODE;
+            restTemplateUtil.send(url, HttpMethod.POST, request, userId, sysTaskId);
 
 
         } catch (Exception e) {

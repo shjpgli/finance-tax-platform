@@ -9,7 +9,7 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +93,7 @@ public class CheckServiceImpl implements CheckService {
         insert(check);
 
         //完成任务埋点,如果任务不存在或失效则返回
-        if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_CODE)) {
+        if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), TaskConstant.SYS_TASK_CHECK_CODE)) {
             return 0;
         }
 
@@ -219,7 +219,7 @@ public class CheckServiceImpl implements CheckService {
     }
 
     private boolean pointsLog(String userId, int points) {
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_CHECK_CODE);
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_CHECK_CODE);
         if (pointsRuleBO == null) {
             return false;
         }
@@ -237,7 +237,7 @@ public class CheckServiceImpl implements CheckService {
     }
 
     private boolean recheckPointsLog(String userId) {
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_RECHECK_CODE);
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_RECHECK_CODE);
         LOGGER.info("用户补签积分规则：{}" ,pointsRuleBO);
         if (pointsRuleBO == null) {
             return false;
@@ -247,10 +247,10 @@ public class CheckServiceImpl implements CheckService {
         pointsLog.setId(Utils.uuid());
         pointsLog.setCreateTime(new Date());
         pointsLog.setUserId(userId);
-        pointsLog.setOutgo(pointsRuleBO.getPoints());
+        pointsLog.setIncome(pointsRuleBO.getPoints());
         pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setLogType("RE_CHECK_IN");
-        pointsLog.setRemark("用户补签消耗20积分");
+        pointsLog.setRemark("用户补签消耗"+ -pointsRuleBO.getPoints()+"积分");
         pointsLogService.insert(pointsLog);
         return true;
     }
