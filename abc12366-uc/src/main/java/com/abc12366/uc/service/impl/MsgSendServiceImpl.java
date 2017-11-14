@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.abc12366.gateway.util.MessageConstant;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,7 @@ import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.util.MessageConstant;
-import com.abc12366.uc.util.MessageSendUtil;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.alibaba.fastjson.JSONObject;
 
 @Service("msgSendService")
@@ -70,7 +70,7 @@ public class MsgSendServiceImpl implements IMsgSendService{
             	 if(messageSendBo.getWebMsg()!=null){
             		 Message message = new Message();
                      message.setBusinessId(StringUtils.isEmpty(messageSendBo.getBusinessId())?user.getId():messageSendBo.getBusinessId());
-                     message.setBusiType(StringUtils.isEmpty(messageSendBo.getBusiType())?MessageConstant.XTTX:messageSendBo.getBusiType());
+                     message.setBusiType(StringUtils.isEmpty(messageSendBo.getBusiType())? MessageConstant.XTTX:messageSendBo.getBusiType());
                      message.setType(MessageConstant.SYS_MESSAGE);
                      message.setContent(messageSendBo.getWebMsg());
                      message.setUserId(user.getId());

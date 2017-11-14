@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.abc12366.gateway.util.Constant;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -20,7 +21,6 @@ import com.abc12366.uc.model.job.DzsbXxInfo;
 import com.abc12366.uc.service.IDzsbTimeService;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.util.MessageConstant;
 import com.abc12366.uc.webservice.AcceptClient;
 
 /**
@@ -72,7 +72,7 @@ public class JsxxRemindJob implements StatefulJob{
 	        map.put("serviceid", "GY01");
 	        map.put("ywid", YWLX);
 	        map.put("lrrq", dzsbTime.getLasttime());
-	        map.put("maxcount", MessageConstant.DZSBQNUM);
+	        map.put("maxcount", Constant.DZSBQNUM);
 	        DzsbJob job=client.processYw(map);
 	        if("00000000".equals(job.getRescode())){//查询成功
 	        	List<DzsbXxInfo> dzsbXxInfos= job.getDataList();
@@ -113,7 +113,7 @@ public class JsxxRemindJob implements StatefulJob{
 	        			dzsbTimeService.update(dzsbTime);
 	        		}
 	        		if(!job.getIsExistData() 
-	        				|| dzsbXxInfos.size()<Integer.valueOf(MessageConstant.DZSBQNUM)){//没有数据了
+	        				|| dzsbXxInfos.size()<Integer.valueOf(Constant.DZSBQNUM)){//没有数据了
 	        			LOGGER.info("操作当前录入日期缴税信息:全部处理完毕");
 	        			break;
 	        		}

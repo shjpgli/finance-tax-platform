@@ -1,13 +1,13 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.MapUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.CurriculumCollectMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumCollectRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumCollect;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo;
 import com.abc12366.bangbang.service.CurrCollectService;
-import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -38,7 +38,7 @@ public class CurrCollectServiceImpl implements CurrCollectService {
     private CurriculumCollectRoMapper collectRoMapper;
 
     @Autowired
-    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public CurriculumCollectBo insert(String curriculumId, HttpServletRequest request) {
@@ -66,8 +66,8 @@ public class CurrCollectServiceImpl implements CurrCollectService {
 
         String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
         String responseStr;
-        String sysTaskId = UCConstant.SYS_TASK_COURSE_COLLECT_CODE;
-        responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+        String sysTaskId = TaskConstant.SYS_TASK_COURSE_COLLECT_CODE;
+        responseStr = restTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 //        System.out.println(responseStr);
 
 

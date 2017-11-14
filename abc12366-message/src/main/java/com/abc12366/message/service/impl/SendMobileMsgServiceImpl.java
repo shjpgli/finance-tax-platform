@@ -9,8 +9,8 @@ import com.abc12366.message.model.bo.UpyunErrorBO;
 import com.abc12366.message.model.bo.UpyunMessageResponse;
 import com.abc12366.message.service.SendMobileMsgService;
 import com.abc12366.message.service.SendMsgLogService;
-import com.abc12366.message.util.MessageConstant;
-import com.abc12366.message.util.soaUtil;
+import com.abc12366.gateway.util.MessageConstant;
+import com.abc12366.message.util.SOAUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +103,7 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
             LOGGER.info("发送业务通知短信失败，号码：{}，通道：又拍", vars);
             throw new ServiceException(4204);
         }
-        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+        if (SOAUtil.isExchangeSuccessful(responseEntity)) {
             try {
                 UpyunMessageResponse essageResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
                 //记日志

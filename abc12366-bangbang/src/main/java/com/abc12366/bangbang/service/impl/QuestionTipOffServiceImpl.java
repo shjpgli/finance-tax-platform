@@ -1,10 +1,8 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.MapUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionTipOffRoMapper;
-import com.abc12366.bangbang.model.question.Question;
-import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffStatus;

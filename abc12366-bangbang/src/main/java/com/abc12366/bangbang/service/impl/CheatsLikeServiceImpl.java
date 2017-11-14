@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.MapUtil;
-import com.abc12366.bangbang.common.UcUserCommon;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.CheatsCommentMapper;
 import com.abc12366.bangbang.mapper.db1.CheatsLikeMapper;
 import com.abc12366.bangbang.mapper.db1.CheatsMapper;
@@ -16,6 +15,7 @@ import com.abc12366.bangbang.model.question.bo.CheatsCommentBo;
 import com.abc12366.bangbang.service.CheatsLikeService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         String toUserId = "";
         Cheats cheats = cheatsRoMapper.selectByPrimaryKey(id);
         String cheatsId = "";
@@ -130,7 +130,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
     @Override
     public String inserttrample(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         String toUserId = "";
         Cheats cheats = cheatsRoMapper.selectByPrimaryKey(id);
         String cheatsId = "";
@@ -190,7 +190,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
     @Override
     public String delete(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("id", id, "userId", userId);
 //        likeMapper.delete(map);
 //        int likeCnt = likeRoMapper.selectLikeCnt(id);
@@ -211,7 +211,7 @@ public class CheatsLikeServiceImpl implements CheatsLikeService {
     @Override
     public String selectExist(String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("id", id, "userId", userId);
         String cnt = likeRoMapper.selectExist(map)+"";
         return cnt;

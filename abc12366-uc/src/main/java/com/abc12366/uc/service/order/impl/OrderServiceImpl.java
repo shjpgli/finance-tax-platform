@@ -2,10 +2,7 @@ package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
@@ -20,7 +17,8 @@ import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
-import com.abc12366.uc.util.*;
+import com.abc12366.uc.util.CharUtil;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -42,9 +40,6 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
-
-    @Autowired
-    private UcRestTemplateUtil ucRestTemplateUtil;
 
     @Autowired
     private OrderRoMapper orderRoMapper;
@@ -745,16 +740,16 @@ public class OrderServiceImpl implements OrderService {
     private void setTodoTask(OrderBO order) {
         double amount = order.getTotalPrice();
         String userId = order.getUserId();
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_CONSUME_CODE);
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_CONSUME_CODE);
         if (amount >= 1000 && amount < 3000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_1000_CODE);
+            todoTaskService.doTask(userId, TaskConstant.SYS_TASK_CONSUME_BEYOND_1000_CODE);
         }
 
         if (amount >= 3000 && amount < 5000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_3000_CODE);
+            todoTaskService.doTask(userId, TaskConstant.SYS_TASK_CONSUME_BEYOND_3000_CODE);
         }
         if (amount >= 5000) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_CONSUME_BEYOND_5000_CODE);
+            todoTaskService.doTask(userId, TaskConstant.SYS_TASK_CONSUME_BEYOND_5000_CODE);
         }
     }
 
@@ -836,7 +831,7 @@ public class OrderServiceImpl implements OrderService {
             message.setBusinessId(order.getOrderNo());
             message.setBusiType(MessageConstant.SPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            String content = MessageConstant.BUYING_MEMBERS_PREFIX.replaceAll("\\{#DATA.VIP\\}", orderProductBO.getName());
+            String content = RemindConstant.BUYING_MEMBERS_PREFIX.replaceAll("\\{#DATA.VIP\\}", orderProductBO.getName());
             message.setContent(content);
             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
             message.setUserId(order.getUserId());
@@ -883,7 +878,7 @@ public class OrderServiceImpl implements OrderService {
             message.setBusinessId(order.getOrderNo());
             message.setBusiType(MessageConstant.SPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            String content = MessageConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user.getPoints()));
+            String content = RemindConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user.getPoints()));
             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
             message.setUserId(order.getUserId());
             //web消息
@@ -945,7 +940,7 @@ public class OrderServiceImpl implements OrderService {
     private void insertPoints(OrderBO orderBO) {
         if (orderBO != null && orderBO.getGiftPoints() != null && orderBO.getGiftPoints() > 0) {
             //如果积分规则为空则返回
-            PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_ORDER_CODE);
+            PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_ORDER_CODE);
             if (pointsRuleBO == null) {
                 return;
             }
@@ -968,7 +963,7 @@ public class OrderServiceImpl implements OrderService {
      */
     private void insertDeductPoints(OrderBO orderBO) {
         //如果积分规则为空则返回
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_EXCHANGE_CODE);
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_EXCHANGE_CODE);
         if (pointsRuleBO == null) {
             return;
         }
@@ -1101,7 +1096,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4102, "物流公司查询失败");
                 }
                 Message message = new Message();
-                String content = MessageConstant.DELIVER_GOODS_PREFIX+order.getOrderNo()+MessageConstant.DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX;
+                String content = RemindConstant.DELIVER_GOODS_PREFIX+order.getOrderNo()+ RemindConstant.DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
 
                 //web消息
                 if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
@@ -1181,10 +1176,10 @@ public class OrderServiceImpl implements OrderService {
             message.setBusiType(MessageConstant.SPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
             if (expressComp != null) {
-                content = MessageConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + MessageConstant.SUFFIX;
+                content = RemindConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
                 message.setContent(content);
             } else {
-                content = MessageConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + MessageConstant.SUFFIX;
+                content = RemindConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + RemindConstant.SUFFIX;
                 message.setContent(content);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
             }
@@ -1227,7 +1222,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticReceipt() {
-        Date date = DateUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
+        Date date = DateUtils.getAddDate(Constant.ORDER_RECEIPT_DAYS);
         //查询15天之前未确认的订单
         List<Order> orderList = orderRoMapper.selectReceiptOrderByDate(date);
         for (Order order : orderList) {
@@ -1240,7 +1235,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     @Override
     public void automaticCancel() {
-        Date date = DateUtils.getAddTime(UCConstant.ORDER_CANCEL_TIME);
+        Date date = DateUtils.getAddTime(Constant.ORDER_CANCEL_TIME);
         //查询两个小时未支付的订单，自动取消
         List<Order> orderList = orderRoMapper.selectCancelOrderByDate(date);
         for (Order order : orderList) {

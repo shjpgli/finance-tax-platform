@@ -1,7 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db1.WxMsgMapper;
@@ -116,7 +116,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
 		                       	UserBO userBO= userRoMapper.selectByopenid(map.get("FromUserName"));
 		                       	if(userBO!=null){
 		                       	     LOGGER.info("用户关注公众号，做任务，USERID:"+userBO.getId());
-		                       		 todoTaskService.doTask(userBO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
+		                       		 todoTaskService.doTask(userBO.getId(), TaskConstant.SYS_TASK_GZCSZJGZH_CODE);
 		                       	}
                         	
                         	
