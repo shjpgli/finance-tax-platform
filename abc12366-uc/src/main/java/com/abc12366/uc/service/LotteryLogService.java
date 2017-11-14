@@ -14,6 +14,8 @@ import java.util.Map;
 public interface LotteryLogService {
     List<LotteryLogBO> selectList(Map map);
     LotteryLogBO selectOne(String id);
+    Integer selectUserDay(String userId);
+    Integer selectUserDayLuck(String userId);
     LotteryLogBO insert(LotteryLogBO lotteryLogBO);
     LotteryLogBO update(LotteryLogBO lotteryLogBO, String id);
     boolean delete(String id);

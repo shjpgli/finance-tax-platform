@@ -74,6 +74,14 @@ public class LotteryLogServiceImpl implements LotteryLogService {
     }
 
     @Override
+    public    Integer selectUserDayLuck(String userId){
+        return lotteryLogRoMapper.selectUserDayLuck(userId);
+    }
+    @Override
+    public    Integer selectUserDay(String userId){
+        return lotteryLogRoMapper.selectUserDay(userId);
+    }
+    @Override
     public List<LotteryLogBO> selectList(Map map) {
         return lotteryLogRoMapper.selectList(map);
     }

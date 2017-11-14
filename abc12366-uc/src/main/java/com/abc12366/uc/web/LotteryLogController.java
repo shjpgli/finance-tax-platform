@@ -36,11 +36,13 @@ public class LotteryLogController {
     public ResponseEntity selectList(@RequestParam(required = false) String userName,
                                      @RequestParam(required = false) String activityName,
                                      @RequestParam(required = false) String userId,
+                                     @RequestParam(required = false) String state,
                                      @RequestParam(required = false) String startTime,
                                      @RequestParam(required = false) String  endTime,
                                      @RequestParam(required = false) Integer isluck,@RequestParam(required = false, defaultValue = Constant.pageNum) int page, @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         Map<String, Object> map = new HashMap<>();
         map.put("isluck",isluck);
+        if(state != null && !state.isEmpty())        map.put("state",state);
         if(userId != null && !userId.isEmpty())        map.put("userId",userId);
         if(userName != null && !userName.isEmpty())        map.put("userName",userName);
         if(activityName != null && !activityName.isEmpty())        map.put("activityName",activityName);
@@ -61,6 +63,17 @@ public class LotteryLogController {
 
          PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<LotteryLogBO> list = lotteryLogService.selectList(map);
+        //这里要计算那些 领取过期的奖品
+        long now1 = (new Date()).getTime();
+        for (LotteryLogBO llog : list) {
+            if (llog.getEndlqDate() != null && "未领取".equals(llog.getState())) {
+               if (now1> llog.getEndlqDate().getTime() ){
+                    llog.setState("已过期");
+                    lotteryLogService.update(llog,llog.getId());
+               }
+            }
+        }
+
         LOGGER.info("selectList:{}", list);
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -113,7 +126,12 @@ public class LotteryLogController {
         lotteryLogService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
-
+//获取用户当天抽奖次数
+@GetMapping(path = "/userCount/{userId}")
+public ResponseEntity userCount(@PathVariable String userId) {
+    Integer returnObj = lotteryLogService.selectUserDay(userId);
+    return ResponseEntity.ok(Utils.kv("data", returnObj));
+}
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LotteryLogBO returnObj = lotteryLogService.selectOne(id);
