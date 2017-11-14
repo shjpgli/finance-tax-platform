@@ -10,6 +10,7 @@ import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.uc.service.UserFeedbackMsgService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +42,9 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     @Autowired
     private TodoTaskService todoTaskService;
 
+    @Autowired
+    private UserFeedbackMsgService userFeedbackMsgService;
+
     @Override
     public List<UserExtendListBO> selectList(Map map) {
         LOGGER.info("{}", map);
@@ -68,6 +72,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         userExtendUpdate.setValidStatus(validStatus);
         if(validStatus.equals(UCConstant.USER_REALNAME_VALIDATED)){
             userExtendUpdate.setValidTime(new Date());
+            userFeedbackMsgService.realNameValidate("2");
         }
         int result = userExtendMapper.update(userExtendUpdate);
         if (result < 1) {
