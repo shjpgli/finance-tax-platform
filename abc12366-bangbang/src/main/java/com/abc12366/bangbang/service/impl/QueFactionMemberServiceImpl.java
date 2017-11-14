@@ -119,6 +119,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
         int status = 1;
         if(auto == 1){
             status = 2;
+            factionMemberBo.setMemberGrade("B1");
+            factionMemberBo.setDuty("B1");
         }
         try {
             factionMemberBo.setCreateTime(new Date());
