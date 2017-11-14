@@ -11,7 +11,6 @@ import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.model.bo.AppSettingBO;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.TimeUtil;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,14 +145,14 @@ public class AppServiceImpl implements AppService {
             throw new ServiceException(4035);
         }
         //判断app登录是否已过期
-        long lastTime = TimeUtil.getDateStringToLong(app.getLastResetTokenTime());
+        long lastTime = DateUtils.getDateStringToLong(app.getLastResetTokenTime());
         long currentTime = System.currentTimeMillis();
         if (currentTime > lastTime) {
             LOGGER.warn("APP登录已过期，请重新登录：{}", app);
             throw new ServiceException(4025);
         }
         //判断app是否已过期
-        long endTime = TimeUtil.getDateStringToLong(app.getEndTime());
+        long endTime = DateUtils.getDateStringToLong(app.getEndTime());
         if (currentTime > endTime) {
             LOGGER.warn("APP已过期，请重新续费：{}", app);
             throw new ServiceException(4026);

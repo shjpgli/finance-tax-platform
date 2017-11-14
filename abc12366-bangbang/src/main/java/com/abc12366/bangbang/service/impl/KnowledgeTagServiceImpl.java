@@ -7,7 +7,6 @@ import com.abc12366.bangbang.mapper.db1.QuestionClassifyTagMapper;
 import com.abc12366.bangbang.model.KnowledgeTag;
 import com.abc12366.bangbang.service.KnowledgeTagService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,8 +70,8 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
                 throw new ServiceException(4521);
             }
             tag.setId(Utils.uuid());
-            tag.setCreateUser(UcUserCommon.getAdminId());
-            tag.setUpdateUser(UcUserCommon.getAdminId());
+            tag.setCreateUser(Utils.getAdminId());
+            tag.setUpdateUser(Utils.getAdminId());
         }
         knowledgeTagMapper.insertBatch(knowledgeTags);
         return knowledgeTags;
@@ -93,10 +92,10 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
 //                throw new ServiceException(4521);
                 tag1.setStatus(Boolean.TRUE);
             }
-            tag.setUpdateUser(UcUserCommon.getAdminId());
+            tag.setUpdateUser(Utils.getAdminId());
             if(tag1 == null){
                 tag.setId(Utils.uuid());
-                tag.setCreateUser(UcUserCommon.getAdminId());
+                tag.setCreateUser(Utils.getAdminId());
                 insertList.add(tag);
             }else{
                 tag.setId(tag1.getId());
@@ -131,14 +130,14 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
                 }
             }
             tag.setTagType(tagTypes1.toString());
-            tag.setUpdateUser(UcUserCommon.getAdminId());
+            tag.setUpdateUser(Utils.getAdminId());
             knowledgeTagMapper.updateByPrimaryKeySelective(tag);
             return tag;
         }
         try {
             knowledgeTag.setId(Utils.uuid());
-            knowledgeTag.setCreateUser(UcUserCommon.getAdminId());
-            knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeTag.setCreateUser(Utils.getAdminId());
+            knowledgeTag.setUpdateUser(Utils.getAdminId());
             knowledgeTagMapper.insert(knowledgeTag);
             return knowledgeTag;
         }catch (Exception e){
@@ -152,7 +151,7 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
         KnowledgeTag tag = knowledgeTagMapper.selectByName(knowledgeTag.getName());
 
         try {
-            knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeTag.setUpdateUser(Utils.getAdminId());
             knowledgeTag.setUpdateTime(new Date());
             knowledgeTagMapper.updateByPrimaryKeySelective(knowledgeTag);
             return knowledgeTag;
@@ -168,7 +167,7 @@ public class KnowledgeTagServiceImpl implements KnowledgeTagService {
             KnowledgeTag knowledgeTag = new KnowledgeTag();
             knowledgeTag.setId(id);
             knowledgeTag.setStatus(status);
-            knowledgeTag.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeTag.setUpdateUser(Utils.getAdminId());
             knowledgeTag.setUpdateTime(new Date());
             knowledgeTagMapper.updateByPrimaryKeySelective(knowledgeTag);
         }catch (Exception e){

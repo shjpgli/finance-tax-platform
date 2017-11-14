@@ -8,23 +8,20 @@ import com.abc12366.bangbang.mapper.db2.QuestionAnswerRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCommentRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionLikeRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionRoMapper;
-import com.abc12366.bangbang.model.Answer;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionComment;
 import com.abc12366.bangbang.model.question.QuestionLike;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
-import com.abc12366.bangbang.model.question.bo.QuestionLikeBo;
 import com.abc12366.bangbang.service.QueLikeService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -63,7 +60,7 @@ public class QueLikeServiceImpl implements QueLikeService {
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         String toUserId = "";
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
@@ -140,7 +137,7 @@ public class QueLikeServiceImpl implements QueLikeService {
     @Override
     public String inserttrample(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         String toUserId = "";
         QuestionAnswerBo answer = answerRoMapper.selectByPrimaryKey(id);
         String questionId = "";
@@ -200,7 +197,7 @@ public class QueLikeServiceImpl implements QueLikeService {
     @Override
     public String delete(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("id", id, "userId", userId);
         likeMapper.delete(map);
         int likeCnt = likeRoMapper.selectLikeCnt(id);
@@ -221,7 +218,7 @@ public class QueLikeServiceImpl implements QueLikeService {
     @Override
     public String selectExist(String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("id", id, "userId", userId);
         String cnt = likeRoMapper.selectExist(map)+"";
         return cnt;

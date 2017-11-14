@@ -6,7 +6,7 @@ import com.abc12366.bangbang.model.curriculum.*;
 import com.abc12366.bangbang.model.curriculum.bo.*;
 import com.abc12366.bangbang.service.CurriculumService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,7 +207,7 @@ public class CurriculumServiceImpl implements CurriculumService {
             //保存课程信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
 
-            String userId = UcUserCommon.getAdminId();
+            String userId = Utils.getAdminId();
 
             Curriculum curriculum = new Curriculum();
             curriculumBo.setCurriculumId(uuid);

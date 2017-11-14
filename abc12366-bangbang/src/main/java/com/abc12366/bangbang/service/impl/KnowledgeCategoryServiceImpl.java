@@ -7,7 +7,6 @@ import com.abc12366.bangbang.model.KnowledgeCategory;
 import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +41,8 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     public KnowledgeCategory add(KnowledgeCategory record) {
         try{
             record.setId(Utils.uuid());
-            record.setCreateUser(UcUserCommon.getAdminId());
-            record.setUpdateUser(UcUserCommon.getAdminId());
+            record.setCreateUser(Utils.getAdminId());
+            record.setUpdateUser(Utils.getAdminId());
             String parentCode = StringUtil.nullToString(record.getParentCode());
             if("0".equals(parentCode)){
                 parentCode = "";
@@ -69,7 +68,7 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     @Override
     public KnowledgeCategory modify(KnowledgeCategory knowledgeCategory) {
         try{
-            knowledgeCategory.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeCategory.setUpdateUser(Utils.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
             return knowledgeCategory;
@@ -85,7 +84,7 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             KnowledgeCategory knowledgeCategory = new KnowledgeCategory();
             knowledgeCategory.setId(id);
             knowledgeCategory.setName(name);
-            knowledgeCategory.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeCategory.setUpdateUser(Utils.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
         }catch (Exception e){

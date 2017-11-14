@@ -7,14 +7,13 @@ import com.abc12366.bangbang.mapper.db2.QuestionCollectRoMapper;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionCollect;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
 import com.abc12366.bangbang.service.QueCollectService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class QueCollectServiceImpl implements QueCollectService {
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId();
+        String userId = Utils.getUserId();
 
 
                 QuestionCollect collect = new QuestionCollect();
@@ -94,7 +93,7 @@ public class QueCollectServiceImpl implements QueCollectService {
     @Override
     public String delete(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("questionId", id, "userId", userId);
 
         int collectCnt = collectRoMapper.selectCollectCnt(id)-1;
@@ -120,7 +119,7 @@ public class QueCollectServiceImpl implements QueCollectService {
     @Override
     public String selectExist(String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("questionId", id, "userId", userId);
         String cnt = collectRoMapper.selectExist(map)+"";
         return cnt;

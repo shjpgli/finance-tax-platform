@@ -13,7 +13,6 @@ import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
-import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -119,7 +118,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
 
         //加入日志，草稿状态不需要记录日志
         if(!"3".equals(invoiceUseApplyBO.getExamineStatus())){
-            insertLog(id,"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
+            insertLog(id,"申请", Utils.getAdminInfo().getNickname(),"已提交");
         }
         return invoiceUseApplyBO;
     }
@@ -171,7 +170,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         }
         //加入日志，草稿状态不需要记录日志
         if(!"3".equals(invoiceUseApplyBO.getExamineStatus())){
-            insertLog(invoiceUseApply.getId(),"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
+            insertLog(invoiceUseApply.getId(),"申请", Utils.getAdminInfo().getNickname(),"已提交");
         }
         return invoiceUseApplyBO;
     }
@@ -205,9 +204,9 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             }
         }
         if(check.equals("1")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核通过");
+            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), Utils.getAdminInfo().getNickname(),"审核通过");
         }else if(check.equals("2")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核不通过");
+            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), Utils.getAdminInfo().getNickname(),"审核不通过");
         }
         //加入日志
     }
