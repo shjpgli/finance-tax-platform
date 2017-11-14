@@ -32,7 +32,9 @@ public class HndsLoginBo implements Serializable {
 	private String roleid;
 	//用户ID
 	private String userId;
-
+	//纳税人名称
+	private String nsrmc="";
+	
 	public String getTaxtype() {
 		return taxtype;
 	}
@@ -106,5 +108,13 @@ public class HndsLoginBo implements Serializable {
 	
 	public static void main(String[] args) {
 		System.out.println(new MD5("111111").compute());
+	}
+
+	public String getNsrmc() {
+		return nsrmc;
+	}
+
+	public void setNsrmc(String nsrmc) {
+		this.nsrmc = nsrmc;
 	}
 }

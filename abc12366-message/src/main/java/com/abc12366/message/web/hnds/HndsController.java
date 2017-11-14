@@ -62,6 +62,9 @@ public class HndsController {
             jsonObject=JSONObject.parseObject(responseEntity.getBody());
             LOGGER.info("湖南地税登录返回: " + jsonObject);
             if("00".equals(jsonObject.getString("retcode"))){
+            	if(!loginBo.getNsrmc().equals(jsonObject.getString("nsrmc"))){
+            		return ResponseEntity.ok(Utils.bodyStatus(9999, "当前纳税人识别号不允许单点登录"));
+            	}
             	jsonObject.put("sign", HndsSecurityUtils.encodeDES(cfg.getHndsKey(), loginBo.getMainuserid(), loginBo.getChangePwd()));
             	HashMap<String,Object> map=jsonObject.parseObject(responseEntity.getBody(), HashMap.class);
             	map.put("userid",loginBo.getUserId());
