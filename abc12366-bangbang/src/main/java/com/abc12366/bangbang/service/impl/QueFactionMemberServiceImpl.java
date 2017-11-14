@@ -129,7 +129,7 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
         QuestionFactionMember factionMember = new QuestionFactionMember();
         QuestionFaction faction = factionRoMapper.selectByPrimaryKey(factionMemberBo.getFactionId());
         int peopleLimit = faction.getPeopleLimit();
-        if("2".equals(factionMemberBo.getStatus())){
+        if(factionMemberBo.getStatus() == 2){
             //已通过的人数
             int cnt = memberRoMapper.selectPassMemberCnt(factionMemberBo.getFactionId());
             if(cnt >= peopleLimit){
