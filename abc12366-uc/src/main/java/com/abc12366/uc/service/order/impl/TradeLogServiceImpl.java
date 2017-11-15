@@ -68,15 +68,17 @@ public class TradeLogServiceImpl implements TradeLogService {
 			if (dataList.size() > 0) {
 			    for (TradeBillBO data: dataList) {
 			        TradeLog log = selectOne(data);
-			        if (log != null && log.getTradeNo().equals(data.getTradeNo())
-			                && log.getAmount().equals(data.getAmount())) {
-			            log.setCompareStatus("1");
-			        } else {
-			            log.setCompareStatus("0");
-			            undoneList.add(data);
-			        }
-			        log.setCompareTime(new Date());
-			        tradeLogMapper.update(log);
+                    if(log!=null){
+                        if (log.getTradeNo().equals(data.getTradeNo())
+                                && log.getAmount().equals(data.getAmount())) {
+                            log.setCompareStatus("1");
+                        } else {
+                            log.setCompareStatus("0");
+                            undoneList.add(data);
+                        }
+                        log.setCompareTime(new Date());
+                        tradeLogMapper.update(log);
+                    }
 			    }
 			}
 			return undoneList;
