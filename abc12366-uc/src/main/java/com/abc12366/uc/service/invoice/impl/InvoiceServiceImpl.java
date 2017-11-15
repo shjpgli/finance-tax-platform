@@ -535,7 +535,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4913, "发票号码或发票代码不存在");
             }
             if (!"3".equals(invoiceDetail.getStatus())) {
-                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在<已签收>后才能被使用");
+                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在已签收后才能被使用");
             }
             Invoice ce = new Invoice();
             ce.setId(invoiceExcel.getInvoiceOrderNo());
