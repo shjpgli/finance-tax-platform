@@ -9,6 +9,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.LotteryBO;
+import com.abc12366.uc.service.LotteryActivityprizeService;
 import com.abc12366.uc.service.LotteryService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

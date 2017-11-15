@@ -250,19 +250,29 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         invoiceBO.setAmount(amount);
 
-        //查询地址信息
-        if (invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
-            UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
-            if (userAddress != null) {
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
-                invoiceBO.setConsignee(userAddress.getName());
-                invoiceBO.setContactNumber(userAddress.getPhone());
-                invoiceBO.setShippingAddress(address.toString());
+        //查询地址信息，纸质发票时才查询地址
+        if(invoiceBO.getProperty() != null && "1".equals(invoiceBO.getProperty())){
+            if (invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
+                UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
+                if (userAddress != null) {
+                    StringBuffer address = new StringBuffer();
+                    address.append(userAddress.getProvinceName() + "-");
+                    address.append(userAddress.getCityName() + "-");
+                    address.append(userAddress.getAreaName() + "-");
+                    address.append(userAddress.getDetail());
+                    invoiceBO.setConsignee(userAddress.getName());
+                    invoiceBO.setContactNumber(userAddress.getPhone());
+                    invoiceBO.setShippingAddress(address.toString());
+                }
             }
+        }
+        //发票抬头为个人时，去掉纳税人识别号等数据
+        if(invoiceBO.getName() != null && "1".equals(invoiceBO.getName())){
+            invoiceBO.setNsrsbh(null);
+            invoiceBO.setNsrmc(null);
+            invoiceBO.setAddress(null);
+            invoiceBO.setPhone(null);
+            invoiceBO.setBank(null);
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceBO, invoice);
@@ -524,7 +534,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("发票号码或发票代码不存在：{}", invoiceDetail);
                 throw new ServiceException(4913, "发票号码或发票代码不存在");
             }
-            if (!"0".equals(invoiceDetail.getStatus())) {
+            if (!"3".equals(invoiceDetail.getStatus())) {
                 throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在<已签收>后才能被使用");
             }
             Invoice ce = new Invoice();
@@ -825,8 +835,13 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceCode = einvocie.getFP_DM();
             invoiceBO.setInvoiceNo(invoiceNo);
             invoiceBO.setInvoiceCode(invoiceCode);
-            //更新发票详情信息
-            updInvoiceDetail(einvocie);
+            //更新发票详情信息，更新成功就去修改开票日志表
+            if(updInvoiceDetail(einvocie,invoiceBO.getId())){
+                Einvocie temp = new Einvocie();
+                temp.setTBSTATUS("1");
+                temp.setFPQQLSH(fpqqlsh);
+                invoiceDetailMapper.updateDZFP(temp);
+            }
             invoice.setStatus("5");
             sendDzfpMessage(request, invoiceBO);
         } else {
@@ -900,13 +915,15 @@ public class InvoiceServiceImpl implements InvoiceService {
      * 更新发票详情信息
      *
      * @param einvocie
+     * @param id
      */
-    private boolean updInvoiceDetail(Einvocie einvocie) {
+    private boolean updInvoiceDetail(Einvocie einvocie, String id) {
         InvoiceDetail tail = new InvoiceDetail();
         tail.setInvoiceNo(einvocie.getFP_HM());
         tail.setInvoiceCode(einvocie.getFP_DM());
         tail.setSpUrl(einvocie.getSP_URL());
         tail.setPdfUrl(einvocie.getPDF_URL());
+        tail.setRemark(id);
         //根据发票号码和发票代码查找发票详细信息表
         InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
         if (detail != null && detail.getStatus() != null && "3".equals(detail.getStatus())) {

@@ -22,6 +22,6 @@ public interface QuestionHeadmanService {
     void delete(String id);
 
     /* 修改状态（apply:申请,success:通过,refuse:拒绝） */
-    void changeStatus(String id, String status);
+    void changeStatus(QuestionHeadman record);
 
 }

@@ -160,11 +160,11 @@ public class EventIdBo implements Serializable {
         this.status = status;
     }
 
-    public String getBmendtime() {
+    public Date getBmendtime() {
         return bmendtime;
     }
 
-    public void setBmendtime(String bmendtime) {
+    public void setBmendtime(Date bmendtime) {
         this.bmendtime = bmendtime;
     }
 
@@ -190,7 +190,7 @@ public class EventIdBo implements Serializable {
     private String sergrade;
     private String sponsorid;
     private String status;
-    private String bmendtime;
+    private Date bmendtime;
     private String isCheck;
     private String isUserGrade;
     private int isApply;

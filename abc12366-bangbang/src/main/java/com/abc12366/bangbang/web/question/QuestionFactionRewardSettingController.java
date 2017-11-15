@@ -38,7 +38,7 @@ public class QuestionFactionRewardSettingController {
                 ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
     }
 
-    /* 添加 */
+    /* 帮邦后台 跟帮派分配积分 */
     @PostMapping(path = "/add")
     public ResponseEntity add(@RequestBody QuestionFactionRewardSetting record) {
         questionFactionRewardSettingService.setting(record);

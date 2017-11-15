@@ -17,6 +17,9 @@
             <if test="status!=null">
                 and status=#{status}
             </if>
+            <if test="lotteryId!=null">
+                and lotteryId=#{lotteryId}
+            </if>
         </where>
         ORDER BY sort
     </select>
