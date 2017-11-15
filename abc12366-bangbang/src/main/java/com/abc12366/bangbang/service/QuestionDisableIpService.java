@@ -18,6 +18,6 @@ public interface QuestionDisableIpService {
     void disable(QuestionDisableIp questionDisableUser);
 
     /*撤销禁言*/
-    void enable(String userId);
+    void enable(String ip);
 
 }
