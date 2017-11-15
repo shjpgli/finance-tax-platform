@@ -644,7 +644,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
             }else{
                 LOGGER.info("发票详情信息未签收，请签收后再进行同步：{}", tail);
-                throw new ServiceException(4964,"发票号码为： "+data.getFP_HM()+"的未领用完成，请签收后再进行同步");
+                throw new ServiceException(4964,"发票号码为"+data.getFP_HM()+"的未领用完成，请签收后再进行同步");
             }
             //更新电子发票开票日志信息
             data.setTBSTATUS("1");
