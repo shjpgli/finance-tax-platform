@@ -117,10 +117,10 @@ public class ExperienceLogController {
         Date startDate = null;
         Date endDate = null;
         if (start != null) {
-            startDate = DateUtils.StrToDate(start);
+            startDate = DateUtils.strToDate(start);
         }
         if (end != null) {
-            Date endDateTmp = DateUtils.StrToDate(end);
+            Date endDateTmp = DateUtils.strToDate(end);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(endDateTmp);
             calendar.add(Calendar.DAY_OF_MONTH, 1);

@@ -92,7 +92,7 @@ public class DateUtils {
      * @param str
      * @return date
      */
-    public static Date StrToDate(String str) {
+    public static Date strToDate(String str) {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date;
@@ -101,6 +101,25 @@ public class DateUtils {
         } catch (ParseException e) {
             e.printStackTrace();
             throw new ServiceException(4805);
+        }
+        return date;
+    }
+
+    /**
+     * 字符串转换成日期
+     *
+     * @param str 日期字符串
+     * @param format 格式
+     * @return date
+     */
+    public static Date strToDate(String str, String format) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        Date date = null;
+        try {
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return date;
     }

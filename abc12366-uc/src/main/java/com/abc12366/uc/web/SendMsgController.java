@@ -35,4 +35,11 @@ public class SendMsgController {
 		  return msgSendService.sendMsgByQq(sendBo);
 	 }
 	 
+	 @SuppressWarnings("rawtypes")
+	 @PostMapping("/byqdbatch")
+	 public ResponseEntity sendByQdbatch(@RequestBody MessageSendBo sendBo){
+		  LOGGER.info("接收到前端消息:"+JSONObject.toJSONString(sendBo));
+		  return msgSendService.sendByQdbatch(sendBo);
+	 }
+	 
 }

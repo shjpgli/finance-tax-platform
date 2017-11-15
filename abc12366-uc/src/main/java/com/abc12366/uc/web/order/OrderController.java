@@ -69,10 +69,10 @@ public class OrderController {
         orderBO.setOrderNo(orderNo);
         orderBO.setOrderStatus(orderStatus);
         if (startTime != null && !"".equals(startTime)) {
-            orderBO.setStartTime(DateUtils.StrToDate(startTime));
+            orderBO.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            orderBO.setEndTime(DateUtils.StrToDate(endTime));
+            orderBO.setEndTime(DateUtils.strToDate(endTime));
         }
 
         List<OrderBO> orderList = orderService.selectList(orderBO, pageNum, pageSize);
@@ -125,10 +125,10 @@ public class OrderController {
             order.setIsReturn(isReturn);
         }
         if (startTime != null && !"".equals(startTime)) {
-            order.setStartTime(DateUtils.StrToDate(startTime));
+            order.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            order.setEndTime(DateUtils.StrToDate(endTime));
+            order.setEndTime(DateUtils.strToDate(endTime));
         }
         List<OrderBO> orderBOs = orderService.selectOrderList(order, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
@@ -170,10 +170,10 @@ public class OrderController {
         order.setIsInvoice(false);
         order.setGoodsType(goodsType);
         if (startTime != null && !"".equals(startTime)) {
-            order.setStartTime(DateUtils.StrToDate(startTime));
+            order.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            order.setEndTime(DateUtils.StrToDate(endTime));
+            order.setEndTime(DateUtils.strToDate(endTime));
         }
         List<OrderBO> orderBOs = orderService.selectUserAllOrderList(order, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
@@ -211,10 +211,10 @@ public class OrderController {
         goodsBO.setName(name);
 //        order.setGoodsBO(goodsBO);
         if (startTime != null && !"".equals(startTime)) {
-            order.setStartTime(DateUtils.StrToDate(startTime));
+            order.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            order.setEndTime(DateUtils.StrToDate(endTime));
+            order.setEndTime(DateUtils.strToDate(endTime));
         }
 
         List<OrderBO> orderBOs = orderService.selectOrderListByInvoice(order, pageNum, pageSize);
@@ -249,10 +249,10 @@ public class OrderController {
         orderBO.setUser(user);
         orderBO.setGoodsId(goodsId);
         if (startTime != null && !"".equals(startTime)) {
-            orderBO.setStartTime(DateUtils.StrToDate(startTime));
+            orderBO.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            orderBO.setEndTime(DateUtils.StrToDate(endTime));
+            orderBO.setEndTime(DateUtils.strToDate(endTime));
         }
 
         List<OrderBO> orderList = orderService.selectCurriculumOrderList(orderBO, pageNum, pageSize);

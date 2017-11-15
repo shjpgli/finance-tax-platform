@@ -69,10 +69,10 @@ public class InvoiceRepoController {
         invoiceRepo.setInvoiceNoEnd(invoiceNoEnd);
 
         if (startTime != null && !"".equals(startTime)) {
-            invoiceRepo.setStartTime(DateUtils.StrToDate(startTime));
+            invoiceRepo.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            invoiceRepo.setEndTime(DateUtils.StrToDate(endTime));
+            invoiceRepo.setEndTime(DateUtils.strToDate(endTime));
         }
         //获取发票类型编码长度，用户排序
         if(StringUtils.isEmpty(invoiceTypeCode)){

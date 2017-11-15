@@ -435,7 +435,7 @@ public class OrderServiceImpl implements OrderService {
                 LOGGER.info("删除失败：{}", orderBO);
                 throw new ServiceException(4103);
             }
-            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "7", "用户删除订单", "0");
+            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "11", "用户删除订单", "0");
         } else {
             LOGGER.info("订单只有在未付款或已结束可以删除：{}", orderBO);
             throw new ServiceException(4140);

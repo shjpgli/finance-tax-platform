@@ -67,7 +67,7 @@ public class CheckServiceImpl implements CheckService {
         Calendar now = Calendar.getInstance();
         int day = now.get(Calendar.DAY_OF_MONTH);
         check.setOrderby(String.valueOf(day));
-        check.setCheckDate(DateUtils.StrToDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
+        check.setCheckDate(DateUtils.strToDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
 
         //判断当天是否已经签到过
         if (isExist(check)) {
@@ -121,7 +121,7 @@ public class CheckServiceImpl implements CheckService {
     @Transactional("db1TxManager")
     @Override
     public void reCheck(ReCheck recheck) {
-        Date date = DateUtils.StrToDate(recheck.getDate());
+        Date date = DateUtils.strToDate(recheck.getDate());
         //每天只能补签三次
         Check checkTmp = new Check();
         checkTmp.setUserId(recheck.getUserId());
@@ -188,8 +188,8 @@ public class CheckServiceImpl implements CheckService {
         int month = Integer.parseInt(timeArray[1]);
         int days = getDaysByYearMonth(year, month);
 
-        Date startDate = DateUtils.StrToDate(yearMonth + "-01");
-        Date endDate = DateUtils.StrToDate(year + "-" + (month + 1) + "-01");
+        Date startDate = DateUtils.strToDate(yearMonth + "-01");
+        Date endDate = DateUtils.strToDate(year + "-" + (month + 1) + "-01");
         CheckListParam checkListParam = new CheckListParam();
         checkListParam.setUserId(userId);
         checkListParam.setStartDate(startDate);
@@ -207,7 +207,7 @@ public class CheckServiceImpl implements CheckService {
             }
             for (int j = 0; j < checkList.size(); j++) {
                 Check check = checkList.get(j);
-                Date checkDate = DateUtils.StrToDate(yearMonth + "-" + iExtend);
+                Date checkDate = DateUtils.strToDate(yearMonth + "-" + iExtend);
                 checkListBO.setDate(checkDate);
                 if (check.getCheckDate().equals(checkDate)) {
                     checkListBO.setIsCheck(true);
@@ -283,7 +283,7 @@ public class CheckServiceImpl implements CheckService {
         Date date = calendar.getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = format.format(date);
-        Date checkDate = DateUtils.StrToDate(dateStr);
+        Date checkDate = DateUtils.strToDate(dateStr);
         check.setCheckDate(checkDate);
         return isExist(check);
     }
