@@ -64,6 +64,7 @@ public class EventApplyBbBo implements Serializable {
     private String status;
     private String userid;
 
+
     private List<EventApplyCentenBo> eventApplyCentenBo;
 
     public List<EventApplyCentenBo> getEventApplyCentenBo() {

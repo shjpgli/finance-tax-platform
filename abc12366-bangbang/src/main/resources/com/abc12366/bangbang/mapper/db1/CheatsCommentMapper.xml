@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.CheatsComment">
 		 INSERT INTO bb_cheats_comment
- 		(id,cheatsId,userId,commentUserId,commentTxt,status,createTime,lastUpdate,ip,factionId,likeNum,trampleNum,reportNum) 
+ 		(id,cheatsId,userId,classifyCode,commentUserId,commentTxt,status,createTime,lastUpdate,ip,factionId,likeNum,trampleNum,reportNum)
 		 VALUES 
- 		(#{id},#{cheatsId},#{userId},#{commentUserId},#{commentTxt},#{status},#{createTime},#{lastUpdate},#{ip},#{factionId},#{likeNum},#{trampleNum},#{reportNum}) 
+ 		(#{id},#{cheatsId},#{userId},#{classifyCode},#{commentUserId},#{commentTxt},#{status},#{createTime},#{lastUpdate},#{ip},#{factionId},#{likeNum},#{trampleNum},#{reportNum})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

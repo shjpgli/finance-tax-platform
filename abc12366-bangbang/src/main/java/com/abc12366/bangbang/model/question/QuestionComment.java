@@ -52,6 +52,9 @@ public class QuestionComment implements Serializable {
 	/**被举报数**int(11)**/
 	private Integer reportNum;
 
+    /**所属分类**varchar(64)**/
+    private String classifyCode;
+
 
 
 	public void setId(String id){
@@ -166,4 +169,11 @@ public class QuestionComment implements Serializable {
 		return this.reportNum;
 	}
 
+    public String getClassifyCode() {
+        return classifyCode;
+    }
+
+    public void setClassifyCode(String classifyCode) {
+        this.classifyCode = classifyCode;
+    }
 }

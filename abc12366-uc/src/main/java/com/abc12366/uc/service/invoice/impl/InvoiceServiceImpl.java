@@ -26,9 +26,9 @@ import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
 import com.abc12366.uc.service.IActivityService;
 import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.util.CharUtil;
-import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -106,9 +106,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     private IWxTemplateService templateService;
 
     @Autowired
-    private IDzfpService iDzfpService;
-
-    @Autowired
     private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
 
     @Autowired
@@ -119,6 +116,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private DzfpRoMapper dzfpRoMapper;
+
+    @Autowired
+    private DzfpMapper dzfpMapper;
 
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
@@ -250,19 +250,29 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         invoiceBO.setAmount(amount);
 
-        //查询地址信息
-        if (invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
-            UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
-            if (userAddress != null) {
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
-                invoiceBO.setConsignee(userAddress.getName());
-                invoiceBO.setContactNumber(userAddress.getPhone());
-                invoiceBO.setShippingAddress(address.toString());
+        //查询地址信息，纸质发票时才查询地址
+        if(invoiceBO.getProperty() != null && "1".equals(invoiceBO.getProperty())){
+            if (invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
+                UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
+                if (userAddress != null) {
+                    StringBuffer address = new StringBuffer();
+                    address.append(userAddress.getProvinceName() + "-");
+                    address.append(userAddress.getCityName() + "-");
+                    address.append(userAddress.getAreaName() + "-");
+                    address.append(userAddress.getDetail());
+                    invoiceBO.setConsignee(userAddress.getName());
+                    invoiceBO.setContactNumber(userAddress.getPhone());
+                    invoiceBO.setShippingAddress(address.toString());
+                }
             }
+        }
+        //发票抬头为个人时，去掉纳税人识别号等数据
+        if(invoiceBO.getName() != null && "1".equals(invoiceBO.getName())){
+            invoiceBO.setNsrsbh(null);
+            invoiceBO.setNsrmc(null);
+            invoiceBO.setAddress(null);
+            invoiceBO.setPhone(null);
+            invoiceBO.setBank(null);
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceBO, invoice);
@@ -475,7 +485,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceTemp.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.ORDER\\}",
+                String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.INVOICE\\}",
                         invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
                         expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -524,7 +534,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("发票号码或发票代码不存在：{}", invoiceDetail);
                 throw new ServiceException(4913, "发票号码或发票代码不存在");
             }
-            if (!"0".equals(invoiceDetail.getStatus())) {
+            if (!"3".equals(invoiceDetail.getStatus())) {
                 throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在<已签收>后才能被使用");
             }
             Invoice ce = new Invoice();
@@ -614,42 +624,49 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRoMapper.selectTodoListCount();
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager",rollbackFor = {ServiceException.class,SQLException.class})
     @Override
     public void invoiceCheck() {
         Einvocie einvocie = new Einvocie();
         einvocie.setTBSTATUS("0");
-        List<Einvocie> list = iDzfpService.selectList(einvocie);
-        List<Einvocie> dataList = new ArrayList<>();
+        List<Einvocie> list = dzfpRoMapper.selectList(einvocie);
         for(Einvocie data : list){
             //更新发票库存信息
             InvoiceDetail tail = new InvoiceDetail();
-            tail.setInvoiceNo(einvocie.getFP_HM());
-            tail.setInvoiceCode(einvocie.getFP_DM());
-            tail.setSpUrl(einvocie.getSP_URL());
-            tail.setPdfUrl(einvocie.getPDF_URL());
+            tail.setInvoiceNo(data.getFP_HM());
+            tail.setInvoiceCode(data.getFP_DM());
+            tail.setSpUrl(data.getSP_URL());
+            tail.setPdfUrl(data.getPDF_URL());
             //根据发票号码和发票代码查找发票详细信息表
             InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
             if (detail == null) {
-                LOGGER.info("发票号码为XXX的未找到库存，请入库再进行同步：{}", detail);
-                throw new ServiceException(4186,"发票号码为"+einvocie.getFP_HM()+"的未找到库存，请入库后再进行同步");
+                LOGGER.info("发票号码为XXX的未找到库存，请入库后再进行同步：{}", detail);
+                throw new ServiceException(4186,"发票号码为"+data.getFP_HM()+"的未找到库存，请入库后再进行同步");
             }
-            if (detail.getStatus() != null && "3".equals(detail.getStatus())) {
-                tail.setId(detail.getId());
-                tail.setLastUpdate(new Date());
-                tail.setStatus("2");
-                int dUpdate = invoiceDetailMapper.update(tail);
-                if (dUpdate != 1) {
-                    LOGGER.info("发票详情信息修改失败：{}", tail);
-                    throw new ServiceException(4187);
-                }
-            }else{
-                LOGGER.info("发票详情信息未签收，请去发票仓库签收：{}", tail);
-                throw new ServiceException(4964,"发票号码为： "+einvocie.getFP_HM()+"的未领用完成，请签收后再进行同步");
+            if (detail.getStatus() != null && !"3".equals(detail.getStatus())) {
+                LOGGER.info("发票详情信息未签收，请签收后再进行同步：{}", tail);
+                throw new ServiceException(4187,"发票号码为"+data.getFP_HM()+"的未领用完成，请签收后再进行同步");
             }
+
             //更新电子发票开票日志信息
             data.setTBSTATUS("1");
-            iDzfpService.update(data);
+
+            int dz = invoiceDetailMapper.updateDZFP(data);
+            if(dz != 1){
+                LOGGER.info("更新电子发票开票日志信息失败：{}", tail);
+                throw new ServiceException(4187,"更新电子发票开票日志信息失败");
+            }
+
+            tail.setId(detail.getId());
+            tail.setLastUpdate(new Date());
+            tail.setStatus("2");
+            int dUpdate = invoiceDetailMapper.update(tail);
+            if (dUpdate != 1) {
+                LOGGER.info("发票详情信息修改失败：{}", tail);
+                throw new ServiceException(4187);
+            }
+
+
         }
     }
 
@@ -760,8 +777,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             String fpqqlsh = id.substring(5, id.length());
             Einvocie einvocie = dzfpRoMapper.selectOne(fpqqlsh);
             if(einvocie == null){
-                List<InvoiceXm> invoiceXmList = new ArrayList<InvoiceXm>();
-                InvoiceXm invoiceXm = new InvoiceXm();
                 //发票信息填充
                 DzfpGetReq dzfpGetReq = new DzfpGetReq();
 
@@ -769,16 +784,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dzfpGetReq.setZsfs("0"); //
                 dzfpGetReq.setKplx("0"); //开票0，退票1
                 dzfpGetReq.setKpr(Utils.getAdminInfo().getNickname());
-                invoiceXm.setXmmc(invoiceBO.getContentDetail());
-                //商品编码
-                invoiceXm.setSpbm("1010105000000000000");
-                //价格
-                invoiceXm.setTotalAmt(invoiceBO.getAmount());
-                //数量
-                invoiceXm.setXmsl(Double.valueOf(1));
-                invoiceXm.setFphxz("0");
-                invoiceXm.setYhzcbs("0");
-                invoiceXmList.add(invoiceXm);
+
                 if ("1".equals(invoiceBO.getName())) {
                     dzfpGetReq.setGmf_mc("个人");
                 } else if ("2".equals(invoiceBO.getName())) {
@@ -786,15 +792,33 @@ public class InvoiceServiceImpl implements InvoiceService {
                     dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
                 }
                 dzfpGetReq.setGmf_dzyx(invoiceBO.getEmail());
+
+                List<InvoiceXm> invoiceXmList = new ArrayList<InvoiceXm>();
                 List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
                 StringBuffer buffer = new StringBuffer();
                 if(orderBOs != null && orderBOs.size() > 0){
                     for(OrderBO orderBO : orderBOs){
+                        InvoiceXm invoiceXm = new InvoiceXm();
+                        invoiceXm.setXmmc(invoiceBO.getContentDetail());
+                        //商品编码
+                        invoiceXm.setSpbm("1010105000000000000");
+                        //价格
+                        invoiceXm.setTotalAmt(orderBO.getTotalPrice());
+                        //数量
+                        invoiceXm.setXmsl(Double.valueOf(1));
+                        invoiceXm.setFphxz("0");
+                        invoiceXm.setYhzcbs("0");
+                        invoiceXmList.add(invoiceXm);
+
                         List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
                         if(productBOs != null && productBOs.size() > 0){
                             for (OrderProductBO pBO : productBOs){
-                                buffer.append(pBO.getName());
-                                buffer.append(",");
+                                if(pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())){
+                                    buffer.append("培训课程,");
+                                }else{
+                                    buffer.append(pBO.getName());
+                                    buffer.append(",");
+                                }
                             }
                         }
                     }
@@ -818,14 +842,18 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceCode = einvocie.getFP_DM();
             invoiceBO.setInvoiceNo(invoiceNo);
             invoiceBO.setInvoiceCode(invoiceCode);
-            //更新发票详情信息
-            updInvoiceDetail(einvocie);
+            //更新发票详情信息，更新成功就去修改开票日志表
+            if(updInvoiceDetail(einvocie,invoiceBO.getId())){
+                Einvocie temp = new Einvocie();
+                temp.setTBSTATUS("1");
+                temp.setFPQQLSH(fpqqlsh);
+                invoiceDetailMapper.updateDZFP(temp);
+            }
             invoice.setStatus("5");
             sendDzfpMessage(request, invoiceBO);
         } else {
             if (invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())) {
-                InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId
-                        ());
+                InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
                 if (invoiceDetail == null) {
                     LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
                     throw new ServiceException(4186);
@@ -893,13 +921,15 @@ public class InvoiceServiceImpl implements InvoiceService {
      * 更新发票详情信息
      *
      * @param einvocie
+     * @param id
      */
-    private boolean updInvoiceDetail(Einvocie einvocie) {
+    private boolean updInvoiceDetail(Einvocie einvocie, String id) {
         InvoiceDetail tail = new InvoiceDetail();
         tail.setInvoiceNo(einvocie.getFP_HM());
         tail.setInvoiceCode(einvocie.getFP_DM());
         tail.setSpUrl(einvocie.getSP_URL());
         tail.setPdfUrl(einvocie.getPDF_URL());
+        tail.setRemark(id);
         //根据发票号码和发票代码查找发票详细信息表
         InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
         if (detail != null && detail.getStatus() != null && "3".equals(detail.getStatus())) {

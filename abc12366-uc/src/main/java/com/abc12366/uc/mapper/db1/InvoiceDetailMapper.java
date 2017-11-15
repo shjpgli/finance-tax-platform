@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
+import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,4 +32,6 @@ public interface InvoiceDetailMapper {
     int update(InvoiceDetail record);
 
     int updateByRepoId(InvoiceDetail invoiceDetail);
+
+    int updateDZFP(Einvocie einvocie);
 }

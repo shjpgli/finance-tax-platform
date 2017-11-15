@@ -169,21 +169,21 @@ public class QueFactionServiceImpl implements QueFactionService {
             userLevel = userBo.getLevel();
         }
 
+        if(userLevel != null && userLevel.length() > 2){
+            String userLevel1 = userLevel.substring(2);
+            int userLevel2 = Integer.parseInt(userLevel1);
+            if(userLevel2 < 20){
+                //用户等级大于等于20级才能创建邦派
+                throw new ServiceException(6128);
+            }
+        }else{
+            throw new ServiceException(6122);
+        }
+
         if("VIP0".equals(vipLevel)){
             if(factionCnt>=2){
                 //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
                 throw new ServiceException(6126);
-            }else{
-                if(userLevel != null && userLevel.length() > 2){
-                    String userLevel1 = userLevel.substring(2);
-                    int userLevel2 = Integer.parseInt(userLevel1);
-                    if(userLevel2 < 22){
-                        //用户等级大于等于22级或者成为VIP会员才能创建邦派
-                        throw new ServiceException(6128);
-                    }
-                }else{
-                    throw new ServiceException(6122);
-                }
             }
         }else{
             if(factionCnt>=4){

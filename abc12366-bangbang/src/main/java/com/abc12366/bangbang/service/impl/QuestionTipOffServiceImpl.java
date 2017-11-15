@@ -1,5 +1,9 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.model.BaseObject;
+import com.abc12366.bangbang.model.Message;
+import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
+import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionTipOffRoMapper;
@@ -7,18 +11,22 @@ import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffStatus;
 import com.abc12366.bangbang.service.QuestionTipOffService;
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSON;
 import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  * @Author liuQi
@@ -48,6 +56,11 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
     @Autowired
     private CheatsCommentMapper cheatsCommentMapper;
 
+    @Autowired
+    private RestTemplateUtil restTemplateUtil;
+
+    @Autowired
+    private MessageSendUtil messageSendUtil;
 
     @Override
     public List<QuestionTipOffBo> selectList() {
@@ -85,6 +98,51 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
             }
         }
     }
+
+    @Transactional("db1TxManager")
+    @Override
+    public void changeStatusByAdmin(QuestionTipOff questionTipOff, HttpServletRequest request) {
+        changeStatus(questionTipOff);
+
+        QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(questionTipOff.getId());
+        Message message = new Message();
+        message.setType("2");
+        message.setUserId(record.getCreateUser());
+        message.setBusinessId(record.getId());
+        if(QuestionTipOffStatus.approved.name().equals(questionTipOff.getStatus())){
+            /*送积分奖励*/
+            Integer rewardsPoints = record.getRewardsPoints();
+            if(rewardsPoints != null && rewardsPoints > 0){
+                HashMap map = new HashMap<>();
+                List<AllocationPointAwardBO> list = new ArrayList<>();
+                AllocationPointAwardBO awardBO = new AllocationPointAwardBO();
+                awardBO.setPoint(rewardsPoints);
+                awardBO.setUserId(record.getCreateUser());
+                map.put("pointAwardBOList", list);
+                try {
+                    String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/uc/points/batch/award";
+                    String responseStr = restTemplateUtil.exchange(url, HttpMethod.POST, map, request);
+                    if (!StringUtils.isEmpty(responseStr)) {
+                        BaseObject response = JSON.parseObject(responseStr, BaseObject.class);
+                        if(!response.getCode().equals("2000")){
+                            throw new ServiceException(6143);
+                        }
+                    }
+                } catch (Exception e) {
+                    throw new ServiceException(6143);
+                }
+                message.setContent(new StringBuilder("您").append(DateUtils.dateToStr(record.getCreateTime())).append("举报的内容已被屏蔽！感谢您的参与，赠送").append(rewardsPoints).append("积分").toString());
+            }
+            message.setContent(new StringBuilder("您").append(DateUtils.dateToStr(record.getCreateTime())).append("举报的内容已被屏蔽！感谢您的参与").toString());
+        }
+        if(QuestionTipOffStatus.refuse.name().equals(questionTipOff.getStatus())){
+            message.setContent("很抱歉！您"+ DateUtils.dateToStr(record.getCreateTime())+"举报的内容已被拒绝，拒绝原因为："+record.getRefuseReason());
+        }
+        messageSendUtil.sendMessage(message, request);
+    }
+
+
+
 
     @Override
     public QuestionTipOffBo save(QuestionTipOffBo questionTipOffBo) {

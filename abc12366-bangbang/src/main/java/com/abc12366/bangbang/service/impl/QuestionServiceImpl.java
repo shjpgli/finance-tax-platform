@@ -2,11 +2,13 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionInviteMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionTagMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.bo.TopicRecommendParamBO;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionInvite;
+import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
@@ -40,6 +42,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     private QuestionRoMapper questionRoMapper;
+
+    @Autowired
+    private QuestionSysBlockMapper questionSysBlockMapper;
 
     @Autowired
     private QuestionTagMapper tagMapper;
@@ -264,14 +269,24 @@ public class QuestionServiceImpl implements QuestionService {
                 }
             }
 
-
-
-
             //保存问题信息
             String uuid = UUID.randomUUID().toString().replace("-", "");
             Question question = new Question();
             questionBo.setId(uuid);
             BeanUtils.copyProperties(questionBo, question);
+
+
+            if("1".equals(questionBo.getStatus())){
+                //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                QuestionSysBlock sysBlock = new QuestionSysBlock();
+                sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                sysBlock.setUserId(questionBo.getUserId());
+                sysBlock.setClassifyCode(questionBo.getClassifyCode());
+                sysBlock.setStatus("1");
+                sysBlock.setSourceId(questionBo.getId());
+                sysBlock.setSourceType("question");
+                questionSysBlockMapper.insert(sysBlock);
+            }
 
 
             List<QuestionTag> tagList = questionBo.getTagList();
@@ -406,6 +421,18 @@ public class QuestionServiceImpl implements QuestionService {
                         }
                     }
                 }
+            }
+
+            if("1".equals(questionBo.getStatus())){
+                //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                QuestionSysBlock sysBlock = new QuestionSysBlock();
+                sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                sysBlock.setUserId(questionBo.getUserId());
+                sysBlock.setClassifyCode(questionBo.getClassifyCode());
+                sysBlock.setStatus("1");
+                sysBlock.setSourceId(questionBo.getId());
+                sysBlock.setSourceType("question");
+                questionSysBlockMapper.insert(sysBlock);
             }
 
 

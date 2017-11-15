@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service;
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -20,6 +21,9 @@ public interface QuestionTipOffService {
 
     /* 审核 */
     void changeStatus(QuestionTipOff questionTipOff);
+
+    /* 后台审核 */
+    void changeStatusByAdmin(QuestionTipOff questionTipOff, HttpServletRequest request);
 
     QuestionTipOffBo save(QuestionTipOffBo questionTipOffBo);
 

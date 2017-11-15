@@ -27,6 +27,7 @@ import java.util.*;
 
 @Service
 public class LotteryActivityServiceImpl implements LotteryActivityService {
+    public static long timerL = 0;
     private static final Logger LOGGER = LoggerFactory.getLogger(LotteryActivityServiceImpl.class);
     @Autowired
     private LotteryActivityMapper lotteryActivityMapper;
@@ -234,12 +235,12 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
             throw new ServiceException(9999, "抽奖活动不存在，请查证");
         }
         if(!lotteryActivityBO.getStatus()){
-            throw new ServiceException(9999, "抽奖活动已停用");
+            throw new ServiceException(9999, "抽奖活动维护中");
         }
 
 
         if(!DateUtils.dateIn(lotteryActivityBO.getStartTime(),lotteryActivityBO.getEndTime(),new Date())){
-            throw new ServiceException(9999, "抽奖活动已过期");
+            throw new ServiceException(9999, "活动未开始或已结束!");
 
         }
 
@@ -287,8 +288,11 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
             remake = "活动当天库存不足";
         }else  if  (obj.getStock()<=0) {
             remake = "奖品总量不足";
+            if(obj.getLotteryName() != null)remake += ":" + obj.getLotteryName() ;
         }else if(userLotteryMaxDay !=null && userDayCountLuck >= userLotteryMaxDay){
             remake = "用户当天中奖上限";
+        }else if(System.currentTimeMillis()-timerL < 666){
+            remake = "未抽中2";
         }
         Integer addday = lotteryActivityBO.getGetlotteyDay();
         if (addday == null)addday = 0;
@@ -301,6 +305,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
 
         if ("".equals(remake) )
         {//假如这个值为空 说明抽中了
+            timerL = System.currentTimeMillis();//保存一个时间  在很短的时间内  不允许第二次中奖
             lotteryLogBO.setIsluck(1);
             try {
                 lotteryLogBO.setEndlqDate(DateUtils.addDays(new Date(),addday));

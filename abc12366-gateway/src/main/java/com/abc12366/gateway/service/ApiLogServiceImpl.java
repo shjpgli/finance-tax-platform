@@ -4,6 +4,7 @@ import com.abc12366.gateway.mapper.db1.ApiLogMapper;
 import com.abc12366.gateway.mapper.db2.ApiLogRoMapper;
 import com.abc12366.gateway.model.ApiLog;
 import com.abc12366.gateway.model.bo.TableBO;
+import com.abc12366.gateway.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,11 @@ public class ApiLogServiceImpl implements ApiLogService {
 
     @Override
     public int selectApiLogCount(ApiLog apiLog) {
+        // 查询之前判断表是否存在
+        TableBO tableBO = new TableBO();
+        tableBO.setYyyyMMdd(DateUtils.getDataString());
+        apiLogMapper.create(tableBO);
+
         return apiLogRoMapper.selectApiLogCount(apiLog);
     }
 

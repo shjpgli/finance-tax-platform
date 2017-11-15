@@ -113,6 +113,7 @@ public class DzfpClient {
     		Einvocie einvocie=(Einvocie) xmlToObject(ret[0].toString(),Einvocie.class);
     		if("0000".equals(einvocie.getReturnCode())){
     			einvocie.setSendStr(content);
+    			einvocie.setTBSTATUS("0");
     			dzfpService.insert(einvocie);
     		}
     	}

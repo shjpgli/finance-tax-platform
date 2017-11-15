@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -48,8 +49,8 @@ public class QuestionSysBlockController {
     * 修改状态 接口
     */
     @PutMapping(path = "/status/{id}/{status}")
-    public ResponseEntity modifyStatus(@PathVariable String id, @PathVariable String status) {
-        questionSysBlockService.changeStatus(id, status);
+    public ResponseEntity modifyStatus(@PathVariable String id, @PathVariable String status, HttpServletRequest request) {
+        questionSysBlockService.changeStatus(id, status, request);
         return ResponseEntity.ok(Utils.kv());
     }
 

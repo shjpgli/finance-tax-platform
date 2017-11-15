@@ -19,6 +19,7 @@ public class InvoiceBO implements Serializable {
 
 	private String id;
 	private String userId;
+	@Size(min = 2, max = 20)
 	private String username;
 	private String invoiceNo;
 	private String invoiceCode;
