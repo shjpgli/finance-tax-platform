@@ -2,9 +2,11 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CheatsMapper;
 import com.abc12366.bangbang.mapper.db1.CheatsTagMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.CheatsTag;
+import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.CheatsTagBo;
 import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
@@ -33,6 +35,9 @@ public class CheatsServiceImpl implements CheatsService {
 
     @Autowired
     private CheatsRoMapper cheatsRoMapper;
+
+    @Autowired
+    private QuestionSysBlockMapper questionSysBlockMapper;
 
     @Autowired
     private QuestionRoMapper questionRoMapper;
@@ -210,6 +215,19 @@ public class CheatsServiceImpl implements CheatsService {
             BeanUtils.copyProperties(cheatsBo, cheats);
 
 
+            if("1".equals(cheatsBo.getStatus())){
+                //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                QuestionSysBlock sysBlock = new QuestionSysBlock();
+                sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                sysBlock.setUserId(cheatsBo.getUserId());
+                sysBlock.setClassifyCode(cheatsBo.getClassifyCode());
+                sysBlock.setStatus("1");
+                sysBlock.setSourceId(cheatsBo.getId());
+                sysBlock.setSourceType("cheats");
+                questionSysBlockMapper.insert(sysBlock);
+            }
+
+
             List<CheatsTag> tagList = cheatsBo.getTagList();
 
             if(tagList != null){
@@ -323,6 +341,18 @@ public class CheatsServiceImpl implements CheatsService {
                         }
                     }
                 }
+            }
+
+            if("1".equals(cheatsBo.getStatus())){
+                //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                QuestionSysBlock sysBlock = new QuestionSysBlock();
+                sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                sysBlock.setUserId(cheatsBo.getUserId());
+                sysBlock.setClassifyCode(cheatsBo.getClassifyCode());
+                sysBlock.setStatus("1");
+                sysBlock.setSourceId(cheatsBo.getId());
+                sysBlock.setSourceType("cheats");
+                questionSysBlockMapper.insert(sysBlock);
             }
 
 

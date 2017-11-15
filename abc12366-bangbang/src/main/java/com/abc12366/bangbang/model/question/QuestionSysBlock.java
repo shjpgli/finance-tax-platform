@@ -16,6 +16,9 @@ public class QuestionSysBlock  {
 	/**内容状态**/
 	private String status;
 
+    /**所属分类**/
+    private String classifyCode;
+
 	/**来源id**/
 	private String sourceId;
 
@@ -98,4 +101,12 @@ public class QuestionSysBlock  {
 		this.status = status;
 		return this;
 	}
+
+    public String getClassifyCode() {
+        return classifyCode;
+    }
+
+    public void setClassifyCode(String classifyCode) {
+        this.classifyCode = classifyCode;
+    }
 }

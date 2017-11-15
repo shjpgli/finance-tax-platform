@@ -67,6 +67,9 @@ public class QuestionAnswer implements Serializable {
     /**是否已读**int(1)**/
     private Integer isRead;
 
+    /**所属分类**varchar(64)**/
+    private String classifyCode;
+
 
 
 	public void setId(String id){
@@ -219,5 +222,13 @@ public class QuestionAnswer implements Serializable {
 
     public void setIsRead(Integer isRead) {
         this.isRead = isRead;
+    }
+
+    public String getClassifyCode() {
+        return classifyCode;
+    }
+
+    public void setClassifyCode(String classifyCode) {
+        this.classifyCode = classifyCode;
     }
 }
