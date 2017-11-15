@@ -49,7 +49,7 @@ public class QuestionDisableUserServiceImpl implements QuestionDisableUserServic
         Message message = new Message();
         message.setUserId(record.getUserId());
         message.setContent(new StringBuilder("很抱歉！您已被禁言了,原因为：").append(record.getReason()).append("，下次生效时间为！").append(DateUtils.dateToStr(record.getActiveTime())).toString());
-        message.setType("1");
+        message.setType("2");
         message.setBusinessId(record.getUserId());
         messageSendUtil.sendMessage(message, request);
     }
@@ -61,7 +61,7 @@ public class QuestionDisableUserServiceImpl implements QuestionDisableUserServic
         Message message = new Message();
         message.setUserId(userId);
         message.setContent("恭喜你！您的禁言已被撤销");
-        message.setType("1");
+        message.setType("2");
         message.setBusinessId(userId);
         messageSendUtil.sendMessage(message, request);
     }

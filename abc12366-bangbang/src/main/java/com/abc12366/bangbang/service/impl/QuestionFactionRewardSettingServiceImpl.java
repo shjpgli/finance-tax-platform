@@ -58,7 +58,7 @@ public class QuestionFactionRewardSettingServiceImpl implements QuestionFactionR
         Message message = new Message();
         message.setUserId(leader.getUserId());
         message.setContent("恭喜您！系统给您的帮派分配了"+record.getRewardsPoints()+"积分！");
-        message.setType("1");
+        message.setType("2");
         message.setBusinessId(record.getId());
         messageSendUtil.sendMessage(message, request);
     }

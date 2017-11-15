@@ -106,7 +106,7 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
 
         QuestionTipOff record = questionTipOffRoMapper.selectByPrimaryKey(questionTipOff.getId());
         Message message = new Message();
-        message.setType("1");
+        message.setType("2");
         message.setUserId(record.getCreateUser());
         message.setBusinessId(record.getId());
         if(QuestionTipOffStatus.approved.name().equals(questionTipOff.getStatus())){

@@ -91,7 +91,7 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         if("refuse".equals(record.getStatus())){
             message.setContent("很抱歉！您的掌门人审核未通过！拒绝理由为："+ record.getRemark());
         }
-        message.setType("1");
+        message.setType("2");
         message.setBusinessId(headmanBo.getId());
         messageSendUtil.sendMessage(message, request);
     }
