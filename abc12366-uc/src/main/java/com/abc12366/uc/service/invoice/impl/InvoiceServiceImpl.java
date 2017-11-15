@@ -777,8 +777,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             String fpqqlsh = id.substring(5, id.length());
             Einvocie einvocie = dzfpRoMapper.selectOne(fpqqlsh);
             if(einvocie == null){
-                List<InvoiceXm> invoiceXmList = new ArrayList<InvoiceXm>();
-                InvoiceXm invoiceXm = new InvoiceXm();
                 //发票信息填充
                 DzfpGetReq dzfpGetReq = new DzfpGetReq();
 
@@ -786,16 +784,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dzfpGetReq.setZsfs("0"); //
                 dzfpGetReq.setKplx("0"); //开票0，退票1
                 dzfpGetReq.setKpr(Utils.getAdminInfo().getNickname());
-                invoiceXm.setXmmc(invoiceBO.getContentDetail());
-                //商品编码
-                invoiceXm.setSpbm("1010105000000000000");
-                //价格
-                invoiceXm.setTotalAmt(invoiceBO.getAmount());
-                //数量
-                invoiceXm.setXmsl(Double.valueOf(1));
-                invoiceXm.setFphxz("0");
-                invoiceXm.setYhzcbs("0");
-                invoiceXmList.add(invoiceXm);
+
                 if ("1".equals(invoiceBO.getName())) {
                     dzfpGetReq.setGmf_mc("个人");
                 } else if ("2".equals(invoiceBO.getName())) {
@@ -803,10 +792,24 @@ public class InvoiceServiceImpl implements InvoiceService {
                     dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
                 }
                 dzfpGetReq.setGmf_dzyx(invoiceBO.getEmail());
+
+                List<InvoiceXm> invoiceXmList = new ArrayList<InvoiceXm>();
                 List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
                 StringBuffer buffer = new StringBuffer();
                 if(orderBOs != null && orderBOs.size() > 0){
                     for(OrderBO orderBO : orderBOs){
+                        InvoiceXm invoiceXm = new InvoiceXm();
+                        invoiceXm.setXmmc(invoiceBO.getContentDetail());
+                        //商品编码
+                        invoiceXm.setSpbm("1010105000000000000");
+                        //价格
+                        invoiceXm.setTotalAmt(orderBO.getTotalPrice());
+                        //数量
+                        invoiceXm.setXmsl(Double.valueOf(1));
+                        invoiceXm.setFphxz("0");
+                        invoiceXm.setYhzcbs("0");
+                        invoiceXmList.add(invoiceXm);
+
                         List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
                         if(productBOs != null && productBOs.size() > 0){
                             for (OrderProductBO pBO : productBOs){
