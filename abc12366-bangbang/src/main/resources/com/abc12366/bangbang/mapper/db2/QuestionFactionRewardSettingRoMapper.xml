@@ -35,7 +35,7 @@
                     </choose>
                   ORDER BY honorTime DESC, honor DESC)
             t
-            LEFT JOIN bb_question_faction t1 ON t.factionId = t1.factionId
+            JOIN bb_question_faction t1 ON t.factionId = t1.factionId
             LEFT JOIN bb_question_faction_reward_setting t_log ON t_log.factionId = t.factionId AND t_log.date = t.date
         )
         temp

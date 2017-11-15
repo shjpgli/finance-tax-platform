@@ -80,5 +80,10 @@ public interface QuestionFactionMemberRoMapper {
      **/
     int selectClassifyCnt(Map<String, Object> map);
 
-
+    /**
+     *
+     * 查询帮主
+     *
+     **/
+    QuestionFactionMember selectFactionLeader(@Param("factionId") String factionId);
 }
