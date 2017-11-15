@@ -28,6 +28,9 @@ public class Cheats implements Serializable {
 	/**秘籍状态(0正常，1待审查，2拉黑)**varchar(20)**/
 	private String status;
 
+    /**图片**varchar(300)**/
+    private String cheatsImage;
+
 	/**创建时间**datetime**/
 	private java.util.Date createTime;
 
@@ -230,5 +233,13 @@ public class Cheats implements Serializable {
 
     public void setTrampleNum(Integer trampleNum) {
         this.trampleNum = trampleNum;
+    }
+
+    public String getCheatsImage() {
+        return cheatsImage;
+    }
+
+    public void setCheatsImage(String cheatsImage) {
+        this.cheatsImage = cheatsImage;
     }
 }
