@@ -177,7 +177,7 @@ public class ReportDateJob implements Job {
 							.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
 							()));
                     
-                    msgSendService.sendMsg(user, sysMsg, "tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList, vdxMsg);
+                    msgSendService.sendMsg(user, sysMsg, "","tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList, vdxMsg);
                 }
 
                 //2.申报期信息发送
@@ -197,7 +197,7 @@ public class ReportDateJob implements Job {
                 
                 String vdxMsg = RemindConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
                 
-                msgSendService.sendMsg(user, sysMsg, "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, vdxMsg);
+                msgSendService.sendMsg(user, sysMsg, "", "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, vdxMsg);
             }
             return 1;
         }
