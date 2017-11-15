@@ -2,9 +2,11 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
+import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.service.QueAnswerService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
@@ -37,6 +39,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionSysBlockMapper questionSysBlockMapper;
 
     @Autowired
     private QuestionRoMapper questionRoMapper;
@@ -158,6 +163,18 @@ public class QueAnswerServiceImpl implements QueAnswerService {
                     boolean bl = answerTxt.contains(word);
                     if(bl){
                         answerBo.setStatus("1");
+
+                        //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                        QuestionSysBlock sysBlock = new QuestionSysBlock();
+                        sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                        sysBlock.setUserId(answerBo.getUserId());
+                        sysBlock.setClassifyCode(classifyCode);
+                        sysBlock.setStatus("1");
+                        sysBlock.setSourceId(answerBo.getId());
+                        sysBlock.setSourceType("answer");
+                        questionSysBlockMapper.insert(sysBlock);
+
+
                         break;
                     }
                 }
@@ -174,6 +191,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             questionMapper.updateByPrimaryKeySelective(question);
             answerBo.setAnswerNum(answerNum);
 
+            answer.setClassifyCode(classifyCode);
             answerMapper.insert(answer);
 
 
@@ -243,6 +261,17 @@ public class QueAnswerServiceImpl implements QueAnswerService {
                     boolean bl = answerTxt.contains(word);
                     if(bl){
                         answerBo.setStatus("1");
+                        String classifyCode = questionRoMapper.selectclassifyCode(answerBo.getQuestionId());
+                        //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                        QuestionSysBlock sysBlock = new QuestionSysBlock();
+                        sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                        sysBlock.setUserId(answerBo.getUserId());
+                        sysBlock.setClassifyCode(classifyCode);
+                        sysBlock.setStatus("1");
+                        sysBlock.setSourceId(answerBo.getId());
+                        sysBlock.setSourceType("answer");
+                        questionSysBlockMapper.insert(sysBlock);
+
                         break;
                     }
                 }

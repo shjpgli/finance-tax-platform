@@ -2,9 +2,11 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CheatsCommentMapper;
 import com.abc12366.bangbang.mapper.db1.CheatsMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.CheatsComment;
+import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.CheatsCommentBo;
 import com.abc12366.bangbang.service.CheatsCommentService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
@@ -31,6 +33,9 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
 
     @Autowired
     private CheatsCommentRoMapper commentRoMapper;
+
+    @Autowired
+    private QuestionSysBlockMapper questionSysBlockMapper;
 
     @Autowired
     private CheatsMapper cheatsMapper;
@@ -114,6 +119,12 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             commentBo.setReportNum(0);
             commentBo.setStatus("0");
 
+            //保存问题评论信息
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            CheatsComment comment = new CheatsComment();
+            commentBo.setId(uuid);
+
+
             //敏感词校验
             String commentTxt = commentBo.getCommentTxt();
             List<String> wordList = sensitiveWordsRoMapper.selectListWords();
@@ -122,16 +133,21 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
                     boolean bl = commentTxt.contains(word);
                     if(bl){
                         commentBo.setStatus("1");
+
+                        //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                        QuestionSysBlock sysBlock = new QuestionSysBlock();
+                        sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                        sysBlock.setUserId(commentBo.getUserId());
+                        sysBlock.setClassifyCode(classifyCode);
+                        sysBlock.setStatus("1");
+                        sysBlock.setSourceId(commentBo.getId());
+                        sysBlock.setSourceType("cheats_comment");
+                        questionSysBlockMapper.insert(sysBlock);
+
                         break;
                     }
                 }
             }
-
-            //保存问题评论信息
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            CheatsComment comment = new CheatsComment();
-            commentBo.setId(uuid);
-            BeanUtils.copyProperties(commentBo, comment);
 
             int commentNum = commentRoMapper.selectCommentCnt(commentBo.getCheatsId());
             Cheats cheats = new Cheats();
@@ -140,6 +156,10 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             cheatsMapper.updateByPrimaryKeySelective(cheats);
 
             commentBo.setCommentNum(commentNum);
+
+            comment.setClassifyCode(classifyCode);
+
+            BeanUtils.copyProperties(commentBo, comment);
 
             commentMapper.insert(comment);
 
@@ -190,6 +210,8 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
             throw new ServiceException(6373);
         }
 
+        String classifyCode = cheatsRoMapper.selectclassifyCode(commentBo.getCheatsId());
+
         //更新秘籍评论信息
         CheatsComment comment = new CheatsComment();
         try {
@@ -206,6 +228,17 @@ public class CheatsCommentServiceImpl implements CheatsCommentService {
                     boolean bl = commentTxt.contains(word);
                     if(bl){
                         commentBo.setStatus("1");
+
+                        //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                        QuestionSysBlock sysBlock = new QuestionSysBlock();
+                        sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                        sysBlock.setUserId(commentBo.getUserId());
+                        sysBlock.setClassifyCode(classifyCode);
+                        sysBlock.setStatus("1");
+                        sysBlock.setSourceId(commentBo.getId());
+                        sysBlock.setSourceType("cheats_comment");
+                        questionSysBlockMapper.insert(sysBlock);
+
                         break;
                     }
                 }

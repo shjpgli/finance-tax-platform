@@ -149,7 +149,7 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         if (newExp >= Integer.parseInt(myExperienceBO.getNextLevelExp())) {
             //如果积分规则为空则返回
             PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_EXP_UP_CODE);
-            if (pointsRuleBO == null || pointsRuleBO.getPoints() > 0) {
+            if (pointsRuleBO == null) {
                 return;
             }
 

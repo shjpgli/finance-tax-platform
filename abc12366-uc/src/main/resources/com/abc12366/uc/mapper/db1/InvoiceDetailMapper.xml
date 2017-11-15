@@ -145,5 +145,12 @@
         WHERE invoiceRepoId = #{invoiceRepoId}
     </update>
 
+    <update id="updateDZFP" parameterType="com.abc12366.uc.model.dzfp.Einvocie">
+        update uc_einvocie
+        <set>
+            <if test="TBSTATUS != null">TBSTATUS = #{TBSTATUS}</if>
+        </set>
+        where FPQQLSH=#{FPQQLSH}
+    </update>
 
 </mapper>

@@ -93,7 +93,7 @@ public class UserBindServiceImpl implements UserBindService {
 
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
-        bindLimit(userId);
+        //bindLimit(userId);
 
         //查看是否重复绑定
         UserDzsb queryParam = new UserDzsb();
@@ -403,7 +403,7 @@ public class UserBindServiceImpl implements UserBindService {
 
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
-        bindLimit(userId);
+        //bindLimit(userId);
 
         userHngsInsertBO.setUserId(Utils.getUserId(request));
         //查看是否重复绑定
@@ -617,7 +617,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     private void analyzeXmlTY12(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
 
@@ -656,7 +656,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {
@@ -727,7 +727,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {
@@ -828,7 +828,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     private void analyzeXmlTY03(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {
