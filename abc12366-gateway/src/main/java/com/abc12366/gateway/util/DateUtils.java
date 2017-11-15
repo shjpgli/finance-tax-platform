@@ -467,4 +467,25 @@ public class DateUtils {
         date = calendar.getTime();
         return date;
     }
+    /**
+     *给日期 加上 " 23:59:59";
+     */
+    public static Date put23h23m59s(String endTime){
+        if(endTime == null)return null;
+        if(endTime != null && !endTime.isEmpty())     {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date eTime = sdf.parse(endTime);
+                endTime = sdf.format(eTime) + " 23:59:59";
+                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                eTime = sdf2.parse(endTime);
+                return eTime;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return null;
+    }
+
 }

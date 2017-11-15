@@ -234,12 +234,12 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
             throw new ServiceException(9999, "抽奖活动不存在，请查证");
         }
         if(!lotteryActivityBO.getStatus()){
-            throw new ServiceException(9999, "抽奖活动已停用");
+            throw new ServiceException(9999, "抽奖活动维护中");
         }
 
 
         if(!DateUtils.dateIn(lotteryActivityBO.getStartTime(),lotteryActivityBO.getEndTime(),new Date())){
-            throw new ServiceException(9999, "抽奖活动已过期");
+            throw new ServiceException(9999, "活动未开始或已结束!");
 
         }
 
