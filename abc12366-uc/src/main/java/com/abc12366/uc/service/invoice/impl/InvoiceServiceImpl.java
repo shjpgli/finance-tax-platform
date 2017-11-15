@@ -26,9 +26,9 @@ import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
 import com.abc12366.uc.service.IActivityService;
 import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.util.CharUtil;
-import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -106,9 +106,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     private IWxTemplateService templateService;
 
     @Autowired
-    private IDzfpService iDzfpService;
-
-    @Autowired
     private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
 
     @Autowired
@@ -119,6 +116,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private DzfpRoMapper dzfpRoMapper;
+
+    @Autowired
+    private DzfpMapper dzfpMapper;
 
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
@@ -475,7 +475,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceTemp.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.ORDER\\}",
+                String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.INVOICE\\}",
                         invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
                         expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -614,12 +614,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRoMapper.selectTodoListCount();
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager",rollbackFor = {ServiceException.class,SQLException.class})
     @Override
     public void invoiceCheck() {
         Einvocie einvocie = new Einvocie();
         einvocie.setTBSTATUS("0");
-        List<Einvocie> list = iDzfpService.selectList(einvocie);
+        List<Einvocie> list = dzfpRoMapper.selectList(einvocie);
         for(Einvocie data : list){
             //更新发票库存信息
             InvoiceDetail tail = new InvoiceDetail();
@@ -633,22 +633,30 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.info("发票号码为XXX的未找到库存，请入库后再进行同步：{}", detail);
                 throw new ServiceException(4186,"发票号码为"+data.getFP_HM()+"的未找到库存，请入库后再进行同步");
             }
-            if (detail.getStatus() != null && "3".equals(detail.getStatus())) {
-                tail.setId(detail.getId());
-                tail.setLastUpdate(new Date());
-                tail.setStatus("2");
-                int dUpdate = invoiceDetailMapper.update(tail);
-                if (dUpdate != 1) {
-                    LOGGER.info("发票详情信息修改失败：{}", tail);
-                    throw new ServiceException(4187);
-                }
-            }else{
+            if (detail.getStatus() != null && !"3".equals(detail.getStatus())) {
                 LOGGER.info("发票详情信息未签收，请签收后再进行同步：{}", tail);
-                throw new ServiceException(4964,"发票号码为"+data.getFP_HM()+"的未领用完成，请签收后再进行同步");
+                throw new ServiceException(4187,"发票号码为"+data.getFP_HM()+"的未领用完成，请签收后再进行同步");
             }
+
             //更新电子发票开票日志信息
             data.setTBSTATUS("1");
-            iDzfpService.update(data);
+
+            int dz = invoiceDetailMapper.updateDZFP(data);
+            if(dz != 1){
+                LOGGER.info("更新电子发票开票日志信息失败：{}", tail);
+                throw new ServiceException(4187,"更新电子发票开票日志信息失败");
+            }
+
+            tail.setId(detail.getId());
+            tail.setLastUpdate(new Date());
+            tail.setStatus("2");
+            int dUpdate = invoiceDetailMapper.update(tail);
+            if (dUpdate != 1) {
+                LOGGER.info("发票详情信息修改失败：{}", tail);
+                throw new ServiceException(4187);
+            }
+
+
         }
     }
 
