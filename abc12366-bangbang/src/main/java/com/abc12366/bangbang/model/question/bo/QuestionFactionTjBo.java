@@ -72,6 +72,12 @@ public class QuestionFactionTjBo implements Serializable {
 	/**邦派等级**varchar(64)**/
 	private String factionGrade;
 
+    /**邦派等级名称**/
+    private String factionGradeName;
+
+    /**邦派等级图片**/
+    private String factionGradeImage;
+
     private List<QuestionFactionTag> tagList;
 
     private List<QuestionFactionClassify> classifyList;
@@ -363,5 +369,21 @@ public class QuestionFactionTjBo implements Serializable {
 
     public void setNickname2(String nickname2) {
         this.nickname2 = nickname2;
+    }
+
+    public String getFactionGradeName() {
+        return factionGradeName;
+    }
+
+    public void setFactionGradeName(String factionGradeName) {
+        this.factionGradeName = factionGradeName;
+    }
+
+    public String getFactionGradeImage() {
+        return factionGradeImage;
+    }
+
+    public void setFactionGradeImage(String factionGradeImage) {
+        this.factionGradeImage = factionGradeImage;
     }
 }
