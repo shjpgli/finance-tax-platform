@@ -3,11 +3,11 @@ package com.abc12366.uc.wsbssoa.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
 import com.abc12366.uc.wsbssoa.response.RSAPkResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.RSAUtil;
-import com.abc12366.uc.wsbssoa.utils.soaUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +94,7 @@ public class MainServiceImpl implements MainService {
         String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+ Base64.getEncoder().encodeToString(api.getBytes());
         HttpEntity requestEntity = new HttpEntity(null, headers);
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+        if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
             RSAPkResponse obj = JSON.parseObject(String.valueOf(responseEntity.getBody()), RSAPkResponse.class);
             return obj;
         } else {

@@ -2,10 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.TaskConstant;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.*;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
@@ -28,7 +25,6 @@ import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.MD5;
 import com.abc12366.uc.wsbssoa.utils.RSAUtil;
-import com.abc12366.uc.wsbssoa.utils.soaUtil;
 import com.alibaba.fastjson.JSON;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
@@ -263,7 +259,7 @@ public class UserBindServiceImpl implements UserBindService {
 
         HttpEntity requestEntity = new HttpEntity(requestBody, headers);
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+        if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
             HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
             if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
                 List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
@@ -346,7 +342,7 @@ public class UserBindServiceImpl implements UserBindService {
             String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+Base64.getEncoder().encodeToString(api.getBytes());
             HttpEntity requestEntity = new HttpEntity(null, headers);
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-            if (soaUtil.isExchangeSuccessful(responseEntity)) {
+            if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
                 DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
                 if (!StringUtils.isEmpty(dzsjSmrzBO.getSmrzbz())&&dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
                     LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
