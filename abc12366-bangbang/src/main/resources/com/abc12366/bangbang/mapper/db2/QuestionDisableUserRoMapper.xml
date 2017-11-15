@@ -18,16 +18,23 @@
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionDisableUserBo">
-        SELECT
-         tb.userid,t_user.nickname as username,
-        (SELECT COUNT(1) FROM bb_question WHERE userId = tb.userId AND STATUS ='2') questionDisableCnt,
-        (SELECT COUNT(1) FROM bb_question_answer WHERE userId = tb.userId AND STATUS = '2'AND parentId ='') answerDisableCnt,
-        (SELECT COUNT(1) FROM bb_question_answer WHERE userId = tb.userId AND STATUS = '2'AND parentId !='')  commentDisableCnt ,
-        IF(t_disable_user.userId IS NULL, FALSE, TRUE) isDisable
-        FROM
-        (SELECT DISTINCT(userId) FROM bb_question UNION SELECT DISTINCT(userId) FROM bb_question_answer) AS tb
-        JOIN abc12366_uc.uc_user t_user ON t_user.id = tb.userId
-        LEFT JOIN bb_question_disable_user t_disable_user ON tb.userId= t_disable_user.userId AND t_disable_user.activeTime > NOW()
+        SELECT * FROM (
+           SELECT tb.userid,t_user.nickname AS username,
+            (
+            (SELECT COUNT(1) FROM bb_question WHERE userId = tb.userId AND (STATUS ='2' OR STATUS = '3')) + (SELECT COUNT(1) FROM bb_cheats WHERE userId= tb.userId AND (STATUS ='2' OR STATUS = '3'))
+            )questionDisableCnt,
+            (SELECT COUNT(1) FROM bb_question_answer WHERE userId = tb.userId AND (STATUS ='2' OR STATUS = '3') ) answerDisableCnt,
+            (
+            (SELECT COUNT(1) FROM bb_question_comment WHERE userId = tb.userId AND (STATUS ='2' OR STATUS = '3'))  +  (SELECT COUNT(1) FROM bb_cheats_comment WHERE userId = tb.userId AND (STATUS ='2' OR STATUS = '3'))
+            )commentDisableCnt ,
+            IF(t_disable_user.userId IS NULL, FALSE, TRUE) isDisable
+            FROM
+            (SELECT DISTINCT(userId) FROM bb_question UNION SELECT DISTINCT(userId) FROM bb_question_answer) AS tb
+              JOIN abc12366_uc.uc_user t_user ON t_user.id = tb.userId
+              LEFT JOIN bb_question_disable_user t_disable_user ON tb.userId= t_disable_user.userId AND t_disable_user.activeTime > NOW()
+        ) temp
+        WHERE
+        questionDisableCnt>0  OR answerDisableCnt>0 OR commentDisableCnt>0
     </select>
 
     <!-- 查询（根据主键ID查询） -->
