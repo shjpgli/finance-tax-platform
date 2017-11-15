@@ -41,7 +41,7 @@ public class OrderSubmitBO implements Serializable {
      * 用户名
      **/
     @NotEmpty
-    @Size(min = 2, max = 32)
+    @Size(min = 2, max = 20)
     private String username;
 
     /**
