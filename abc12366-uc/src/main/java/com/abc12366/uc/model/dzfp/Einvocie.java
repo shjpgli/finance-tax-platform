@@ -23,7 +23,7 @@ public class Einvocie implements Serializable{
     private String KPRQ;//开票日期
     private String PDF_URL;//pdf下载地址
     private String SP_URL;//收票地址
-    private String TBSTATUS="0";//同步状态 0：未同步
+    private String TBSTATUS;//同步状态 0：未同步
     private String sendStr;//请求内容
     
 	public String getReturnCode() {
