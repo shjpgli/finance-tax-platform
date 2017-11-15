@@ -89,7 +89,7 @@ public class LotteryActivityController {
      * @return
      */
     @GetMapping(path = "/luckdraw")
-    public ResponseEntity luckDraw(@RequestParam(required = true) String userId,@RequestParam(required = true) String activityId,@RequestParam(required = true) String ip) {
+    public ResponseEntity luckDraw(@RequestParam(required = false) String userId,@RequestParam(required = false) String activityId,@RequestParam(required = false) String ip) {
         LotteryLogBO returnObj =lotteryActivityService.luckDraw(userId,activityId,ip);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }

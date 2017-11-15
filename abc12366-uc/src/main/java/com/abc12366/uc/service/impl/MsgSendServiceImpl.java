@@ -113,7 +113,7 @@ public class MsgSendServiceImpl implements IMsgSendService {
     }
 
     @Override
-    public void sendMsg(User user, String sysMsg, String templateid, Map<String, String> dataList, String dxmsg) {
+    public void sendMsg(User user, String sysMsg,String skipUrl, String templateid, Map<String, String> dataList, String dxmsg) {
 
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
         obj.setLevelId(user.getVipLevel());
