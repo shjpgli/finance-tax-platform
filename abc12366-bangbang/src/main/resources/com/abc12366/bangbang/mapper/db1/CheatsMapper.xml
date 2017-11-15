@@ -12,9 +12,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.Cheats">
 		 INSERT INTO bb_cheats
- 		(id,userId,title,describ,detail,status,createTime,lastUpdate,classifyCode,browseNum,likeNum,trampleNum,isRecommend,recommendTime,tag,ip,factionId,commentNum,collectNum,reportNum)
+ 		(id,userId,title,describ,detail,status,cheatsImage,createTime,lastUpdate,classifyCode,browseNum,likeNum,trampleNum,isRecommend,recommendTime,tag,ip,factionId,commentNum,collectNum,reportNum)
 		 VALUES 
- 		(#{id},#{userId},#{title},#{describ},#{detail},#{status},#{createTime},#{lastUpdate},#{classifyCode},#{browseNum},#{likeNum},#{trampleNum},#{isRecommend},#{recommendTime},#{tag},#{ip},#{factionId},#{commentNum},#{collectNum},#{reportNum})
+ 		(#{id},#{userId},#{title},#{describ},#{detail},#{status},#{cheatsImage},#{createTime},#{lastUpdate},#{classifyCode},#{browseNum},#{likeNum},#{trampleNum},#{isRecommend},#{recommendTime},#{tag},#{ip},#{factionId},#{commentNum},#{collectNum},#{reportNum})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->
@@ -166,6 +166,9 @@
 			<if test="status != null">
 				 status = #{status},
 			</if>
+             <if test="cheatsImage != null">
+                 cheatsImage = #{cheatsImage},
+             </if>
 			<if test="createTime != null">
 				 createTime = #{createTime},
 			</if>
