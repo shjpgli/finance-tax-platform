@@ -135,6 +135,7 @@ public class MsgSendServiceImpl implements IMsgSendService {
                 message.setBusiType(MessageConstant.XTTX);
                 message.setType(MessageConstant.SYS_MESSAGE);
                 message.setContent(sysMsg);
+                message.setUrl(skipUrl);
                 message.setUserId(user.getId());
                 messageSendUtil.sendMessage(message, accessToken);
             }
