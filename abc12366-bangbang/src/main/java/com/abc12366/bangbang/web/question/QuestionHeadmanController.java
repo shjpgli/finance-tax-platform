@@ -46,8 +46,8 @@ public class QuestionHeadmanController {
 
     /* 掌门人 审核 */
     @PutMapping(path = "/modifyStatus")
-    public ResponseEntity modifyStatus(@RequestBody QuestionHeadmanBo headmanBo) {
-        questionHeadmanService.modify(headmanBo);
+    public ResponseEntity modifyStatus(@RequestBody QuestionHeadman headman) {
+        questionHeadmanService.changeStatus(headman);
         return ResponseEntity.ok(Utils.kv());
     }
 
