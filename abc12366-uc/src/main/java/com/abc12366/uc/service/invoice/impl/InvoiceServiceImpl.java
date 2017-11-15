@@ -250,20 +250,22 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
         invoiceBO.setAmount(amount);
 
-        //查询地址信息
-        /*if (invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
-            UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
-            if (userAddress != null) {
-                StringBuffer address = new StringBuffer();
-                address.append(userAddress.getProvinceName() + "-");
-                address.append(userAddress.getCityName() + "-");
-                address.append(userAddress.getAreaName() + "-");
-                address.append(userAddress.getDetail());
-                invoiceBO.setConsignee(userAddress.getName());
-                invoiceBO.setContactNumber(userAddress.getPhone());
-                invoiceBO.setShippingAddress(address.toString());
+        //查询地址信息，纸质发票时才查询地址
+        if(invoiceBO.getProperty() != null && "1".equals(invoiceBO.getProperty())){
+            if (invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
+                UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
+                if (userAddress != null) {
+                    StringBuffer address = new StringBuffer();
+                    address.append(userAddress.getProvinceName() + "-");
+                    address.append(userAddress.getCityName() + "-");
+                    address.append(userAddress.getAreaName() + "-");
+                    address.append(userAddress.getDetail());
+                    invoiceBO.setConsignee(userAddress.getName());
+                    invoiceBO.setContactNumber(userAddress.getPhone());
+                    invoiceBO.setShippingAddress(address.toString());
+                }
             }
-        }*/
+        }
         //发票抬头为个人时，去掉纳税人识别号等数据
         if(invoiceBO.getName() != null && "1".equals(invoiceBO.getName())){
             invoiceBO.setNsrsbh(null);
