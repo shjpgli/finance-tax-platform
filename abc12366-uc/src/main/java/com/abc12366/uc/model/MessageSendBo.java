@@ -1,6 +1,7 @@
 package com.abc12366.uc.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +16,8 @@ public class MessageSendBo implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String userId;//用户ID
+		
+	private List<String> userIds;//批量用户ID
 	
 	private String busiType;//业务类型
 	
@@ -82,6 +85,14 @@ public class MessageSendBo implements Serializable{
 
 	public void setBusinessId(String businessId) {
 		this.businessId = businessId;
+	}
+
+	public List<String> getUserIds() {
+		return userIds;
+	}
+
+	public void setUserIds(List<String> userIds) {
+		this.userIds = userIds;
 	}
 	
 	

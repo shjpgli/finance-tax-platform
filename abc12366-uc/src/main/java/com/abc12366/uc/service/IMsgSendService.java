@@ -31,4 +31,12 @@ public interface IMsgSendService {
 	 */
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity sendMsgByQq(MessageSendBo messageSendBo);
+
+	/**
+	 * 前段批量发送消息
+	 * @param sendBo 消息实体
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity sendByQdbatch(MessageSendBo sendBo);
 }
