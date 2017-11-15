@@ -56,7 +56,9 @@
     <!-- 查询我管理的邦派信息包括统计 -->
     <select id="selectFactionTj" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo" parameterType="java.lang.String">
         SELECT
-          factionId,	factionName,	factionImg,	classifyCode,	tag,awardPoint,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
+          factionId,	factionName,	factionImg,	classifyCode,	tag,awardPoint,	minGrade,	intro,	auto,
+          inviteLink,	f.createTime,	f.updateTime,	userId,	state,	announcement,	f.peopleLimit,	factionGrade,
+          l.name factionGradeName,l.image factionGradeImage,
           (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = '1') nickname,
 
         (SELECT u.nickname FROM bb_question_faction_member m left join bb_user u on m.userId = u.id where factionId = f.factionId and duty = '2' limit 1) nickname2,
@@ -83,8 +85,8 @@
         (SELECT count(id) FROM bb_question_answer where status = '0' and isAccept = '1' and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = f.factionId) and factionId = f.factionId) adoptNum
 
 
-        FROM bb_question_faction f
-        WHERE factionId = #{factionId}
+        FROM bb_question_faction f left join bb_question_faction_level l on f.factionGrade = l.code
+        WHERE f.factionId = #{factionId}
     </select>
 
 
