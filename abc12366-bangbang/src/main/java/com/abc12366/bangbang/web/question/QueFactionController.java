@@ -85,8 +85,10 @@ public class QueFactionController {
      */
     @GetMapping(path = "/selectListExcellent")
     public ResponseEntity selectListExcellent(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                              @RequestParam(value = "classifyCode", required = false) String classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("classifyCode", classifyCode);//
 //        queFactionService.autoCalculateFactionHonor();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionListBo> dataList = queFactionService.selectListExcellent(dataMap);
@@ -106,12 +108,14 @@ public class QueFactionController {
     }
 
     /**
-     * 优秀邦派列表查询
+     * 潜力邦派列表查询
      */
     @GetMapping(path = "/selectListPotential")
     public ResponseEntity selectListPotential(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                              @RequestParam(value = "classifyCode", required = false) String classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionListBo> dataList = queFactionService.selectListPotential(dataMap);
 
