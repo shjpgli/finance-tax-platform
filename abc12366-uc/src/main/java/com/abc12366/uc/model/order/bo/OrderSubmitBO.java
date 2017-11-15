@@ -27,7 +27,7 @@ public class OrderSubmitBO implements Serializable {
     /**
      * 配送方式
      **/
-    @Size(min = 6, max = 64)
+    @Size(min = 2, max = 64)
     private String deliveryMethod;
 
     /**
@@ -41,7 +41,7 @@ public class OrderSubmitBO implements Serializable {
      * 用户名
      **/
     @NotEmpty
-    @Size(min = 6, max = 64)
+    @Size(min = 2, max = 20)
     private String username;
 
     /**
