@@ -11,16 +11,25 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo"
             parameterType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo">
-        select * from (
-        SELECT t.*,t_user.nickname as username,t_classify.classifyName,
-        IF(t1.title IS NULL, t2.answer, CONCAT(t1.title,t1.detail)) content
+        SELECT * FROM (
+        SELECT t.*,t_user.nickname AS username,t_classify.classifyName,
+          (CASE
+            WHEN t1.title IS NOT NULL THEN CONCAT(t1.title,t1.detail)
+            WHEN t2.answer IS NOT NULL THEN t2.answer
+            WHEN t3.title IS NOT NULL THEN CONCAT(t3.title,t3.describ)
+            WHEN t4.commentTxt IS NOT NULL THEN  t4.commentTxt
+            END ) AS content
         FROM bb_question_sys_block t
         LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
         LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
-        LEFT JOIN abc12366_uc.uc_user t_user ON t.userId = t_user.id
-        LEFT JOIN bb_question_classify t_classify ON t.classifyCode = t_classify.classifyCode
-        ) as temp
-        where 1 = 1
+        LEFT JOIN bb_cheats t3 ON(t.sourceId=t3.id AND t.sourceType ='cheats')
+        LEFT JOIN bb_cheats_comment t4 ON(t.sourceId=t4.id AND t.sourceType ='cheats_comment')
+
+        JOIN abc12366_uc.uc_user t_user ON t.userId = t_user.id
+        JOIN bb_question_classify t_classify ON t.classifyCode = t_classify.classifyCode
+        ) AS temp
+        WHERE 1 = 1
+
         <if test="content != null and content != ''">
             AND temp.content like CONCAT('%',#{content},'%')
         </if>

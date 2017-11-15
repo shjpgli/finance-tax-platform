@@ -2,7 +2,6 @@ package com.abc12366.gateway.service;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.mapper.db1.AppMapper;
-import com.abc12366.gateway.mapper.db2.ApiLogRoMapper;
 import com.abc12366.gateway.mapper.db2.AppRoMapper;
 import com.abc12366.gateway.mapper.db2.AppSettingRoMapper;
 import com.abc12366.gateway.model.ApiLog;
@@ -42,7 +41,7 @@ public class AppServiceImpl implements AppService {
     private AppRoMapper appRoMapper;
 
     @Autowired
-    private ApiLogRoMapper apiLogRoMapper;
+    private ApiLogService apiLogService;
 
     @Autowired
     private AppSettingRoMapper appSettingRoMapper;
@@ -192,7 +191,7 @@ public class AppServiceImpl implements AppService {
         apiLog.setMethod(method);
         //查询每分钟访问的次数
         if (bo.getTimesPerMinute() != 0) {
-            int minuteCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            int minuteCount = apiLogService.selectApiLogCount(apiLog);
             if (minuteCount > bo.getTimesPerMinute()) {
                 LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
                 throw new ServiceException(4031);
@@ -201,7 +200,7 @@ public class AppServiceImpl implements AppService {
         //查询每小时访问的次数
         apiLog.setStartTime(currentTime - (60 * 1000 * 60));
         if (bo.getTimesPerHour() != 0) {
-            int hourCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            int hourCount = apiLogService.selectApiLogCount(apiLog);
             if (hourCount > bo.getTimesPerHour()) {
                 LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
                 throw new ServiceException(4032);
@@ -210,7 +209,7 @@ public class AppServiceImpl implements AppService {
         //查询每天访问的次数
         apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
         if (bo.getTimesPerDay() != 0) {
-            int dayCount = apiLogRoMapper.selectApiLogCount(apiLog);
+            int dayCount = apiLogService.selectApiLogCount(apiLog);
             if (dayCount > bo.getTimesPerDay()) {
                 LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
                 throw new ServiceException(4033);
