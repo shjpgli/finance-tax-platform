@@ -34,16 +34,12 @@
         FROM cms_adpage
         <where>
             status is true
-            <if test="startTime != null">
                 <![CDATA[
                 and date_format(now(), '%Y-%m-%d') >= date_format(startTime, '%Y-%m-%d')
                 ]]>
-            </if>
-            <if test="endTime != null">
                 <![CDATA[
                 and date_format(endTime, '%Y-%m-%d') >= date_format(now(), '%Y-%m-%d')
                 ]]>
-            </if>
             <if test="name != null">and name like CONCAT('%',#{name},'%')</if>
         </where>
         ORDER BY sort ASC
