@@ -133,9 +133,9 @@
 
         (SELECT count(id) FROM bb_question where status = '0' and factionId = f.factionId) questionNum,
 
-        (SELECT count(id) FROM bb_question_answer status = '0' and where factionId = f.factionId) answerNum,
+        (SELECT count(id) FROM bb_question_answer where status = '0' and  factionId = f.factionId) answerNum,
 
-        (SELECT count(id) FROM bb_question_comment status = '0' and where factionId = f.factionId) discussNum,
+        (SELECT count(id) FROM bb_question_comment where status = '0' and  factionId = f.factionId) discussNum,
 
         (SELECT count(id) FROM bb_question_answer where status = '0' and isAccept = '1' and factionId = f.factionId) adoptNum
         FROM bb_question_faction f
