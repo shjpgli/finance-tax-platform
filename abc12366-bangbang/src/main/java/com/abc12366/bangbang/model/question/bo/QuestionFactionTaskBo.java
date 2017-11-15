@@ -126,4 +126,20 @@ public class QuestionFactionTaskBo implements Serializable {
     public void setIsFinish(Integer isFinish) {
         this.isFinish = isFinish;
     }
+
+    public String getFactionName() {
+        return factionName;
+    }
+
+    public void setFactionName(String factionName) {
+        this.factionName = factionName;
+    }
+
+    public String getFactionImg() {
+        return factionImg;
+    }
+
+    public void setFactionImg(String factionImg) {
+        this.factionImg = factionImg;
+    }
 }

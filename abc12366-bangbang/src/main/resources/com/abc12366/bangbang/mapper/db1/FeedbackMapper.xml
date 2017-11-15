@@ -12,11 +12,11 @@
 		LEFT JOIN
 		(
 			SELECT a.* FROM abc12366_message.msg_business_message a
-			WHERE TYPE = 'FEEDBACK'AND
+			WHERE busiType = 'FEEDBACK'AND
 			createTime =
 			(SELECT MAX(createTime)
 			FROM abc12366_message.msg_business_message
-			WHERE TYPE = 'FEEDBACK'AND businessId = a.businessId)
+			WHERE busiType = 'FEEDBACK'AND businessId = a.businessId)
 		)  t3
 		ON t1.id = t3.businessId
 		WHERE 1=1

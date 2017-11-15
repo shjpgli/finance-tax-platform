@@ -29,6 +29,8 @@ public interface QueFactionService {
 
     QuestionFactionBo update(QuestionFactionBo factionBo);
 
+    QuestionFactionBo updateSelect(QuestionFactionBo factionBo);
+
     String updateStatus(String factionId, String status);
 
     String delete(String factionId);

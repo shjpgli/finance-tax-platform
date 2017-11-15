@@ -6,16 +6,14 @@ import com.abc12366.uc.mapper.db2.TodoTaskRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.TodoTask;
 import com.abc12366.uc.model.TodoTaskFront;
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
-import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.SysTaskBO;
 import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.SysTaskService;
 import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,22 +62,22 @@ public class TodoTaskServiceImpl implements TodoTaskService {
                 return;
             }
             //做特殊任务
-            if (sysTaskBO.getType().trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
+            if (sysTaskBO.getType().trim().equals(TaskConstant.SPECIAL_TASK_TYPE)) {
                 doTaskSpecial(userId, sysTaskBO);
             }
             //做其他任务
             String dateType = sysTaskBO.getDateType();
             switch (dateType.trim()) {
-                case UCConstant.TASK_TIME_ONETIME_TYPE:
+                case TaskConstant.TASK_TIME_ONETIME_TYPE:
                     doTaskOneTime(userId, sysTaskBO);
                     break;
-                case UCConstant.TASK_TIME_DAY_TYPE:
+                case TaskConstant.TASK_TIME_DAY_TYPE:
                     doTaskDay(userId, sysTaskBO);
                     break;
-                case UCConstant.TASK_TIME_MONTH_TYPE:
+                case TaskConstant.TASK_TIME_MONTH_TYPE:
                     doTaskMonth(userId, sysTaskBO);
                     break;
-                case UCConstant.TASK_TIME_YEAR_TYPE:
+                case TaskConstant.TASK_TIME_YEAR_TYPE:
                     doTaskYear(userId, sysTaskBO);
                     break;
             }
@@ -104,13 +102,13 @@ public class TodoTaskServiceImpl implements TodoTaskService {
             TodoTask todoTask = selectOne(userId, sysTaskBO.getId());
 
             //如果该项任务已完成，则返回
-            if (todoTask == null || todoTask.getStatus().trim().equals(UCConstant.TASK_FINISHED)) {
+            if (todoTask == null || todoTask.getStatus().trim().equals(TaskConstant.TASK_FINISHED)) {
                 return false;
             }
 
             todoTask.setFinishedCount(todoTask.getFinishedCount() + 1);
             if (todoTask.getFinishedCount() >= todoTask.getAllCount()) {
-                todoTask.setStatus(UCConstant.TASK_FINISHED);
+                todoTask.setStatus(TaskConstant.TASK_FINISHED);
             }
             todoTask.setLastUpdate(new Date());
             update(todoTask);
@@ -141,7 +139,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         if (StringUtils.isEmpty(userId)) {
             return;
         }
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectTimeLimitedListByType(UCConstant.BANGBANG_TASK_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectTimeLimitedListByType(TaskConstant.BANGBANG_TASK_TYPE);
         if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
             return;
         }
@@ -180,7 +178,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     @Override
     public void computeAward(String userId, TodoTask todoTask) {
         //根据奖励的类型分别做计算
-        if (todoTask.getAwardType().trim().equals(UCConstant.AWARD_TYPE_EXP)) {
+        if (todoTask.getAwardType().trim().equals(TaskConstant.AWARD_TYPE_EXP)) {
             ExperienceLogBO experienceLog = new ExperienceLogBO();
             experienceLog.setUserId(userId);
             experienceLog.setRuleId(todoTask.getRuleId());
@@ -188,7 +186,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
             experienceLog.setOutgo(0);
 
             experienceLogService.insert(experienceLog);
-        } else if (todoTask.getAwardType().trim().equals(UCConstant.AWARD_TYPE_POINT)) {
+        } else if (todoTask.getAwardType().trim().equals(TaskConstant.AWARD_TYPE_POINT)) {
             PointsLogBO pointsLog = new PointsLogBO();
             pointsLog.setUserId(userId);
             pointsLog.setRuleId(todoTask.getRuleId());
@@ -243,7 +241,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //            }
 //        }
 
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectTimeLimitedListByType(UCConstant.SPECIAL_TASK_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectTimeLimitedListByType(TaskConstant.SPECIAL_TASK_TYPE);
         if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
             return;
         }
@@ -292,7 +290,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //        }
 //        generateTaskListByDateType(userId, dateType);
 
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NEW_USER_TASK_TYPE, UCConstant.TASK_TIME_ONETIME_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NEW_USER_TASK_TYPE, TaskConstant.TASK_TIME_ONETIME_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如成长任务已生成则不用再生成
             List<TodoTask> taskList = todoTaskRoMapper.selectListOneTime(userId, sysTaskBO.getId());
@@ -312,7 +310,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //        }
 //        generateTaskListByDateType(userId, dateType);
 
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NORMAL_TASK_TYPE, UCConstant.TASK_TIME_DAY_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NORMAL_TASK_TYPE, TaskConstant.TASK_TIME_DAY_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如日度任务已生成则不用再生成
             List<TodoTask> taskList = todoTaskRoMapper.selectListByDay(userId, sysTaskBO.getId());
@@ -332,7 +330,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //        }
 //        generateTaskListByDateType(userId, dateType);
 
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NORMAL_TASK_TYPE, UCConstant.TASK_TIME_YEAR_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NORMAL_TASK_TYPE, TaskConstant.TASK_TIME_YEAR_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如年度任务已生成则不用再生成
             List<TodoTask> taskList = todoTaskRoMapper.selectListByYear(userId, sysTaskBO.getId());
@@ -351,7 +349,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 //            return;
 //        }
 //        generateTaskListByDateType(userId, dateType);
-        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(UCConstant.NORMAL_TASK_TYPE, UCConstant.TASK_TIME_MONTH_TYPE);
+        List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NORMAL_TASK_TYPE, TaskConstant.TASK_TIME_MONTH_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如月度任务已生成则不用再生成
             List<TodoTask> taskList = todoTaskRoMapper.selectListByMonth(userId, sysTaskBO.getId());
@@ -389,13 +387,13 @@ public class TodoTaskServiceImpl implements TodoTaskService {
             todoTask.setAwardType(sysTaskBO.getAwardType());
             todoTask.setType(type);
             todoTask.setAward(sysTaskBO.getAward());
-            todoTask.setStatus(UCConstant.TASK_UNFINISHED);
+            todoTask.setStatus(TaskConstant.TASK_UNFINISHED);
             todoTask.setSkipUrl(sysTaskBO.getSkipURL());
             todoTask.setRuleId(sysTaskBO.getRuleId());
             Date date = new Date();
             todoTask.setCreateTime(date);
             todoTask.setLastUpdate(date);
-            if (type.trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
+            if (type.trim().equals(TaskConstant.SPECIAL_TASK_TYPE)) {
                 long now = System.currentTimeMillis();
                 //如果特殊任务已过期则不需要生成了
                 if (now > sysTaskBO.getEndTime().getTime()) {
@@ -416,14 +414,14 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     public void finishTask(String userId, TodoTask todoTask) {
         //如果该项任务不存在或已完成，则返回
-        if (todoTask == null || todoTask.getStatus().trim().equals(UCConstant.TASK_FINISHED)) {
+        if (todoTask == null || todoTask.getStatus().trim().equals(TaskConstant.TASK_FINISHED)) {
             return;
         }
 
         //用户每完成当天一项任务一次，更新已完成数，当已完成数等于该项任务数量，更新该项任务数量为已完成
         todoTask.setFinishedCount(todoTask.getFinishedCount() + 1);
         if (todoTask.getFinishedCount() >= todoTask.getAllCount()) {
-            todoTask.setStatus(UCConstant.TASK_FINISHED);
+            todoTask.setStatus(TaskConstant.TASK_FINISHED);
         }
         todoTask.setLastUpdate(new Date());
         update(todoTask);
@@ -555,7 +553,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         todoTask.setAwardType(sysTaskBO.getAwardType());
         todoTask.setType(sysTaskBO.getType());
         todoTask.setAward(sysTaskBO.getAward());
-        todoTask.setStatus(UCConstant.TASK_UNFINISHED);
+        todoTask.setStatus(TaskConstant.TASK_UNFINISHED);
         todoTask.setSkipUrl(sysTaskBO.getSkipURL());
         todoTask.setRuleId(sysTaskBO.getRuleId());
         Date date = new Date();

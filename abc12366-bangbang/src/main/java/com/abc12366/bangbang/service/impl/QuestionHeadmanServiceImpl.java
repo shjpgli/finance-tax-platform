@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionHeadmanMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionHeadmanRoMapper;
 import com.abc12366.bangbang.model.question.QuestionHeadman;
@@ -45,7 +44,7 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         QuestionHeadman headman = new QuestionHeadman();
         BeanUtils.copyProperties(headmanBo, headman);
         headman.setId(Utils.uuid());
-        headman.setUserId(UcUserCommon.getUserId());
+        headman.setUserId(Utils.getUserId());
         headman.setStatus("apply");
         headman.setCreateTime(new Date());
         int cnt = questionHeadmanRoMapper.selectExist(headman.getUserId());

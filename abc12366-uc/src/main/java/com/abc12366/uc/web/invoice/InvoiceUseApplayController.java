@@ -1,13 +1,13 @@
 package com.abc12366.uc.web.invoice;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.invoice.InvoiceUseApply;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
-import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -53,10 +53,10 @@ public class InvoiceUseApplayController {
         applyBO.setExamineStatus(examineStatus);
         applyBO.setApplyUser(applyUser);
         if (startTime != null && !"".equals(startTime)) {
-            applyBO.setStartTime(DataUtils.StrToDate(startTime));
+            applyBO.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            applyBO.setEndTime(DataUtils.StrToDate(endTime));
+            applyBO.setEndTime(DateUtils.strToDate(endTime));
         }
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);

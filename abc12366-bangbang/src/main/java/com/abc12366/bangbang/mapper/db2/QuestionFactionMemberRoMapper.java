@@ -54,6 +54,13 @@ public interface QuestionFactionMemberRoMapper {
 
     /**
      *
+     * 查询已通过的用户数
+     *
+     **/
+    int selectPassMemberCnt(@Param("factionId") String factionId);
+
+    /**
+     *
      * 查询（根据主键ID查询）
      *
      **/

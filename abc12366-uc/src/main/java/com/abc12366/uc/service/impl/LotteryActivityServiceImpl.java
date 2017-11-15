@@ -6,15 +6,15 @@ package com.abc12366.uc.service.impl;
  */
 
 import com.abc12366.gateway.exception.ServiceException;
+
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.uc.mapper.db1.LotteryActivityMapper;
 import com.abc12366.uc.mapper.db2.LotteryActivityRoMapper;
-import com.abc12366.uc.model.Lottery;
 import com.abc12366.uc.model.LotteryActivity;
-import com.abc12366.uc.model.LotteryActivityprize;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
-import com.abc12366.uc.util.LszUtil;
-import com.abc12366.gateway.util.UCConstant;
+
+import com.abc12366.gateway.util.TaskConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -115,12 +115,12 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
             if (!obj.getStatus()) {
                 //remake = "奖品已禁用";
             } else if (amount<= balance) {//总数量 小于 已出数量
-               // remake = "总库存不足";
+                // remake = "总库存不足";
             } else {
                 //判断商品是否过期
                 if (obj.getStartTime() != null && obj.getEndTime() != null) {
                     if (date.getTime() < obj.getStartTime().getTime() || date.getTime() > obj.getEndTime().getTime()) {
-                       // remake = "奖品过期";
+                        // remake = "奖品过期";
                     } else {
                         awardToList.add(obj);
                     }
@@ -150,73 +150,73 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         return null;
     }
 
-private  boolean luckDo(LotteryActivityBO lottery){
+    private  boolean luckDo(LotteryActivityBO lottery){
         //首先判断是不是当天
-    Date date = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    String oldDate = "";
-    if (lottery.getTimeDay() != null) {
-        oldDate = sdf.format(lottery.getTimeDay());
-    }
-    String nowDate = sdf.format(date);
-    if (!nowDate.equals(oldDate)) {
-        //假如不是当天
-        lottery.setTimeCount(0);
-        lottery.setTimeDay(date);
-    }
-    if (lottery.getTimeStock() <= lottery.getTimeCount()) {
-        //当天库存不足
-        return false;
-    } else {
-
-        Random random = new Random();
-        random.setSeed(System.currentTimeMillis());
-        long rand = random.nextInt(86400000);//一天是 86400秒
-        String nowDays = sdf.format(date);
-        try {
-            Date nowDay = sdf.parse(nowDays);
-            long timel = date.getTime() - nowDay.getTime();//今天过去的时间数  毫秒
-            if  (timel < rand){
-                return false;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String oldDate = "";
+        if (lottery.getTimeDay() != null) {
+            oldDate = sdf.format(lottery.getTimeDay());
         }
-        return true;
-    }
+        String nowDate = sdf.format(date);
+        if (!nowDate.equals(oldDate)) {
+            //假如不是当天
+            lottery.setTimeCount(0);
+            lottery.setTimeDay(date);
+        }
+        if (lottery.getTimeStock() <= lottery.getTimeCount()) {
+            //当天库存不足
+            return false;
+        } else {
 
-}
-private boolean activityTimeStock(LotteryActivityBO lotteryActivityBO){
-    Date date = new Date();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    String oldDate = "";
-    if (lotteryActivityBO.getTimeDay() != null) {
-        oldDate = sdf.format(lotteryActivityBO.getTimeDay());
+            Random random = new Random();
+            random.setSeed(System.currentTimeMillis());
+            long rand = random.nextInt(86400000);//一天是 86400秒
+            String nowDays = sdf.format(date);
+            try {
+                Date nowDay = sdf.parse(nowDays);
+                long timel = date.getTime() - nowDay.getTime();//今天过去的时间数  毫秒
+                if  (timel < rand){
+                    return false;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
     }
-    String nowDate = sdf.format(date);
-    if (!nowDate.equals(oldDate)) {
-        //假如不是当天
-        lotteryActivityBO.setTimeCount(0);
-        lotteryActivityBO.setTimeDay(date);
+    private boolean activityTimeStock(LotteryActivityBO lotteryActivityBO){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String oldDate = "";
+        if (lotteryActivityBO.getTimeDay() != null) {
+            oldDate = sdf.format(lotteryActivityBO.getTimeDay());
+        }
+        String nowDate = sdf.format(date);
+        if (!nowDate.equals(oldDate)) {
+            //假如不是当天
+            lotteryActivityBO.setTimeCount(0);
+            lotteryActivityBO.setTimeDay(date);
+        }
+        if (lotteryActivityBO.getTimeStock() <= lotteryActivityBO.getTimeCount()) {
+            //当天库存不足
+            return false;
+        }
+        return true            ;
     }
-    if (lotteryActivityBO.getTimeStock() <= lotteryActivityBO.getTimeCount()) {
-        //当天库存不足
+    private boolean    checkIp( String activityId, String ip){
+        Map<String, Object> map = new HashMap<>();
+        if(activityId != null && !activityId.isEmpty()){
+            map.put("activityId",activityId);
+            map.put("ip",ip);
+        }
+        List<LotteryActivityipBO> list = lotteryActivityipService.selectList(map);
+        if(list!= null && list.size()>0 ){
+            return true;
+        }
         return false;
     }
-    return true            ;
-}
-private boolean    checkIp( String activityId, String ip){
-    Map<String, Object> map = new HashMap<>();
-    if(activityId != null && !activityId.isEmpty()){
-        map.put("activityId",activityId);
-        map.put("ip",ip);
-    }
-    List<LotteryActivityipBO> list = lotteryActivityipService.selectList(map);
-    if(list!= null && list.size()>0 ){
-        return true;
-    }
-    return false;
-}
     @Override
     public synchronized LotteryLogBO luckDraw(String userId, String activityId, String ip) {
         if (userId == null || userId.isEmpty()) {
@@ -238,7 +238,7 @@ private boolean    checkIp( String activityId, String ip){
         }
 
 
-        if(!LszUtil.dateIn(lotteryActivityBO.getStartTime(),lotteryActivityBO.getEndTime(),new Date())){
+        if(!DateUtils.dateIn(lotteryActivityBO.getStartTime(),lotteryActivityBO.getEndTime(),new Date())){
             throw new ServiceException(9999, "抽奖活动已过期");
 
         }
@@ -255,15 +255,31 @@ private boolean    checkIp( String activityId, String ip){
 
         LotteryActivityprizeBO obj = luckDrawEx(activityId);
 //        LotteryActivityprizeBO obj =  lotteryOne(activityId);
-        PointCalculateBO pointCalculateBO = new PointCalculateBO();
-        pointCalculateBO.setUserId(userId);
-        pointCalculateBO.setRuleCode(UCConstant.POINT_RULE_LOTTERY_CODE);
-        //扣积分
-        Integer point = pointsService.calculate(pointCalculateBO);
+        Integer point = 0;
+
+        Integer userDayCount = lotteryLogService.selectUserDay(userId);
+        Integer freeCount =  lotteryActivityBO.getUserFreeCount();
+        if(freeCount != null && freeCount> userDayCount){
+            //免费的次数 大于  今天抽奖的次数
+
+        }        else        {
+            //扣积分
+            PointCalculateBO pointCalculateBO = new PointCalculateBO();
+            pointCalculateBO.setUserId(userId);
+            pointCalculateBO.setRuleCode(TaskConstant.POINT_RULE_LOTTERY_CODE);
+
+            point = pointsService.calculate(pointCalculateBO);
+            if (point==null || point == 0) {
+                throw new ServiceException(9999, "您的积分异常");
+            }
+            if(point < 0)point = -point;
+        }
         Date date = new Date();
         String remake = "";
         //库存 记日志
         //明天测试
+        Integer userLotteryMaxDay = lotteryActivityBO.getUserLotteryMaxDay();
+        Integer userDayCountLuck = lotteryLogService.selectUserDayLuck(userId);
 
         if (obj == null || obj.getNoluck()) {
             remake = "未抽中";
@@ -271,19 +287,26 @@ private boolean    checkIp( String activityId, String ip){
             remake = "活动当天库存不足";
         }else  if  (obj.getStock()<=0) {
             remake = "奖品总量不足";
-        }else{
-
-         }
-
+        }else if(userLotteryMaxDay !=null && userDayCountLuck >= userLotteryMaxDay){
+            remake = "用户当天中奖上限";
+        }
+        Integer addday = lotteryActivityBO.getGetlotteyDay();
+        if (addday == null)addday = 0;
         LotteryLogBO lotteryLogBO = new LotteryLogBO();
         lotteryLogBO.setUserId(userId);
         lotteryLogBO.setUpoint(point);
         lotteryLogBO.setActivityId(activityId);
         lotteryLogBO.setRemake(remake);
         lotteryLogBO.setIp(ip);
+
         if ("".equals(remake) )
         {//假如这个值为空 说明抽中了
             lotteryLogBO.setIsluck(1);
+            try {
+                lotteryLogBO.setEndlqDate(DateUtils.addDays(new Date(),addday));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             lotteryLogBO.setState("未领取");
             lotteryLogBO.setLotteryId(obj.getLotteryId());
             lotteryLogBO.setLotteryName(obj.getLotteryName());
@@ -296,9 +319,7 @@ private boolean    checkIp( String activityId, String ip){
             lotteryActivityBO.setTimeCount(lotteryActivityBO.getTimeCount()+1);
 
 
-        } else
-
-        {
+        } else{
             lotteryLogBO.setIsluck(0);
             obj = null;
         }

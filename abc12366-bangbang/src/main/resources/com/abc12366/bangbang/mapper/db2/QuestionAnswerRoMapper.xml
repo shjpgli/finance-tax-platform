@@ -33,7 +33,7 @@
         <if test="isAccept != null and isAccept != ''">
             AND isAccept = #{isAccept}
         </if>
-        order by a.createTime DESC
+        order by a.isAccept desc,a.createTime DESC
     </select>
 
     <!-- 最新回答 -->

@@ -66,7 +66,7 @@ public Integer getStock(){
     if(amount != null && balance != null) {
         return amount - balance;
     }
-    return null;
+    return 0;
     }
     public Integer getBalance() {
         return balance;

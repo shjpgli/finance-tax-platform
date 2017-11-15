@@ -25,6 +25,9 @@ public class CheatsTagBo implements Serializable {
     /**分类代码**/
     private String classifyCode;
 
+    /**父分类代码**/
+    private String parentCode;
+
 
 
 	public void setId(String id){
@@ -65,5 +68,13 @@ public class CheatsTagBo implements Serializable {
 
     public void setClassifyCode(String classifyCode) {
         this.classifyCode = classifyCode;
+    }
+
+    public String getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode;
     }
 }

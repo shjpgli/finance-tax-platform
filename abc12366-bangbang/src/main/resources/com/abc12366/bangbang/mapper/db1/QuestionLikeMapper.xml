@@ -18,9 +18,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionLike">
 		 INSERT INTO bb_question_like
- 		(likeId,id,questionId,likeType,likeTarget,userId,likeTime,factionId)
+ 		(likeId,id,questionId,likeType,likeTarget,userId,toUserId,likeTime,factionId)
 		 VALUES 
- 		(#{likeId},#{id},#{questionId},#{likeType},#{likeTarget},#{userId},#{likeTime},#{factionId})
+ 		(#{likeId},#{id},#{questionId},#{likeType},#{likeTarget},#{userId},#{toUserId},#{likeTime},#{factionId})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

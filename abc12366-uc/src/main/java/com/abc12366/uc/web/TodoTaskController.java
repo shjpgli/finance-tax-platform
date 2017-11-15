@@ -1,6 +1,7 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.TodoTask;
 import com.abc12366.uc.model.TodoTaskFront;
@@ -121,7 +122,7 @@ public class TodoTaskController {
     /**
      * 用户做任务接口：做任务并且计算奖励，用于用户业务操作任务埋点，
      * @param userId 用户ID
-     * @param taskCode 系统任务编码 参考：{@linkplain com.abc12366.gateway.util.UCConstant}
+     * @param taskCode 系统任务编码 参考：{@linkplain TaskConstant}
      */
     @PostMapping(path = "/do/award/{userId}/{taskCode}")
     public ResponseEntity doTaskAward(@PathVariable("userId") String userId, @PathVariable("taskCode") String taskCode) {

@@ -38,7 +38,7 @@ public class CheckController {
      * @return ResponseEntity 签到获取的积分值
      */
     @PostMapping(path = "/check")
-    public ResponseEntity check(@Valid @RequestBody Check check){
+    public synchronized ResponseEntity check(@Valid @RequestBody Check check){
         LOGGER.info("用户签到：{}", check);
         int points = checkService.check(check);
         LOGGER.info("用户签到获取的积分：{}", points);
@@ -95,10 +95,10 @@ public class CheckController {
      * @return ResponseEntity
      */
     @GetMapping(path = "/check/total")
-    public ResponseEntity checkTotal(@RequestParam(required = false) String year){
+    public ResponseEntity checkTotal(){
         String userId = Utils.getUserId();
-        LOGGER.info("用户获取本年累计签到天数：{},{}", userId, year);
-        int total = checkService.checkTotal(userId, year);
+        LOGGER.info("用户获取本年累计签到天数：{},{}", userId);
+        int total = checkService.checkTotal(userId);
         LOGGER.info("用户获取本年累计签到天数返回结果：{}", total);
         return ResponseEntity.ok(Utils.kv("data", total));
     }

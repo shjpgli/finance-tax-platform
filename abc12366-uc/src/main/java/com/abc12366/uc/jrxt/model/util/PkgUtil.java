@@ -3,13 +3,13 @@ package com.abc12366.uc.jrxt.model.util;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.jrxt.model.tiripPackage.*;
 import com.alibaba.fastjson.JSONObject;
-
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -196,7 +196,7 @@ public class PkgUtil extends BaseObject{
         RouterSession routerSession = new RouterSession();
         ParamList paramList = new ParamList();
         paramList.setName("CREATETIME");
-        paramList.setValue(DateUtil.getCurrentTime("yyyy-MM-dd HH:mm:ss"));
+        paramList.setValue(com.abc12366.gateway.util.DateUtils.dateToStr(new Date()));
         routerSession.addParamList(paramList);
         tiripPackage.setRouterSession(routerSession);
 

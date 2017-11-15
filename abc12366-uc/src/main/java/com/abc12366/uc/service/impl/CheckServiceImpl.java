@@ -1,25 +1,23 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.CheckMapper;
 import com.abc12366.uc.mapper.db2.CheckRoMapper;
-import com.abc12366.uc.model.Check;
-import com.abc12366.uc.model.CheckRank;
-import com.abc12366.uc.model.PrivilegeItem;
-import com.abc12366.uc.model.ReCheck;
-import com.abc12366.uc.model.bo.CheckListBO;
-import com.abc12366.uc.model.bo.CheckListParam;
-import com.abc12366.uc.model.bo.PointsLogBO;
-import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
-import com.abc12366.uc.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -30,6 +28,9 @@ import java.util.*;
  */
 @Service
 public class CheckServiceImpl implements CheckService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CheckServiceImpl.class);
+
     @Autowired
     private CheckMapper checkMapper;
 
@@ -44,19 +45,29 @@ public class CheckServiceImpl implements CheckService {
     private TodoTaskService todoTaskService;
 
     @Autowired
-    private PrivilegeItemService privilegeItemService;
+    private PointsRuleService pointsRuleService;
 
     @Autowired
-    private PointsRuleService pointsRuleService;
+    private VipPrivilegeLevelService vipPrivilegeLevelService;
+
+    @Autowired
+    private UserRoMapper userRoMapper;
 
 
     @Transactional("db1TxManager")
     @Override
     public int check(Check check) {
+        User user = null;
+        if (!StringUtils.isEmpty(check.getUserId())) {
+            user = userRoMapper.selectOne(check.getUserId());
+        }
+        if (user == null) {
+            return 0;
+        }
         Calendar now = Calendar.getInstance();
         int day = now.get(Calendar.DAY_OF_MONTH);
         check.setOrderby(String.valueOf(day));
-        check.setCheckDate(DateUtils.StrToDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
+        check.setCheckDate(DateUtils.strToDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date())));
 
         //判断当天是否已经签到过
         if (isExist(check)) {
@@ -81,23 +92,28 @@ public class CheckServiceImpl implements CheckService {
         //记录签到
         insert(check);
 
-        //签到统计
-        continuingCheck(check.getUserId());
-
         //完成任务埋点,如果任务不存在或失效则返回
-        if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), UCConstant.SYS_TASK_CHECK_CODE)) {
+        if (!todoTaskService.doTaskWithouComputeAward(check.getUserId(), TaskConstant.SYS_TASK_CHECK_CODE)) {
             return 0;
+        }
+
+        //签到积分加成
+        if (!StringUtils.isEmpty(user.getVipLevel())) {
+            VipPrivilegeLevelBO vipPrivilegeLevelBOPar = new VipPrivilegeLevelBO();
+            vipPrivilegeLevelBOPar.setLevelId(user.getVipLevel());
+            vipPrivilegeLevelBOPar.setPrivilegeId("A_JDSJF");
+            VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectLevelIdPrivilegeId(vipPrivilegeLevelBOPar);
+            if (vipPrivilegeLevelBO != null) {
+                if (!StringUtils.isEmpty(vipPrivilegeLevelBO.getVal1())) {
+                    LOGGER.info("签到赠送积分加成：{}", vipPrivilegeLevelBO.getVal1() + "倍");
+                    points = (int) (points * Float.parseFloat(vipPrivilegeLevelBO.getVal1()));
+                }
+            }
         }
 
         //记日志,如果规则失效则返回
         if (!pointsLog(check.getUserId(), points)) {
             return 0;
-        }
-
-        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(check.getUserId());
-        if (privilegeItem != null && privilegeItem.getHyjfjc() > 1) {
-            //usablePoints = (int) (usablePoints * privilegeItem.getHyjfjc());
-            points = (int) (points * privilegeItem.getHyjyzjc());
         }
         return points;
     }
@@ -105,7 +121,7 @@ public class CheckServiceImpl implements CheckService {
     @Transactional("db1TxManager")
     @Override
     public void reCheck(ReCheck recheck) {
-        Date date = DateUtils.StrToDate(recheck.getDate());
+        Date date = DateUtils.strToDate(recheck.getDate());
         //每天只能补签三次
         Check checkTmp = new Check();
         checkTmp.setUserId(recheck.getUserId());
@@ -129,21 +145,38 @@ public class CheckServiceImpl implements CheckService {
         check.setIsReCheck(true);
 
         recheckInsert(check);
-        int points = -20;
-        //签到统计
-        continuingCheck(recheck.getUserId(), calendar);
         //记日志
-        recheckPointsLog(recheck.getUserId(), points);
+        recheckPointsLog(recheck.getUserId());
     }
 
     @Override
     public List<CheckRank> rank(String yearTemp) {
-        String year = yearTemp;
+        Map<String, Object> map = new HashMap<>();
+        Date startTime;
+        Date endTime;
         if (yearTemp == null || yearTemp.trim().equals("")) {
-            Calendar calendar = Calendar.getInstance();
-            year = String.valueOf(calendar.get(Calendar.YEAR));
+            startTime = DateUtils.getFirstMonthOfYear();
+            endTime = DateUtils.getFirstMonthOfLastYear();
+        } else {
+            Date date;
+            try {
+                date = new SimpleDateFormat("yyyy").parse(yearTemp);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                LOGGER.error("时间转换异常：{}", yearTemp);
+                throw new ServiceException(4806);
+            }
+            Calendar end = Calendar.getInstance();
+            end.setTime(date);
+            end.add(Calendar.YEAR, 1);
+
+            startTime = date;
+            endTime = end.getTime();
         }
-        return checkRoMapper.selectRankList(year);
+
+        map.put("startTime", startTime);
+        map.put("endTime", endTime);
+        return checkRoMapper.selectRankList(map);
     }
 
     @Override
@@ -155,16 +188,12 @@ public class CheckServiceImpl implements CheckService {
         int month = Integer.parseInt(timeArray[1]);
         int days = getDaysByYearMonth(year, month);
 
-        Date startDate = DateUtils.StrToDate(yearMonth + "-01");
-        Date endDate = DateUtils.StrToDate(year + "-" + (month + 1) + "-01");
-        Map<String, Object> map = new HashMap<>();
+        Date startDate = DateUtils.strToDate(yearMonth + "-01");
+        Date endDate = DateUtils.strToDate(year + "-" + (month + 1) + "-01");
         CheckListParam checkListParam = new CheckListParam();
         checkListParam.setUserId(userId);
         checkListParam.setStartDate(startDate);
         checkListParam.setEndDate(endDate);
-        map.put("userId", userId);
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
         List<Check> checkList = checkRoMapper.selectCheckList(checkListParam);
 
         List<CheckListBO> checkListBOs = new ArrayList<>();
@@ -178,7 +207,7 @@ public class CheckServiceImpl implements CheckService {
             }
             for (int j = 0; j < checkList.size(); j++) {
                 Check check = checkList.get(j);
-                Date checkDate = DateUtils.StrToDate(yearMonth + "-" + iExtend);
+                Date checkDate = DateUtils.strToDate(yearMonth + "-" + iExtend);
                 checkListBO.setDate(checkDate);
                 if (check.getCheckDate().equals(checkDate)) {
                     checkListBO.setIsCheck(true);
@@ -190,7 +219,7 @@ public class CheckServiceImpl implements CheckService {
     }
 
     private boolean pointsLog(String userId, int points) {
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_CHECK_CODE);
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_CHECK_CODE);
         if (pointsRuleBO == null) {
             return false;
         }
@@ -207,8 +236,9 @@ public class CheckServiceImpl implements CheckService {
         return true;
     }
 
-    private boolean recheckPointsLog(String userId, int points) {
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_RECHECK_CODE);
+    private boolean recheckPointsLog(String userId) {
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_RECHECK_CODE);
+        LOGGER.info("用户补签积分规则：{}" ,pointsRuleBO);
         if (pointsRuleBO == null) {
             return false;
         }
@@ -217,10 +247,10 @@ public class CheckServiceImpl implements CheckService {
         pointsLog.setId(Utils.uuid());
         pointsLog.setCreateTime(new Date());
         pointsLog.setUserId(userId);
-        pointsLog.setOutgo(-points);
+        pointsLog.setIncome(pointsRuleBO.getPoints());
         pointsLog.setRuleId(pointsRuleBO.getId());
         pointsLog.setLogType("RE_CHECK_IN");
-        pointsLog.setRemark("用户补签消耗20积分");
+        pointsLog.setRemark("用户补签消耗"+ -pointsRuleBO.getPoints()+"积分");
         pointsLogService.insert(pointsLog);
         return true;
     }
@@ -253,67 +283,61 @@ public class CheckServiceImpl implements CheckService {
         Date date = calendar.getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = format.format(date);
-        Date checkDate = DateUtils.StrToDate(dateStr);
+        Date checkDate = DateUtils.strToDate(dateStr);
         check.setCheckDate(checkDate);
         return isExist(check);
     }
 
     public boolean isExist(Check check) {
         List<Check> checkList = checkRoMapper.selectByOrder(check);
-        if (checkList != null && checkList.size() >= 1) {
-            return true;
-        }
-        return false;
+        return (checkList != null && checkList.size() >= 1) ;
     }
 
-    public void continuingCheck(String userId) {
-        Map<String, String> map = new HashMap<>();
-        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        map.put("userId", userId);
-        map.put("year", year);
-        List<CheckRank> checkRankList = checkRoMapper.selectOneRank(map);
-        CheckRank checkRank = new CheckRank();
-        checkRank.setUserId(userId);
-        checkRank.setLastUpdate(new Date());
-        checkRank.setYear(year);
-        if (checkRankList == null || checkRankList.size() < 1) {
-            checkRank.setId(Utils.uuid());
-            checkRank.setCount(1);
-            checkMapper.insertRank(checkRank);
-            return;
-        }
-        CheckRank checkRankTmp = checkRankList.get(0);
-        checkRank.setCount(checkRankTmp.getCount() + 1);
-        checkMapper.updateRank(checkRank);
-    }
+//    public void continuingCheck(String userId) {
+//        Map<String, String> map = new HashMap<>();
+//        String year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+//        map.put("userId", userId);
+//        map.put("year", year);
+//        List<CheckRank> checkRankList = checkRoMapper.selectOneRank(map);
+//        CheckRank checkRank = new CheckRank();
+//        checkRank.setUserId(userId);
+//        checkRank.setLastUpdate(new Date());
+//        checkRank.setYear(year);
+//        if (checkRankList == null || checkRankList.size() < 1) {
+//            checkRank.setId(Utils.uuid());
+//            checkRank.setCount(1);
+//            checkMapper.insertRank(checkRank);
+//            return;
+//        }
+//        CheckRank checkRankTmp = checkRankList.get(0);
+//        checkRank.setCount(checkRankTmp.getCount() + 1);
+//        checkMapper.updateRank(checkRank);
+//    }
 
-    public void continuingCheck(String userId, Calendar calendar) {
-        Map<String, String> map = new HashMap<>();
-        String year = String.valueOf(calendar.get(Calendar.YEAR));
-        map.put("userId", userId);
-        map.put("year", year);
-        List<CheckRank> checkRankList = checkRoMapper.selectOneRank(map);
-        CheckRank checkRank = new CheckRank();
-        checkRank.setUserId(userId);
-        checkRank.setLastUpdate(new Date());
-        checkRank.setYear(year);
-        if (checkRankList == null || checkRankList.size() < 1) {
-            checkRank.setId(Utils.uuid());
-            checkRank.setCount(1);
-            checkMapper.insertRank(checkRank);
-            return;
-        }
-        CheckRank checkRankTmp = checkRankList.get(0);
-        checkRank.setCount(checkRankTmp.getCount() + 1);
-        checkMapper.updateRank(checkRank);
-    }
+//    public void continuingCheck(String userId, Calendar calendar) {
+//        Map<String, String> map = new HashMap<>();
+//        String year = String.valueOf(calendar.get(Calendar.YEAR));
+//        map.put("userId", userId);
+//        map.put("year", year);
+//        List<CheckRank> checkRankList = checkRoMapper.selectOneRank(map);
+//        CheckRank checkRank = new CheckRank();
+//        checkRank.setUserId(userId);
+//        checkRank.setLastUpdate(new Date());
+//        checkRank.setYear(year);
+//        if (checkRankList == null || checkRankList.size() < 1) {
+//            checkRank.setId(Utils.uuid());
+//            checkRank.setCount(1);
+//            checkMapper.insertRank(checkRank);
+//            return;
+//        }
+//        CheckRank checkRankTmp = checkRankList.get(0);
+//        checkRank.setCount(checkRankTmp.getCount() + 1);
+//        checkMapper.updateRank(checkRank);
+//    }
 
     public boolean isRecheckExist(Check check) {
         List<Check> checkList = checkRoMapper.selectIsRecheck(check);
-        if (checkList == null || checkList.size() <= 0) {
-            return false;
-        }
-        return true;
+        return !(checkList == null || checkList.size() <= 0);
     }
 
     public int getDaysByYearMonth(int year, int month) {
@@ -322,16 +346,12 @@ public class CheckServiceImpl implements CheckService {
         a.set(Calendar.MONTH, month - 1);
         a.set(Calendar.DATE, 1);
         a.roll(Calendar.DATE, -1);
-        int maxDate = a.get(Calendar.DATE);
-        return maxDate;
+        return a.get(Calendar.DATE);
     }
 
     @Override
-    public int checkTotal(String userId, String year) {
-        if (StringUtils.isEmpty(year)) {
-            year = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        }
-        Integer total = checkRoMapper.checkTotal(userId, year);
+    public int checkTotal(String userId) {
+        Integer total = checkRoMapper.checkTotal(userId);
         return total == null ? 0 : total;
     }
 }

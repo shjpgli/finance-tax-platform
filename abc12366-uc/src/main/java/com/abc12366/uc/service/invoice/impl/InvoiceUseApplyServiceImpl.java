@@ -3,17 +3,13 @@ package com.abc12366.uc.service.invoice.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
-import com.abc12366.uc.mapper.db2.InvoiceDistributeRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceRepoRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseApplyRoMapper;
-import com.abc12366.uc.mapper.db2.InvoiceUseDetailRoMapper;
+import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.invoice.*;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseApplyBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseCheckBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceUseDetailBO;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
-import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -91,7 +87,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         String id = Utils.uuid();
         invoiceUseApplyBO.setId(id);
         Date date = new Date();
-        invoiceUseApplyBO.setApplyUser(UserUtil.getAdminId());
+        invoiceUseApplyBO.setApplyUser(Utils.getAdminId());
         invoiceUseApplyBO.setApplyTime(date);
         InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
         BeanUtils.copyProperties(invoiceUseApplyBO,invoiceUseApply);
@@ -119,7 +115,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
 
         //加入日志，草稿状态不需要记录日志
         if(!"3".equals(invoiceUseApplyBO.getExamineStatus())){
-            insertLog(id,"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
+            insertLog(id,"申请", Utils.getAdminInfo().getNickname(),"已提交");
         }
         return invoiceUseApplyBO;
     }
@@ -171,7 +167,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         }
         //加入日志，草稿状态不需要记录日志
         if(!"3".equals(invoiceUseApplyBO.getExamineStatus())){
-            insertLog(invoiceUseApply.getId(),"申请", UserUtil.getAdminInfo().getNickname(),"已提交");
+            insertLog(invoiceUseApply.getId(),"申请", Utils.getAdminInfo().getNickname(),"已提交");
         }
         return invoiceUseApplyBO;
     }
@@ -205,9 +201,9 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             }
         }
         if(check.equals("1")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核通过");
+            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), Utils.getAdminInfo().getNickname(),"审核通过");
         }else if(check.equals("2")){
-            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), UserUtil.getAdminInfo().getNickname(),"审核不通过");
+            insertLog(invoiceUseApply.getId(),invoiceUseCheckBO.getCheckOpinion(), Utils.getAdminInfo().getNickname(),"审核不通过");
         }
         //加入日志
     }
@@ -217,7 +213,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         InvoiceUseApply invoiceUseApply = new InvoiceUseApply();
         BeanUtils.copyProperties(invoiceUseCheckBO,invoiceUseApply);
         invoiceUseApply.setDistributeTime(new Date());
-        invoiceUseApply.setDistributeUser(UserUtil.getAdminId());
+        invoiceUseApply.setDistributeUser(Utils.getAdminId());
         invoiceUseApply.setIssueStatus("1");
         int aUpdate = invoiceUseApplyMapper.update(invoiceUseApply);
         if(aUpdate != 1){
@@ -263,7 +259,7 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
 
                 //更新发票库存状态
                 InvoiceRepo invoiceRepo = new InvoiceRepo();
-                invoiceRepo.setUpdateUser(UserUtil.getAdminId());
+                invoiceRepo.setUpdateUser(Utils.getAdminId());
                 invoiceRepo.setLastUpdate(date);
                 invoiceRepo.setId(invoiceDistribute.getInvoiceRepoId());
                 invoiceRepo.setStatus("1");
@@ -286,7 +282,8 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
         for(InvoiceDistribute invoiceDistribute:invoiceDistributeList){
             invoiceDistribute.setStatus("2");
             invoiceDistribute.setSignTime(date);
-            invoiceDistribute.setSignUser(UserUtil.getAdminId());
+            invoiceDistribute.setSignUser(Utils.getAdminId());
+            //修改发票分发信息表
             int update = invoiceDistributeMapper.update(invoiceDistribute);
             if(update != 1){
                 LOGGER.warn("修改失败，参数{}：" + invoiceDistribute);
@@ -297,8 +294,15 @@ public class InvoiceUseApplyServiceImpl implements InvoiceUseApplyService {
             invoiceUseApply.setId(invoiceDistribute.getUseId());
             invoiceUseApply.setIssueStatus("2");
             invoiceUseApply.setSignTime(date);
-            invoiceUseApply.setSignUser(UserUtil.getAdminId());
+            invoiceUseApply.setSignUser(Utils.getAdminId());
             invoiceUseApplyMapper.update(invoiceUseApply);
+            //更新发票详情信息，改成，3：已签收
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            invoiceDetail.setLastUpdate(date);
+            invoiceDetail.setInvoiceRepoId(invoiceDistribute.getInvoiceRepoId());
+            invoiceDetail.setStatus("3");
+            invoiceDetailMapper.updateByRepoId(invoiceDetail);
+
         }
     }
 

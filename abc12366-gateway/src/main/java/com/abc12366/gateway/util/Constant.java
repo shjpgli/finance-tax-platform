@@ -1,12 +1,7 @@
 package com.abc12366.gateway.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 /**
- * 常量定义
+ * 系统没有归类的常量定义
  *
  * @author lijun <ljun51@outlook.com>
  * @create 2017-03-28 5:12 PM
@@ -52,21 +47,15 @@ public class Constant {
     //系统设置默认密码
     public final static String defaultPwd = "abc@12366";
     //时间-当前日期
-    public final static String startTime = getTodaySting();
+    public final static String startTime = DateUtils.getTodaySting();
 
-    public final static String endTime = getTodaySting();
-
-
-    public final static String defaultFolder = "E:/abc12306";
+    public final static String endTime = DateUtils.getTodaySting();
 
     // 客户端每次接口访问，在请求头中传入用户IP、用户代理类型，以便服务端记录
     // 客户端IP
     public final static String CLIENT_IP = "Client-Ip";
     // 客户端用户代理
     public final static String CLIENT_USER_AGENT = "Client-User-Agent";
-
-    //前台传递终端类型：做经验值计算时用
-    public final static String CLIENT_TYPE = "Client_Type";
 
     // 淘宝IP地址库（http://ip.taobao.com）查询接口，每个用户的访问频率需小于10qps
     public final static String IP_QUERY_URL = "http://ip.taobao.com/service/getIpInfo.php?ip={ip}";
@@ -86,67 +75,24 @@ public class Constant {
 
     // 订单自动取消时间：小时
     public final static Integer ORDER_CANCEL_TIME = 2;
-
     // 订单退货期限，单位：天
     public final static Integer ORDER_BACK_DAYS = 7;
     // 订单换货期限，单位：天
     public final static Integer ORDER_EXCHANGE_DAYS = 15;
     // 订单换货自动收货期限，单位：天
     public final static Integer ORDER_EXCHANGE_RECEIPT_DAYS = 15;
-
     // 订单自动确认收货，单位：天
     public final static Integer ORDER_RECEIPT_DAYS = 15;
 
-    /**
-     * 获取当前系统当天日期String
-     *
-     * @return String
-     */
-    public static String getTodaySting() {
-        Date date = new Date();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
-    }
+    //用户连续输错密码阈值
+    public final static int USER_CONTINUE_PASSWORD_WRONG_MAX = 5;
+    //用户连续输错密码超过阈值锁定时间，单位：毫秒
+    public final static int LOCK_TIME = 10 * 60 * 1000;
 
     /**
-     * 获取当前系统当天日期
-     *
-     * @param date Date
-     * @return Date
+     * 电子申报系统信息查询数量
      */
-    public static Date getToday(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, 0);
-        date = calendar.getTime();
-        return date;
-    }
-
-    /**
-     * 获取当前系统前一天日期
-     *
-     * @param date Date
-     * @return Date
-     */
-    public static Date getYesterDay(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        date = calendar.getTime();
-        return date;
-    }
-
-    /**
-     * 获取当前系统下一天日期
-     *
-     * @param date Date
-     * @return Date
-     */
-    public static Date getNextDay(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        date = calendar.getTime();
-        return date;
-    }
+	public static final String DZSBQNUM="200";
+    //电子申报绑定时间，单位：月
+    public final static Integer DZSB_BIND_DATE = 7;
 }

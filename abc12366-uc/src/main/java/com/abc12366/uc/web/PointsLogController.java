@@ -1,12 +1,11 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsLogUcBO;
 import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.util.DateUtils;
-import com.abc12366.uc.util.UserUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -117,17 +116,17 @@ public class PointsLogController {
         Date startDate = null;
         Date endDate = null;
         if (start != null) {
-            startDate = DateUtils.StrToDate(start);
+            startDate = DateUtils.strToDate(start);
         }
         if (end != null) {
-            Date endDateTmp = DateUtils.StrToDate(end);
+            Date endDateTmp = DateUtils.strToDate(end);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(endDateTmp);
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             endDate = calendar.getTime();
         }
 
-        map.put("userId", UserUtil.getUserId(request));
+        map.put("userId", Utils.getUserId(request));
         map.put("start", startDate);
         map.put("end", endDate);
 

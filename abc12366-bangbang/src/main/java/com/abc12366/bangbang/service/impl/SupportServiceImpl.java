@@ -1,13 +1,12 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.MapUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.SupportMapper;
 import com.abc12366.bangbang.mapper.db2.SupportRoMapper;
 import com.abc12366.bangbang.model.Support;
 import com.abc12366.bangbang.model.bo.SupportBO;
 import com.abc12366.bangbang.service.SupportService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ public class SupportServiceImpl implements SupportService {
     @Override
     public SupportBO insert(String subject, String id, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         //查看是否已经点赞
         Map map = MapUtil.kv("subjectId", id, "userId", userId, "type", subject);
         List<SupportBO> supportBOList = supportRoMapper.selectExist(map);
@@ -66,7 +65,7 @@ public class SupportServiceImpl implements SupportService {
     @Override
     public void delete(String subject, String id, HttpServletRequest request) {
         LOGGER.info("{}:{}:{}", subject, id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Support support = new Support();
         support.setType(subject);
         support.setSubjectId(id);

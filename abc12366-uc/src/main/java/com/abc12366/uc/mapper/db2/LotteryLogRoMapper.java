@@ -14,4 +14,7 @@ import java.util.Map;
 public interface LotteryLogRoMapper {
     List<LotteryLogBO> selectList(Map map);
     LotteryLogBO selectOne(String id);
+    Integer selectUserDay(String userId);
+
+    Integer selectUserDayLuck(String userId);
 }

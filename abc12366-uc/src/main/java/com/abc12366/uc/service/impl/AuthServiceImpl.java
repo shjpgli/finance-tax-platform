@@ -3,7 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UcUserLoginLogMapper;
@@ -189,7 +189,7 @@ public class AuthServiceImpl implements AuthService {
         BeanUtils.copyProperties(user, userReturnBO);
 
         //首次绑定手机任务埋点
-        todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
+        todoTaskService.doTask(user.getId(), TaskConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
 
         LOGGER.info("{}", userReturnBO);
         return userReturnBO;
@@ -506,12 +506,12 @@ public class AuthServiceImpl implements AuthService {
         insertLoginLog(userId);
 
         //登录任务日志
-        todoTaskService.doTaskWithouComputeAward(userId, UCConstant.SYS_TASK_LOGIN_CODE);
+        todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
         User user = userRoMapper.selectOne(userId);
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
+            todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
         }
 
         try{
@@ -544,9 +544,9 @@ public class AuthServiceImpl implements AuthService {
         } else {
             wrongCount = wrongCountList.get(0);
             wrongCount.setCount(wrongCount.getCount() + 1);
-            if (wrongCount.getCount() >= UCConstant.USER_CONTINUE_PASSWORD_WRONG_MAX) {
+            if (wrongCount.getCount() >= Constant.USER_CONTINUE_PASSWORD_WRONG_MAX) {
                 Date limitTime = new Date();
-                limitTime.setTime(limitTime.getTime() + UCConstant.LOCK_TIME);
+                limitTime.setTime(limitTime.getTime() + Constant.LOCK_TIME);
                 wrongCount.setCount(0);
                 wrongCount.setLimitTime(limitTime);
                 userMapper.updateContinuePwdWrong(wrongCount);
@@ -610,7 +610,7 @@ public class AuthServiceImpl implements AuthService {
 
             //查询系统任务
             //新的查询系统任务方法：根据编码查询
-            ExperienceRuleBO experienceRuleBO = experienceRuleService.selectValidOneByCode(UCConstant
+            ExperienceRuleBO experienceRuleBO = experienceRuleService.selectValidOneByCode(TaskConstant
                     .EXP_RULE_LOGIN_CODE);
             if (experienceRuleBO == null) {
                 return;

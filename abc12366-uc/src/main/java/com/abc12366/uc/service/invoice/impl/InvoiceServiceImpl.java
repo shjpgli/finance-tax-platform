@@ -2,12 +2,11 @@ package com.abc12366.uc.service.invoice.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.UserAddressBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
@@ -28,7 +27,8 @@ import com.abc12366.uc.service.IActivityService;
 import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.invoice.InvoiceService;
-import com.abc12366.uc.util.*;
+import com.abc12366.uc.util.CharUtil;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.webservice.DzfpClient;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -203,7 +203,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceBO addInvoice(InvoiceBO invoiceBO) {
 
-        String invoiceId = DataUtils.getInvoiceOrderString();
+        String invoiceId = DateUtils.getInvoiceOrderString();
         invoiceBO.setId(invoiceId);
         Date date = new Date();
         invoiceBO.setCreateTime(date);
@@ -331,7 +331,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 excel.setAmount(bo.getAmount());
                 excel.setAmountBig(bo.getAmount());
                 excel.setAmountSmall(bo.getAmount());
-                excel.setDrawer(UserUtil.getAdminInfo().getNickname());
+                excel.setDrawer(Utils.getAdminInfo().getNickname());
                 List<OrderBO> orderBOList = bo.getOrderBOList();
                 StringBuffer remark = new StringBuffer();
                 for (OrderBO orderBO : orderBOList) {
@@ -475,7 +475,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceTemp.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.ORDER\\}",
+                String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.ORDER\\}",
                         invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
                         expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -525,9 +525,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4913, "发票号码或发票代码不存在");
             }
             if (!"0".equals(invoiceDetail.getStatus())) {
-                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + "未出库或已使用");
+                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在<已签收>后才能被使用");
             }
-
             Invoice ce = new Invoice();
             ce.setId(invoiceExcel.getInvoiceOrderNo());
             ce.setStatus("2");
@@ -591,7 +590,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void automaticReceiptInvoice() {
-        Date date = DataUtils.getAddDate(UCConstant.ORDER_RECEIPT_DAYS);
+        Date date = DateUtils.getAddDate(Constant.ORDER_RECEIPT_DAYS);
         //查询15天之前未确认的订单
         List<Invoice> orderList = invoiceRoMapper.selectReceiptInvoiceByDate(date);
         for (Invoice invoice : orderList) {
@@ -615,6 +614,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRoMapper.selectTodoListCount();
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void invoiceCheck() {
         Einvocie einvocie = new Einvocie();
@@ -623,11 +623,33 @@ public class InvoiceServiceImpl implements InvoiceService {
         List<Einvocie> dataList = new ArrayList<>();
         for(Einvocie data : list){
             //更新发票库存信息
-            boolean isUpd = updInvoiceDetail(data);
-            if(isUpd){
-                data.setTBSTATUS("1");
-                iDzfpService.update(data);
+            InvoiceDetail tail = new InvoiceDetail();
+            tail.setInvoiceNo(einvocie.getFP_HM());
+            tail.setInvoiceCode(einvocie.getFP_DM());
+            tail.setSpUrl(einvocie.getSP_URL());
+            tail.setPdfUrl(einvocie.getPDF_URL());
+            //根据发票号码和发票代码查找发票详细信息表
+            InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
+            if (detail == null) {
+                LOGGER.info("发票号码为XXX的未找到库存，请入库再进行同步：{}", detail);
+                throw new ServiceException(4186,"发票号码为"+einvocie.getFP_HM()+"的未找到库存，请入库后再进行同步");
             }
+            if (detail.getStatus() != null && "3".equals(detail.getStatus())) {
+                tail.setId(detail.getId());
+                tail.setLastUpdate(new Date());
+                tail.setStatus("2");
+                int dUpdate = invoiceDetailMapper.update(tail);
+                if (dUpdate != 1) {
+                    LOGGER.info("发票详情信息修改失败：{}", tail);
+                    throw new ServiceException(4187);
+                }
+            }else{
+                LOGGER.info("发票详情信息未签收，请去发票仓库签收：{}", tail);
+                throw new ServiceException(4964,"发票号码为： "+einvocie.getFP_HM()+"的未领用完成，请签收后再进行同步");
+            }
+            //更新电子发票开票日志信息
+            data.setTBSTATUS("1");
+            iDzfpService.update(data);
         }
     }
 
@@ -746,7 +768,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dzfpGetReq.setFpqqlsh(fpqqlsh);
                 dzfpGetReq.setZsfs("0"); //
                 dzfpGetReq.setKplx("0"); //开票0，退票1
-                dzfpGetReq.setKpr(UserUtil.getAdminInfo().getNickname());
+                dzfpGetReq.setKpr(Utils.getAdminInfo().getNickname());
                 invoiceXm.setXmmc(invoiceBO.getContentDetail());
                 //商品编码
                 invoiceXm.setSpbm("1010105000000000000");
@@ -776,7 +798,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                             }
                         }
                     }
-                    dzfpGetReq.setBz(buffer.toString());
+                    if(buffer.length() > 0){
+                        dzfpGetReq.setBz(buffer.deleteCharAt(buffer.length()-1).toString());
+                    }
                 }
                 dzfpGetReq.setInvoiceXms(invoiceXmList);
                 try {
@@ -834,7 +858,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             throw new ServiceException(4102);
         }
         //加入发票日志
-        insertInvoiceLog(invoiceCheckBO.getId(), UserUtil.getAdminId(), invoiceCheckBO.getRemark());
+        insertInvoiceLog(invoiceCheckBO.getId(), Utils.getAdminId(), invoiceCheckBO.getRemark());
     }
 
     /**
@@ -856,6 +880,16 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     /**
+     * 电子发票是否生成红包口令,0：否；1：是
+     */
+    private String selectFieldValue(String dictId) {
+        Dict dict = new Dict();
+        dict.setDictId(dictId);
+        dict = dictRoMapper.selectOne(dict);
+        return dict != null ? dict.getFieldValue() : "";
+    }
+
+    /**
      * 更新发票详情信息
      *
      * @param einvocie
@@ -868,7 +902,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         tail.setPdfUrl(einvocie.getPDF_URL());
         //根据发票号码和发票代码查找发票详细信息表
         InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
-        if (detail != null) {
+        if (detail != null && detail.getStatus() != null && "3".equals(detail.getStatus())) {
             tail.setId(detail.getId());
             tail.setLastUpdate(new Date());
             tail.setStatus("2");
@@ -904,7 +938,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setBusinessId(invoiceBO.getId());
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
-            String content = MessageConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+            String content = RemindConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
                     .getId());
             message.setContent(content);
             message.setUserId(invoiceBO.getUserId());
@@ -949,11 +983,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
         //查看业务提醒是否启用
         if (findObj != null && findObj.getStatus()) {
-            String isRedPackage = SpringCtxHolder.getProperty("DZFP_IS_REDPACKAGE");
+            //查询是否发红包
+            String isRedPackage = selectFieldValue("dzfp_is_redpackage");
             String redPackage = "";
             if(isRedPackage != null && "1".equals(isRedPackage)){
                 //获取微信红包信息
-                redPackage = "微信红包口令："+selectWechatPassword("wechat_hongbao");
+                redPackage = RemindConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",selectWechatPassword("wechat_hongbao"));
             }
 
             //发送消息
@@ -962,7 +997,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setBusiType(MessageConstant.ZZFPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
 
-            String content = MessageConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
+            String content = RemindConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
                     invoiceBO.getId())+redPackage;
             message.setContent(content);
             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -984,7 +1019,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 dataList.put("keyword1", invoiceBO.getInvoiceCode());
                 dataList.put("keyword2", invoiceBO.getInvoiceNo());
                 dataList.put("keyword3", String.valueOf(invoiceBO.getAmount()));
-                dataList.put("keyword4", DataUtils.dateToStr(new Date()));
+                dataList.put("keyword4", DateUtils.dateToStr(new Date()));
                 templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
             }
             if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
@@ -1052,7 +1087,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.DZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}",
+                String content = RemindConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}",
                         invoiceBO.getId());
                 message.setContent(content);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
@@ -1098,7 +1133,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 message.setBusinessId(invoiceBO.getId());
                 message.setBusiType(MessageConstant.ZZFPDD);
                 message.setType(MessageConstant.SYS_MESSAGE);
-                String content = MessageConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+                String content = RemindConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
                         .getId());
                 message.setContent(content);
                 message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +

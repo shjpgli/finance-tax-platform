@@ -13,7 +13,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionFactionTjBo;
 import com.abc12366.bangbang.service.QueFactionService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.UCUserBO;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,7 +161,7 @@ public class QueFactionServiceImpl implements QueFactionService {
 
         int factionCnt = questionFactionRoMapper.selectFactionCnt(questionFactionBo.getUserId());
 
-        UCUserBO userBo = UcUserCommon.getUserInfo();
+        UCUserBO userBo = Utils.getUserInfo();
         String vipLevel = "";
         String userLevel = "";
         if(userBo != null){
@@ -169,9 +169,27 @@ public class QueFactionServiceImpl implements QueFactionService {
             userLevel = userBo.getLevel();
         }
 
-        if(factionCnt>=4){
-            //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
-            throw new ServiceException(6126);
+        if("VIP0".equals(vipLevel)){
+            if(factionCnt>=2){
+                //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
+                throw new ServiceException(6126);
+            }else{
+                if(userLevel != null && userLevel.length() > 2){
+                    String userLevel1 = userLevel.substring(2);
+                    int userLevel2 = Integer.parseInt(userLevel1);
+                    if(userLevel2 < 22){
+                        //用户等级大于等于22级或者成为VIP会员才能创建邦派
+                        throw new ServiceException(6128);
+                    }
+                }else{
+                    throw new ServiceException(6122);
+                }
+            }
+        }else{
+            if(factionCnt>=4){
+                //普通用户只能创建2个帮派，VIP 会员可以创建最多4个帮派
+                throw new ServiceException(6126);
+            }
         }
 
         List<QuestionFactionTag> tagList = questionFactionBo.getTagList();
@@ -211,7 +229,7 @@ public class QueFactionServiceImpl implements QueFactionService {
             member.setMemberGrade("B1");
             member.setCreateTime(new Date());
             member.setMemberId(UUID.randomUUID().toString().replace("-", ""));
-            member.setStatus(1);
+            member.setStatus(2);//1、申请，2、通过
             memberFactionMapper.insert(member);
 
             questionFactionMapper.insert(questionFaction);
@@ -323,6 +341,25 @@ public class QueFactionServiceImpl implements QueFactionService {
 //                }
 //            }
 
+
+            questionFactionMapper.updateByPrimaryKeySelective(questionFaction);
+        } catch (Exception e) {
+            LOGGER.error("更新邦派信息异常：{}", e);
+            throw new ServiceException(6123);
+        }
+        return questionFactionBo;
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public QuestionFactionBo updateSelect(QuestionFactionBo questionFactionBo) {
+        //更新邦派信息
+        QuestionFaction questionFaction = new QuestionFaction();
+        try {
+            JSONObject jsonStu = JSONObject.fromObject(questionFactionBo);
+            LOGGER.info("更新邦派信息:{}", jsonStu.toString());
+            questionFactionBo.setUpdateTime(new Date());
+            BeanUtils.copyProperties(questionFactionBo, questionFaction);
 
             questionFactionMapper.updateByPrimaryKeySelective(questionFaction);
         } catch (Exception e) {

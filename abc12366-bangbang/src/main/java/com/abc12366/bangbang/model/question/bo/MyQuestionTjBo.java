@@ -22,6 +22,9 @@ public class MyQuestionTjBo implements Serializable {
     /**点赞次数**int(11)**/
     private Integer likeNum;
 
+    /**被点赞次数**int(11)**/
+    private Integer quiltLikeNum;
+
     /**回复次数**int(11)**/
     private Integer answerNum;
 
@@ -151,5 +154,13 @@ public class MyQuestionTjBo implements Serializable {
     public MyQuestionTjBo setNewFansNum(Integer newFansNum) {
         this.newFansNum = newFansNum;
         return this;
+    }
+
+    public Integer getQuiltLikeNum() {
+        return quiltLikeNum;
+    }
+
+    public void setQuiltLikeNum(Integer quiltLikeNum) {
+        this.quiltLikeNum = quiltLikeNum;
     }
 }

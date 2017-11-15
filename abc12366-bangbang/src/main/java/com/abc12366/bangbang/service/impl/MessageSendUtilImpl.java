@@ -1,10 +1,11 @@
-package com.abc12366.bangbang.util;
+package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.model.Message;
 import com.abc12366.bangbang.model.bo.MessageBO;
+import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,8 @@ public class MessageSendUtilImpl implements MessageSendUtil {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RestTemplateUtil restTemplateUtil;
     /**
      * 需要验证token的发送
      */
@@ -50,7 +53,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
 
         String responseStr;
         try {
-            responseStr = send(url, HttpMethod.POST, map, request);
+            responseStr = restTemplateUtil.exchange(url, HttpMethod.POST, map, request);
         } catch (Exception e) {
             throw new ServiceException(4821);
         }
@@ -59,35 +62,6 @@ public class MessageSendUtilImpl implements MessageSendUtil {
             response = JSON.parseObject(responseStr, MessageBO.class);
         }
         return response;
-    }
-
-    @Override
-    public String send(String url, HttpMethod method, Map<String, Object> map, HttpServletRequest request) {
-        //请求头设置
-        HttpHeaders httpHeaders = new HttpHeaders();
-        if (!StringUtils.isEmpty(request.getHeader(Constant.APP_TOKEN_HEAD))) {
-            httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-        }
-        if (!StringUtils.isEmpty(request.getHeader(Constant.ADMIN_TOKEN_HEAD))) {
-            httpHeaders.add(Constant.ADMIN_TOKEN_HEAD, request.getHeader(Constant.ADMIN_TOKEN_HEAD));
-        }
-        if (!StringUtils.isEmpty(request.getHeader(Constant.USER_TOKEN_HEAD))) {
-            httpHeaders.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
-        }
-        if (!StringUtils.isEmpty(request.getHeader(Constant.VERSION_HEAD))) {
-            httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
-        }
-
-        HttpEntity requestEntity = new HttpEntity(map, httpHeaders);
-        LOGGER.info("Request: {}, {}", url, requestEntity);
-        ResponseEntity<String> responseEntity = null;
-        try {
-            responseEntity = restTemplate.exchange(url, method, requestEntity, String.class);
-        } catch (RestClientException e) {
-            throw new ServiceException("0000", "调用接口异常，地址：" + url);
-        }
-        LOGGER.info("Response: {}, {}", url, responseEntity);
-        return responseEntity != null ? responseEntity.getBody() : null;
     }
 
     /**
@@ -133,15 +107,5 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         }
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity != null ? responseEntity.getBody() : null;
-    }
-
-    public static void main(String[] args) {
-//        Message message = new Message();
-//        message.setBusinessId("cs");
-//        message.setType(MessageConstant.SPDD);
-//        message.setContent(MessageConstant.BUYING_MEMBERS_PREFIX + MessageConstant.BUYING_MEMBERS_SUFFIX + "。<a " +
-//                "href=\"" + MessageConstant.ABCUC_URL + "/member/member_rights.html\">会员权益详情查看</a>");
-//        message.setUserId("cs");
-//        new MessageSendUtilImpl().sendMessage(message);
     }
 }

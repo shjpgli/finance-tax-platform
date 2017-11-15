@@ -19,18 +19,23 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.cms.model.bo.EventApplyBo" parameterType="java.util.Map">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM cms_event_apply
+        a.applyId, a.eventId, a.source, u.nickname name,u.phone  tel, u.regMail email, a.applytime, a.status
+        FROM cms_event_apply a left join cms_user u on a.userid = u.id
         WHERE 1=1
         <if test="name != null and name != ''">
-            AND (name like CONCAT('%',#{name},'%') or tel like CONCAT('%',#{name},'%') or email like
-            CONCAT('%',#{name},'%') )
+            AND u.nickname like CONCAT('%',#{name},'%')
+        </if>
+        <if test="tel != null and tel != ''">
+            AND u.phone like CONCAT('%',#{tel},'%')
+        </if>
+        <if test="email != null and email != ''">
+            AND u.regMail like CONCAT('%',#{email},'%')
         </if>
         <if test="status != null and status != ''">
-            AND status = #{status}
+            AND a.status = #{status}
         </if>
         <if test="eventId != null and eventId != ''">
-            AND eventId = #{eventId}
+            AND a.eventId = #{eventId}
         </if>
     </select>
 

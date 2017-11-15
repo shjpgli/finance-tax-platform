@@ -1,4 +1,4 @@
-package com.abc12366.bangbang.common;
+package com.abc12366.bangbang.util;
 
 import java.util.HashMap;
 import java.util.Map;

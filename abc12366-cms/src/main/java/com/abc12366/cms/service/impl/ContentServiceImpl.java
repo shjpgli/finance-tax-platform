@@ -5,11 +5,11 @@ import com.abc12366.cms.mapper.db2.*;
 import com.abc12366.cms.model.*;
 import com.abc12366.cms.model.bo.*;
 import com.abc12366.cms.service.ContentService;
-import com.abc12366.cms.util.CmsRestTemplateUtil;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +97,7 @@ public class ContentServiceImpl implements ContentService {
     private ContenttagidRoMapper tagRoMapper;
 
     @Autowired
-    private CmsRestTemplateUtil cmsRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public List<ContentListBo> selectList(Map<String, Object> map) {
@@ -768,11 +768,11 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public String updateViewsDayjf(String contentId, HttpServletRequest request) {
         contentMapper.updateViewsDay(contentId);
-        String userId = UcUserCommon.getUserId();
+        String userId = Utils.getUserId();
         String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
         String responseStr;
-        String sysTaskId = UCConstant.SYS_TASK_BROSE_NEWS_CODE;
-        responseStr = cmsRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+        String sysTaskId = TaskConstant.SYS_TASK_BROSE_NEWS_CODE;
+        responseStr = restTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
         return "";
     }
 

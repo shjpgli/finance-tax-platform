@@ -11,7 +11,6 @@ import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,8 +165,8 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         try {
             KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             knowledgeBase.setId(Utils.uuid());
-            knowledgeBase.setCreateUser(UcUserCommon.getAdminId());
-            knowledgeBase.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeBase.setCreateUser(Utils.getAdminId());
+            knowledgeBase.setUpdateUser(Utils.getAdminId());
             Long zero = new Long(0);
             knowledgeBase.setPv(zero);
             knowledgeBase.setShareNum(zero);
@@ -200,7 +199,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         try {
             KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             knowledgeBase.setUpdateTime(new Date());
-            knowledgeBase.setUpdateUser(UcUserCommon.getAdminId());
+            knowledgeBase.setUpdateUser(Utils.getAdminId());
             String knowledgeId = knowledgeBase.getId();
             knowledgeBaseMapper.updateByPrimaryKeySelective(knowledgeBase);
 

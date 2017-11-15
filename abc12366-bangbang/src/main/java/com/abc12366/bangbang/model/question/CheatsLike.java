@@ -22,6 +22,9 @@ public class CheatsLike implements Serializable {
 	/**用户ID**varchar(64)**/
 	private String userId;
 
+    /**被赞或被踩用户ID**varchar(64)**/
+    private String toUserId;
+
 	/**点赞时间**datetime**/
 	private java.util.Date likeTime;
 
@@ -66,7 +69,15 @@ public class CheatsLike implements Serializable {
 		return this.userId;
 	}
 
-	public void setLikeTime(java.util.Date likeTime){
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    public void setLikeTime(java.util.Date likeTime){
 		this.likeTime = likeTime;
 	}
 
