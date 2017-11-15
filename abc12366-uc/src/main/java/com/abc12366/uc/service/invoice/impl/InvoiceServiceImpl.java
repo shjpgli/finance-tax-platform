@@ -813,8 +813,12 @@ public class InvoiceServiceImpl implements InvoiceService {
                         List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
                         if(productBOs != null && productBOs.size() > 0){
                             for (OrderProductBO pBO : productBOs){
-                                buffer.append(pBO.getName());
-                                buffer.append(",");
+                                if(pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())){
+                                    buffer.append("培训课程,");
+                                }else{
+                                    buffer.append(pBO.getName());
+                                    buffer.append(",");
+                                }
                             }
                         }
                     }
@@ -849,8 +853,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             sendDzfpMessage(request, invoiceBO);
         } else {
             if (invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())) {
-                InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId
-                        ());
+                InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
                 if (invoiceDetail == null) {
                     LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
                     throw new ServiceException(4186);
