@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 
 /**
@@ -14,9 +16,11 @@ public class VipPrivilegeLevelBO {
     /**id*/
     private String id;
     /**'等级id'*/
+    @NotEmpty
     private String levelId;
 
     /**'权益id'*/
+    @NotEmpty
     private String privilegeId;
     /**'val1'*/
     private String val1;

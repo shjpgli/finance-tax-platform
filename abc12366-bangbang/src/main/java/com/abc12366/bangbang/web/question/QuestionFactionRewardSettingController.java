@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -40,8 +41,8 @@ public class QuestionFactionRewardSettingController {
 
     /* 帮邦后台 跟帮派分配积分 */
     @PostMapping(path = "/add")
-    public ResponseEntity add(@RequestBody QuestionFactionRewardSetting record) {
-        questionFactionRewardSettingService.setting(record);
+    public ResponseEntity add(@RequestBody QuestionFactionRewardSetting record, HttpServletRequest request) {
+        questionFactionRewardSettingService.setting(record, request);
         return ResponseEntity.ok(Utils.kv("data", record));
     }
 

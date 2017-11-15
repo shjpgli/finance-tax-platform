@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class QuestionDisableUserServiceImpl implements QuestionDisableUserServic
 
     @Transactional("db1TxManager")
     @Override
-    public void disable(QuestionDisableUser record) {
+    public void disable(QuestionDisableUser record, HttpServletRequest request) {
         questionDisableUserMapper.deleteByPrimaryKey(record.getUserId());
         record.setUpdateAdmin(Utils.getAdminId());
         questionDisableUserMapper.insert(record);
@@ -48,20 +49,20 @@ public class QuestionDisableUserServiceImpl implements QuestionDisableUserServic
         Message message = new Message();
         message.setUserId(record.getUserId());
         message.setContent(new StringBuilder("很抱歉！您已被禁言了,原因为：").append(record.getReason()).append("，下次生效时间为！").append(DateUtils.dateToStr(record.getActiveTime())).toString());
-        message.setType("1");
+        message.setType("2");
         message.setBusinessId(record.getUserId());
-        messageSendUtil.sendMessage(message);
+        messageSendUtil.sendMessage(message, request);
     }
 
     @Override
-    public void enable(String userId) {
+    public void enable(String userId, HttpServletRequest request) {
         questionDisableUserMapper.deleteByPrimaryKey(userId);
         /*发送系统消息*/
         Message message = new Message();
         message.setUserId(userId);
         message.setContent("恭喜你！您的禁言已被撤销");
-        message.setType("1");
+        message.setType("2");
         message.setBusinessId(userId);
-        messageSendUtil.sendMessage(message);
+        messageSendUtil.sendMessage(message, request);
     }
 }
