@@ -3,11 +3,11 @@ package com.abc12366.uc.wsbssoa.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
 import com.abc12366.uc.wsbssoa.response.RSAPkResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.RSAUtil;
-import com.abc12366.uc.wsbssoa.utils.soaUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +38,7 @@ public class MainServiceImpl implements MainService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Override
     public String RSAEncrypt(HttpServletRequest request, String inputStr) throws Exception {
         RSAPublicKey pbk = (RSAPublicKey) getRSAPublicKey(request);
         return new String(RSAUtil.encrypt(pbk, inputStr.getBytes("iso-8859-1")), "iso-8859-1");
@@ -79,12 +80,11 @@ public class MainServiceImpl implements MainService {
         String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+ Base64.getEncoder().encodeToString(api.getBytes());
         HttpEntity requestEntity = new HttpEntity(null, headers);
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+        if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
             return JSON.parseObject(String.valueOf(responseEntity.getBody()), RSAPkResponse.class);
         } else {
             throw new ServiceException(4192);
         }
-        //RSAPkResponse obj = SoaConnectionFactory.get(request, ConstantsUri.GET_RSA_PK, map, RSAPkResponse.class);
     }
 
     @Override
