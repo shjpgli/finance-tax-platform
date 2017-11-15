@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
     /* 审核，并发送站内信息 */
     @Transactional("db1TxManager")
     @Override
-    public void changeStatus(QuestionHeadman record) {
+    public void changeStatus(QuestionHeadman record, HttpServletRequest request) {
         questionHeadmanMapper.updateByPrimaryKeySelective(record);
         QuestionHeadmanBo headmanBo = questionHeadmanRoMapper.selectByPrimaryKey(record.getId());
         Message message = new Message();
@@ -92,6 +93,6 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         }
         message.setType("1");
         message.setBusinessId(headmanBo.getId());
-        messageSendUtil.sendMessage(message);
+        messageSendUtil.sendMessage(message, request);
     }
 }

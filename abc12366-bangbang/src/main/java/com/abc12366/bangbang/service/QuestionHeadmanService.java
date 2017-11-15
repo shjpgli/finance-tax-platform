@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service;
 import com.abc12366.bangbang.model.question.QuestionHeadman;
 import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -22,6 +23,6 @@ public interface QuestionHeadmanService {
     void delete(String id);
 
     /* 修改状态（apply:申请,success:通过,refuse:拒绝） */
-    void changeStatus(QuestionHeadman record);
+    void changeStatus(QuestionHeadman record, HttpServletRequest request);
 
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -42,8 +43,8 @@ public class QuestionDisableUserController {
     * 禁用用户 接口
     */
     @PostMapping(path = "/disable")
-    public ResponseEntity disable(@RequestBody QuestionDisableUser record) {
-        questionDisableUserService.disable(record);
+    public ResponseEntity disable(@RequestBody QuestionDisableUser record, HttpServletRequest request) {
+        questionDisableUserService.disable(record, request);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -51,8 +52,8 @@ public class QuestionDisableUserController {
     * 撤销禁用用户 接口
     */
     @DeleteMapping(path = "/enable/{userId}")
-    public ResponseEntity enable(@PathVariable String userId) {
-        questionDisableUserService.enable(userId);
+    public ResponseEntity enable(@PathVariable String userId, HttpServletRequest request) {
+        questionDisableUserService.enable(userId, request);
         return ResponseEntity.ok(Utils.kv());
     }
 

@@ -138,7 +138,7 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
         if(QuestionTipOffStatus.refuse.name().equals(questionTipOff.getStatus())){
             message.setContent("很抱歉！您"+ DateUtils.dateToStr(record.getCreateTime())+"举报的内容已被拒绝，拒绝原因为："+record.getRefuseReason());
         }
-        messageSendUtil.sendMessage(message);
+        messageSendUtil.sendMessage(message, request);
     }
 
 

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class QuestionFactionRewardSettingServiceImpl implements QuestionFactionR
 
     @Transactional("db1TxManager")
     @Override
-    public void setting(QuestionFactionRewardSetting record) {
+    public void setting(QuestionFactionRewardSetting record, HttpServletRequest request) {
         record.setId(Utils.uuid());
         record.setUpdateAdmin(Utils.getAdminId());
         questionFactionRewardSettingMapper.insert(record);
@@ -59,6 +60,6 @@ public class QuestionFactionRewardSettingServiceImpl implements QuestionFactionR
         message.setContent("恭喜您！系统给您的帮派分配了"+record.getRewardsPoints()+"积分！");
         message.setType("1");
         message.setBusinessId(record.getId());
-        messageSendUtil.sendMessage(message);
+        messageSendUtil.sendMessage(message, request);
     }
 }
