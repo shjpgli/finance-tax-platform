@@ -5,12 +5,11 @@ import com.abc12366.bangbang.mapper.db2.CurriculumEvaluateRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumEvaluate;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumEvaluateBo;
 import com.abc12366.bangbang.service.CurrEvaluateService;
-import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,7 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
     private CurriculumEvaluateRoMapper evaluateRoMapper;
 
     @Autowired
-    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public List<CurriculumEvaluateBo> selectList(Map<String,Object> map) {
@@ -84,9 +83,9 @@ public class CurrEvaluateServiceImpl implements CurrEvaluateService {
 
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
             String responseStr;
-            String userId = UcUserCommon.getUserId();
-            String sysTaskId = UCConstant.SYS_TASK_COURSE_COMMENT_CODE;
-            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+            String userId = Utils.getUserId();
+            String sysTaskId = TaskConstant.SYS_TASK_COURSE_COMMENT_CODE;
+            responseStr = restTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 //            System.out.println(responseStr);
 
 

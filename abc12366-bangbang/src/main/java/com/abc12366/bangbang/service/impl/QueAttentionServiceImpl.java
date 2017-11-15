@@ -1,6 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.MapUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.QuestionAttentionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionAttentionRoMapper;
 import com.abc12366.bangbang.model.question.QuestionAttention;
@@ -8,7 +8,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionAttentionBo;
 import com.abc12366.bangbang.service.QueAttentionService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
     @Override
     public String insert(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
 
 
         QuestionAttention attention = new QuestionAttention();
@@ -74,7 +74,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
     @Override
     public String delete(String id, HttpServletRequest request) {
         LOGGER.info("{}:{}", id, request);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("attentionUserId", id, "userId", userId);
         attentionMapper.delete(map);
         int attentionCnt = attentionRoMapper.selectAttentionCnt(id);
@@ -99,7 +99,7 @@ public class QueAttentionServiceImpl implements QueAttentionService {
     @Override
     public String selectExist(String id, HttpServletRequest request) {
         LOGGER.info("{}", id);
-        String userId = UcUserCommon.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map map = MapUtil.kv("attentionUserId", id, "userId", userId);
         String cnt = attentionRoMapper.selectExist(map)+"";
         return cnt;

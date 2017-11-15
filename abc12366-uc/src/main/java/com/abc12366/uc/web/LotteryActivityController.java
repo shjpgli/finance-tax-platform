@@ -6,6 +6,7 @@ package com.abc12366.uc.web;
  */
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.LotteryActivityBO;
 import com.abc12366.uc.model.bo.LotteryLogBO;
@@ -46,6 +47,10 @@ public class LotteryActivityController {
     @PostMapping
     public ResponseEntity insert(@RequestBody LotteryActivityBO lotteryActivityBO) {
         LOGGER.info("insert:{}", lotteryActivityBO);
+        if(lotteryActivityBO.getEndTime() != null){
+            String endStr =  DateUtils.dateToString( lotteryActivityBO.getEndTime());
+            lotteryActivityBO.setEndTime(DateUtils.put23h23m59s(endStr));
+        }
         LotteryActivityBO returnObj = lotteryActivityService.insert(lotteryActivityBO);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
@@ -53,6 +58,10 @@ public class LotteryActivityController {
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@RequestBody LotteryActivityBO lotteryActivityBO,
                                  @PathVariable String id) {
+        if(lotteryActivityBO.getEndTime() != null){
+            String endStr =  DateUtils.dateToString( lotteryActivityBO.getEndTime());
+            lotteryActivityBO.setEndTime(DateUtils.put23h23m59s(endStr));
+        }
         LOGGER.info("update：{} id:{}", lotteryActivityBO, id);
         LotteryActivityBO returnObj = lotteryActivityService.update(lotteryActivityBO, id);
         LOGGER.info("{}", returnObj);

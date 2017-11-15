@@ -39,6 +39,7 @@
         <if test="curriculumId != null and curriculumId != ''">
             AND s.curriculumId = #{curriculumId}
         </if>
+        order by s.studyTime desc
     </select>
 
     <!-- 查询学习次数 -->

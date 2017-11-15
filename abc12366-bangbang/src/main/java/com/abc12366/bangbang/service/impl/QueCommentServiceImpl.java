@@ -2,19 +2,19 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionCommentMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionMapper;
+import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
 import com.abc12366.bangbang.mapper.db2.*;
-import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionComment;
+import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.QuestionCommentBo;
 import com.abc12366.bangbang.service.QueCommentService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
-import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +41,9 @@ public class QueCommentServiceImpl implements QueCommentService {
     private QuestionAnswerMapper answerMapper;
 
     @Autowired
+    private QuestionSysBlockMapper questionSysBlockMapper;
+
+    @Autowired
     private QuestionRoMapper questionRoMapper;
 
     @Autowired
@@ -62,7 +65,7 @@ public class QueCommentServiceImpl implements QueCommentService {
     private BangBangDtLogUtil bangBangDtLogUtil;
 
     @Autowired
-    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public List<QuestionCommentBo> selectList(Map<String,Object> map) {
@@ -128,6 +131,11 @@ public class QueCommentServiceImpl implements QueCommentService {
             commentBo.setReportNum(0);
             commentBo.setStatus("0");
 
+            //保存问题评论信息
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            QuestionComment comment = new QuestionComment();
+            commentBo.setId(uuid);
+
             //敏感词校验
             String commentTxt = commentBo.getCommentTxt();
             List<String> wordList = sensitiveWordsRoMapper.selectListWords();
@@ -136,15 +144,23 @@ public class QueCommentServiceImpl implements QueCommentService {
                     boolean bl = commentTxt.contains(word);
                     if(bl){
                         commentBo.setStatus("1");
+
+                        //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                        QuestionSysBlock sysBlock = new QuestionSysBlock();
+                        sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                        sysBlock.setUserId(commentBo.getUserId());
+                        sysBlock.setClassifyCode(classifyCode);
+                        sysBlock.setStatus("1");
+                        sysBlock.setSourceId(commentBo.getId());
+                        sysBlock.setSourceType("comment");
+                        questionSysBlockMapper.insert(sysBlock);
+
                         break;
                     }
                 }
             }
 
-            //保存问题评论信息
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            QuestionComment comment = new QuestionComment();
-            commentBo.setId(uuid);
+
             BeanUtils.copyProperties(commentBo, comment);
 
             int commentNum = commentRoMapper.selectCommentCnt(commentBo.getAnswerId());
@@ -154,6 +170,7 @@ public class QueCommentServiceImpl implements QueCommentService {
             answerMapper.updateByPrimaryKeySelective(answer);
             commentBo.setCommentNum(commentNum);
 
+            comment.setClassifyCode(classifyCode);
             commentMapper.insert(comment);
 
             //帮邦日志记录表
@@ -161,9 +178,9 @@ public class QueCommentServiceImpl implements QueCommentService {
             bangBangDtLogUtil.insertLog(3,1, comment.getQuestionId(), comment.getAnswerId(), comment.getId(),comment.getCommentTxt(), comment.getUserId(), "");
 
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
-            String userId = UcUserCommon.getUserId();
-            String sysTaskId = UCConstant.SYS_TASK_ASK_COMMENT_CODE;
-            bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+            String userId = Utils.getUserId();
+            String sysTaskId = TaskConstant.SYS_TASK_ASK_COMMENT_CODE;
+            restTemplateUtil.send(url, HttpMethod.POST, request, userId, sysTaskId);
 
 
         } catch (Exception e) {
@@ -222,6 +239,17 @@ public class QueCommentServiceImpl implements QueCommentService {
                     boolean bl = commentTxt.contains(word);
                     if(bl){
                         commentBo.setStatus("1");
+                        String classifyCode = questionRoMapper.selectclassifyCode(commentBo.getQuestionId());
+                        //question：提问，answer：回答，comment：评论 cheats：秘籍，cheats_comment:秘籍下的评论
+                        QuestionSysBlock sysBlock = new QuestionSysBlock();
+                        sysBlock.setId(UUID.randomUUID().toString().replace("-", ""));
+                        sysBlock.setUserId(commentBo.getUserId());
+                        sysBlock.setClassifyCode(classifyCode);
+                        sysBlock.setStatus("1");
+                        sysBlock.setSourceId(commentBo.getId());
+                        sysBlock.setSourceType("comment");
+                        questionSysBlockMapper.insert(sysBlock);
+
                         break;
                     }
                 }

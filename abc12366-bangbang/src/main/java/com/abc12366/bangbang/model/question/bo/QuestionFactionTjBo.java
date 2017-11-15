@@ -24,6 +24,12 @@ public class QuestionFactionTjBo implements Serializable {
 	/**邦派图片**varchar(300)**/
 	private String factionImg;
 
+    /**帮主昵称**/
+    private String nickname;
+
+    /**副帮主昵称**/
+    private String nickname2;
+
 	/**邦派分类**varchar(500)**/
 	private String classifyCode;
 
@@ -341,5 +347,21 @@ public class QuestionFactionTjBo implements Serializable {
 
     public void setAwardPoint(Integer awardPoint) {
         this.awardPoint = awardPoint;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname2() {
+        return nickname2;
+    }
+
+    public void setNickname2(String nickname2) {
+        this.nickname2 = nickname2;
     }
 }

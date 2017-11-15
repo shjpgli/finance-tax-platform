@@ -265,7 +265,7 @@ public class QueFactionController {
     }
 
     /**
-     * 邦派排行列表查询
+     * 邦派任务情况查询
      */
     @GetMapping(path = "/selectTaskList")
     public ResponseEntity selectTaskList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,

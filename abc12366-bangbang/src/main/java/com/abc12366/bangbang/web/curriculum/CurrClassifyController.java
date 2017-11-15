@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.web.curriculum;
 
+import com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyTagBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifysBo;
@@ -94,8 +95,12 @@ public class CurrClassifyController {
      * 根据分类查询相关标签
      */
     @GetMapping(path = "/selectClassifyTagList")
-    public ResponseEntity selectClassifyTagList(@RequestParam(value = "classifyId", required = false) String classifyId) {
-        List<CurriculumClassifyTagBo> dataList = classifyService.selectClassifyTagList(classifyId);
+    public ResponseEntity selectClassifyTagList(@RequestParam(value = "classifyId", required = false) String classifyId,
+                                                @RequestParam(value = "tagName", defaultValue = "") String tagName) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("classifyId",classifyId);
+        map.put("tagName",tagName);
+        List<CurriculumClassifyTagBo> dataList = classifyService.selectClassifyTagList(map);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
 
     }
@@ -143,6 +148,13 @@ public class CurrClassifyController {
         //删除课程分类信息
         String rtn = classifyService.delete(classifyId);
         return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /*课程添加标签，并且让标签和选择的课程分类关联*/
+    @PutMapping(path = "/addTagAndRefClassify")
+    public ResponseEntity addTagAndRefClassify(@RequestBody List<CurriculumClassifyTag> tagList) {
+        classifyService.addTagAndRefClassify(tagList);
+        return ResponseEntity.ok(Utils.kv("dataList", tagList));
     }
 
 }

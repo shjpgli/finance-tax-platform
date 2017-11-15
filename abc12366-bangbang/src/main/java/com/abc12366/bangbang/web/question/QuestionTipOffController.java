@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -46,11 +47,11 @@ public class QuestionTipOffController {
     }
 
     /*
-    * 修改状态 接口
+    * 后台审核修改状态 接口
     */
     @PutMapping(path = "/modifyStatus")
-    public ResponseEntity modifyStatus(@RequestBody QuestionTipOff questionTipOff) {
-        questionTipOffService.changeStatus(questionTipOff);
+    public ResponseEntity modifyStatus(@RequestBody QuestionTipOff questionTipOff, HttpServletRequest request) {
+        questionTipOffService.changeStatusByAdmin(questionTipOff, request);
         return ResponseEntity.ok(Utils.kv());
     }
 

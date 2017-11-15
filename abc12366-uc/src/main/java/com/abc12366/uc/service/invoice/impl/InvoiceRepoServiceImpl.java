@@ -13,7 +13,6 @@ import com.abc12366.uc.model.invoice.InvoiceRepo;
 import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
-import com.abc12366.uc.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -76,7 +75,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
         Date date = new Date();
         invoiceRepoBO.setCreateTime(date);
-        invoiceRepoBO.setCreateUser(UserUtil.getAdminId());
+        invoiceRepoBO.setCreateUser(Utils.getAdminId());
         invoiceRepoBO.setLastUpdate(date);
         int startLength = invoiceRepoBO.getInvoiceNoStart().length();
         int endLength = invoiceRepoBO.getInvoiceNoEnd().length();
@@ -172,7 +171,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     public InvoiceRepoBO update(InvoiceRepoBO invoiceRepoBO) {
         Date date = new Date();
         invoiceRepoBO.setLastUpdate(date);
-        invoiceRepoBO.setUpdateUser(UserUtil.getAdminId());
+        invoiceRepoBO.setUpdateUser(Utils.getAdminId());
         InvoiceRepo invoiceRepo = new InvoiceRepo();
         BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
         //已出库的发票仓库不能进行修改
@@ -307,7 +306,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
     @Override
     public InvoiceDetailBO selectInvoiceDistributeByInv(String invoiceTypeCode) {
         InvoiceDistribute invoiceDistribute = new InvoiceDistribute();
-        invoiceDistribute.setSignUser(UserUtil.getAdminId());
+        invoiceDistribute.setSignUser(Utils.getAdminId());
         invoiceDistribute.setInvoiceTypeCode(invoiceTypeCode);
         return invoiceDetailRoMapper.selectInvoiceDetail(invoiceDistribute);
     }

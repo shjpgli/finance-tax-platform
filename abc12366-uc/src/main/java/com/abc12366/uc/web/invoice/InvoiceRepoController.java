@@ -1,13 +1,13 @@
 package com.abc12366.uc.web.invoice;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.invoice.InvoiceRepo;
 import com.abc12366.uc.model.invoice.bo.InvoiceDetailBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceRepoBO;
 import com.abc12366.uc.service.invoice.InvoiceRepoService;
-import com.abc12366.uc.util.DataUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -69,10 +69,10 @@ public class InvoiceRepoController {
         invoiceRepo.setInvoiceNoEnd(invoiceNoEnd);
 
         if (startTime != null && !"".equals(startTime)) {
-            invoiceRepo.setStartTime(DataUtils.StrToDate(startTime));
+            invoiceRepo.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            invoiceRepo.setEndTime(DataUtils.StrToDate(endTime));
+            invoiceRepo.setEndTime(DateUtils.strToDate(endTime));
         }
         //获取发票类型编码长度，用户排序
         if(StringUtils.isEmpty(invoiceTypeCode)){

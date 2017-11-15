@@ -1,6 +1,8 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.PointMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
@@ -9,8 +11,7 @@ import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
-import com.abc12366.uc.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -255,7 +256,7 @@ public class PointsServiceImpl implements PointsService {
     @Override
     public void batchAward(PointBatchAwardBO pointBatchAwardBO) {
         //如果积分规则为空则返回
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(UCConstant.POINT_RULE_BANGBANG_BATCH_AWARD_CODE);
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_BANGBANG_BATCH_AWARD_CODE);
         if (pointsRuleBO == null) {
             return;
         }
@@ -284,8 +285,8 @@ public class PointsServiceImpl implements PointsService {
                 .getRequest();
         Message message = new Message();
         message.setUserId(pointAwardBO.getUserId());
-        message.setType(UCConstant.BUSI_MSG_TYPE_BANGBANG);
-        message.setBusiType(UCConstant.BUSI_TYPE_BANGBANG);
+        message.setType(MessageConstant.BB_MESSAGE);
+        message.setBusiType(MessageConstant.BUSI_TYPE_BANGBANG);
         message.setBusinessId(pointAwardBO.getUserId());
         message.setStatus("1");
         message.setUrl("");

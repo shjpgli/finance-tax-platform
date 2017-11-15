@@ -1,10 +1,11 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.common.UcUserCommon;
 import com.abc12366.bangbang.mapper.db1.QuestionHeadmanMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionHeadmanRoMapper;
+import com.abc12366.bangbang.model.Message;
 import com.abc12366.bangbang.model.question.QuestionHeadman;
 import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
+import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.service.QuestionHeadmanService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -39,13 +40,16 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         return questionHeadmanRoMapper.selectByPrimaryKey(id);
     }
 
+    @Autowired
+    private MessageSendUtil messageSendUtil;
+
     @Transactional("db1TxManager")
     @Override
     public void add(QuestionHeadmanBo headmanBo) {
         QuestionHeadman headman = new QuestionHeadman();
         BeanUtils.copyProperties(headmanBo, headman);
         headman.setId(Utils.uuid());
-        headman.setUserId(UcUserCommon.getUserId());
+        headman.setUserId(Utils.getUserId());
         headman.setStatus("apply");
         headman.setCreateTime(new Date());
         int cnt = questionHeadmanRoMapper.selectExist(headman.getUserId());
@@ -71,11 +75,23 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         questionHeadmanMapper.deleteByPrimaryKey(id);
     }
 
+
+    /* 审核，并发送站内信息 */
+    @Transactional("db1TxManager")
     @Override
-    public void changeStatus(String id, String status) {
-        QuestionHeadman headman = new QuestionHeadman();
-        headman.setId(id);
-        headman.setStatus(status);
-        questionHeadmanMapper.updateByPrimaryKeySelective(headman);
+    public void changeStatus(QuestionHeadman record) {
+        questionHeadmanMapper.updateByPrimaryKeySelective(record);
+        QuestionHeadmanBo headmanBo = questionHeadmanRoMapper.selectByPrimaryKey(record.getId());
+        Message message = new Message();
+        message.setUserId(headmanBo.getUserId());
+        if("success".equals(record.getStatus())){
+            message.setContent("恭喜您！您的掌门人审核已通过！");
+        }
+        if("refuse".equals(record.getStatus())){
+            message.setContent("很抱歉！您的掌门人审核未通过！拒绝理由为："+ record.getRemark());
+        }
+        message.setType("1");
+        message.setBusinessId(headmanBo.getId());
+        messageSendUtil.sendMessage(message);
     }
 }

@@ -6,12 +6,11 @@ import com.abc12366.bangbang.mapper.db2.CurriculumStudyRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumStudy;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumStudyBo;
 import com.abc12366.bangbang.service.CurrStudyService;
-import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.UcUserCommon;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,7 @@ public class CurrStudyServiceImpl implements CurrStudyService {
     private CurriculumMapper curriculumMapper;
 
     @Autowired
-    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public List<CurriculumStudyBo> selectList(Map<String,Object> map) {
@@ -73,9 +72,9 @@ public class CurrStudyServiceImpl implements CurrStudyService {
             studyMapper.insert(study);
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
             String responseStr;
-            String userId = UcUserCommon.getUserId();
-            String sysTaskId = UCConstant.SYS_TASK_COURSE_LEARNING_CODE;
-            responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
+            String userId = Utils.getUserId();
+            String sysTaskId = TaskConstant.SYS_TASK_COURSE_LEARNING_CODE;
+            responseStr = restTemplateUtil.send(url, HttpMethod.POST, request,userId,sysTaskId);
 //            System.out.println(responseStr);
 
             curriculumMapper.updateWatchsDay(studyBo.getCurriculumId());

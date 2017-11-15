@@ -83,7 +83,7 @@
     <select id="selectUsableShare" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT sum(share) as usableShare
         FROM uc_invoice_repo
-        where status != '1' and invoiceTypeCode like CONCAT('%',#{invoiceTypeCode},'%') ORDER BY (invoiceTypeCode+0);
+        where status = '0' and invoiceTypeCode = #{invoiceTypeCode} ORDER BY (invoiceTypeCode+0);
     </select>
     <!-- 发票领用明细表对象-->
     <resultMap id="invoiceApprovalLogMap" type="com.abc12366.uc.model.invoice.bo.InvoiceApprovalLogBO">

@@ -92,12 +92,12 @@ public class AppController {
         AppBO appBO = new AppBO();
         appBO.setName(name);
         if (startTime != null && !"".equals(startTime)) {
-            appBO.setStartTime(DateUtils.StrToDate(startTime));
+            appBO.setStartTime(DateUtils.strToDate(startTime));
         } else {
             appBO.setStartTime(null);
         }
         if (endTime != null && !"".equals(endTime)) {
-            appBO.setEndTime(DateUtils.StrToDate(endTime));
+            appBO.setEndTime(DateUtils.strToDate(endTime));
         } else {
             appBO.setEndTime(null);
         }

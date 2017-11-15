@@ -29,10 +29,17 @@ public class SendMsgController {
 	 private IMsgSendService msgSendService;
      
 	 @SuppressWarnings("rawtypes")
-	@PostMapping("/byqd")
+	 @PostMapping("/byqd")
 	 public ResponseEntity sendByQd(@RequestBody MessageSendBo sendBo){
 		  LOGGER.info("接收到前端消息:"+JSONObject.toJSONString(sendBo));
 		  return msgSendService.sendMsgByQq(sendBo);
+	 }
+	 
+	 @SuppressWarnings("rawtypes")
+	 @PostMapping("/byqdbatch")
+	 public ResponseEntity sendByQdbatch(@RequestBody MessageSendBo sendBo){
+		  LOGGER.info("接收到前端消息:"+JSONObject.toJSONString(sendBo));
+		  return msgSendService.sendByQdbatch(sendBo);
 	 }
 	 
 }

@@ -2,6 +2,8 @@ package com.abc12366.gateway.util;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.model.User;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -243,6 +245,22 @@ public class Utils {
             throw new ServiceException(4044);
         }
         return appId;
+    }
+
+    public static UCUserBO getUserInfo(){
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        return (UCUserBO) request.getAttribute(Constant.USER_INFO);
+    }
+
+    public static User getAdminInfo() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        User user = (User) request.getAttribute(Constant.ADMIN_USER);
+        if (StringUtils.isEmpty(user)) {
+            throw new ServiceException(4130);
+        }
+        return user;
     }
 
     public static ServletRegistrationBean getServletRegistrationBean() throws IOException {

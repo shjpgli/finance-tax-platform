@@ -2,6 +2,8 @@ package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.MessageConstant;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.MessageSendLogMapper;
@@ -289,7 +291,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         //调用又拍接口请求体设置
         LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("mobile", phone);
-        requestBody.add("template_id", SpringCtxHolder.getProperty("message.upyun.templateid"));
+        requestBody.add("template_id", MessageConstant.MESSAGE_UPYUN_TEMPLATE_296);
         requestBody.add("vars", type + "|" + code);
         HttpEntity entity = new HttpEntity(requestBody, httpHeaders);
         ResponseEntity responseEntity;
@@ -302,7 +304,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             sendMsgLogService.insert(sendLog);
             throw new ServiceException(4204);
         }
-        if (soaUtil.isExchangeSuccessful(responseEntity)) {
+        if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
             try {
                 UpyunMessageResponse messageResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
                 //记日志

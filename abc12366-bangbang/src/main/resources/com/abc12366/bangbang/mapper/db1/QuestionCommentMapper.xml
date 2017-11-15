@@ -25,9 +25,9 @@
 	<!-- 添加 -->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.question.QuestionComment">
 		 INSERT INTO bb_question_comment
- 		(id,answerId,questionId,userId,commentUserId,commentTxt,status,createTime,lastUpdate,ip,factionId,likeNum,trampleNum,reportNum) 
+ 		(id,answerId,questionId,userId,classifyCode,commentUserId,commentTxt,status,createTime,lastUpdate,ip,factionId,likeNum,trampleNum,reportNum)
 		 VALUES 
- 		(#{id},#{answerId},#{questionId},#{userId},#{commentUserId},#{commentTxt},#{status},#{createTime},#{lastUpdate},#{ip},#{factionId},#{likeNum},#{trampleNum},#{reportNum}) 
+ 		(#{id},#{answerId},#{questionId},#{userId},#{classifyCode},#{commentUserId},#{commentTxt},#{status},#{createTime},#{lastUpdate},#{ip},#{factionId},#{likeNum},#{trampleNum},#{reportNum})
 	</insert>
 
 	<!-- 添加 （匹配有值的字段）-->

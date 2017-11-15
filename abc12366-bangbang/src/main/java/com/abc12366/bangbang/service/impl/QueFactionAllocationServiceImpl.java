@@ -12,9 +12,9 @@ import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationsBo;
 import com.abc12366.bangbang.service.QueFactionAllocationService;
-import com.abc12366.bangbang.util.BangbangRestTemplateUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.RestTemplateUtil;
 import com.alibaba.fastjson.JSON;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
     private QuestionFactionRoMapper questionFactionRoMapper;
 
     @Autowired
-    private BangbangRestTemplateUtil bangbangRestTemplateUtil;
+    private RestTemplateUtil restTemplateUtil;
 
     @Override
     public List<QuestionFactionAllocationBo> selectList(Map<String,Object> map) {
@@ -199,7 +199,7 @@ public class QueFactionAllocationServiceImpl implements QueFactionAllocationServ
                 map.put("pointAwardBOList", list);
                 try {
                     String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/uc/points/batch/award";
-                    String responseStr = bangbangRestTemplateUtil.send(url, HttpMethod.POST, map, request);
+                    String responseStr = restTemplateUtil.exchange(url, HttpMethod.POST, map, request);
                     if (!StringUtils.isEmpty(responseStr)) {
                         BaseObject response = JSON.parseObject(responseStr, BaseObject.class);
                         if(!response.getCode().equals("2000")){

@@ -33,7 +33,7 @@ public class QuestionFactionBo implements Serializable {
     private Integer awardPoint;
 
 	/**入邦最低等级**varchar(64)**/
-	private String minGrade;
+	private Integer minGrade;
 
 	/**简介**varchar(1000)**/
 	private String intro;
@@ -111,15 +111,15 @@ public class QuestionFactionBo implements Serializable {
 		return this.tag;
 	}
 
-	public void setMinGrade(String minGrade){
-		this.minGrade = minGrade;
-	}
+    public Integer getMinGrade() {
+        return minGrade;
+    }
 
-	public String getMinGrade(){
-		return this.minGrade;
-	}
+    public void setMinGrade(Integer minGrade) {
+        this.minGrade = minGrade;
+    }
 
-	public void setIntro(String intro){
+    public void setIntro(String intro){
 		this.intro = intro;
 	}
 

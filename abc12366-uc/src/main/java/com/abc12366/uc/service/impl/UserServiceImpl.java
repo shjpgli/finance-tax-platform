@@ -3,7 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
 
         if (user.getUserPicturePath() != null && !user.getUserPicturePath().trim().equals("")) {
             //首次上传用户头像任务埋点
-            todoTaskService.doTask(user.getId(), UCConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_CODE);
+            todoTaskService.doTask(user.getId(), TaskConstant.SYS_TASK_FIRST_UPLOAD_PICTURE_CODE);
         }
 
         UserBO userDTO = new UserBO();
@@ -252,6 +252,13 @@ public class UserServiceImpl implements UserService {
         UserBO user = userRoMapper.selectOneByToken(token);
         if (user != null) {
             tokenMapper.updateLastTokenResetTime(token);
+            //用户重要信息模糊化处理:电话号码
+            if (!StringUtils.isEmpty(user.getPhone()) && user.getPhone().length() >= 8) {
+                String phone = user.getPhone();
+                StringBuilder phoneFuffer = new StringBuilder(phone);
+                user.setPhone(phoneFuffer.replace(3, phone.length() - 4, "****").toString());
+            }
+            user.setPassword(null);
         }
         return user;
     }
@@ -300,7 +307,7 @@ public class UserServiceImpl implements UserService {
         user.setId(userExist.getId());
         user.setPassword(encodePassword);
         user.setLastUpdate(new Date());
-        int result = userMapper.update(user);
+        int result = userMapper.updatePassword(user);
         if (result != 1) {
             throw new ServiceException(4023);
         }
@@ -311,7 +318,7 @@ public class UserServiceImpl implements UserService {
             //发消息
             userFeedbackMsgService.updatePasswordSuccessNotice();
             //首次修改密码任务埋点
-            todoTaskService.doTask(userExist.getId(), UCConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
+            todoTaskService.doTask(userExist.getId(), TaskConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -622,7 +629,7 @@ public class UserServiceImpl implements UserService {
         String userId = Utils.getUserId();
         UserExtend userExtend = userExtendRoMapper.isRealName(userId);
         if (userExtend != null && userExtend.getValidStatus() != null && userExtend.getValidStatus().equals
-                (UCConstant.USER_REALNAME_VALIDATED)) {
+                (TaskConstant.USER_REALNAME_VALIDATED)) {
             isRealName.setIsRealName(true);
         } else {
             isRealName.setIsRealName(false);
@@ -679,7 +686,7 @@ public class UserServiceImpl implements UserService {
             int n = userMapper.update(users);
             if (n >= 1) {
                 LOGGER.info("用户关注公众号，做任务，USERID:" + userUpdateDTO.getId());
-                todoTaskService.doTask(userUpdateDTO.getId(), UCConstant.SYS_TASK_GZCSZJGZH_CODE);
+                todoTaskService.doTask(userUpdateDTO.getId(), TaskConstant.SYS_TASK_GZCSZJGZH_CODE);
                 return 2;
             } else {
                 throw new ServiceException(4624);

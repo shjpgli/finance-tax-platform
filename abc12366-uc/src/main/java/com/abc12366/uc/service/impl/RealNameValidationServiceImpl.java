@@ -9,7 +9,8 @@ import com.abc12366.uc.model.bo.UserExtendListBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.gateway.util.UCConstant;
+import com.abc12366.gateway.util.TaskConstant;
+import com.abc12366.uc.service.UserFeedbackMsgService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +42,9 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     @Autowired
     private TodoTaskService todoTaskService;
 
+    @Autowired
+    private UserFeedbackMsgService userFeedbackMsgService;
+
     @Override
     public List<UserExtendListBO> selectList(Map map) {
         LOGGER.info("{}", map);
@@ -66,7 +70,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         userExtendUpdate.setStartTime(startTime);
         userExtendUpdate.setEndTime(getSpecifiedDate("2099-12-30 23:59:59"));
         userExtendUpdate.setValidStatus(validStatus);
-        if(validStatus.equals(UCConstant.USER_REALNAME_VALIDATED)){
+        if(validStatus.equals(TaskConstant.USER_REALNAME_VALIDATED)){
             userExtendUpdate.setValidTime(new Date());
         }
         int result = userExtendMapper.update(userExtendUpdate);
@@ -75,13 +79,15 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         }
 
         //首次实名认证任务埋点
-        if(validStatus.equals(UCConstant.USER_REALNAME_VALIDATED)){
-            todoTaskService.doTask(userId, UCConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
+        if(validStatus.equals(TaskConstant.USER_REALNAME_VALIDATED)){
+            todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
         }
 
         UserExtendBO userExtendBO = new UserExtendBO();
         UserExtend userExtend1 = userExtendRoMapper.selectOne(userExtendUpdate.getUserId());
         BeanUtils.copyProperties(userExtend1, userExtendBO);
+
+        userFeedbackMsgService.realNameValidate(userId,validStatus);
         return userExtendBO;
     }
 

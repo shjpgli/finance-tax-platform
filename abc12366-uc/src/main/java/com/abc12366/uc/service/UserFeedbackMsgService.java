@@ -30,4 +30,11 @@ public interface UserFeedbackMsgService {
      *  用户经验值等级提升每发送消息提醒用户
      */
     void expLevelUp();
+
+    /**
+     * 用户提交实名认证请求后审核通过或未通过发送消息提醒用户
+     * @param userId 用户ID
+     * @param status 认证状态
+     */
+    void realNameValidate(String userId,String status);
 }

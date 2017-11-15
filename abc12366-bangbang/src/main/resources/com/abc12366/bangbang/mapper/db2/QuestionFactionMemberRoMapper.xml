@@ -21,7 +21,15 @@
         SELECT
         count(*)
         FROM bb_question_faction_member
-        WHERE factionId = #{factionId} and userId = #{userId}
+        WHERE status in('1','2') and factionId = #{factionId} and userId = #{userId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectPassMemberCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT
+        count(*)
+        FROM bb_question_faction_member
+        WHERE status = '2' and factionId = #{factionId}
     </select>
 
     <!-- 查询（根据主键ID查询） -->

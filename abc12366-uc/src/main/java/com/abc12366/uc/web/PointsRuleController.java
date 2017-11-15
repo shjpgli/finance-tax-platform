@@ -142,4 +142,17 @@ public class PointsRuleController {
         pointsRuleService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
+
+    /**
+     * 查询一条积分规则(分局积分规则编码)
+     * @param
+     * @return
+     */
+    @GetMapping(path = "/code/{code}")
+    public ResponseEntity selectOneByCode(@PathVariable String code) {
+        LOGGER.info("{}", code);
+        PointsRuleBO points_rule = pointsRuleService.selectValidOneByCode(code);
+        LOGGER.info("{}", points_rule);
+        return ResponseEntity.ok(Utils.kv("data", points_rule));
+    }
 }

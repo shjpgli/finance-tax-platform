@@ -3,11 +3,16 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
-import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.PrivilegeItem;
+import com.abc12366.uc.model.UserDzsb;
+import com.abc12366.uc.model.UserHnds;
+import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
@@ -16,15 +21,9 @@ import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
-import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJG;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
-import com.abc12366.uc.util.DataUtils;
-import com.abc12366.uc.util.DateUtils;
-import com.abc12366.gateway.util.UCConstant;
-import com.abc12366.uc.util.UserUtil;
 import com.abc12366.uc.webservice.AcceptClient;
 import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
-import com.abc12366.uc.wsbssoa.response.HngsAppLoginResponse;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.MD5;
@@ -50,7 +49,6 @@ import java.io.IOException;
 import java.security.interfaces.RSAPublicKey;
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -83,8 +81,6 @@ public class UserBindServiceImpl implements UserBindService {
     @Autowired
     private TodoTaskService todoTaskService;
 
-    protected static Map<String, Object> appCache = new ConcurrentHashMap<>();
-
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
         if (userDzsbInsertBO == null) {
@@ -96,8 +92,8 @@ public class UserBindServiceImpl implements UserBindService {
 //        isRealnameValidated(request);
 
         //用户会员绑定企业数量限制
-        String userId = UserUtil.getUserId(request);
-        bindLimit(userId);
+        String userId = Utils.getUserId(request);
+        //bindLimit(userId);
 
         //查看是否重复绑定
         UserDzsb queryParam = new UserDzsb();
@@ -151,10 +147,10 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
         userDzsb.setSwjgDm(ty21Object.getSWJGDM());
         if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {
-            userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+            userDzsb.setExpireTime(DateUtils.strToDate(ty21Object.getRJDQR()));
         }
         if (ty21Object.getYQDQR() != null && !ty21Object.getYQDQR().trim().equals("")) {
-            userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+            userDzsb.setExpandExpireTime(DateUtils.strToDate(ty21Object.getYQDQR()));
         }
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());
@@ -167,7 +163,7 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userDzsb, userDzsbBO1);
 
         //绑定税号任务埋点
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userDzsbBO1;
     }
 
@@ -356,7 +352,7 @@ public class UserBindServiceImpl implements UserBindService {
                     LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
                     return true;
                 }
-                LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
+                LOGGER.warn("uc调用电子税局实名认证查询接口成功，返回结果：{}", dzsjSmrzBO);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -368,7 +364,7 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public void automaticBindCancel() {
-        Date date = DataUtils.getAddMonth(UCConstant.DZSB_BIND_DATE);
+        Date date = DateUtils.getAddMonth(Constant.DZSB_BIND_DATE);
         List<String> ids = userBindRoMapper.selectListByDate(date);
         Map<String, Object> map = new HashMap<>();
         map.put("ids", ids);
@@ -406,10 +402,10 @@ public class UserBindServiceImpl implements UserBindService {
 //        isRealnameValidated(request);
 
         //用户会员绑定企业数量限制
-        String userId = UserUtil.getUserId(request);
-        bindLimit(userId);
+        String userId = Utils.getUserId(request);
+        //bindLimit(userId);
 
-        userHngsInsertBO.setUserId(UserUtil.getUserId(request));
+        userHngsInsertBO.setUserId(Utils.getUserId(request));
         //查看是否重复绑定
         List<UserHngs> userHngsList = userBindRoMapper.userHngsListExist(userHngsInsertBO);
         if (userHngsList != null && userHngsList.size() >= 1) {
@@ -458,7 +454,7 @@ public class UserBindServiceImpl implements UserBindService {
         userHngs.setStatus(true);
         userHngs.setCreateTime(date);
         userHngs.setLastUpdate(date);
-        userHngs.setUserId(UserUtil.getUserId(request));
+        userHngs.setUserId(Utils.getUserId(request));
         userHngs.setRoleId(hngsNsrLoginResponse.getRoleId());
         int result = userBindMapper.hngsBind(userHngs);
         if (result < 1) {
@@ -468,7 +464,7 @@ public class UserBindServiceImpl implements UserBindService {
         UserHngsBO userHngsBO1 = new UserHngsBO();
         BeanUtils.copyProperties(userHngs, userHngsBO1);
         //绑定税号任务埋点
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHngsBO1;
     }
 
@@ -504,7 +500,7 @@ public class UserBindServiceImpl implements UserBindService {
         userHnds.setStatus(true);
         userHnds.setCreateTime(date);
         userHnds.setLastUpdate(date);
-        userHnds.setUserId(UserUtil.getUserId(request));
+        userHnds.setUserId(Utils.getUserId(request));
         int result = userBindMapper.hndsBind(userHnds);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userHnds);
@@ -514,7 +510,7 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userHnds, userHndsBO1);
         //绑定税号任务埋点
         String userId = Utils.getUserId();
-        todoTaskService.doTask(userId, UCConstant.SYS_TASK_COURSE_BDSH_CODE);
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
         return userHndsBO1;
     }
 
@@ -551,7 +547,7 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
-        String userId = UserUtil.getUserId(request);
+        String userId = Utils.getUserId(request);
         Map<String, String> map = new HashMap<>();
         map.put("serviceid", "TY21");
         map.put("nsrsbh", login.getNsrsbhOrShxydm());
@@ -584,10 +580,10 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
         userDzsb.setSwjgDm(ty21Object.getSWJGDM());
         if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {
-            userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+            userDzsb.setExpireTime(DateUtils.strToDate(ty21Object.getRJDQR()));
         }
         if (ty21Object.getYQDQR() != null && !ty21Object.getYQDQR().trim().equals("")) {
-            userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+            userDzsb.setExpandExpireTime(DateUtils.strToDate(ty21Object.getYQDQR()));
         }
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());
@@ -621,7 +617,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     private void analyzeXmlTY12(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
 
@@ -660,7 +656,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {
@@ -731,7 +727,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || !resMap.get("rescode").equals("00000000")) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {
@@ -827,12 +823,12 @@ public class UserBindServiceImpl implements UserBindService {
 //        return encodedCode;
 
         String frist_sbmm = new MD5(code).compute().toUpperCase();
-        String second_gssbmm = new MD5(frist_sbmm + UCConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
+        String second_gssbmm = new MD5(frist_sbmm + TaskConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
         return second_gssbmm;
     }
 
     private void analyzeXmlTY03(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
-        if (resMap == null || resMap.isEmpty() || resMap.get("rescode") == null) {
+        if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
         if (!resMap.get("rescode").equals("00000000")) {

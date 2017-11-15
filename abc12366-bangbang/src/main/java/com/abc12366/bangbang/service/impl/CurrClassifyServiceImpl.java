@@ -2,11 +2,11 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.CurriculumClassifyMapper;
 import com.abc12366.bangbang.mapper.db1.CurriculumClassifyTagMapper;
-import com.abc12366.bangbang.mapper.db1.QuestionClassifyTagMapper;
+import com.abc12366.bangbang.mapper.db1.KnowledgeTagMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumClassifyRoMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumClassifyTagRoMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionClassifyTagRoMapper;
+import com.abc12366.bangbang.model.KnowledgeTag;
 import com.abc12366.bangbang.model.curriculum.CurriculumClassify;
 import com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyBo;
@@ -14,6 +14,7 @@ import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifyTagBo;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumClassifysBo;
 import com.abc12366.bangbang.service.CurrClassifyService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Utils;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,9 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
 
     @Autowired
     private CurriculumClassifyTagRoMapper tagRoMapper;
+
+    @Autowired
+    private KnowledgeTagMapper knowledgeTagMapper;
 
 
     @Override
@@ -169,12 +173,11 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
     }
 
     @Override
-    public List<CurriculumClassifyTagBo> selectClassifyTagList(String classifyId) {
+    public List<CurriculumClassifyTagBo> selectClassifyTagList(Map<String, Object> map) {
         List<CurriculumClassifyTagBo> classifyTagBoList;
         try {
-            LOGGER.info("查询单个课程分类标签信息:{}", classifyId);
             //查询课程分类标签信息
-            classifyTagBoList = tagRoMapper.selectClassifyTagList(classifyId);
+            classifyTagBoList = tagRoMapper.selectClassifyTagList(map);
         } catch (Exception e) {
             LOGGER.error("查询单个课程分类标签信息异常：{}", e);
             throw new ServiceException(4301);
@@ -273,6 +276,73 @@ public class CurrClassifyServiceImpl implements CurrClassifyService {
             throw new ServiceException(4304);
         }
         return "";
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public List<CurriculumClassifyTag> addTagAndRefClassify(List<CurriculumClassifyTag> tagList) {
+        for (CurriculumClassifyTag tag: tagList){
+            String tagName = tag.getTagName();
+            String classifyId = tag.getClassifyId();
+            KnowledgeTag tag1 = knowledgeTagMapper.selectByName(tagName);
+            if(tag1 != null && tag1.getTagType().indexOf("xthf_course") > -1 && tag1.getStatus() == Boolean.TRUE){
+                //如果课程标签 存在，添加关联分类标签关系 bb_curriculum_classify_tag
+                CurriculumClassifyTag classifyTag = tagRoMapper.selectByClassifyAndTagId(classifyId, tag1.getId());
+                tag.setTagId(tag1.getId());
+                if(classifyTag == null){
+                    tag.setId(Utils.uuid());
+                    tagMapper.insertSelective(tag);
+                }else{
+                    throw new ServiceException(4604);
+                }
+            }
+            if(tag1 != null && tag1.getTagType().indexOf("xthf_course") > -1 && tag1.getStatus() == Boolean.FALSE){
+                //如果课程标签 存在，修改状态为true
+                tag1.setStatus(Boolean.TRUE);
+                tag1.setUpdateUser(Utils.getAdminId());
+                knowledgeTagMapper.updateByPrimaryKeySelective(tag1);
+                // 添加关联分类标签关系 bb_curriculum_classify_tag
+                CurriculumClassifyTag classifyTag = tagRoMapper.selectByClassifyAndTagId(classifyId, tag1.getId());
+                tag.setTagId(tag1.getId());
+                if(classifyTag == null){
+                    tag.setId(Utils.uuid());
+                    tagMapper.insertSelective(tag);
+                }
+            }
+            //如果内容标签存在，添加课程分类
+            if(tag1 != null){
+                tag1.setTagType(tag1.getTagType()+";xthf_course");
+                tag1.setUpdateUser(Utils.getAdminId());
+                tag1.setStatus(Boolean.TRUE);
+                knowledgeTagMapper.updateByPrimaryKeySelective(tag1);
+                // 添加关联分类标签关系 bb_curriculum_classify_tag
+                CurriculumClassifyTag classifyTag = tagRoMapper.selectByClassifyAndTagId(classifyId, tag1.getId());
+                tag.setTagId(tag1.getId());
+                if(classifyTag == null){
+                    tag.setId(Utils.uuid());
+                    tagMapper.insertSelective(tag);
+                }
+            }
+            if(tag1 == null){
+                KnowledgeTag record = new KnowledgeTag();
+                record.setId(Utils.uuid());
+                record.setTagType("xthf_course");
+                record.setStatus(Boolean.TRUE);
+                record.setName(tagName);
+                record.setDescription(tagName);
+                record.setCreateUser(Utils.getAdminId());
+                record.setUpdateUser(Utils.getAdminId());
+                knowledgeTagMapper.insert(record);
+                // 添加关联分类标签关系 bb_curriculum_classify_tag
+                CurriculumClassifyTag classifyTag = tagRoMapper.selectByClassifyAndTagId(classifyId, record.getId());
+                tag.setTagId(record.getId());
+                if(classifyTag == null){
+                    tag.setId(Utils.uuid());
+                    tagMapper.insertSelective(tag);
+                }
+            }
+        }
+        return tagList;
     }
 
     public String genCodes(int length){

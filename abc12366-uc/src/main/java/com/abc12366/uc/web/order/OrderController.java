@@ -1,12 +1,12 @@
 package com.abc12366.uc.web.order;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.order.OrderService;
-import com.abc12366.uc.util.DataUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -69,10 +69,10 @@ public class OrderController {
         orderBO.setOrderNo(orderNo);
         orderBO.setOrderStatus(orderStatus);
         if (startTime != null && !"".equals(startTime)) {
-            orderBO.setStartTime(DataUtils.StrToDate(startTime));
+            orderBO.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            orderBO.setEndTime(DataUtils.StrToDate(endTime));
+            orderBO.setEndTime(DateUtils.strToDate(endTime));
         }
 
         List<OrderBO> orderList = orderService.selectList(orderBO, pageNum, pageSize);
@@ -125,10 +125,10 @@ public class OrderController {
             order.setIsReturn(isReturn);
         }
         if (startTime != null && !"".equals(startTime)) {
-            order.setStartTime(DataUtils.StrToDate(startTime));
+            order.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            order.setEndTime(DataUtils.StrToDate(endTime));
+            order.setEndTime(DateUtils.strToDate(endTime));
         }
         List<OrderBO> orderBOs = orderService.selectOrderList(order, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
@@ -170,10 +170,10 @@ public class OrderController {
         order.setIsInvoice(false);
         order.setGoodsType(goodsType);
         if (startTime != null && !"".equals(startTime)) {
-            order.setStartTime(DataUtils.StrToDate(startTime));
+            order.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            order.setEndTime(DataUtils.StrToDate(endTime));
+            order.setEndTime(DateUtils.strToDate(endTime));
         }
         List<OrderBO> orderBOs = orderService.selectUserAllOrderList(order, pageNum, pageSize);
         PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
@@ -211,10 +211,10 @@ public class OrderController {
         goodsBO.setName(name);
 //        order.setGoodsBO(goodsBO);
         if (startTime != null && !"".equals(startTime)) {
-            order.setStartTime(DataUtils.StrToDate(startTime));
+            order.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            order.setEndTime(DataUtils.StrToDate(endTime));
+            order.setEndTime(DateUtils.strToDate(endTime));
         }
 
         List<OrderBO> orderBOs = orderService.selectOrderListByInvoice(order, pageNum, pageSize);
@@ -249,10 +249,10 @@ public class OrderController {
         orderBO.setUser(user);
         orderBO.setGoodsId(goodsId);
         if (startTime != null && !"".equals(startTime)) {
-            orderBO.setStartTime(DataUtils.StrToDate(startTime));
+            orderBO.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            orderBO.setEndTime(DataUtils.StrToDate(endTime));
+            orderBO.setEndTime(DateUtils.strToDate(endTime));
         }
 
         List<OrderBO> orderList = orderService.selectCurriculumOrderList(orderBO, pageNum, pageSize);
