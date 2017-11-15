@@ -479,7 +479,7 @@ public class AuthServiceImpl implements AuthService {
         user.setId(userExist.getId());
         user.setPassword(encodePassword);
         user.setLastUpdate(new Date());
-        int result = userMapper.update(user);
+        int result = userMapper.updatePassword(user);
         if (result != 1) {
             throw new ServiceException(4023);
         }
