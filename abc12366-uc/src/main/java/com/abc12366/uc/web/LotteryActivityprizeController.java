@@ -45,6 +45,7 @@ public class LotteryActivityprizeController {
     @PostMapping
     public ResponseEntity insert(@RequestBody LotteryActivityprizeBO lotteryActivityprizeBO) {
         LOGGER.info("insert:{}", lotteryActivityprizeBO);
+        lotteryActivityprizeBO.setBalance(0);
         LotteryActivityprizeBO returnObj = lotteryActivityprizeService.insert(lotteryActivityprizeBO);
         return ResponseEntity.ok(Utils.kv("data", returnObj));
     }
