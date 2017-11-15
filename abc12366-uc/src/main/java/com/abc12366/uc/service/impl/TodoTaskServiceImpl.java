@@ -3,7 +3,6 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TodoTaskMapper;
 import com.abc12366.uc.mapper.db2.TodoTaskRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.TodoTask;
 import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
@@ -46,9 +45,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Autowired
     private ExperienceLogService experienceLogService;
-
-    @Autowired
-    private UserRoMapper userRoMapper;
 
     @Transactional("db1TxManager")
     @Override

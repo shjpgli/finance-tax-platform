@@ -46,7 +46,7 @@ public class MainServiceImpl implements MainService {
     /**
      * 从soa获取公钥，将getRSAPublicKeyStr()获取到的序列化了的公钥反序列化成对象
      *
-     * @return
+     * @return Object
      * @throws Exception
      */
     @Override
@@ -69,23 +69,8 @@ public class MainServiceImpl implements MainService {
 
     /**
      * 从soa获取序列化了的公钥
-     *
-     * @return
+     * @return RSAPkResponse
      */
-//    private RSAPkResponse getRSAPublicKeyStr(HttpServletRequest request) throws IOException {
-//        String url = SpringCtxHolder.getProperty("wsbssoa.hngs.url") + "/pk";
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("accessToken", (String) request.getAttribute("accessToken"));
-//        HttpEntity requestEntity = new HttpEntity(null, headers);
-//        ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
-//        if (soaUtil.isExchangeSuccessful(responseEntity)) {
-//            RSAPkResponse obj = JSON.parseObject(String.valueOf(responseEntity.getBody()), RSAPkResponse.class);
-//            return obj;
-//        } else {
-//            throw new ServiceException(4192);
-//        }
-//        //RSAPkResponse obj = SoaConnectionFactory.get(request, ConstantsUri.GET_RSA_PK, map, RSAPkResponse.class);
-//    }
     private RSAPkResponse getRSAPublicKeyStr(HttpServletRequest request) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
@@ -95,8 +80,7 @@ public class MainServiceImpl implements MainService {
         HttpEntity requestEntity = new HttpEntity(null, headers);
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
         if (soaUtil.isExchangeSuccessful(responseEntity)) {
-            RSAPkResponse obj = JSON.parseObject(String.valueOf(responseEntity.getBody()), RSAPkResponse.class);
-            return obj;
+            return JSON.parseObject(String.valueOf(responseEntity.getBody()), RSAPkResponse.class);
         } else {
             throw new ServiceException(4192);
         }
