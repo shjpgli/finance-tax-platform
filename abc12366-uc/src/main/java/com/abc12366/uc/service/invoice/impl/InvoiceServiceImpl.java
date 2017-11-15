@@ -620,19 +620,18 @@ public class InvoiceServiceImpl implements InvoiceService {
         Einvocie einvocie = new Einvocie();
         einvocie.setTBSTATUS("0");
         List<Einvocie> list = iDzfpService.selectList(einvocie);
-        List<Einvocie> dataList = new ArrayList<>();
         for(Einvocie data : list){
             //更新发票库存信息
             InvoiceDetail tail = new InvoiceDetail();
-            tail.setInvoiceNo(einvocie.getFP_HM());
-            tail.setInvoiceCode(einvocie.getFP_DM());
-            tail.setSpUrl(einvocie.getSP_URL());
-            tail.setPdfUrl(einvocie.getPDF_URL());
+            tail.setInvoiceNo(data.getFP_HM());
+            tail.setInvoiceCode(data.getFP_DM());
+            tail.setSpUrl(data.getSP_URL());
+            tail.setPdfUrl(data.getPDF_URL());
             //根据发票号码和发票代码查找发票详细信息表
             InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
             if (detail == null) {
-                LOGGER.info("发票号码为XXX的未找到库存，请入库再进行同步：{}", detail);
-                throw new ServiceException(4186,"发票号码为"+einvocie.getFP_HM()+"的未找到库存，请入库后再进行同步");
+                LOGGER.info("发票号码为XXX的未找到库存，请入库后再进行同步：{}", detail);
+                throw new ServiceException(4186,"发票号码为"+data.getFP_HM()+"的未找到库存，请入库后再进行同步");
             }
             if (detail.getStatus() != null && "3".equals(detail.getStatus())) {
                 tail.setId(detail.getId());
@@ -644,8 +643,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                     throw new ServiceException(4187);
                 }
             }else{
-                LOGGER.info("发票详情信息未签收，请去发票仓库签收：{}", tail);
-                throw new ServiceException(4964,"发票号码为： "+einvocie.getFP_HM()+"的未领用完成，请签收后再进行同步");
+                LOGGER.info("发票详情信息未签收，请签收后再进行同步：{}", tail);
+                throw new ServiceException(4964,"发票号码为"+data.getFP_HM()+"的未领用完成，请签收后再进行同步");
             }
             //更新电子发票开票日志信息
             data.setTBSTATUS("1");
