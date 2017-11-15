@@ -240,12 +240,12 @@ public class UserMsgController {
         map.put("status", status == null ? null : status.trim());
         if (!StringUtils.isEmpty(startDate)) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtils.StrToDate(startDate));
+            calendar.setTime(DateUtils.strToDate(startDate));
             map.put("startDate", calendar.getTime());
         }
         if (!StringUtils.isEmpty(endDate)) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtils.StrToDate(endDate));
+            calendar.setTime(DateUtils.strToDate(endDate));
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             map.put("endDate", calendar.getTime());
         }

@@ -59,7 +59,7 @@ public class ApiLogController {
                                         @RequestParam(value = "startTime", required = false) String startTime) {
 
         if (startTime != null && !"".equals(startTime)) {
-            startTime = DateUtils.getDateFormat(DateUtils.StrToDate(startTime), "yyyyMMdd");
+            startTime = DateUtils.getDateFormat(DateUtils.strToDate(startTime), "yyyyMMdd");
         } else { // 默认为当天
             startTime = DateUtils.getDateFormat(new Date(), "yyyyMMdd");
         }
@@ -91,7 +91,7 @@ public class ApiLogController {
             @RequestParam(value = "startTime", required = false) String startTime) {
 
         if (startTime != null && !"".equals(startTime)) {
-            startTime = DateUtils.getDateFormat(DateUtils.StrToDate(startTime), "yyyyMMdd");
+            startTime = DateUtils.getDateFormat(DateUtils.strToDate(startTime), "yyyyMMdd");
         } else { // 默认为当天
             startTime = DateUtils.getDateFormat(new Date(), "yyyyMMdd");
         }
@@ -129,7 +129,7 @@ public class ApiLogController {
             @RequestParam(value = "startTime", required = false) String startTime) throws IOException {
 
         if (startTime != null && !"".equals(startTime)) {
-            startTime = DateUtils.getDateFormat(DateUtils.StrToDate(startTime), "yyyyMMdd");
+            startTime = DateUtils.getDateFormat(DateUtils.strToDate(startTime), "yyyyMMdd");
         } else { // 默认为当天
             startTime = DateUtils.getDateFormat(new Date(), "yyyyMMdd");
         }
@@ -183,8 +183,8 @@ public class ApiLogController {
                 .nickname(nickname)
                 .businessName(businessName)
                 .businessData(businessData)
-                .startDate(DateUtils.StrToDate(startDate))
-                .endDate(DateUtils.StrToDate(endDate))
+                .startDate(DateUtils.strToDate(startDate))
+                .endDate(DateUtils.strToDate(endDate))
                 .build();
         LOGGER.info("{}", adminLog);
 

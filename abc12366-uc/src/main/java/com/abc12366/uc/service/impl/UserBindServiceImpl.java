@@ -147,10 +147,10 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
         userDzsb.setSwjgDm(ty21Object.getSWJGDM());
         if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {
-            userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+            userDzsb.setExpireTime(DateUtils.strToDate(ty21Object.getRJDQR()));
         }
         if (ty21Object.getYQDQR() != null && !ty21Object.getYQDQR().trim().equals("")) {
-            userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+            userDzsb.setExpandExpireTime(DateUtils.strToDate(ty21Object.getYQDQR()));
         }
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());
@@ -580,10 +580,10 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setSwjgMc(ty21Object.getSWJGMC());
         userDzsb.setSwjgDm(ty21Object.getSWJGDM());
         if (ty21Object.getRJDQR() != null && !ty21Object.getRJDQR().trim().equals("")) {
-            userDzsb.setExpireTime(DateUtils.StrToDate(ty21Object.getRJDQR()));
+            userDzsb.setExpireTime(DateUtils.strToDate(ty21Object.getRJDQR()));
         }
         if (ty21Object.getYQDQR() != null && !ty21Object.getYQDQR().trim().equals("")) {
-            userDzsb.setExpandExpireTime(DateUtils.StrToDate(ty21Object.getYQDQR()));
+            userDzsb.setExpandExpireTime(DateUtils.strToDate(ty21Object.getYQDQR()));
         }
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());

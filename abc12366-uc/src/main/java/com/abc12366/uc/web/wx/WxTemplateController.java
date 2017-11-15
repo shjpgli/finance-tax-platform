@@ -162,10 +162,10 @@ public class WxTemplateController {
 			map.put("username", username);
 		}
 		if(!StringUtils.isEmpty(beginTime)){
-			map.put("beginTime", DateUtils.StrToDate(beginTime));
+			map.put("beginTime", DateUtils.strToDate(beginTime));
 		}
 		if(!StringUtils.isEmpty(endTime)){
-			map.put("endTime", DateUtils.StrToDate(endTime));
+			map.put("endTime", DateUtils.strToDate(endTime));
 		}
 		
 		List<QTemplateSendLog> dataList = templateService.wxTemplateSendList(page, size,map);

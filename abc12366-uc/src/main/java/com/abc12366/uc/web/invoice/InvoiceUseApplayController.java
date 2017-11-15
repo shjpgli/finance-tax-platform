@@ -53,10 +53,10 @@ public class InvoiceUseApplayController {
         applyBO.setExamineStatus(examineStatus);
         applyBO.setApplyUser(applyUser);
         if (startTime != null && !"".equals(startTime)) {
-            applyBO.setStartTime(DateUtils.StrToDate(startTime));
+            applyBO.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            applyBO.setEndTime(DateUtils.StrToDate(endTime));
+            applyBO.setEndTime(DateUtils.strToDate(endTime));
         }
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);

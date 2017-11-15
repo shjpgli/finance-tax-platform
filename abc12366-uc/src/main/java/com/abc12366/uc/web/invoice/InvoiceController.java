@@ -61,10 +61,10 @@ public class InvoiceController {
         invoice.setProperty(property);
         invoice.setWaybillNum(waybillNum);
         if (startTime != null && !"".equals(startTime)) {
-            invoice.setStartTime(DateUtils.StrToDate(startTime));
+            invoice.setStartTime(DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
-            invoice.setEndTime(DateUtils.StrToDate(endTime));
+            invoice.setEndTime(DateUtils.strToDate(endTime));
         }
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
