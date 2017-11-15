@@ -3,6 +3,7 @@ package com.abc12366.bangbang.service;
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -15,7 +16,7 @@ public interface QuestionSysBlockService {
     List<QuestionSysBlockBo> selectList(QuestionSysBlockParamBo Param);
 
     /* 审核 */
-    void changeStatus(String id ,String status);
+    void changeStatus(String id ,String status, HttpServletRequest request);
 
 
 }
