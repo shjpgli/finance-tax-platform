@@ -53,7 +53,11 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectList(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -72,7 +76,11 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectList(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -91,7 +99,11 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectListRecommend(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -110,7 +122,11 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatstjydBo> dataList = cheatsService.selectListRecommendTitle(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -129,7 +145,11 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatstjydBo> dataList = cheatsService.selectListByTag(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -148,7 +168,11 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectListByBrowseNum(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -252,7 +276,11 @@ public class CheatsController {
         dataMap.put("userId", userId);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectMyCheatsList(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 

@@ -43,8 +43,8 @@ public class QuestionDisableIpServiceImpl implements QuestionDisableIpService {
     }
 
     @Override
-    public void enable(String userId) {
-        questionDisableIpMapper.deleteByPrimaryKey(userId);
+    public void enable(String ip) {
+        questionDisableIpMapper.deleteByIP(ip);
     }
 
 }

@@ -61,7 +61,7 @@
             resultType="java.lang.Integer">
         SELECT count(*)
         FROM msg_user_message
-        WHERE toUserId = #{userId}
+        WHERE toUserId = #{toUserId}
         <if test="type != null and type != ''">AND type = #{type}</if>
         AND status = '1'
         AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
