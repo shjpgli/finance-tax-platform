@@ -48,19 +48,19 @@ public class SftpController {
 
         String directory = fjListBo.getDirectory();
         List<FjBo> fjBoList = fjListBo.getFjBo();
-        List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> dataList = new ArrayList<>();
         String fileName;
         List<Byte> content;
+        ChannelSftp sftp = sf.connect(host, port, username, password);
         for (FjBo fjBo : fjBoList) {
-            ChannelSftp sftp = sf.connect(host, port, username, password);
             fileName = fjBo.getFileName();
             content = fjBo.getContent();
             Map<String, String> map = sf.uploadByByte(directory, content, fileName, sftp);
             dataList.add(map);
-            sftp.disconnect();
-            sftp.exit();
         }
         LOGGER.info("{}", dataList);
+        sftp.disconnect();
+        sftp.exit();
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
@@ -80,19 +80,19 @@ public class SftpController {
 
         String directory = fjListBo.getDirectory();
         List<FjBo> fjBoList = fjListBo.getFjBo();
-        List<Map<String, String>> dataList = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> dataList = new ArrayList<>();
         String fileName;
         String fileContent;
+        ChannelSftp sftp = sf.connect(host, port, username, password);
         for (FjBo fjBo : fjBoList) {
-            ChannelSftp sftp = sf.connect(host, port, username, password);
             fileName = fjBo.getFileName();
             fileContent = fjBo.getFileContent();
             Map<String, String> map = sf.uploadByBase64(directory, fileContent, fileName, sftp);
             dataList.add(map);
-            sftp.disconnect();
-            sftp.exit();
         }
         LOGGER.info("{}", dataList);
+        sftp.disconnect();
+        sftp.exit();
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 }

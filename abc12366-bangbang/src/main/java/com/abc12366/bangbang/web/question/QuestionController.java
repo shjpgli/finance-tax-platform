@@ -55,7 +55,11 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectList(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -74,7 +78,11 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectList(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -93,8 +101,11 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectListRecommend(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
-
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
     }
 
     /**
@@ -112,7 +123,11 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectListByPoints(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -131,7 +146,11 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectListByBrowseNum(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -152,7 +171,11 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectListWait(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -171,7 +194,11 @@ public class QuestionController {
         dataMap.put("classifyCode", classifyCode);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectListAccept(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -184,7 +211,11 @@ public class QuestionController {
         Map<String, Object> dataMap = new HashMap<>();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionryBo> dataList = questionService.selectListry(dataMap);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
 
     }
 
@@ -281,7 +312,11 @@ public class QuestionController {
     public ResponseEntity topicRecommendList(TopicRecommendParamBO param) {
         PageHelper.startPage(param.getPage(), param.getSize(), true).pageSizeZero(true).reasonable(true);
         List<RecommendBo> dataList = questionService.selectList(param);
-        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
     }
 
     @PutMapping(path = "/recommend/{id}/{isRecommend}")

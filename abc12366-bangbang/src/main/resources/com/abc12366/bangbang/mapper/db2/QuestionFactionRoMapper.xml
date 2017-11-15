@@ -100,7 +100,7 @@
     </select>
 
     <!-- 查询优秀邦派 -->
-    <select id="selectListExcellent" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.lang.String">
+    <select id="selectListExcellent" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.util.Map">
         SELECT
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
 
@@ -119,11 +119,17 @@
         (SELECT count(id) FROM bb_question_answer where status = '0' and isAccept = '1' and factionId = f.factionId) adoptNum
         FROM bb_question_faction f
         WHERE 1=1
+        <if test="tag != null and tag != ''">
+            AND tag like CONCAT('%',#{tag},'%')
+        </if>
+        <if test="classifyCode != null and classifyCode != ''">
+            AND classifyCode like CONCAT(#{classifyCode},'%')
+        </if>
         order by 2*answerNum+discussNum+7*adoptNum desc
     </select>
 
     <!-- 查询潜力邦派 -->
-    <select id="selectListPotential" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.lang.String">
+    <select id="selectListPotential" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionListBo" parameterType="java.util.Map">
         SELECT
         factionId,	factionName,	factionImg,	classifyCode,	tag,	minGrade,	intro,	auto,	inviteLink,	createTime,	updateTime,	userId,	state,	announcement,	peopleLimit,	factionGrade,
 
@@ -141,7 +147,14 @@
 
         (SELECT count(id) FROM bb_question_answer where status = '0' and isAccept = '1' and factionId = f.factionId) adoptNum
         FROM bb_question_faction f
-        WHERE DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(createtime)
+        WHERE
+        DATE_SUB(CURDATE(), INTERVAL 1 MONTH) &lt; date(createtime)
+        <if test="tag != null and tag != ''">
+            AND tag like CONCAT('%',#{tag},'%')
+        </if>
+        <if test="classifyCode != null and classifyCode != ''">
+            AND classifyCode like CONCAT(#{classifyCode},'%')
+        </if>
         order by 2*answerNum+discussNum+7*adoptNum desc
     </select>
 
