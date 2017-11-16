@@ -56,8 +56,8 @@
     <update id="updatePhone" parameterType="com.abc12366.uc.model.User">
         update uc_user
         <set>
-            <if test="phone != null">phone = #{phone},</if>
-            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+            phone = #{phone}
+            <if test="lastUpdate != null">,lastUpdate = #{lastUpdate}</if>
         </set>
         where id=#{id}
     </update>
