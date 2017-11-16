@@ -345,7 +345,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         if (!vipLevel.trim().equals(Constant.USER_VIP_LEVEL_1) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_2)
-                && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_3) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_4)){
+                && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_3) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_4)) {
             LOGGER.info("更新会员失败，因为传入的用户等级编码不在约定之中：{}", vipLevel);
             return;
         }
@@ -421,7 +421,7 @@ public class UserServiceImpl implements UserService {
         loginBO.setUsernameOrPhone(bindPhoneBO.getNewPhone());
         User userPhoneExist = userRoMapper.selectByUsernameOrPhone(loginBO);
         //该手机号码已被绑定
-        if (userPhoneExist != null) {
+        if (userPhoneExist != null && !bindPhoneBO.getUserId().equals(userPhoneExist.getId())) {
             throw new ServiceException(4858);
         }
 
