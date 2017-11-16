@@ -98,7 +98,7 @@ public class JsxxRemindJob implements StatefulJob{
 	                        dataList.put("keyword5", "成功");
 	                        
 	                        for(int j=0;j<users.size();j++){
-	                        	msgSendService.sendMsg(users.get(j), sysMsg, "aa2k1U-NBYQ6zdaubKhEdrZYPj2VS-j0PZfFDXPxKUE", dataList, dxmsg);
+	                        	msgSendService.sendMsg(users.get(j), sysMsg,"", "aa2k1U-NBYQ6zdaubKhEdrZYPj2VS-j0PZfFDXPxKUE", dataList, dxmsg);
 	                        }
 	        			}else{
 	        				LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]缴税信息，未查到相关用户信息,纳税人名称:"+dzsbXxInfo.getNsrmc());

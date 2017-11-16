@@ -110,7 +110,7 @@ public class CjxxRemindJob implements StatefulJob{
         		                        dataList.put("keyword3Color", "#00DB00");
         		                        
         		                        for(int j=0;j<users.size();j++){
-        		                        	msgSendService.sendMsg(users.get(j), sysMsg, "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, dxmsg);
+        		                        	msgSendService.sendMsg(users.get(j), sysMsg,"", "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, dxmsg);
         		                        }
         		        			}else{
         		        				LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]催缴信息，未查到相关用户信息,纳税人名称:"+dzsbXxInfo.getNsrmc());

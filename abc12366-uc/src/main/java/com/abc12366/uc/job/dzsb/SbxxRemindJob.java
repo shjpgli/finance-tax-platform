@@ -99,7 +99,7 @@ public class SbxxRemindJob implements StatefulJob{
 	                        dataList.put("keyword5", dzsbXxInfo.getWcrq());
 	                        
 	                        for(int j=0;j<users.size();j++){
-	                        	msgSendService.sendMsg(users.get(j), sysMsg, "YeYkFYIhmbSKdlCTmY8XF5qrR6o6ykYYPLN41DC3mOQ", dataList, dxmsg);
+	                        	msgSendService.sendMsg(users.get(j), sysMsg,"", "YeYkFYIhmbSKdlCTmY8XF5qrR6o6ykYYPLN41DC3mOQ", dataList, dxmsg);
 	                        }
 	        			}else{
 	        				LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]申报信息，未查到相关用户信息,纳税人名称:"+dzsbXxInfo.getNsrmc());
