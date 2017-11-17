@@ -17,6 +17,7 @@ import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -82,19 +83,27 @@ public class UserServiceImpl implements UserService {
     private UserFeedbackMsgService userFeedbackMsgService;
 
     @Override
-    public List<UserBO> selectList(Map<String, Object> map) {
+    public List<UserListBO> selectList(Map<String, Object> map, int page, int size) {
+
+        // 真实姓名不为空，查询扩展表
+        String realName = "realName";
+        List<UserExtendListBO> userExtendList = null;
+        if (!StringUtils.isEmpty(map.get(realName))) {
+            userExtendList = userExtendRoMapper.selectList(map);
+        }
+        if (userExtendList != null && userExtendList.size() > 0) {
+
+        }
         //解析多标签名称参数
-        List tagNameList = new ArrayList<>();
-        if (map.get("tagName") != null && !map.get("tagName").equals("")) {
-            tagNameList = analysisTagName((String) map.get("tagName"), ",");
+        List tagIdList = new ArrayList<>();
+        String tagId = "tagId";
+        if (!StringUtils.isEmpty(map.get(tagId))) {
+            tagIdList = analysisTagId((String) map.get(tagId), ",");
         }
-        map.put("tagName", tagNameList);
-        map.put("tagNameCount", (tagNameList == null) ? 0 : tagNameList.size());
-        List<UserBO> users = userRoMapper.selectList(map);
-        if (users.size() < 1) {
-            return null;
-        }
-        LOGGER.info("{}", users);
+        map.put(tagId, tagIdList);
+        map.put("tagIdCount", (tagIdList == null) ? 0 : tagIdList.size());
+        PageHelper.startPage(page, size, false).pageSizeZero(true).reasonable(true);
+        List<UserListBO> users = userRoMapper.selectList(map);
         return users;
     }
 
@@ -163,7 +172,8 @@ public class UserServiceImpl implements UserService {
         }
 
         //普通用户只允许修改一次用户名
-        if (!StringUtils.isEmpty(userUpdateBO.getUsername()) && !userUpdateBO.getUsername().trim().equals(user.getUsername()) &&
+        if (!StringUtils.isEmpty(userUpdateBO.getUsername()) && !userUpdateBO.getUsername().trim().equals(user
+                .getUsername()) &&
                 user.getUsernameModifiedTimes() >= 1) {
             throw new ServiceException(4037);
         }
@@ -326,18 +336,6 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    public List analysisTagName(String tagName, String sliptor) {
-        String[] tags = tagName.trim().split(sliptor);
-        List list = Arrays.asList(tags);
-        //去除空的元素
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) == null || list.get(i).equals("")) {
-                list.remove(i);
-            }
-        }
-        return list;
-    }
-
     @Override
     public void updateUserVipInfo(String userId, String vipLevel) {
         if (StringUtils.isEmpty(vipLevel)) {
@@ -345,7 +343,8 @@ public class UserServiceImpl implements UserService {
             return;
         }
         if (!vipLevel.trim().equals(Constant.USER_VIP_LEVEL_1) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_2)
-                && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_3) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_4)) {
+                && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_3) && !vipLevel.trim().equals(Constant
+                .USER_VIP_LEVEL_4)) {
             LOGGER.info("更新会员失败，因为传入的用户等级编码不在约定之中：{}", vipLevel);
             return;
         }
@@ -557,38 +556,6 @@ public class UserServiceImpl implements UserService {
         sendPhoneCode(sendCodeBO.getPhone(), sendCodeBO.getType());
     }
 
-    //调用message接口发送短信
-    private void sendPhoneCode(String phone, String type) {
-        //不变参数
-        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/getcode";
-
-        //请求头设置
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
-        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("phone", phone);
-        requestBody.put("type", type);
-
-        HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
-        ResponseEntity responseEntity;
-        try {
-            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        } catch (Exception e) {
-            throw new ServiceException(4821);
-        }
-
-        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
-            BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
-            if (!object.getCode().equals("2000")) {
-                throw new ServiceException(4204);
-            }
-        }
-    }
-
     @Override
     public void loginedVerifyCode(LoginedVerifyCodeBO verifyCodeBO) {
         LOGGER.info("用户通过用户ID校验手机验证码，参数：{}", verifyCodeBO.toString());
@@ -712,5 +679,61 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO selectOneByPhone(String phone) {
         return userRoMapper.selectOneByPhone(phone);
+    }
+
+    /**
+     * 调用message接口发送短信
+     *
+     * @param phone 手机号
+     * @param type  短信类型
+     */
+    private void sendPhoneCode(String phone, String type) {
+        //不变参数
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/getcode";
+
+        //请求头设置
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(Constant.VERSION_HEAD, request.getHeader(Constant.VERSION_HEAD));
+        httpHeaders.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
+
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("phone", phone);
+        requestBody.put("type", type);
+
+        HttpEntity requestEntity = new HttpEntity(requestBody, httpHeaders);
+        ResponseEntity responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
+        }
+
+        if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
+            BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
+            if (!object.getCode().equals("2000")) {
+                throw new ServiceException(4204);
+            }
+        }
+    }
+
+    /**
+     * 逗号分隔的标签ID转为List
+     *
+     * @param tagId 带逗号分隔的标签ID
+     * @param split 分隔符
+     * @return ID列表
+     */
+    private List analysisTagId(String tagId, String split) {
+        String[] tags = tagId.trim().split(split);
+        List list = Arrays.asList(tags);
+        //去除空的元素
+        for (int i = 0; i < list.size(); i++) {
+            if (StringUtils.isEmpty(list.get(i))) {
+                list.remove(i);
+            }
+        }
+        return list;
     }
 }
