@@ -41,11 +41,11 @@
         LEFT JOIN gw_view_sys_dict d ON d.id = b.dictId
         <where>
             b.status = true
-            <if test="name != null">AND b.name LIKE CONCAT('%',#{name},'%')</if>
-            <if test="uri != null">AND b.uri = #{uri}</if>
-            <if test="method != null">AND b.method = #{method}</if>
-            <if test="version != null">AND b.version = #{version}</if>
-            <if test="appId != null">AND a.appId = #{appId}</if>
+            <if test="name != null and uri != ''">AND b.name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="uri != null and uri != '' ">and b.uri LIKE CONCAT('%',#{uri},'%')</if>
+            <if test="method != null and method != ''">AND b.method = #{method}</if>
+            <if test="version != null and version != ''">AND b.version = #{version}</if>
+            <if test="appId != null and appId != ''">AND a.appId = #{appId}</if>
 
         </where>
     </select>
