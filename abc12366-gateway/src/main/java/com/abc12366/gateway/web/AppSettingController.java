@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -45,11 +47,15 @@ public class AppSettingController {
     @GetMapping(path = "/appsetting")
     public ResponseEntity selectList(@RequestParam(value = "appId") String appId,
                                      @RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "uri", required = false) String uri,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) throws IOException {
         AppSettingBO appSettingBO = new AppSettingBO();
         appSettingBO.setAppId(appId);
         appSettingBO.setName(name);
+        if (uri != null && !"".equals(uri)) {
+            appSettingBO.setUri(new String(new BASE64Decoder().decodeBuffer(uri)));
+        }
         LOGGER.info("{},{},{}", pageNum, pageSize, appSettingBO);
 
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
