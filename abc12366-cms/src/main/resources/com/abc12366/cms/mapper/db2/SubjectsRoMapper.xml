@@ -32,6 +32,7 @@
         <result property="subjectsId" column="subjectsId"/>
         <result property="optionString" column="optionString"/>
         <result property="status" column="status"/>
+        <result property="sequence" column="sequence"/>
     </resultMap>
 
     <!-- 查询（根据主键id查询） -->
@@ -45,7 +46,7 @@
 
     <select id="getOption" parameterType="java.lang.String" resultMap="oneOption">
         SELECT
-        id, subjectsId, optionString, status
+        id, subjectsId, optionString, status,sequence
         FROM cms_paper_option
         WHERE subjectsId = #{subjectsId}
     </select>
