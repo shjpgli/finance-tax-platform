@@ -47,7 +47,7 @@ public class RedEnvelopController {
      * @return ResponseEntity
      */
     @GetMapping()
-    public ResponseEntity selectList(@RequestParam(value = "activityId", required = false) String activityId,
+    public ResponseEntity selectList(@RequestParam(value = "activityId") String activityId,
                                      @RequestParam(value = "sendStatus", required = false) String sendStatus,
                                      @RequestParam(value = "receiveStatus", required = false) String receiveStatus,
                                      @RequestParam(value = "openId", required = false) String openId,
