@@ -426,7 +426,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //如果用户已绑定电话，则对传入的旧电话号码进行校验
-        if (user.getPhone() != null) {
+        if (user.getPhone() != null && !user.getPhone().trim().equals("")) {
             //旧的手机号码不能为空
             if (StringUtils.isEmpty(bindPhoneBO.getOldPhone())) {
                 throw new ServiceException(4856);
