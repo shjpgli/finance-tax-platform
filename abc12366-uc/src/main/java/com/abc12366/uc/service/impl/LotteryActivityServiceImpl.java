@@ -63,6 +63,17 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
 
     @Override
     public boolean delete(String id) {
+        //如果有抽奖记录就不能删除、
+        Map<String, Object> map = new HashMap<>();
+        if(id != null && !id.isEmpty()){
+            throw new RuntimeException("id错误");
+
+        }
+            map.put("activityId",id);
+        List<LotteryLogBO>  list =  lotteryLogService.selectList(map);
+        if(list.size() > 0){
+            throw new ServiceException(9999,"有抽奖记录，删除失败");
+        }
         Integer result = lotteryActivityMapper.delete(id);
         return (result == 1);
     }
@@ -245,7 +256,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         }
 
         if (checkIp(activityId,ip)){
-            throw new ServiceException(9999, "Ip屏蔽");
+            throw new ServiceException(9999, "参加活动失败！");
         }
 
 //        P-hycj
