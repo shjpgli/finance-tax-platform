@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, subjectsId, optionString, status
+        id, subjectsId, optionString, status, sequence
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -15,6 +15,7 @@
         <include refid="Base_Column_List"/>
         FROM cms_paper_option
         WHERE id = #{id}
+        ORDER BY sequence
     </select>
 
 </mapper>

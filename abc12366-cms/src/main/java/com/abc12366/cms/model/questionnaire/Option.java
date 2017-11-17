@@ -25,6 +25,11 @@ public class Option implements Serializable {
     private String optionString;
 
     /**
+     * 序号
+     **/
+    private Integer sequence;
+
+    /**
      * 选项状态，true:正常，false:删除
      **/
     private Boolean status;
@@ -59,5 +64,13 @@ public class Option implements Serializable {
 
     public void setSubjectsId(String subjectsId) {
         this.subjectsId = subjectsId;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 }

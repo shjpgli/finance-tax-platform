@@ -88,7 +88,7 @@ public class AppSettingServiceImpl implements AppSettingService {
         //根据appId删除授权信息
         //appSettingMapper.deleteByAppId(appId);
         if (appSettingBOList != null && appSettingBOList.size() != 0) {
-            if(appSettingBOList.size() >= 100){
+            if(appSettingBOList.size() > 100){
                 LOGGER.warn("每次最多授权100个：{}", appSettingBOList.size());
                 throw new ServiceException(4101,"每次最多授权100个");
             }
