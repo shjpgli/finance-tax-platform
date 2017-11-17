@@ -506,6 +506,13 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn("修改失败");
             throw new ServiceException(4018);
         }
+
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(bo.getPhone());
+        if (null != userRoMapper.selectByUsernameOrPhone(loginBO)) {
+            throw new ServiceException(4183);
+        }
+
         user.setLastUpdate(new Date());
         user.setPhone(bo.getPhone());
         int result = userMapper.updatePhone(user);
