@@ -345,7 +345,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         if (!vipLevel.trim().equals(Constant.USER_VIP_LEVEL_1) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_2)
-                && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_3) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_4)){
+                && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_3) && !vipLevel.trim().equals(Constant.USER_VIP_LEVEL_4)) {
             LOGGER.info("更新会员失败，因为传入的用户等级编码不在约定之中：{}", vipLevel);
             return;
         }
@@ -421,12 +421,12 @@ public class UserServiceImpl implements UserService {
         loginBO.setUsernameOrPhone(bindPhoneBO.getNewPhone());
         User userPhoneExist = userRoMapper.selectByUsernameOrPhone(loginBO);
         //该手机号码已被绑定
-        if (userPhoneExist != null) {
+        if (userPhoneExist != null && !bindPhoneBO.getUserId().equals(userPhoneExist.getId())) {
             throw new ServiceException(4858);
         }
 
         //如果用户已绑定电话，则对传入的旧电话号码进行校验
-        if (user.getPhone() != null) {
+        if (user.getPhone() != null && !user.getPhone().trim().equals("")) {
             //旧的手机号码不能为空
             if (StringUtils.isEmpty(bindPhoneBO.getOldPhone())) {
                 throw new ServiceException(4856);
@@ -506,6 +506,15 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn("修改失败");
             throw new ServiceException(4018);
         }
+
+        if (!StringUtils.isEmpty(bo.getPhone())) {
+            LoginBO loginBO = new LoginBO();
+            loginBO.setUsernameOrPhone(bo.getPhone());
+            if (null != userRoMapper.selectByUsernameOrPhone(loginBO)) {
+                throw new ServiceException(4183);
+            }
+        }
+
         user.setLastUpdate(new Date());
         user.setPhone(bo.getPhone());
         int result = userMapper.updatePhone(user);
@@ -698,5 +707,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByHngsNsrsbh(String nsrsbh) {
         return userRoMapper.findByHngsNsrsbh(nsrsbh);
+    }
+
+    @Override
+    public UserBO selectOneByPhone(String phone) {
+        return userRoMapper.selectOneByPhone(phone);
     }
 }

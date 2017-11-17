@@ -123,4 +123,11 @@ public interface UserService {
 	 * @return
 	 */
 	List<User> findByHngsNsrsbh(String nsrsbh);
+
+    /**
+     * 根据手机号码查询用户
+     * @param phone 手机号码
+     * @return UserBO
+     */
+    UserBO selectOneByPhone(String phone);
 }

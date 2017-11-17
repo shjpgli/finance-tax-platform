@@ -86,8 +86,12 @@ public class AppSettingServiceImpl implements AppSettingService {
     public List<AppSetting> insertList(String appId, List<AppSettingBO> appSettingBOList) {
         List<AppSetting> list = new ArrayList<>();
         //根据appId删除授权信息
-        appSettingMapper.deleteByAppId(appId);
+        //appSettingMapper.deleteByAppId(appId);
         if (appSettingBOList != null && appSettingBOList.size() != 0) {
+            if(appSettingBOList.size() > 100){
+                LOGGER.warn("每次最多授权100个：{}", appSettingBOList.size());
+                throw new ServiceException(4101,"每次最多授权100个");
+            }
             for (AppSettingBO bo : appSettingBOList) {
                 bo.setId(Utils.uuid());
                 Date date = new Date();
@@ -97,6 +101,7 @@ public class AppSettingServiceImpl implements AppSettingService {
                 BeanUtils.copyProperties(bo, appSetting);
                 list.add(appSetting);
             }
+            //批量新增授权
             appSettingMapper.batchInsert(list);
         }
         return list;

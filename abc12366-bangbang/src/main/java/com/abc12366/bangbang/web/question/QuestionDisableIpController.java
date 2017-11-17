@@ -51,9 +51,9 @@ public class QuestionDisableIpController {
     /*
     * 撤销禁用 接口
     */
-    @DeleteMapping(path = "/enable/{id}")
-    public ResponseEntity enable(@PathVariable String id) {
-        questionDisableIpService.enable(id);
+    @DeleteMapping(path = "/enable/{ip}")
+    public ResponseEntity enable(@PathVariable String ip) {
+        questionDisableIpService.enable(ip);
         return ResponseEntity.ok(Utils.kv());
     }
 

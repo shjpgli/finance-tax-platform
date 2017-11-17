@@ -52,4 +52,6 @@ public interface UserRoMapper {
 	User selectByWxUserId(User users);
 
 	List<User> findByHngsNsrsbh(String nsrsbh);
+
+    UserBO selectOneByPhone(String phone);
 }
