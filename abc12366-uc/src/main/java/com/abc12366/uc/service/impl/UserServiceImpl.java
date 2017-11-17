@@ -507,7 +507,7 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4018);
         }
 
-        if (!StringUtils.isEmpty(bo.getPhone()) && !"null".equalsIgnoreCase(bo.getPhone())) {
+        if (!StringUtils.isEmpty(bo.getPhone())) {
             LoginBO loginBO = new LoginBO();
             loginBO.setUsernameOrPhone(bo.getPhone());
             if (null != userRoMapper.selectByUsernameOrPhone(loginBO)) {
