@@ -507,10 +507,12 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4018);
         }
 
-        LoginBO loginBO = new LoginBO();
-        loginBO.setUsernameOrPhone(bo.getPhone());
-        if (null != userRoMapper.selectByUsernameOrPhone(loginBO)) {
-            throw new ServiceException(4183);
+        if (!StringUtils.isEmpty(bo.getPhone())) {
+            LoginBO loginBO = new LoginBO();
+            loginBO.setUsernameOrPhone(bo.getPhone());
+            if (null != userRoMapper.selectByUsernameOrPhone(loginBO)) {
+                throw new ServiceException(4183);
+            }
         }
 
         user.setLastUpdate(new Date());
