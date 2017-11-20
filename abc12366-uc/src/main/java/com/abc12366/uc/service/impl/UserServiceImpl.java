@@ -178,7 +178,11 @@ public class UserServiceImpl implements UserService {
             }
         }
         if (userUpdateBO.getUsername() != null && !user.getUsername().equals(userUpdateBO.getUsername())) {
-            user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
+            if (!StringUtils.isEmpty(user.getUsernameModifiedTimes())) {
+                user.setUsernameModifiedTimes(user.getUsernameModifiedTimes() + 1);
+            } else {
+                user.setUsernameModifiedTimes(1);
+            }
         }
         BeanUtils.copyProperties(userUpdateBO, user);
         user.setLastUpdate(new Date());
