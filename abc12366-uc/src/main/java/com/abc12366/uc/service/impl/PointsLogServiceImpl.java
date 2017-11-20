@@ -181,4 +181,9 @@ public class PointsLogServiceImpl implements PointsLogService {
         insert(pointsLogBO);
         return pointsLogBO;
     }
+
+	@Override
+	public int selecttimes(Map map) {
+		return pointsLogRoMapper.selecttimes(map);
+	}
 }

@@ -21,4 +21,10 @@ public interface PointsLogService {
     PointsLogBO insertNoVip(PointsLogBO pointsLogBO);
 
     PointsLogBO insertByConsume(PointsLogBO pointsLogBO);
+    /**
+     * 查询本月装让次数
+     * @param map
+     * @return
+     */
+    int selecttimes (Map map);
 }

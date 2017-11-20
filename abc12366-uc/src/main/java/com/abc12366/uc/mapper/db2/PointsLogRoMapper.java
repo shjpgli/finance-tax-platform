@@ -15,4 +15,6 @@ public interface PointsLogRoMapper {
     List<PointsLogBO> selectList(Map map);
 
     List<PointsLogUcBO> selectListByUser(Map<String, Object> map);
+
+	int selecttimes(Map map);
 }
