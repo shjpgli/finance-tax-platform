@@ -456,7 +456,7 @@ public class UserServiceImpl implements UserService {
         userPhone.setId(user.getId());
         userPhone.setPhone(bindPhoneBO.getNewPhone());
         LOGGER.info("用户绑定手机号：{}", userPhone.toString());
-        int result = userMapper.updatePhone(user);
+        int result = userMapper.updatePhone(userPhone);
         if (result != 1) {
             LOGGER.warn("修改失败");
             throw new ServiceException(4102);
