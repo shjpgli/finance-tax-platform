@@ -1,7 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.Express;
-import com.abc12366.uc.model.bo.ExpressBO;
+import com.abc12366.uc.model.invoice.Express;
+import com.abc12366.uc.model.invoice.bo.ExpressBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

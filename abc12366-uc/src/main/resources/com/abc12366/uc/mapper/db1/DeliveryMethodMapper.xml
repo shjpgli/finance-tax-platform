@@ -11,7 +11,7 @@
 
     <!-- 添加 -->
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.DeliveryMethod">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.DeliveryMethod">
         INSERT INTO uc_delivery_method
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -117,7 +117,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.DeliveryMethod">
+    <update id="update" parameterType="com.abc12366.uc.model.order.DeliveryMethod">
         UPDATE uc_delivery_method
         <set>
             <if test="name != null">
