@@ -100,7 +100,7 @@
         ) h left join (select x.orderNo, x.name, y.specId from uc_order_product x left join uc_order_product_spec y on x.productId = y.productId) j on h.orderNo = j.orderNo
     </select>
 
-    <select id="selectCompletedOrder" resultType="com.abc12366.uc.model.bo.ExchangeCompletedOrderBO"
+    <select id="selectCompletedOrder" resultType="com.abc12366.uc.model.order.bo.ExchangeCompletedOrderBO"
             parameterType="java.lang.String">
         select orderNo, giftPoints, createTime, lastUpdate, userId, points, e.productId, goodsType,isReturn,isExchange,name from
         (select c.*, d.points from
@@ -110,8 +110,8 @@
     </select>
 
     <!-- 3-已拒绝 5-已退票 6-已收货-->
-    <select id="selectOrderInvoice" parameterType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO"
-            resultType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO">
+    <select id="selectOrderInvoice" parameterType="com.abc12366.uc.model.order.bo.ExchangeOrderInvoiceBO"
+            resultType="com.abc12366.uc.model.order.bo.ExchangeOrderInvoiceBO">
         select c.invoiceNo, c.invoiceCode, c.name, c.content, c.amount, c.type, c.property, c.status,
         c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank, d.isInvoice, d.orderNo from
         (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId and b.status = true ) c
@@ -120,8 +120,8 @@
         and c.orderNo = #{orderNo}
     </select>
 
-    <select id="selectInvoice" parameterType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO"
-            resultType="com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO">
+    <select id="selectInvoice" parameterType="com.abc12366.uc.model.order.bo.ExchangeOrderInvoiceBO"
+            resultType="com.abc12366.uc.model.order.bo.ExchangeOrderInvoiceBO">
         select c.invoiceNo, c.invoiceCode, c.name, c.content, c.amount, c.type, c.property, c.status,
         c.nsrsbh, c.nsrmc, c.address, c.phone, c.bank, d.isInvoice, d.orderNo from
         (select a.*, b.orderNo from uc_invoice a left join uc_order_invoice b on a.id = b.invoiceId and b.status = true ) c

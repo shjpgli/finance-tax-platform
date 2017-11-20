@@ -206,7 +206,7 @@
     </resultMap>
 
     <!--配送方式对象-->
-    <resultMap id="deliveryMethodBOMap" type="com.abc12366.uc.model.bo.DeliveryMethodBO">
+    <resultMap id="deliveryMethodBOMap" type="com.abc12366.uc.model.order.bo.DeliveryMethodBO">
         <id column="deliveryId" property="id"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="VARCHAR"/>
@@ -235,7 +235,7 @@
     </select>-->
 
     <!-- 获取物流公司信息-->
-    <select id="getExpressComp" resultType="com.abc12366.uc.model.ExpressComp" parameterType="java.lang.String">
+    <select id="getExpressComp" resultType="com.abc12366.uc.model.order.ExpressComp" parameterType="java.lang.String">
         SELECT
         id, compCode, compName, compUrl, sort, createTime, lastUpdate,templateUrl
         FROM uc_express_comp
@@ -243,7 +243,7 @@
     </select>
 
     <!-- 查询用户地址信息 -->
-    <!--<select id="getUserAddress" resultType="com.abc12366.uc.model.bo.UserAddressBO" parameterType="java.lang.String">
+    <!--<select id="getUserAddress" resultType="com.abc12366.uc.model.order.bo.UserAddressBO" parameterType="java.lang.String">
         SELECT
         a.id, a.userId, a.name, a.province, a.city, a.area, a.detail, a.phone, a.isDefault, a.status, a.createTime, a.lastUpdate,
         p.province as provinceName,c.city as cityName,e.area as areaName

@@ -1,7 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
-import com.abc12366.uc.model.UvipPrice;
-import com.abc12366.uc.model.bo.UvipPriceBO;
+import com.abc12366.uc.model.order.UvipPrice;
+import com.abc12366.uc.model.order.bo.UvipPriceBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

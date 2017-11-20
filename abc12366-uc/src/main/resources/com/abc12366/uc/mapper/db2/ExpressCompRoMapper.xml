@@ -9,29 +9,29 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.ExpressComp" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.order.ExpressComp" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_express_comp
         WHERE id = #{id}
     </select>
 
-    <select id="selectByCompName" resultType="com.abc12366.uc.model.ExpressComp" parameterType="java.lang.String">
+    <select id="selectByCompName" resultType="com.abc12366.uc.model.order.ExpressComp" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_express_comp
         WHERE compName = #{compName}
     </select>
 
-    <select id="selectByCompCode" resultType="com.abc12366.uc.model.ExpressComp" parameterType="java.lang.String">
+    <select id="selectByCompCode" resultType="com.abc12366.uc.model.order.ExpressComp" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_express_comp
         WHERE compCode = #{compCode}
     </select>
 
-    <select id="selectList" resultType="com.abc12366.uc.model.ExpressComp"
-            parameterType="com.abc12366.uc.model.ExpressComp">
+    <select id="selectList" resultType="com.abc12366.uc.model.order.ExpressComp"
+            parameterType="com.abc12366.uc.model.order.ExpressComp">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_express_comp

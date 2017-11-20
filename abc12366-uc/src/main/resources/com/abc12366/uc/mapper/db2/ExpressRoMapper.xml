@@ -9,7 +9,7 @@
 	</sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.Express" parameterType="java.lang.String">
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.invoice.Express" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_express
@@ -17,7 +17,7 @@
     </select>
 
     <!-- 查询（根据主键 invoiceOrderNo 查询） -->
-    <select id="selectbyInvoiceOrderNo" resultType="com.abc12366.uc.model.Express" parameterType="java.lang.String">
+    <select id="selectbyInvoiceOrderNo" resultType="com.abc12366.uc.model.invoice.Express" parameterType="java.lang.String">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_express
