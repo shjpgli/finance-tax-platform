@@ -163,8 +163,8 @@ public class UserServiceImpl implements UserService {
         }
 
         //普通用户只允许修改一次用户名
-        if (!StringUtils.isEmpty(userUpdateBO.getUsername()) && !userUpdateBO.getUsername().trim().equals(user.getUsername()) &&
-                user.getUsernameModifiedTimes() >= 1) {
+        if (!StringUtils.isEmpty(userUpdateBO.getUsername()) && !userUpdateBO.getUsername().trim().equals(user.getUsername())
+                && !StringUtils.isEmpty(user.getUsernameModifiedTimes()) && user.getUsernameModifiedTimes() >= 1) {
             throw new ServiceException(4037);
         }
 
@@ -452,11 +452,15 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(4201);
         }
 
-        UserPhoneBO userPhoneBO = new UserPhoneBO();
-        userPhoneBO.setId(user.getId());
-        userPhoneBO.setPhone(bindPhoneBO.getNewPhone());
-        LOGGER.info("用户绑定手机号：{}", userPhoneBO.toString());
-        updatePhone(userPhoneBO);
+        User userPhone = new User();
+        userPhone.setId(user.getId());
+        userPhone.setPhone(bindPhoneBO.getNewPhone());
+        LOGGER.info("用户绑定手机号：{}", userPhone.toString());
+        int result = userMapper.updatePhone(user);
+        if (result != 1) {
+            LOGGER.warn("修改失败");
+            throw new ServiceException(4102);
+        }
     }
 
     @Override
