@@ -82,35 +82,68 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserFeedbackMsgService userFeedbackMsgService;
 
+    @Autowired
+    private ExperienceLevelService experienceLevelService;
+
+    @Autowired
+    private TagService tagService;
+
     @Override
     public List<UserListBO> selectList(Map<String, Object> map, int page, int size) {
 
-        // 真实姓名不为空，查询扩展表
-        String realName = "realName";
-        List<UserExtendListBO> userExtendList = null;
-        if (!StringUtils.isEmpty(map.get(realName))) {
-            userExtendList = userExtendRoMapper.selectList(map);
-        }
-        if (userExtendList != null && userExtendList.size() > 0) {
+        List<UserListBO> userList = new ArrayList<>();
 
+        if (!StringUtils.isEmpty(String.valueOf(map.get("realName")).trim())) {
+            // 真实姓名不为空，查询扩展表
+            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+            List<UserExtendListBO> userExtendList = userExtendRoMapper.selectList(map);
+            if (userExtendList != null && userExtendList.size() > 0) {
+                for (UserExtendListBO ue : userExtendList) {
+                    map.put("id", ue.getUserId());
+                    userList.addAll(userRoMapper.selectList(map));
+                }
+            }
+        } else if (!StringUtils.isEmpty(map.get("tagId"))) {
+            // 查询条件包含标签时
+            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+            List<String> userIds = tagService.selectUserIdsByTagIds(map);
+            for (String userId : userIds) {
+                map.put("id", userId);
+                userList.addAll(userRoMapper.selectList(map));
+            }
+        } else if (!StringUtils.isEmpty(map.get("medal")) || !StringUtils.isEmpty(map.get("vipLevel"))
+                || !StringUtils.isEmpty(map.get("exp")) || !StringUtils.isEmpty(map.get("points"))
+                || !StringUtils.isEmpty(map.get("username")) || !StringUtils.isEmpty(map.get("phone"))
+                || !StringUtils.isEmpty(map.get("nickname")) || !StringUtils.isEmpty(map.get("status"))
+                || !StringUtils.isEmpty(map.get("createTime"))) {
+            // 用户表信息不为空时，查询用户表
+            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+            userList = userRoMapper.selectList(map);
+        } else {
+            // 查询默认数据
+            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+            userList = userRoMapper.selectList(map);
         }
-        //解析多标签名称参数
-        List tagIdList = new ArrayList<>();
-        String tagId = "tagId";
-        if (!StringUtils.isEmpty(map.get(tagId))) {
-            tagIdList = analysisTagId((String) map.get(tagId), ",");
+
+        // 补充真实姓名、用户等级信息
+        for (UserListBO user : userList) {
+            UserExtend ue = userExtendRoMapper.selectOneForAdmin(user.getId());
+            if (ue != null) {
+                user.setRealName(ue.getRealName());
+            }
+            ExperienceLevelBO el = experienceLevelService.selectOne(user.getExp());
+            if (el != null) {
+                user.setMedal(el.getMedal());
+                user.setLevelName(el.getName());
+                user.setMedalIcon(el.getMedalIcon());
+            }
         }
-        map.put(tagId, tagIdList);
-        map.put("tagIdCount", (tagIdList == null) ? 0 : tagIdList.size());
-        PageHelper.startPage(page, size, false).pageSizeZero(true).reasonable(true);
-        List<UserListBO> users = userRoMapper.selectList(map);
-        return users;
+        return userList;
     }
 
     @Override
     public User selectUser(String userId) {
-        User userTemp = userRoMapper.selectOne(userId);
-        return userTemp;
+        return userRoMapper.selectOne(userId);
     }
 
     @Override
@@ -681,6 +714,11 @@ public class UserServiceImpl implements UserService {
         return userRoMapper.selectOneByPhone(phone);
     }
 
+    @Override
+    public User selectUserById(User user) {
+        return userRoMapper.selectUserById(user);
+    }
+
     /**
      * 调用message接口发送短信
      *
@@ -716,24 +754,5 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4204);
             }
         }
-    }
-
-    /**
-     * 逗号分隔的标签ID转为List
-     *
-     * @param tagId 带逗号分隔的标签ID
-     * @param split 分隔符
-     * @return ID列表
-     */
-    private List analysisTagId(String tagId, String split) {
-        String[] tags = tagId.trim().split(split);
-        List list = Arrays.asList(tags);
-        //去除空的元素
-        for (int i = 0; i < list.size(); i++) {
-            if (StringUtils.isEmpty(list.get(i))) {
-                list.remove(i);
-            }
-        }
-        return list;
     }
 }

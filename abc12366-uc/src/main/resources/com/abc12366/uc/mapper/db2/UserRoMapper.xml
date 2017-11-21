@@ -81,6 +81,17 @@
         </where>
     </select>
     -->
+    <select id="selectUserById" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.User">
+        SELECT id, username, phone, password, regMail, regIP, salt, nickname, status, createTime,
+          lastUpdate, userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath,
+          points, exp, vipLevel, usernameModifiedTimes, vipExpireDate, wxopenid, wxheadimg, wxnickname, bdqudao, oldId
+        FROM uc_user
+        <where>
+            <if test="id != null and id != ''">
+                id=#{id}
+            </if>
+        </where>
+    </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
         SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname

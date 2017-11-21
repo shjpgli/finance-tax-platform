@@ -22,8 +22,8 @@ public interface UserRoMapper {
     /**
      * 后台用户列表查询
      *
+     * @param map 查询参数
      * @return 用户列表List
-     * @map 查询参数
      */
     List<UserListBO> selectList(Map map);
 
@@ -60,4 +60,12 @@ public interface UserRoMapper {
     List<User> findByHngsNsrsbh(String nsrsbh);
 
     UserBO selectOneByPhone(String phone);
+
+    /**
+     * 根据用户ID查询用户基本表信息
+     *
+     * @param user 用户条件
+     * @return 用户基本表信息
+     */
+    User selectUserById(User user);
 }

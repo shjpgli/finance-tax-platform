@@ -18,9 +18,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -153,5 +153,37 @@ public class TagServiceImpl implements TagService {
             }
             throw new ServiceException(4626);
         }
+    }
+
+    @Override
+    public List<String> selectUserIdsByTagIds(Map map) {
+        //解析多标签名称参数
+        String tagId = "tagId";
+        List tagIdList = new ArrayList<>();
+        if (!StringUtils.isEmpty(map.get(tagId))) {
+            tagIdList = analysisTagId((String) map.get(tagId), ",");
+        }
+        map.put(tagId, tagIdList);
+        map.put("tagIdCount", (tagIdList == null) ? 0 : tagIdList.size());
+        return tagRoMapper.selectUserIdsByTagIds(map);
+    }
+
+    /**
+     * 逗号分隔的标签ID转为List
+     *
+     * @param tagId 带逗号分隔的标签ID
+     * @param split 分隔符
+     * @return ID列表
+     */
+    private List analysisTagId(String tagId, String split) {
+        String[] tags = tagId.trim().split(split);
+        List list = Arrays.asList(tags);
+        //去除空的元素
+        for (int i = 0; i < list.size(); i++) {
+            if (StringUtils.isEmpty(list.get(i))) {
+                list.remove(i);
+            }
+        }
+        return list;
     }
 }

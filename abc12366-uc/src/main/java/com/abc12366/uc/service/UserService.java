@@ -154,4 +154,12 @@ public interface UserService {
      * @return UserBO
      */
     UserBO selectOneByPhone(String phone);
+
+    /**
+     * 根据用户ID查询用户基本表信息
+     *
+     * @param user 用户条件
+     * @return 用户基本表信息
+     */
+    User selectUserById(User user);
 }

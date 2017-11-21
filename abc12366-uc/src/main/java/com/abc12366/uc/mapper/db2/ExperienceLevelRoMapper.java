@@ -14,4 +14,12 @@ public interface ExperienceLevelRoMapper {
     List<ExperienceLevelBO> selectList(Map<String, Object> map);
 
     ExperienceLevelBO selectOne(String id);
+
+    /**
+     * 根据经验值查询对象信息
+     *
+     * @param exp 经验值
+     * @return 经验值对象信息
+     */
+    ExperienceLevelBO selectOneByExp(int exp);
 }
