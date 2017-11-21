@@ -1,6 +1,6 @@
 package com.abc12366.uc.model.invoice.bo;
 
-import com.abc12366.uc.model.bo.DeliveryMethodBO;
+import com.abc12366.uc.model.order.bo.DeliveryMethodBO;
 import com.abc12366.uc.model.invoice.InvoiceLog;
 import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.invoice.InvoiceDetail;

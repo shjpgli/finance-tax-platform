@@ -101,6 +101,5 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //多个结果投票
                 .excludePathPatterns("/vote/**")
                 .excludePathPatterns("/vote/result/**");
-
     }
 }

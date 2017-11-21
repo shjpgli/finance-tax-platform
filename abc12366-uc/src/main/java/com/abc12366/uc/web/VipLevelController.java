@@ -33,6 +33,14 @@ public class VipLevelController {
     @Autowired
     private VipLevelService vipLevelService;
 
+    /**
+     * 会员列表查询
+     * @param level  会员等级
+     * @param status 状态
+     * @param page 页数
+     * @param size 大小
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam(required = false) String level,
                                      @RequestParam(required = false) Boolean status,
@@ -56,6 +64,11 @@ public class VipLevelController {
                         .getTotal()));
     }
 
+    /**
+     * 查看单个会员
+     * @param id 会员id
+     * @return
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -63,6 +76,11 @@ public class VipLevelController {
         return ResponseEntity.ok(Utils.kv("data", vipLevelBO));
     }
 
+    /**
+     * 新增会员 
+     * @param vipLevelInsertBO 会员信息
+     * @return
+     */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody VipLevelInsertBO vipLevelInsertBO) {
         LOGGER.info("{}", vipLevelInsertBO);
@@ -71,6 +89,12 @@ public class VipLevelController {
         return ResponseEntity.ok(Utils.kv("data", vipLevelBOReturn));
     }
 
+    /**
+     * 更新会员
+     * @param vipLevelUpdateBO 会员信息
+     * @param id 会员ID
+     * @return
+     */
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody VipLevelUpdateBO vipLevelUpdateBO, @PathVariable String id) {
         LOGGER.info("{}:{}", vipLevelUpdateBO, id);
@@ -79,13 +103,18 @@ public class VipLevelController {
         return ResponseEntity.ok(Utils.kv("data", vipLevelBOReturn));
     }
 
+    /**
+     * 删除会员
+     * @param id 会员id
+     * @return
+     */
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
         vipLevelService.delete(id);
         return ResponseEntity.ok(Utils.kv());
     }
-
+     
     //启用、禁用会员等级接口
     @PutMapping(path = "/{id}/{status}")
     public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
@@ -93,7 +122,12 @@ public class VipLevelController {
         vipLevelService.enableOrDisable(id, status);
         return ResponseEntity.ok(Utils.kv());
     }
-
+    
+    /**
+     * 通过code查找会员
+     * @param levelCode 会员code
+     * @return
+     */
     @GetMapping(path = "/bo/{levelCode}")
     public ResponseEntity selectByLevelCode(@PathVariable String levelCode) {
         LOGGER.info("{}", levelCode);

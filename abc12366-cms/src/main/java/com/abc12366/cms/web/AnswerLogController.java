@@ -132,7 +132,7 @@ public class AnswerLogController {
         LOGGER.info("{}", answerLogBO);
         AnswerLogBO bo = answerLogService.batch(answerLogBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**

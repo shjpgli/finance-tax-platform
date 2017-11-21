@@ -6,25 +6,33 @@ package com.abc12366.uc.model.bo;
  * Time: 15:38
  */
 public class NsrBindQueryParamBO {
-    private String username;
+    private String userId;
     private String nsrsbh;
     private Boolean status;
 
     public NsrBindQueryParamBO() {
     }
 
-    public NsrBindQueryParamBO(String username, String nsrsbh,Boolean status) {
-        this.username = username;
-        this.nsrsbh = nsrsbh;
+    private NsrBindQueryParamBO(Builder builder) {
+        setUserId(builder.userId);
+        setNsrsbh(builder.nsrsbh);
+        setStatus(builder.status);
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getNsrsbh() {
@@ -35,11 +43,40 @@ public class NsrBindQueryParamBO {
         this.nsrsbh = nsrsbh;
     }
 
-	public Boolean getStatus() {
-		return status;
-	}
+    @Override
+    public String toString() {
+        return "NsrBindQueryParamBO{" +
+                "userId='" + userId + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
+                ", status=" + status +
+                '}';
+    }
 
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
+    public static final class Builder {
+        private String userId;
+        private String nsrsbh;
+        private Boolean status;
+
+        public Builder() {
+        }
+
+        public Builder userId(String val) {
+            userId = val;
+            return this;
+        }
+
+        public Builder nsrsbh(String val) {
+            nsrsbh = val;
+            return this;
+        }
+
+        public Builder status(Boolean val) {
+            status = val;
+            return this;
+        }
+
+        public NsrBindQueryParamBO build() {
+            return new NsrBindQueryParamBO(this);
+        }
+    }
 }

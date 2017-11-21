@@ -18,5 +18,9 @@ public interface NsrBindQueryRoMapper {
 
     UserHngsBO selectHngs(String id);
 
-    List<NsrBindQueryBO> selectDzsbList(NsrBindQueryParamBO nsrBindQueryParamBO);
+    List<NsrBindQueryBO> selectDzsbList(NsrBindQueryParamBO bo);
+
+    List<NsrBindQueryBO> selectHngsList(NsrBindQueryParamBO bo);
+
+    List<NsrBindQueryBO> selectHndsList(NsrBindQueryParamBO bo);
 }

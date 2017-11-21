@@ -1,6 +1,6 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.abc12366.uc.model.UvipPrice;
+import com.abc12366.uc.model.order.UvipPrice;
 import com.abc12366.uc.model.bo.DictBO;
 
 import java.io.Serializable;

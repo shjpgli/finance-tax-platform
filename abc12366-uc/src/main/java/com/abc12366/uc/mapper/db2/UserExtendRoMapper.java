@@ -24,4 +24,6 @@ public interface UserExtendRoMapper {
      * @return Integer 数量
      */
     Integer selectTodoListCount();
+
+	List<Map<String, String>> canmerging(Map map);
 }

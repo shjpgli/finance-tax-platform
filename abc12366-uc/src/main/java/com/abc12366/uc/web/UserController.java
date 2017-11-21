@@ -7,13 +7,11 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.UserService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,54 +57,40 @@ public class UserController {
     }
 
 
-    //查询用户列表，支持多标签查询
+    /**
+     * 查询用户列表，支持多标签查询
+     *
+     * @param username 用户名
+     * @param phone    手机号
+     * @param nickname 昵称
+     * @param status   用户状态
+     * @param tagId    标签ID
+     * @param realName 真实姓名
+     * @param points   积分
+     * @param exp      经验值
+     * @param vipLevel 会员等级
+     * @param medal    用户等级
+     * @param page     当前页
+     * @param size     每页大小
+     * @return List 用户列表
+     */
     @GetMapping
     public ResponseEntity selectList(
             @RequestParam(required = false) String username,
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) String nickname,
             @RequestParam(required = false) Boolean status,
-            @RequestParam(required = false) String tagName,
+            @RequestParam(required = false) String tagId,
             @RequestParam(required = false) String realName,
             @RequestParam(required = false) String points,
             @RequestParam(required = false) String exp,
             @RequestParam(required = false) String vipLevel,
             @RequestParam(required = false) String medal,
+            @RequestParam(required = false) String createTime,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}:{}:{}:{}:{}", username, phone, nickname, status, tagName, page, size);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        Map<String, Object> map = new HashMap<>();
-        if (username != null && StringUtils.isEmpty(username)) {
-            username = null;
-        }
-        if (phone != null && StringUtils.isEmpty(phone)) {
-            phone = null;
-        }
-        if (nickname != null && StringUtils.isEmpty(nickname)) {
-            nickname = null;
-        }
-        if (status != null && StringUtils.isEmpty(status)) {
-            status = null;
-        }
-        if (tagName != null && StringUtils.isEmpty(tagName)) {
-            tagName = null;
-        }
-        if (StringUtils.isEmpty(realName)) {
-            realName = null;
-        }
-        if (StringUtils.isEmpty(points)) {
-            points = null;
-        }
-        if (StringUtils.isEmpty(exp)) {
-            exp = null;
-        }
-        if (StringUtils.isEmpty(vipLevel)) {
-            vipLevel = null;
-        }
-        if (StringUtils.isEmpty(medal)) {
-            medal = null;
-        }
+
+        Map<String, Object> map = new HashMap<>(16);
         map.put("medal", medal);
         map.put("vipLevel", vipLevel);
         map.put("exp", exp);
@@ -116,12 +100,14 @@ public class UserController {
         map.put("phone", phone);
         map.put("nickname", nickname);
         map.put("status", status);
-        map.put("tagName", tagName);
-        List<UserBO> userList = userService.selectList(map);
+        map.put("tagId", tagId);
+        map.put("createTime", createTime);
+        LOGGER.info("{}:{}:{}", map, page, size);
+
+        List<UserListBO> userList = userService.selectList(map, page, size);
+        PageInfo<UserListBO> pageInfo = new PageInfo<>(userList);
         LOGGER.info("{}", userList);
-        return (userList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     //根据用户ID查询用户
@@ -240,7 +226,7 @@ public class UserController {
         LOGGER.info("用户修改密码：{}", passwordUpdateBO);
         Boolean message = userService.updatePassword(passwordUpdateBO, request);
         LOGGER.info("{}", message);
-        LOGGER.info("用户修改密码结果：{}",message);
+        LOGGER.info("用户修改密码结果：{}", message);
         return ResponseEntity.ok(Utils.kv("data", message));
     }
 
