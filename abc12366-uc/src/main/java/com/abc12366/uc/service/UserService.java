@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.UserStatisBO;
 import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -130,4 +131,11 @@ public interface UserService {
      * @return UserBO
      */
     UserBO selectOneByPhone(String phone);
+
+    /**
+     * 统计用户，统计维度为【月份】
+     * @param map
+     * @return
+     */
+    List<UserStatisBO> statisUserByMonth(Map<String, Object> map);
 }
