@@ -7,7 +7,6 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.UserService;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +64,7 @@ public class UserController {
      * @param phone    手机号
      * @param nickname 昵称
      * @param status   用户状态
-     * @param tagName  标签名
+     * @param tagId    标签ID
      * @param realName 真实姓名
      * @param points   积分
      * @param exp      经验值

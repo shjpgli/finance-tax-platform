@@ -112,13 +112,13 @@
             <if test="status!=null">
                 and status=#{status}
             </if>
-            <if test="vipLevel != null and vipLevel != null">
+            <if test="vipLevel != null and vipLevel != ''">
                 and vipLevel=#{vipLevel}
             </if>
-            <if test="exp!=null">
+            <if test="exp!=null and exp != ''">
                 and exp >= #{exp}
             </if>
-            <if test="points!=null">
+            <if test="points!=null and points != ''">
                 and points >= #{points}
             </if>
             <if test="createTime !=null and createTime != ''">
