@@ -24,7 +24,7 @@
        where 
           userId= #{userId}
           and code=#{code}
-          and DATE_FORMAT(uul.createTime,"%Y%m")=#{sendtime}
+          and DATE_FORMAT(uul.createTime,#{tformat})=#{sendtime}
     </select>
 
     <select id="selectListByUser" resultType="com.abc12366.uc.model.bo.PointsLogUcBO" parameterType="java.util.Map">

@@ -70,8 +70,13 @@ public class VipPointsController {
 		 }
 		 
 		 if(SignUtil.checkSignature("integralmultiplication", vippointslog.getSignature(), vippointslog.getSendId(), vippointslog.getReciveId())){
-                PointsRuleBO bo=pointsRuleService.selectValidOneByCode("P-HYJFZS");
-			    
+                PointsRuleBO bo=pointsRuleService.selectValidOneByCode("P-hyjfzs");
+                if(bo==null){
+			    	LOGGER.info("积分转让失败：积分转让规则异常!");
+			    	return ResponseEntity.ok(Utils.bodyStatus(9999, "积分转让失败：积分转让规则异常!"));
+			    }
+                
+                
 			    UserBO sendUser=userService.selectByUsernameOrPhone(vippointslog.getSendId());
 			    if(sendUser==null){
 			    	LOGGER.info("积分转让失败：转让用户异常!");
@@ -96,14 +101,22 @@ public class VipPointsController {
 		        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
 		        
 		        if(findObj!=null){
-		        	Integer times=Integer.parseInt(findObj.getVal1());
+		        	
+		        	Integer times=0;
 			        
+		        	try {
+						times=Integer.parseInt(findObj.getVal1());
+					} catch (NumberFormatException e) {
+						LOGGER.info("积分转让失败：本月积分转让次数已用完!");
+						return ResponseEntity.ok(Utils.bodyStatus(9999, "积分转让失败：本月积分装让次数已用完!"));
+					}
 			        
 			        if(times!=-1){//不为无限次数
 			        	
 			        	Map<String, Object> map=new HashMap<String, Object>();
 			        	map.put("userId", sendUser.getId());
 			        	map.put("code", bo.getCode());
+			        	map.put("tformat","%Y%m");
 			        	map.put("sendtime", new SimpleDateFormat("yyyyMM").format(new Date()));
 			        	
 			        	int num=pointsLogService.selecttimes(map);
@@ -116,8 +129,8 @@ public class VipPointsController {
 			        //开始操作积分转让
 			        return pointsService.integralMultiplication(sendUser, reciveUser, bo);
 		        }else{
-		        	 LOGGER.info("积分转让失败：积分规则不存在!");
-					 return ResponseEntity.ok(Utils.bodyStatus(9999, "积分转让失败：积分规则不存在!"));
+		        	 LOGGER.info("积分转让失败：账户没有积分转让特权!");
+					 return ResponseEntity.ok(Utils.bodyStatus(9999, "积分转让失败：账户没有积分转让特权!"));
 		        }  
 		 }else{
 			 LOGGER.info("积分转让失败：签名校验异常!");
