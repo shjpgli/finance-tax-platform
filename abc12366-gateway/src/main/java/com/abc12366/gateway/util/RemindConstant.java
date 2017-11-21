@@ -60,4 +60,33 @@ public class RemindConstant {
     public static final String SBQXXTMSG="财税专家用户提醒，本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税！";
     
     public static final String SBQXSJMSG="本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税";
+
+    //修改密码成功消息
+    public static final String UPDATE_PWD_SUCCESS_SYS = "您的密码于{#DATA.DATE}被修改，请确认为本人操作，如有疑问请联系客服咨询4008873133。";
+
+    public static final String UPDATE_PWD_SUCCESS_WX_1 = "您好,您的密码已通过，";
+    public static final String UPDATE_PWD_SUCCESS_WX_4 = "完成修改，感谢您的使用！";
+
+    //未实名认证用户每天第一天登录发消息提醒其尽快进行认证
+    public static final String UNREALNAME_SYS = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证，您还未进行实名认证,请尽快完成实名认证，否则部分功能将无法使用；";
+
+    public static final String UNREALNAME_WX_1 = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证,";
+    public static final String UNREALNAME_WX_2 = "未认证";
+    public static final String UNREALNAME_WX_4 = "请尽快完成实名认证，否则部分功能将无法使用。";
+
+    public static final String UNREALNAME_DX = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证，您还未进行实名认证，请尽快完成实名认证，否则部分功能将无法使用。";
+
+    //用户每天第一天登录发送未完成任务通知
+    public static final String UNDO_TASK_SYS = "您还有{#DATA}个任务没有完成，快去做任务赢取积分和经验值吧!";
+
+    //用户每天第一天登录发送未签到通知
+    public static final String UNDO_CHECK_SYS = "签到赢积分换好礼，您今天的签到打卡任务未完成，请及时签到!";
+
+    //用户等级提升提醒
+    public static final String EXP_LEVEL_UP_SYS = "恭喜您！您的经验值等级提升了，详情请查看经验值明细!";
+
+    //实名认证审核结果通知
+    public static final String REALNAME_VALIDATE_SYS = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE},详情请登录财税专家软件查询！";
+    public static final String REALNAME_VALIDATE_WX_1 = "您好，你提交的实名认证信息已审核";
+    public static final String REALNAME_VALIDATE_WX_4 = "详情请登录财税专家软件查询！";
 }

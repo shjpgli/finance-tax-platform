@@ -87,7 +87,7 @@ public class LotteryLogController {
      * @return
      */
     @GetMapping(path = "/getLottery")
-    public ResponseEntity getLottery( @RequestParam(required = true) String lotteryLogId,@RequestParam(required = false) String addressId) {
+    public ResponseEntity getLottery( @RequestParam(required = true) String lotteryLogId,@RequestParam(required = false) String addressId,@RequestParam(required = false) String address,@RequestParam(required = false) String sendName) {
         if(lotteryLogId==null || lotteryLogId.isEmpty()){
             throw new ServiceException(9999,"id为空");
         }
@@ -98,6 +98,9 @@ public class LotteryLogController {
         if("未领取".equals(returnObj.getState())){
             returnObj.setState("发货中");
             returnObj.setAddressId(addressId);
+
+            returnObj.setAddress(address);
+            returnObj.setSendName(sendName);
             returnObj = lotteryLogService.update(returnObj,returnObj.getId());
             return ResponseEntity.ok(Utils.kv("data", returnObj));
         }else{

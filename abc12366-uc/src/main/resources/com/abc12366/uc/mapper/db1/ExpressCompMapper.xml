@@ -10,7 +10,7 @@
     </delete>
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.ExpressComp">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.ExpressComp">
         INSERT INTO uc_express_comp
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -68,7 +68,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.ExpressComp">
+    <update id="update" parameterType="com.abc12366.uc.model.order.ExpressComp">
         UPDATE uc_express_comp
         <set>
             <if test="compCode != null">

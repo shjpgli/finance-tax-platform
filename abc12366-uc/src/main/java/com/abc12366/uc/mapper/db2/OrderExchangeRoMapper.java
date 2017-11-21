@@ -1,8 +1,8 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.order.OrderExchange;
-import com.abc12366.uc.model.bo.ExchangeCompletedOrderBO;
-import com.abc12366.uc.model.bo.ExchangeOrderInvoiceBO;
+import com.abc12366.uc.model.order.bo.ExchangeCompletedOrderBO;
+import com.abc12366.uc.model.order.bo.ExchangeOrderInvoiceBO;
 import com.abc12366.uc.model.order.bo.OrderExchangeExportBO;
 import com.abc12366.uc.model.bo.SfExportBO;
 

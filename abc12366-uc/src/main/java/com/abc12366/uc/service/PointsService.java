@@ -5,6 +5,8 @@ import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 /**
  * Admin: liuguiyao<435720953@qq.com>
  * Date: 2017-07-20
@@ -40,4 +42,13 @@ public interface PointsService {
      * @param pointBatchAwardBO {@linkplain com.abc12366.uc.model.bo.PointBatchAwardBO}
      */
     void batchAward(PointBatchAwardBO pointBatchAwardBO);
+    
+    /**
+     * 积分转让操作
+     * @param sendUser  发送者
+     * @param reciveUser  接受者
+     * @param bo 积分规则
+     * @return
+     */
+    ResponseEntity integralMultiplication(UserBO sendUser,UserBO reciveUser,PointsRuleBO bo);
 }

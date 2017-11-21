@@ -1,6 +1,6 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.abc12366.uc.model.ExpressComp;
+import com.abc12366.uc.model.order.ExpressComp;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.invoice.bo.InvoiceBO;
 import org.hibernate.validator.constraints.NotEmpty;

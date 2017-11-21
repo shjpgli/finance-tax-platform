@@ -4,7 +4,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
-import com.abc12366.uc.model.UvipPrice;
+import com.abc12366.uc.model.order.UvipPrice;
 import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.GoodsBO;
@@ -385,10 +385,10 @@ public class GoodsServiceImpl implements GoodsService {
         }
         Goods goods = goodsRoMapper.selectByPrimaryKey(id);
         //商品类型是会员服务=4，不能删除
-        if (goods != null && "4".equals(goods.getGoodsType())) {
+       /* if (goods != null && "4".equals(goods.getGoodsType())) {
             LOGGER.info("商品类型是会员服务，不能删除：{}", goods);
             throw new ServiceException(4902);
-        }
+        }*/
         //删除产品信息
         int gDelete = goodsMapper.deleteByPrimaryKey(id);
         if (gDelete != 1) {

@@ -315,4 +315,13 @@ public class UserController {
         int status = userService.changeWxBdxx(userUpdateDTO);
         return ResponseEntity.ok(Utils.kv("data", status));
     }
+
+    //根据手机号码查询用户
+    @GetMapping(path = "/u/phone/{phone}")
+    public ResponseEntity selectOneByPhone(@PathVariable String phone) {
+        LOGGER.info("根据手机号码查看用户：{}", phone);
+        UserBO user = userService.selectOneByPhone(phone);
+        LOGGER.info("根据手机号码查看用户结果：{}", user);
+        return ResponseEntity.ok(Utils.kv("data", user));
+    }
 }

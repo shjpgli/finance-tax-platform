@@ -7,16 +7,14 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.Message;
-import com.abc12366.uc.model.bo.UserAddressBO;
+import com.abc12366.uc.model.order.bo.UserAddressBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
-import com.abc12366.uc.model.invoice.Invoice;
-import com.abc12366.uc.model.invoice.InvoiceBack;
-import com.abc12366.uc.model.invoice.InvoiceDetail;
-import com.abc12366.uc.model.invoice.InvoiceLog;
+import com.abc12366.uc.model.invoice.*;
 import com.abc12366.uc.model.invoice.bo.*;
+import com.abc12366.uc.model.order.ExpressComp;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.OrderExchange;
 import com.abc12366.uc.model.order.OrderInvoice;
@@ -24,7 +22,6 @@ import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.order.bo.OrderProductBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
 import com.abc12366.uc.service.IActivityService;
-import com.abc12366.uc.service.IDzfpService;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.invoice.InvoiceService;
@@ -535,7 +532,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4913, "发票号码或发票代码不存在");
             }
             if (!"3".equals(invoiceDetail.getStatus())) {
-                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在<已签收>后才能被使用");
+                throw new ServiceException(4913, "发票号码：" + invoiceExcel.getInvoiceNo() + " 未签收。发票只有在已签收后才能被使用");
             }
             Invoice ce = new Invoice();
             ce.setId(invoiceExcel.getInvoiceOrderNo());

@@ -22,7 +22,7 @@ public interface IMsgSendService {
 	 * @param dataList //模板消息内容
 	 * @param dxmsg //短信消息
 	 */
-	public void sendMsg(User user,String sysMsg,String  templateid,Map<String, String> dataList,String dxmsg);
+	public void sendMsg(User user,String sysMsg,String skipUrl, String  templateid,Map<String, String> dataList,String dxmsg);
 	
 	/**
 	 * 前段发送消息

@@ -9,6 +9,16 @@ import java.util.Date;
 
 
 public class LotteryActivityprizeBO{
+    private Boolean lotterySend;
+
+    public Boolean getLotterySend() {
+        return lotterySend;
+    }
+
+    public void setLotterySend(Boolean lotterySend) {
+        this.lotterySend = lotterySend;
+    }
+
     private Boolean noluck;
 
     public Boolean getNoluck() {

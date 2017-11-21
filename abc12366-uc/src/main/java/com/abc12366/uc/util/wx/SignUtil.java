@@ -29,24 +29,36 @@ public class SignUtil {
      */
     public static boolean checkSignature(String signature, String timestamp,
                                          String nonce) {
-        String[] arr = new String[]{WxGzhClient.getInstance().getTokenStr(), timestamp, nonce};
-        Arrays.sort(arr);
-        StringBuilder content = new StringBuilder();
-        for (String s : arr) {
-            content.append(s);
-        }
-        MessageDigest md = null;
-        String tmpStr = null;
-        try {
-            md = MessageDigest.getInstance("SHA-1");
-
-            byte[] digest = md.digest(content.toString().getBytes());
-            tmpStr = byteToStr(digest);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
+        return checkSignature(WxGzhClient.getInstance().getTokenStr(),signature, timestamp,nonce);
     }
+    
+    /**
+     * 签名校验
+     * @param signature  签名
+     * @param timestamp 时间戳
+     * @param nonce 随机码
+     * @return
+     */
+	public static boolean checkSignature(String sign,String signature, String timestamp,
+	            String nonce) {
+			String[] arr = new String[]{sign, timestamp, nonce};
+			Arrays.sort(arr);
+			StringBuilder content = new StringBuilder();
+			for (String s : arr) {
+			content.append(s);
+			}
+			MessageDigest md = null;
+			String tmpStr = null;
+			try {
+			md = MessageDigest.getInstance("SHA-1");
+			
+			byte[] digest = md.digest(content.toString().getBytes());
+			tmpStr = byteToStr(digest);
+			} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			}
+			return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
+	}
 
 
     private static String byteToStr(byte[] byteArray) {

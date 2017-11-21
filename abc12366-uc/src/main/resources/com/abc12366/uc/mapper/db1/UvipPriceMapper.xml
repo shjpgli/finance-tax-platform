@@ -13,7 +13,7 @@
         WHERE productId = #{productId}
     </delete>
 
-    <insert id="insert" parameterType="com.abc12366.uc.model.UvipPrice">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.UvipPrice">
         INSERT INTO uc_uvip_price
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -70,7 +70,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.abc12366.uc.model.UvipPrice">
+    <update id="update" parameterType="com.abc12366.uc.model.order.UvipPrice">
         UPDATE uc_uvip_price
         <set>
             <if test="productId != null">
