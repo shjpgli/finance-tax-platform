@@ -49,4 +49,12 @@
         SELECT count(*) FROM uc_user_extend
         WHERE validStatus = '1'
     </select>
+    
+    <select id="canmerging" resultType="java.util.Map" parameterType="java.util.Map">
+      select id,username,vipLevel,nickname FROM uc_user WHERE EXISTS (
+         SELECT userId FROM uc_user_extend
+         WHERE userId = uc_user.id AND validStatus = '2' AND idcard=#{idcard} AND userId!=#{userid}
+      ) AND status=1  
+    </select>
+    
 </mapper>

@@ -16,6 +16,7 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.AccountMergingMapper;
 import com.abc12366.uc.mapper.db1.InvoiceLogMapper;
 import com.abc12366.uc.mapper.db1.OrderLogMapper;
+import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.model.bo.UserBO;
@@ -54,6 +55,9 @@ public class AccountMergingServiceImpl implements IAccountMergingService {
 	
 	@Autowired
     private InvoiceLogMapper invoiceLogMapper;
+	
+	@Autowired
+    private UserExtendRoMapper userExtendRoMapper;
 	 
 	@SuppressWarnings("rawtypes")
 	@Transactional("db1TxManager")
@@ -132,5 +136,11 @@ public class AccountMergingServiceImpl implements IAccountMergingService {
         userService.enableOrDisable(beMergeUserBO.getId(), "false");
         
         return ResponseEntity.ok(Utils.kv());
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<Map<String, String>> canmerging(Map map) {
+		return userExtendRoMapper.canmerging(map);
 	}
 }

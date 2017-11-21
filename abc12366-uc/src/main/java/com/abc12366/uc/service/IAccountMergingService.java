@@ -1,5 +1,7 @@
 package com.abc12366.uc.service;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 
 import com.abc12366.uc.model.bo.PointsRuleBO;
@@ -19,6 +21,15 @@ public interface IAccountMergingService {
      * @param bo //积分规则信息
      * @return
      */
+	@SuppressWarnings("rawtypes")
 	ResponseEntity merging(UserBO mergeUserBO, UserBO beMergeUserBO,
 			PointsRuleBO bo);
+    
+	/**
+	 * 可合并账号列表
+	 * @param idcard  身份证ID
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	java.util.List<Map<String, String>> canmerging(Map map);
 }

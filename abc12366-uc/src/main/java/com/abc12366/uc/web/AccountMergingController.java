@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,7 @@ import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.abc12366.uc.model.bo.UserBO;
+import com.github.pagehelper.Page;
 
 /**
  * 账号合并
@@ -130,5 +133,23 @@ public class AccountMergingController {
 			 return ResponseEntity.ok(Utils.bodyStatus(9999, "账号合并接失败：该用户暂无账号合并特权!"));
         } 
 
+	 }
+	 
+	 @SuppressWarnings("rawtypes")
+	 @RequestMapping("/canmerging/{userid}")
+	 public ResponseEntity canmerging(@PathVariable("userid")String userId){
+		 Map mergeMap=userService.selectOneForAdmin(userId);
+		 if(mergeMap==null){
+			 return ResponseEntity.ok(Utils.bodyStatus(9999, "获取可合并账号列表异常:用户信息不存在!"));
+		 }
+		 UserExtend  mergeExtend=(UserExtend) mergeMap.get("user_extend");
+		 if(mergeExtend==null || StringUtils.isEmpty(mergeExtend.getIdcard()) || !"2".equals(mergeExtend.getValidStatus())){
+			 return ResponseEntity.ok(Utils.bodyStatus(9999, "获取可合并账号列表异常:该账号实名认证信息异常"));
+		 }
+		 Map<String,String> map=new HashMap<String,String>();
+		 map.put("userid", userId);
+		 map.put("idcard", mergeExtend.getIdcard());
+		 List<Map<String,String>> datalist=accountMergingService.canmerging(map);
+		 return ResponseEntity.ok(Utils.kv("dataList", datalist));
 	 }
 }
