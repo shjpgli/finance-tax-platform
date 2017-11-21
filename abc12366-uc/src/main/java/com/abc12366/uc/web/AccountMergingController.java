@@ -71,7 +71,7 @@ public class AccountMergingController {
 		 }
 		 String mergeId=body.get("mergeId").toString();
 		 String beMergeId=body.get("beMergeId").toString();
-		 if(SignUtil.checkSignature("accountmerging", body.get("signature").toString(), mergeId, beMergeId)){
+		 if(!SignUtil.checkSignature("accountmerging", body.get("signature").toString(), mergeId, beMergeId)){
 			 LOGGER.info("账号合并失败：签名校验异常!");
 			 return ResponseEntity.ok(Utils.bodyStatus(9999, "账号合并失败：签名校验异常!"));
 		 }
@@ -104,7 +104,7 @@ public class AccountMergingController {
 				 beMergeExtend==null || StringUtils.isEmpty(mergeExtend.getIdcard()) 
 				  || !mergeExtend.getIdcard().equals(beMergeExtend.getIdcard())){
 			    LOGGER.info("账号合并接失败：账户扩展信息异常或账号不属于同一认证用户!");
-		    	return ResponseEntity.ok(Utils.bodyStatus(9999, "积分转让失败：账户扩展信息异常或账号不属于同一认证用户!"));
+		    	return ResponseEntity.ok(Utils.bodyStatus(9999, "积分转让失败：账户信息异常或账号不属于同一认证用户!"));
 		 }
 		 
 		 VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
