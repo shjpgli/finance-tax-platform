@@ -108,8 +108,12 @@ public class UserServiceImpl implements UserService {
             PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
             List<String> userIds = tagService.selectUserIdsByTagIds(map);
             for (String userId : userIds) {
-                map.put("id", userId);
-                userList.addAll(userRoMapper.selectList(map));
+                if (!StringUtils.isEmpty(userId)) {
+                    User user = userRoMapper.selectUserById(new User(userId));
+                    UserListBO ul = new UserListBO();
+                    BeanUtils.copyProperties(user, ul);
+                    userList.add(ul);
+                }
             }
         } else if (!StringUtils.isEmpty(map.get("medal")) || !StringUtils.isEmpty(map.get("vipLevel"))
                 || !StringUtils.isEmpty(map.get("exp")) || !StringUtils.isEmpty(map.get("points"))
@@ -131,11 +135,13 @@ public class UserServiceImpl implements UserService {
             if (ue != null) {
                 user.setRealName(ue.getRealName());
             }
-            ExperienceLevelBO el = experienceLevelService.selectOne(user.getExp());
-            if (el != null) {
-                user.setMedal(el.getMedal());
-                user.setLevelName(el.getName());
-                user.setMedalIcon(el.getMedalIcon());
+            if (user.getExp() != null && !"".equals(user.getExp())) {
+                ExperienceLevelBO el = experienceLevelService.selectOne(user.getExp());
+                if (el != null) {
+                    user.setMedal(el.getMedal());
+                    user.setLevelName(el.getName());
+                    user.setMedalIcon(el.getMedalIcon());
+                }
             }
         }
         return userList;
