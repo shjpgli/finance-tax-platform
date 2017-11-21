@@ -52,4 +52,11 @@ public interface UserBindService {
      */
     void automaticBindCancel();
 
+    /**
+     * 供财税专家软件登录电子税局方法
+     * @param login 登录纳税密码等参数封装类
+     * @param request HttpServletRequest
+     * @return HngsNsrLoginResponse
+     */
+    HngsNsrLoginResponse nsrLoginDzsj(UserHngsInsertBO login, HttpServletRequest request);
 }

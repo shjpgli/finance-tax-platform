@@ -160,7 +160,7 @@ public class UserBindController {
     @PostMapping(path = "/nsrlogin/dzsj")
     public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
-        HngsNsrLoginResponse loginResponse = userBindService.loginWsbsHngs(login, request);
+        HngsNsrLoginResponse loginResponse = userBindService.nsrLoginDzsj(login,request);//userBindService.loginWsbsHngs(login, request);
         return ResponseEntity.ok(loginResponse);
     }
 
