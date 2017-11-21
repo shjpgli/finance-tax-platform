@@ -40,4 +40,9 @@ public interface AnswerLogRoMapper {
      * 查询（浏览统计总数）
      **/
     Integer selectlltjs(Map<String, Object> map);
+
+    /**
+     * 查询（用户答题次数）
+     **/
+    Integer selectldtcnt(Map<String, Object> map);
 }

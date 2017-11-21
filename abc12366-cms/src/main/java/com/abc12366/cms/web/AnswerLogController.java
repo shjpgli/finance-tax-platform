@@ -206,4 +206,15 @@ public class AnswerLogController {
                 ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
+    @GetMapping(path = "/selectdtcnt")
+    public ResponseEntity selectdtcnt(@RequestParam(value = "userId", required = false) String userId,
+                                   @RequestParam(value = "questionId", required = false) String questionId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("questionId", questionId);
+        dataMap.put("userId", userId);
+        int data = answerLogService.selectdtcnt(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
 }
