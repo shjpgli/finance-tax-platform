@@ -57,6 +57,11 @@ public class AccountMergingController {
 	 @Autowired
 	 private PointsRuleService pointsRuleService;
 
+	 /**
+	  * 账号合并
+	  * @param body  参数
+	  * @return
+	  */
 	 @SuppressWarnings("rawtypes")
 	 @PostMapping("/merging")
 	 public ResponseEntity merging(@RequestBody Map<String, Object> body){
@@ -135,6 +140,11 @@ public class AccountMergingController {
 
 	 }
 	 
+	 /**
+	  * 可合并账号列表
+	  * @param userId 用户ID
+	  * @return
+	  */
 	 @SuppressWarnings("rawtypes")
 	 @RequestMapping("/canmerging/{userid}")
 	 public ResponseEntity canmerging(@PathVariable("userid")String userId){
