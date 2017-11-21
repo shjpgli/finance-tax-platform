@@ -11,37 +11,19 @@ public class UserListBO {
     private String id;
     private String username;
     private String phone;
-    private String password;
-    private String regMail;
-    private String regIP;
-    private String salt;
     private String nickname;
-    private boolean status;
+    private Boolean status;
     private Date createTime;
     private Date lastUpdate;
-    private String userPicturePath;
-    private String maxUserPicturePath;
-    private String midUserPicturePath;
-    private String minUserPicturePath;
-    private int points;
-    private int exp;
+    private Integer points;
+    private Integer exp;
     private String vipLevel;
     private String realName;
     private String levelName;
     private String medal;
     private String medalIcon;
-    private Integer usernameModifiedTimes;
-    private Date vipExpireDate;
 
     public UserListBO() {
-    }
-
-    public String getLevelName() {
-        return levelName;
-    }
-
-    public void setLevelName(String levelName) {
-        this.levelName = levelName;
     }
 
     public String getId() {
@@ -68,38 +50,6 @@ public class UserListBO {
         this.phone = phone;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRegMail() {
-        return regMail;
-    }
-
-    public void setRegMail(String regMail) {
-        this.regMail = regMail;
-    }
-
-    public String getRegIP() {
-        return regIP;
-    }
-
-    public void setRegIP(String regIP) {
-        this.regIP = regIP;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -108,11 +58,11 @@ public class UserListBO {
         this.nickname = nickname;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -132,51 +82,19 @@ public class UserListBO {
         this.lastUpdate = lastUpdate;
     }
 
-    public String getUserPicturePath() {
-        return userPicturePath;
-    }
-
-    public void setUserPicturePath(String userPicturePath) {
-        this.userPicturePath = userPicturePath;
-    }
-
-    public String getMaxUserPicturePath() {
-        return maxUserPicturePath;
-    }
-
-    public void setMaxUserPicturePath(String maxUserPicturePath) {
-        this.maxUserPicturePath = maxUserPicturePath;
-    }
-
-    public String getMidUserPicturePath() {
-        return midUserPicturePath;
-    }
-
-    public void setMidUserPicturePath(String midUserPicturePath) {
-        this.midUserPicturePath = midUserPicturePath;
-    }
-
-    public String getMinUserPicturePath() {
-        return minUserPicturePath;
-    }
-
-    public void setMinUserPicturePath(String minUserPicturePath) {
-        this.minUserPicturePath = minUserPicturePath;
-    }
-
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 
-    public int getExp() {
+    public Integer getExp() {
         return exp;
     }
 
-    public void setExp(int exp) {
+    public void setExp(Integer exp) {
         this.exp = exp;
     }
 
@@ -196,6 +114,14 @@ public class UserListBO {
         this.realName = realName;
     }
 
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
     public String getMedal() {
         return medal;
     }
@@ -212,19 +138,23 @@ public class UserListBO {
         this.medalIcon = medalIcon;
     }
 
-    public Integer getUsernameModifiedTimes() {
-        return usernameModifiedTimes;
-    }
-
-    public void setUsernameModifiedTimes(Integer usernameModifiedTimes) {
-        this.usernameModifiedTimes = usernameModifiedTimes;
-    }
-
-    public Date getVipExpireDate() {
-        return vipExpireDate;
-    }
-
-    public void setVipExpireDate(Date vipExpireDate) {
-        this.vipExpireDate = vipExpireDate;
+    @Override
+    public String toString() {
+        return "UserListBO{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", points=" + points +
+                ", exp=" + exp +
+                ", vipLevel='" + vipLevel + '\'' +
+                ", realName='" + realName + '\'' +
+                ", levelName='" + levelName + '\'' +
+                ", medal='" + medal + '\'' +
+                ", medalIcon='" + medalIcon + '\'' +
+                '}';
     }
 }

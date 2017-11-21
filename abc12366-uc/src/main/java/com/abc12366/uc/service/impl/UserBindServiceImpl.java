@@ -167,10 +167,10 @@ public class UserBindServiceImpl implements UserBindService {
     public HngsNsrLoginResponse loginWsbsHngs(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-        headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
+        headers.add(Constant.VERSION_HEAD, Constant.VERSION_1);
         headers.add(Constant.USER_TOKEN_HEAD, request.getHeader(Constant.USER_TOKEN_HEAD));
         String api = "/login";
-        String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/post?api="+api;
+        String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/hngs/post?api=" + api;
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
         Timestamp timestamp = new Timestamp(new Date().getTime());
@@ -201,6 +201,13 @@ public class UserBindServiceImpl implements UserBindService {
         ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
         if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
             HngsNsrLoginResponse nsrLoginResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), HngsNsrLoginResponse.class);
+            if (nsrLoginResponse == null) {
+                throw new ServiceException(4840);
+            } else {
+                if (!nsrLoginResponse.isSuccess()) {
+                    throw new ServiceException(nsrLoginResponse.getCode(), nsrLoginResponse.getMsg());
+                }
+            }
             if (nsrLoginResponse != null && nsrLoginResponse.getMenuList() != null && nsrLoginResponse.getMenuList().size() > 0) {
                 List<AuthorizationDto> authList = nsrLoginResponse.getMenuList();
                 List<AuthorizationDto> filteredAuthList = new ArrayList<>();
@@ -226,14 +233,14 @@ public class UserBindServiceImpl implements UserBindService {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.add(Constant.APP_TOKEN_HEAD, request.getHeader(Constant.APP_TOKEN_HEAD));
-            headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
+            headers.add(Constant.VERSION_HEAD, Constant.VERSION_1);
             String api = "/smrz/sfsmrz?" + "sfzjhm=" + sfzjhm.trim() + "&xm=" + xm.trim();
-            String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+Base64.getEncoder().encodeToString(api.getBytes());
+            String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/hngs/get?api=" + Base64.getEncoder().encodeToString(api.getBytes());
             HttpEntity requestEntity = new HttpEntity(null, headers);
             ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
             if (RestTemplateUtil.isExchangeSuccessful(responseEntity)) {
                 DzsjSmrzBO dzsjSmrzBO = JSON.parseObject(String.valueOf(responseEntity.getBody()), DzsjSmrzBO.class);
-                if (!StringUtils.isEmpty(dzsjSmrzBO.getSmrzbz())&&dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
+                if (!StringUtils.isEmpty(dzsjSmrzBO.getSmrzbz()) && dzsjSmrzBO.getSmrzbz().trim().toUpperCase().equals("Y")) {
                     LOGGER.warn("uc调用电子税局实名认证查询接口成功，实名认证结果：身份证：{}，姓名：{}，电子税局是否实名认证：{}", sfzjhm, xm, dzsjSmrzBO.getSmrzbz());
                     return true;
                 }
@@ -732,14 +739,50 @@ public class UserBindServiceImpl implements UserBindService {
 //    }
 
     //用户会员绑定纳税人数量是否超过上限-以社会信用代码作为企业唯一标识
-    private void bindLimit(String userId) {
-        List<ShxydmBO> list = userBindRoMapper.bindCount(userId);
-        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
-        int limit = privilegeItem.getGrzhbdqys();
-        if (limit != -1) {
-            if (list != null && list.size() >= limit) {
-                throw new ServiceException(4043);
+//    private void bindLimit(String userId) {
+//        List<ShxydmBO> list = userBindRoMapper.bindCount(userId);
+//        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
+//        int limit = privilegeItem.getGrzhbdqys();
+//        if (limit != -1) {
+//            if (list != null && list.size() >= limit) {
+//                throw new ServiceException(4043);
+//            }
+//        }
+//    }
+
+    @Override
+    public HngsNsrLoginResponse nsrLoginDzsj(UserHngsInsertBO login, HttpServletRequest request) {
+        HngsNsrLoginResponse loginResponse = loginWsbsHngs(login, request);
+        //更新绑定关系
+        if (loginResponse != null) {
+            UserHngs userHngs = new UserHngs();
+            userHngs.setUserId(Utils.getUserId(request));
+            userHngs.setDjxh(loginResponse.getDjxh());
+            userHngs.setNsrsbh(loginResponse.getNsrsbh());
+            userHngs.setNsrmc(loginResponse.getNsrmc());
+            userHngs.setShxydm(loginResponse.getNsrsbh());
+            userHngs.setSwjgDm(loginResponse.getZgswjDm());
+            userHngs.setSwjgMc(loginResponse.getZgswjmc());
+            userHngs.setLastUpdate(new Date());
+            userHngs.setRoleId(loginResponse.getRoleId());
+            //办税员角色
+            String bsyjs = "";
+            switch (loginResponse.getRoleId().trim().toUpperCase()) {
+                case "R0001":
+                    bsyjs = "办税员01";
+                    break;
+                case "R0002":
+                    bsyjs = "办税员02";
+                    break;
+                case "R0003":
+                    bsyjs = "办税员03";
+                    break;
             }
+            userHngs.setBsy(bsyjs);
+            userHngs.setSmrzzt(StringUtils.isEmpty(loginResponse.getGxruuid())? "未认证": "已认证");
+            userHngs.setStatus(true);
+            userBindMapper.updateHngs(userHngs);
         }
+        return loginResponse;
     }
 }

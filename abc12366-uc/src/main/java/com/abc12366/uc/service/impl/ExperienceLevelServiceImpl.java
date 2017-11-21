@@ -46,6 +46,11 @@ public class ExperienceLevelServiceImpl implements ExperienceLevelService {
     }
 
     @Override
+    public ExperienceLevelBO selectOne(int exp) {
+        return experienceLevelRoMapper.selectOneByExp(exp);
+    }
+
+    @Override
     public ExperienceLevelBO insert(ExperienceLevelInsertAndUpdateBO experienceLevelInsertBO) {
         if (experienceLevelInsertBO == null) {
             LOGGER.warn("新增失败,入参为：" + null);

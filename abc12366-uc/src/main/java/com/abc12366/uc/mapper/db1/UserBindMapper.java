@@ -28,4 +28,6 @@ public interface UserBindMapper {
     int update(UserDzsb userDzsb);
 
     int updateBatch(Map<String,Object> map);
+
+    int updateHngs(UserHngs userHngs);
 }

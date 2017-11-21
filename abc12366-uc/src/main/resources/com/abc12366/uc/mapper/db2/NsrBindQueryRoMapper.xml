@@ -59,33 +59,53 @@
 
     <select id="selectDzsbList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO"
             parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
-        SELECT
-        uu.username,
-        uu.nickname,
-        uud.id,
-        uud.userId,
-        uud.nsrsbh,
-        uud.nsrmc,
-        uud.swjgmc,
-        uud.status,
-        uud.createTime,
-        uud.lastUpdate,
-        'dzsb' bindType
-        FROM uc_user_dzsb uud
-        LEFT JOIN uc_user uu
-        ON uud.userId = uu.id
+        SELECT id, userId, nsrsbh, nsrmc, swjgmc, status, createTime, lastUpdate, 'dzsb' bindType
+        FROM uc_user_dzsb
         <where>
-            <if test="username!=null">
-                and uu.username=#{username}
+            <if test="userId != null and userId != ''">
+                userId = #{userId}
             </if>
-            <if test="nsrsbh!=null">
-                and uud.nsrsbh=#{nsrsbh}
+            <if test="nsrsbh != null and nsrsbh != ''">
+                and nsrsbh = #{nsrsbh}
             </if>
-            <if test="status!=null">
-                and uud.status=#{status}
+            <if test="status != null">
+                and status = #{status}
             </if>
         </where>
-        
+    </select>
+
+    <select id="selectHngsList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO"
+            parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
+        SELECT id, userId, nsrsbh, nsrmc, swjgmc, status, createTime, lastUpdate, 'hngs' bindType
+        FROM uc_user_hngs
+        <where>
+            <if test="userId != null and userId != ''">
+                userId = #{userId}
+            </if>
+            <if test="nsrsbh != null and nsrsbh != ''">
+                and nsrsbh = #{nsrsbh}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectHndsList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO"
+            parameterType="com.abc12366.uc.model.bo.NsrBindQueryParamBO">
+        SELECT id, userId, nsrsbh, nsrmc, swjgmc, status, createTime, lastUpdate, 'hnds' bindType
+        FROM uc_user_hnds
+        <where>
+            <if test="userId != null and userId != ''">
+                userId = #{userId}
+            </if>
+            <if test="nsrsbh != null and nsrsbh != ''">
+                and nsrsbh = #{nsrsbh}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
     </select>
 
     <select id="selectDzsb" resultType="com.abc12366.uc.model.bo.UserDzsbBO" parameterType="java.lang.String">

@@ -31,6 +31,13 @@ public class VipLogController {
     @Autowired
     private VipLogService vipLogService;
 
+    /**
+     * 会员日志查询
+     * @param userId 用户ID
+     * @param page 页数
+     * @param size 大小
+     * @return
+     */
     @GetMapping
     public ResponseEntity selectList(@RequestParam String userId,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,

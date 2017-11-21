@@ -44,6 +44,13 @@ public class User {
      */
     private String oldId;
 
+    public User() {
+    }
+
+    public User(String id) {
+        this.id = id;
+    }
+
     public String getWxopenid() {
 		return wxopenid;
 	}
@@ -67,9 +74,6 @@ public class User {
 	public void setWxnickname(String wxnickname) {
 		this.wxnickname = wxnickname;
 	}
-
-	public User() {
-    }
 
     public String getId() {
         return id;
