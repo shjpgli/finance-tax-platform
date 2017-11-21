@@ -24,6 +24,7 @@ import com.abc12366.uc.service.IAccountMergingService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.UserService;
+import com.abc12366.uc.util.wx.SignUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.abc12366.uc.model.bo.UserBO;
 
@@ -57,8 +58,14 @@ public class AccountMergingController {
 	 @PostMapping("/merging")
 	 public ResponseEntity merging(@RequestBody Map<String, Object> body){
 		 LOGGER.info("账号合并接收参数:"+JSONObject.toJSONString(body));
-		 if(StringUtils.isEmpty(body.get("mergeId")) || StringUtils.isEmpty(body.get("beMergeId"))){
+		 if(StringUtils.isEmpty(body.get("mergeId")) || StringUtils.isEmpty(body.get("beMergeId")) || StringUtils.isEmpty(body.get("signature"))){
 			 return ResponseEntity.ok(Utils.bodyStatus(9999, "账号合并失败：接收数据异常!"));
+		 }
+		 String mergeId=body.get("mergeId").toString();
+		 String beMergeId=body.get("beMergeId").toString();
+		 if(SignUtil.checkSignature("accountmerging", body.get("signature").toString(), mergeId, beMergeId)){
+			 LOGGER.info("账号合并失败：签名校验异常!");
+			 return ResponseEntity.ok(Utils.bodyStatus(9999, "账号合并失败：签名校验异常!"));
 		 }
 		 
 		 PointsRuleBO bo=pointsRuleService.selectValidOneByCode("P-zhhb");
@@ -67,8 +74,7 @@ public class AccountMergingController {
 		    return ResponseEntity.ok(Utils.bodyStatus(9999, "账号合并失败：积分合并规则异常!"));
 		 }
 		 
-		 String mergeId=body.get("mergeId").toString();
-		 String beMergeId=body.get("beMergeId").toString();
+		 
 		 
 		 //获取合并账号扩展信息
 		 Map mergeMap=userService.selectOneForAdmin(mergeId);
