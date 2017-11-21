@@ -15,8 +15,18 @@ import java.util.Map;
  */
 public interface UserService {
 
-    List<UserBO> selectList(Map<String, Object> map);
-    User selectUser(String userId) ;
+    /**
+     * 后台查询用户列表
+     *
+     * @param map  用户信息
+     * @param page 当前页
+     * @param size 每页大小
+     * @return 用户列表List
+     */
+    List<UserListBO> selectList(Map<String, Object> map, int page, int size);
+
+    User selectUser(String userId);
+
     Map selectOne(String userId);
 
     UserBO update(UserUpdateBO userUpdateBO);
@@ -65,6 +75,7 @@ public interface UserService {
 
     /**
      * 用户已登录状态下通过用户ID和验证码校验验证码
+     *
      * @param verifyCodeBO
      */
     void loginedVerifyCode(LoginedVerifyCodeBO verifyCodeBO);
@@ -78,56 +89,77 @@ public interface UserService {
 
     /**
      * 用户手机+验证码登录专用接口
+     *
      * @param sendCodeBO
      */
     void phoneLoginSendCode(SendPhoneCodeParam sendCodeBO);
 
     /**
      * 旧手机号码有效性校验
+     *
      * @param oldPhone
      */
     void verifyOldPhone(oldPhoneBO oldPhone);
 
     /**
      * 用户是否实名认证
+     *
      * @return
      */
     IsRealNameBO isRealName();
 
     /**
      * 根据用户ID获取用户信息和用户扩展信息（供后台管理系统使用，敏感信息不做模糊化处理）
+     *
      * @param id
      * @return
      */
     Map selectOneForAdmin(String id);
+
     /**
      * 获取正常用户总数
+     *
      * @return
      */
-	int getAllNomalCont();
-	/**
-	 * 分页获取正常用户信息
-	 * @param map
-	 * @return
-	 */
-	List<UserBO> getNomalList(Map<String, Object> map);
-	/**
-	 * 微信绑定关系修改
-	 * @param userUpdateDTO
-	 * @return
-	 */
-	int changeWxBdxx(UserUpdateBO userUpdateDTO);
-	/**
-	 * 通过绑定的国税纳税人识别号查询用户信息
-	 * @param nsrsbh
-	 * @return
-	 */
-	List<User> findByHngsNsrsbh(String nsrsbh);
+    int getAllNomalCont();
+
+    /**
+     * 分页获取正常用户信息
+     *
+     * @param map
+     * @return
+     */
+    List<UserBO> getNomalList(Map<String, Object> map);
+
+    /**
+     * 微信绑定关系修改
+     *
+     * @param userUpdateDTO
+     * @return
+     */
+    int changeWxBdxx(UserUpdateBO userUpdateDTO);
+
+    /**
+     * 通过绑定的国税纳税人识别号查询用户信息
+     *
+     * @param nsrsbh
+     * @return
+     */
+    List<User> findByHngsNsrsbh(String nsrsbh);
 
     /**
      * 根据手机号码查询用户
+     *
      * @param phone 手机号码
      * @return UserBO
      */
     UserBO selectOneByPhone(String phone);
+
+    /**
+     * 根据用户ID查询用户基本表信息
+     *
+     * @param user 用户条件
+     * @return 用户基本表信息
+     */
+    User selectUserById(User user);
 }

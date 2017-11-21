@@ -2,17 +2,21 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.NsrBindQueryBO;
+import com.abc12366.uc.model.bo.UserDzsbBO;
+import com.abc12366.uc.model.bo.UserHndsBO;
+import com.abc12366.uc.model.bo.UserHngsBO;
 import com.abc12366.uc.service.NsrBindQueryService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 查询所有绑定关系接口控制器
@@ -30,41 +34,39 @@ public class NsrBindQueryController {
 
     /**
      * 查询纳税人绑定关系列表
-     * @param username
-     * @param nsrsbh
-     * @param status
-     * @param page
-     * @param size
-     * @return
+     *
+     * @param username 用户名
+     * @param nsrsbh   纳税人识别号
+     * @param status   绑定状态
+     * @param type     查询类型：dzsb、hngs、hnds，默认为dzsb
+     * @param page     当前页
+     * @param size     每页大小
+     * @return 绑定信息列表
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String username,
                                      @RequestParam(required = false) String nsrsbh,
                                      @RequestParam(required = false) Boolean status,
+                                     @RequestParam(required = false, defaultValue = "dzsb") String type,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}:{}", username, nsrsbh, page, size);
-        long start = System.currentTimeMillis();
-        if (username != null && username.equals("")) {
-            username = null;
-        }
-        if (nsrsbh != null && nsrsbh.equals("")) {
-            nsrsbh = null;
-        }
-        NsrBindQueryParamBO nsrBindQueryParamBO = new NsrBindQueryParamBO(username, nsrsbh,status);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<NsrBindQueryBO> nsrBindQueryBOList = nsrBindQueryService.selectList(nsrBindQueryParamBO);
-        long end = System.currentTimeMillis();
-        LOGGER.warn("消耗时间：{}" , end-start);
-        return (nsrBindQueryBOList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) nsrBindQueryBOList, "total", ((Page)
-                        nsrBindQueryBOList).getTotal()));
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("username", username);
+        map.put("nsrsbh", nsrsbh);
+        map.put("status", status);
+        map.put("type", type);
+        LOGGER.info("{}:{}:{}", map, page, size);
+
+        List<NsrBindQueryBO> dataList = nsrBindQueryService.selectList(map, page, size);
+        LOGGER.info("{}", dataList);
+        PageInfo<NsrBindQueryBO> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
 
     }
 
     /**
      * 查询一条电子申报绑定
+     *
      * @param id
      * @return
      */
@@ -77,6 +79,7 @@ public class NsrBindQueryController {
 
     /**
      * 查询一条湖南地税绑定
+     *
      * @param id
      * @return
      */
@@ -89,6 +92,7 @@ public class NsrBindQueryController {
 
     /**
      * 查询一条湖南国税绑定
+     *
      * @param id
      * @return
      */
