@@ -34,8 +34,8 @@
         where ut.id=#{id}
     </select>
 
-    <select id="selectUserIdsByTagIds" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
-        SELECT a.subjectId FROM
+    <select id="selectUserIdsByTagIds" resultType="java.lang.String" parameterType="java.util.Map">
+        SELECT DISTINCT a.subjectId FROM
         <foreach item="item" collection="tagId" separator="union all" open="(" close=")" index="">
             SELECT subjectId FROM uc_subject_tag WHERE tagId=#{item}
         </foreach>
