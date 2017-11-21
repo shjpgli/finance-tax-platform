@@ -1380,4 +1380,15 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+
+    @Override
+    public List<OrderStatisBO> statisOrderByStatus(Map<String, Object> map) {
+        return orderRoMapper.statisOrderByStatus(map);
+    }
+
+    @Override
+    public List<OrderStatisBO> statisOrderByMonth(Map<String, Object> map) {
+        return orderRoMapper.statisOrderByMonth(map);
+    }
+
 }

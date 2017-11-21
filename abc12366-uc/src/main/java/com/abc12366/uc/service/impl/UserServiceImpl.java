@@ -10,10 +10,7 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.BaseObject;
-import com.abc12366.uc.model.Token;
-import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.UserExtend;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
@@ -768,5 +765,9 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(4204);
             }
         }
+    }
+
+    public List<UserStatisBO> statisUserByMonth(Map<String, Object> map) {
+        return userRoMapper.statisUserByMonth(map);
     }
 }

@@ -295,4 +295,19 @@ public interface OrderService {
      * @param tradeNo
      */
     void selectStock(String tradeNo);
+
+
+    /**
+     * 统计订单，统计维度为【订单状态】
+     * @param map
+     * @return
+     */
+    List<OrderStatisBO> statisOrderByStatus(Map<String, Object> map);
+
+    /**
+     * 统计订单，统计维度为【月份】
+     * @param map
+     * @return
+     */
+    List<OrderStatisBO> statisOrderByMonth(Map<String, Object> map);
 }

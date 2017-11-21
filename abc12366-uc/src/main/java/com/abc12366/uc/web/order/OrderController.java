@@ -8,6 +8,7 @@ import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -500,6 +501,64 @@ public class OrderController {
         OrderBO bo = orderService.selectOrderByGoodsIdAndUserId(map);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
+    }
+
+    /**
+     * 统计订单，统计维度为【订单状态】
+     *
+     * @param tradeMethod 交易方式
+     * @param startTime  开始时间
+     * @param endTime  结束时间
+     * @return
+     */
+    @GetMapping(path = "/status/statis")
+    public ResponseEntity statisOrderByStatus(@RequestParam(value = "tradeMethod", required = true) String tradeMethod,
+                                      @RequestParam(value = "startTime", required = false) String startTime,
+                                      @RequestParam(value = "endTime", required = false) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tradeMethod",tradeMethod);
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime",DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+
+        List<OrderStatisBO> orderList = orderService.statisOrderByStatus(map);
+        PageInfo<OrderStatisBO> pageInfo = new PageInfo<>(orderList);
+        LOGGER.info("{}", orderList);
+        return (orderList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 统计订单，统计维度为【月份】
+     *
+     * @param tradeMethod 交易方式
+     * @param startTime  开始时间
+     * @param endTime  结束时间
+     * @return
+     */
+    @GetMapping(path = "/month/statis")
+    public ResponseEntity statisOrder(@RequestParam(value = "tradeMethod", required = true) String tradeMethod,
+                                      @RequestParam(value = "startTime", required = false) String startTime,
+                                      @RequestParam(value = "endTime", required = false) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tradeMethod",tradeMethod);
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime",DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+
+        List<OrderStatisBO> orderList = orderService.statisOrderByMonth(map);
+        PageInfo<OrderStatisBO> pageInfo = new PageInfo<>(orderList);
+        LOGGER.info("{}", orderList);
+        return (orderList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
 }
