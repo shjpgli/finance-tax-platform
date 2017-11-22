@@ -40,6 +40,9 @@ public class MessageConstant {
     // 又拍template_id,发送业务通知短信模板
     public final static String MESSAGE_UPYUN_TEMPLATE_529 = "529";
 
+    // 发送订单和发票通知短信模板
+    public final static String MESSAGE_UPYUN_TEMPLATE_615 = "615";
+
     //商品订单
     public static final String SPDD = "SPDD";
     //纸质发票订单
@@ -62,6 +65,9 @@ public class MessageConstant {
     public static final String YWTX_MESSAGE = "message";
     //业务提醒代码
     public static final String YWTX_CODE = "A_YWTX";
+    //系统提醒代码
+    public static final String XTTX_CODE = "A_XTTX";
+
 
     //消息类型，1：系统消息，2：帮帮消息
     public static final String SYS_MESSAGE = "1";
