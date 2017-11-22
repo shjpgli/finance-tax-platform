@@ -2,10 +2,15 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.uc.mapper.db2.VipPrivilegeLevelRoMapper;
 import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.MessageBO;
+import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
+import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.gateway.util.RemindConstant;
 import com.alibaba.fastjson.JSON;
@@ -22,6 +27,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +45,12 @@ public class MessageSendUtilImpl implements MessageSendUtil {
 
     @Autowired
     private RestTemplateUtil restTemplateUtil;
+
+    @Autowired
+    private IWxTemplateService templateService;
+
+    @Autowired
+    private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
 
     /**
      * 需要验证token的发送
@@ -182,4 +194,46 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         }
 		
 	}
+
+    @Override
+    public void sendMsg(HttpServletRequest request, User user, Message message, Map<String, String> map, String templateId) {
+        //查询会员特权-业务提醒
+        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+        obj.setLevelId(user.getVipLevel());
+        obj.setPrivilegeId(MessageConstant.XTTX_CODE);
+        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+        //查看业务提醒是否启用
+        if(findObj != null && findObj.getStatus()){
+            //web消息
+            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
+                message.setUserId(user.getId());
+                sendMessage(message, request);
+            }
+            //微信消息
+            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && org.apache.commons.lang.StringUtils.isNotEmpty(user.getWxopenid())){
+                templateService.templateSend(templateId, map);
+            }
+            //短信消息
+            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && org.apache.commons.lang.StringUtils.isNotEmpty(user.getPhone())){
+                sendPhoneMessage(request, message.getContent(), user);
+            }
+        }
+    }
+    /**
+     * 发送短信公告方法
+     * @param request
+     * @param content
+     * @param user
+     */
+    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
+        //发送短信
+        Map<String, String> maps = new HashMap<String, String>();
+        maps.put("var", content);
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        list.add(maps);
+
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+        sendPhoneMessage(user.getPhone(), MessageConstant.MESSAGE_UPYUN_TEMPLATE_615, list, accessToken);
+    }
+
 }
