@@ -2,15 +2,18 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ActivityMapper;
 import com.abc12366.uc.mapper.db2.ActivityRoMapper;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
 import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.*;
 import com.abc12366.uc.service.IActivityService;
+import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.LocalIpAddressUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
@@ -46,6 +49,9 @@ public class ActivityService implements IActivityService {
 
     @Autowired
     private ActivityRoMapper activityRoMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<WxActivity> selectList(WxActivity activity, int page, int size) {
@@ -119,24 +125,16 @@ public class ActivityService implements IActivityService {
             if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
                 throw new ServiceException(6002);
             }
-            synchronized (this) {
-                WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
-                        .id(Utils.uuid().replaceAll("-", ""))
-                        .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
-                        .createTime(new Date())
-                        .activityId(activity.getId())
-                        .build();
-                activityMapper.generateSecret(redEnvelop);
-                WxRedEnvelopBO bo = new WxRedEnvelopBO();
-                BeanUtils.copyProperties(redEnvelop, bo);
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    LOGGER.error("generateSecret线程中断: {}, {}", e.getMessage(), e);
-                }
-                return bo;
-            }
+            WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
+                    .id(Utils.uuid())
+                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
+                    .createTime(new Date())
+                    .activityId(activity.getId())
+                    .build();
+            activityMapper.generateSecret(redEnvelop);
+            WxRedEnvelopBO bo = new WxRedEnvelopBO();
+            BeanUtils.copyProperties(redEnvelop, bo);
+            return bo;
         }
         return null;
     }
@@ -200,13 +198,37 @@ public class ActivityService implements IActivityService {
         lotteryLog.setCreateTime(now);
         activityMapper.insertLotteryLog(lotteryLog);
 
-        List<WxRedEnvelop> dataList = selectRedEnvelop(lotteryBO.getActivityId(), lotteryBO.getSecret().trim().toLowerCase());
+        List<WxRedEnvelop> dataList = selectRedEnvelopList(lotteryBO.getActivityId(), lotteryBO.getSecret().trim()
+                .toLowerCase());
         LOGGER.info("红包密码是否正确:{}", dataList.size() > 0);
         if (dataList.size() < 1) {
             throw new ServiceException(6003);
+        } else {
+            for (WxRedEnvelop redEnvelop : dataList) {
+                // 用户已参与抽奖
+                if (StringUtils.isNotEmpty(redEnvelop.getOpenId())) {
+                    if (lotteryBO.getOpenId().equals(redEnvelop.getOpenId())) {
+                        throw new ServiceException(6011);
+                    }
+                } else {
+                    // 未参与抽奖用户开始抽奖
+                    redEnvelop.setOpenId(lotteryBO.getOpenId());
+                    lottery(activity, redEnvelop, now);
+                    return redEnvelop;
+                }
+            }
         }
-        // 取第一条记录
-        WxRedEnvelop redEnvelop = dataList.get(0);
+        return null;
+    }
+
+    /**
+     * 开始抽奖
+     *
+     * @param activity   红包活动信息
+     * @param redEnvelop 红包信息
+     * @param now        同步时间
+     */
+    private void lottery(WxActivity activity, WxRedEnvelop redEnvelop, Date now) {
         String probabilityStr = activity.getProbability();
         if (probabilityStr.contains("%")) {
             probabilityStr = probabilityStr.replaceAll("%", "");
@@ -215,7 +237,6 @@ public class ActivityService implements IActivityService {
             // 中奖
             if (inProbability(probability)) {
                 LOGGER.info("中奖:{}", redEnvelop.getSecret());
-                redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
                 // 已中奖未发送
                 redEnvelop.setSendStatus("0");
@@ -225,13 +246,13 @@ public class ActivityService implements IActivityService {
                 redEnvelop.setAmount(activity.getAmount());
                 redEnvelop.setAmountType(activity.getAmountType());
                 redEnvelop.setProbability(activity.getProbability());
+                redEnvelop.setBillno(billno());
                 activityMapper.updateRedEnvelop(redEnvelop);
 
                 LOGGER.info("发送微信红包");
-                sendRedPack(lotteryBO, activity, redEnvelop);
+                send(redEnvelop.getId());
             } else { // 未中奖
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
-                redEnvelop.setOpenId(lotteryBO.getOpenId());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
                 redEnvelop.setReceiveTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
@@ -244,22 +265,33 @@ public class ActivityService implements IActivityService {
         } else {
             throw new ServiceException(5000);
         }
-        return redEnvelop;
     }
 
     @Override
     public List<WxRedEnvelop> selectRedEnvelopList(WxRedEnvelop redEnvelop, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return activityRoMapper.selectRedEnvelopList(redEnvelop);
+        List<WxRedEnvelop> dataList = activityRoMapper.selectRedEnvelopList(redEnvelop);
+        for (WxRedEnvelop re : dataList) {
+            if (StringUtils.isNotEmpty(re.getOpenId())) {
+                User user = new User();
+                user.setWxopenid(re.getOpenId());
+                user = userService.selectUserById(user);
+                if (user != null) {
+                    re.setPhone(user.getPhone());
+                    re.setWxnickname(user.getWxnickname());
+                }
+            }
+        }
+        return dataList;
     }
 
     @Override
     public WxRedEnvelop gethbinfo(String id) {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
-        if (redEnvelop != null) {
+        if (redEnvelop != null && StringUtils.isNotEmpty(redEnvelop.getBillno())) {
             GetRedPack grp = new GetRedPack.Builder()
-                    .nonce_str(redEnvelop.getId().replaceAll("-", ""))
-                    .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
+                    .nonce_str(redEnvelop.getId())
+                    .mch_billno(redEnvelop.getBillno())
                     .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                     .appid(SpringCtxHolder.getProperty("abc.appid"))
                     .bill_type("MCHT")
@@ -295,18 +327,12 @@ public class ActivityService implements IActivityService {
             List<WxRedEnvelop> dataList = new ArrayList<>();
             for (WxRedEnvelopBO redEnvelopBO : redEnvelopList) {
                 WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
-                        .id(Utils.uuid().replaceAll("-", ""))
+                        .id(Utils.uuid())
                         .createTime(new Date())
                         .secret(redEnvelopBO.getSecret())
                         .activityId(redEnvelopBO.getActivityId().trim())
                         .build();
                 dataList.add(redEnvelop);
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    LOGGER.error("importJSON线程中断: {}, {}", e.getMessage(), e);
-                }
             }
             activityMapper.batchGenerateSecret(dataList);
         } else {
@@ -315,14 +341,14 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public WxRedEnvelop resend(String id) {
+    public WxRedEnvelop send(String id) {
         WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
         // 重新发送状态为【0-未发送、2-发送失败】的记录
-        if (redEnvelop != null) {
+        if (redEnvelop != null && StringUtils.isNotEmpty(redEnvelop.getBillno())) {
             WxActivity activity = selectOne(redEnvelop.getActivityId());
             SendRedPack srp = new SendRedPack.Builder()
                     .nonce_str(redEnvelop.getId())
-                    .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
+                    .mch_billno(redEnvelop.getBillno())
                     .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
                     .wxappid(SpringCtxHolder.getProperty("abc.appid"))
                     .send_name(SpringCtxHolder.getProperty("abc.send_name"))
@@ -381,23 +407,9 @@ public class ActivityService implements IActivityService {
 
     @Override
     public void batchDeleteSecret(List<Id> ids) {
-        for (Id id: ids) {
+        for (Id id : ids) {
             deleteSecret(id.getId());
         }
-    }
-
-    @Override
-    public WxRedEnvelop updateSecret(WxRedEnvelopUpdateBO bo) {
-        WxRedEnvelop data = activityRoMapper.selectRedEnvelopOne(bo.getId());
-        if (data!= null) {
-            // 接收状态设置为空值
-            data.setReceiveStatus("");
-            data.setOpenId(bo.getOpenId());
-            data.setCreateTime(bo.getCreateTime());
-            activityMapper.updateRedEnvelop(data);
-            return data;
-        }
-        return null;
     }
 
     /**
@@ -412,61 +424,14 @@ public class ActivityService implements IActivityService {
     }
 
     /**
-     * 发送红包
+     * 查询口令状态
      */
-    private void sendRedPack(WxLotteryBO lotteryBO, WxActivity activity, WxRedEnvelop redEnvelop) {
-        SendRedPack srp = new SendRedPack.Builder()
-                .nonce_str(redEnvelop.getId().replaceAll("-", ""))
-                .mch_billno(String.valueOf(redEnvelop.getCreateTime().getTime()))
-                .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
-                .wxappid(SpringCtxHolder.getProperty("abc.appid"))
-                .send_name(SpringCtxHolder.getProperty("abc.send_name"))
-                .re_openid(lotteryBO.getOpenId())
-                .total_amount(yuan2cent(redEnvelop.getSendAmount()).intValue())
-                .total_num(1)
-                .wishing(activity.getWishing())
-                .act_name(activity.getName())
-                .remark(activity.getRemark())
-                .scene_id("PRODUCT_2")
-                .client_ip(LocalIpAddressUtil.resolveLocalAddress() != null ? String.valueOf(LocalIpAddressUtil
-                        .resolveLocalAddress()) : "127.0.0.1")
+    private List<WxRedEnvelop> selectRedEnvelopList(String activityId, String secret) {
+        WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
+                .activityId(activityId)
+                .secret(secret)
                 .build();
-        srp.setSign(SignUtil.signKey(srp));
-
-        // 发送3次
-        for (int i = 1; i <= 3; i++) {
-            LOGGER.info("第{}次发送:{}", i, srp);
-            ReceiveRedPack rrp = WxMchConnectFactory.post(WechatUrl.SENDREDPACK, null, srp, ReceiveRedPack.class);
-            if (rrp != null) {
-                // 发送请求成功
-                if ("SUCCESS".equals(rrp.getReturn_code())) {
-                    // 发红包成功
-                    if ("SUCCESS".equals(rrp.getResult_code())) {
-                        // 发送成功
-                        redEnvelop.setSendStatus("1");
-                    } else {
-                        // 发送失败
-                        redEnvelop.setSendStatus("2");
-                    }
-                    redEnvelop.setSendTime(new Date());
-                    redEnvelop.setSendTimes(i);
-                    redEnvelop.setRemark(rrp.getErr_code_des());
-                    activityMapper.updateRedEnvelop(redEnvelop);
-                    if (!"SUCCESS".equals(rrp.getReturn_code())) {
-                        throw new ServiceException(rrp.getResult_code(), rrp.getErr_code_des());
-                    }
-                    break;
-                } else {
-                    throw new ServiceException(rrp.getReturn_code(), rrp.getReturn_msg());
-                }
-            }
-            // 第二次过3s重发，第三次6s
-            try {
-                Thread.sleep(i * 3000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        return activityRoMapper.selectRedEnvelopList(redEnvelop);
     }
 
     /**
@@ -526,12 +491,23 @@ public class ActivityService implements IActivityService {
             }
             String secret = rule + sb.toString();
             List<WxRedEnvelop> dataList = selectRedEnvelop(activityId, secret);
-            return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId).toLowerCase() : secret;
+            return dataList != null && dataList.size() > 0 ? secretRule(ruleType, rule, activityId).toLowerCase() :
+                    secret;
         } else {
             // 规则2口令格式为：管理员自主输入的中文字符串，用#符号分割，
             // 如：艾博克#财税平台#爱我中华#美丽中国，只要匹配其中一个词即可
             String[] keywords = rule.split("#");
             return keywords[LocalDateTime.now().getSecond() % keywords.length];
         }
+    }
+
+    /**
+     * 生成商户订单号
+     *
+     * @return 商户订单号
+     */
+    private String billno() {
+        return SpringCtxHolder.getProperty("abc.mch_id") + DateUtils.getDataString()
+                + activityMapper.selectBillno("wxlottery");
     }
 }

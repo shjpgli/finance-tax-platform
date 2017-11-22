@@ -6,7 +6,6 @@ import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.ActivityBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxLotteryBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
-import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopUpdateBO;
 
 import java.util.List;
 
@@ -111,12 +110,12 @@ public interface IActivityService {
     void importJSON(List<WxRedEnvelopBO> redEnvelopList);
 
     /**
-     * 对于发送失败的红包，重新发送
+     * 发送红包
      *
      * @param id PK
      * @return WxRedEnvelop
      */
-    WxRedEnvelop resend(String id);
+    WxRedEnvelop send(String id);
 
     /**
      * 删除未抽奖的口令
@@ -131,12 +130,4 @@ public interface IActivityService {
      * @param ids List<Id>
      */
     void batchDeleteSecret(List<Id> ids);
-
-    /**
-     * 根据口令ID修改口令记录
-     *
-     * @param bo 更新口令对象
-     * @return WxRedEnvelopBO
-     */
-    WxRedEnvelop updateSecret(WxRedEnvelopUpdateBO bo);
 }

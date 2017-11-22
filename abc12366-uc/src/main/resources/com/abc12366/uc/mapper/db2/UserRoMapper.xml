@@ -90,6 +90,9 @@
             <if test="id != null and id != ''">
                 id=#{id}
             </if>
+            <if test="wxopenid != null and wxopenid != ''">
+                wxopenid=#{wxopenid}
+            </if>
         </where>
     </select>
 

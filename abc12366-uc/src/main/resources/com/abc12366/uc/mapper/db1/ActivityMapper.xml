@@ -10,7 +10,7 @@
 
     <sql id="Base_RedEnvelop_List">
         id, secret, createTime, activityId, startTime, endTime, amount, amountType, probability,
-        sendAmount, sendStatus, sendTimes, sendTime, receiveStatus, receiveTime, ip, openId
+        sendAmount, sendStatus, sendTimes, sendTime, receiveStatus, receiveTime, ip, openId, billno
     </sql>
 
     <sql id="Base_LotteryLog_List">
@@ -60,7 +60,8 @@
         VALUES
         (#{id}, #{secret}, #{createTime}, #{activityId}, #{startTime}, #{endTime}, #{amount}, #{amountType},
         #{probability},
-        #{sendAmount}, #{sendStatus}, #{sendTimes}, #{sendTime}, #{receiveStatus}, #{receiveTime}, #{ip}, #{openId})
+        #{sendAmount}, #{sendStatus}, #{sendTimes}, #{sendTime}, #{receiveStatus}, #{receiveTime}, #{ip}, #{openId},
+        #{billno})
     </insert>
 
     <insert id="batchGenerateSecret" parameterType="java.util.List">
@@ -70,7 +71,8 @@
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.id}, #{item.secret}, #{item.createTime}, #{item.activityId}, #{item.startTime}, #{item.endTime},
             #{item.amount}, #{item.amountType}, #{item.probability}, #{item.sendAmount}, #{item.sendStatus},
-            #{item.sendTimes}, #{item.sendTime}, #{item.receiveStatus}, #{item.receiveTime}, #{item.ip}, #{item.openId})
+            #{item.sendTimes}, #{item.sendTime}, #{item.receiveStatus}, #{item.receiveTime}, #{item.ip},
+            #{item.openId}, #{item.billno})
         </foreach>
     </insert>
 
@@ -92,6 +94,7 @@
             <if test="ip != null">ip = #{ip},</if>
             <if test="openId != null">openId = #{openId},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="billno != null">billno = #{billno},</if>
         </set>
         where id = #{id}
     </update>
@@ -107,4 +110,8 @@
         DELETE FROM uc_wxredenvelop
         WHERE id = #{id}
     </delete>
+
+    <select id="selectBillno" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT NEXTVAL(#{name}) from dual
+    </select>
 </mapper>
