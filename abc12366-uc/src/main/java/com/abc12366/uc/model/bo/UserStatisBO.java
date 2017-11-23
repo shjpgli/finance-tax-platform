@@ -14,11 +14,7 @@ public class UserStatisBO {
      */
     private Integer count;
     /**
-     * 月份
-     */
-    private String months;
-    /**
-     * 天数
+     * 时间
      */
     private String days;
 
@@ -28,14 +24,6 @@ public class UserStatisBO {
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public String getMonths() {
-        return months;
-    }
-
-    public void setMonths(String months) {
-        this.months = months;
     }
 
     public String getDays() {
