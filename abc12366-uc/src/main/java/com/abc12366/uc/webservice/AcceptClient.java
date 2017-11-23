@@ -7,26 +7,32 @@ import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.model.job.DzsbJob;
 import com.abc12366.uc.model.job.DzsbXxInfo;
 import com.alibaba.fastjson.JSONObject;
-
-import org.apache.axis2.AxisFault;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.rmi.RemoteException;
 import java.util.Map;
 
 /**
- * Created by p on 2016-04-28.
+ * 电子申报处理业务入口
+ *
+ * @author lijun <ljun51@outlook.com>
+ * @create 2017-06-07 4:02 PM
+ * @since 1.0.0
  */
 @Component("client")
+@Scope("prototype")
 public class AcceptClient {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AcceptClient.class);
+
     @Autowired
     private PkgUtil pkgutil;
 
     public Map<String, String> process(Map<String, String> map) {
-        //String target = "http://dzsb.abc12366.cn/tdps-accept/services/AcceptService?wsdl";
-//        String target = "http://testhn.abc12366.cn/tdps-accept/services/AcceptService?wsdl";
         String target = SpringCtxHolder.getProperty("tdps.api.url") + "/tdps-accept/services/AcceptService?wsdl";
 
         try {
@@ -38,12 +44,9 @@ public class AcceptClient {
             String response = processResponse.getTiripPkgStr();
             TiripPackage tiripPackage = (TiripPackage) XmlJavaParser.parseXmlToObject(TiripPackage.class, response);
             return pkgutil.processBackBusinessPkgBytdps(tiripPackage);
-        } catch (AxisFault axisFault) {
-            axisFault.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.error("{}", e);
         }
         return null;
     }
@@ -77,9 +80,9 @@ public class AcceptClient {
             	dzsbJob.setIsExistData(object.getBoolean("isExistData"));
             	dzsbJob.setDataList(object.getJSONArray("dataList").toJavaList(DzsbXxInfo.class));
             }
-            
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.error("{}", e);
             dzsbJob.setRescode("999999");
             dzsbJob.setMessage(e.getMessage());
         }

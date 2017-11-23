@@ -6,7 +6,6 @@ import com.abc12366.gateway.util.*;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
-import com.abc12366.uc.model.PrivilegeItem;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
@@ -173,7 +172,7 @@ public class UserBindServiceImpl implements UserBindService {
         String url = SpringCtxHolder.getProperty("abc12366.message.url") + "/hngs/post?api=" + api;
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("nsrsbh", userHngsInsertBO.getBsy());
-        Timestamp timestamp = new Timestamp(new Date().getTime());
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         requestBody.put("timestamp", Long.toString(timestamp.getTime()));
         requestBody.put("roleId", userHngsInsertBO.getRole());
         String nsrsbh = userHngsInsertBO.getBsy().trim().toUpperCase();
@@ -386,7 +385,6 @@ public class UserBindServiceImpl implements UserBindService {
 //        isRealnameValidated(request);
 
         UserHnds userHnds = new UserHnds();
-        //BeanUtils.copyProperties(userHndsInsertBO, userHnds);
         Date date = new Date();
         userHnds.setId(Utils.uuid());
         userHnds.setStatus(true);
@@ -646,49 +644,6 @@ public class UserBindServiceImpl implements UserBindService {
                 if ("FRZJH".equals(mx.getCODE())) {
                     object.setFRZJH(mx.getVALUE());
                 }
-
-//                if ("LOGINTOKEN".equals(mx.getCODE())) {
-//                    object.setLOGINTOKEN(mx.getVALUE());
-//                }
-//                if ("DLSJ".equals(mx.getCODE())) {
-//                    object.setDLSJ(mx.getVALUE());
-//                }
-//                if ("Y_NSRSBH".equals(mx.getCODE())) {
-//                    object.setY_NSRSBH(mx.getVALUE());
-//                }
-//                if ("NSRMC".equals(mx.getCODE())) {
-//                    object.setNSRMC(mx.getVALUE());
-//                }
-//                if ("SHXYDM".equals(mx.getCODE())) {
-//                    object.setSHXYDM(mx.getVALUE());
-//                }
-//                if ("SWJGDM".equals(mx.getCODE())) {
-//                    object.setSWJGDM(mx.getVALUE());
-//                }
-//                if ("SWJGMC".equals(mx.getCODE())) {
-//                    object.setSWJGMC(mx.getVALUE());
-//                }
-//                if ("DJXH".equals(mx.getCODE())) {
-//                    object.setDJXH(mx.getVALUE());
-//                }
-//                if ("FRXM".equals(mx.getCODE())) {
-//                    object.setFRXM(mx.getVALUE());
-//                }
-//                if ("FRZJH".equals(mx.getCODE())) {
-//                    object.setFRZJH(mx.getVALUE());
-//                }
-//                if ("RJDQR".equals(mx.getCODE())) {
-//                    object.setRJDQR(mx.getVALUE());
-//                }
-//                if ("YQDQR".equals(mx.getCODE())) {
-//                    object.setYQDQR(mx.getVALUE());
-//                }
-//                if ("NSRLX".equals(mx.getCODE())) {
-//                    object.setNSRLX(mx.getVALUE());
-//                }
-//                if ("SFGTJZH".equals(mx.getCODE())) {
-//                    object.setSFGTJZH(mx.getVALUE());
-//                }
             }
         } else {
             throw new ServiceException("9999", jbxxcx.getCWYY());
@@ -717,38 +672,12 @@ public class UserBindServiceImpl implements UserBindService {
             if (xgjgs == null || xgjgs.getXGJG() == null) {
                 throw new ServiceException(4633);
             }
-//            for (XGJG xgjg : xgjgs.getXGJG()) {
-//                if (xgjg.getGSCG() != "0") {
-//                    throw new ServiceException(xgjg.getGSCG(), xgjg.getCWYY());
-//                }
-//            }
         } catch (org.exolab.castor.xml.MarshalException e) {
             e.printStackTrace();
             throw new ServiceException(4633);
         }
 
     }
-
-    //用户是否实名制
-//    private void isRealnameValidated(HttpServletRequest request) {
-//        String userId = UserUtil.getUserId(request);
-//        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
-//        if (userExtend == null || StringUtils.isEmpty(userExtend.getValidStatus()) || !userExtend.getValidStatus().trim().equals("2")) {
-//            throw new ServiceException(4712);
-//        }
-//    }
-
-    //用户会员绑定纳税人数量是否超过上限-以社会信用代码作为企业唯一标识
-//    private void bindLimit(String userId) {
-//        List<ShxydmBO> list = userBindRoMapper.bindCount(userId);
-//        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(userId);
-//        int limit = privilegeItem.getGrzhbdqys();
-//        if (limit != -1) {
-//            if (list != null && list.size() >= limit) {
-//                throw new ServiceException(4043);
-//            }
-//        }
-//    }
 
     @Override
     public HngsNsrLoginResponse nsrLoginDzsj(UserHngsInsertBO login, HttpServletRequest request) {
