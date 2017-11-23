@@ -132,7 +132,7 @@ public class AnswerLogController {
         LOGGER.info("{}", answerLogBO);
         AnswerLogBO bo = answerLogService.batch(answerLogBO);
         LOGGER.info("{}", bo);
-        return new ResponseEntity<>(bo, HttpStatus.OK);
+        return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
     /**
@@ -204,6 +204,17 @@ public class AnswerLogController {
         return (dataList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4001), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
+
+    @GetMapping(path = "/selectdtcnt")
+    public ResponseEntity selectdtcnt(@RequestParam(value = "userId", required = false) String userId,
+                                   @RequestParam(value = "questionId", required = false) String questionId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("questionId", questionId);
+        dataMap.put("userId", userId);
+        int data = answerLogService.selectdtcnt(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
     }
 
 }

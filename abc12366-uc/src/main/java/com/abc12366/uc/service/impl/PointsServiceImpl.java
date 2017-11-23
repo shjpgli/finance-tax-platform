@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -297,4 +299,28 @@ public class PointsServiceImpl implements PointsService {
             throw new ServiceException(4822);
         }
     }
+
+    @SuppressWarnings("rawtypes")
+	@Transactional("db1TxManager")
+	public ResponseEntity integralMultiplication(UserBO sendUser,
+			UserBO reciveUser, PointsRuleBO bo) {
+		
+    	PointsLogBO spointsLog = new PointsLogBO();
+        spointsLog.setUserId(sendUser.getId());
+        spointsLog.setRuleId(bo.getId());
+        spointsLog.setRemark("会员特权积分转让给用户："+reciveUser.getUsername());
+        spointsLog.setIncome(0);
+        spointsLog.setOutgo(bo.getPoints());
+        pointsLogService.insert(spointsLog);
+        
+        PointsLogBO rpointsLog = new PointsLogBO();
+        rpointsLog.setUserId(reciveUser.getId());
+        rpointsLog.setRuleId(bo.getId());
+        rpointsLog.setRemark("会员特权积分转让，来自会员用户："+sendUser.getUsername());
+        rpointsLog.setIncome(bo.getPoints());
+        rpointsLog.setOutgo(0);
+        pointsLogService.insert(rpointsLog);
+    	
+        return ResponseEntity.ok(Utils.kv()) ;
+	}
 }

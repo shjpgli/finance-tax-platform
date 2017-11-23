@@ -9,14 +9,15 @@ import java.util.Date;
  */
 public class NsrBindQueryBO {
     private String id;
+    private String userId;
     private String username;
     private String nickname;
     private String nsrsbh;
     private String nsrmc;
     private String swjgmc;
     private boolean status;
-    private Date lastUpdate;
     private String bindType;
+    private Date lastUpdate;
     private Date createTime;
 
     public NsrBindQueryBO() {
@@ -100,6 +101,14 @@ public class NsrBindQueryBO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override

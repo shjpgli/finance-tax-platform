@@ -34,4 +34,6 @@ public interface AnswerLogService {
     AnswerLogtjListBo selecttj(Map<String, Object> map);
 
     List<AnswertjBO> selectListBysubjectsId(String subjectsId);
+
+    int selectdtcnt(Map<String, Object> map);
 }

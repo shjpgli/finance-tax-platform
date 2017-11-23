@@ -9,6 +9,48 @@ import java.util.Date;
 
 
 public class LotteryLogBO{
+
+    /**快递地址*/
+    private String address;
+    /**收件人*/
+    private String sendName;
+    /**活动开始时间*/
+    private Date activityStartTime;
+    /**活动结束时间*/
+    private Date activityEndTime;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSendName() {
+        return sendName;
+    }
+
+    public void setSendName(String sendName) {
+        this.sendName = sendName;
+    }
+
+    public Date getActivityStartTime() {
+        return activityStartTime;
+    }
+
+    public void setActivityStartTime(Date activityStartTime) {
+        this.activityStartTime = activityStartTime;
+    }
+
+    public Date getActivityEndTime() {
+        return activityEndTime;
+    }
+
+    public void setActivityEndTime(Date activityEndTime) {
+        this.activityEndTime = activityEndTime;
+    }
+
     private Date endlqDate;
 
     public Date getEndlqDate() {
@@ -193,19 +235,4 @@ public String getIp(){
 public void setIp(String ip){
    this.ip = ip;
 }
-
-@Override
-public String toString() {
-return "LotteryLog {\r\n"+
-"\""+"id"+"\""+":"+"\""+id+"\""+",\r\n"+
-"\""+"activityId"+"\""+":"+"\""+activityId+"\""+",\r\n"+
-"\""+"lotteryId"+"\""+":"+"\""+lotteryId+"\""+",\r\n"+
-"\""+"createTime"+"\""+":"+"\""+createTime+"\""+",\r\n"+
-"\""+"lotteryName"+"\""+":"+"\""+lotteryName+"\""+",\r\n"+
-"\""+"isluck"+"\""+":"+"\""+isluck+"\""+",\r\n"+
-"\""+"state"+"\""+":"+"\""+state+"\""+",\r\n"+
-"\""+"userId"+"\""+":"+"\""+userId+"\""+",\r\n"+
-"\""+"upoint"+"\""+":"+"\""+upoint+"\""+",\r\n"+
-"\""+"ip"+"\""+":"+"\""+ip+"\""+"}";
-}
-}
+ }

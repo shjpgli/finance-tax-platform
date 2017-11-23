@@ -97,10 +97,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //问卷
                 .excludePathPatterns("/question/**")
                 .excludePathPatterns("/subjects/**")
+                .excludePathPatterns("/accessLog/**")
                 .excludePathPatterns("/answer/batch")
                         //多个结果投票
                 .excludePathPatterns("/vote/**")
                 .excludePathPatterns("/vote/result/**");
-
     }
 }

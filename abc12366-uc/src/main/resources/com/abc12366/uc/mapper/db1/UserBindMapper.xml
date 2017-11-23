@@ -65,8 +65,6 @@
     <update id="update" parameterType="com.abc12366.uc.model.UserDzsb">
         update uc_user_dzsb uud
         <set>
-            <if test="status!=null">uud.status = #{status},</if>
-            <if test="djxh!=null">uud.djxh = #{djxh},</if>
             <if test="nsrsbh!=null">uud.nsrsbh = #{nsrsbh},</if>
             <if test="nsrmc!=null">uud.nsrmc = #{nsrmc},</if>
             <if test="shxydm!=null">uud.shxydm = #{shxydm},</if>
@@ -80,6 +78,24 @@
             <if test="lastLoginTime!=null">uud.lastLoginTime = #{lastLoginTime},</if>
             <if test="nsrlx!=null">uud.nsrlx = #{nsrlx},</if>
             <if test="sfgtjzh!=null">uud.sfgtjzh = #{sfgtjzh}</if>
+        </set>
+        where uud.userId = #{userId}
+        and uud.djxh = #{djxh}
+        and status=1
+    </update>
+
+    <update id="updateHngs" parameterType="com.abc12366.uc.model.UserHngs">
+        update uc_user_hngs uud
+        <set>
+            <if test="nsrsbh!=null and nsrsbh != ''">uud.nsrsbh = #{nsrsbh},</if>
+            <if test="bsy!=null and bsy != ''">uud.bsy = #{bsy},</if>
+            <if test="nsrmc!=null and nsrmc != ''">uud.nsrmc = #{nsrmc},</if>
+            <if test="shxydm!=null and shxydm != ''">uud.shxydm = #{shxydm},</if>
+            <if test="smrzzt!=null and smrzzt != ''">uud.smrzzt = #{smrzzt},</if>
+            <if test="swjgMc!=null and swjgMc != ''">uud.swjgMc = #{swjgMc},</if>
+            <if test="swjgDm!=null and swjgDm != ''">uud.swjgDm = #{swjgDm},</if>
+            <if test="lastUpdate!=null">uud.lastUpdate = #{lastUpdate},</if>
+            <if test="roleId!=null and roleId != ''">uud.roleId = #{roleId}</if>
         </set>
         where uud.userId = #{userId}
         and uud.djxh = #{djxh}

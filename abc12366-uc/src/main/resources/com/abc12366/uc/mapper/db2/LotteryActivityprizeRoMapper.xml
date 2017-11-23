@@ -8,6 +8,7 @@
         (select b.name from uc_lottery b where b.id=z.lotteryId) as lotteryName,
         (select c.image from uc_lottery c where c.id=z.lotteryId) as lotteryImage,
         (select d.noluck from uc_lottery d where d.id=z.lotteryId) as noluck,
+        (select e.send from uc_lottery e where e.id=z.lotteryId) as lotterySend,
         lastTime
         from uc_lottery_activityprize z
         <where>

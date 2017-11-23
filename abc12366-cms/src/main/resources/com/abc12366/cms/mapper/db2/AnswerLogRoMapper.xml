@@ -150,5 +150,17 @@
         </if>
     </select>
 
+    <!-- 查询（浏览统计总数） -->
+    <select id="selectldtcnt" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(id) cnt FROM cms_paper_answer_log
+        WHERE 1=1
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+        <if test="userId != null and userId != ''">
+            AND userId = #{userId}
+        </if>
+    </select>
+
 
 </mapper>

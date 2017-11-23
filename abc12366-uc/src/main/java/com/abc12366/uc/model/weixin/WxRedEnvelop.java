@@ -67,9 +67,14 @@ public class WxRedEnvelop {
     private String sendStatus;
 
     /**
-     * 发送次数
+     * 二维码地址
      */
-    private Integer sendTimes;
+    private String url;
+
+    /**
+     * 业务ID
+     */
+    private String businessId;
 
     /**
      * 发送时间
@@ -101,13 +106,28 @@ public class WxRedEnvelop {
      */
     private String name;
 
+    /**
+     * 商户订单号
+     */
+    private String billno;
+
+    /**
+     * 微信昵称
+     */
+    private String wxnickname;
+
+    /**
+     * 手机号码
+     */
+    private String phone;
+
     public WxRedEnvelop() {
     }
 
     public WxRedEnvelop(String id, String secret, Date createTime, String activityId, Date startTime, Date endTime,
                         Double amount, String amountType, String probability, Double sendAmount, String sendStatus,
-                        Integer sendTimes, Date sendTime, String receiveStatus, Date receiveTime, String ip, String
-                                openId, String remark) {
+                        String url, Date sendTime, String receiveStatus, Date receiveTime, String ip, String
+                                openId, String remark, String billno, String businessId) {
         this.id = id;
         this.secret = secret;
         this.createTime = createTime;
@@ -119,13 +139,15 @@ public class WxRedEnvelop {
         this.probability = probability;
         this.sendAmount = sendAmount;
         this.sendStatus = sendStatus;
-        this.sendTimes = sendTimes;
+        this.url = url;
         this.sendTime = sendTime;
         this.receiveStatus = receiveStatus;
         this.receiveTime = receiveTime;
         this.ip = ip;
         this.openId = openId;
         this.remark = remark;
+        this.billno = billno;
+        this.businessId = businessId;
     }
 
     private WxRedEnvelop(Builder builder) {
@@ -140,13 +162,14 @@ public class WxRedEnvelop {
         setProbability(builder.probability);
         setSendAmount(builder.sendAmount);
         setSendStatus(builder.sendStatus);
-        setSendTimes(builder.sendTimes);
+        setUrl(builder.url);
         setSendTime(builder.sendTime);
         setReceiveStatus(builder.receiveStatus);
         setReceiveTime(builder.receiveTime);
         setIp(builder.ip);
         setOpenId(builder.openId);
         setRemark(builder.remark);
+        setBillno(builder.billno);
     }
 
     public String getId() {
@@ -237,14 +260,6 @@ public class WxRedEnvelop {
         this.sendStatus = sendStatus;
     }
 
-    public Integer getSendTimes() {
-        return sendTimes;
-    }
-
-    public void setSendTimes(Integer sendTimes) {
-        this.sendTimes = sendTimes;
-    }
-
     public Date getSendTime() {
         return sendTime;
     }
@@ -301,9 +316,49 @@ public class WxRedEnvelop {
         this.name = name;
     }
 
+    public String getBillno() {
+        return billno;
+    }
+
+    public void setBillno(String billno) {
+        this.billno = billno;
+    }
+
+    public String getWxnickname() {
+        return wxnickname;
+    }
+
+    public void setWxnickname(String wxnickname) {
+        this.wxnickname = wxnickname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
+    }
+
     @Override
     public String toString() {
-        return "RedEnvelop{" +
+        return "WxRedEnvelop{" +
                 "id='" + id + '\'' +
                 ", secret='" + secret + '\'' +
                 ", createTime=" + createTime +
@@ -313,15 +368,20 @@ public class WxRedEnvelop {
                 ", amount=" + amount +
                 ", amountType='" + amountType + '\'' +
                 ", probability='" + probability + '\'' +
+                ", remark='" + remark + '\'' +
                 ", sendAmount=" + sendAmount +
                 ", sendStatus='" + sendStatus + '\'' +
-                ", sendTimes=" + sendTimes +
+                ", url='" + url + '\'' +
+                ", businessId='" + businessId + '\'' +
                 ", sendTime=" + sendTime +
                 ", receiveStatus='" + receiveStatus + '\'' +
-                ", receiveTime='" + receiveTime + '\'' +
+                ", receiveTime=" + receiveTime +
                 ", ip='" + ip + '\'' +
                 ", openId='" + openId + '\'' +
-                ", remark='" + remark + '\'' +
+                ", name='" + name + '\'' +
+                ", billno='" + billno + '\'' +
+                ", wxnickname='" + wxnickname + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 
@@ -337,13 +397,15 @@ public class WxRedEnvelop {
         private String probability;
         private Double sendAmount;
         private String sendStatus;
-        private Integer sendTimes;
+        private String url;
+        private String businessId;
         private Date sendTime;
         private String receiveStatus;
         private Date receiveTime;
         private String ip;
         private String openId;
         private String remark;
+        private String billno;
 
         public Builder() {
         }
@@ -403,11 +465,6 @@ public class WxRedEnvelop {
             return this;
         }
 
-        public Builder sendTimes(Integer val) {
-            sendTimes = val;
-            return this;
-        }
-
         public Builder sendTime(Date val) {
             sendTime = val;
             return this;
@@ -435,6 +492,21 @@ public class WxRedEnvelop {
 
         public Builder remark(String val) {
             remark = val;
+            return this;
+        }
+
+        public Builder billno(String val) {
+            billno = val;
+            return this;
+        }
+
+        public Builder url(String val) {
+            url = val;
+            return this;
+        }
+
+        public Builder businessId(String val) {
+            businessId = val;
             return this;
         }
 

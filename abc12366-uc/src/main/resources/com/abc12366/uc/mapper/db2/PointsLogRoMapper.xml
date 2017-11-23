@@ -16,6 +16,16 @@
         </where>
         ORDER BY createTime DESC
     </select>
+    
+    <select id="selecttimes" resultType="int" parameterType="java.util.Map">
+       select count(*)
+       from uc_upoints_log uul left join uc_upoints_rule uur 
+       ON uul.ruleId = uur.id
+       where 
+          userId= #{userId}
+          and code=#{code}
+          and DATE_FORMAT(uul.createTime,#{tformat})=#{sendtime}
+    </select>
 
     <select id="selectListByUser" resultType="com.abc12366.uc.model.bo.PointsLogUcBO" parameterType="java.util.Map">
         SELECT uul.id id,

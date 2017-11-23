@@ -23,4 +23,9 @@
         where id=#{id}
     </select>
 
+    <select id="selectOneByExp" resultType="com.abc12366.uc.model.bo.ExperienceLevelBO" parameterType="java.lang.Integer">
+        SELECT id,name,minValue,uc_uexp_level.maxValue,topPerDay,status,lastUpdate,createTime,medal,medalIcon
+        from uc_uexp_level
+        where #{exp} BETWEEN uc_uexp_level.minValue AND uc_uexp_level.maxValue
+    </select>
 </mapper>

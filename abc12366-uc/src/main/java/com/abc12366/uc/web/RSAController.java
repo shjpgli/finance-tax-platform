@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.bo.RSAResponse;
 import com.abc12366.uc.wsbssoa.utils.RSA;
+
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import sun.misc.BASE64Encoder;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
+
 /**
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-09-05
@@ -23,7 +25,10 @@ import java.security.interfaces.RSAPublicKey;
 @RestController
 @RequestMapping(path = "/rsa", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class RSAController {
-
+	
+	
+	
+	
     /**
      * 获取组装PublicKey对象（公钥）所需参数接口
      * @return
@@ -33,6 +38,7 @@ public class RSAController {
         RSAResponse rsaResponse = new RSAResponse();
         try {
             RSAPublicKey publicKey = RSA.getDefaultPublicKey();
+            
             if (publicKey != null) {
                 rsaResponse.setCode("2000");
                 rsaResponse.setMessage("生成公钥成功");
@@ -60,7 +66,7 @@ public class RSAController {
         RSAResponse rsaResponse = new RSAResponse();
         try {
             RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
-            if (privateKey != null) {
+        	if (privateKey != null) {
                 rsaResponse.setCode("2000");
                 rsaResponse.setMessage("生成私钥成功");
                 rsaResponse.setFormat(privateKey.getFormat());

@@ -11,14 +11,14 @@
     </delete>
 
     <!--删除：根据主键ID和用户ID删除-->
-    <delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.UserAddress">
+    <delete id="deleteByIdAndUserId" parameterType="com.abc12366.uc.model.order.UserAddress">
         DELETE FROM uc_user_address
         WHERE id = #{id} and userId = #{userId}
     </delete>
 
 
     <!-- 添加 （匹配有值的字段）-->
-    <insert id="insert" parameterType="com.abc12366.uc.model.UserAddress">
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.UserAddress">
         INSERT INTO uc_user_address
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -100,7 +100,7 @@
     </insert>
 
     <!-- 修 改-->
-    <update id="update" parameterType="com.abc12366.uc.model.UserAddress">
+    <update id="update" parameterType="com.abc12366.uc.model.order.UserAddress">
         UPDATE uc_user_address
         <set>
             <if test="userId != null">

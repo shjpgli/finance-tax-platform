@@ -246,6 +246,14 @@ public class AnswerLogServiceImpl implements AnswerLogService {
     }
 
     @Override
+    public int selectdtcnt(Map<String, Object> map) {
+        //用户回答次数
+        int cnt = answerLogRoMapper.selectldtcnt(map);
+
+        return cnt;
+    }
+
+    @Override
     public List<AnswertjBO> selectListBysubjectsId(String subjectsId) {
 
         return answerRoMapper.selectListBysubjectsId(subjectsId);

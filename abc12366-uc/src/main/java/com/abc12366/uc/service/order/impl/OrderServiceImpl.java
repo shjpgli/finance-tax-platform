@@ -6,7 +6,7 @@ import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
-import com.abc12366.uc.model.ExpressComp;
+import com.abc12366.uc.model.order.ExpressComp;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointsLogBO;
@@ -820,46 +820,25 @@ public class OrderServiceImpl implements OrderService {
      */
     private void sendMemberMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
         User user = userRoMapper.selectOne(order.getUserId());
-        //查询会员特权-业务提醒
-        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
-        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        //查看业务提醒是否启用
-        if(findObj != null && findObj.getStatus()){
-            Message message = new Message();
-            message.setBusinessId(order.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            String content = RemindConstant.BUYING_MEMBERS_PREFIX.replaceAll("\\{#DATA.VIP\\}", orderProductBO.getName());
-            message.setContent(content);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setUserId(order.getUserId());
+        Message message = new Message();
+        message.setBusinessId(order.getOrderNo());
+        message.setBusiType(MessageConstant.SPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
+        String content = RemindConstant.BUYING_MEMBERS_PREFIX.replaceAll("\\{#DATA.VIP\\}", orderProductBO.getName());
+        message.setContent(content);
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        message.setUserId(order.getUserId());
 
-            //web消息
-            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
-                messageSendUtil.sendMessage(message, request);
-            }
-
-
-            //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", user.getId());
-                map.put("openId", user.getWxopenid());
-                map.put("first", "亲爱的" + user.getUsername() + "，恭喜您成功升级为 VIP 会员！");
-                map.put("remark", "感恩您的参与和支持，谢谢！。");
-                map.put("keyword1", user.getVipLevelName());
-                map.put("keyword2", orderProductBO.getName());
-                map.put("keyword3", DateUtils.dateToStr(new Date()));
-                templateService.templateSend("GrA5UnnYg39Rhs2nyDzwoFiYfmZh5sFkNXTZWGGmrkY", map);
-            }
-
-            //短信消息
-            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
-                sendPhoneMessage(request, content, user);
-            }
-        }
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", user.getId());
+        map.put("openId", user.getWxopenid());
+        map.put("first", "亲爱的" + user.getUsername() + "，恭喜您成功升级为 VIP 会员！");
+        map.put("remark", "感恩您的参与和支持，谢谢！。");
+        map.put("keyword1", user.getVipLevelName());
+        map.put("keyword2", orderProductBO.getName());
+        map.put("keyword3", DateUtils.dateToStr(new Date()));
+        String templateId = "GrA5UnnYg39Rhs2nyDzwoFiYfmZh5sFkNXTZWGGmrkY";
+        messageSendUtil.sendMsg(request, user, message,map,templateId);
     }
 
     /**
@@ -867,42 +846,26 @@ public class OrderServiceImpl implements OrderService {
      */
     private void sendPointsMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
         User user = userRoMapper.selectOne(order.getUserId());
-        //查询会员特权-业务提醒
-        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
-        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        //查看业务提醒是否启用
-        if(findObj != null && findObj.getStatus()){
-            Message message = new Message();
-            message.setBusinessId(order.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            String content = RemindConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user.getPoints()));
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setUserId(order.getUserId());
-            //web消息
-            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())){
-                messageSendUtil.sendMessage(message, request);
-            }
+        //组装web消息
+        Message message = new Message();
+        message.setBusinessId(order.getOrderNo());
+        message.setBusiType(MessageConstant.SPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
+        String content = RemindConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user.getPoints()));
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        message.setUserId(order.getUserId());
+        message.setContent(content);
 
-            //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", user.getId());
-                map.put("openId", user.getWxopenid());
-                map.put("first", "亲爱的"+user.getUsername()+"，你已兑换成功。");
-                map.put("remark", "感谢你的使用。");
-                map.put("keyword1", orderProductBO.getName());
-                map.put("keyword2", String.valueOf(order.getGiftPoints()));
-                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
-            }
-
-            //短信消息
-            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
-                sendPhoneMessage(request, content, user);
-            }
-        }
+        //组装微信消息
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", user.getId());
+        map.put("openId", user.getWxopenid());
+        map.put("first", "亲爱的"+user.getUsername()+"，你已兑换成功。");
+        map.put("remark", "感谢你的使用。");
+        map.put("keyword1", orderProductBO.getName());
+        map.put("keyword2", String.valueOf(order.getGiftPoints()));
+        String templateId = "mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU";
+        messageSendUtil.sendMsg(request, user, message,map,templateId);
     }
 
     /**
@@ -1083,66 +1046,33 @@ public class OrderServiceImpl implements OrderService {
 
             //查询用户信息
             User user = userRoMapper.selectOne(data.getUserId());
-            //查询会员特权
-            VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-            obj.setLevelId(user.getVipLevel());
-            obj.setPrivilegeId("A_YWTX");
-            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-            if(findObj != null && findObj.getStatus()){
-                //发送消息
-                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
-                if (expressComp == null) {
-                    LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
-                    throw new ServiceException(4102, "物流公司查询失败");
-                }
-                Message message = new Message();
-                String content = RemindConstant.DELIVER_GOODS_PREFIX+order.getOrderNo()+ RemindConstant.DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
 
-                //web消息
-                if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                    message.setBusinessId(data.getOrderNo());
-                    message.setBusiType(MessageConstant.SPDD);
-                    message.setType(MessageConstant.SYS_MESSAGE);
-                    message.setContent(content);
-                    message.setUserId(data.getUserId());
-                    messageSendUtil.sendMessage(message, request);
-                }
-                if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
-                    //发送微信消息
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("userId", user.getId());
-                    map.put("openId", user.getWxopenid());
-                    map.put("first", "你有新的订单提醒：");
-                    map.put("remark", "详情请登录财税平台查看。");
-                    map.put("keyword1", data.getOrderNo());
-                    map.put("keyword2", Utils.getAdminInfo().getNickname());
-                    map.put("keyword3", DateUtils.dateToStr(new Date()));
-                    templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
-                }
-                //发送短信
-                if(findObj.getVal3() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
-                    sendPhoneMessage(request, content, user);
-
-                }
+            //组装web消息
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
+            if (expressComp == null) {
+                LOGGER.warn("物流公司查询失败：{}", order.getExpressCompId());
+                throw new ServiceException(4102, "物流公司查询失败");
             }
+            Message message = new Message();
+            String content = RemindConstant.DELIVER_GOODS_PREFIX+order.getOrderNo()+ RemindConstant.DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
+            message.setBusinessId(data.getOrderNo());
+            message.setBusiType(MessageConstant.SPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
+            message.setContent(content);
+            message.setUserId(data.getUserId());
+
+            //发送微信消息
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("userId", user.getId());
+            map.put("openId", user.getWxopenid());
+            map.put("first", "你有新的订单提醒：");
+            map.put("remark", "详情请登录财税平台查看。");
+            map.put("keyword1", data.getOrderNo());
+            map.put("keyword2", Utils.getAdminInfo().getNickname());
+            map.put("keyword3", DateUtils.dateToStr(new Date()));
+            String templateId = "mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU";
+            messageSendUtil.sendMsg(request, user, message,map,templateId);
         }
-    }
-
-    /**
-     * 发送短信公告方法
-     * @param request
-     * @param content
-     * @param user
-     */
-    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
-        //发送短信
-        Map<String, String> maps = new HashMap<String, String>();
-        maps.put("var", content);
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        list.add(maps);
-
-        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
     }
 
     @Transactional("db1TxManager")
@@ -1156,56 +1086,36 @@ public class OrderServiceImpl implements OrderService {
         updOrder(order);
         insertOrderLog(Utils.getAdminId(), order.getOrderNo(), "5", orderOperationBO.getRemark(), "0");
 
+        //发送普通业务消息
+        ExpressComp expressComp = null;
+        if (order.getExpressCompId() != null && !"".equals(order.getExpressCompId())) {
+            expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
+        }
+        String content;
+        Message message = new Message();
+        message.setBusinessId(order.getOrderNo());
+        message.setBusiType(MessageConstant.SPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
+        if (expressComp != null) {
+            content = RemindConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
+            message.setContent(content);
+        } else {
+            content = RemindConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + RemindConstant.SUFFIX;
+            message.setContent(content);
+            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        }
 
         User user = userRoMapper.selectOne(order.getUserId());
-        //查询会员特权-业务提醒
-        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
-        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        //查看业务提醒是否启用
-        if(findObj != null && findObj.getStatus()){
-            //发送普通业务消息
-            ExpressComp expressComp = null;
-            if (order.getExpressCompId() != null && !"".equals(order.getExpressCompId())) {
-                expressComp = expressCompRoMapper.selectByPrimaryKey(order.getExpressCompId());
-            }
-            String content;
-            Message message = new Message();
-            message.setBusinessId(order.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            if (expressComp != null) {
-                content = RemindConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
-                message.setContent(content);
-            } else {
-                content = RemindConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + RemindConstant.SUFFIX;
-                message.setContent(content);
-                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            }
-            //web消息
-            if(findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                message.setUserId(order.getUserId());
-                messageSendUtil.sendMessage(message, request);
-            }
-            //微信消息
-            if(findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils.isNotEmpty(user.getWxopenid())){
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", user.getId());
-                map.put("openId", user.getWxopenid());
-                map.put("first", "你有新的订单提醒：");
-                map.put("remark", "详情请登录财税平台查看。");
-                map.put("keyword1", order.getOrderNo());
-                map.put("keyword2", Utils.getAdminInfo().getNickname());
-                map.put("keyword3", DateUtils.dateToStr(new Date()));
-                templateService.templateSend("mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU", map);
-            }
-
-            //短信消息
-            if(findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) && StringUtils.isNotEmpty(user.getPhone())){
-                sendPhoneMessage(request, content, user);
-            }
-        }
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", user.getId());
+        map.put("openId", user.getWxopenid());
+        map.put("first", "你有新的订单提醒：");
+        map.put("remark", "详情请登录财税平台查看。");
+        map.put("keyword1", order.getOrderNo());
+        map.put("keyword2", Utils.getAdminInfo().getNickname());
+        map.put("keyword3", DateUtils.dateToStr(new Date()));
+        String templateId = "mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU";
+        messageSendUtil.sendMsg(request, user, message,map,templateId);
 
     }
 
@@ -1378,6 +1288,17 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("订单只有在前台用户删除后，管理员才可以进行删除：{}", orderBO);
             throw new ServiceException(4140);
         }
+    }
+
+
+    @Override
+    public List<OrderStatisBO> statisOrderByStatus(Map<String, Object> map) {
+        return orderRoMapper.statisOrderByStatus(map);
+    }
+
+    @Override
+    public List<OrderStatisBO> statisOrderByMonth(Map<String, Object> map) {
+        return orderRoMapper.statisOrderByMonth(map);
     }
 
 }
