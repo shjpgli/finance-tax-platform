@@ -75,4 +75,11 @@ public interface UserRoMapper {
      * @return
      */
     List<UserStatisBO> statisUserByMonth(Map<String, Object> map);
+
+    /**
+     * 统计用户，统计维度为【天数】
+     * @param map
+     * @return
+     */
+    List<UserStatisBO> statisUserByDay(Map<String, Object> map);
 }
