@@ -41,6 +41,16 @@ public class WxRedEnvelopBO {
     @Length(min = 16, max = 64)
     private String activityId;
 
+    /**
+     * 业务ID
+     */
+    private String businessId;
+
+    /**
+     * 二维码地址
+     */
+    private String url;
+
     public String getId() {
         return id;
     }
@@ -73,6 +83,22 @@ public class WxRedEnvelopBO {
         this.activityId = activityId;
     }
 
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         return "WxRedEnvelopBO{" +
@@ -80,6 +106,8 @@ public class WxRedEnvelopBO {
                 ", secret='" + secret + '\'' +
                 ", createTime=" + createTime +
                 ", activityId='" + activityId + '\'' +
+                ", businessId='" + businessId + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

@@ -76,12 +76,14 @@ public class RedEnvelopController {
      * 根据活动ID生成口令
      *
      * @param activityId 活动ID
+     * @param businessId 业务ID
      * @return ResponseEntity
      */
     @GetMapping("/{activityId}")
-    public ResponseEntity insert(@PathVariable("activityId") String activityId) {
+    public ResponseEntity generateSecret(@PathVariable("activityId") String activityId,
+                                         @RequestParam(value = "businessId", required = false) String businessId) {
         LOGGER.info("{}", activityId);
-        WxRedEnvelopBO data = iActivityService.generateSecret(activityId);
+        WxRedEnvelopBO data = iActivityService.generateSecret(activityId, businessId);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
@@ -115,6 +117,24 @@ public class RedEnvelopController {
     public ResponseEntity gethbinfo(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
         WxRedEnvelop data = iActivityService.gethbinfo(id);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 根据业务ID查询微信红包信息
+     *
+     * @param activityId 红包活动ID
+     * @param businessId 业务ID
+     * @return ResponseEntity
+     */
+    @GetMapping("/{activityId}/{businessId}")
+    public ResponseEntity gethbinfo(@PathVariable("activityId") String activityId,
+                                    @PathVariable("businessId") String businessId) {
+        LOGGER.info("{},{}", activityId, businessId);
+        WxRedEnvelop data = iActivityService.gethbinfo(activityId, businessId);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);

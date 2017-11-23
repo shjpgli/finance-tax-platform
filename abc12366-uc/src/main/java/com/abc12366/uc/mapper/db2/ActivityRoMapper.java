@@ -26,7 +26,7 @@ public interface ActivityRoMapper {
 
     List<WxRedEnvelop> selectRedEnvelopList(WxRedEnvelop redEnvelop);
 
-    WxRedEnvelop selectRedEnvelopOne(String id);
+    WxRedEnvelop selectRedEnvelopOne(WxRedEnvelop redEnvelop);
 
     SentReceived selectSentReceivedCount(String activityId);
 

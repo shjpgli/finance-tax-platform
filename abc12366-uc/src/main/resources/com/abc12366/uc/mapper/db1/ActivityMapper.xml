@@ -10,7 +10,7 @@
 
     <sql id="Base_RedEnvelop_List">
         id, secret, createTime, activityId, startTime, endTime, amount, amountType, probability,
-        sendAmount, sendStatus, sendTimes, sendTime, receiveStatus, receiveTime, ip, openId, billno
+        sendAmount, sendStatus, url, sendTime, receiveStatus, receiveTime, ip, openId, billno, businessId
     </sql>
 
     <sql id="Base_LotteryLog_List">
@@ -60,8 +60,8 @@
         VALUES
         (#{id}, #{secret}, #{createTime}, #{activityId}, #{startTime}, #{endTime}, #{amount}, #{amountType},
         #{probability},
-        #{sendAmount}, #{sendStatus}, #{sendTimes}, #{sendTime}, #{receiveStatus}, #{receiveTime}, #{ip}, #{openId},
-        #{billno})
+        #{sendAmount}, #{sendStatus}, #{url}, #{sendTime}, #{receiveStatus}, #{receiveTime}, #{ip}, #{openId},
+        #{billno}, #{businessId})
     </insert>
 
     <insert id="batchGenerateSecret" parameterType="java.util.List">
@@ -71,8 +71,8 @@
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.id}, #{item.secret}, #{item.createTime}, #{item.activityId}, #{item.startTime}, #{item.endTime},
             #{item.amount}, #{item.amountType}, #{item.probability}, #{item.sendAmount}, #{item.sendStatus},
-            #{item.sendTimes}, #{item.sendTime}, #{item.receiveStatus}, #{item.receiveTime}, #{item.ip},
-            #{item.openId}, #{item.billno})
+            #{item.url}, #{item.sendTime}, #{item.receiveStatus}, #{item.receiveTime}, #{item.ip},
+            #{item.openId}, #{item.billno}, #{businessId})
         </foreach>
     </insert>
 
@@ -82,7 +82,7 @@
             <if test="createTime != null">createTime = #{createTime},</if>
             <if test="sendAmount != null">sendAmount = #{sendAmount},</if>
             <if test="sendStatus != null">sendStatus = #{sendStatus},</if>
-            <if test="sendTimes != null">sendTimes = #{sendTimes},</if>
+            <if test="url != null">url = #{url},</if>
             <if test="startTime != null">startTime = #{startTime},</if>
             <if test="endTime != null">endTime = #{endTime},</if>
             <if test="amount != null">amount = #{amount},</if>
