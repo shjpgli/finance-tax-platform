@@ -337,9 +337,9 @@ public class RSA {
             return null;
         }
         byte[] data = plaintext.getBytes();
-        KeyPair keyPair = getKeyPair();
+        //KeyPair keyPair = getKeyPair();
         try {
-            byte[] en_data = encrypt((RSAPublicKey)keyPair.getPublic(), data);
+            byte[] en_data = encrypt((RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(new BASE64Decoder().decodeBuffer(publickKeyStr))), data);
             return new String(Hex.encodeHex(en_data));
         } catch(NullPointerException ex) {
             LOGGER.error("keyPair cannot be null.");
@@ -386,10 +386,12 @@ public class RSA {
         if(StringUtils.isBlank(encrypttext)) {
             return null;
         }
-        KeyPair keyPair = getKeyPair();
+        //KeyPair keyPair = getKeyPair();
         try {
             byte[] en_data = Hex.decodeHex(encrypttext.toCharArray());
-            byte[] data = decrypt((RSAPrivateKey)keyPair.getPrivate(), en_data);
+            //byte[] data = decrypt((RSAPrivateKey)keyPair.getPrivate(), en_data);
+            
+            byte[] data = decrypt((RSAPrivateKey)keyFactory.generatePrivate(new PKCS8EncodedKeySpec(new BASE64Decoder().decodeBuffer(privateKeyStr))), en_data);
             return new String(data);
         } catch(NullPointerException ex) {
             LOGGER.error("keyPair cannot be null.");
