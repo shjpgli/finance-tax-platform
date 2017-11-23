@@ -5,6 +5,7 @@ import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserListBO;
+import com.abc12366.uc.model.bo.UserStatisBO;
 import com.abc12366.uc.model.bo.UserSimpleInfoBO;
 import org.apache.ibatis.annotations.Param;
 
@@ -68,4 +69,10 @@ public interface UserRoMapper {
      * @return 用户基本表信息
      */
     User selectUserById(User user);
+    /**
+     * 统计用户，统计维度为【月份】
+     * @param map
+     * @return
+     */
+    List<UserStatisBO> statisUserByMonth(Map<String, Object> map);
 }

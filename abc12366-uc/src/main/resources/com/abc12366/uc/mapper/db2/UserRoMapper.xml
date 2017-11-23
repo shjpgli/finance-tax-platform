@@ -90,6 +90,9 @@
             <if test="id != null and id != ''">
                 id=#{id}
             </if>
+            <if test="wxopenid != null and wxopenid != ''">
+                wxopenid=#{wxopenid}
+            </if>
         </where>
     </select>
 
@@ -250,5 +253,26 @@
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,uu.oldId
         from uc_user uu
         where phone=#{phone}
+    </select>
+
+    <select id="statisUserByMonth" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
+        select DATE_FORMAT(createTime,'%Y-%m') months ,count(id) count from uc_user
+        <where>
+            <if test=" tradeMethod != null and tradeMethod != ''">
+                and tradeMethod = #{tradeMethod}
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
+            </if>
+        </where>
+        GROUP BY months
     </select>
 </mapper>

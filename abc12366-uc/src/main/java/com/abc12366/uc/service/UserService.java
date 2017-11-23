@@ -161,5 +161,12 @@ public interface UserService {
      * @param user 用户条件
      * @return 用户基本表信息
      */
+
     User selectUserById(User user);
+    /**
+     * 统计用户，统计维度为【月份】
+     * @param map
+     * @return
+     */
+    List<UserStatisBO> statisUserByMonth(Map<String, Object> map);
 }
