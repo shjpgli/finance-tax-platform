@@ -22,7 +22,7 @@
             <if test="userId != null and userId != ''">
                 userId = #{userId}
             </if>
-            <if test="realName != null and reamName != ''">
+            <if test="realName != null and realName != ''">
                 and realName = #{realName}
             </if>
             <if test="validStatus != null and validStatus != ''">
