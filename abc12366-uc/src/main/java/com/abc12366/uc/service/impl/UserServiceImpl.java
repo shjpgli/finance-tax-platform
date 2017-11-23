@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
@@ -14,6 +15,7 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
+import com.ctc.wstx.util.DataUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -768,6 +770,15 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<UserStatisBO> statisUserByMonth(Map<String, Object> map) {
-        return userRoMapper.statisUserByMonth(map);
+        int day = 0;
+        if(map.get("startTime") != null && map.get("endTime") != null){
+            day = DateUtils.differentDaysByMillisecond((Date)map.get("startTime"),(Date)map.get("endTime"));
+        }
+        //未超过30天则按天显示统计数，否则按月显示统计数
+        if(day > 31){
+            return userRoMapper.statisUserByMonth(map);
+        }else{
+            return userRoMapper.statisUserByDay(map);
+        }
     }
 }
