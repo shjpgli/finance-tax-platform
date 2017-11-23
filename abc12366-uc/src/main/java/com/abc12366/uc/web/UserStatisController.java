@@ -3,6 +3,9 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserSimpleInfoBO;
 import com.abc12366.uc.model.bo.UserStatisBO;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.StringUtil;
@@ -42,7 +45,7 @@ public class UserStatisController {
      * @return
      */
     @GetMapping(path = "/month")
-    public ResponseEntity statisOrder(@RequestParam(value = "startTime", required = false) String startTime,
+    public ResponseEntity statisUser(@RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime) {
         Map<String,Object> map = new HashMap<>();
         if (startTime != null && !"".equals(startTime)) {
@@ -54,6 +57,32 @@ public class UserStatisController {
 
         List<UserStatisBO> orderList = userService.statisUserByMonth(map);
         PageInfo<UserStatisBO> pageInfo = new PageInfo<>(orderList);
+        LOGGER.info("{}", orderList);
+        return (orderList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 统计用户，列表查询
+     *
+     * @param startTime  开始时间
+     * @param endTime  结束时间
+     * @return
+     */
+    @GetMapping(path = "/list")
+    public ResponseEntity statisUserList(@RequestParam(value = "startTime", required = false) String startTime,
+                                      @RequestParam(value = "endTime", required = false) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+
+        List<UserSimpleInfoBO> orderList = userService.statisUserList(map);
+        PageInfo<UserSimpleInfoBO> pageInfo = new PageInfo<>(orderList);
         LOGGER.info("{}", orderList);
         return (orderList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :

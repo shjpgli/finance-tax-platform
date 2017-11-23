@@ -775,10 +775,17 @@ public class UserServiceImpl implements UserService {
             day = DateUtils.differentDaysByMillisecond((Date)map.get("startTime"),(Date)map.get("endTime"));
         }
         //未超过30天则按天显示统计数，否则按月显示统计数
-        if(day > 31){
-            return userRoMapper.statisUserByMonth(map);
+        if(day <= 31){
+            map.put("dateFormat", "%Y-%m-%d");
+            return userRoMapper.statisUserByDay(map);
         }else{
+            map.put("dateFormat", "%Y-%m");
             return userRoMapper.statisUserByDay(map);
         }
+    }
+
+    @Override
+    public List<UserSimpleInfoBO> statisUserList(Map<String, Object> map) {
+        return userRoMapper.statisUserList(map);
     }
 }
