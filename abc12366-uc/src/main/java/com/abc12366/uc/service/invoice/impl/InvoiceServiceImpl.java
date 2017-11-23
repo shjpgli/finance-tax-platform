@@ -869,14 +869,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     /**
      * 获取微信红包字典信息
      */
-    private String selectWechatPassword(String dictId) {
+    private String selectWechatPassword(String dictId, String businessId) {
         Dict dict = new Dict();
         dict.setDictId(dictId);
         dict = dictRoMapper.selectOne(dict);
         String password = "";
         if(dict != null){
             password = dict.getFieldValue();
-            WxRedEnvelopBO data = iActivityService.generateSecret(password);
+            WxRedEnvelopBO data = iActivityService.generateSecret(password, businessId);
             if(data != null && data.getSecret() != null){
                 password = data.getSecret();
             }
@@ -966,7 +966,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         String redPackage = "";
         if(isRedPackage != null && "1".equals(isRedPackage)){
             //获取微信红包信息
-            redPackage = RemindConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",selectWechatPassword("wechat_hongbao"));
+            redPackage = RemindConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",
+                    selectWechatPassword("wechat_hongbao", invoiceBO.getId()));
         }
 
         //发送消息

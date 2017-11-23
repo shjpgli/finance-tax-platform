@@ -5,6 +5,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.UserStatisBO;
 import com.abc12366.uc.service.UserService;
+import com.abc12366.uc.util.StringUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

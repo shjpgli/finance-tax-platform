@@ -72,9 +72,10 @@ public interface IActivityService {
      * 生成红包口令
      *
      * @param activityId 活动ID
+     * @param businessId 业务ID
      * @return WxRedEnvelopBO
      */
-    WxRedEnvelopBO generateSecret(String activityId);
+    WxRedEnvelopBO generateSecret(String activityId, String businessId);
 
     /**
      * 抽奖
@@ -101,6 +102,15 @@ public interface IActivityService {
      * @return WxRedEnvelop
      */
     WxRedEnvelop gethbinfo(String id);
+
+    /**
+     * 根据业务ID查询微信红包信息
+     *
+     * @param activityId 红包活动ID
+     * @param businessId 业务ID
+     * @return WxRedEnvelop
+     */
+    WxRedEnvelop gethbinfo(String activityId, String businessId);
 
     /**
      * 导入红包数据
