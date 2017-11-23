@@ -36,10 +36,7 @@ public class UserHkjController {
         LOGGER.info("-----------------------------------{}", apptoken);
 
         // token校验
-//        boolean isAuth = authService.isAuthentication(apptoken, request);
-//        if (!isAuth) {
-//            return ResponseEntity.ok().build();
-//        }
+        authService.isAuthentication(apptoken, request);
         // 根据用户token获取用户
         UserBO userBO = userService.authAndRefreshToken(apptoken);
         UserHkj userHkj = new UserHkj();
