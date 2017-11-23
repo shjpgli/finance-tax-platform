@@ -90,6 +90,7 @@
             questionId,COUNT(id) as acount
             FROM
             cms_paper_access_log
+            GROUP BY questionId
         ) AS ac on ac.questionId = an.questionId
         WHERE
         an.questionId = #{questionId}
