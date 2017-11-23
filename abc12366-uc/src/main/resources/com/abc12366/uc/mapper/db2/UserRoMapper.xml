@@ -255,8 +255,8 @@
         where phone=#{phone}
     </select>
 
-    <select id="statisUserByMonth" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
-        select DATE_FORMAT(createTime,'%Y-%m') months ,count(id) count from uc_user
+    <select id="statisUserByDay" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
+        select DATE_FORMAT(createTime,#{dateFormat}) days ,count(id) count from uc_user
         <where>
             <if test="startTime != null">
                 <![CDATA[
@@ -267,24 +267,6 @@
             <if test="endTime != null">
                 <![CDATA[
               and date_format(createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
-              ]]>
-            </if>
-        </where>
-        GROUP BY months
-    </select>
-
-    <select id="statisUserByDay" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
-        select DATE_FORMAT(createTime,'%Y-%m-%d') days ,count(id) count from uc_user
-        <where>
-            <if test="startTime != null">
-                <![CDATA[
-              and date_format(createTime, '%Y-%m-%d %h:%i:%s') >= date_format(#{startTime}, '%Y-%m-%d %h:%i:%s')
-
-                ]]>
-            </if>
-            <if test="endTime != null">
-                <![CDATA[
-              and date_format(createTime, '%Y-%m-%d %h:%i:%s') <= date_format(#{endTime}, '%Y-%m-%d %h:%i:%s')
               ]]>
             </if>
         </where>

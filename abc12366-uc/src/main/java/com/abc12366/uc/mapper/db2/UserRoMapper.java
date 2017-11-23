@@ -69,15 +69,9 @@ public interface UserRoMapper {
      * @return 用户基本表信息
      */
     User selectUserById(User user);
-    /**
-     * 统计用户，统计维度为【月份】
-     * @param map
-     * @return
-     */
-    List<UserStatisBO> statisUserByMonth(Map<String, Object> map);
 
     /**
-     * 统计用户，统计维度为【天数】
+     * 统计用户，统计维度为【创建时间】
      * @param map
      * @return
      */
