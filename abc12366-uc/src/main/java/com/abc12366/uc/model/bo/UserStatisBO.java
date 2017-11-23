@@ -9,8 +9,18 @@ package com.abc12366.uc.model.bo;
  */
 public class UserStatisBO {
 
+    /**
+     * 条数
+     */
     private Integer count;
+    /**
+     * 月份
+     */
     private String months;
+    /**
+     * 天数
+     */
+    private String days;
 
     public Integer getCount() {
         return count;
@@ -26,5 +36,13 @@ public class UserStatisBO {
 
     public void setMonths(String months) {
         this.months = months;
+    }
+
+    public String getDays() {
+        return days;
+    }
+
+    public void setDays(String days) {
+        this.days = days;
     }
 }
