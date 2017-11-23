@@ -781,4 +781,9 @@ public class UserServiceImpl implements UserService {
             return userRoMapper.statisUserByDay(map);
         }
     }
+
+    @Override
+    public List<UserSimpleInfoBO> statisUserList(Map<String, Object> map) {
+        return userRoMapper.statisUserList(map);
+    }
 }
