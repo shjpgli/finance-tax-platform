@@ -8,6 +8,7 @@ import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,31 +56,17 @@ public class RealNameValidationController {
                                      @RequestParam(required = false) String validStatus,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}", username, page, size);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        if (StringUtils.isEmpty(username)) {
-            username = null;
-        }
-        if (StringUtils.isEmpty(realName)) {
-            realName = null;
-        }
-        if (StringUtils.isEmpty(phone)) {
-            phone = null;
-        }
-        if (StringUtils.isEmpty(validStatus)) {
-            validStatus = null;
-        }
+
         Map<String, Object> map = new HashMap<>();
         map.put("username", username);
         map.put("status", status);
         map.put("realName", realName);
         map.put("phone", phone);
         map.put("validStatus", validStatus);
-        List<UserExtendListBO> userExtendBOList = realNameValidationService.selectList(map);
-        return (userExtendBOList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userExtendBOList, "total", ((Page) userExtendBOList)
-                        .getTotal()));
+        LOGGER.info("{}:{}:{}", map, page, size);
+        List<UserExtendListBO> userExtendBOList = realNameValidationService.selectList(map, page, size);
+        PageInfo<UserExtendListBO> pageInfo = new PageInfo<>(userExtendBOList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     @PutMapping(path = "/{userId}/{validStatus}")
