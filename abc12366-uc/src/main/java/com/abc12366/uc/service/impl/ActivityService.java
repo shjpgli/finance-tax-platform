@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ActivityMapper;
@@ -113,7 +114,7 @@ public class ActivityService implements IActivityService {
      * 生成口令
      */
     @Override
-    public WxRedEnvelopBO generateSecret(String activityId) {
+    public WxRedEnvelopBO generateSecret(String activityId, String businessId) {
         WxActivity activity = selectOne(activityId);
         if (activity != null) {
             // 活动是否激活
@@ -131,6 +132,23 @@ public class ActivityService implements IActivityService {
                     .createTime(new Date())
                     .activityId(activity.getId())
                     .build();
+            if (StringUtils.isNotEmpty(businessId)) {
+                WxRedEnvelop wre = new WxRedEnvelop.Builder()
+                        .businessId(businessId)
+                        .activityId(activityId)
+                        .build();
+                wre = activityRoMapper.selectRedEnvelopOne(wre);
+                if (wre != null) {
+                    throw new ServiceException(6012);
+                } else {
+                    redEnvelop.setBusinessId(businessId);
+                    redEnvelop.setUrl(Constant.WEIXIn_LOTTERY
+                                    .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
+                                    .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
+                                    .replace("STATE", state(redEnvelop.getSecret(), redEnvelop.getActivityId()))
+                    );
+                }
+            }
             activityMapper.generateSecret(redEnvelop);
             WxRedEnvelopBO bo = new WxRedEnvelopBO();
             BeanUtils.copyProperties(redEnvelop, bo);
@@ -221,52 +239,6 @@ public class ActivityService implements IActivityService {
         return null;
     }
 
-    /**
-     * 开始抽奖
-     *
-     * @param activity   红包活动信息
-     * @param redEnvelop 红包信息
-     * @param now        同步时间
-     */
-    private void lottery(WxActivity activity, WxRedEnvelop redEnvelop, Date now) {
-        String probabilityStr = activity.getProbability();
-        if (probabilityStr.contains("%")) {
-            probabilityStr = probabilityStr.replaceAll("%", "");
-            Double probability = Double.valueOf(probabilityStr) / 100;
-            LOGGER.info("开始抽奖");
-            // 中奖
-            if (inProbability(probability)) {
-                LOGGER.info("中奖:{}", redEnvelop.getSecret());
-                redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
-                // 已中奖未发送
-                redEnvelop.setSendStatus("0");
-                redEnvelop.setSendTime(now);
-                redEnvelop.setStartTime(activity.getStartTime());
-                redEnvelop.setEndTime(activity.getEndTime());
-                redEnvelop.setAmount(activity.getAmount());
-                redEnvelop.setAmountType(activity.getAmountType());
-                redEnvelop.setProbability(activity.getProbability());
-                redEnvelop.setBillno(billno());
-                activityMapper.updateRedEnvelop(redEnvelop);
-
-                LOGGER.info("发送微信红包");
-                send(redEnvelop.getId());
-            } else { // 未中奖
-                LOGGER.info("未中奖:{}", redEnvelop.getSecret());
-                redEnvelop.setReceiveStatus("NOT_WINNING");
-                redEnvelop.setReceiveTime(now);
-                redEnvelop.setStartTime(activity.getStartTime());
-                redEnvelop.setEndTime(activity.getEndTime());
-                redEnvelop.setAmount(activity.getAmount());
-                redEnvelop.setAmountType(activity.getAmountType());
-                redEnvelop.setProbability(activity.getProbability());
-                activityMapper.updateRedEnvelop(redEnvelop);
-            }
-        } else {
-            throw new ServiceException(5000);
-        }
-    }
-
     @Override
     public List<WxRedEnvelop> selectRedEnvelopList(WxRedEnvelop redEnvelop, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -287,37 +259,20 @@ public class ActivityService implements IActivityService {
 
     @Override
     public WxRedEnvelop gethbinfo(String id) {
-        WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
-        if (redEnvelop != null && StringUtils.isNotEmpty(redEnvelop.getBillno())) {
-            GetRedPack grp = new GetRedPack.Builder()
-                    .nonce_str(redEnvelop.getId())
-                    .mch_billno(redEnvelop.getBillno())
-                    .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
-                    .appid(SpringCtxHolder.getProperty("abc.appid"))
-                    .bill_type("MCHT")
-                    .build();
-            grp.setSign(SignUtil.signKey(grp));
-            GetRedPackResp rpp = WxMchConnectFactory.post(WechatUrl.GETHBINFO, null, grp, GetRedPackResp.class);
-            if (rpp != null) {
-                // 发送请求成功
-                if ("SUCCESS".equals(rpp.getReturn_code())) {
-                    // 发红包成功
-                    if ("SUCCESS".equals(rpp.getResult_code())) {
-                        if (!"1".equals(redEnvelop.getSendStatus())) {
-                            redEnvelop.setSendStatus("1");
-                        }
-                        redEnvelop.setReceiveStatus(rpp.getStatus());
-                        redEnvelop.setReceiveTime(rpp.getRcv_time());
-                        redEnvelop.setRemark(rpp.getErr_code_des());
-                        activityMapper.updateRedEnvelop(redEnvelop);
-                    } else {
-                        throw new ServiceException(rpp.getResult_code(), rpp.getErr_code_des());
-                    }
-                } else {
-                    throw new ServiceException(rpp.getReturn_code(), rpp.getReturn_msg());
-                }
-            }
-        }
+        WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder().id(id).build();
+        redEnvelop = activityRoMapper.selectRedEnvelopOne(redEnvelop);
+        getHbInfo(redEnvelop);
+        return redEnvelop;
+    }
+
+    @Override
+    public WxRedEnvelop gethbinfo(String activityId, String businessId) {
+        WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
+                .activityId(activityId)
+                .businessId(businessId)
+                .build();
+        redEnvelop = activityRoMapper.selectRedEnvelopOne(redEnvelop);
+        getHbInfo(redEnvelop);
         return redEnvelop;
     }
 
@@ -342,7 +297,8 @@ public class ActivityService implements IActivityService {
 
     @Override
     public WxRedEnvelop send(String id) {
-        WxRedEnvelop redEnvelop = activityRoMapper.selectRedEnvelopOne(id);
+        WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder().id(id).build();
+        redEnvelop = activityRoMapper.selectRedEnvelopOne(redEnvelop);
         // 重新发送状态为【0-未发送、2-发送失败】的记录
         if (redEnvelop != null && StringUtils.isNotEmpty(redEnvelop.getBillno())) {
             WxActivity activity = selectOne(redEnvelop.getActivityId());
@@ -394,11 +350,12 @@ public class ActivityService implements IActivityService {
 
     @Override
     public void deleteSecret(String id) {
-        WxRedEnvelop wxRedEnvelop = activityRoMapper.selectRedEnvelopOne(id);
+        WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder().id(id).build();
+        redEnvelop = activityRoMapper.selectRedEnvelopOne(redEnvelop);
         // 如果接收状态、发送状态都为空值，则为没有抽奖的口令
-        if (wxRedEnvelop != null &&
-                StringUtils.isEmpty(wxRedEnvelop.getReceiveStatus()) &&
-                StringUtils.isEmpty(wxRedEnvelop.getSendStatus())) {
+        if (redEnvelop != null &&
+                StringUtils.isEmpty(redEnvelop.getReceiveStatus()) &&
+                StringUtils.isEmpty(redEnvelop.getSendStatus())) {
             activityMapper.deleteSecret(id);
         } else {
             throw new ServiceException(6010);
@@ -409,6 +366,90 @@ public class ActivityService implements IActivityService {
     public void batchDeleteSecret(List<Id> ids) {
         for (Id id : ids) {
             deleteSecret(id.getId());
+        }
+    }
+
+    /**
+     * 开始抽奖
+     *
+     * @param activity   红包活动信息
+     * @param redEnvelop 红包信息
+     * @param now        同步时间
+     */
+    private void lottery(WxActivity activity, WxRedEnvelop redEnvelop, Date now) {
+        String probabilityStr = activity.getProbability();
+        if (probabilityStr.contains("%")) {
+            probabilityStr = probabilityStr.replaceAll("%", "");
+            Double probability = Double.valueOf(probabilityStr) / 100;
+            LOGGER.info("开始抽奖");
+            // 中奖
+            if (inProbability(probability)) {
+                LOGGER.info("中奖:{}", redEnvelop.getSecret());
+                redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
+                // 已中奖未发送
+                redEnvelop.setSendStatus("0");
+                redEnvelop.setSendTime(now);
+                redEnvelop.setStartTime(activity.getStartTime());
+                redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setAmount(activity.getAmount());
+                redEnvelop.setAmountType(activity.getAmountType());
+                redEnvelop.setProbability(activity.getProbability());
+                redEnvelop.setBillno(billno());
+                activityMapper.updateRedEnvelop(redEnvelop);
+
+                LOGGER.info("发送微信红包");
+                send(redEnvelop.getId());
+            } else { // 未中奖
+                LOGGER.info("未中奖:{}", redEnvelop.getSecret());
+                redEnvelop.setReceiveStatus("NOT_WINNING");
+                redEnvelop.setReceiveTime(now);
+                redEnvelop.setStartTime(activity.getStartTime());
+                redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setAmount(activity.getAmount());
+                redEnvelop.setAmountType(activity.getAmountType());
+                redEnvelop.setProbability(activity.getProbability());
+                activityMapper.updateRedEnvelop(redEnvelop);
+            }
+        } else {
+            throw new ServiceException(5000);
+        }
+    }
+
+    /**
+     * 同步微信红包信息
+     *
+     * @param redEnvelop 红包信息
+     */
+    private void getHbInfo(WxRedEnvelop redEnvelop) {
+        if (redEnvelop != null && StringUtils.isNotEmpty(redEnvelop.getBillno())) {
+            GetRedPack grp = new GetRedPack.Builder()
+                    .nonce_str(redEnvelop.getId())
+                    .mch_billno(redEnvelop.getBillno())
+                    .mch_id(SpringCtxHolder.getProperty("abc.mch_id"))
+                    .appid(SpringCtxHolder.getProperty("abc.appid"))
+                    .bill_type("MCHT")
+                    .build();
+            grp.setSign(SignUtil.signKey(grp));
+            GetRedPackResp rpp = WxMchConnectFactory.post(WechatUrl.GETHBINFO, null, grp, GetRedPackResp.class);
+            if (rpp != null) {
+                // 发送请求成功
+                if ("SUCCESS".equals(rpp.getReturn_code())) {
+                    // 发红包成功
+                    if ("SUCCESS".equals(rpp.getResult_code())) {
+                        if (!"1".equals(redEnvelop.getSendStatus())) {
+                            redEnvelop.setSendStatus("1");
+                        }
+                        redEnvelop.setReceiveStatus(rpp.getStatus());
+                        redEnvelop.setReceiveTime(rpp.getRcv_time());
+                        redEnvelop.setRemark(rpp.getErr_code_des());
+                        activityMapper.updateRedEnvelop(redEnvelop);
+                    } else {
+                        throw new ServiceException(rpp.getResult_code(), rpp.getErr_code_des());
+                    }
+                } else {
+                    throw new ServiceException(rpp.getReturn_code(), rpp.getReturn_msg());
+                }
+            }
         }
     }
 
@@ -509,5 +550,12 @@ public class ActivityService implements IActivityService {
     private String billno() {
         return SpringCtxHolder.getProperty("abc.mch_id") + DateUtils.getDataString()
                 + activityMapper.selectBillno("wxlottery");
+    }
+
+    /**
+     * 口令，活动ID编码
+     */
+    private static String state(String secret, String activityId) {
+        return Utils.encode(secret + "," + activityId);
     }
 }
