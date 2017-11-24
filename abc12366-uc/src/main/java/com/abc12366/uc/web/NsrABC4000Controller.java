@@ -44,13 +44,6 @@ public class NsrABC4000Controller {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping(path = "/update")
-//    public ResponseEntity update(@Valid @RequestBody ABC4000CallbackBO data) {
-//        LOGGER.info("{}", data);
-//        ResponseForAbc4000Simple response = nsrABC4000Service.update(data);
-//        return ResponseEntity.ok(response);
-//    }
-
     /**
      * 供外系统回调UC修改用户绑定关系数据
      * @param data

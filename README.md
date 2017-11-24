@@ -144,12 +144,12 @@ redis常用命令：
 * `abc12366-message`消息子系统，所以子项目需要发送消息都通过本项目
 * `pom.xml`maven项目管理依赖配置文件
 
-**在代码层面，原则上所有子项目除了依赖`abc12366-common`之外，相互之间不能存在依赖。**
+**在代码层面，原则上所有子项目除了依赖`abc12366-gateway`之外，相互之间不能存在依赖。**
 
-项目安装(在项目根路径)：
+开发环境项目安装(在项目根路径)，请确保application.properties的spring.profiles.active为dev：
 > mvn clean install
 
-客户端安装需要依赖服务端，在服务端没启动时，可以跳过测试安装：
+跳过测试安装：
 > mvn clean install -Dmaven.test.skip=true
 
 启动`abc12366-uc`：
@@ -160,15 +160,26 @@ redis常用命令：
 
 下面需要注意启动顺序，项目之间会有依赖；否则某些情况下可能会有警告。
 
-#### 数据库
+正式环境安装：
+因为项目同时安装在IDC和公司机房，两边的配置环境是不一样的；所以在打包项目时，要根据不同的配置打包。
+通过指定application.properties的spring.profiles.active的值确定机房环境：dev为项目开发环境，
+prod为IDC机房环境，comp为公司机房环境。每次打包都需要确认是否为正确的机房环境，除gateway项目外，
+其他4个项目都需要修改。比如修改为公司环境：
 
-项目使用mysql数据库，在开发阶段，系统会自动创建数据表、初始化数据，脚本在每个项目的`resources`目录下，`schema.sql`(数据表结构),
-`data.sql`(初始化数据)。系统发布阶段、或多人开发时相关的脚本需要全部注释。
+    # 在application.properties文件中，改为公司环境
+    spring.profiles.active=comp
+  
+
+在确认配置文件为正确的机房环境后，在项目根路径执行下面的命令：
+> mvn clean install
+
+命令执行完成后如果代码没问题会看到成功信息，可以在每个子项目的target文件下看到一个可执行jar文件，
+通过下面的命令查看jar是否打包成功：
+> java -jar ./abc12366-uc/target/abc12366-uc-1.0.0-SNAPSHOT.jar
 
 ### 接口测试
 
-推荐使用跨平台命令行方式的`curl`或基于chrome浏览器的图形化工具`postman`。由于postman工具需要科学上网科学上网才能在web store中下载，
-所以还需要一个科学上网工具[`lantern`](https://github.com/getlantern/lantern)。
+推荐使用跨平台命令行方式的`curl`或图形化工具`postman`。
 
 ### 涉及到的技术和框架
 
@@ -184,7 +195,7 @@ redis常用命令：
 - [x] 数据库[Mysql](https://www.mysql.com)
 - [x] 操作JSON[fastjson](https://github.com/alibaba/fastjson)
 
-### alipay-sdk安装
+### alipay-sdk, hnds-security安装
 
 在工程根目录执行：
 > mvn install:install-file -DgroupId=com.alipay -DartifactId=alipay-sdk -Dversion=20170324180803 -Dpackaging=jar -Dfile=alipay-sdk-java20170324180803.jar

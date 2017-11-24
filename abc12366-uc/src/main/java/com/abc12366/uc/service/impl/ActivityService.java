@@ -227,6 +227,8 @@ public class ActivityService implements IActivityService {
                 if (StringUtils.isNotEmpty(redEnvelop.getOpenId())) {
                     if (lotteryBO.getOpenId().equals(redEnvelop.getOpenId())) {
                         throw new ServiceException(6011);
+                    } else {
+                        throw new ServiceException(6013);
                     }
                 } else {
                     // 未参与抽奖用户开始抽奖

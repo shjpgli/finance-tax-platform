@@ -15,6 +15,9 @@ id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,rem
     <update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
         update uc_lottery_log
         <set>
+            <if test="address!=null">address=#{address},</if>
+            <if test="sendName!=null">sendName=#{sendName},</if>
+            <if test="endlqDate!=null">endlqDate=#{endlqDate},</if>
             <if test="activityId!=null">activityId=#{activityId},</if>
             <if test="endlqDate!=null">endlqDate=#{endlqDate},</if>
             <if test="lotteryId!=null">lotteryId=#{lotteryId},</if>
