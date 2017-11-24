@@ -12,7 +12,6 @@ import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
-import com.abc12366.uc.service.PrivilegeItemService;
 import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
@@ -71,9 +70,6 @@ public class UserBindServiceImpl implements UserBindService {
     private RSAService rsaService;
 
     @Autowired
-    private PrivilegeItemService privilegeItemService;
-
-    @Autowired
     private TodoTaskService todoTaskService;
 
     @Override
@@ -82,9 +78,6 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
         }
-
-        //是否已实名认证，未认证不允许做绑定
-//        isRealnameValidated(request);
 
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
@@ -122,7 +115,6 @@ public class UserBindServiceImpl implements UserBindService {
         }
 
         UserDzsb userDzsb = new UserDzsb();
-
         userDzsb.setId(Utils.uuid());
         Date date = new Date();
         userDzsb.setCreateTime(date);
@@ -289,9 +281,6 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4101);
         }
 
-        //是否已实名认证，未认证不允许做绑定
-//        isRealnameValidated(request);
-
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
         //bindLimit(userId);
@@ -380,9 +369,6 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-
-        //是否已实名认证，未认证不允许做绑定
-//        isRealnameValidated(request);
 
         UserHnds userHnds = new UserHnds();
         Date date = new Date();
