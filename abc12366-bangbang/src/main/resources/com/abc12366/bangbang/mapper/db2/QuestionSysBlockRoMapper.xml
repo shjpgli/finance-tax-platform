@@ -18,17 +18,19 @@
             WHEN t2.answer IS NOT NULL THEN t2.answer
             WHEN t3.title IS NOT NULL THEN CONCAT(t3.title,t3.describ)
             WHEN t4.commentTxt IS NOT NULL THEN  t4.commentTxt
+            WHEN t5.commentTxt IS NOT NULL THEN  t5.commentTxt
             END ) AS content
         FROM bb_question_sys_block t
         LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
-        LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
+        LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND t.sourceType = 'answer')
         LEFT JOIN bb_cheats t3 ON(t.sourceId=t3.id AND t.sourceType ='cheats')
         LEFT JOIN bb_cheats_comment t4 ON(t.sourceId=t4.id AND t.sourceType ='cheats_comment')
+        LEFT JOIN bb_question_comment t5 ON (t.sourceId=t5.id  AND t.sourceType='comment')
 
         JOIN abc12366_uc.uc_user t_user ON t.userId = t_user.id
         JOIN bb_question_classify t_classify ON t.classifyCode = t_classify.classifyCode
         ) AS temp
-        WHERE 1 = 1
+        WHERE content IS NOT NULL
 
         <if test="content != null and content != ''">
             AND temp.content like CONCAT('%',#{content},'%')

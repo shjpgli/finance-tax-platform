@@ -170,6 +170,7 @@ public class WxRedEnvelop {
         setOpenId(builder.openId);
         setRemark(builder.remark);
         setBillno(builder.billno);
+        setBusinessId(builder.businessId);
     }
 
     public String getId() {

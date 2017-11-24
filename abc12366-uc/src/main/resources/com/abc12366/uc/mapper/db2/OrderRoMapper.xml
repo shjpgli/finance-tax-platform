@@ -767,7 +767,7 @@
         LEFT JOIN uc_user u ON u.id = o.userId
         LEFT JOIN  uc_order_product t on t.orderNo = o.orderNo
         <where>
-            1 = 1
+            1 = 1 and o.orderStatus != '11'
             <if test=" user.id != null and user.id != '' ">
                 and u.id = #{user.id}
             </if>

@@ -30,7 +30,6 @@ public class PkgUtil extends BaseObject{
         String serviceId = map.get("serviceid").toUpperCase();
         if(serviceId.equalsIgnoreCase("TY11")){
             result = makeTiripPackageBytdpsTY11(makeTY11(map), serviceId, "CSZJ_NEW");
-//            result=requestBuild.doBuildRequestXml(serviceId, "qqqqqq", map.get("nsrsbh"), "201605", new String[]{"TY11"}, new String[]{makeTY11(map)});
         }
         if(serviceId.equalsIgnoreCase("TY03")){
             result = makeTiripPackageBytdpsTY03(makeTY03(map), serviceId, "CSZJ_NEW", map.get("NSRSBH"), map.get("OLDPASS"));
@@ -307,8 +306,6 @@ public class PkgUtil extends BaseObject{
         identity.setServiceId(serviceId);
         identity.setChannelId(yhmc);
         identity.setPassword(oldpwd);
-        //identity.setPassword(processBusinessPkgBytdps("qqqqqq", "abc",mm));
-//        identity.setPassword(codeUtiltdps.encodeContent(cryptutiltdps.encryptContent("qqqqqq".getBytes(), mm.getBytes())));
         tiripPackage.setIdentity(identity);
 
         // make ContentControl

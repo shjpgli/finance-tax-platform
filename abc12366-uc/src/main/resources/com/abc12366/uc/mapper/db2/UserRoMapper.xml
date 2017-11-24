@@ -255,12 +255,9 @@
         where phone=#{phone}
     </select>
 
-    <select id="statisUserByMonth" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
-        select DATE_FORMAT(createTime,'%Y-%m') months ,count(id) count from uc_user
+    <select id="statisUserByDay" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
+        select DATE_FORMAT(createTime,#{dateFormat}) days ,count(id) count from uc_user
         <where>
-            <if test=" tradeMethod != null and tradeMethod != ''">
-                and tradeMethod = #{tradeMethod}
-            </if>
             <if test="startTime != null">
                 <![CDATA[
               and date_format(createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
@@ -273,27 +270,26 @@
               ]]>
             </if>
         </where>
-        GROUP BY months
+        GROUP BY days
     </select>
 
-    <select id="statisUserByDay" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
-        select DATE_FORMAT(createTime,'%Y-%m') months ,count(id) count from uc_user
+    <select id="statisUserList" resultType="com.abc12366.uc.model.bo.UserSimpleInfoBO" parameterType="java.util.Map">
+        select u.id, u.nickName, u.userPicturePath, e.tags, e.signature, e.education,
+        e.graduate, e.occupation, e.income, e.careerDuration
+        from uc_user u
+        left join uc_user_extend e on e.userId = u.id
         <where>
-            <if test=" tradeMethod != null and tradeMethod != ''">
-                and tradeMethod = #{tradeMethod}
-            </if>
             <if test="startTime != null">
                 <![CDATA[
-              and date_format(createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+              and date_format(u.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
 
                 ]]>
             </if>
             <if test="endTime != null">
                 <![CDATA[
-              and date_format(createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              and date_format(u.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
               ]]>
             </if>
         </where>
-        GROUP BY months
     </select>
 </mapper>
