@@ -19,6 +19,17 @@ public class LotteryLogBO{
     /**活动结束时间*/
     private Date activityEndTime;
 
+    /**收件人号码*/
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -120,7 +131,7 @@ public class LotteryLogBO{
 
     private String remake;
     private String activityName;
-private String lotteryLevel;
+    private String lotteryLevel;
 
     public String getLotteryLevel() {
         return lotteryLevel;
@@ -144,7 +155,7 @@ private String lotteryLevel;
     public void setRemake(String remake) {
         this.remake = remake;
     }
-private String userName ;
+    private String userName ;
 
     public String getUserName() {
         return userName;
@@ -155,84 +166,84 @@ private String userName ;
     }
 
     /** key */
-private String id;
- /** 活动id */
-private String activityId;
- /** 奖品id */
-private String lotteryId;
- /** 抽奖时间 */
-private Date createTime;
- /** 奖品名称 */
-private String lotteryName;
- /** 是否中奖：0否，1是 */
-private Integer isluck;
- /** 领取状态 */
-private String state;
- /** 用户id */
-private String userId;
- /** 消耗积分 */
-private Integer upoint;
- /** ip */
-private String ip;
+    private String id;
+     /** 活动id */
+    private String activityId;
+     /** 奖品id */
+    private String lotteryId;
+     /** 抽奖时间 */
+    private Date createTime;
+     /** 奖品名称 */
+    private String lotteryName;
+     /** 是否中奖：0否，1是 */
+    private Integer isluck;
+     /** 领取状态 */
+    private String state;
+     /** 用户id */
+    private String userId;
+     /** 消耗积分 */
+    private Integer upoint;
+     /** ip */
+    private String ip;
 
-public String getId(){
-    return id;
-}
-public void setId(String id){
-   this.id = id;
-}
-public String getActivityId(){
-    return activityId;
-}
-public void setActivityId(String activityId){
-   this.activityId = activityId;
-}
-public String getLotteryId(){
-    return lotteryId;
-}
-public void setLotteryId(String lotteryId){
-   this.lotteryId = lotteryId;
-}
-public Date getCreateTime(){
-    return createTime;
-}
-public void setCreateTime(Date createTime){
-   this.createTime = createTime;
-}
-public String getLotteryName(){
-    return lotteryName;
-}
-public void setLotteryName(String lotteryName){
-   this.lotteryName = lotteryName;
-}
-public Integer getIsluck(){
-    return isluck;
-}
-public void setIsluck(Integer isluck){
-   this.isluck = isluck;
-}
-public String getState(){
-    return state;
-}
-public void setState(String state){
-   this.state = state;
-}
-public String getUserId(){
-    return userId;
-}
-public void setUserId(String userId){
-   this.userId = userId;
-}
-public Integer getUpoint(){
-    return upoint;
-}
-public void setUpoint(Integer upoint){
-   this.upoint = upoint;
-}
-public String getIp(){
-    return ip;
-}
-public void setIp(String ip){
-   this.ip = ip;
-}
+    public String getId(){
+        return id;
+    }
+    public void setId(String id){
+       this.id = id;
+    }
+    public String getActivityId(){
+        return activityId;
+    }
+    public void setActivityId(String activityId){
+       this.activityId = activityId;
+    }
+    public String getLotteryId(){
+        return lotteryId;
+    }
+    public void setLotteryId(String lotteryId){
+       this.lotteryId = lotteryId;
+    }
+    public Date getCreateTime(){
+        return createTime;
+    }
+    public void setCreateTime(Date createTime){
+       this.createTime = createTime;
+    }
+    public String getLotteryName(){
+        return lotteryName;
+    }
+    public void setLotteryName(String lotteryName){
+       this.lotteryName = lotteryName;
+    }
+    public Integer getIsluck(){
+        return isluck;
+    }
+    public void setIsluck(Integer isluck){
+       this.isluck = isluck;
+    }
+    public String getState(){
+        return state;
+    }
+    public void setState(String state){
+       this.state = state;
+    }
+    public String getUserId(){
+        return userId;
+    }
+    public void setUserId(String userId){
+       this.userId = userId;
+    }
+    public Integer getUpoint(){
+        return upoint;
+    }
+    public void setUpoint(Integer upoint){
+       this.upoint = upoint;
+    }
+    public String getIp(){
+        return ip;
+    }
+    public void setIp(String ip){
+       this.ip = ip;
+    }
  }
