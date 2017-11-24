@@ -6,10 +6,7 @@ import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendListBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
 import com.abc12366.uc.service.RealNameValidationService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +55,9 @@ public class RealNameValidationController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
 
         Map<String, Object> map = new HashMap<>();
+        if (!org.springframework.util.StringUtils.isEmpty(username)) {
+            username = username.toLowerCase().trim();
+        }
         map.put("username", username);
         map.put("status", status);
         map.put("realName", realName);
