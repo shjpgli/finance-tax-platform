@@ -261,7 +261,6 @@
             <if test="startTime != null">
                 <![CDATA[
               and date_format(createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
-
                 ]]>
             </if>
             <if test="endTime != null">
@@ -282,7 +281,6 @@
             <if test="startTime != null">
                 <![CDATA[
               and date_format(u.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
-
                 ]]>
             </if>
             <if test="endTime != null">
@@ -292,4 +290,35 @@
             </if>
         </where>
     </select>
+
+    <select id="statisUserCount" resultType="com.abc12366.uc.model.bo.UserLossRateBO" parameterType="java.util.Map">
+        select count(id) as userCount from uc_user
+        <where>
+            <if test="endTime != null">
+                <![CDATA[
+                and date_format(createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+                ]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="statisUserLossRateCount" resultType="com.abc12366.uc.model.bo.UserLossRateBO" parameterType="java.util.Map">
+        select count(u.id) as lossUserCount from uc_user u
+        ,uc_user_login_log g
+        <where>
+            g.userId = u.id
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(g.createTime, '%Y-%m') >= date_format(#{startTime}, '%Y-%m')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                and date_format(g.createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+                ]]>
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

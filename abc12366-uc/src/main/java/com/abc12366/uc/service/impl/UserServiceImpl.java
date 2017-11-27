@@ -33,6 +33,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -787,5 +788,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserSimpleInfoBO> statisUserList(Map<String, Object> map) {
         return userRoMapper.statisUserList(map);
+    }
+
+    @Override
+    public UserLossRateBO statisUserLossRate(Map<String, Object> map) {
+        UserLossRateBO userCount = userRoMapper.statisUserCount(map);
+        UserLossRateBO lossUserCount = userRoMapper.statisUserLossRateCount(map);
+        UserLossRateBO data = new UserLossRateBO();
+        if(userCount != null && userCount.getUserCount() != null && lossUserCount != null && lossUserCount.getLossUserCount() != null){
+            int notUserCount = userCount.getUserCount() - lossUserCount.getLossUserCount();
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            // 设置精确到小数点后2位
+            numberFormat.setMaximumFractionDigits(2);
+            String rate = numberFormat.format((float) notUserCount / (float) userCount.getUserCount() * 100);
+            data.setRate(rate);
+            data.setUserCount(userCount.getUserCount());
+            data.setLossUserCount(lossUserCount.getLossUserCount());
+        }
+        return data;
     }
 }

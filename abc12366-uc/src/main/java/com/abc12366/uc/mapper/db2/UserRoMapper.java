@@ -2,11 +2,7 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserListBO;
-import com.abc12366.uc.model.bo.UserStatisBO;
-import com.abc12366.uc.model.bo.UserSimpleInfoBO;
+import com.abc12366.uc.model.bo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -83,4 +79,18 @@ public interface UserRoMapper {
      * @return
      */
     List<UserSimpleInfoBO> statisUserList(Map<String, Object> map);
+
+    /**
+     * 用户登陆数
+     * @param map
+     * @return
+     */
+    UserLossRateBO statisUserLossRateCount(Map<String, Object> map);
+
+    /**
+     * 用户总数
+     * @param map
+     * @return
+     */
+    UserLossRateBO statisUserCount(Map<String, Object> map);
 }
