@@ -807,4 +807,33 @@ public class UserServiceImpl implements UserService {
         }
         return data;
     }
+
+    @Override
+    public UserLivenessYearBO userLiveness(String year) {
+        UserLivenessYearBO userLivenessYearBO = new UserLivenessYearBO();
+        for (int i = 0; i < 12; i++) {
+            Calendar start = Calendar.getInstance();
+            start.set(Integer.parseInt(year), i, 1, 0, 0, 0);
+            Calendar end = Calendar.getInstance();
+            end.set(Integer.parseInt(year), i + 1, 1, 0, 0, 0);
+            userLivenessYearBO.setMonth(i+1+"");
+            //先查出没有登录过的
+            List<UserLivenessMonthBO> monthNoLoginList = userRoMapper.userLivenessMonthNoLogin(start.getTime(), end.getTime());
+            //再查出登录过的并生序排列
+            List<UserLivenessMonthBO> monthList = userRoMapper.userLivenessMonth(start.getTime(),end.getTime());
+            List<UserLivenessMonthBO> list = new ArrayList<>();
+            list.addAll(monthNoLoginList);
+            list.addAll(monthList);
+            userLivenessYearBO.setUserLivenessMonthBOList(list);
+        }
+        return userLivenessYearBO;
+    }
+
+    @Override
+    public void userExpLevel(String year) {
+        Calendar start = Calendar.getInstance();
+        start.set(Integer.parseInt(year), 0, 1, 0, 0, 0);
+        Calendar end = Calendar.getInstance();
+        end.set(Integer.parseInt(year)+1, 0, 1, 0, 0, 0);
+    }
 }

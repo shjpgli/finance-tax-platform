@@ -183,4 +183,8 @@ public interface UserService {
      * @return
      */
     UserLossRateBO statisUserLossRate(Map<String, Object> map);
+
+    UserLivenessYearBO userLiveness(String year);
+
+    void userExpLevel(String year);
 }

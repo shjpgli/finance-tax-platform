@@ -321,4 +321,22 @@
     </select>
 
 
+    <select id="userLivenessMonthNoLogin" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessMonthBO">
+        SELECT c.id userId,c.nickname,c.userPicturePath,0 AS cou
+        FROM uc_user c
+        LEFT JOIN(SELECT d.userId FROM uc_user_login_log d
+            where <![CDATA[ d.createTime>=#{start} ]]>
+            <![CDATA[ and d.createTime<#{end} ]]>
+            ) e
+        ON c.id = e.userId WHERE e.userId IS NULL
+    </select>
+
+    <select id="userLivenessMonth" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessMonthBO">
+        SELECT a.userId,b.nickname,b.userPicturePath,a.cou FROM (
+          SELECT userId,COUNT(1) cou FROM uc_user_login_log
+          where <![CDATA[ createTime>=#{start} ]]>
+            <![CDATA[ and createTime<#{end} ]]>
+          GROUP BY userId
+          ORDER BY cou ASC) a JOIN uc_user b ON a.userId=b.id
+    </select>
 </mapper>

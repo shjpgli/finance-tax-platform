@@ -78,7 +78,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //发信息
         //1.系统消息
         String sysMsg = RemindConstant.UNREALNAME_SYS;
-        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "'>马上去实名认证。</a>";
+        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "'>马上去实名认证</a>";
         //2.微信消息
         Map<String, String> dataList = new HashMap<>();
         dataList.put("first", RemindConstant.UNREALNAME_WX_1);
@@ -110,7 +110,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //发信息
         //1.系统消息
         String sysMsg = RemindConstant.UNDO_TASK_SYS.replace("{#DATA}",""+undoTaskCount);
-        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/task.php'>马上做任务。</a>";
+        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/task.php'>马上做任务</a>";
         //2.微信消息,不做
         //3.短信消息，不做
         msgSendService.sendMsg(getUser(), sysMsg,skipUrl, null, null, null);
@@ -125,7 +125,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //发信息
         //1.系统消息
         String sysMsg = RemindConstant.UNDO_CHECK_SYS;
-        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/checkIn.php'>马上签到。</a>";
+        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/checkIn.php'>马上签到</a>";
         //2.微信消息,不做
         //3.短信消息，不做
         msgSendService.sendMsg(getUser(), sysMsg, skipUrl, null, null, null);

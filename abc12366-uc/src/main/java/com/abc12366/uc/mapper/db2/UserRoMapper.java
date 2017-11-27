@@ -93,4 +93,8 @@ public interface UserRoMapper {
      * @return
      */
     UserLossRateBO statisUserCount(Map<String, Object> map);
+
+    List<UserLivenessMonthBO> userLivenessMonthNoLogin(@Param("start")Date start, @Param("end")Date end);
+
+    List<UserLivenessMonthBO> userLivenessMonth(@Param("start")Date start, @Param("end")Date end);
 }
