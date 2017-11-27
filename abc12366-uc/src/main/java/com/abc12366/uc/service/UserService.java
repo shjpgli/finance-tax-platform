@@ -176,4 +176,8 @@ public interface UserService {
      * @return
      */
     List<UserSimpleInfoBO> statisUserList(Map<String, Object> map);
+
+    UserLivenessYearBO userLiveness(String year);
+
+    void userExpLevel(String year);
 }

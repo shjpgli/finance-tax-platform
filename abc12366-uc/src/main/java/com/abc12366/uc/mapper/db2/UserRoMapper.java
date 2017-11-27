@@ -2,13 +2,10 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserListBO;
-import com.abc12366.uc.model.bo.UserStatisBO;
-import com.abc12366.uc.model.bo.UserSimpleInfoBO;
+import com.abc12366.uc.model.bo.*;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -83,4 +80,8 @@ public interface UserRoMapper {
      * @return
      */
     List<UserSimpleInfoBO> statisUserList(Map<String, Object> map);
+
+    List<UserLivenessMonthBO> userLivenessMonthNoLogin(@Param("start")Date start, @Param("end")Date end);
+
+    List<UserLivenessMonthBO> userLivenessMonth(@Param("start")Date start, @Param("end")Date end);
 }

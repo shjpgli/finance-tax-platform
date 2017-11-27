@@ -771,14 +771,14 @@ public class UserServiceImpl implements UserService {
 
     public List<UserStatisBO> statisUserByMonth(Map<String, Object> map) {
         int day = 0;
-        if(map.get("startTime") != null && map.get("endTime") != null){
-            day = DateUtils.differentDaysByMillisecond((Date)map.get("startTime"),(Date)map.get("endTime"));
+        if (map.get("startTime") != null && map.get("endTime") != null) {
+            day = DateUtils.differentDaysByMillisecond((Date) map.get("startTime"), (Date) map.get("endTime"));
         }
         //未超过30天则按天显示统计数，否则按月显示统计数
-        if(day <= 31){
+        if (day <= 31) {
             map.put("dateFormat", "%Y-%m-%d");
             return userRoMapper.statisUserByDay(map);
-        }else{
+        } else {
             map.put("dateFormat", "%Y-%m");
             return userRoMapper.statisUserByDay(map);
         }
@@ -787,5 +787,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserSimpleInfoBO> statisUserList(Map<String, Object> map) {
         return userRoMapper.statisUserList(map);
+    }
+
+    @Override
+    public UserLivenessYearBO userLiveness(String year) {
+        UserLivenessYearBO userLivenessYearBO = new UserLivenessYearBO();
+        for (int i = 0; i < 12; i++) {
+            Calendar start = Calendar.getInstance();
+            start.set(Integer.parseInt(year), i, 1, 0, 0, 0);
+            Calendar end = Calendar.getInstance();
+            end.set(Integer.parseInt(year), i + 1, 1, 0, 0, 0);
+            userLivenessYearBO.setMonth(i+1+"");
+            //先查出没有登录过的
+            List<UserLivenessMonthBO> monthNoLoginList = userRoMapper.userLivenessMonthNoLogin(start.getTime(), end.getTime());
+            //再查出登录过的并生序排列
+            List<UserLivenessMonthBO> monthList = userRoMapper.userLivenessMonth(start.getTime(),end.getTime());
+            List<UserLivenessMonthBO> list = new ArrayList<>();
+            list.addAll(monthNoLoginList);
+            list.addAll(monthList);
+            userLivenessYearBO.setUserLivenessMonthBOList(list);
+        }
+        return userLivenessYearBO;
+    }
+
+    @Override
+    public void userExpLevel(String year) {
+        Calendar start = Calendar.getInstance();
+        start.set(Integer.parseInt(year), 0, 1, 0, 0, 0);
+        Calendar end = Calendar.getInstance();
+        end.set(Integer.parseInt(year)+1, 0, 1, 0, 0, 0);
     }
 }

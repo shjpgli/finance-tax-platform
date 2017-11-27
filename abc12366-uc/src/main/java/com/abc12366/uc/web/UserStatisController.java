@@ -3,12 +3,10 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserLivenessYearBO;
 import com.abc12366.uc.model.bo.UserSimpleInfoBO;
 import com.abc12366.uc.model.bo.UserStatisBO;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.util.StringUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,5 +85,44 @@ public class UserStatisController {
         return (orderList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户活跃度统计接口
+     * @param year 年份
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/liveness")
+    public ResponseEntity userLiveness(@RequestParam String year){
+        LOGGER.info("查询用户活跃度统计：{}", year);
+        UserLivenessYearBO userLivenessYearBO = userService.userLiveness(year);
+        LOGGER.info("查询用户活跃度统计结果返回：{}", userLivenessYearBO);
+        return ResponseEntity.ok(Utils.kv("dataList",userLivenessYearBO));
+    }
+
+    /**
+     * 用户经验值等级统计
+     * @param year 年份
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/explevel")
+    public ResponseEntity userExpLevel(@RequestParam String year){
+        LOGGER.info("查询用户经验值等级统计：{}", year);
+        userService.userExpLevel(year);
+        LOGGER.info("查询用户经验值等级统计结果返回：{}");
+        return ResponseEntity.ok(Utils.kv("dataList",null));
+    }
+
+    /**
+     * 用户会员等级统计
+     * @param year 年份
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/viplevel")
+    public ResponseEntity userVipLevel(@RequestParam String year){
+        LOGGER.info("查询用户活跃度统计：{}", year);
+        UserLivenessYearBO userLivenessYearBO = userService.userLiveness(year);
+        LOGGER.info("查询用户活跃度统计结果返回：{}", userLivenessYearBO);
+        return ResponseEntity.ok(Utils.kv("dataList",userLivenessYearBO));
     }
 }
