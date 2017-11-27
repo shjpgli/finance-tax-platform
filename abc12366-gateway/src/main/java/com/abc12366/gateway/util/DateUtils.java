@@ -106,6 +106,24 @@ public class DateUtils {
     }
 
     /**
+     * 字符串转换成日期，yyyy-MM
+     *
+     * @param str
+     * @return date
+     */
+    public static Date strToDateMonth(String str) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    /**
      * 字符串转换成日期
      *
      * @param str 日期字符串
@@ -134,6 +152,19 @@ public class DateUtils {
             return null;
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    /**
+     * 时间转String，yyyy-MM
+     * @param date
+     * @return
+     */
+    public static String dateToMonth(Date date) {
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
         return format.format(date);
     }
 
@@ -318,13 +349,26 @@ public class DateUtils {
     }
 
     /**
-     * 日期往后减去num天
+     * 日期往后减去num月
      *
      * @param num
      * @return
      */
     public static Date getAddMonth(int num) {
         Date date = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -num);
+        date = calendar.getTime();
+        return date;
+    }
+
+    /**
+     * 日期往后减去num月
+     * @param num
+     * @return
+     */
+    public static Date getAddMonth(Date date,int num) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, -num);
