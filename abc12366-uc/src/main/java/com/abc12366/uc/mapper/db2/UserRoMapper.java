@@ -93,4 +93,5 @@ public interface UserRoMapper {
      * @return
      */
     UserLossRateBO statisUserCount(Map<String, Object> map);
+
 }

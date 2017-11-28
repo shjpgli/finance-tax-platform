@@ -4,10 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserLossRateBO;
-import com.abc12366.uc.model.bo.UserSimpleInfoBO;
-import com.abc12366.uc.model.bo.UserStatisBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.StringUtil;
 import com.github.pagehelper.PageInfo;
@@ -113,6 +110,30 @@ public class UserStatisController {
         UserLossRateBO data = userService.statisUserLossRate(map);
 //        PageInfo<UserLossRateBO> pageInfo = new PageInfo<>(list);
         LOGGER.info("{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("data",data));
+    }
+
+    /**
+     * 用户留存率统计
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/reta")
+    public ResponseEntity statisUserRetainedRate(@RequestParam(value = "startTime", required = true) String startTime,
+                                                 @RequestParam(value = "endTime", required = true) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", startTime);
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", endTime);
+        }
+        Map<Object, Object> data = userService.statisUserRetainedRate(map);
+        //PageInfo< Map<Object, Object>> pageInfo = new PageInfo<>((List<Object>) list);
+        LOGGER.info("list{}", data);
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("data",data));

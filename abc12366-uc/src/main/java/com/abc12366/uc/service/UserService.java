@@ -183,4 +183,11 @@ public interface UserService {
      * @return
      */
     UserLossRateBO statisUserLossRate(Map<String, Object> map);
+
+    /**
+     *用户留存率统计
+     * @param map
+     * @return
+     */
+    Map<Object, Object> statisUserRetainedRate(Map<String, Object> map);
 }

@@ -807,4 +807,27 @@ public class UserServiceImpl implements UserService {
         }
         return data;
     }
+
+    @Override
+    public Map<Object, Object> statisUserRetainedRate(Map<String, Object> map) {
+        String number = "0,1,2,3,4,6,12,";
+        map.put("number",number);
+        //获取起止时间的月份数组
+        List<Date> dates = DateUtils.getMonthBetween((String)map.get("startTime"),(String)map.get("endTime"));
+        if(dates != null && dates.size() > 12){
+            LOGGER.info("起止时间不能超过12个月:" + dates);
+            throw new ServiceException(4926,"起止时间不能超过12个月");
+        }
+        Map<String, Object> inMap = new HashMap<>();
+        Map<Object, Object> outMap = new HashMap<>();
+        List<UserRetainedRateBO> bos;
+        for (Date date:dates){
+            bos = new ArrayList<>();
+            inMap.put("startTime",date);
+            inMap.put("number",number);
+            bos = userMapper.statisUserRetainedRate(inMap);
+            outMap.put(DateUtils.dateToString(date),bos);
+        }
+        return outMap;
+    }
 }
