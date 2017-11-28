@@ -18,6 +18,12 @@
             <if test="location!=null">
                 and location=#{location}
             </if>
+            <if test="username!=null">
+                and username=#{username}
+            </if>
+            <if test="feature!=null">
+                and feature LIKE CONCAT('%',#{feature},'%')
+            </if>
         </where>
         ORDER BY createTime DESC
     </select>

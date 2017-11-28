@@ -49,6 +49,7 @@ public class SendMsgLogController {
                                      @RequestParam(required = false) String channel,
                                      @RequestParam(required = false) String start,
                                      @RequestParam(required = false) String end,
+                                     @RequestParam(required = false) String sendinfo,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -68,6 +69,9 @@ public class SendMsgLogController {
         if (end != null && "".equals(end.trim())) {
             end = null;
         }
+        if (sendinfo != null && "".equals(sendinfo.trim())) {
+            sendinfo = null;
+        }
         Date startDate = null;
         Date endDate = null;
         if (start != null) {
@@ -86,6 +90,7 @@ public class SendMsgLogController {
         map.put("channel", channel);
         map.put("start", startDate);
         map.put("end", endDate);
+        map.put("sendinfo", sendinfo);
         List<MessageSendLog> logList = sendMsgLogService.selectList(map);
         LOGGER.info("查询到的短信日志有：{}", logList);
         return (logList == null) ?
