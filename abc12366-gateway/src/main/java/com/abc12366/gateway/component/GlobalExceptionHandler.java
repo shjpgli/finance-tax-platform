@@ -31,14 +31,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity handle(Exception e) {
-        LOGGER.error("{}", e);
+
         BodyStatus bodyStatus;
         if (e instanceof ServiceException) {
             bodyStatus = ((ServiceException) e).getBodyStatus();
-            LOGGER.warn(bodyStatus.getMessage() + e);
+            LOGGER.error("程序主动抛出异常结果:"+bodyStatus.getMessage()+"<"+e+">");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         }
+        LOGGER.error("{}", e);
         if (e instanceof HttpRequestMethodNotSupportedException) {
             bodyStatus = Utils.bodyStatus(4005);
             LOGGER.warn(bodyStatus.getMessage() + e);

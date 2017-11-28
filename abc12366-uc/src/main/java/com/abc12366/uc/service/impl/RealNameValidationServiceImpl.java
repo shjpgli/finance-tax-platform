@@ -90,7 +90,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     public UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
             ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
         if (userExtend == null) {
             throw new ServiceException(4701);
         }
