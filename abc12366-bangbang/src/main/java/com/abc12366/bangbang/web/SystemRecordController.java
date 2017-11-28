@@ -24,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,8 @@ public class SystemRecordController {
      * @param appName  使用系统
      * @param location 访问地点
      * @param yyyyMMdd 查询日期
+     * @param feature  操作功能
+     * @param username 用户名
      * @param page     当前页
      * @param size     每页大小
      * @return ResponseEntity SystemRecordBO实体
@@ -117,10 +118,12 @@ public class SystemRecordController {
      * @see SystemRecordInsertBO
      */
     @PostMapping
-    public ResponseEntity insert(@RequestBody SystemRecordInsertBO systemRecordInsertBO, HttpServletRequest request) throws
+    public ResponseEntity insert(@RequestBody SystemRecordInsertBO systemRecordInsertBO, HttpServletRequest request)
+            throws
             ExecutionException, InterruptedException {
         LOGGER.info("{}", systemRecordInsertBO);
-        CompletableFuture<SystemRecordBO> systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO,request);
+        CompletableFuture<SystemRecordBO> systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO,
+                request);
         CompletableFuture.allOf(systemRecordBOReturn);
         LOGGER.info("{}", systemRecordBOReturn.get());
         return ResponseEntity.ok(Utils.kv("data", systemRecordBOReturn.get()));

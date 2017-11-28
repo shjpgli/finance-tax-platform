@@ -34,14 +34,16 @@ public class SendMsgLogController {
 
     /**
      * 查询短信日志列表接口
-     * @param phone
-     * @param status
-     * @param channel
-     * @param start
-     * @param end
-     * @param page
-     * @param size
-     * @return
+     *
+     * @param phone    手机号
+     * @param status   发送状态
+     * @param channel  发送通道
+     * @param start    开始时间
+     * @param end      结束时间
+     * @param sendinfo 短信内容
+     * @param page     当前页
+     * @param size     每页大小
+     * @return 短信日志列表
      */
     @GetMapping()
     public ResponseEntity selectList(@RequestParam(required = false) String phone,
