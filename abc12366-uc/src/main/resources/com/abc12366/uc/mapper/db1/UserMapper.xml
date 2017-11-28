@@ -92,4 +92,18 @@
         </set>
         where id=#{id}
     </update>
+
+    <resultMap type="com.abc12366.uc.model.bo.UserRetainedRateBO" id="resultMap">
+        <result column="userCount" property="userCount" jdbcType="INTEGER"/>
+        <result column="rateCount" property="rateCount" jdbcType="INTEGER"/>
+        <result column="rate" property="rate" jdbcType="DOUBLE"/>
+    </resultMap>
+    <!-- 获取留存率 -->
+    <select id="statisUserRetainedRate" parameterType="java.util.Map" resultMap="resultMap" statementType="CALLABLE">
+        {call getUserRetentionRate(
+        #{startTime,jdbcType=TIMESTAMP,mode=IN},
+        #{number,jdbcType=VARCHAR,mode=IN}
+        )
+        }
+    </select>
 </mapper>
