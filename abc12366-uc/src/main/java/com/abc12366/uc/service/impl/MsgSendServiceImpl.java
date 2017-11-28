@@ -233,4 +233,86 @@ public class MsgSendServiceImpl implements IMsgSendService {
 			return ResponseEntity.ok(Utils.kv());
 		}
 	}
+	
+	
+	
+	
+	public void sendXtxx(MessageSendBo sendBo,User user){
+		
+		VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+        obj.setLevelId(user.getVipLevel());
+        obj.setPrivilegeId(MessageConstant.XTTX_CODE);
+        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+        
+        //获取运营管理系统accessToken
+        String accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
+        
+        if (findObj != null && findObj.getStatus()) {
+        	LOGGER.info("用户:" + user.getId() + ",提醒：" + sendBo.getWebMsg());
+
+            //普通消息
+            if (sendBo.getWebMsg() != null) {
+                Message message = new Message();
+                message.setBusinessId(StringUtils.isEmpty(sendBo.getBusinessId()) ? user.getId() :
+                	sendBo.getBusinessId());
+                message.setBusiType(StringUtils.isEmpty(sendBo.getBusiType()) ? MessageConstant.XTTX :
+                	sendBo.getBusiType());
+                message.setType(MessageConstant.SYS_MESSAGE);
+                message.setContent(sendBo.getWebMsg());
+                message.setUserId(user.getId());
+                messageSendUtil.sendMessage(message, accessToken);
+            }
+
+            //微信消息
+            if (findObj.getVal2() != null
+                    && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2())
+                    && StringUtils.isNotEmpty(user.getWxopenid())
+                    && sendBo.getTemplateid() != null && sendBo.getDataList() != null) {
+
+            	sendBo.getDataList().put("userId", user.getId());
+                sendBo.getDataList().put("openId", user.getWxopenid());
+                templateService.templateSend(sendBo.getTemplateid(), sendBo.getDataList());
+            }
+
+            //短信消息
+            if (findObj.getVal3() != null
+                    && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3())
+                    && StringUtils.isNotEmpty(user.getPhone())
+                    && sendBo.getPhoneMsg() != null) {
+                Map<String, String> maps = new HashMap<String, String>();
+                maps.put("var", sendBo.getPhoneMsg());
+                List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+                list.add(maps);
+                messageSendUtil.sendPhoneMessage(user.getPhone(), MessageConstant.MESSAGE_UPYUN_TEMPLATE_615,
+                        list, accessToken);
+            }
+        }
+		
+	}
+
+	@Override
+	public ResponseEntity sendXtxx(MessageSendBo sendBo) {
+		User user = userService.selectUser(sendBo.getUserId());
+        if (user != null) {
+        	sendXtxx(sendBo,user);
+        	return ResponseEntity.ok(Utils.kv());
+        }
+        return ResponseEntity.ok(Utils.bodyStatus(9999, "用户信息不存在")); 
+	}
+
+	@Override
+	public ResponseEntity sendXtxxbatch(MessageSendBo sendBo) {
+		if(sendBo.getUserIds()==null || sendBo.getUserIds().size()==0){
+			return ResponseEntity.ok(Utils.bodyStatus(9876, "批量发送用户为空!"));
+		}else{
+			for(String userid:sendBo.getUserIds()){
+				User user = userService.selectUser(userid);
+		        if (user != null) {
+		        	sendXtxx(sendBo,user);
+		        }
+			}
+		}
+		return ResponseEntity.ok(Utils.kv());
+	}
 }
