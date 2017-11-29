@@ -127,6 +127,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         }*/
         //根据轮询发送短信消息
         String chanle= WeightFactorProduceStrategy.getInstance().getPartitionIdForTopic();
+        LOGGER.info("短信发送通道["+chanle+"],内容:"+(type+ code));
         if(MessageConstant.MSG_CHANNEL_ALI.equals(chanle)){
         	sendAliYunMsg(phone, type, code,MessageConstant.ALIYUNTEMP_YZM);
         }else if(MessageConstant.MSG_CHANNEL_YOUPAI.equals(chanle)){

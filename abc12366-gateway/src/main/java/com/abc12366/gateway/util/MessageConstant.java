@@ -77,6 +77,7 @@ public class MessageConstant {
     
     //阿里云短信验证码模板
     public final static String ALIYUNTEMP_YZM="SMS_100835124";
+    
     //阿里云短信业务消息模板
     public final static String ALIYUNTEMP_DXTZ="SMS_114060175";
 }
