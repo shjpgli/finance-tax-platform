@@ -19,13 +19,21 @@ import com.abc12366.message.service.MobileVerifyCodeService;
 import com.abc12366.message.service.SendMsgLogService;
 import com.abc12366.message.util.*;
 import com.alibaba.fastjson.JSON;
-import com.aliyun.mns.client.CloudAccount;
+/*import com.aliyun.mns.client.CloudAccount;
 import com.aliyun.mns.client.CloudTopic;
 import com.aliyun.mns.client.MNSClient;
 import com.aliyun.mns.model.BatchSmsAttributes;
 import com.aliyun.mns.model.MessageAttributes;
 import com.aliyun.mns.model.RawTopicMessage;
-import com.aliyun.mns.model.TopicMessage;
+import com.aliyun.mns.model.TopicMessage;*/
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.http.MethodType;
+import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.profile.IClientProfile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,16 +112,28 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCodeMapper.insert(phoneCode);
         }
         //版本4.0阿里和友拍轮流发
-        List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
+        /*List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
         if (sendLogList == null || sendLogList.size() < 1) {
-            sendAliyunMessage(phone, type, code);
+            //sendAliyunMessage(phone, type, code);
+        	sendAliYunMsg(phone, type, code,MessageConstant.ALIYUNTEMP_YZM);
         } else {
             MessageSendLog messageSendLog = sendLogList.get(0);
             if (messageSendLog.getSendchanel().equals(MessageConstant.MSG_CHANNEL_ALI)) {
                 sendYoupaiTemplate(phone, type, code);
             } else {
-                sendAliyunMessage(phone, type, code);
+                //sendAliyunMessage(phone, type, code);
+            	sendAliYunMsg(phone, type, code,MessageConstant.ALIYUNTEMP_YZM);
             }
+        }*/
+        //根据轮询发送短信消息
+        String chanle= WeightFactorProduceStrategy.getInstance().getPartitionIdForTopic();
+        LOGGER.info("短信发送通道["+chanle+"],内容:"+(type+ code));
+        if(MessageConstant.MSG_CHANNEL_ALI.equals(chanle)){
+        	sendAliYunMsg(phone, type, code,MessageConstant.ALIYUNTEMP_YZM);
+        }else if(MessageConstant.MSG_CHANNEL_YOUPAI.equals(chanle)){
+        	sendYoupaiTemplate(phone, type, code);
+        }else{
+        	sendNeteaseTemplate(phone, type,code);
         }
 
 //        版本3.0:使用阿里云短信通道
@@ -221,22 +241,22 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             String msg = neteaseTemplateResponseBO.getMsg();
             if (neteaseTemplateResponseBO != null && respCode.equals("200")) {
                 //记日志
-                messageLog("wy", codeType, code, "1", respCode, "发送成功");
+                messageLog("wy",phone, codeType, code, "1", respCode, "发送成功");
                 return true;
             } else if (respCode.equals("416") || respCode.equals("417") || respCode.equals("419")) {
                 //如果发送失败状态码是416、417、419中的一个，就将异常信息抛出给用户
                 //记日志
-                messageLog("wy", codeType, code, "4", respCode, msg);
+                messageLog("wy",phone, codeType, code, "4", respCode, msg);
                 throw new ServiceException(respCode, msg);
             } else {
                 //其他发送情况一律调友拍继续发
                 //记日志
-                messageLog("wy", codeType, code, "4", "4204", "网易短信发送通道异常");
+                messageLog("wy",phone, codeType, code, "4", "4204", "网易短信发送通道异常");
                 return false;
             }
         }
         //记日志
-        messageLog("wy", codeType, code, "4", "4204", "网易短信发送通道异常");
+        messageLog("wy",phone, codeType, code, "4", "4204", "网易短信发送通道异常");
         return false;
     }
 
@@ -325,7 +345,16 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         return false;
     }
 
-    private void messageLog(String sendchanel, String biztype, String sendinfo, String sendstatus, String failcode, String failcause) {
+    /**
+     * 发送短信消息日志
+     * @param sendchanel  //通道类型
+     * @param biztype //短信类型
+     * @param sendinfo //内容
+     * @param sendstatus  //发送状态
+     * @param failcode //失败code
+     * @param failcause //失败原因
+     */
+    private void messageLog(String sendchanel,String phone, String biztype, String sendinfo, String sendstatus, String failcode, String failcause) {
         MessageSendLog sendLog = new MessageSendLog();
         Date time = new Date();
         sendLog.setId(Utils.uuid());
@@ -337,10 +366,69 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         sendLog.setFailcode(failcode);
         sendLog.setFailcause(failcause);
         sendLog.setLogtime(time);
+        sendLog.setPhone(phone);
         sendLogMapper.insert(sendLog);
     }
+    
+    /**
+     * 阿里云信息发送
+     * @param phone 手机号码
+     * @param codeType  短信类型
+     * @param msg 消息内容
+     * @param temCode  模板ID
+     * @return
+     */
+    public boolean sendAliYunMsg(String phone, String codeType, String msg,String temCode){
+    	try {
+	    	System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+	    	System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+	    	
+	    	final String product = "Dysmsapi";//短信API产品名称（短信产品名固定，无需修改）
+	    	final String domain = "dysmsapi.aliyuncs.com";//短信API产品域名（接口地址固定，无需修改）
+	    	
+	    	final String accessKeyId =SpringCtxHolder.getProperty("message.aliyun.accessid"); //"LTAItz4dVk9FX02a";//你的accessKeyId
+	    	final String accessKeySecret = SpringCtxHolder.getProperty("message.aliyun.accesskey");//"m9FiMcm2nmh7gj9uXQIx0mzNcZQzN5";//你的accessKeySecret
+	    	//初始化ascClient,暂时不支持多region（请勿修改）
+	    	IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId,
+	    	accessKeySecret);
+	    	
+		    DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+		    IAcsClient acsClient = new DefaultAcsClient(profile);
+		    
+		    SendSmsRequest request = new SendSmsRequest();
+		    //使用post提交
+		    request.setMethod(MethodType.POST);
+		    //必填:待发送手机号。支持以逗号分隔的形式进行批量调用，批量上限为1000个手机号码,批量调用相对于单条调用及时性稍有延迟,验证码类型的短信推荐使用单条调用的方式
+		    request.setPhoneNumbers(phone);
+		    
+		    request.setSignName(SpringCtxHolder.getProperty("message.aliyun.signname"));
 
-    public boolean sendAliyunMessage(String phone, String codeType, String code) {
+		    request.setTemplateCode(temCode);
+		    
+		    if(MessageConstant.ALIYUNTEMP_YZM.equals(temCode)){
+		    	msg="{\"code\":\""+msg+"\"}";
+		    }else{
+		    	msg="{\"name\":\""+msg+"\"}";
+		    }
+		    request.setTemplateParam(msg);
+		    
+		    SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+		    if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {//请求成功
+		         messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, (codeType+":"+msg),  MessageConstant.SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE, MessageConstant.SEND_MSG_SUCCESS_CONTENT);	
+		    	 return true;
+		    }else{
+	             messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, (codeType+":"+msg),  MessageConstant.SEND_MSG_STATUS_FAIL, sendSmsResponse.getCode(), sendSmsResponse.getMessage());
+		    	 return false;
+		    }
+		} catch (ClientException e) {
+             messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, (codeType+":"+msg),  MessageConstant.SEND_MSG_STATUS_FAIL, "SYSTEM.EXCEPTION", e.getMessage());
+			 return false;
+		}
+    }
+    
+    
+
+    /*public boolean sendAliyunMessage(String phone, String codeType, String code) {
         String accessId = SpringCtxHolder.getProperty("message.aliyun.accessid");
         String accessKey = SpringCtxHolder.getProperty("message.aliyun.accesskey");
         String endPoint = SpringCtxHolder.getProperty("message.aliyun.endpoint");
@@ -348,22 +436,22 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         String signName = SpringCtxHolder.getProperty("message.aliyun.signname");
         String templateCode = SpringCtxHolder.getProperty("message.aliyun.templatecode");
 
-        /**
+        *//**
          * Step 1. 获取主题引用
-         */
+         *//*
         CloudAccount account = new CloudAccount(accessId, accessKey, endPoint);
         MNSClient client = account.getMNSClient();
         CloudTopic topic = client.getTopicRef(topicRef);
-        /**
+        *//**
          * Step 2. 设置SMS消息体（必须）
          *
          * 注：目前暂时不支持消息内容为空，需要指定消息内容，不为空即可。
-         */
+         *//*
         RawTopicMessage msg = new RawTopicMessage();
         msg.setMessageBody("sms-message");
-        /**
+        *//**
          * Step 3. 生成SMS消息属性
-         */
+         *//*
         MessageAttributes messageAttributes = new MessageAttributes();
         BatchSmsAttributes batchSmsAttributes = new BatchSmsAttributes();
         // 3.1 设置发送短信的签名（SMSSignName）
@@ -377,9 +465,9 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         batchSmsAttributes.addSmsReceiver(phone, smsReceiverParams);
         messageAttributes.setBatchSmsAttributes(batchSmsAttributes);
         try {
-            /**
+            *//**
              * Step 4. 发布SMS消息
-             */
+             *//*
             TopicMessage ret = topic.publishMessage(msg, messageAttributes);
             //记日志
             MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_ALI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
@@ -408,7 +496,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         }
         client.close();
         return true;
-    }
+    }*/
 
     @Override
     public void getRegisCode(String type, String phone) {
