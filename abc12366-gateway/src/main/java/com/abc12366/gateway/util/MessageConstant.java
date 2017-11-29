@@ -74,4 +74,9 @@ public class MessageConstant {
     public final static String BB_MESSAGE = "2";
     //业务类型：帮帮
     public final static String BUSI_TYPE_BANGBANG = "BANGBANG-AWARD";
+    
+    //阿里云短信验证码模板
+    public final static String ALIYUNTEMP_YZM="SMS_100835124";
+    //阿里云短信业务消息模板
+    public final static String ALIYUNTEMP_DXTZ="SMS_114060175";
 }
