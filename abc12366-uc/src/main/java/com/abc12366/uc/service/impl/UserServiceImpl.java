@@ -11,7 +11,10 @@ import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
-import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.BaseObject;
+import com.abc12366.uc.model.Token;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
@@ -763,14 +766,14 @@ public class UserServiceImpl implements UserService {
 
     public List<UserStatisBO> statisUserByMonth(Map<String, Object> map) {
         int day = 0;
-        if(map.get("startTime") != null && map.get("endTime") != null){
-            day = DateUtils.differentDaysByMillisecond((Date)map.get("startTime"),(Date)map.get("endTime"));
+        if (map.get("startTime") != null && map.get("endTime") != null) {
+            day = DateUtils.differentDaysByMillisecond((Date) map.get("startTime"), (Date) map.get("endTime"));
         }
         //未超过30天则按天显示统计数，否则按月显示统计数
-        if(day <= 31){
+        if (day <= 31) {
             map.put("dateFormat", "%Y-%m-%d");
             return userRoMapper.statisUserByDay(map);
-        }else{
+        } else {
             map.put("dateFormat", "%Y-%m");
             return userRoMapper.statisUserByDay(map);
         }
@@ -786,7 +789,7 @@ public class UserServiceImpl implements UserService {
         UserLossRateBO userCount = userRoMapper.statisUserCount(map);
         UserLossRateBO lossUserCount = userRoMapper.statisUserLossRateCount(map);
         UserLossRateBO data = new UserLossRateBO();
-        if(userCount != null && userCount.getUserCount() != null && lossUserCount != null && lossUserCount.getLossUserCount() != null){
+        if (userCount != null && userCount.getUserCount() != null && lossUserCount != null && lossUserCount.getLossUserCount() != null) {
             int notUserCount = userCount.getUserCount() - lossUserCount.getLossUserCount();
             NumberFormat numberFormat = NumberFormat.getInstance();
             // 设置精确到小数点后2位
@@ -800,25 +803,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Object, Object> statisUserRetainedRate(Map<String, Object> map) {
+    public List<UserRetainedRateListBO> statisUserRetainedRate(Map<String, Object> map) {
         String number = "0,1,2,3,4,6,12,";
-        map.put("number",number);
+        map.put("number", number);
         //获取起止时间的月份数组
-        List<Date> dates = DateUtils.getMonthBetween((String)map.get("startTime"),(String)map.get("endTime"));
-        if(dates != null && dates.size() > 12){
+        List<Date> dates = DateUtils.getMonthBetween((String) map.get("startTime"), (String) map.get("endTime"));
+        if (dates != null && dates.size() > 12) {
             LOGGER.info("起止时间不能超过12个月:" + dates);
-            throw new ServiceException(4926,"起止时间不能超过12个月");
+            throw new ServiceException(4926, "起止时间不能超过12个月");
         }
         Map<String, Object> inMap = new HashMap<>();
-        Map<Object, Object> outMap = new HashMap<>();
         List<UserRetainedRateBO> bos;
-        for (Date date:dates){
+        List<UserRetainedRateListBO> listBOs = new ArrayList<>();
+        for (Date date : dates) {
+            UserRetainedRateListBO userRetainedRateListBO = new UserRetainedRateListBO();
             bos = new ArrayList<>();
-            inMap.put("startTime",date);
-            inMap.put("number",number);
+            inMap.put("startTime", date);
+            inMap.put("number", number);
             bos = userMapper.statisUserRetainedRate(inMap);
-            outMap.put(DateUtils.dateToString(date),bos);
+            userRetainedRateListBO.setDate(date);
+            userRetainedRateListBO.setUserRetainedRateBOList(bos);
+            listBOs.add(userRetainedRateListBO);
         }
-        return outMap;
+        return listBOs;
+    }
+
+    @Override
+    public List<UserExprotInfoBO> statisUserConsumeLevel(Map<String, Object> map) {
+        return userRoMapper.statisUserConsumeLevel(map);
+    }
+
+    @Override
+    public UserRFMBO statisUserRFM(Map<String, Object> map) {
+        return userRoMapper.statisUserRFM(map);
     }
 }

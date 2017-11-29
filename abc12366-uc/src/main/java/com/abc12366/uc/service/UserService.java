@@ -189,5 +189,14 @@ public interface UserService {
      * @param map
      * @return
      */
-    Map<Object, Object> statisUserRetainedRate(Map<String, Object> map);
+    List<UserRetainedRateListBO> statisUserRetainedRate(Map<String, Object> map);
+
+    /**
+     * 用户消费能力分析
+     * @param map
+     * @return
+     */
+    List<UserExprotInfoBO>  statisUserConsumeLevel(Map<String, Object> map);
+
+    UserRFMBO statisUserRFM(Map<String, Object> map);
 }
