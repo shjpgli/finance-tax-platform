@@ -4,10 +4,10 @@
 <mapper namespace="com.abc12366.bangbang.mapper.db2.SystemRecordRoMapper">
 
     <select id="selectList" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO" parameterType="java.util.Map">
-        SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,pageUrl,
+        SELECT * FROM (SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,pageUrl,
         stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,ruleCode,
         (select username from bb_user bu where bu.id=userId) username
-        from bb_system_record_${yyyyMMdd}
+        from bb_system_record_${yyyyMMdd}) t
         <where>
             <if test="userId!=null">
                 userId=#{userId}
