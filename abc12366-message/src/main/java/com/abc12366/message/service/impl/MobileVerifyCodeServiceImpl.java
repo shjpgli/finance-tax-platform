@@ -112,7 +112,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             phoneCodeMapper.insert(phoneCode);
         }
         //版本4.0阿里和友拍轮流发
-        List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
+        /*List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
         if (sendLogList == null || sendLogList.size() < 1) {
             //sendAliyunMessage(phone, type, code);
         	sendAliYunMsg(phone, type, code,MessageConstant.ALIYUNTEMP_YZM);
@@ -124,6 +124,15 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
                 //sendAliyunMessage(phone, type, code);
             	sendAliYunMsg(phone, type, code,MessageConstant.ALIYUNTEMP_YZM);
             }
+        }*/
+        //根据轮询发送短信消息
+        String chanle= WeightFactorProduceStrategy.getInstance().getPartitionIdForTopic();
+        if(MessageConstant.MSG_CHANNEL_ALI.equals(chanle)){
+        	sendAliYunMsg(phone, type, code,MessageConstant.ALIYUNTEMP_YZM);
+        }else if(MessageConstant.MSG_CHANNEL_YOUPAI.equals(chanle)){
+        	sendYoupaiTemplate(phone, type, code);
+        }else{
+        	sendNeteaseTemplate(phone, type,code);
         }
 
 //        版本3.0:使用阿里云短信通道
