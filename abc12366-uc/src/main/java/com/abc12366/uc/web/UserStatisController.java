@@ -131,7 +131,52 @@ public class UserStatisController {
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", endTime);
         }
-        Map<Object, Object> data = userService.statisUserRetainedRate(map);
+        List<UserRetainedRateListBO> list = userService.statisUserRetainedRate(map);
+        PageInfo<UserRetainedRateListBO> pageInfo = new PageInfo<>(list);
+        LOGGER.info("{}", list);
+        return (list == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户消费能力分析，用户列表
+     * R表示最近一次消费间隔统计时间段截止日期的天数，F表示统计时间段内消费次数，M表示统计时间段内容消费总金额。
+     * @param startDay R开始天数
+     * @param endDay   R结束天数
+     * @param startCount F开始次数
+     * @param endCount F结束次数
+     * @param startPrice M开始总金额
+     * @param endPrice M结束总金额
+     * @return
+     */
+    @GetMapping(path = "/consume")
+    public ResponseEntity statisUserConsumeLevel(@RequestParam(value = "startDay", required = true) int startDay,
+                                                 @RequestParam(value = "endDay", required = true) int endDay,
+                                                 @RequestParam(value = "startCount", required = true) int startCount,
+                                                 @RequestParam(value = "endCount", required = true) int endCount,
+                                                 @RequestParam(value = "startPrice", required = true) double startPrice,
+                                                 @RequestParam(value = "endPrice", required = true) double endPrice,
+                                                 @RequestParam(value = "startTime", required = true) String startTime,
+                                                 @RequestParam(value = "endTime", required = true) String endTime,
+                                                 @RequestParam(value = "tradeMethod", required = true) String tradeMethod
+                                                 ) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("startDay",startDay);
+        map.put("endDay",endDay);
+        map.put("startCount",startCount);
+        map.put("endCount",endCount);
+        map.put("startPrice",startPrice);
+        map.put("endPrice",endPrice);
+        map.put("tradeMethod", tradeMethod);
+        map.put("orderStatus", "6");
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        List<UserExprotInfoBO> data = userService.statisUserConsumeLevel(map);
         //PageInfo< Map<Object, Object>> pageInfo = new PageInfo<>((List<Object>) list);
         LOGGER.info("list{}", data);
         return (data == null) ?
@@ -139,6 +184,31 @@ public class UserStatisController {
                 ResponseEntity.ok(Utils.kv("data",data));
     }
 
+    /**
+     * 用户消费能力分析
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/consume/rfm")
+    public ResponseEntity statisUserConsumeRFM(@RequestParam(value = "startTime", required = true) String startTime,
+                                                 @RequestParam(value = "endTime", required = true) String endTime,
+                                               @RequestParam(value = "tradeMethod", required = true) String tradeMethod) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        map.put("tradeMethod", tradeMethod);
+        map.put("orderStatus", "6");
+        UserRFMBO data = userService.statisUserRFM(map);
+        LOGGER.info("{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("data",data));
+    }
 
 
 }

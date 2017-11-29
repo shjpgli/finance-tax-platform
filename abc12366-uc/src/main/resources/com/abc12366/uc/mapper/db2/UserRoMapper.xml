@@ -270,4 +270,76 @@
         </where>
     </select>
 
+    <select id="statisUserRFM" resultType="com.abc12366.uc.model.bo.UserRFMBO" parameterType="java.util.Map">
+        select r.minTime,r.maxTime,r.avgTime,min(m.sumPrice) as minPrice,max(m.sumPrice) as maxPrice,avg(m.sumPrice) as avgPrice,
+        min(m.consum) as minConsum,max(m.consum) as maxConsum,avg(m.consum) as avgConsum from
+        (SELECT min(datediff(#{endTime},o.createTime)) AS minTime,
+            max(datediff(#{endTime},o.createTime)) AS maxTime,
+            avg(datediff(#{endTime},o.createTime)) AS avgTime
+            FROM
+            uc_user u left join
+            uc_order o on o.userId = u.id
+            WHERE  1 = 1
+            <if test="startTime != null">
+                <![CDATA[
+                  and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                    ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                    ]]>
+            </if>
+            AND o.orderStatus = #{orderStatus}
+            AND o.tradeMethod = #{tradeMethod}
+        ) r,
+        (SELECT sum(o.totalPrice) AS sumPrice, count(u.id) AS consum FROM
+            uc_user u left join
+            uc_order o on o.userId = u.id
+            WHERE  1 = 1
+            <if test="startTime != null">
+                <![CDATA[
+                  and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                    ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                    ]]>
+            </if>
+            AND o.orderStatus = #{orderStatus}
+            AND o.tradeMethod = #{tradeMethod}
+          group by u.id
+        ) m
+
+    </select>
+
+    <select id="statisUserConsumeLevel" resultType="com.abc12366.uc.model.bo.UserExprotInfoBO" parameterType="java.util.Map">
+        select * from
+            (SELECT
+            sum(o.totalPrice) AS sumPrice,
+            count(u.id) AS consum,
+            u.id, u.nickName, u.phone, e.realName, e.area
+            from uc_order o
+            left join uc_user u on u.id = o.userId
+            left join uc_user_extend e on e.userId = u.id
+            where 1=1
+                <![CDATA[
+                and datediff(#{endTime},o.createTime) >=  #{startDay}
+                and datediff(#{endTime},o.createTime) <=  #{endDay}
+                and date_format(o.createTime, '%Y-%m-d%') >= #{startTime}
+                and date_format(o.createTime, '%Y-%m-d%') <= #{endTime}
+               ]]>
+            AND o.orderStatus = #{orderStatus}
+            AND o.tradeMethod = #{tradeMethod}
+            group by u.id) m
+        where
+            1 = 1
+            <![CDATA[
+                and m.sumPrice >= #{startPrice}
+                and m.sumPrice <= #{endPrice}
+                and m.consum <= #{startCount}
+                and m.consum <= #{endCount}
+            ]]>
+    </select>
 </mapper>
