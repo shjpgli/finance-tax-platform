@@ -70,8 +70,7 @@ public class WeightFactorProduceStrategy{
      * @param weight_n 权重数 
      * @return 
      */  
-    private int GCD(int weight_m,int weight_n)  
-    {  
+    private int GCD(int weight_m,int weight_n) {  
         int temp;  
         while(weight_n != 0){  
             if(weight_m < weight_n){  
