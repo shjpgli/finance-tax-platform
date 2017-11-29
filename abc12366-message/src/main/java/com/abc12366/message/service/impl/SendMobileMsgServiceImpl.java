@@ -57,7 +57,7 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
     public void sendMsg(MobileMsgBO mobileMsgBO) {
         LOGGER.info("发送业务通知短信：{}", mobileMsgBO.toString());
         //只通过又拍发送
-        sendMsgByUppyun(mobileMsgBO);
+        //sendMsgByUppyun(mobileMsgBO);
         //版本4.0阿里和友拍轮流发
 //        List<MessageSendLog> sendLogList = messageSendLogRoMapper.selectLast();
 //        if (sendLogList == null || sendLogList.size() < 1) {
@@ -72,11 +72,9 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
 //        }
         
         String chanle= WeightFactorProduceStrategy.getInstance().getPartitionIdForTopic();
-        if(MessageConstant.MSG_CHANNEL_ALI.equals(chanle)){
+        if(MessageConstant.MSG_CHANNEL_YOUPAI.equals(chanle)){
         	sendMsgByUppyun(mobileMsgBO);
-        }/*else if(MessageConstant.MSG_CHANNEL_YOUPAI.equals(chanle)){
-        	mobileVerifyCodeService.sendAliYunMsg(mobileMsgBO.getPhone(), "业务消息", mobileMsgBO.getVars().get(0).getVar(), MessageConstant.ALIYUNTEMP_DXTZ);
-        }*/else{
+        }else{
         	mobileVerifyCodeService.sendAliYunMsg(mobileMsgBO.getPhone(), "业务消息", mobileMsgBO.getVars().get(0).getVar(), MessageConstant.ALIYUNTEMP_DXTZ);
         }
          
