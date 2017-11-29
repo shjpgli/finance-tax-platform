@@ -90,6 +90,21 @@
         and (nsrsbh = #{nsrsbh} OR shxydm=#{shxydm})
     </select>
 
+    <select id="selectListByUserIdAndNsrsbh" parameterType="com.abc12366.uc.model.UserDzsb" resultType="com.abc12366.uc.model.abc4000.NSRXX">
+        select uud.nsrsbh nsrsbh,
+        uud.shxydm shxydm,
+        uud.nsrmc nsrmc,
+        uud.createTime bdsj,
+        uud.expireTime dqr,
+        uud.swjgMc swjgmc,
+        uud.swjgDm swjgdm,
+        uud.expandExpireTime yqdqr
+        from uc_user_dzsb uud
+        where uud.userId = #{userId}
+        and uud.status = '1'
+        and nsrsbh = #{nsrsbh}
+    </select>
+
     <select id="dzsbCount" resultType="com.abc12366.uc.model.UserDzsb">
         select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
         from uc_user_dzsb

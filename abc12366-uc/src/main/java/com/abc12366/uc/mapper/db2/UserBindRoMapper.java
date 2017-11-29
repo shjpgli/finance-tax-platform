@@ -33,8 +33,22 @@ public interface UserBindRoMapper {
 
     List<UserHngs> userHngsListExist(UserHngsInsertBO userHngsInsertBO);
 
+    /**
+     * 根据'用户ID，纳税人识别号或社会信用代码'查询是否存在绑定信息
+     *
+     * @param queryParam 纳税人识别号、社会信用代码必传
+     * @return 纳税人绑定信息
+     */
     List<NSRXXBO> selectListByUserIdAndNsrsbhOrShxydm(UserDzsb queryParam);
-    
+
+    /**
+     * 根据'用户ID，纳税人识别号'查询是否存在绑定信息
+     *
+     * @param queryParam 纳税人识别号必传
+     * @return 纳税人绑定信息
+     */
+    List<NSRXXBO> selectListByUserIdAndNsrsbh(UserDzsb queryParam);
+
     List<UserDzsb> dzsbCount(String userId);
 
     List<UserHngs> hngsCount(String userId);
