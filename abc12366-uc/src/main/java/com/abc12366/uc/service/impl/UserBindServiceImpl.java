@@ -103,6 +103,7 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("fwmm", pwdDecode2);
         map.put("userid", userId);
         Map<String, String> resMap = client.process(map);
+        LOGGER.info("{}", resMap);
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, userDzsbInsertBO.getNsrsbhOrShxydm());
         LOGGER.info("{}", ty21Object);
 
@@ -433,6 +434,7 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("fwmm", pwdDecode2);
         map.put("userid", userId);
         Map<String, String> resMap = client.process(map);
+        LOGGER.info("{}", resMap);
 
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
         LOGGER.info("{}", ty21Object);
@@ -478,8 +480,11 @@ public class UserBindServiceImpl implements UserBindService {
         mapVali.put("serviceid", "TY11");
         mapVali.put("NSRSBH", data.getNsrsbh());
         Map respMapVali = client.process(mapVali);
+        LOGGER.info("{}", respMapVali);
         //调用tdps查询这个税号的基本信息，然后和输入的法人名称和法人证件号进行对比
         TY21Xml2Object object = analyzeXmlTY11(respMapVali, data.getNsrsbh());
+        LOGGER.info("{}", object);
+
         if (StringUtils.isEmpty(object.getFRXM()) || StringUtils.isEmpty(object.getFRZJH())) {
             throw new ServiceException(4630);
         }
@@ -491,8 +496,8 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("serviceid", "TY12");
         map.put("NSRSBH", data.getNsrsbh());
         Map respMap = client.process(map);
+        LOGGER.info("{}", respMap);
         analyzeXmlTY12(respMap, data.getNsrsbh());
-
     }
 
     private void analyzeXmlTY12(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
@@ -530,8 +535,8 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("OLDPASS", data.getOldpwd());
         map.put("NEWPASS", data.getNewpwd());
         Map respMap = client.process(map);
+        LOGGER.info("{}", respMap);
         analyzeXmlTY03(respMap, data.getNsrsbh());
-        System.out.println(respMap);
     }
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
