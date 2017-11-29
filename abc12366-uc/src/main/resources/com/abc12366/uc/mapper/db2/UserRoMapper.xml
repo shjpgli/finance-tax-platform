@@ -77,6 +77,7 @@
                 and createTime <![CDATA[<=]]> #{endDate}
             </if>
         </where>
+        ORDER BY createTime DESC
     </select>
 
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
