@@ -2,6 +2,7 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,18 +63,20 @@ public class UserController {
     /**
      * 查询用户列表，支持多标签查询
      *
-     * @param username 用户名
-     * @param phone    手机号
-     * @param nickname 昵称
-     * @param status   用户状态
-     * @param tagId    标签ID
-     * @param realName 真实姓名
-     * @param points   积分
-     * @param exp      经验值
-     * @param vipLevel 会员等级
-     * @param medal    用户等级
-     * @param page     当前页
-     * @param size     每页大小
+     * @param username  用户名
+     * @param phone     手机号
+     * @param nickname  昵称
+     * @param status    用户状态
+     * @param tagId     标签ID
+     * @param realName  真实姓名
+     * @param points    积分
+     * @param exp       经验值
+     * @param vipLevel  会员等级
+     * @param medal     用户等级
+     * @param startDate 注册开始日期, 默认为最近30天
+     * @param endDate   注册结束日期, 默认为当天
+     * @param page      当前页
+     * @param size      每页大小
      * @return List 用户列表
      */
     @GetMapping
@@ -87,7 +91,8 @@ public class UserController {
             @RequestParam(required = false) String exp,
             @RequestParam(required = false) String vipLevel,
             @RequestParam(required = false) String medal,
-            @RequestParam(required = false) String createTime,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
 
@@ -105,7 +110,14 @@ public class UserController {
         map.put("nickname", nickname);
         map.put("status", status);
         map.put("tagId", tagId);
-        map.put("createTime", createTime);
+        if (StringUtils.isEmpty(startDate)) {
+            startDate = DateUtils.dateToString(DateUtils.getAddDate(30));
+        }
+        map.put("startDate", startDate);
+        if (StringUtils.isEmpty(endDate)) {
+            endDate = DateUtils.dateToString(new Date());
+        }
+        map.put("endDate", endDate);
         LOGGER.info("{}:{}:{}", map, page, size);
 
         List<UserListBO> userList = userService.selectList(map, page, size);
@@ -314,5 +326,5 @@ public class UserController {
         LOGGER.info("根据手机号码查看用户结果：{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
-    
+
 }

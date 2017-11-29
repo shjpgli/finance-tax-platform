@@ -27,60 +27,6 @@
         where uu.wxopenid = #{wxopenid}
     </select>
 
-    <!--
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
-        select * from 
-        (select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname,
-        uu.status,
-        uu.createTime, uu.lastUpdate,
-        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
-        uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
-        uue.realName, uul.name levelName, uul.medalIcon, uul.medal
-        from uc_user uu LEFT JOIN uc_user_extend uue on uu.id = uue.userId
-        LEFT JOIN uc_uexp_level uul
-        on uu.exp BETWEEN uul.minValue and uul.maxValue and uul.status = '1') u
-        <where>
-            <if test="username != null and username != ''">
-                username=#{username}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone=#{phone}
-            </if>
-            <if test="nickname != null and nickname != ''">
-                and nickname=#{nickname}
-            </if>
-            <if test="status!=null">
-                and status=#{status}
-            </if>
-            <if test="medal != null and medal != ''">
-                and medal=#{medal}
-            </if>
-            <if test="vipLevel != null and vipLevel != null">
-                and vipLevel=#{vipLevel}
-            </if>
-            <if test="exp!=null">
-                and exp >= #{exp}
-            </if>
-            <if test="points!=null">
-                and points >= #{points}
-            </if>
-            <if test="realName !=null and realName != ''">
-                and realName=#{realName}
-            </if>
-            <if test="createTime !=null and createTime != ''">
-                and createTime >= #{createTime}
-            </if>
-            <if test="tagId != null and tagIdCount > 0">
-                and u.id in
-                (SELECT a.subjectId FROM
-                <foreach item="item" collection="tagId" separator="union all" open="(" close=")" index="">
-                    SELECT subjectId FROM uc_subject_tag ust WHERE ut.tagId=#{item}
-                </foreach>
-                a group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount})
-            </if>
-        </where>
-    </select>
-    -->
     <select id="selectUserById" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.User">
         SELECT id, username, phone, password, regMail, regIP, salt, nickname, status, createTime,
           lastUpdate, userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath,
@@ -124,8 +70,11 @@
             <if test="points!=null and points != ''">
                 and points >= #{points}
             </if>
-            <if test="createTime !=null and createTime != ''">
-                and createTime >= #{createTime}
+            <if test="startDate !=null and startDate != ''">
+                and createTime >= #{startDate}
+            </if>
+            <if test="endDate !=null and endDate != ''">
+                and createTime <![CDATA[<=]]> #{endDate}
             </if>
         </where>
     </select>

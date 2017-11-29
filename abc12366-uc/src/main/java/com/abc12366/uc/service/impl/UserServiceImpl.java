@@ -15,7 +15,6 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
-import com.ctc.wstx.util.DataUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,14 +114,6 @@ public class UserServiceImpl implements UserService {
                     userList.add(ul);
                 }
             }
-        } else if (!StringUtils.isEmpty(map.get("medal")) || !StringUtils.isEmpty(map.get("vipLevel"))
-                || !StringUtils.isEmpty(map.get("exp")) || !StringUtils.isEmpty(map.get("points"))
-                || !StringUtils.isEmpty(map.get("username")) || !StringUtils.isEmpty(map.get("phone"))
-                || !StringUtils.isEmpty(map.get("nickname")) || !StringUtils.isEmpty(map.get("status"))
-                || !StringUtils.isEmpty(map.get("createTime"))) {
-            // 用户表信息不为空时，查询用户表
-            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            userList = userRoMapper.selectList(map);
         } else {
             // 查询默认数据
             PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -135,7 +126,7 @@ public class UserServiceImpl implements UserService {
             if (ue != null) {
                 user.setRealName(ue.getRealName());
             }
-            if (user.getExp() != null && !"".equals(user.getExp())) {
+            if (user.getExp() != null && !"".equals(String.valueOf(user.getExp()))) {
                 ExperienceLevelBO el = experienceLevelService.selectOne(user.getExp());
                 if (el != null) {
                     user.setMedal(el.getMedal());
