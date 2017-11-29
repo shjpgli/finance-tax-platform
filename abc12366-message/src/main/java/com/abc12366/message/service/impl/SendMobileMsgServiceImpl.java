@@ -10,6 +10,7 @@ import com.abc12366.message.model.bo.UpyunErrorBO;
 import com.abc12366.message.model.bo.UpyunMessageResponse;
 import com.abc12366.message.service.SendMobileMsgService;
 import com.abc12366.message.service.SendMsgLogService;
+import com.abc12366.message.util.WeightFactorProduceStrategy;
 import com.abc12366.gateway.util.MessageConstant;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -47,7 +48,10 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
 
     @Autowired
     private SendMsgLogService sendMsgLogService;
-
+    
+    
+    @Autowired
+    private com.abc12366.message.service.MobileVerifyCodeService mobileVerifyCodeService;
 
     @Override
     public void sendMsg(MobileMsgBO mobileMsgBO) {
@@ -66,6 +70,16 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
 //                sendMsgByAliyun(mobileMsgBO);
 //            }
 //        }
+        
+        String chanle= WeightFactorProduceStrategy.getInstance().getPartitionIdForTopic();
+        if(MessageConstant.MSG_CHANNEL_ALI.equals(chanle)){
+        	sendMsgByUppyun(mobileMsgBO);
+        }/*else if(MessageConstant.MSG_CHANNEL_YOUPAI.equals(chanle)){
+        	mobileVerifyCodeService.sendAliYunMsg(mobileMsgBO.getPhone(), "业务消息", mobileMsgBO.getVars().get(0).getVar(), MessageConstant.ALIYUNTEMP_DXTZ);
+        }*/else{
+        	mobileVerifyCodeService.sendAliYunMsg(mobileMsgBO.getPhone(), "业务消息", mobileMsgBO.getVars().get(0).getVar(), MessageConstant.ALIYUNTEMP_DXTZ);
+        }
+         
     }
 
     @Override

@@ -241,22 +241,22 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             String msg = neteaseTemplateResponseBO.getMsg();
             if (neteaseTemplateResponseBO != null && respCode.equals("200")) {
                 //记日志
-                messageLog("wy",phone, codeType, code, "1", respCode, "发送成功");
+                messageLog("wy",phone, codeType, codeType+":"+code, "1", respCode, "发送成功");
                 return true;
             } else if (respCode.equals("416") || respCode.equals("417") || respCode.equals("419")) {
                 //如果发送失败状态码是416、417、419中的一个，就将异常信息抛出给用户
                 //记日志
-                messageLog("wy",phone, codeType, code, "4", respCode, msg);
+                messageLog("wy",phone, codeType, codeType+":"+code, "4", respCode, msg);
                 throw new ServiceException(respCode, msg);
             } else {
                 //其他发送情况一律调友拍继续发
                 //记日志
-                messageLog("wy",phone, codeType, code, "4", "4204", "网易短信发送通道异常");
+                messageLog("wy",phone, codeType, codeType+":"+code, "4", "4204", "网易短信发送通道异常");
                 return false;
             }
         }
         //记日志
-        messageLog("wy",phone, codeType, code, "4", "4204", "网易短信发送通道异常");
+        messageLog("wy",phone, codeType, codeType+":"+code, "4", "4204", "网易短信发送通道异常");
         return false;
     }
 
@@ -320,7 +320,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         } catch (Exception e) {
             //记日志
             MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_YOUPAI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
-                    (type+code), MessageConstant.SEND_MSG_STATUS_FAIL, MessageConstant.SEND_MSG_CHANNEL_ERROR_CODE,MessageConstant.SEND_MSG_CHANNEL_ERROR_YOUPAI);
+                    (type+":"+code), MessageConstant.SEND_MSG_STATUS_FAIL, MessageConstant.SEND_MSG_CHANNEL_ERROR_CODE,MessageConstant.SEND_MSG_CHANNEL_ERROR_YOUPAI);
             sendMsgLogService.insert(sendLog);
             throw new ServiceException(4204);
         }
@@ -329,14 +329,14 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
                 UpyunMessageResponse messageResponse = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunMessageResponse.class);
                 //记日志
                 MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_YOUPAI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
-                        (type+code), MessageConstant.SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE,MessageConstant.SEND_MSG_SUCCESS_CONTENT);
+                        (type+":"+code), MessageConstant.SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE,MessageConstant.SEND_MSG_SUCCESS_CONTENT);
                 sendMsgLogService.insert(sendLog);
             } catch (Exception e) {
                 UpyunErrorBO response = JSON.parseObject(String.valueOf(responseEntity.getBody()), UpyunErrorBO.class);
                 //记日志
                 //记日志
                 MessageSendLog sendLog = new MessageSendLog(MessageConstant.MSG_CHANNEL_YOUPAI,phone, MessageConstant.MOBILE_MSG_BUSI_TYPE,
-                        (type+code), MessageConstant.SEND_MSG_STATUS_FAIL, response.getError_code(),response.getMessage());
+                        (type+":"+code), MessageConstant.SEND_MSG_STATUS_FAIL, response.getError_code(),response.getMessage());
                 sendMsgLogService.insert(sendLog);
                 return false;
             }
@@ -405,23 +405,25 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
 		    request.setTemplateCode(temCode);
 		    
+		    String sendMsg="";
+		    
 		    if(MessageConstant.ALIYUNTEMP_YZM.equals(temCode)){
-		    	msg="{\"code\":\""+msg+"\"}";
+		    	sendMsg="{\"code\":\""+msg+"\"}";
 		    }else{
-		    	msg="{\"name\":\""+msg+"\"}";
+		    	sendMsg="{\"name\":\""+msg+"\"}";
 		    }
-		    request.setTemplateParam(msg);
+		    request.setTemplateParam(sendMsg);
 		    
 		    SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
 		    if(sendSmsResponse.getCode() != null && sendSmsResponse.getCode().equals("OK")) {//请求成功
-		         messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, (codeType+":"+msg),  MessageConstant.SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE, MessageConstant.SEND_MSG_SUCCESS_CONTENT);	
+		         messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, codeType+":"+msg,  MessageConstant.SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE, MessageConstant.SEND_MSG_SUCCESS_CONTENT);	
 		    	 return true;
 		    }else{
-	             messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, (codeType+":"+msg),  MessageConstant.SEND_MSG_STATUS_FAIL, sendSmsResponse.getCode(), sendSmsResponse.getMessage());
+	             messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, codeType+":"+msg,  MessageConstant.SEND_MSG_STATUS_FAIL, sendSmsResponse.getCode(), sendSmsResponse.getMessage());
 		    	 return false;
 		    }
 		} catch (ClientException e) {
-             messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, (codeType+":"+msg),  MessageConstant.SEND_MSG_STATUS_FAIL, "SYSTEM.EXCEPTION", e.getMessage());
+             messageLog(MessageConstant.MSG_CHANNEL_ALI,phone, codeType, codeType+":"+msg,  MessageConstant.SEND_MSG_STATUS_FAIL, "SYSTEM.EXCEPTION", e.getMessage());
 			 return false;
 		}
     }

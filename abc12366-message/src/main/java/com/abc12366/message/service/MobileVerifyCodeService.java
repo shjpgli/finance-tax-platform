@@ -13,6 +13,8 @@ public interface MobileVerifyCodeService {
     void getCode(String type, String phone) throws IOException;
 
     void verify(VerifyParam verifyParam);
+    
+    boolean sendAliYunMsg(String phone, String codeType, String msg,String temCode);
 
     void getRegisCode(String type, String phone);
 }
