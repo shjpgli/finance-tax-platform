@@ -1,5 +1,7 @@
 package com.abc12366.gateway.component;
 
+import com.abc12366.gateway.exception.DzsbServiceException;
+import com.abc12366.gateway.exception.DzsjServiceException;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.model.BodyValidStatus;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 全局Exception处理
  *
@@ -30,34 +34,48 @@ public class GlobalExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity handle(Exception e) {
-
+    public ResponseEntity handle(Exception e, HttpServletRequest request) {
+        String uri = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping" +
+                ".bestMatchingPattern");
         BodyStatus bodyStatus;
         if (e instanceof ServiceException) {
             bodyStatus = ((ServiceException) e).getBodyStatus();
-            LOGGER.error("程序主动抛出异常结果:"+bodyStatus.getMessage()+"<"+e+">");
+            LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
+            bodyStatus.setMessage("访问" + uri + "时，出现[" + bodyStatus.getCode() + ":" + bodyStatus.getMessage() +
+                    "]，来源财税平台");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
-
+        } else if (e instanceof DzsbServiceException) {
+            bodyStatus = ((DzsbServiceException) e).getBodyStatus();
+            LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
+            bodyStatus.setMessage("访问" + uri + "时，出现[" + bodyStatus.getCode() + ":" + bodyStatus.getMessage() +
+                    "]，来源电子申报");
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
+        } else if (e instanceof DzsjServiceException) {
+            bodyStatus = ((DzsjServiceException) e).getBodyStatus();
+            LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
+            bodyStatus.setMessage("访问" + uri + "时，出现[" + bodyStatus.getCode() + ":" + bodyStatus.getMessage() +
+                    "]，来源电子税局");
+            return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         }
-        LOGGER.error("{}", e);
+
         if (e instanceof HttpRequestMethodNotSupportedException) {
             bodyStatus = Utils.bodyStatus(4005);
-            LOGGER.warn(bodyStatus.getMessage() + e);
+            LOGGER.warn("{}", bodyStatus.getMessage(), e);
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof HttpMediaTypeNotSupportedException) {
             bodyStatus = Utils.bodyStatus(4011);
-            LOGGER.error(bodyStatus.getMessage() + e);
+            LOGGER.warn("{}", bodyStatus.getMessage(), e);
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof HttpMessageNotReadableException) {
             bodyStatus = Utils.bodyStatus(4004);
-            LOGGER.error(bodyStatus.getMessage() + e);
+            LOGGER.warn("{}", bodyStatus.getMessage(), e);
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof NumberFormatException) {
             bodyStatus = Utils.bodyStatus(4008);
-            LOGGER.error(bodyStatus.getMessage() + e);
+            LOGGER.warn("{}", bodyStatus.getMessage(), e);
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
 
         } else if (e instanceof MethodArgumentNotValidException) {
@@ -69,17 +87,18 @@ public class GlobalExceptionHandler {
                         .message(fieldError.getDefaultMessage())
                         .field(fieldError.getField())
                         .build();
-                LOGGER.warn(bodyValidStatus.getMessage() + e);
+                LOGGER.warn("{}", bodyValidStatus.getMessage(), e);
                 return new ResponseEntity<>(bodyValidStatus, HttpStatus.OK);
             } else {
                 bodyStatus = Utils.bodyStatus(4006);
-                LOGGER.error(bodyStatus.getMessage() + e);
+                LOGGER.warn("{}", bodyStatus.getMessage(), e);
                 return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
             }
-
         } else {
             bodyStatus = Utils.bodyStatus(5000);
-            LOGGER.error(bodyStatus.getMessage() + e);
+            LOGGER.error("被动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
+            bodyStatus.setMessage("访问" + uri + "时，出现[" + bodyStatus.getCode() + ":" + bodyStatus.getMessage() +
+                    "]，来源财税平台");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         }
     }
