@@ -205,6 +205,10 @@
         where phone=#{phone}
     </select>
 
+    <resultMap id="userStatisBO" type="com.abc12366.uc.model.bo.UserStatisBO">
+        <result column="days" property="days" jdbcType="TIMESTAMP"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+    </resultMap>
     <select id="statisUserByDay" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
         select DATE_FORMAT(createTime,#{dateFormat}) days ,count(id) count from uc_user
         <where>
