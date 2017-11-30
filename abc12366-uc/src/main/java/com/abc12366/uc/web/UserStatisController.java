@@ -4,11 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserLossRateBO;
-import com.abc12366.uc.model.bo.UserLivenessYearBO;
-import com.abc12366.uc.model.bo.UserSimpleInfoBO;
-import com.abc12366.uc.model.bo.UserStatisBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -92,16 +88,30 @@ public class UserStatisController {
     }
 
     /**
-     * 用户活跃度统计接口
-     * @param year 年份
+     * 用户活跃度统计(概况)接口
      * @return ResponseEntity
      */
     @GetMapping(path = "/liveness")
-    public ResponseEntity userLiveness(@RequestParam String year){
-        LOGGER.info("查询用户活跃度统计：{}", year);
-        UserLivenessYearBO userLivenessYearBO = userService.userLiveness(year);
-        LOGGER.info("查询用户活跃度统计结果返回：{}", userLivenessYearBO);
-        return ResponseEntity.ok(Utils.kv("dataList",userLivenessYearBO));
+    public ResponseEntity userLiveness(){
+        LOGGER.info("查询用户活跃度概况统计");
+        UserLivenessSurveyBO userLivenessSurveyBO = userService.userLivenessSurvey();
+        LOGGER.info("查询用户活跃度概况统计结果返回：{}", userLivenessSurveyBO);
+        return ResponseEntity.ok(Utils.kv("dataList",userLivenessSurveyBO));
+    }
+
+    /**
+     * 用户活跃度统计（详情）接口
+     * @param type 时间类型
+     * @param start 开始时间
+     * @param end 结束时间
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/liveness/detail")
+    public ResponseEntity userLivenessDetail(@RequestParam String type,@RequestParam String start,@RequestParam String end){
+        LOGGER.info("查询用户活跃度统计：{}:{}:{}", type,start,end);
+        Object object = userService.userLivenessDetail(type,start,end);
+        LOGGER.info("查询用户活跃度统计结果返回：{}", object);
+        return ResponseEntity.ok(Utils.kv("dataList",object));
     }
 
     /**
@@ -112,9 +122,9 @@ public class UserStatisController {
     @GetMapping(path = "/explevel")
     public ResponseEntity userExpLevel(@RequestParam String year){
         LOGGER.info("查询用户经验值等级统计：{}", year);
-        userService.userExpLevel(year);
-        LOGGER.info("查询用户经验值等级统计结果返回：{}");
-        return ResponseEntity.ok(Utils.kv("dataList",null));
+        List<ExpLevelStatistic> expLevelStatisticList = userService.userExpLevel(year);
+        LOGGER.info("查询用户经验值等级统计结果返回：{}", expLevelStatisticList);
+        return ResponseEntity.ok(Utils.kv("dataList",expLevelStatisticList));
     }
 
     /**
@@ -125,9 +135,9 @@ public class UserStatisController {
     @GetMapping(path = "/viplevel")
     public ResponseEntity userVipLevel(@RequestParam String year){
         LOGGER.info("查询用户活跃度统计：{}", year);
-        UserLivenessYearBO userLivenessYearBO = userService.userLiveness(year);
-        LOGGER.info("查询用户活跃度统计结果返回：{}", userLivenessYearBO);
-        return ResponseEntity.ok(Utils.kv("dataList",userLivenessYearBO));
+        List<VipLevelStatistic> vipLevelStatisticList = userService.userVip(year);
+        LOGGER.info("查询用户活跃度统计结果返回：{}", vipLevelStatisticList);
+        return ResponseEntity.ok(Utils.kv("dataList",vipLevelStatisticList));
     }
 
     /**

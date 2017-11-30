@@ -20,6 +20,7 @@ public class UserDzsbListBO {
     private Date createTime;
     private Date lastUpdate;
     private String userType;
+    private Date expandExpireTime;
 
     public UserDzsbListBO() {
     }
@@ -118,5 +119,32 @@ public class UserDzsbListBO {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public Date getExpandExpireTime() {
+        return expandExpireTime;
+    }
+
+    public void setExpandExpireTime(Date expandExpireTime) {
+        this.expandExpireTime = expandExpireTime;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDzsbListBO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", djxh='" + djxh + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
+                ", nsrmc='" + nsrmc + '\'' +
+                ", shxydm='" + shxydm + '\'' +
+                ", swjgMc='" + swjgMc + '\'' +
+                ", swjgDm='" + swjgDm + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", userType='" + userType + '\'' +
+                ", expandExpireTime=" + expandExpireTime +
+                '}';
     }
 }

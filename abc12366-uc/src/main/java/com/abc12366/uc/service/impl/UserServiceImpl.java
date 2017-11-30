@@ -15,7 +15,6 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
-import com.ctc.wstx.util.DataUtil;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +86,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private VipLevelService vipLevelService;
+
+    @Autowired
+    private ExperienceLogService experienceLogService;
 
     @Override
     public List<UserListBO> selectList(Map<String, Object> map, int page, int size) {
@@ -772,14 +777,14 @@ public class UserServiceImpl implements UserService {
 
     public List<UserStatisBO> statisUserByMonth(Map<String, Object> map) {
         int day = 0;
-        if(map.get("startTime") != null && map.get("endTime") != null){
-            day = DateUtils.differentDaysByMillisecond((Date)map.get("startTime"),(Date)map.get("endTime"));
+        if (map.get("startTime") != null && map.get("endTime") != null) {
+            day = DateUtils.differentDaysByMillisecond((Date) map.get("startTime"), (Date) map.get("endTime"));
         }
         //未超过30天则按天显示统计数，否则按月显示统计数
-        if(day <= 31){
+        if (day <= 31) {
             map.put("dateFormat", "%Y-%m-%d");
             return userRoMapper.statisUserByDay(map);
-        }else{
+        } else {
             map.put("dateFormat", "%Y-%m");
             return userRoMapper.statisUserByDay(map);
         }
@@ -795,7 +800,7 @@ public class UserServiceImpl implements UserService {
         UserLossRateBO userCount = userRoMapper.statisUserCount(map);
         UserLossRateBO lossUserCount = userRoMapper.statisUserLossRateCount(map);
         UserLossRateBO data = new UserLossRateBO();
-        if(userCount != null && userCount.getUserCount() != null && lossUserCount != null && lossUserCount.getLossUserCount() != null){
+        if (userCount != null && userCount.getUserCount() != null && lossUserCount != null && lossUserCount.getLossUserCount() != null) {
             int notUserCount = userCount.getUserCount() - lossUserCount.getLossUserCount();
             NumberFormat numberFormat = NumberFormat.getInstance();
             // 设置精确到小数点后2位
@@ -809,31 +814,157 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserLivenessYearBO userLiveness(String year) {
-        UserLivenessYearBO userLivenessYearBO = new UserLivenessYearBO();
-        for (int i = 0; i < 12; i++) {
-            Calendar start = Calendar.getInstance();
-            start.set(Integer.parseInt(year), i, 1, 0, 0, 0);
-            Calendar end = Calendar.getInstance();
-            end.set(Integer.parseInt(year), i + 1, 1, 0, 0, 0);
-            userLivenessYearBO.setMonth(i+1+"");
-            //先查出没有登录过的
-            List<UserLivenessMonthBO> monthNoLoginList = userRoMapper.userLivenessMonthNoLogin(start.getTime(), end.getTime());
-            //再查出登录过的并生序排列
-            List<UserLivenessMonthBO> monthList = userRoMapper.userLivenessMonth(start.getTime(),end.getTime());
-            List<UserLivenessMonthBO> list = new ArrayList<>();
-            list.addAll(monthNoLoginList);
-            list.addAll(monthList);
-            userLivenessYearBO.setUserLivenessMonthBOList(list);
+    public UserLivenessSurveyBO userLivenessSurvey() {
+        UserLivenessSurveyBO userLivenessSurveyBO = userRoMapper.userLivenessSurvey();
+        if (userLivenessSurveyBO.getLastweek() != 0) {
+            userLivenessSurveyBO.setLastweekDevidedbyLastweek(userLivenessSurveyBO.getYesterday() / userLivenessSurveyBO.getLastweek() * 100 + "%");
+        } else {
+            userLivenessSurveyBO.setLastweekDevidedbyLastweek("/");
         }
-        return userLivenessYearBO;
+        if (userLivenessSurveyBO.getLast30Days() != 0) {
+            userLivenessSurveyBO.setLast30DaysDevidedbyYesterday(userLivenessSurveyBO.getYesterday() / userLivenessSurveyBO.getLast30Days() * 100 + "%");
+        } else {
+            userLivenessSurveyBO.setLast30DaysDevidedbyYesterday("/");
+        }
+        return userLivenessSurveyBO;
     }
 
     @Override
-    public void userExpLevel(String year) {
-        Calendar start = Calendar.getInstance();
-        start.set(Integer.parseInt(year), 0, 1, 0, 0, 0);
-        Calendar end = Calendar.getInstance();
-        end.set(Integer.parseInt(year)+1, 0, 1, 0, 0, 0);
+    public Object userLivenessDetail(String type, String startStr, String endStr) {
+        if (StringUtils.isEmpty(type) || StringUtils.isEmpty(startStr) || StringUtils.isEmpty(endStr)) {
+            return null;
+        }
+        List<UserLivenessDetailBO> list = new ArrayList<>();
+
+        if (type.trim().equals("year")) {
+            Calendar c1 = Calendar.getInstance();
+            c1.setTime(DateUtils.strToDate(startStr, "yyyy"));
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(DateUtils.strToDate(endStr, "yyyy"));
+            Calendar c3 = Calendar.getInstance();
+            c3.setTime(DateUtils.strToDate(startStr, "yyyy"));
+            c3.add(Calendar.YEAR,1);
+            int minusYear = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);
+            for(int i=0;i<minusYear;i++){
+                UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c2.getTime());
+                userLivenessDetailBO.setDate(DateUtils.dateToString(c1.getTime(),"yyyy") + "～" + DateUtils.dateToString(c3.getTime(),"yyyy"));
+                if (userLivenessDetailBO.getAllRegister() > 0) {
+                    userLivenessDetailBO.setLiveUserPercent(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100 + "%");
+                } else {
+                    userLivenessDetailBO.setLiveUserPercent(0 + "");
+                }
+                list.add(userLivenessDetailBO);
+                c1.add(Calendar.YEAR,1);
+                c3.add(Calendar.YEAR,1);
+            }
+        }
+        if (type.trim().equals("month")) {
+            Calendar c1 = Calendar.getInstance();
+            c1.setTime(DateUtils.strToDate(startStr, "yyyy-MM"));
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(DateUtils.strToDate(endStr, "yyyy-MM"));
+            int minusYear = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);
+            int minus = c2.get(Calendar.MONTH)-c1.get(Calendar.MONTH) +12*minusYear;
+            Calendar c3 = Calendar.getInstance();
+            c3.setTime(DateUtils.strToDate(startStr, "yyyy-MM"));
+            c3.add(Calendar.MONTH,1);
+            for(int i=0;i<minus;i++){
+                UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c3.getTime());
+                userLivenessDetailBO.setDate(DateUtils.dateToString(c1.getTime(),"yyyy-MM") + "～" + DateUtils.dateToString(c3.getTime(),"yyyy-MM"));
+                if (userLivenessDetailBO.getAllRegister() > 0) {
+                    userLivenessDetailBO.setLiveUserPercent(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100 + "%");
+                } else {
+                    userLivenessDetailBO.setLiveUserPercent(0 + "");
+                }
+                list.add(userLivenessDetailBO);
+                c1.add(Calendar.MONTH,1);
+                c3.add(Calendar.MONTH,1);
+            }
+        }
+
+        if (type.trim().equals("day")) {
+            Calendar c1 = Calendar.getInstance();
+            c1.setTime(DateUtils.strToDate(startStr, "yyyy-MM-dd"));
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(DateUtils.strToDate(endStr, "yyyy-MM-dd"));
+            Calendar c3 = Calendar.getInstance();
+            c3.setTime(DateUtils.strToDate(endStr, "yyyy-MM-dd"));
+            c3.add(Calendar.DAY_OF_YEAR,1);
+            long minus = (c3.getTime().getTime()-c1.getTime().getTime())/(24*60*60*1000);
+            for(int i=0;i<minus;i++){
+                UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c2.getTime());
+                userLivenessDetailBO.setDate(DateUtils.dateToString(c1.getTime(),"yyyy-MM-dd") + "～" + DateUtils.dateToString(c3.getTime(),"yyyy-MM-dd"));
+                if (userLivenessDetailBO.getAllRegister() > 0) {
+                    userLivenessDetailBO.setLiveUserPercent(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100 + "%");
+                } else {
+                    userLivenessDetailBO.setLiveUserPercent(0 + "");
+                }
+                list.add(userLivenessDetailBO);
+                c1.add(Calendar.DAY_OF_YEAR,1);
+                c3.add(Calendar.DAY_OF_YEAR,1);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<ExpLevelStatistic> userExpLevel(String year) {
+        Date start = DateUtils.strToDate(year, "yyyy");
+        Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
+        Date lastStart = DateUtils.strToDate(Integer.parseInt(year) - 1 + "", "yyyy");
+        List<ExperienceLevelBO> experienceLevelBOList = experienceLevelService.selectList(null);
+
+        List<ExpLevelStatistic> expLevelStatisticList = new ArrayList<>();
+        for (ExperienceLevelBO experienceLevelBO : experienceLevelBOList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("start", start);
+            map.put("end", end);
+            map.put("lastStart", lastStart);
+            map.put("lastEnd", start);
+            map.put("min", experienceLevelBO.getMinValue());
+            map.put("max", experienceLevelBO.getMaxValue());
+            float increase = experienceLogService.selectCount(map);
+            float now = userRoMapper.selectExpCount(map);
+            ExpLevelStatistic expLevelStatistic = new ExpLevelStatistic();
+            expLevelStatistic.setAll((int)now);
+            expLevelStatistic.setLevelCode(experienceLevelBO.getName());
+            expLevelStatistic.setLevelName(experienceLevelBO.getMedal());
+            expLevelStatistic.setIncreasePercent(now-increase==0?"/":(increase/(now-increase)*100+"%"));
+            expLevelStatisticList.add(expLevelStatistic);
+        }
+        return expLevelStatisticList;
+    }
+
+    @Override
+    public List<VipLevelStatistic> userVip(String year) {
+        List<VipLevelBO> vipLevelBOList = vipLevelService.selectList(new HashMap<>());
+        Date start = DateUtils.strToDate(year, "yyyy");
+        Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
+        Date lastStart = DateUtils.strToDate(Integer.parseInt(year) - 1 + "", "yyyy");
+        List<VipLevelStatistic> vipLevelStatistics = new ArrayList<>();
+        for (int i = 0; i < vipLevelBOList.size(); i++) {
+            VipLevelBO vipLevelBO = vipLevelBOList.get(i);
+            if (vipLevelBO.getLevelCode().equals("VIP0")) {
+                continue;
+            }
+            Map<String, Object> map = new HashMap<>();
+            map.put("levelCode", vipLevelBO.getLevelCode());
+            map.put("start", start);
+            map.put("end", end);
+            map.put("lastStart", lastStart);
+            map.put("lastEnd", start);
+            VipLevelStatisticTemp vipLevelStatistic = vipLogService.selectCountByCode(map);
+            VipLevelStatistic levelStatistic = new VipLevelStatistic();
+            levelStatistic.setLevelCode(vipLevelBO.getLevelCode());
+            levelStatistic.setAll(vipLevelStatistic.getAllCount());
+            levelStatistic.setIncrease((int) vipLevelStatistic.getIncrease());
+            if (vipLevelStatistic.getLastIncrease() < 1) {
+                levelStatistic.setIncreasePercent("/");
+            } else {
+                levelStatistic.setIncreasePercent(vipLevelStatistic.getIncrease() / vipLevelStatistic.getLastIncrease() * 100F + "%");
+            }
+            vipLevelStatistics.add(levelStatistic);
+        }
+        return vipLevelStatistics;
     }
 }

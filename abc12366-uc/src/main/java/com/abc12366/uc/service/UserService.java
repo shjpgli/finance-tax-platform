@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -184,7 +185,18 @@ public interface UserService {
      */
     UserLossRateBO statisUserLossRate(Map<String, Object> map);
 
-    UserLivenessYearBO userLiveness(String year);
+    /**
+     * 用户活跃度统计(明细)接口
+     * @return UserLivenessSurveyBO
+     */
+    Object userLivenessDetail(String type, String start, String end);
 
-    void userExpLevel(String year);
+    List<ExpLevelStatistic> userExpLevel(String year);
+    /**
+     * 用户活跃度统计(概况)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessSurveyBO userLivenessSurvey();
+
+    List<VipLevelStatistic> userVip(String year);
 }

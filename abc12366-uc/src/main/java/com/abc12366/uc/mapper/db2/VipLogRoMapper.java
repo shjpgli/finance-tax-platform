@@ -1,8 +1,10 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.bo.VipLevelStatisticTemp;
 import com.abc12366.uc.model.bo.VipLogBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Admin: liuguiyao<435720953@qq.com.com>
@@ -11,4 +13,6 @@ import java.util.List;
  */
 public interface VipLogRoMapper {
     List<VipLogBO> selectList(String userId);
+
+    VipLevelStatisticTemp selectCountByCode(Map map);
 }

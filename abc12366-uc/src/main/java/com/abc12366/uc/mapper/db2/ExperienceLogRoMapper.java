@@ -17,4 +17,6 @@ public interface ExperienceLogRoMapper {
     ExperienceLogQueryBO selectOne(String id);
 
     List<ExpLogUcBO> selectListByUser(Map<String, Object> map);
+
+    float selectCount(Map<String, Object> map);
 }

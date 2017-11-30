@@ -97,4 +97,16 @@ public interface UserRoMapper {
     List<UserLivenessMonthBO> userLivenessMonthNoLogin(@Param("start")Date start, @Param("end")Date end);
 
     List<UserLivenessMonthBO> userLivenessMonth(@Param("start")Date start, @Param("end")Date end);
+    /**
+     * 用户活跃度统计(概况)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessSurveyBO userLivenessSurvey();
+    /**
+     * 用户活跃度统计(明细)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessDetailBO userLivenessDetail(@Param("start")Date start, @Param("end")Date end);
+
+    Float selectExpCount(Map<String, Object> map);
 }

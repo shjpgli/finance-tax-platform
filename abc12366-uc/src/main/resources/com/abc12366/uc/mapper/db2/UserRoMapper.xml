@@ -320,23 +320,28 @@
         </where>
     </select>
 
-
-    <select id="userLivenessMonthNoLogin" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessMonthBO">
-        SELECT c.id userId,c.nickname,c.userPicturePath,0 AS cou
-        FROM uc_user c
-        LEFT JOIN(SELECT d.userId FROM uc_user_login_log d
-            where <![CDATA[ d.createTime>=#{start} ]]>
-            <![CDATA[ and d.createTime<#{end} ]]>
-            ) e
-        ON c.id = e.userId WHERE e.userId IS NULL
+    <select id="userLivenessSurvey" resultType="com.abc12366.uc.model.bo.UserLivenessSurveyBO">
+        SELECT (
+        SELECT COUNT(DISTINCT userId) yesterday FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 1 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) yesterday,
+        (SELECT COUNT(DISTINCT userId) lastweek FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 7 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) lastweek,
+        (SELECT COUNT(DISTINCT userId) last30Days FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 30 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) last30Days
+        FROM DUAL
     </select>
 
-    <select id="userLivenessMonth" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessMonthBO">
-        SELECT a.userId,b.nickname,b.userPicturePath,a.cou FROM (
-          SELECT userId,COUNT(1) cou FROM uc_user_login_log
-          where <![CDATA[ createTime>=#{start} ]]>
-            <![CDATA[ and createTime<#{end} ]]>
-          GROUP BY userId
-          ORDER BY cou ASC) a JOIN uc_user b ON a.userId=b.id
+    <select id="userLivenessDetail" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessDetailBO">
+        SELECT
+        (SELECT COUNT(1) register FROM uc_user WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        ) register,
+        (SELECT COUNT(DISTINCT userId) yesterday FROM uc_user_login_log WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        ) liveUsers,
+        (SELECT COUNT(1) FROM uc_user
+        ) allRegister
+        FROM DUAL
+    </select>
+    <select id="selectExpCount" parameterType="java.util.Map" resultType="java.lang.Float">
+        select count(1) now from uc_user where exp &gt;= #{min} and exp &lt;= #{max}
     </select>
 </mapper>

@@ -12,4 +12,14 @@
         ORDER BY createTime DESC
     </select>
 
+    <select id="selectCountByCode" resultType="com.abc12366.uc.model.bo.VipLevelStatisticTemp" parameterType="java.util.Map">
+        SELECT
+        (SELECT COUNT(1) allCount FROM uc_user WHERE vipLevel=#{levelCode}
+        ) allCount,
+        (SELECT COUNT(1) increase FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &gt;=#{start} AND createTime &lt; #{end}
+        ) increase,
+        (SELECT COUNT(1) lastIncrease FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &gt;=#{lastStart} AND createTime &lt;#{lastEnd}
+        ) lastIncrease
+        FROM DUAL
+    </select>
 </mapper>
