@@ -325,6 +325,7 @@
             AND o.tradeMethod = #{tradeMethod}
           group by u.id
         ) m
+    </select>
 
     <select id="userLivenessDetail" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessDetailBO">
         SELECT
@@ -338,7 +339,6 @@
     </select>
     <select id="selectExpCount" parameterType="java.util.Map" resultType="java.lang.Float">
         select count(1) now from uc_user where exp &gt;= #{min} and exp &lt;= #{max}
-    </select>
     </select>
 
     <select id="statisUserConsumeLevel" resultType="com.abc12366.uc.model.bo.UserExprotInfoBO" parameterType="java.util.Map">
