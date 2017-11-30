@@ -16,6 +16,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +44,8 @@ public class SystemRecordController {
      * @param appName  使用系统
      * @param location 访问地点
      * @param yyyyMMdd 查询日期
+     * @param feature  操作功能
+     * @param username 用户名
      * @param page     当前页
      * @param size     每页大小
      * @return ResponseEntity SystemRecordBO实体
@@ -53,21 +55,29 @@ public class SystemRecordController {
     public ResponseEntity selectList(@RequestParam(required = false) String appName,
                                      @RequestParam(required = false) String location,
                                      @RequestParam(required = false) String yyyyMMdd,
+                                     @RequestParam(required = false) String username,
+                                     @RequestParam(required = false) String feature,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
 
         Map<String, String> map = new HashMap<>(16);
 
-        if (yyyyMMdd != null && !yyyyMMdd.isEmpty()) {
+        if (StringUtils.isNotEmpty(yyyyMMdd)) {
             map.put("yyyyMMdd", yyyyMMdd);
         } else {
             map.put("yyyyMMdd", DateUtils.getDataString());
         }
-        if (appName != null && !appName.isEmpty()) {
+        if (StringUtils.isNotEmpty(appName)) {
             map.put("appName", appName);
         }
-        if (location != null && !location.isEmpty()) {
+        if (StringUtils.isNotEmpty(location)) {
             map.put("location", location);
+        }
+        if (StringUtils.isNotEmpty(username)) {
+            map.put("username", username);
+        }
+        if (StringUtils.isNotEmpty(feature)) {
+            map.put("feature", feature);
         }
 
         List<SystemRecordBO> systemRecordList = systemRecordService.selectList(map, page, size);
@@ -108,10 +118,12 @@ public class SystemRecordController {
      * @see SystemRecordInsertBO
      */
     @PostMapping
-    public ResponseEntity insert(@RequestBody SystemRecordInsertBO systemRecordInsertBO, HttpServletRequest request) throws
+    public ResponseEntity insert(@RequestBody SystemRecordInsertBO systemRecordInsertBO, HttpServletRequest request)
+            throws
             ExecutionException, InterruptedException {
         LOGGER.info("{}", systemRecordInsertBO);
-        CompletableFuture<SystemRecordBO> systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO,request);
+        CompletableFuture<SystemRecordBO> systemRecordBOReturn = systemRecordService.insert(systemRecordInsertBO,
+                request);
         CompletableFuture.allOf(systemRecordBOReturn);
         LOGGER.info("{}", systemRecordBOReturn.get());
         return ResponseEntity.ok(Utils.kv("data", systemRecordBOReturn.get()));

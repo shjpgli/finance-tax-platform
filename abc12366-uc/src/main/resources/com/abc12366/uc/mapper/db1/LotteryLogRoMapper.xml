@@ -5,11 +5,11 @@
     <insert id="insert" parameterType="com.abc12366.uc.model.LotteryLog">
 insert into uc_lottery_log(
 id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake,addressId
-,address,sendName,activityStartTime,activityEndTime,activityName,lotteryLevel,lotterySend
+,address,sendName,phone,activityStartTime,activityEndTime,activityName,lotteryLevel,lotterySend
  ,kuaidiGS ,  kuaididanhao, sendRemake  ,sendRemake2,endlqDate
 )values(
 #{id},#{activityId},#{lotteryId},#{createTime},#{lotteryName},#{isluck},#{state},#{userId},#{upoint},#{ip},#{remake},#{addressId}
-,#{address},#{sendName},#{activityStartTime},#{activityEndTime},#{activityName},#{lotteryLevel},#{lotterySend}
+,#{address},#{sendName},#{phone},#{activityStartTime},#{activityEndTime},#{activityName},#{lotteryLevel},#{lotterySend}
 ,#{kuaidiGS},#{kuaididanhao},#{sendRemake},#{sendRemake2} ,#{endlqDate})
 </insert>
     <update id="update" parameterType="com.abc12366.uc.model.LotteryLog">
@@ -17,7 +17,7 @@ id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,rem
         <set>
             <if test="address!=null">address=#{address},</if>
             <if test="sendName!=null">sendName=#{sendName},</if>
-            <if test="endlqDate!=null">endlqDate=#{endlqDate},</if>
+            <if test="phone!=null">phone=#{phone},</if>
             <if test="activityId!=null">activityId=#{activityId},</if>
             <if test="endlqDate!=null">endlqDate=#{endlqDate},</if>
             <if test="lotteryId!=null">lotteryId=#{lotteryId},</if>

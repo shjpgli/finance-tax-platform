@@ -25,12 +25,6 @@ public class ApplicationConfig {
     private String appKey;
     @Value("${message.netease.appSecret}")
     private String appSecret;
-    @Value("${message.netease.contentType}")
-    private String contentType;
-    @Value("${message.netease.charset}")
-    private String charset;
-    
-    
 
 	//电子税局地址
     @Value("${dzsj.soa.url}")
@@ -121,21 +115,5 @@ public class ApplicationConfig {
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getCharset() {
-        return charset;
-    }
-
-    public void setCharset(String charset) {
-        this.charset = charset;
     }
 }

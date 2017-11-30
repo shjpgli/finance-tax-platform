@@ -18,6 +18,17 @@ public class LotteryLog{
     /**活动结束时间*/
     private Date activityEndTime;
 
+    /**收件人号码*/
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getAddress() {
         return address;
     }

@@ -8,10 +8,12 @@ import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -65,9 +67,34 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
         }
     }
 
+    @Transactional("db1TxManager")
     @Override
     public KnowledgeCategory modify(KnowledgeCategory knowledgeCategory) {
         try{
+            String parentCode = knowledgeCategory.getParentCode();
+            String id = knowledgeCategory.getId();
+            /* 如果修改分类的时候，修改了父节点，判断 */
+            if(!StringUtils.isEmpty(parentCode) && !StringUtils.isEmpty(id)){
+                KnowledgeCategory cate = knowledgeCategoryMapper.selectByPrimaryKey(id);
+                String cateCode = cate.getCode();
+                if(parentCode.equals("0")){
+                    parentCode = "" ;
+                }
+                if(!cateCode.substring(0, cateCode.length()-6).equals(parentCode)){
+                    String newCode = parentCode + genCodes(6);
+                    for (; ; ) {
+                        KnowledgeCategory rs = knowledgeCategoryMapper.selectByCode(newCode);
+                        if (rs == null) {
+                            break;
+                        } else {
+                            newCode = parentCode + genCodes(6);
+                        }
+                    }
+                    knowledgeCategory.setCode(newCode);
+                    //同步修改
+                    knowledgeBaseMapper.updateCategoryCode(cateCode, newCode);
+                }
+            }
             knowledgeCategory.setUpdateUser(Utils.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);

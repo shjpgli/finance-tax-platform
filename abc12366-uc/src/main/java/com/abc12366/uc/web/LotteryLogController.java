@@ -87,7 +87,9 @@ public class LotteryLogController {
      * @return
      */
     @GetMapping(path = "/getLottery")
-    public ResponseEntity getLottery( @RequestParam(required = true) String lotteryLogId,@RequestParam(required = false) String addressId,@RequestParam(required = false) String address,@RequestParam(required = false) String sendName) {
+    public ResponseEntity getLottery( @RequestParam(required = true) String lotteryLogId,@RequestParam(required = false) String addressId,
+                                      @RequestParam(required = false) String address,@RequestParam(required = false) String sendName,
+                                      @RequestParam(required = false)String phone) {
         if(lotteryLogId==null || lotteryLogId.isEmpty()){
             throw new ServiceException(9999,"id为空");
         }
@@ -101,6 +103,7 @@ public class LotteryLogController {
 
             returnObj.setAddress(address);
             returnObj.setSendName(sendName);
+            returnObj.setPhone(phone);
             returnObj = lotteryLogService.update(returnObj,returnObj.getId());
             return ResponseEntity.ok(Utils.kv("data", returnObj));
         }else{

@@ -14,7 +14,7 @@
 		SELECT t.id, t.status, t.type, t1.nickname, t1.phone, t2.realName, t1.username
 		FROM bb_question_expert t
 		JOIN abc12366_uc.uc_user t1 ON t1.id = t.userId
-		JOIN abc12366_uc.uc_user_extend t2 ON t2.userId = t.userId
+		LEFT JOIN abc12366_uc.uc_user_extend t2 ON t2.userId = t.userId
 		WHERE  1=1
 		<if test="username != null and username !=''">
 			AND t1.username = #{username}
