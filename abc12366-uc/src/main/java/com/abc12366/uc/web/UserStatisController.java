@@ -153,10 +153,10 @@ public class UserStatisController {
      * @return
      */
     @GetMapping(path = "/consume")
-    public ResponseEntity statisUserConsumeLevel(@RequestParam(value = "startDay", required = true) int startDay,
-                                                 @RequestParam(value = "endDay", required = true) int endDay,
-                                                 @RequestParam(value = "startCount", required = true) int startCount,
-                                                 @RequestParam(value = "endCount", required = true) int endCount,
+    public ResponseEntity statisUserConsumeLevel(@RequestParam(value = "startDay", required = true) double startDay,
+                                                 @RequestParam(value = "endDay", required = true) double endDay,
+                                                 @RequestParam(value = "startCount", required = true) double startCount,
+                                                 @RequestParam(value = "endCount", required = true) double endCount,
                                                  @RequestParam(value = "startPrice", required = true) double startPrice,
                                                  @RequestParam(value = "endPrice", required = true) double endPrice,
                                                  @RequestParam(value = "startTime", required = true) String startTime,
