@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.exception.DzsbServiceException;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
@@ -544,7 +545,7 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4629);
         }
         if (!"00000000".equals(resMap.get("rescode"))) {
-            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
+            throw new DzsbServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
         }
         if (!resMap.containsKey("taxML_SSHDXX_" + nsrsbh + ".xml")) {
             throw new ServiceException(4634);
@@ -616,7 +617,7 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4629);
         }
         if (!"00000000".equals(resMap.get("rescode"))) {
-            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
+            throw new DzsbServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
         }
         if (!resMap.containsKey("taxML_CRM_NSRXXCX_" + nsrsbh + ".xml")) {
             throw new ServiceException(4634);
@@ -658,7 +659,7 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4629);
         }
         if (!"00000000".equals(resMap.get("rescode"))) {
-            throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
+            throw new DzsbServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
         }
         if (!resMap.containsKey("taxML_NSRAQSZ_" + nsrsbh + ".xml")) {
             throw new ServiceException(4634);
