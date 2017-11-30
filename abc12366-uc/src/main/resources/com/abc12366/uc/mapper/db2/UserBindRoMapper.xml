@@ -19,9 +19,7 @@
 
     <select id="getUserDzsbBind" resultType="com.abc12366.uc.model.bo.UserDzsbListBO" parameterType="java.lang.String">
         select uud.id, uud.userId, uud.djxh, uud.nsrsbh, uud.nsrmc, uud.shxydm, uud.swjgMc, uud.swjgDm, uud.status,
-          uud.createTime, uud.lastUpdate, uud.expireTime,
-          (select distinct uul.level from uc_uvip_level uul, uc_user uu
-          where uul.levelCode=uu.vipLevel and uu.id=uud.userId) userType
+          uud.createTime, uud.lastUpdate, uud.expireTime
         from uc_user_dzsb uud
         where userId=#{userId}
         and status=1

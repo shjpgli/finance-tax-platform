@@ -21,7 +21,6 @@ public class UserDzsbListBO {
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
-    private String userType;
 
     /**
      * 软件到期日
@@ -120,14 +119,6 @@ public class UserDzsbListBO {
         this.lastUpdate = lastUpdate;
     }
 
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
-
     public Date getExpireTime() {
         return expireTime;
     }
@@ -150,7 +141,6 @@ public class UserDzsbListBO {
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
-                ", userType='" + userType + '\'' +
                 ", expireTime=" + expireTime +
                 '}';
     }
