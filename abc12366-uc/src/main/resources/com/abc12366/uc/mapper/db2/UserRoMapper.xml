@@ -323,10 +323,13 @@
             (SELECT
             sum(o.totalPrice) AS sumPrice,
             count(u.id) AS consum,
-            u.id, u.nickName, u.phone, e.realName, e.area
+            u.id, u.nickName, u.phone, e.realName, CONCAT(p.province,t.city,r.area) as area
             from uc_order o
             left join uc_user u on u.id = o.userId
             left join uc_user_extend e on e.userId = u.id
+            LEFT JOIN uc_province p ON p.provinceId = e.province
+				LEFT JOIN uc_city t on t.cityId = e.city
+				LEFT JOIN uc_area r on r.areaId = e.area
             where 1=1
                 <![CDATA[
                 and datediff(#{endTime},o.createTime) >=  #{startDay}
