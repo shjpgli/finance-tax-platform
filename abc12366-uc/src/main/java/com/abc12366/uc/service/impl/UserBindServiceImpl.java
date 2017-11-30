@@ -624,7 +624,7 @@ public class UserBindServiceImpl implements UserBindService {
                 }
             }
         } else {
-            throw new ServiceException("9999", jbxxcx.getCWYY());
+            throw new DzsbServiceException("9999", jbxxcx.getCWYY());
         }
         return object;
     }
@@ -661,7 +661,7 @@ public class UserBindServiceImpl implements UserBindService {
                 }
             }
         } else {
-            throw new ServiceException("9999", jbxxcx.getCWYY());
+            throw new DzsbServiceException("9999", jbxxcx.getCWYY());
         }
         return object;
     }
