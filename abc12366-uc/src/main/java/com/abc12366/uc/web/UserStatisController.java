@@ -7,6 +7,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.StringUtil;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,8 +71,11 @@ public class UserStatisController {
      * @return
      */
     @GetMapping(path = "/list")
-    public ResponseEntity statisUserList(@RequestParam(value = "startTime", required = false) String startTime,
+    public ResponseEntity statisUserList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                         @RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         Map<String,Object> map = new HashMap<>();
         if (startTime != null && !"".equals(startTime)) {
             map.put("startTime", DateUtils.strToDate(startTime));
@@ -110,9 +114,7 @@ public class UserStatisController {
         UserLossRateBO data = userService.statisUserLossRate(map);
 //        PageInfo<UserLossRateBO> pageInfo = new PageInfo<>(list);
         LOGGER.info("{}", data);
-        return (data == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("data",data));
+        return ResponseEntity.ok(Utils.kv("data",data));
     }
 
     /**
@@ -159,8 +161,11 @@ public class UserStatisController {
                                                  @RequestParam(value = "endPrice", required = true) double endPrice,
                                                  @RequestParam(value = "startTime", required = true) String startTime,
                                                  @RequestParam(value = "endTime", required = true) String endTime,
-                                                 @RequestParam(value = "tradeMethod", required = true) String tradeMethod
+                                                 @RequestParam(value = "tradeMethod", required = true) String tradeMethod,
+                                                 @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize
                                                  ) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         Map<String,Object> map = new HashMap<>();
         map.put("startDay",startDay);
         map.put("endDay",endDay);
@@ -177,11 +182,11 @@ public class UserStatisController {
             map.put("endTime", DateUtils.strToDate(endTime));
         }
         List<UserExprotInfoBO> data = userService.statisUserConsumeLevel(map);
-        //PageInfo< Map<Object, Object>> pageInfo = new PageInfo<>((List<Object>) list);
+        PageInfo<UserExprotInfoBO> pageInfo = new PageInfo<>(data);
         LOGGER.info("list{}", data);
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("data",data));
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -205,9 +210,7 @@ public class UserStatisController {
         map.put("orderStatus", "6");
         UserRFMBO data = userService.statisUserRFM(map);
         LOGGER.info("{}", data);
-        return (data == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("data",data));
+        return ResponseEntity.ok(Utils.kv("data",data));
     }
 
 

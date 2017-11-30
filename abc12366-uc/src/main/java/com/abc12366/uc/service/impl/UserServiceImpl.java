@@ -36,6 +36,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -769,14 +770,45 @@ public class UserServiceImpl implements UserService {
         if (map.get("startTime") != null && map.get("endTime") != null) {
             day = DateUtils.differentDaysByMillisecond((Date) map.get("startTime"), (Date) map.get("endTime"));
         }
+        List<UserStatisBO> statisBOs = new ArrayList<>();
+        List<UserStatisBO> userStatisBOList = new ArrayList<>();
         //未超过30天则按天显示统计数，否则按月显示统计数
         if (day <= 31) {
             map.put("dateFormat", "%Y-%m-%d");
-            return userRoMapper.statisUserByDay(map);
+            statisBOs = userRoMapper.statisUserByDay(map);
+            List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            for (Date date :datelist){
+                UserStatisBO bo = new UserStatisBO();
+                bo.setCount(0);
+                bo.setDays(sdf.format(date));
+                for(UserStatisBO statisBO:statisBOs){
+                    if(sdf.format(date).equals(statisBO.getDays())){
+                        BeanUtils.copyProperties(statisBO, bo);
+                    }
+                }
+                userStatisBOList.add(bo);
+            }
         } else {
             map.put("dateFormat", "%Y-%m");
-            return userRoMapper.statisUserByDay(map);
+            statisBOs = userRoMapper.statisUserByDay(map);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+            Date startTime = (Date)map.get("startTime");
+            Date endTime = (Date) map.get("endTime");
+            List<Date> datelist = DateUtils.getMonthBetween(sdf.format(startTime), sdf.format(endTime));
+            for (Date date :datelist){
+                UserStatisBO bo = new UserStatisBO();
+                bo.setCount(0);
+                bo.setDays(sdf.format(date));
+                for(UserStatisBO statisBO:statisBOs){
+                    if(sdf.format(date).equals(statisBO.getDays())){
+                        BeanUtils.copyProperties(statisBO, bo);
+                    }
+                }
+                userStatisBOList.add(bo);
+            }
         }
+        return  userStatisBOList;
     }
 
     @Override
