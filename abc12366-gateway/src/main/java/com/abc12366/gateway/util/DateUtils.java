@@ -5,9 +5,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * 日期工具类
@@ -106,6 +104,24 @@ public class DateUtils {
     }
 
     /**
+     * 字符串转换成日期，yyyy-MM
+     *
+     * @param str
+     * @return date
+     */
+    public static Date strToDateMonth(String str) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = sdf.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    /**
      * 字符串转换成日期
      *
      * @param str 日期字符串
@@ -134,6 +150,19 @@ public class DateUtils {
             return null;
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    /**
+     * 时间转String，yyyy-MM
+     * @param date
+     * @return
+     */
+    public static String dateToMonth(Date date) {
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
         return format.format(date);
     }
 
@@ -318,13 +347,26 @@ public class DateUtils {
     }
 
     /**
-     * 日期往后减去num天
+     * 日期往后减去num月
      *
      * @param num
      * @return
      */
     public static Date getAddMonth(int num) {
         Date date = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -num);
+        date = calendar.getTime();
+        return date;
+    }
+
+    /**
+     * 日期往后减去num月
+     * @param num
+     * @return
+     */
+    public static Date getAddMonth(Date date,int num) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, -num);
@@ -500,4 +542,51 @@ public class DateUtils {
         return days;
     }
 
+
+    /**
+     *
+     * @param minDate 最小时间  2015-01
+     * @param maxDate 最大时间 2015-10
+     * @return 日期集合 格式为 年-月
+     * @throws Exception
+     */
+    public static List<Date> getMonthBetween(String minDate, String maxDate){
+        ArrayList<Date> result = new ArrayList<Date>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");//格式化为年月
+
+        Calendar min = Calendar.getInstance();
+        Calendar max = Calendar.getInstance();
+        try {
+            min.setTime(sdf.parse(minDate));
+            min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
+
+            max.setTime(sdf.parse(maxDate));
+            max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Calendar curr = min;
+        while (curr.before(max)) {
+            getLastDayOfMonth(curr.getTime(), "yyyy-MM-dd");
+            result.add(getLastDayOfMonth(curr.getTime(), "yyyy-MM-dd"));
+            curr.add(Calendar.MONTH, 1);
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取指定日期月份的最后一天，patter为返回的日期的字符串格式
+     * @param date
+     * @param patter
+     * @return
+     */
+    public static Date getLastDayOfMonth(Date date,String patter) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.roll(Calendar.DAY_OF_MONTH, -1);
+        java.text.SimpleDateFormat format = new java.text.SimpleDateFormat(patter);
+        return cal.getTime();
+    }
 }

@@ -4,7 +4,6 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.UpyunMapper;
 import com.abc12366.message.mapper.db2.UpyunRoMapper;
 import com.abc12366.message.model.UpyunTemplate;
@@ -44,8 +43,6 @@ public class UpyunServiceImpl implements UpyunService {
     private UpyunMapper upyunMapper;
 
     @Autowired
-    private ApplicationConfig config;
-    @Autowired
     private RestTemplate restTemplate;
 
     @Override
@@ -57,7 +54,7 @@ public class UpyunServiceImpl implements UpyunService {
     public void synchronizeTemplate() {
         String url = SpringCtxHolder.getProperty("message.upyun.send.url") + "/templates";
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Type", config.getContentType());
+        httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
         httpHeaders.add("Authorization", SpringCtxHolder.getProperty("message.upyun.auth"));
         //调用又拍接口请求体设置
         LinkedMultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
@@ -80,7 +77,8 @@ public class UpyunServiceImpl implements UpyunService {
         System.out.println(!StringUtils.isEmpty(templates));
         System.out.println(StringUtils.isEmpty(templates.getTemplates()));
         System.out.println(templates.getTemplates().size() > 0);
-        if (!StringUtils.isEmpty(templates) && !StringUtils.isEmpty(templates.getTemplates()) && templates.getTemplates().size() > 0) {
+        if (!StringUtils.isEmpty(templates) && !StringUtils.isEmpty(templates.getTemplates()) && templates
+                .getTemplates().size() > 0) {
             for (UpyunTemplateAcceptBaseBO templateBase : templates.getTemplates()) {
                 UpyunTemplate upyunTemplate = new UpyunTemplate();
                 upyunTemplate.setId(Utils.uuid());

@@ -10,7 +10,7 @@ package com.abc12366.uc.model.bo;
 public class UserStatisBO {
 
     /**
-     * 条数
+     * 用户总数
      */
     private Integer count;
     /**

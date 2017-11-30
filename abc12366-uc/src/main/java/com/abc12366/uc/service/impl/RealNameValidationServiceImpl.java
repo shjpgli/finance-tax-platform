@@ -90,7 +90,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     public UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
             ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
         if (userExtend == null) {
             throw new ServiceException(4701);
         }
@@ -107,6 +107,31 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         userExtendUpdate.setValidStatus(validStatus);
         if (validStatus.equals(TaskConstant.USER_REALNAME_VALIDATED)) {
             userExtendUpdate.setValidTime(new Date());
+            
+            //实名认证 跟新生日和性别
+            String idCard=userExtend.getIdcard();
+            if(idCard.length()==15){
+            	String id17 = idCard.substring(14, 15);
+            	if (Integer.parseInt(id17) % 2 != 0) {    
+                	userExtendUpdate.setSex("1");
+                } else {    
+                	userExtendUpdate.setSex("0");   
+                }
+            	String birthday = idCard.substring(6, 12);    
+                Date birthdate = new SimpleDateFormat("yyMMdd").parse(birthday);
+                userExtendUpdate.setBirthday(birthdate);
+            }else if(idCard.length()==18){
+            	String id17 = idCard.substring(16, 17);    
+                if (Integer.parseInt(id17) % 2 != 0) {    
+                	userExtendUpdate.setSex("1");
+                } else {    
+                	userExtendUpdate.setSex("0");   
+                } 
+                String birthday = idCard.substring(6, 14);    
+                Date birthdate = new SimpleDateFormat("yyyyMMdd").parse(birthday);
+                userExtendUpdate.setBirthday(birthdate);
+            }
+            
         }
         int result = userExtendMapper.update(userExtendUpdate);
         if (result < 1) {

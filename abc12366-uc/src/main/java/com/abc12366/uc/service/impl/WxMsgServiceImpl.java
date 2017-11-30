@@ -37,6 +37,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -155,10 +157,29 @@ public class WxMsgServiceImpl implements IWxMsgService {
 
     private ReturnMsg getReMsgOneBykeyString(String key) {
         try {
-            return msgRoMapper.getReMsgOneBykeyString(key);
+            //return msgRoMapper.getReMsgOneBykeyString(key);
+        	List<ReturnMsg> msgs=msgRoMapper.getAllkeyString();
+        	if(msgs!=null && msgs.size()>0){
+        		for(ReturnMsg msg:msgs){
+        			if("ALL".equals(msg.getSearchTp())){
+        				String[] keywords=msg.getKeyString().split(",");
+        				for(String keyword:keywords){
+        					if(key.contains(keyword)) return msg;
+        				}
+        			}else if("PART".equals(msg.getSearchTp())){
+        				String keyword=msg.getKeyString();
+        				keyword=keyword.replaceAll("", "|");
+        				keyword=(String) keyword.subSequence(1, keyword.length()-1);
+        				Pattern p=Pattern.compile(keyword);
+        			    Matcher m=p.matcher(key);
+        			    if(m.find()) return msg;
+        			}
+        		}
+        	}
+        	return null;
         } catch (Exception e) {
             LOGGER.error("查询单个关键字类型信息失败：{}", e);
-            throw null;
+            return null;
         }
     }
     
