@@ -249,13 +249,30 @@ public class UserBindServiceImpl implements UserBindService {
     public void automaticBindCancel() {
         Date date = DateUtils.getAddMonth(Constant.DZSB_BIND_DATE);
         List<String> ids = userBindRoMapper.selectListByDate(date);
-        Map<String, Object> map = new HashMap<>(16);
-        map.put("ids", ids);
-        try {
-            userBindMapper.updateBatch(map);
-        } catch (Exception e) {
-            LOGGER.error("automaticBindCancel.updateBatch(List<String> idList)", e);
-            throw new ServiceException(4923);
+        if(ids != null && ids.size() > 0){
+            int size = ids.size();
+            int num = (size) % 100 == 0 ? (size / 100) : (size / 100 + 1);// 按每100条记录查询
+            int start = 0;
+            int end = 0;
+            List<String> page = new ArrayList<String>();
+            //方法1
+            for (int i = 1; i <= num; i++) {
+                end = (i * 100) > size ? size : (i * 100);
+                start = (i - 1) * 100;
+                for (; start < end; start++) {
+                    page.add(ids.get(start));
+                }
+                //此处可以进行处理数据  插入 修改删除 都可以进行操作 避免同时操作大集合数据
+                Map<String, Object> map = new HashMap<>();
+                map.put("ids", page);
+                try {
+                    userBindMapper.updateBatch(map);
+                } catch (Exception e) {
+                    LOGGER.error("automaticBindCancel.updateBatch(List<String> idList){}{}",page.toString(), e);
+                    throw new ServiceException(4923);
+                }
+                page.clear();
+            }
         }
     }
 
