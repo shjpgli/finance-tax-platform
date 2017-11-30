@@ -126,4 +126,7 @@ public interface KnowledgeBaseMapper {
 
     /* 根据知识库分类id  查询知识库个数 */
     int selectCntByCategoryId(String categoryId);
+
+
+    void updateCategoryCode(@Param("oldCode") String oldCode, @Param("newCode") String newCode);
 }
