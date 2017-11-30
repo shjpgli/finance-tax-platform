@@ -915,11 +915,11 @@ public class UserServiceImpl implements UserService {
             Calendar c2 = Calendar.getInstance();
             c2.setTime(DateUtils.strToDate(endStr, "yyyy-MM-dd"));
             Calendar c3 = Calendar.getInstance();
-            c3.setTime(DateUtils.strToDate(endStr, "yyyy-MM-dd"));
+            c3.setTime(DateUtils.strToDate(startStr, "yyyy-MM-dd"));
             c3.add(Calendar.DAY_OF_YEAR,1);
             long minus = (c3.getTime().getTime()-c1.getTime().getTime())/(24*60*60*1000);
             for(int i=0;i<minus;i++){
-                UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c2.getTime());
+                UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c3.getTime());
                 userLivenessDetailBO.setDate(DateUtils.dateToString(c1.getTime(),"yyyy-MM-dd") + "～" + DateUtils.dateToString(c3.getTime(),"yyyy-MM-dd"));
                 if (userLivenessDetailBO.getAllRegister() > 0) {
                     userLivenessDetailBO.setLiveUserPercent(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100 + "%");
