@@ -109,4 +109,18 @@ public interface UserRoMapper {
     UserLivenessDetailBO userLivenessDetail(@Param("start")Date start, @Param("end")Date end);
 
     Float selectExpCount(Map<String, Object> map);
+
+    /**
+     * 查询RFM指标
+     * @param map
+     * @return
+     */
+    UserRFMBO statisUserRFM(Map<String, Object> map);
+
+    /**
+     * 查询导出用户
+     * @param map
+     * @return
+     */
+    List<UserExprotInfoBO> statisUserConsumeLevel(Map<String, Object> map);
 }

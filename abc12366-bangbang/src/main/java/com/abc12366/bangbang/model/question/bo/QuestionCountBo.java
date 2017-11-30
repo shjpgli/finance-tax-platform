@@ -9,6 +9,15 @@ public class QuestionCountBo {
     private String uid;
     private String userPicturePath;
     private String username;
+    private String nickname;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public String getId() {
         return id;

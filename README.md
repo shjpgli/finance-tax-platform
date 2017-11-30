@@ -200,6 +200,8 @@ prod为IDC机房环境，comp为公司机房环境。每次打包都需要确认
 在工程根目录执行：
 > mvn install:install-file -DgroupId=com.alipay -DartifactId=alipay-sdk -Dversion=20170324180803 -Dpackaging=jar -Dfile=alipay-sdk-java20170324180803.jar
   mvn install:install-file -DgroupId=hnds -DartifactId=hnds-security -Dversion=1.0 -Dpackaging=jar -Dfile=hnds-security.jar
+  mvn install:install-file -DgroupId=aliyun-sdk -DartifactId=aliyun-sdk-core -Dversion=3.3.1 -Dpackaging=jar -Dfile=aliyun-java-sdk-core-3.3.1.jar
+  mvn install:install-file -DgroupId=aliyun-sdk -DartifactId=aliyun-sdk-dysmsapi -Dversion=1.0.0 -Dpackaging=jar -Dfile=aliyun-java-sdk-dysmsapi-1.0.0.jar
 
 ### 接口规范
 

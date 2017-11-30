@@ -45,4 +45,13 @@ public class VerifyParam {
     public void setCode(String code) {
         this.code = code;
     }
+
+    @Override
+    public String toString() {
+        return "VerifyParam{" +
+                "type='" + type + '\'' +
+                ", phone='" + phone + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

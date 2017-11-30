@@ -39,4 +39,17 @@ public interface IMsgSendService {
 	 */
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity sendByQdbatch(MessageSendBo sendBo);
+
+	/**
+	 * 前段阿松系统消息
+	 * @param sendBo 消息实体
+	 * @return
+	 */
+	public ResponseEntity sendXtxx(MessageSendBo sendBo);
+
+	/**
+	 * 前段批量发送系统消息
+	 * @param sendBo
+	 */
+	public ResponseEntity sendXtxxbatch(MessageSendBo sendBo);
 }

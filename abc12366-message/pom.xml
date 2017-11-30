@@ -53,10 +53,16 @@
         </dependency>
         <!--阿里云短信依赖-->
         <dependency>
-            <groupId>com.aliyun.mns</groupId>
-            <artifactId>aliyun-sdk-mns</artifactId>
-            <version>1.1.8</version>
+            <groupId>aliyun-sdk</groupId>
+            <artifactId>aliyun-sdk-core</artifactId>
+            <version>3.3.1</version>
         </dependency>
+        <dependency>
+            <groupId>aliyun-sdk</groupId>
+            <artifactId>aliyun-sdk-dysmsapi</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpasyncclient</artifactId>

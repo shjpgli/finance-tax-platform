@@ -1,10 +1,5 @@
 package com.abc12366.message.model.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**

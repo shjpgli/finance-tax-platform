@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -21,6 +23,12 @@ public class UserDzsbListBO {
     private Date lastUpdate;
     private String userType;
     private Date expandExpireTime;
+
+    /**
+     * 软件到期日
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private Date expireTime;
 
     public UserDzsbListBO() {
     }
@@ -113,8 +121,8 @@ public class UserDzsbListBO {
         this.lastUpdate = lastUpdate;
     }
 
-    public String getUserType() {
-        return userType;
+    public Date getExpireTime() {
+        return expireTime;
     }
 
     public void setUserType(String userType) {
@@ -145,6 +153,26 @@ public class UserDzsbListBO {
                 ", lastUpdate=" + lastUpdate +
                 ", userType='" + userType + '\'' +
                 ", expandExpireTime=" + expandExpireTime +
+                '}';
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDzsbListBO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", djxh='" + djxh + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
+                ", nsrmc='" + nsrmc + '\'' +
+                ", shxydm='" + shxydm + '\'' +
+                ", swjgMc='" + swjgMc + '\'' +
+                ", swjgDm='" + swjgDm + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", expireTime=" + expireTime +
                 '}';
     }
 }
