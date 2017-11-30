@@ -13,7 +13,7 @@
         select id from uc_user_dzsb
         WHERE status = true
         <![CDATA[
-                and ( date_format(lastLoginTime, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s') or lastLoginTime is null)
+                and date_format(lastLoginTime, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s') and lastLoginTime is not null
                 ]]>
     </select>
 
