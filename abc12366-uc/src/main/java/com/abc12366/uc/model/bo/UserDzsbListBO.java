@@ -1,5 +1,7 @@
 package com.abc12366.uc.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -20,6 +22,12 @@ public class UserDzsbListBO {
     private Date createTime;
     private Date lastUpdate;
     private String userType;
+
+    /**
+     * 软件到期日
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private Date expireTime;
 
     public UserDzsbListBO() {
     }
@@ -118,5 +126,32 @@ public class UserDzsbListBO {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public Date getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDzsbListBO{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", djxh='" + djxh + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
+                ", nsrmc='" + nsrmc + '\'' +
+                ", shxydm='" + shxydm + '\'' +
+                ", swjgMc='" + swjgMc + '\'' +
+                ", swjgDm='" + swjgDm + '\'' +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", userType='" + userType + '\'' +
+                ", expireTime=" + expireTime +
+                '}';
     }
 }
