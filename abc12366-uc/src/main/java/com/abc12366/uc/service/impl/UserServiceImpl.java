@@ -581,7 +581,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("用户手机+验证码登录获取手机验证码参数：{}", sendCodeBO.toString());
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(sendCodeBO.getPhone());
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User user = userMapper.selectByUsernameOrPhone(loginBO);
         //判断手机号码是否注册
         if (user == null) {
             LOGGER.warn("此号码未注册，不允许通过验证码登录：{}", loginBO.toString());

@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
+import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserRetainedRateBO;
 
 import java.util.List;
@@ -40,4 +41,6 @@ public interface UserMapper {
      * @return
      */
     List<UserRetainedRateBO> statisUserRetainedRate(Map<String, Object> inMap);
+
+	User selectByUsernameOrPhone(LoginBO bo);
 }
