@@ -7,6 +7,7 @@ package com.abc12366.uc.model.bo;
  */
 public class VipLevelStatistic {
     private String levelCode;
+    private String levelName;
     private int all;
     private int increase;
     private String increasePercent;
@@ -43,10 +44,19 @@ public class VipLevelStatistic {
         this.increase = increase;
     }
 
+    public String getLevelName() {
+        return levelName;
+    }
+
+    public void setLevelName(String levelName) {
+        this.levelName = levelName;
+    }
+
     @Override
     public String toString() {
         return "VipLevelStatistic{" +
                 "levelCode='" + levelCode + '\'' +
+                ", levelName='" + levelName + '\'' +
                 ", all=" + all +
                 ", increase=" + increase +
                 ", increasePercent='" + increasePercent + '\'' +

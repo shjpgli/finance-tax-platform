@@ -35,6 +35,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -844,12 +845,12 @@ public class UserServiceImpl implements UserService {
     public UserLivenessSurveyBO userLivenessSurvey() {
         UserLivenessSurveyBO userLivenessSurveyBO = userRoMapper.userLivenessSurvey();
         if (userLivenessSurveyBO.getLastweek() != 0) {
-            userLivenessSurveyBO.setLastweekDevidedbyLastweek(userLivenessSurveyBO.getYesterday() / userLivenessSurveyBO.getLastweek() * 100 + "%");
+            userLivenessSurveyBO.setLastweekDevidedbyLastweek(new DecimalFormat("#.##").format(userLivenessSurveyBO.getYesterday() / userLivenessSurveyBO.getLastweek() * 100) + "%");
         } else {
             userLivenessSurveyBO.setLastweekDevidedbyLastweek("/");
         }
         if (userLivenessSurveyBO.getLast30Days() != 0) {
-            userLivenessSurveyBO.setLast30DaysDevidedbyYesterday(userLivenessSurveyBO.getYesterday() / userLivenessSurveyBO.getLast30Days() * 100 + "%");
+            userLivenessSurveyBO.setLast30DaysDevidedbyYesterday(new DecimalFormat("#.##").format(userLivenessSurveyBO.getYesterday() / userLivenessSurveyBO.getLast30Days() * 100) + "%");
         } else {
             userLivenessSurveyBO.setLast30DaysDevidedbyYesterday("/");
         }
@@ -873,10 +874,10 @@ public class UserServiceImpl implements UserService {
             c3.add(Calendar.YEAR,1);
             int minusYear = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);
             for(int i=0;i<minusYear;i++){
-                UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c2.getTime());
+                UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c3.getTime());
                 userLivenessDetailBO.setDate(DateUtils.dateToString(c1.getTime(),"yyyy") + "～" + DateUtils.dateToString(c3.getTime(),"yyyy"));
                 if (userLivenessDetailBO.getAllRegister() > 0) {
-                    userLivenessDetailBO.setLiveUserPercent(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100 + "%");
+                    userLivenessDetailBO.setLiveUserPercent(new DecimalFormat("#.##").format(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100) + "%");
                 } else {
                     userLivenessDetailBO.setLiveUserPercent(0 + "");
                 }
@@ -899,7 +900,7 @@ public class UserServiceImpl implements UserService {
                 UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c3.getTime());
                 userLivenessDetailBO.setDate(DateUtils.dateToString(c1.getTime(),"yyyy-MM") + "～" + DateUtils.dateToString(c3.getTime(),"yyyy-MM"));
                 if (userLivenessDetailBO.getAllRegister() > 0) {
-                    userLivenessDetailBO.setLiveUserPercent(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100 + "%");
+                    userLivenessDetailBO.setLiveUserPercent(new DecimalFormat("#.##").format(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100) + "%");
                 } else {
                     userLivenessDetailBO.setLiveUserPercent(0 + "");
                 }
@@ -922,7 +923,7 @@ public class UserServiceImpl implements UserService {
                 UserLivenessDetailBO userLivenessDetailBO = userRoMapper.userLivenessDetail(c1.getTime(), c3.getTime());
                 userLivenessDetailBO.setDate(DateUtils.dateToString(c1.getTime(),"yyyy-MM-dd") + "～" + DateUtils.dateToString(c3.getTime(),"yyyy-MM-dd"));
                 if (userLivenessDetailBO.getAllRegister() > 0) {
-                    userLivenessDetailBO.setLiveUserPercent(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100 + "%");
+                    userLivenessDetailBO.setLiveUserPercent(new DecimalFormat("#.##").format(userLivenessDetailBO.getLiveUsers() / userLivenessDetailBO.getAllRegister() * 100) + "%");
                 } else {
                     userLivenessDetailBO.setLiveUserPercent(0 + "");
                 }
@@ -956,7 +957,7 @@ public class UserServiceImpl implements UserService {
             expLevelStatistic.setAll((int)now);
             expLevelStatistic.setLevelCode(experienceLevelBO.getName());
             expLevelStatistic.setLevelName(experienceLevelBO.getMedal());
-            expLevelStatistic.setIncreasePercent(now-increase==0?"/":(increase/(now-increase)*100+"%"));
+            expLevelStatistic.setIncreasePercent(now-increase==0?"/":new DecimalFormat("#.##").format(increase/(now-increase)*100)+"%");
             expLevelStatisticList.add(expLevelStatistic);
         }
         return expLevelStatisticList;
@@ -983,12 +984,13 @@ public class UserServiceImpl implements UserService {
             VipLevelStatisticTemp vipLevelStatistic = vipLogService.selectCountByCode(map);
             VipLevelStatistic levelStatistic = new VipLevelStatistic();
             levelStatistic.setLevelCode(vipLevelBO.getLevelCode());
+            levelStatistic.setLevelName(vipLevelBO.getLevel());
             levelStatistic.setAll(vipLevelStatistic.getAllCount());
             levelStatistic.setIncrease((int) vipLevelStatistic.getIncrease());
             if (vipLevelStatistic.getLastIncrease() < 1) {
                 levelStatistic.setIncreasePercent("/");
             } else {
-                levelStatistic.setIncreasePercent(vipLevelStatistic.getIncrease() / vipLevelStatistic.getLastIncrease() * 100F + "%");
+                levelStatistic.setIncreasePercent(new DecimalFormat("#.##").format(vipLevelStatistic.getIncrease() / vipLevelStatistic.getLastIncrease() * 100F) + "%");
             }
             vipLevelStatistics.add(levelStatistic);
         }
