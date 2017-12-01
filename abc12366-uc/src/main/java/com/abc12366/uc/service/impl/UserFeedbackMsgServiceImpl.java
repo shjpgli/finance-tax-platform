@@ -4,6 +4,7 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UcUserLoginLog;
@@ -163,7 +164,16 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.REALNAME_VALIDATE_WX_4);
         //3.短信消息
-        msgSendService.sendMsg(user, sysMsg,"", "JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U", dataList, sysMsg);
+        //msgSendService.sendMsg(user, sysMsg,"", "JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U", dataList, sysMsg);
+
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(userId);
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setPhoneMsg(sysMsg);
+        sendBo.setDataList(dataList);
+        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
+
+        msgSendService.sendXtxx(sendBo);
     }
 
     private User getUser() {
