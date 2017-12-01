@@ -21,8 +21,6 @@ public class UserDzsbListBO {
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
-    private String userType;
-    private Date expandExpireTime;
 
     /**
      * 软件到期日
@@ -125,22 +123,6 @@ public class UserDzsbListBO {
         return expireTime;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
-
-    public Date getExpandExpireTime() {
-        return expandExpireTime;
-    }
-
-    public void setExpandExpireTime(Date expandExpireTime) {
-        this.expandExpireTime = expandExpireTime;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
     public void setExpireTime(Date expireTime) {
         this.expireTime = expireTime;
     }
@@ -159,8 +141,6 @@ public class UserDzsbListBO {
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
-                ", userType='" + userType + '\'' +
-                ", expandExpireTime=" + expandExpireTime +
                 ", expireTime=" + expireTime +
                 '}';
     }
