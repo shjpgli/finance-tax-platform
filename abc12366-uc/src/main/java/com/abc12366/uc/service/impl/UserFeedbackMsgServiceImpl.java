@@ -94,7 +94,15 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("remark", RemindConstant.UNREALNAME_WX_4);
         //3.短信消息
         String dxmsg = RemindConstant.UNREALNAME_DX;
-        msgSendService.sendMsg(user, sysMsg, skipUrl, "JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U", dataList, dxmsg);
+
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(getUser().getId());
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setSkipUrl(skipUrl);
+        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
+        sendBo.setDataList(dataList);
+        sendBo.setPhoneMsg(dxmsg);
+        msgSendService.sendXtxx(sendBo);
     }
 
     @Override
