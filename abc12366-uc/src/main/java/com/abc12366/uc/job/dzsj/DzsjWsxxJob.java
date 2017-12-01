@@ -1,6 +1,5 @@
 package com.abc12366.uc.job.dzsj;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import sun.misc.BASE64Decoder;
@@ -39,7 +37,7 @@ import com.alibaba.fastjson.JSONObject;
 public class DzsjWsxxJob implements StatefulJob{
 	private static final Logger LOGGER = LoggerFactory.getLogger(DzsjWsxxJob.class);
 	
-	private final String QCOUNT="1";//查询数量
+	private final String QCOUNT="200";//查询数量
 
 	private static AppService appService;
 	
