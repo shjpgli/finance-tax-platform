@@ -77,10 +77,11 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
             return;
         }
         UserExtendBO userExtendBO = getUserExtend();
-        if (userExtendBO != null && !StringUtils.isEmpty(userExtendBO.getValidStatus()) && userExtendBO.getValidStatus().equals("2")) {
+        if (userExtendBO != null && !StringUtils.isEmpty(userExtendBO.getValidStatus()) &&
+                (userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_VALIDATED)||
+                        userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_TO_VALIDATE))) {
             return;
         }
-        User user = getUser();
 
         //发信息
         //1.系统消息

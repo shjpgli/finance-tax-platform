@@ -105,6 +105,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         userExtendUpdate.setStartTime(startTime);
         userExtendUpdate.setEndTime(getSpecifiedDate("2099-12-30 23:59:59"));
         userExtendUpdate.setValidStatus(validStatus);
+        userExtendUpdate.setValidTime(new Date());
         if (validStatus.equals(TaskConstant.USER_REALNAME_VALIDATED)) {
             userExtendUpdate.setValidTime(new Date());
             
