@@ -18,4 +18,6 @@ public interface ExperienceLogService {
     List<ExperienceLogQueryBO> selectList(Map map);
 
     List<ExpLogUcBO> selectListByUser(Map<String, Object> map);
+
+    float selectCount(Map<String, Object> map);
 }

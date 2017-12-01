@@ -23,10 +23,9 @@ import java.util.List;
 
 /**
  * 用户绑定办税身份控制器类，以常规JSON形式返回数据
- * <p>
- * Admin: liuguiyao<435720953@qq.com>
- * Date: 2017-07-25
- * Time: 16:22
+ *
+ * @author liuguiyao 435720953@qq.com
+ * @date 2017-07-25
  */
 @RestController
 @RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
@@ -38,24 +37,26 @@ public class UserBindController {
 
     /**
      * 用户绑定纳税人（电子申报）
-     * @param userDzsbInsertBO
-     * @param request
-     * @return
-     * @throws Exception
+     *
+     * @param userDzsbInsertBO 纳税人信息
+     * @param request          HttpServletRequest
+     * @return 纳税人信息
+     * @throws Exception 访问网络、解包异常
      */
     @PostMapping(path = "/bind/dzsb")
     public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest
             request) throws Exception {
         LOGGER.info("{}:{}", userDzsbInsertBO, request);
-        UserDzsbBO user_dzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
-        LOGGER.info("{}", user_dzsb);
-        return ResponseEntity.ok(Utils.kv("data", user_dzsb));
+        UserDzsbBO userDzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
+        LOGGER.info("{}", userDzsb);
+        return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
 
     /**
      * 用户解除纳税人绑定（电子申报）
-     * @param id
-     * @return
+     *
+     * @param id 绑定表主键
+     * @return 是否解绑成功
      */
     @PutMapping(path = "/unbind/dzsb/{id}")
     public ResponseEntity userDzsbUnbind(@PathVariable String id) {
@@ -64,6 +65,14 @@ public class UserBindController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 根据用户ID查询电子申报绑定列表
+     *
+     * @param userId 用户ID
+     * @param page   当前页
+     * @param size   每页大小
+     * @return 电子申报绑定列表
+     */
     @GetMapping(path = "/bind/dzsb/{userId}")
     public ResponseEntity getUserDzsbBind(@PathVariable String userId,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -78,6 +87,14 @@ public class UserBindController {
                         .getTotal()));
     }
 
+    /**
+     * 根据用户ID查询电子税局绑定列表
+     *
+     * @param userId 用户ID
+     * @param page   当前页
+     * @param size   每页大小
+     * @return 电子税局绑定列表
+     */
     @GetMapping(path = "/bind/hngs/{userId}")
     public ResponseEntity getUserhngsBind(@PathVariable String userId,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -92,6 +109,14 @@ public class UserBindController {
                         .getTotal()));
     }
 
+    /**
+     * 根据用户ID查询湖南地税绑定列表
+     *
+     * @param userId 用户ID
+     * @param page   当前页
+     * @param size   每页大小
+     * @return 湖南地税绑定列表
+     */
     @GetMapping(path = "/bind/hnds/{userId}")
     public ResponseEntity getUserhndsBind(@PathVariable String userId,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -106,14 +131,28 @@ public class UserBindController {
                         .getTotal()));
     }
 
+    /**
+     * 绑定湖南国税用户
+     *
+     * @param userHngsInsertBO 湖南国税用户信息
+     * @param request          HttpServletRequest
+     * @return 国税用户登陆信息
+     * @throws Exception 网络异常
+     */
     @PostMapping(path = "/bind/hngs")
     public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest
             request) throws Exception {
         LOGGER.info("{}:{}", userHngsInsertBO, request);
-        UserHngsBO user_hngs = userBindService.hngsBind(userHngsInsertBO, request);
-        return ResponseEntity.ok(Utils.kv("data", user_hngs));
+        UserHngsBO userHngs = userBindService.hngsBind(userHngsInsertBO, request);
+        return ResponseEntity.ok(Utils.kv("data", userHngs));
     }
 
+    /**
+     * 解绑湖南国税用户
+     *
+     * @param id 湖南国税绑定表主键
+     * @return ResponseEntity
+     */
     @PutMapping(path = "/unbind/hngs/{id}")
     public ResponseEntity userHngsUnbind(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -121,14 +160,27 @@ public class UserBindController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 绑定湖南地税用户
+     *
+     * @param userHndsInsertBO 地税用户信息
+     * @param request          HttpServletRequest
+     * @return 地税登陆信息
+     */
     @PostMapping(path = "/bind/hnds")
     public ResponseEntity userHndsBind(@Valid @RequestBody UserHndsInsertBO userHndsInsertBO, HttpServletRequest
             request) {
         LOGGER.info("{}:{}", userHndsInsertBO, request);
-        UserHndsBO user_hnds = userBindService.hndsBind(userHndsInsertBO, request);
-        return ResponseEntity.ok(Utils.kv("data", user_hnds));
+        UserHndsBO userHnds = userBindService.hndsBind(userHndsInsertBO, request);
+        return ResponseEntity.ok(Utils.kv("data", userHnds));
     }
 
+    /**
+     * 解绑湖南地税用户
+     *
+     * @param id 地税绑定表主键
+     * @return ResponseEntity
+     */
     @PutMapping(path = "/unbind/hnds/{id}")
     public ResponseEntity userHndsUnbind(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -136,6 +188,14 @@ public class UserBindController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 电子申报纳税人登录绑定
+     *
+     * @param login   登录信息
+     * @param request HttpServletRequest
+     * @return 纳税人信息
+     * @throws Exception 访问网络、解包异常
+     */
     @PostMapping(path = "/nsrlogin/shb")
     public ResponseEntity nsrLoginShb(@Valid @RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
@@ -143,33 +203,71 @@ public class UserBindController {
         return ResponseEntity.ok(Utils.kv("data", loginResponse));
     }
 
+    /**
+     * 重置电子申报用户密码
+     *
+     * @param data    重置密码信息
+     * @param request HttpServletRequest
+     * @return ResponseEntity
+     * @throws IOException         网络异常
+     * @throws MarshalException    解包异常
+     * @throws ValidationException 验证异常
+     */
     @PostMapping(path = "/shb/resetpassword")
-    public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException, ValidationException {
+    public ResponseEntity resetPassword(@RequestBody NsrResetPwd data, HttpServletRequest request) throws
+            IOException, MarshalException, ValidationException {
         LOGGER.info("{}", data);
         userBindService.resetPassword(data, request);
-        return ResponseEntity.ok(Utils.kv("code","2000","message","您的申报服务密码已重置为'88888888',请尽快修改密码！"));
+        return ResponseEntity.ok(Utils.kv("code", "2000", "message", "您的申报服务密码已重置为'88888888',请尽快修改密码！"));
     }
 
+    /**
+     * 修改电子申报密码
+     *
+     * @param data 修改密码信息
+     * @return ResponseEntity
+     * @throws MarshalException    解包异常
+     * @throws ValidationException 验证异常
+     */
     @PostMapping(path = "/shb/updatepassword")
-    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePwd data) throws MarshalException, ValidationException {
+    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePwd data) throws MarshalException,
+            ValidationException {
         LOGGER.info("用户修改纳税人登录电子申报密码，{}", data);
         userBindService.updatePassword(data);
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 电子税局纳税人登录绑定
+     *
+     * @param login   登陆信息
+     * @param request HttpServletRequest
+     * @return 用户登陆信息
+     * @throws Exception 网络异常
+     */
     @PostMapping(path = "/nsrlogin/dzsj")
-    public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) throws Exception {
+    public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) throws
+            Exception {
         LOGGER.info("{}", login);
-        HngsNsrLoginResponse loginResponse = userBindService.nsrLoginDzsj(login,request);//userBindService.loginWsbsHngs(login, request);
+        HngsNsrLoginResponse loginResponse = userBindService.nsrLoginDzsj(login, request);
         return ResponseEntity.ok(loginResponse);
     }
 
-    //调用电子税局查看用户是否实名认证
+    /**
+     * 调用电子税局查看用户是否实名认证
+     *
+     * @param sfzjhm  身份证件号码
+     * @param xm      姓名
+     * @param request HttpServletRequest
+     * @return 是否实名认证
+     * @throws Exception 网络异常
+     */
     @GetMapping(path = "/realname/dzsj")
-    public ResponseEntity isRealNameValidatedDzsj(@RequestParam String sfzjhm, @PathVariable @RequestParam String xm, HttpServletRequest request) throws Exception {
+    public ResponseEntity isRealNameValidatedDzsj(@RequestParam String sfzjhm, @PathVariable @RequestParam String xm,
+                                                  HttpServletRequest request) throws Exception {
         LOGGER.info("调用电子税局实名认证查询接口：{},{}", sfzjhm, xm);
-        boolean result = userBindService.isRealNameValidatedDzsj(sfzjhm,xm, request);
+        boolean result = userBindService.isRealNameValidatedDzsj(sfzjhm, xm, request);
         LOGGER.info("电子税局返回查询结果：{}", result);
-        return ResponseEntity.ok(Utils.kv("data",result));
+        return ResponseEntity.ok(Utils.kv("data", result));
     }
 }

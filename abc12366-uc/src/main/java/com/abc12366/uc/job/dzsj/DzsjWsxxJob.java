@@ -1,6 +1,5 @@
 package com.abc12366.uc.job.dzsj;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import sun.misc.BASE64Decoder;
@@ -39,7 +37,7 @@ import com.alibaba.fastjson.JSONObject;
 public class DzsjWsxxJob implements StatefulJob{
 	private static final Logger LOGGER = LoggerFactory.getLogger(DzsjWsxxJob.class);
 	
-	private final String QCOUNT="1";//查询数量
+	private final String QCOUNT="200";//查询数量
 
 	private static AppService appService;
 	
@@ -56,7 +54,7 @@ public class DzsjWsxxJob implements StatefulJob{
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		
+		LOGGER.info("--------开始执行[电子税局文书信息提醒]定时任务----------");
 		while(true){
 			try {
 				HttpHeaders headers = new HttpHeaders();
@@ -68,7 +66,7 @@ public class DzsjWsxxJob implements StatefulJob{
 				ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 				
 				DzsjWsxx dzsjWsxx=JSONObject.parseObject(responseEntity.getBody().toString(), DzsjWsxx.class);
-				
+				LOGGER.info("获取[电子税局文书信息提醒]数据:"+JSONObject.toJSONString(dzsjWsxx));
 				if("000".equals(dzsjWsxx.getCode())){//获取数据成功
 					List<WsxxInfo> list=dzsjWsxx.getList();
 					if(list!=null && list.size()>0){
@@ -102,13 +100,11 @@ public class DzsjWsxxJob implements StatefulJob{
 					break;
 				}
 			}  catch (Exception e) {
-				e.printStackTrace();
 				LOGGER.error("电子税局获取文书申请信息异常：",e);
-			}
-	        
-	        
+				break;
+			}   
 		}
-		
+		LOGGER.info("--------结束执行[电子税局文书信息提醒]定时任务----------");
 	}
 
 }

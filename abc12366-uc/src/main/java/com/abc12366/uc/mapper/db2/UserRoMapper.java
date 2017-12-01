@@ -2,10 +2,7 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserListBO;
-import com.abc12366.uc.model.bo.UserSimpleInfoBO;
+import com.abc12366.uc.model.bo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -68,4 +65,56 @@ public interface UserRoMapper {
      * @return 用户基本表信息
      */
     User selectUserById(User user);
+
+    /**
+     * 统计用户，统计维度为【创建时间】
+     * @param map
+     * @return
+     */
+    List<UserStatisBO> statisUserByDay(Map<String, Object> map);
+
+
+    /**
+     * 用户登陆数
+     * @param map
+     * @return
+     */
+    UserLossRateBO statisUserLossRateCount(Map<String, Object> map);
+
+    /**
+     * 用户总数
+     * @param map
+     * @return
+     */
+    UserLossRateBO statisUserCount(Map<String, Object> map);
+
+    List<UserLivenessMonthBO> userLivenessMonthNoLogin(@Param("start")Date start, @Param("end")Date end);
+
+    List<UserLivenessMonthBO> userLivenessMonth(@Param("start")Date start, @Param("end")Date end);
+    /**
+     * 用户活跃度统计(概况)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessSurveyBO userLivenessSurvey();
+    /**
+     * 用户活跃度统计(明细)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessDetailBO userLivenessDetail(@Param("start")Date start, @Param("end")Date end);
+
+    Float selectExpCount(Map<String, Object> map);
+
+    /**
+     * 查询RFM指标
+     * @param map
+     * @return
+     */
+    UserRFMBO statisUserRFM(Map<String, Object> map);
+
+    /**
+     * 查询导出用户
+     * @param map
+     * @return
+     */
+    List<UserExprotInfoBO> statisUserConsumeLevel(Map<String, Object> map);
 }

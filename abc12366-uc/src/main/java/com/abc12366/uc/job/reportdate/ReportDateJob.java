@@ -5,6 +5,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
+import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.RemindConstant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -14,6 +15,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,6 +40,8 @@ public class ReportDateJob implements Job {
 
 
     private UserService userService;
+    
+    private AppService appService;
 
     private IMsgSendService msgSendService;
 
@@ -57,6 +61,7 @@ public class ReportDateJob implements Job {
 
         userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
         msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
+        appService=(AppService) SpringCtxHolder.getApplicationContext().getBean("appService");
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal_1 = Calendar.getInstance();//获取当前日期
@@ -68,6 +73,7 @@ public class ReportDateJob implements Job {
         cale.set(Calendar.DAY_OF_MONTH, 0);
         pmonthL = format.format(cale.getTime());
         
+        accessToken = appService.selectByName("abc12366-admin").getAccessToken();
 
         LOGGER.info("电子税局获取办税期限..............");
         HttpHeaders headers2 = new HttpHeaders();

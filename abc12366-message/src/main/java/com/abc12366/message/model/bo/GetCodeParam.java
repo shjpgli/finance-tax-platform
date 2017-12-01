@@ -35,4 +35,12 @@ public class GetCodeParam {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    @Override
+    public String toString() {
+        return "GetCodeParam{" +
+                "type='" + type + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

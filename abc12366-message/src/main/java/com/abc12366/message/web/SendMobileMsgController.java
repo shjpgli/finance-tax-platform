@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 /**
  * 发送手机业务短信控制器
@@ -30,7 +29,12 @@ public class SendMobileMsgController {
     @Autowired
     private SendMobileMsgService sendMobileMsgService;
 
-    //发短信接口
+    /**
+     * 发短信接口
+     *
+     * @param mobileMsgBO 发送短信对象
+     * @return ResponseEntity
+     */
     @PostMapping(path = "/mobile/msg")
     public ResponseEntity sendMsg(@Valid @RequestBody MobileMsgBO mobileMsgBO) {
         LOGGER.info("发送短信参数：{}", mobileMsgBO);

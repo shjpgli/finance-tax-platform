@@ -80,21 +80,20 @@
         an.alog/ac.acount as accessNum
         FROM
         (
-        SELECT
-        questionId,COUNT(id) as alog
-        FROM
-        cms_paper_answer_log
-        ) AS an
-        left JOIN (
-        SELECT
-        questionId,COUNT(id) as acount
-        FROM
-        cms_paper_access_log
+            SELECT
+            questionId,COUNT(id) as alog
+            FROM
+            cms_paper_answer_log
+            GROUP BY questionId
+        ) AS an LEFT JOIN (
+            SELECT
+            questionId,COUNT(id) as acount
+            FROM
+            cms_paper_access_log
+            GROUP BY questionId
         ) AS ac on ac.questionId = an.questionId
         WHERE
         an.questionId = #{questionId}
-        GROUP BY
-        an.questionId
     </select>
 
 

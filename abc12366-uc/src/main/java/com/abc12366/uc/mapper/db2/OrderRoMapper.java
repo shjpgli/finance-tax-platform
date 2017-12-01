@@ -3,6 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.order.bo.OrderStatBO;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.OrderBO;
+import com.abc12366.uc.model.order.bo.OrderStatisBO;
 import com.abc12366.uc.model.order.bo.OrderTradeBO;
 import org.apache.ibatis.annotations.Param;
 
@@ -93,4 +94,18 @@ public interface OrderRoMapper {
      * @return
      */
     List<OrderBO> selectOrderListByInvoice(OrderBO order);
+
+    /**
+     * 统计订单，统计维度为【订单状态】
+     * @param map
+     * @return
+     */
+    List<OrderStatisBO> statisOrderByStatus(Map<String, Object> map);
+
+    /**
+     * 统计维度为【月份】
+     * @param map
+     * @return
+     */
+    List<OrderStatisBO> statisOrderByMonth(Map<String, Object> map);
 }

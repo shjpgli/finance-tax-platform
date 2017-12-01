@@ -2,7 +2,10 @@ package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
+import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.UserRetainedRateBO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,4 +34,13 @@ public interface UserMapper {
     int updateBatch(Map<String, Object> map);
 
     int updatePassword(User user);
+
+    /**
+     * 用户留存率
+     * @param inMap
+     * @return
+     */
+    List<UserRetainedRateBO> statisUserRetainedRate(Map<String, Object> inMap);
+
+	User selectByUsernameOrPhone(LoginBO bo);
 }

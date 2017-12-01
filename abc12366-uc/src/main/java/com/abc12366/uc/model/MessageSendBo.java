@@ -31,6 +31,8 @@ public class MessageSendBo implements Serializable{
 	
 	private String templateid;//模板ID
 
+	private String skipUrl;//超链接地址
+
 	public String getUserId() {
 		return userId;
 	}
@@ -94,7 +96,12 @@ public class MessageSendBo implements Serializable{
 	public void setUserIds(List<String> userIds) {
 		this.userIds = userIds;
 	}
-	
-	
-    
+
+	public String getSkipUrl() {
+		return skipUrl;
+	}
+
+	public void setSkipUrl(String skipUrl) {
+		this.skipUrl = skipUrl;
+	}
 }

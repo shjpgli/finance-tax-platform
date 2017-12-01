@@ -464,57 +464,37 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
 
             User user = userRoMapper.selectOne(invoiceTemp.getUserId());
-            //查询会员特权-业务提醒
-            VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-            obj.setLevelId(user.getVipLevel());
-            obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-            //查看业务提醒是否启用
-            if (findObj != null && findObj.getStatus()) {
-                //发送消息
-                ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
-                if (expressComp == null) {
-                    LOGGER.warn("物流公司查询失败：{}", invoiceTemp.getExpressCompId());
-                    throw new ServiceException(4102, "物流公司查询失败");
-                }
 
-                Message message = new Message();
-                message.setBusinessId(invoiceTemp.getId());
-                message.setBusiType(MessageConstant.ZZFPDD);
-                message.setType(MessageConstant.SYS_MESSAGE);
-                String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.INVOICE\\}",
-                        invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
-                        expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
-                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                        "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                message.setContent(content);
-                message.setUserId(invoiceTemp.getUserId());
-                if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                    messageSendUtil.sendMessage(message, request);
-                }
-
-                if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils
-                        .isNotEmpty(user.getWxopenid())) {
-                    //发送微信消息
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("userId", user.getId());
-                    map.put("openId", user.getWxopenid());
-                    map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
-                    map.put("remark", "感谢您的使用。");
-                    map.put("keyword1", invoiceTemp.getConsignee());
-                    map.put("keyword2", invoiceTemp.getContactNumber());
-                    map.put("keyword3", expressComp.getCompName());
-                    map.put("keyword4", expressExcel.getWaybillNum());
-                    map.put("keyword5", invoiceTemp.getInvoiceNo());
-                    templateService.templateSend("lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas", map);
-
-                }
-                if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
-                        StringUtils.isNotEmpty(user.getPhone())) {
-                    //发送短信
-                    sendPhoneMessage(request, content, user);
-                }
+            //发送消息
+            ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
+            if (expressComp == null) {
+                LOGGER.warn("物流公司查询失败：{}", invoiceTemp.getExpressCompId());
+                throw new ServiceException(4102, "物流公司查询失败");
             }
+            Message message = new Message();
+            message.setBusinessId(invoiceTemp.getId());
+            message.setBusiType(MessageConstant.ZZFPDD);
+            message.setType(MessageConstant.SYS_MESSAGE);
+            String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.INVOICE\\}",
+                    invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
+                    expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
+            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                    "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            message.setContent(content);
+            message.setUserId(invoiceTemp.getUserId());
+
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("userId", user.getId());
+            map.put("openId", user.getWxopenid());
+            map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
+            map.put("remark", "感谢您的使用。");
+            map.put("keyword1", invoiceTemp.getConsignee());
+            map.put("keyword2", invoiceTemp.getContactNumber());
+            map.put("keyword3", expressComp.getCompName());
+            map.put("keyword4", expressExcel.getWaybillNum());
+            map.put("keyword5", invoiceTemp.getInvoiceNo());
+            String templateId = "lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas";
+            messageSendUtil.sendMsg(request, user, message,map,templateId);
 
         }
     }
@@ -889,14 +869,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     /**
      * 获取微信红包字典信息
      */
-    private String selectWechatPassword(String dictId) {
+    private String selectWechatPassword(String dictId, String businessId) {
         Dict dict = new Dict();
         dict.setDictId(dictId);
         dict = dictRoMapper.selectOne(dict);
         String password = "";
         if(dict != null){
             password = dict.getFieldValue();
-            WxRedEnvelopBO data = iActivityService.generateSecret(password);
+            WxRedEnvelopBO data = iActivityService.generateSecret(password, businessId);
             if(data != null && data.getSecret() != null){
                 password = data.getSecret();
             }
@@ -952,47 +932,25 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     private void sendZzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
         User user = userRoMapper.selectOne(invoiceBO.getUserId());
-        //查询会员特权-业务提醒
-        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
-        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        //查看业务提醒是否启用
-        if (findObj != null && findObj.getStatus()) {
+        //发送消息
+        Message message = new Message();
+        message.setBusinessId(invoiceBO.getId());
+        message.setBusiType(MessageConstant.ZZFPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
+        String content = RemindConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+                .getId());
+        message.setContent(content);
+        message.setUserId(invoiceBO.getUserId());
 
-            //发送消息
-            Message message = new Message();
-            message.setBusinessId(invoiceBO.getId());
-            message.setBusiType(MessageConstant.ZZFPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            String content = RemindConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
-                    .getId());
-            message.setContent(content);
-            message.setUserId(invoiceBO.getUserId());
-            //web消息
-            if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                messageSendUtil.sendMessage(message, request);
-            }
-
-            //微信消息
-            if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) &&
-                    StringUtils.isNotEmpty(user.getWxopenid())) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("userId", user.getId());
-                map.put("openId", user.getWxopenid());
-                map.put("first", "您好，审核结果如下");
-                map.put("remark", "感谢您的使用。");
-                map.put("keyword1", invoiceBO.getId());
-                map.put("keyword2", content);
-                templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
-            }
-
-            //短信消息
-            if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
-                    StringUtils.isNotEmpty(user.getPhone())) {
-                sendPhoneMessage(request, content, user);
-            }
-        }
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", user.getId());
+        map.put("openId", user.getWxopenid());
+        map.put("first", "您好，审核结果如下");
+        map.put("remark", "感谢您的使用。");
+        map.put("keyword1", invoiceBO.getId());
+        map.put("keyword2", content);
+        String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
+        messageSendUtil.sendMsg(request, user, message,map,templateId);
     }
 
     /**
@@ -1003,76 +961,40 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     private void sendDzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
         User user = userRoMapper.selectOne(invoiceBO.getUserId());
-        //查询会员特权-业务提醒
-        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
-        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        //查看业务提醒是否启用
-        if (findObj != null && findObj.getStatus()) {
-            //查询是否发红包
-            String isRedPackage = selectFieldValue("dzfp_is_redpackage");
-            String redPackage = "";
-            if(isRedPackage != null && "1".equals(isRedPackage)){
-                //获取微信红包信息
-                redPackage = RemindConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",selectWechatPassword("wechat_hongbao"));
-            }
-
-            //发送消息
-            Message message = new Message();
-            message.setBusinessId(invoiceBO.getId());
-            message.setBusiType(MessageConstant.ZZFPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-
-            String content = RemindConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
-                    invoiceBO.getId())+redPackage;
-            message.setContent(content);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                    "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setUserId(invoiceBO.getUserId());
-            //web消息
-            if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                messageSendUtil.sendMessage(message, request);
-            }
-
-            if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) &&
-                    StringUtils.isNotEmpty(user.getWxopenid())) {
-                //发送微信消息
-                Map<String, String> dataList = new HashMap<String, String>();
-                dataList.put("userId", user.getId());
-                dataList.put("openId", user.getWxopenid());
-                dataList.put("first", "您申请的电子发票已开具");
-                dataList.put("remark", "请注意查收！"+redPackage);
-                dataList.put("keyword1", invoiceBO.getInvoiceCode());
-                dataList.put("keyword2", invoiceBO.getInvoiceNo());
-                dataList.put("keyword3", String.valueOf(invoiceBO.getAmount()));
-                dataList.put("keyword4", DateUtils.dateToStr(new Date()));
-                templateService.templateSend("8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM", dataList);
-            }
-            if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
-                    StringUtils.isNotEmpty(user.getPhone())) {
-                //发送短信
-                sendPhoneMessage(request, content, user);
-            }
+        //查询是否发红包
+        String isRedPackage = selectFieldValue("dzfp_is_redpackage");
+        String redPackage = "";
+        if(isRedPackage != null && "1".equals(isRedPackage)){
+            //获取微信红包信息
+            redPackage = RemindConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",
+                    selectWechatPassword("wechat_hongbao", invoiceBO.getId()));
         }
-    }
 
-    /**
-     * 发送短信公告方法
-     *
-     * @param request
-     * @param content
-     * @param user
-     */
-    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
-        //发送短信
-        Map<String, String> maps = new HashMap<String, String>();
-        maps.put("var", content);
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        list.add(maps);
+        //发送消息
+        Message message = new Message();
+        message.setBusinessId(invoiceBO.getId());
+        message.setBusiType(MessageConstant.ZZFPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
 
-        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        messageSendUtil.sendPhoneMessage(user.getPhone(), "625", list, accessToken);
+        String content = RemindConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
+                invoiceBO.getId())+redPackage;
+        message.setContent(content);
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        message.setUserId(invoiceBO.getUserId());
+
+        //发送微信消息
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", user.getId());
+        map.put("openId", user.getWxopenid());
+        map.put("first", "您申请的电子发票已开具");
+        map.put("remark", "请注意查收！" + redPackage);
+        map.put("keyword1", invoiceBO.getInvoiceCode());
+        map.put("keyword2", invoiceBO.getInvoiceNo());
+        map.put("keyword3", String.valueOf(invoiceBO.getAmount()));
+        map.put("keyword4", DateUtils.dateToStr(new Date()));
+        String templateId = "8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM";
+        messageSendUtil.sendMsg(request, user, message,map,templateId);
     }
 
     /**
@@ -1097,101 +1019,37 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setStatus("3");
         //修改订单和发票对应关系
         orderInvoiceMapper.updateByInvoiceId(invoiceCheckBO.getId());
+        User user = userRoMapper.selectOne(invoiceBO.getUserId());
+        //发送消息
+        Message message = new Message();
+        message.setBusinessId(invoiceBO.getId());
+        message.setBusiType(MessageConstant.DZFPDD);
+        message.setType(MessageConstant.SYS_MESSAGE);
+
         //1：纸质发票，2：电子发票；
+        String content;
         if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
-
-            User user = userRoMapper.selectOne(invoiceBO.getUserId());
-            //查询会员特权-业务提醒
-            VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-            obj.setLevelId(user.getVipLevel());
-            obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-            //查看业务提醒是否启用
-            if (findObj != null && findObj.getStatus()) {
-
-                //发送消息
-                Message message = new Message();
-                message.setBusinessId(invoiceBO.getId());
-                message.setBusiType(MessageConstant.DZFPDD);
-                message.setType(MessageConstant.SYS_MESSAGE);
-                String content = RemindConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}",
-                        invoiceBO.getId());
-                message.setContent(content);
-                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                message.setUserId(invoiceBO.getUserId());
-                //web消息
-                if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                    messageSendUtil.sendMessage(message, request);
-                }
-                //微信消息
-                if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils
-                        .isNotEmpty(user.getWxopenid())) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("userId", user.getId());
-                    map.put("openId", user.getWxopenid());
-                    map.put("first", "您好，审核结果如下");
-                    map.put("remark", "感谢您的使用。");
-                    map.put("keyword1", invoiceBO.getId());
-                    map.put("keyword2", content);
-                    templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
-                }
-
-                //短信消息
-                if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
-                        StringUtils.isNotEmpty(user.getPhone())) {
-                    sendPhoneMessage(request, content, user);
-                }
-            }
-
+            content = RemindConstant.ELECTRON_INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}",
+                    invoiceBO.getId());
         } else {
-
-            User user = userRoMapper.selectOne(invoiceBO.getUserId());
-            //查询会员特权-业务提醒
-            VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-            obj.setLevelId(user.getVipLevel());
-            obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-            //查看业务提醒是否启用
-            if (findObj != null && findObj.getStatus()) {
-
-                //发送消息
-                Message message = new Message();
-                message.setBusinessId(invoiceBO.getId());
-                message.setBusiType(MessageConstant.ZZFPDD);
-                message.setType(MessageConstant.SYS_MESSAGE);
-                String content = RemindConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
-                        .getId());
-                message.setContent(content);
-                message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                message.setUserId(invoiceBO.getUserId());
-
-                //web消息
-                if (findObj.getVal1() != null && MessageConstant.YWTX_WEB.equals(findObj.getVal1())) {
-                    messageSendUtil.sendMessage(message, request);
-                }
-
-                //微信消息
-                if (findObj.getVal2() != null && MessageConstant.YWTX_WECHAT.equals(findObj.getVal2()) && StringUtils
-                        .isNotEmpty(user.getWxopenid())) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("userId", user.getId());
-                    map.put("openId", user.getWxopenid());
-                    map.put("first", "您好，审核结果如下");
-                    map.put("remark", "感谢您的使用。");
-                    map.put("keyword1", invoiceBO.getId());
-                    map.put("keyword2", content);
-                    templateService.templateSend("W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc", map);
-                }
-
-                //短信消息
-                if (findObj.getVal3() != null && MessageConstant.YWTX_MESSAGE.equals(findObj.getVal3()) &&
-                        StringUtils.isNotEmpty(user.getPhone())) {
-                    sendPhoneMessage(request, content, user);
-                }
-            }
+            content = RemindConstant.INVOICE_CHECK_REFUSE.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
+                    .getId());
         }
+
+        message.setContent(content);
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        message.setUserId(invoiceBO.getUserId());
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("userId", user.getId());
+        map.put("openId", user.getWxopenid());
+        map.put("first", "您好，审核结果如下");
+        map.put("remark", "感谢您的使用。");
+        map.put("keyword1", invoiceBO.getId());
+        map.put("keyword2", content);
+        String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
+        messageSendUtil.sendMsg(request, user, message,map,templateId);
     }
 
 }

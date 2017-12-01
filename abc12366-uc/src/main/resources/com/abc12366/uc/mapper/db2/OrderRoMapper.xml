@@ -767,7 +767,7 @@
         LEFT JOIN uc_user u ON u.id = o.userId
         LEFT JOIN  uc_order_product t on t.orderNo = o.orderNo
         <where>
-            1 = 1
+            1 = 1 and o.orderStatus != '11'
             <if test=" user.id != null and user.id != '' ">
                 and u.id = #{user.id}
             </if>
@@ -895,4 +895,48 @@
           count(orderNo) as 'orderStatus'
         FROM uc_order
     </select>
+
+    <select id="statisOrderByStatus" resultType="com.abc12366.uc.model.order.bo.OrderStatisBO" parameterType="java.util.Map">
+        SELECT count(orderNo) count,orderStatus,tradeMethod FROM uc_order
+        <where>
+            <if test=" tradeMethod != null and tradeMethod != ''">
+                and tradeMethod = #{tradeMethod}
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
+            </if>
+        </where>
+         GROUP BY orderStatus
+    </select>
+
+    <select id="statisOrderByMonth" resultType="com.abc12366.uc.model.order.bo.OrderStatisBO" parameterType="java.util.Map">
+        select DATE_FORMAT(createTime,'%Y-%m') orderMonth ,count(orderNo) count,tradeMethod from uc_order
+        <where>
+            YEAR(createTime)=YEAR(NOW())
+            <if test=" tradeMethod != null and tradeMethod != ''">
+                and tradeMethod = #{tradeMethod}
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
+            </if>
+        </where>
+         GROUP BY orderMonth
+    </select>
+
 </mapper>

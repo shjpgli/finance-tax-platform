@@ -72,6 +72,7 @@
                 and status = #{status}
             </if>
         </where>
+        ORDER BY createTime DESC
     </select>
 
     <select id="selectHngsList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO"
@@ -89,6 +90,7 @@
                 and status = #{status}
             </if>
         </where>
+        ORDER BY createTime DESC
     </select>
 
     <select id="selectHndsList" resultType="com.abc12366.uc.model.bo.NsrBindQueryBO"
@@ -106,6 +108,7 @@
                 and status = #{status}
             </if>
         </where>
+        ORDER BY createTime DESC
     </select>
 
     <select id="selectDzsb" resultType="com.abc12366.uc.model.bo.UserDzsbBO" parameterType="java.lang.String">

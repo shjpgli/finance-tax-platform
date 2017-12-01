@@ -208,7 +208,10 @@ public class AuthServiceImpl implements AuthService {
 
         // 根据用户名查看用户是否存在
         bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim().toLowerCase());
-        User user = userRoMapper.selectByUsernameOrPhone(bo);
+        
+        //修改登录，从主库查询
+        //User user = userRoMapper.selectByUsernameOrPhone(bo);
+        User user = userMapper.selectByUsernameOrPhone(bo);
         if (user == null) {
             LOGGER.warn("登录失败，参数:{}:{}", bo, channel);
             throw new ServiceException(4018);

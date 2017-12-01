@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.service.IMsgSendService;
 import com.alibaba.fastjson.JSONObject;
@@ -32,14 +33,14 @@ public class SendMsgController {
 	 @PostMapping("/byqd")
 	 public ResponseEntity sendByQd(@RequestBody MessageSendBo sendBo){
 		  LOGGER.info("接收到前端消息:"+JSONObject.toJSONString(sendBo));
-		  return msgSendService.sendMsgByQq(sendBo);
+		  return msgSendService.sendXtxx(sendBo);
 	 }
 	 
 	 @SuppressWarnings("rawtypes")
 	 @PostMapping("/byqdbatch")
 	 public ResponseEntity sendByQdbatch(@RequestBody MessageSendBo sendBo){
 		  LOGGER.info("接收到前端消息:"+JSONObject.toJSONString(sendBo));
-		  return msgSendService.sendByQdbatch(sendBo);
+		  return msgSendService.sendXtxxbatch(sendBo);
 	 }
 	 
 }

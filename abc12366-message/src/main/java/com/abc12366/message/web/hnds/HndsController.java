@@ -70,6 +70,7 @@ public class HndsController {
                 jsonObject.put("sign", HndsSecurityUtils.encodeDES(cfg.getHndsKey(), loginBo.getMainuserid(), loginBo
 						.getChangePwd()));
                 HashMap<String, Object> map = jsonObject.parseObject(responseEntity.getBody(), HashMap.class);
+                map.put("username", loginBo.getMainuserid());
                 map.put("userid", loginBo.getUserId());
                 map.put("password", loginBo.getMm());
                 if (!StringUtils.isEmpty(loginBo.getSubuserid())) {

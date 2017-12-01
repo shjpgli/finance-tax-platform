@@ -31,4 +31,12 @@ public interface ActivityMapper {
      * @param id 口令ID
      */
     void deleteSecret(String id);
+
+    /**
+     * 根据名称查询序列号
+     *
+     * @param name 序列号名称
+     * @return 序列号
+     */
+    String selectBillno(String name);
 }

@@ -19,4 +19,10 @@ public interface WxMsgRoMapper {
 
 	ReturnMsg getReMsgOneBykeyString(String key);
 
+	/**
+	 * 获取所有关键字回复信息
+	 * @return
+	 */
+	List<ReturnMsg> getAllkeyString();
+
 }

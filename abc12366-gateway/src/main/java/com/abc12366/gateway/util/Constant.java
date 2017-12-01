@@ -62,6 +62,9 @@ public class Constant {
     // 获取微信二维码图片地址
     public final static String WEIXIN_QRCODE = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=";
 
+    public final static String WEIXIn_LOTTERY = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID" +
+            "&redirect_uri=REDIRECT_URI&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+
     //用户初始会员等级(普通会员)
     public final static String USER_ORIGINAL_LEVEL = "VIP0";
     //银卡

@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -92,6 +94,41 @@ public class UserExtendServiceImpl implements UserExtendService {
                 userExtend.setValidStatus("2");
                 userExtend.setValidTime(new Date());
                 userFeedbackMsgService.realNameValidate(userExtendBO.getUserId(),"2");
+                
+                //实名认证 跟新生日和性别
+                String idCard=userExtendBO.getIdcard();
+                if(idCard.length()==15){
+                	String id17 = idCard.substring(14, 15);
+                	if (Integer.parseInt(id17) % 2 != 0) {    
+                		userExtend.setSex("1");
+                    } else {    
+                    	userExtend.setSex("0");   
+                    }
+                	String birthday = idCard.substring(6, 12);    
+                    Date birthdate=null;
+					try {
+						birthdate = new SimpleDateFormat("yyMMdd").parse(birthday);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+                    userExtend.setBirthday(birthdate);
+                }else if(idCard.length()==18){
+                	String id17 = idCard.substring(16, 17);    
+                    if (Integer.parseInt(id17) % 2 != 0) {    
+                    	userExtend.setSex("1");
+                    } else {    
+                    	userExtend.setSex("0");   
+                    } 
+                    String birthday = idCard.substring(6, 14);    
+                    Date birthdate=null;
+					try {
+						birthdate = new SimpleDateFormat("yyyyMMdd").parse(birthday);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+                    userExtend.setBirthday(birthdate);
+                }
+                
             }
             int result = userExtendMapper.insert(userExtend);
             if (result != 1) {
@@ -150,7 +187,44 @@ public class UserExtendServiceImpl implements UserExtendService {
             //调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
             if(userBindService.isRealNameValidatedDzsj(userExtendUpdateBO.getIdcard(),userExtendUpdateBO.getRealName(), request)){
                 userExtendSecond.setValidStatus("2");
+                userExtendSecond.setValidTime(new Date());
                 userFeedbackMsgService.realNameValidate(userExtendUpdateBO.getUserId(),"2");
+                
+              //实名认证 跟新生日和性别
+                String idCard=userExtendUpdateBO.getIdcard();
+                if(idCard.length()==15){
+                	String id17 = idCard.substring(14, 15);
+                	if (Integer.parseInt(id17) % 2 != 0) {    
+                		userExtendSecond.setSex("1");
+                    } else {    
+                    	userExtendSecond.setSex("0");   
+                    }
+                	String birthday = idCard.substring(6, 12);    
+                    Date birthdate=null;
+					try {
+						birthdate = new SimpleDateFormat("yyMMdd").parse(birthday);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					userExtendSecond.setBirthday(birthdate);
+                }else if(idCard.length()==18){
+                	String id17 = idCard.substring(16, 17);    
+                    if (Integer.parseInt(id17) % 2 != 0) {    
+                    	userExtendSecond.setSex("1");
+                    } else {    
+                    	userExtendSecond.setSex("0");   
+                    } 
+                    String birthday = idCard.substring(6, 14);    
+                    Date birthdate=null;
+					try {
+						birthdate = new SimpleDateFormat("yyyyMMdd").parse(birthday);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					userExtendSecond.setBirthday(birthdate);
+                }
+                
+                
             }
             int result = userExtendMapper.update(userExtendSecond);
             UserExtendBO userExtendBO = new UserExtendBO();

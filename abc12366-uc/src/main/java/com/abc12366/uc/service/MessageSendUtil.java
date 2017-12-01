@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.MessageBO;
 import org.springframework.http.HttpMethod;
 
@@ -35,5 +36,16 @@ public interface MessageSendUtil {
      * @param accessToken
      */
 	void sendPhoneMessage(String phone,String templateId,  List<Map<String,String>> list, String accessToken);
+
+
+    /**
+     * 订单和发票发送消息公共方法
+     * @param request
+     * @param user
+     * @param message
+     * @param map
+     * @param templateId
+     */
+    void sendMsg(HttpServletRequest request, User user, Message message,Map<String, String> map,String templateId);
 
 }

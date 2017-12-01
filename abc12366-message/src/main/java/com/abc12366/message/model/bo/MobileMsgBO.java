@@ -11,12 +11,15 @@ import java.util.List;
  * Time: 16:10
  */
 public class MobileMsgBO {
+
     @NotNull(message = "手机号码phone不能为空")
     @Pattern(regexp = "^\\d{11}$" ,message = "手机号码phone只能为11位")
     @Size(min = 11, max = 11)
     private String phone;
+
     @NotNull(message = "短信内容模板ID不能为空")
     private String templateId;
+
     @NotNull(message = "短信内容不能为空")
     private List<SendMsgVarBO> vars;
 

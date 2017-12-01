@@ -14,13 +14,23 @@ import java.util.Map;
  * Time: 11:07
  */
 public interface RealNameValidationService {
-    List<UserExtendListBO> selectList(Map map);
+
+    /**
+     * 查询实名认证列表
+     *
+     * @param map  查询条件
+     * @param page 页码
+     * @param size 每页数据量
+     * @return 实名认证列表
+     */
+    List<UserExtendListBO> selectList(Map<String, Object> map, int page, int size);
 
     UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
             ParseException;
 
     /**
      * 查询认证状态为【待认证】数量
+     *
      * @return Integer 数量
      */
     Integer selectTodoListCount();

@@ -31,7 +31,13 @@ public class MobileVerifyCodeController {
     @Autowired
     private MobileVerifyCodeService moboleVerifyCodeService;
 
-    //获取验证码接口
+    /**
+     * 获取验证码接口
+     *
+     * @param getCodeParam 获取验证码参数
+     * @return ResponseEntity
+     * @throws IOException
+     */
     @PostMapping(path = "/getcode")
     public ResponseEntity getCode(@Valid @RequestBody GetCodeParam getCodeParam) throws IOException {
         LOGGER.info("{}", getCodeParam);
@@ -39,7 +45,13 @@ public class MobileVerifyCodeController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    //验证码校验接口
+    /**
+     * 验证码校验接口
+     *
+     * @param verifyParam 验证码校验参数
+     * @return ResponseEntity
+     * @throws IOException
+     */
     @PostMapping(path = "/verify")
     public ResponseEntity verify(@Valid @RequestBody VerifyParam verifyParam) throws IOException {
         LOGGER.info("{}", verifyParam);
@@ -47,7 +59,13 @@ public class MobileVerifyCodeController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    //获取注册验证码接口（校验号码是否已被注册）
+    /**
+     * 获取注册验证码接口（校验号码是否已被注册）
+     *
+     * @param getCodeParam 获取注册验证码参数
+     * @return ResponseEntity
+     * @throws IOException
+     */
     @PostMapping(path = "/regis/code")
     public ResponseEntity getRegisCode(@Valid @RequestBody GetCodeParam getCodeParam) throws IOException {
         LOGGER.info("{}", getCodeParam);

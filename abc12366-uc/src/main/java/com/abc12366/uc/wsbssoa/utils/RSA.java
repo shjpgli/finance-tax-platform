@@ -2,6 +2,8 @@ package com.abc12366.uc.wsbssoa.utils;
 
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.uc.web.RSAController;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
@@ -13,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
+import sun.misc.BASE64Decoder;
+
 import javax.crypto.Cipher;
 import java.io.*;
 import java.math.BigInteger;
@@ -20,8 +24,10 @@ import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Date;
 
 
@@ -32,6 +38,9 @@ import java.util.Date;
  *
  */
 public class RSA {
+	
+	
+	
     private static final Logger LOGGER = LoggerFactory.getLogger(RSA.class);
 
     /** 算法名称 */
@@ -48,7 +57,11 @@ public class RSA {
     /** 缓存的密钥对。 */
     private static KeyPair oneKeyPair = null;
 
-    private static File rsaPairFile = null;
+    private static File rsaPairFile = null;   	
+	
+	private static final String  privateKeyStr="MIICXAIBAAKBgQCk4gQGsQ/ID3UW7tlzo9HkeKWMdOeGKFrfU/JZDN/suEqSCHq8Nlj/4wLjA/yEEhmouWuPsYrEB8eRlhy6I4ueW/VElG8l8wi5H82e3VAVxiQMM10KXwchKg2h5WkyN97DFt/W3IpWF10KYqEzzcziWV4JV6OuDzvtqZ911lIa+QIDAQABAoGAFrp5J5r8u+01jMW7/+7THhVrbKMozxt8+1ANFi1qKK12yg6VLKCpQAzA9x4zjtkX5GQ66YHlyQPxhKYWq6n+sssBzCk3IPBiSPncUSAN2v78WypmMYLa4a7e3q4c/wSqu5DFgml96ezN/fjGJrIHbmX5BECKGHWOIEve9m/CGgECQQDOhFruSiqWQZugdmWVdXo60Ccpz9AAvCtkIFLDv12JssZ/BpyIjxzvn1JT7H8YrhjP7HIy+mHRcgq7vfaeOeeZAkEAzGPYKhp+H/zcbj62WfZKs8FUUz8+/GeCRuczckOdNI4HCQ3m39hxBCbUJXxUWvJ0mSjBxnU9+B5ki2asidxqYQJAY/hkQEf816HI4WOPB0vIMKJE4xOrQD/WzXBsQD/p2teFCUa9DcohmsnIQ8IPQHY+oqB2I8FbCtWm5n0t3ihvuQJAc7Aj/5jlQOfYQRKAFqWgnORV/ZSz6xwPkmB1Lzz0M3Ycp1RWFOem+KmdtOYNvTi1JKf8Hn/oJpPVZ04jZRj8oQJBAKjvIOS0SOeLYCJm2su+YxTQEEJrSe7sRetQS+y7BjwK2AMKH47zgCZ+axvpgjRZ/st8p1lXxj/F855Ewu/6Z1s=";
+	
+	private static final String  publickKeyStr="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCk4gQGsQ/ID3UW7tlzo9HkeKWMdOeGKFrfU/JZDN/suEqSCHq8Nlj/4wLjA/yEEhmouWuPsYrEB8eRlhy6I4ueW/VElG8l8wi5H82e3VAVxiQMM10KXwchKg2h5WkyN97DFt/W3IpWF10KYqEzzcziWV4JV6OuDzvtqZ911lIa+QIDAQAB";
 
     static {
         try {
@@ -324,9 +337,9 @@ public class RSA {
             return null;
         }
         byte[] data = plaintext.getBytes();
-        KeyPair keyPair = getKeyPair();
+        //KeyPair keyPair = getKeyPair();
         try {
-            byte[] en_data = encrypt((RSAPublicKey)keyPair.getPublic(), data);
+            byte[] en_data = encrypt((RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(new BASE64Decoder().decodeBuffer(publickKeyStr))), data);
             return new String(Hex.encodeHex(en_data));
         } catch(NullPointerException ex) {
             LOGGER.error("keyPair cannot be null.");
@@ -373,10 +386,12 @@ public class RSA {
         if(StringUtils.isBlank(encrypttext)) {
             return null;
         }
-        KeyPair keyPair = getKeyPair();
+        //KeyPair keyPair = getKeyPair();
         try {
             byte[] en_data = Hex.decodeHex(encrypttext.toCharArray());
-            byte[] data = decrypt((RSAPrivateKey)keyPair.getPrivate(), en_data);
+            //byte[] data = decrypt((RSAPrivateKey)keyPair.getPrivate(), en_data);
+            
+            byte[] data = decrypt((RSAPrivateKey)keyFactory.generatePrivate(new PKCS8EncodedKeySpec(new BASE64Decoder().decodeBuffer(privateKeyStr))), en_data);
             return new String(data);
         } catch(NullPointerException ex) {
             LOGGER.error("keyPair cannot be null.");
@@ -402,19 +417,32 @@ public class RSA {
 
     /** 返回已初始化的默认的公钥。*/
     public static RSAPublicKey getDefaultPublicKey() {
-        KeyPair keyPair = getKeyPair();
+       /* KeyPair keyPair = getKeyPair();
         if(keyPair != null) {
             return (RSAPublicKey)keyPair.getPublic();
         }
-        return null;
+        return null;*/
+    	try {
+			return (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(new BASE64Decoder().decodeBuffer(publickKeyStr)));
+		} catch (Exception e) {
+			LOGGER.error("获取公钥异常:",e);
+			return null;
+		}
+        
     }
 
     /** 返回已初始化的默认的私钥。*/
     public static RSAPrivateKey getDefaultPrivateKey() {
-        KeyPair keyPair = getKeyPair();
+        /*KeyPair keyPair = getKeyPair();
         if(keyPair != null) {
             return (RSAPrivateKey)keyPair.getPrivate();
         }
-        return null;
+        return null;*/
+    	try {
+			return (RSAPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(new BASE64Decoder().decodeBuffer(privateKeyStr)));
+		} catch (Exception e) {
+			LOGGER.error("获取私钥异常:",e);
+			return null;
+		}
     }
 }

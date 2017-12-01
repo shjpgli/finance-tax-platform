@@ -6,7 +6,6 @@ import com.abc12366.uc.model.weixin.WxRedEnvelop;
 import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.WxLotteryBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
-import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopUpdateBO;
 import com.abc12366.uc.service.IActivityService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -77,32 +76,14 @@ public class RedEnvelopController {
      * 根据活动ID生成口令
      *
      * @param activityId 活动ID
+     * @param businessId 业务ID
      * @return ResponseEntity
      */
     @GetMapping("/{activityId}")
-    public ResponseEntity insert(@PathVariable("activityId") String activityId) {
+    public ResponseEntity generateSecret(@PathVariable("activityId") String activityId,
+                                         @RequestParam(value = "businessId", required = false) String businessId) {
         LOGGER.info("{}", activityId);
-        WxRedEnvelopBO data = iActivityService.generateSecret(activityId);
-        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
-
-        LOGGER.info("{}", responseEntity);
-        return responseEntity;
-    }
-
-    /**
-     * 根据口令ID修改口令记录
-     *
-     * @param id 口令ID
-     * @param bo 更新口令对象
-     * @return ResponseEntity
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable("id") String id,
-                                 @Valid @RequestBody WxRedEnvelopUpdateBO bo) {
-        bo.setId(id);
-        LOGGER.info("{}", bo);
-
-        WxRedEnvelop data = iActivityService.updateSecret(bo);
+        WxRedEnvelopBO data = iActivityService.generateSecret(activityId, businessId);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
@@ -143,6 +124,24 @@ public class RedEnvelopController {
     }
 
     /**
+     * 根据业务ID查询微信红包信息
+     *
+     * @param activityId 红包活动ID
+     * @param businessId 业务ID
+     * @return ResponseEntity
+     */
+    @GetMapping("/{activityId}/{businessId}")
+    public ResponseEntity gethbinfo(@PathVariable("activityId") String activityId,
+                                    @PathVariable("businessId") String businessId) {
+        LOGGER.info("{},{}", activityId, businessId);
+        WxRedEnvelop data = iActivityService.gethbinfo(activityId, businessId);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
      * 导入红包数据
      *
      * @param redEnvelopList List<WxRedEnvelop>
@@ -167,7 +166,7 @@ public class RedEnvelopController {
     @PutMapping("/resend/{id}")
     public ResponseEntity resend(@PathVariable("id") String id) {
         LOGGER.info("{}", id);
-        WxRedEnvelop data = iActivityService.resend(id);
+        WxRedEnvelop data = iActivityService.send(id);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
