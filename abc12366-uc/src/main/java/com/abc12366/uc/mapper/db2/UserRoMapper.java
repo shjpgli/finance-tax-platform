@@ -73,12 +73,6 @@ public interface UserRoMapper {
      */
     List<UserStatisBO> statisUserByDay(Map<String, Object> map);
 
-    /**
-     * 统计用户，列表查询
-     * @param map
-     * @return
-     */
-    List<UserSimpleInfoBO> statisUserList(Map<String, Object> map);
 
     /**
      * 用户登陆数

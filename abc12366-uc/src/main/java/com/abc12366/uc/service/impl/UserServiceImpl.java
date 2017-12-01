@@ -819,11 +819,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserSimpleInfoBO> statisUserList(Map<String, Object> map) {
-        return userRoMapper.statisUserList(map);
-    }
-
-    @Override
     public UserLossRateBO statisUserLossRate(Map<String, Object> map) {
         UserLossRateBO userCount = userRoMapper.statisUserCount(map);
         UserLossRateBO lossUserCount = userRoMapper.statisUserLossRateCount(map);
