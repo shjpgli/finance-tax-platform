@@ -22,6 +22,7 @@ import com.abc12366.uc.service.IDzsbTimeService;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.webservice.AcceptClient;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 缴税信息提醒
@@ -51,6 +52,7 @@ public class JsxxRemindJob implements StatefulJob{
 	
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+		LOGGER.info("--------开始执行[缴税信息提醒]定时任务----------");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
 		
 		
@@ -77,6 +79,7 @@ public class JsxxRemindJob implements StatefulJob{
 	        if("00000000".equals(job.getRescode())){//查询成功
 	        	List<DzsbXxInfo> dzsbXxInfos= job.getDataList();
 	        	if(dzsbXxInfos!=null && dzsbXxInfos.size()>0){//查询到数据
+	        		LOGGER.info("获取[缴税信息提醒]数据:"+JSONObject.toJSONString(job.getDataList()));
 	        		//处理数据
 	        		for(int i=0;i<dzsbXxInfos.size();i++){
 	        			DzsbXxInfo dzsbXxInfo=dzsbXxInfos.get(i);
@@ -126,7 +129,7 @@ public class JsxxRemindJob implements StatefulJob{
 	        	break;
 	        }
 		}	
-		
+		LOGGER.info("--------结束执行[缴税信息提醒]定时任务----------");
 		
 	}
 
