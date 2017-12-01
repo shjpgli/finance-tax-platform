@@ -4,6 +4,7 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UcUserLoginLog;
@@ -61,7 +62,13 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.UPDATE_PWD_SUCCESS_WX_4);
         //3.短信消息
-        msgSendService.sendMsg(user, sysMsg,"", "AYi8h8g7_bKN8Yr9wVDh4ZQ_CIOwsoIzX1A6tx1E5WE", dataList, sysMsg);
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(getUser().getId());
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setTemplateid("AYi8h8g7_bKN8Yr9wVDh4ZQ_CIOwsoIzX1A6tx1E5WE");
+        sendBo.setDataList(dataList);
+        sendBo.setPhoneMsg(sysMsg);
+        msgSendService.sendXtxx(sendBo);
     }
 
     @Override
@@ -78,7 +85,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //发信息
         //1.系统消息
         String sysMsg = RemindConstant.UNREALNAME_SYS;
-        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "'>马上去实名认证</a>";
+        String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/userinfolist.html#1_1'>马上去实名认证</a>";
         //2.微信消息
         Map<String, String> dataList = new HashMap<>();
         dataList.put("first", RemindConstant.UNREALNAME_WX_1);
@@ -113,7 +120,11 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/task.php'>马上做任务</a>";
         //2.微信消息,不做
         //3.短信消息，不做
-        msgSendService.sendMsg(getUser(), sysMsg,skipUrl, null, null, null);
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(getUser().getId());
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setSkipUrl(skipUrl);
+        msgSendService.sendXtxx(sendBo);
     }
 
     @Override
@@ -128,7 +139,11 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/checkIn.php'>马上签到</a>";
         //2.微信消息,不做
         //3.短信消息，不做
-        msgSendService.sendMsg(getUser(), sysMsg, skipUrl, null, null, null);
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(getUser().getId());
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setSkipUrl(skipUrl);
+        msgSendService.sendXtxx(sendBo);
     }
 
     @Override
@@ -139,7 +154,11 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/expLog.php'>查看详情</a>";
         //2.微信消息,不做
         //3.短信消息，不做
-        msgSendService.sendMsg(getUser(), sysMsg, skipUrl,  null, null, null);
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(getUser().getId());
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setSkipUrl(skipUrl);
+        msgSendService.sendXtxx(sendBo);
     }
 
     @Override
@@ -163,7 +182,15 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.REALNAME_VALIDATE_WX_4);
         //3.短信消息
-        msgSendService.sendMsg(user, sysMsg,"", "JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U", dataList, sysMsg);
+
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(userId);
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setPhoneMsg(sysMsg);
+        sendBo.setDataList(dataList);
+        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
+
+        msgSendService.sendXtxx(sendBo);
     }
 
     private User getUser() {

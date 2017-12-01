@@ -64,35 +64,6 @@ public class UserStatisController {
     }
 
     /**
-     * 统计用户，列表查询
-     *
-     * @param startTime  开始时间
-     * @param endTime  结束时间
-     * @return
-     */
-    @GetMapping(path = "/list")
-    public ResponseEntity statisUserList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
-                                         @RequestParam(value = "startTime", required = false) String startTime,
-                                      @RequestParam(value = "endTime", required = false) String endTime) {
-        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        Map<String,Object> map = new HashMap<>();
-        if (startTime != null && !"".equals(startTime)) {
-            map.put("startTime", DateUtils.strToDate(startTime));
-        }
-        if (endTime != null && !"".equals(endTime)) {
-            map.put("endTime", DateUtils.strToDate(endTime));
-        }
-
-        List<UserSimpleInfoBO> list = userService.statisUserList(map);
-        PageInfo<UserSimpleInfoBO> pageInfo = new PageInfo<>(list);
-        LOGGER.info("{}", list);
-        return (list == null) ?
-                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    }
-
-    /**
      * 用户活跃度统计(概况)接口
      * @return ResponseEntity
      */
