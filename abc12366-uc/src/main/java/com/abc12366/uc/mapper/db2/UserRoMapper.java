@@ -73,12 +73,6 @@ public interface UserRoMapper {
      */
     List<UserStatisBO> statisUserByDay(Map<String, Object> map);
 
-    /**
-     * 统计用户，列表查询
-     * @param map
-     * @return
-     */
-    List<UserSimpleInfoBO> statisUserList(Map<String, Object> map);
 
     /**
      * 用户登陆数
@@ -93,6 +87,22 @@ public interface UserRoMapper {
      * @return
      */
     UserLossRateBO statisUserCount(Map<String, Object> map);
+
+    List<UserLivenessMonthBO> userLivenessMonthNoLogin(@Param("start")Date start, @Param("end")Date end);
+
+    List<UserLivenessMonthBO> userLivenessMonth(@Param("start")Date start, @Param("end")Date end);
+    /**
+     * 用户活跃度统计(概况)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessSurveyBO userLivenessSurvey();
+    /**
+     * 用户活跃度统计(明细)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessDetailBO userLivenessDetail(@Param("start")Date start, @Param("end")Date end);
+
+    Float selectExpCount(Map<String, Object> map);
 
     /**
      * 查询RFM指标

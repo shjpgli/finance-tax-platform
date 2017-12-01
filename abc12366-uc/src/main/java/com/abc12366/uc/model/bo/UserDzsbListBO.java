@@ -28,6 +28,11 @@ public class UserDzsbListBO {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date expireTime;
 
+    /**
+     * 延期到期日
+     */
+    private Date expandExpireTime;
+
     public UserDzsbListBO() {
     }
 
@@ -127,6 +132,14 @@ public class UserDzsbListBO {
         this.expireTime = expireTime;
     }
 
+    public Date getExpandExpireTime() {
+        return expandExpireTime;
+    }
+
+    public void setExpandExpireTime(Date expandExpireTime) {
+        this.expandExpireTime = expandExpireTime;
+    }
+
     @Override
     public String toString() {
         return "UserDzsbListBO{" +
@@ -142,6 +155,7 @@ public class UserDzsbListBO {
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", expireTime=" + expireTime +
+                ", expandExpireTime=" + expandExpireTime +
                 '}';
     }
 }

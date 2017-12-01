@@ -3,6 +3,7 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -171,18 +172,26 @@ public interface UserService {
     List<UserStatisBO> statisUserByMonth(Map<String, Object> map);
 
     /**
-     * 统计用户，列表查询
-     * @param map
-     * @return
-     */
-    List<UserSimpleInfoBO> statisUserList(Map<String, Object> map);
-
-    /**
      * 用户流失率统计
      * @param map
      * @return
      */
     UserLossRateBO statisUserLossRate(Map<String, Object> map);
+
+    /**
+     * 用户活跃度统计(明细)接口
+     * @return UserLivenessSurveyBO
+     */
+    Object userLivenessDetail(String type, String start, String end);
+
+    List<ExpLevelStatistic> userExpLevel(String year);
+    /**
+     * 用户活跃度统计(概况)接口
+     * @return UserLivenessSurveyBO
+     */
+    UserLivenessSurveyBO userLivenessSurvey();
+
+    List<VipLevelStatistic> userVip(String year);
 
     /**
      *用户留存率统计

@@ -136,6 +136,7 @@ public class DateUtils {
             date = sdf.parse(str);
         } catch (ParseException e) {
             e.printStackTrace();
+            throw new ServiceException(4805);
         }
         return date;
     }
@@ -150,6 +151,14 @@ public class DateUtils {
             return null;
         }
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
+    public static String dateToString(Date date,String str) {
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat format = new SimpleDateFormat(str);
         return format.format(date);
     }
 

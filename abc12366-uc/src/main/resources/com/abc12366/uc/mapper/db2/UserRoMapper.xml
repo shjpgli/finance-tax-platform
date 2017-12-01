@@ -274,6 +274,16 @@
         </where>
     </select>
 
+    <select id="userLivenessSurvey" resultType="com.abc12366.uc.model.bo.UserLivenessSurveyBO">
+        SELECT (
+        SELECT COUNT(DISTINCT userId) yesterday FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 1 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) yesterday,
+        (SELECT COUNT(DISTINCT userId) lastweek FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 7 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) lastweek,
+        (SELECT COUNT(DISTINCT userId) last30Days FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 30 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) last30Days
+        FROM DUAL
+    </select>
     <select id="statisUserRFM" resultType="com.abc12366.uc.model.bo.UserRFMBO" parameterType="java.util.Map">
         select r.minTime,r.maxTime,r.avgTime,min(m.sumPrice) as minPrice,max(m.sumPrice) as maxPrice,avg(m.sumPrice) as avgPrice,
         min(m.consum) as minConsum,max(m.consum) as maxConsum,avg(m.consum) as avgConsum from
@@ -315,7 +325,20 @@
             AND o.tradeMethod = #{tradeMethod}
           group by u.id
         ) m
+    </select>
 
+    <select id="userLivenessDetail" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessDetailBO">
+        SELECT
+        (SELECT COUNT(1) register FROM uc_user WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        ) register,
+        (SELECT COUNT(DISTINCT userId) yesterday FROM uc_user_login_log WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        ) liveUsers,
+        (SELECT COUNT(1) FROM uc_user
+        ) allRegister
+        FROM DUAL
+    </select>
+    <select id="selectExpCount" parameterType="java.util.Map" resultType="java.lang.Float">
+        select count(1) now from uc_user where exp &gt;= #{min} and exp &lt;= #{max}
     </select>
 
     <select id="statisUserConsumeLevel" resultType="com.abc12366.uc.model.bo.UserExprotInfoBO" parameterType="java.util.Map">

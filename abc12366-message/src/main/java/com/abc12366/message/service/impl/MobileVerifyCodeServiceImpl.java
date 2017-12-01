@@ -192,17 +192,17 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
             // 请求成功
             if (sendSmsResponse.getCode() != null && "OK".equals(sendSmsResponse.getCode())) {
-                messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, type + ":" + msg, MessageConstant
+                messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, msg, MessageConstant
                         .SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE, MessageConstant
                         .SEND_MSG_SUCCESS_CONTENT);
                 return true;
             } else {
-                messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, type + ":" + msg, MessageConstant
+                messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, msg, MessageConstant
                         .SEND_MSG_STATUS_FAIL, sendSmsResponse.getCode(), sendSmsResponse.getMessage());
                 return false;
             }
         } catch (ClientException e) {
-            messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, type + ":" + msg, MessageConstant
+            messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, msg, MessageConstant
                     .SEND_MSG_STATUS_FAIL, "SYSTEM.EXCEPTION", e.getMessage());
             return false;
         }

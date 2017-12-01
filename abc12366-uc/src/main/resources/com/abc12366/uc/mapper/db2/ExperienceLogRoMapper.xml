@@ -47,5 +47,12 @@
         ORDER BY uul.createTime DESC
     </select>
 
+    <select id="selectCount" resultType="java.lang.Float" parameterType="java.util.Map">
+        SELECT COUNT(1) FROM (
+        SELECT MAX(usableExp) lastExp, userId FROM uc_uexp_log
+        where createTime &gt;= #{start} and createTime &lt; #{end}
+        GROUP BY userId HAVING lastExp IS NOT NULL
+        ) a WHERE a.lastExp &gt;=#{min} AND a.lastExp &lt;= #{max}
+    </select>
 
 </mapper>

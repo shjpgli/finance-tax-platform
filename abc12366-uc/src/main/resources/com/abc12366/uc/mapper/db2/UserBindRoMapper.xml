@@ -19,7 +19,7 @@
 
     <select id="getUserDzsbBind" resultType="com.abc12366.uc.model.bo.UserDzsbListBO" parameterType="java.lang.String">
         select uud.id, uud.userId, uud.djxh, uud.nsrsbh, uud.nsrmc, uud.shxydm, uud.swjgMc, uud.swjgDm, uud.status,
-          uud.createTime, uud.lastUpdate, uud.expireTime
+          uud.createTime, uud.lastUpdate, uud.expireTime, uud.expandExpireTime
         from uc_user_dzsb uud
         where userId=#{userId}
         and status=1
