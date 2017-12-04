@@ -64,10 +64,16 @@ public class WxMenuServiceImpl implements IWxMenuService {
         if (buttons != null && buttons.size() > 0) {
             Button[] first = new Button[buttons.size()];
             for (int i = 0; i < buttons.size(); i++) {
+            	if(buttons.get(i).getWxStatus()==0){
+            		continue;
+            	}
                 List<Button> secbuttons = wxMenuRoMapper.seletSec(buttons.get(i).getId());
                 if (secbuttons != null && secbuttons.size() > 0) {
                     Button[] sec = new Button[secbuttons.size()];
                     for (int j = 0; j < secbuttons.size(); j++) {
+                    	if(secbuttons.get(j).getWxStatus()==0){
+                    		continue;
+                    	}
                         sec[j] = secbuttons.get(j);
                     }
                     buttons.get(i).setSub_button(sec);
