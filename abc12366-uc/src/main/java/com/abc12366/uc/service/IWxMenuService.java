@@ -50,4 +50,9 @@ public interface IWxMenuService {
      * @param id 菜单id
      */
     public void delete(String id);
+    /**
+     * 数据库获取菜单
+     * @return
+     */
+	public WxMenu getWxMenuDbShow();
 }
