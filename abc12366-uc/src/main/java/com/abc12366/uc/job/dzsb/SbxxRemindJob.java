@@ -56,10 +56,10 @@ public class SbxxRemindJob implements StatefulJob{
 		LOGGER.info("--------开始执行[申报信息提醒]定时任务----------");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
 		
-		
+		DzsbTime dzsbTime=dzsbTimeService.select(YWLX);
+		boolean isFirst=false;
 		while(true){
-			DzsbTime dzsbTime=dzsbTimeService.select(YWLX);
-			boolean isFirst=false;
+			
 			if(dzsbTime==null){//查询不到数据默认设置当月第一天
 				dzsbTime=new DzsbTime();
 				Calendar c = Calendar.getInstance();    
@@ -112,11 +112,7 @@ public class SbxxRemindJob implements StatefulJob{
 	        		}
 	        		LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]申报信息，最后一笔日期:"+dzsbXxInfos.get(dzsbXxInfos.size()-1).getLrrq());
 	        		dzsbTime.setLasttime(dzsbXxInfos.get(dzsbXxInfos.size()-1).getLrrq());
-                    if(isFirst){//第一次插入数据
-                    	dzsbTimeService.insert(dzsbTime);
-	        		}else{//非第一次更新数据
-	        			dzsbTimeService.update(dzsbTime);
-	        		}
+                    
 	        		if(!job.getIsExistData() 
 	        				|| dzsbXxInfos.size()<Integer.valueOf(Constant.DZSBQNUM)){//没有数据了
 	        			LOGGER.info("操作当前录入日期申报信息:全部处理完毕");
@@ -130,6 +126,11 @@ public class SbxxRemindJob implements StatefulJob{
 	        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]申报信息异常:"+job.getMessage());
 	        	break;
 	        }
+		}
+		if(isFirst){//第一次插入数据
+        	dzsbTimeService.insert(dzsbTime);
+		}else{//非第一次更新数据
+			dzsbTimeService.update(dzsbTime);
 		}
 		LOGGER.info("--------结束执行[申报信息提醒]定时任务----------");
 	}
