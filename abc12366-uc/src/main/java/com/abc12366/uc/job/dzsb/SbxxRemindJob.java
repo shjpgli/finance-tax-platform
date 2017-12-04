@@ -119,7 +119,7 @@ public class SbxxRemindJob implements StatefulJob{
 	        			break;
 	        		}
 	        	}else{
-	        		dzsbTimeService.insert(dzsbTime);
+	        		//dzsbTimeService.insert(dzsbTime);
 	        		break;
 	        	}
 	        }else{//查询失败
