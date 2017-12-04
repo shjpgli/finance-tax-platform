@@ -89,4 +89,5 @@ public class RemindConstant {
     public static final String REALNAME_VALIDATE_SYS = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE},详情请登录财税专家软件查询！";
     public static final String REALNAME_VALIDATE_WX_1 = "您好，你提交的实名认证信息已审核";
     public static final String REALNAME_VALIDATE_WX_4 = "详情请登录财税专家软件查询！";
+    public static final String REALNAME_VALIDATE_DX = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE}。";
 }
