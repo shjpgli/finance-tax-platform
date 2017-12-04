@@ -52,7 +52,7 @@ public class SendMobileMsgServiceImpl implements SendMobileMsgService {
         } else {
             mobileVerifyCodeService.sendAliYunMsg(
                     mobileMsgBO.getPhone(),
-                    "业务消息",
+                    MessageConstant.MOBILE_MSG_BUSI_TYPE,
                     mobileMsgBO.getVars().get(0).getVar(),
                     MessageConstant.ALIYUNTEMP_DXTZ);
         }

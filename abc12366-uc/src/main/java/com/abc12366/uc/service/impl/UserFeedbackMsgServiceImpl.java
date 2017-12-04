@@ -191,11 +191,13 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.REALNAME_VALIDATE_WX_4);
         //3.短信消息
+        String dxMsg = RemindConstant.REALNAME_VALIDATE_DX.replace("{#DATA.RESULT}", (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"))
+                .replace("{#DATA.DATE}", DateUtils.dateToStr(new Date()));
 
         MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
-        sendBo.setPhoneMsg(sysMsg);
+        sendBo.setPhoneMsg(dxMsg);
         sendBo.setDataList(dataList);
         sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
 
