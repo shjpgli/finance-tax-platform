@@ -10,6 +10,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,18 +39,16 @@ public class DzsjWsxxJob implements StatefulJob{
 	private static final Logger LOGGER = LoggerFactory.getLogger(DzsjWsxxJob.class);
 	
 	private final String QCOUNT="200";//查询数量
-
-	private static AppService appService;
 	
-    private static UserService userService;
+	@Autowired
+	private  AppService appService;
+	
+	@Autowired
+    private  UserService userService;
     
-    private static IMsgSendService msgSendService;
+    @Autowired
+    private  IMsgSendService msgSendService;
 	
-	static{
-		appService=(AppService) SpringCtxHolder.getApplicationContext().getBean("appService");
-		userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
-        msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
-	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override

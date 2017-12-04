@@ -14,8 +14,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.abc12366.gateway.component.SpringCtxHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.job.DzsbJob;
 import com.abc12366.uc.model.job.DzsbTime;
@@ -37,20 +36,18 @@ public class CjxxRemindJob implements StatefulJob{
 	
 	private static String YWLX="NOTIFY_CJXX";
 	
-	private static AcceptClient client;
+	@Autowired
+	private AcceptClient client;
 	
-    private static IDzsbTimeService dzsbTimeService;
+	@Autowired
+    private IDzsbTimeService dzsbTimeService;
 	
-	private static IMsgSendService msgSendService;
+	@Autowired
+	private IMsgSendService msgSendService;
 	
-    private static UserService userService;
+	@Autowired
+    private UserService userService;
 	
-	static{
-		client=(AcceptClient) SpringCtxHolder.getApplicationContext().getBean("client");
-		dzsbTimeService=(IDzsbTimeService) SpringCtxHolder.getApplicationContext().getBean("dzsbTimeService");
-		msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
-		userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");	
-	}
 	
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {

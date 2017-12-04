@@ -38,11 +38,13 @@ public class ReportDateJob implements Job {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReportDateJob.class);
 
-
+    @Autowired
     private UserService userService;
     
+    @Autowired
     private AppService appService;
 
+    @Autowired
     private IMsgSendService msgSendService;
 
     private String shenqqix = "";//申报期限
@@ -58,10 +60,6 @@ public class ReportDateJob implements Job {
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
-
-        userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
-        msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
-        appService=(AppService) SpringCtxHolder.getApplicationContext().getBean("appService");
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal_1 = Calendar.getInstance();//获取当前日期
