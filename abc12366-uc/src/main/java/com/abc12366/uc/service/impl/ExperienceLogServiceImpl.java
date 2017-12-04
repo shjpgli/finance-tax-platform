@@ -193,4 +193,9 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
     public List<ExpLogUcBO> selectListByUser(Map<String, Object> map) {
         return experienceLogRoMapper.selectListByUser(map);
     }
+
+    @Override
+    public float selectCount(Map<String, Object> map) {
+        return experienceLogRoMapper.selectCount(map);
+    }
 }

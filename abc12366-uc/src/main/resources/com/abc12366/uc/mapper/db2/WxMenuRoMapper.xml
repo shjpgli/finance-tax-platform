@@ -12,6 +12,20 @@
         <include refid="Base_Column_List"/>
         FROM uc_wxmenu where parentId is null ORDER BY sort ASC
     </select>
+    
+    <select id="seletFisrtShow" resultType="com.abc12366.uc.model.weixin.bo.menu.Button">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_wxmenu where parentId is null and wxStatus = 1  ORDER BY sort ASC
+    </select>
+
+    <select id="seletSecShow" resultType="com.abc12366.uc.model.weixin.bo.menu.Button" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_wxmenu
+        where parentId= #{parentId} and wxStatus = 1
+        ORDER BY sort ASC
+    </select>
 
     <select id="seletSec" resultType="com.abc12366.uc.model.weixin.bo.menu.Button" parameterType="java.lang.String">
         SELECT

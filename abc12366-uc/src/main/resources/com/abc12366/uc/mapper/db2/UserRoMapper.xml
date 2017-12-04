@@ -74,7 +74,7 @@
                 and createTime >= #{startDate}
             </if>
             <if test="endDate !=null and endDate != ''">
-                and createTime <![CDATA[<=]]> #{endDate}
+                and createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
             </if>
         </where>
         ORDER BY createTime DESC
@@ -205,6 +205,10 @@
         where phone=#{phone}
     </select>
 
+    <resultMap id="userStatisBO" type="com.abc12366.uc.model.bo.UserStatisBO">
+        <result column="days" property="days" jdbcType="TIMESTAMP"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+    </resultMap>
     <select id="statisUserByDay" resultType="com.abc12366.uc.model.bo.UserStatisBO" parameterType="java.util.Map">
         select DATE_FORMAT(createTime,#{dateFormat}) days ,count(id) count from uc_user
         <where>
@@ -270,6 +274,18 @@
         </where>
     </select>
 
+    <select id="userLivenessSurvey" resultType="com.abc12366.uc.model.bo.UserLivenessSurveyBO">
+        SELECT (
+        SELECT COUNT(DISTINCT userId) yesterday FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 1 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) yesterday,
+        (SELECT COUNT(DISTINCT userId) lastweek FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 7 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) lastweek,
+        (SELECT COUNT(DISTINCT userId) last30Days FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 30 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
+        ) last30Days,
+        (SELECT COUNT(DISTINCT userId) thismonth FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND createTime &lt;(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
+        ) thismonth
+        FROM DUAL
+    </select>
     <select id="statisUserRFM" resultType="com.abc12366.uc.model.bo.UserRFMBO" parameterType="java.util.Map">
         select r.minTime,r.maxTime,r.avgTime,min(m.sumPrice) as minPrice,max(m.sumPrice) as maxPrice,avg(m.sumPrice) as avgPrice,
         min(m.consum) as minConsum,max(m.consum) as maxConsum,avg(m.consum) as avgConsum from
@@ -311,7 +327,20 @@
             AND o.tradeMethod = #{tradeMethod}
           group by u.id
         ) m
+    </select>
 
+    <select id="userLivenessDetail" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessDetailBO">
+        SELECT
+        (SELECT COUNT(1) register FROM uc_user WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        ) register,
+        (SELECT COUNT(DISTINCT userId) yesterday FROM uc_user_login_log WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        ) liveUsers,
+        (SELECT COUNT(1) FROM uc_user
+        ) allRegister
+        FROM DUAL
+    </select>
+    <select id="selectExpCount" parameterType="java.util.Map" resultType="java.lang.Float">
+        select count(1) now from uc_user where exp &gt;= #{min} and exp &lt;= #{max}
     </select>
 
     <select id="statisUserConsumeLevel" resultType="com.abc12366.uc.model.bo.UserExprotInfoBO" parameterType="java.util.Map">
@@ -319,10 +348,13 @@
             (SELECT
             sum(o.totalPrice) AS sumPrice,
             count(u.id) AS consum,
-            u.id, u.nickName, u.phone, e.realName, e.area
+            u.id, u.nickName, u.phone, e.realName, CONCAT(p.province,t.city,r.area) as area
             from uc_order o
             left join uc_user u on u.id = o.userId
             left join uc_user_extend e on e.userId = u.id
+            LEFT JOIN uc_province p ON p.provinceId = e.province
+				LEFT JOIN uc_city t on t.cityId = e.city
+				LEFT JOIN uc_area r on r.areaId = e.area
             where 1=1
                 <![CDATA[
                 and datediff(#{endTime},o.createTime) >=  #{startDay}

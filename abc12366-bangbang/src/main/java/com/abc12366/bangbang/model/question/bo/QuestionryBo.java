@@ -34,6 +34,9 @@ public class QuestionryBo implements Serializable {
 	/**评论次数**int(11)**/
 	private Integer commentNum;
 
+    /**回答次数**int(11)**/
+    private Integer answerNum;
+
     /**用户昵称**varchar(64)**/
     private String nickname;
 
@@ -126,5 +129,13 @@ public class QuestionryBo implements Serializable {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public Integer getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(Integer answerNum) {
+        this.answerNum = answerNum;
     }
 }

@@ -13,15 +13,13 @@
         select id from uc_user_dzsb
         WHERE status = true
         <![CDATA[
-                and ( date_format(lastLoginTime, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s') or lastLoginTime is null)
+                and date_format(lastLoginTime, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s') and lastLoginTime is not null
                 ]]>
     </select>
 
     <select id="getUserDzsbBind" resultType="com.abc12366.uc.model.bo.UserDzsbListBO" parameterType="java.lang.String">
         select uud.id, uud.userId, uud.djxh, uud.nsrsbh, uud.nsrmc, uud.shxydm, uud.swjgMc, uud.swjgDm, uud.status,
-        uud.createTime, uud.lastUpdate,
-        (select distinct uul.level from uc_uvip_level uul, uc_user uu where uul.levelCode=uu.vipLevel and
-        uu.id=uud.userId) userType
+          uud.createTime, uud.lastUpdate, uud.expireTime, uud.expandExpireTime
         from uc_user_dzsb uud
         where userId=#{userId}
         and status=1

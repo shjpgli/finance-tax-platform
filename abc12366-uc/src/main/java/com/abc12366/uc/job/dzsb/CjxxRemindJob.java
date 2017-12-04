@@ -14,8 +14,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.abc12366.gateway.component.SpringCtxHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.job.DzsbJob;
 import com.abc12366.uc.model.job.DzsbTime;
@@ -24,6 +23,7 @@ import com.abc12366.uc.service.IDzsbTimeService;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.webservice.AcceptClient;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 催缴信息提醒
@@ -36,23 +36,22 @@ public class CjxxRemindJob implements StatefulJob{
 	
 	private static String YWLX="NOTIFY_CJXX";
 	
-	private static AcceptClient client;
+	@Autowired
+	private AcceptClient client;
 	
-    private static IDzsbTimeService dzsbTimeService;
+	@Autowired
+    private IDzsbTimeService dzsbTimeService;
 	
-	private static IMsgSendService msgSendService;
+	@Autowired
+	private IMsgSendService msgSendService;
 	
-    private static UserService userService;
+	@Autowired
+    private UserService userService;
 	
-	static{
-		client=(AcceptClient) SpringCtxHolder.getApplicationContext().getBean("client");
-		dzsbTimeService=(IDzsbTimeService) SpringCtxHolder.getApplicationContext().getBean("dzsbTimeService");
-		msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
-		userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");	
-	}
 	
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+		LOGGER.info("--------开始执行[催缴信息提醒]定时任务----------");
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
 		//查询申报期限
@@ -65,9 +64,9 @@ public class CjxxRemindJob implements StatefulJob{
         	if(dzsbXxInfosA!=null && dzsbXxInfosA.size()>0){
         		String sbxq=dzsbXxInfosA.get(0).getSbqx();
         		if(isTwoDayBefore(sbxq)){
+        			DzsbTime dzsbTime=dzsbTimeService.select(YWLX);
+    				boolean isFirst=false;
         			while(true){
-        				DzsbTime dzsbTime=dzsbTimeService.select(YWLX);
-        				boolean isFirst=false;
         				if(dzsbTime==null){//查询不到数据默认设置当月第一天
         					dzsbTime=new DzsbTime();
         					Calendar c = Calendar.getInstance();    
@@ -88,6 +87,7 @@ public class CjxxRemindJob implements StatefulJob{
         		        if("00000000".equals(job.getRescode())){//查询成功
         		        	List<DzsbXxInfo> dzsbXxInfos= job.getDataList();
         		        	if(dzsbXxInfos!=null && dzsbXxInfos.size()>0){//查询到数据
+        		        		LOGGER.info("获取[催缴信息提醒]数据:"+JSONObject.toJSONString(job.getDataList()));
         		        		//处理数据
         		        		for(int i=0;i<dzsbXxInfos.size();i++){
         		        			
@@ -119,30 +119,32 @@ public class CjxxRemindJob implements StatefulJob{
         		        		}
         		        		LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]催缴信息，最后一笔日期:"+dzsbXxInfos.get(dzsbXxInfos.size()-1).getLrrq());
         		        		dzsbTime.setLasttime(dzsbXxInfos.get(dzsbXxInfos.size()-1).getLrrq());
-        	                    if(isFirst){//第一次插入数据
-        	                    	dzsbTimeService.insert(dzsbTime);
-        		        		}else{//非第一次更新数据
-        		        			dzsbTimeService.update(dzsbTime);
-        		        		}
+        	                    
         		        		if(!job.getIsExistData() 
         		        				|| dzsbXxInfos.size()<Integer.valueOf(Constant.DZSBQNUM)){//没有数据了
         		        			LOGGER.info("操作当前录入日期催缴信息:全部处理完毕");
         		        			break;
         		        		}
         		        	}else{
-        		        		dzsbTimeService.insert(dzsbTime);
+        		        		//dzsbTimeService.insert(dzsbTime);
         		        		break;
         		        	}
         		        }else{//查询失败
         		        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]催缴信息异常:"+job.getMessage());
         		        	break;
         		        }
-        			}		
+        			}	
+        			if(isFirst){//第一次插入数据
+                    	dzsbTimeService.insert(dzsbTime);
+	        		}else{//非第一次更新数据
+	        			dzsbTimeService.update(dzsbTime);
+	        		}
         		}
         	}
         }else{
         	LOGGER.info("查询本月申报期限信息异常:"+jobA.getMessage());
         }
+        LOGGER.info("--------结束执行[催缴信息提醒]定时任务----------");
 	} 
 	
 	/**

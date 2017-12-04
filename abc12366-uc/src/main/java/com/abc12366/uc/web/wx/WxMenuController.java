@@ -131,7 +131,7 @@ public class WxMenuController {
     @SuppressWarnings("rawtypes")
     @PostMapping("/wxmenu/create")
     public ResponseEntity wxmenuCreate() {
-        WxMenu wxMenu = iWxMenuService.getWxMenuDb();
+        WxMenu wxMenu = iWxMenuService.getWxMenuDbShow();
 
         List<Button> list =new ArrayList<Button>();
         for (Button btn:wxMenu.getButton()             ) {

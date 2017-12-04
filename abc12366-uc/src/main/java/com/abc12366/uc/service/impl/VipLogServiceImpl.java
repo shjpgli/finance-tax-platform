@@ -6,6 +6,7 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.VipLogMapper;
 import com.abc12366.uc.mapper.db2.VipLogRoMapper;
 import com.abc12366.uc.model.VipLog;
+import com.abc12366.uc.model.bo.VipLevelStatisticTemp;
 import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.service.VipLogService;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Admin: liuguiyao<435720953@qq.com.com>
@@ -69,5 +71,10 @@ public class VipLogServiceImpl implements VipLogService {
         VipLogBO vipLogBOReturn = new VipLogBO();
         BeanUtils.copyProperties(vipLog, vipLogBOReturn);
         return vipLogBOReturn;
+    }
+
+    @Override
+    public VipLevelStatisticTemp selectCountByCode(Map map) {
+        return vipLogRoMapper.selectCountByCode(map);
     }
 }

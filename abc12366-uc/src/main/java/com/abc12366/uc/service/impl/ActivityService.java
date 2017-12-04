@@ -27,6 +27,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -558,6 +560,12 @@ public class ActivityService implements IActivityService {
      * 口令，活动ID编码
      */
     private static String state(String secret, String activityId) {
+        try {
+            return URLEncoder.encode(Utils.encode(secret + "," + activityId), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            LOGGER.error("{}", e);
+        }
         return Utils.encode(secret + "," + activityId);
     }
 }

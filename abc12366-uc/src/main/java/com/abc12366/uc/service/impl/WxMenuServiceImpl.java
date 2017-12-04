@@ -79,6 +79,29 @@ public class WxMenuServiceImpl implements IWxMenuService {
 
         return wxMenu;
     }
+    
+    @Override
+    public WxMenu getWxMenuDbShow() {
+        WxMenu wxMenu = new WxMenu();
+        List<Button> buttons = wxMenuRoMapper.seletFisrtShow();
+        if (buttons != null && buttons.size() > 0) {
+            Button[] first = new Button[buttons.size()];
+            for (int i = 0; i < buttons.size(); i++) {
+                List<Button> secbuttons = wxMenuRoMapper.seletSecShow(buttons.get(i).getId());
+                if (secbuttons != null && secbuttons.size() > 0) {
+                    Button[] sec = new Button[secbuttons.size()];
+                    for (int j = 0; j < secbuttons.size(); j++) {
+                        sec[j] = secbuttons.get(j);
+                    }
+                    buttons.get(i).setSub_button(sec);
+                }
+                first[i] = buttons.get(i);
+            }
+            wxMenu.setButton(first);
+        }
+
+        return wxMenu;
+    }
 
     @Override
     public Button selectOne(String id) {

@@ -1,8 +1,10 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.bo.VipLevelStatisticTemp;
 import com.abc12366.uc.model.bo.VipLogBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * VIP日志服务
@@ -27,4 +29,11 @@ public interface VipLogService {
      * @return {@linkplain com.abc12366.uc.model.bo.VipLogBO VipLogBO}日志对象
      */
     VipLogBO insert(VipLogBO vipLogBO);
+
+    /**
+     * 根据编码查询会员日志列表
+     * @param map
+     * @return
+     */
+    VipLevelStatisticTemp selectCountByCode(Map map);
 }
