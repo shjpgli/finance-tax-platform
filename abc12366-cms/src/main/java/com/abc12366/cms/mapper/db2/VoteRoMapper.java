@@ -18,6 +18,8 @@ import java.util.Map;
 public interface VoteRoMapper {
     List<Vote> selectList(Vote vote);
 
+    List<VoteResult> selectList(VoteResult voteResult);
+
     Vote selectOne(String id);
 
     // 查询参与人数

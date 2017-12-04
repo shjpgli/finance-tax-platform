@@ -41,6 +41,26 @@ public class VoteController {
     @Autowired
     private VoteService voteService;
 
+    @GetMapping(value = "/result")
+    public ResponseEntity selectList(@RequestParam(value = "userId", required = false) String userId,
+                                     @RequestParam(value = "voteId", required = false) String voteId,
+                                     @RequestParam(value = "subjectId", required = false) String subjectId,
+                                     @RequestParam(value = "itemId", required = false) String itemId,
+                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{},{},{}", voteId,subjectId,itemId,userId, page, size);
+
+        VoteResult voteResult = new VoteResult.Builder().voteId(voteId).subjectId(subjectId).itemId(itemId).userId(userId).build();
+        List<VoteResult> dataList = voteService.selectList(voteResult, page, size);
+
+        PageInfo<VoteResult> pageInfo = new PageInfo<>(dataList);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                "total", pageInfo.getTotal()));
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -57,6 +77,7 @@ public class VoteController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+
 
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody Vote vote) {
