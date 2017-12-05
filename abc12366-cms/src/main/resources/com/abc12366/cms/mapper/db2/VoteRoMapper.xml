@@ -46,7 +46,7 @@
             <if test="voteId != null">voteId = #{voteId}</if>
             <if test="subjectId != null">and subjectId = #{subjectId}</if>
             <if test="itemId != null">and itemId = #{itemId}</if>
-            <if test="userId != null">and id = #{userId}</if>
+            <if test="ip != null">and ip = #{ip}</if>
         </where>
     </select>
 

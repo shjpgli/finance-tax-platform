@@ -322,8 +322,7 @@ public class VoteServiceImpl implements VoteService {
                     result.setVoteId(voteId);
                     result.setSubjectId(result.getSubjectId());
                     result.setItemId(result.getItemId());
-                    result.setUserId(result.getUserId());
-                   // result.setUserId(userId);
+                    result.setUserId(userId);
                     result.setIp(addr);
                     result.setUserAgent(userAgent);
                     result.setCreateTime(now);
@@ -353,8 +352,7 @@ public class VoteServiceImpl implements VoteService {
             String addr = Utils.getAddr(request);
             String userAgent = Utils.getUserAgent(request);
             result.setId(Utils.uuid());
-            result.setUserId(result.getUserId());
-            //result.setUserId(userId);
+            result.setUserId(userId);
             result.setIp(addr);
             result.setUserAgent(userAgent);
             result.setCreateTime(now);

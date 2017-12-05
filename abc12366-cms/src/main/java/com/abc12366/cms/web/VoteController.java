@@ -41,16 +41,16 @@ public class VoteController {
     @Autowired
     private VoteService voteService;
 
-    @GetMapping(value = "/result")
-    public ResponseEntity selectList(@RequestParam(value = "userId", required = false) String userId,
-                                     @RequestParam(value = "voteId", required = false) String voteId,
+    @GetMapping(value = "/resultList")
+    public ResponseEntity selectList(@RequestParam(value = "voteId", required = false) String voteId,
                                      @RequestParam(value = "subjectId", required = false) String subjectId,
                                      @RequestParam(value = "itemId", required = false) String itemId,
+                                     @RequestParam(value = "ip",required = false)String ip,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{},{},{}", voteId,subjectId,itemId,userId, page, size);
+        LOGGER.info("{},{},{}", voteId,subjectId,itemId, page, size);
 
-        VoteResult voteResult = new VoteResult.Builder().voteId(voteId).subjectId(subjectId).itemId(itemId).userId(userId).build();
+        VoteResult voteResult = new VoteResult.Builder().voteId(voteId).subjectId(subjectId).itemId(itemId).ip(ip).build();
         List<VoteResult> dataList = voteService.selectResultList(voteResult, page, size);
 
         PageInfo<VoteResult> pageInfo = new PageInfo<>(dataList);
