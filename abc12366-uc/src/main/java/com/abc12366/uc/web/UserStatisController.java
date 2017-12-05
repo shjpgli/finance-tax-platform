@@ -84,9 +84,9 @@ public class UserStatisController {
      */
     @GetMapping(path = "/liveness/detail")
     public ResponseEntity userLivenessDetail(@RequestParam String type,@RequestParam String start,@RequestParam String end){
-        LOGGER.info("查询用户活跃度统计：{}:{}:{}", type,start,end);
+        LOGGER.info("查询用户活跃度详情统计：{}:{}:{}", type,start,end);
         Object object = userService.userLivenessDetail(type,start,end);
-        LOGGER.info("查询用户活跃度统计结果返回：{}", object);
+        LOGGER.info("查询用户活跃度详情统计结果返回：{}", object);
         return ResponseEntity.ok(Utils.kv("dataList",object));
     }
 
@@ -110,9 +110,9 @@ public class UserStatisController {
      */
     @GetMapping(path = "/viplevel")
     public ResponseEntity userVipLevel(@RequestParam String year){
-        LOGGER.info("查询用户活跃度统计：{}", year);
+        LOGGER.info("查询会员等级统计：{}", year);
         List<VipLevelStatistic> vipLevelStatisticList = userService.userVip(year);
-        LOGGER.info("查询用户活跃度统计结果返回：{}", vipLevelStatisticList);
+        LOGGER.info("查询会员等级统计结果返回：{}", vipLevelStatisticList);
         return ResponseEntity.ok(Utils.kv("dataList",vipLevelStatisticList));
     }
 
