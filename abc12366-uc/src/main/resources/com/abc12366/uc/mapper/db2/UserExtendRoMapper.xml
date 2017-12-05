@@ -28,6 +28,9 @@
             <if test="validStatus != null and validStatus != ''">
                 and validStatus = #{validStatus}
             </if>
+            <if test="validType != null and validType != ''">
+                and validType = #{validType}
+            </if>
         </where>
         order by lastUpdate desc
     </select>
