@@ -20,7 +20,6 @@ import java.util.concurrent.Executor;
 @SpringBootApplication(scanBasePackages = "com.abc12366.uc, com.abc12366.gateway")
 @PropertySource("classpath:application.properties")
 @EnableAsync
-@EnableScheduling
 public class Application extends AsyncConfigurerSupport {
 
     public static void main(String[] args) {
