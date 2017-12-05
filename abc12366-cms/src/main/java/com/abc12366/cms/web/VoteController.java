@@ -51,7 +51,7 @@ public class VoteController {
         LOGGER.info("{},{},{}", voteId,subjectId,itemId,userId, page, size);
 
         VoteResult voteResult = new VoteResult.Builder().voteId(voteId).subjectId(subjectId).itemId(itemId).userId(userId).build();
-        List<VoteResult> dataList = voteService.selectList(voteResult, page, size);
+        List<VoteResult> dataList = voteService.selectResultList(voteResult, page, size);
 
         PageInfo<VoteResult> pageInfo = new PageInfo<>(dataList);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),

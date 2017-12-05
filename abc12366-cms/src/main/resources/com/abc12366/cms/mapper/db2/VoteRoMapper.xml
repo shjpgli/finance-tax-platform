@@ -22,25 +22,6 @@
         hiddenResult
     </sql>
 
-    <resultMap id="voteResultMap" type="com.abc12366.cms.model.VoteResult">
-        <id column="id"  property="id" jdbcType="VARCHAR"/>
-        <result column="voteId"  property="voteId" jdbcType="VARCHAR"/>
-        <result column="subjectId"  property="subjectId" jdbcType="VARCHAR"/>
-        <result column="itemId"  property="itemId" jdbcType="VARCHAR"/>
-        <result column="userId"  property="userId" jdbcType="VARCHAR"/>
-        <result column="openId"  property="openId" jdbcType="VARCHAR"/>
-        <result column="ip"  property="ip" jdbcType="VARCHAR"/>
-        <result column="userAgent"  property="userAgent" jdbcType="VARCHAR"/>
-        <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
-            <id column="uId" property="id"/>
-            <result column="uName" property="username"/>
-            <result column="nickname" property="nickname"/>
-            <result column="phone" property="phone"/>
-            <result column="vipLevel" property="vipLevel"/>
-            <result column="vipLevelName" property="vipLevelName"/>
-        </association>
-    </resultMap>
-
     <select id="selectList" resultType="com.abc12366.cms.model.Vote" parameterType="com.abc12366.cms.model.Vote">
         SELECT
         <include refid="Base_Column_List"/>
@@ -58,15 +39,14 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectResult" parameterType="com.abc12366.cms.model.VoteResult" resultType="voteResultMap">
-        SELECT r.id,r.voteId,r.subjectId,r.itemId,r.userId,r.openId,r.ip,r.userAgent
-        FROM cms_vote_result r
-        LEFT JOIN cms_user u ON u.id = r.userId
+    <select id="selectResultList" resultType="com.abc12366.cms.model.VoteResult" parameterType="com.abc12366.cms.model.VoteResult" >
+        SELECT id,voteId,subjectId,itemId,userId,openId,ip,userAgent
+        FROM cms_vote_result
         <where>
-            <if test="voteId != null">r.voteId = #{voteId}</if>
-            <if test="subjectId != null">and r.subjectId = #{subjectId}</if>
-            <if test="itemId != null">and r.itemId = #{itemId}</if>
-            <if test="userId != null">and u.id = #{userId}</if>
+            <if test="voteId != null">voteId = #{voteId}</if>
+            <if test="subjectId != null">and subjectId = #{subjectId}</if>
+            <if test="itemId != null">and itemId = #{itemId}</if>
+            <if test="userId != null">and id = #{userId}</if>
         </where>
     </select>
 

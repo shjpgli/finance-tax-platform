@@ -18,8 +18,6 @@ import java.util.Map;
 public interface VoteRoMapper {
     List<Vote> selectList(Vote vote);
 
-    List<VoteResult> selectList(VoteResult voteResult);
-
     Vote selectOne(String id);
 
     // 查询参与人数
@@ -63,4 +61,9 @@ public interface VoteRoMapper {
      * 查询（投票统计）
      **/
     List<VoteRotptjBo> selecttptj(Map<String, Object> map);
+
+    /**
+     * 查询投票记录
+     */
+    List<VoteResult> selectResultList(VoteResult voteResult);
 }

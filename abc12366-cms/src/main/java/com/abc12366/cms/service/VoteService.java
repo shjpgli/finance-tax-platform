@@ -47,6 +47,6 @@ public interface VoteService {
 
     String updateItemStatus(SubItemBo subItemBo);
 
-    List<VoteResult> selectList(VoteResult voteResult, int page, int size);
+    List<VoteResult> selectResultList(VoteResult voteResult, int page, int size);
 
 }

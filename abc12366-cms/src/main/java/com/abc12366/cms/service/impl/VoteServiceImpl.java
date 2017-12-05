@@ -70,10 +70,10 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
-    public List<VoteResult> selectList(VoteResult voteResult, int page, int size) {
+    public List<VoteResult> selectResultList(VoteResult voteResult, int page, int size) {
         voteMapper.updateStatus();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<VoteResult> voteResults = voteRoMapper.selectList(voteResult);
+        List<VoteResult> voteResults = voteRoMapper.selectResultList(voteResult);
         return voteResults;
     }
 
