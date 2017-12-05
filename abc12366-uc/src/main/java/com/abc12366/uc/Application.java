@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
@@ -19,6 +20,7 @@ import java.util.concurrent.Executor;
 @SpringBootApplication(scanBasePackages = "com.abc12366.uc, com.abc12366.gateway")
 @PropertySource("classpath:application.properties")
 @EnableAsync
+@EnableScheduling
 public class Application extends AsyncConfigurerSupport {
 
     public static void main(String[] args) {

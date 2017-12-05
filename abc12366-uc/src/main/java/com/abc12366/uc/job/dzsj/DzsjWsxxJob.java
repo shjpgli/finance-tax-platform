@@ -11,10 +11,13 @@ import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import sun.misc.BASE64Decoder;
@@ -35,7 +38,8 @@ import com.alibaba.fastjson.JSONObject;
  *
  */
 @SuppressWarnings("deprecation")
-public class DzsjWsxxJob implements StatefulJob{
+@Component
+public class DzsjWsxxJob{
 	private static final Logger LOGGER = LoggerFactory.getLogger(DzsjWsxxJob.class);
 	
 	private final String QCOUNT="200";//查询数量
@@ -49,11 +53,24 @@ public class DzsjWsxxJob implements StatefulJob{
     @Autowired
     private  IMsgSendService msgSendService;
 	
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	@Scheduled(cron="0 0/2 * * * ?")
+	public void execute() throws JobExecutionException {
 		LOGGER.info("--------开始执行[电子税局文书信息提醒]定时任务----------");
+		
+		if(redisTemplate.hasKey("TIMETASK_DZSJWSXXJOB")){
+			LOGGER.info("[电子税局文书信息提醒]已经在其他节点执行,本次执行跳过.....");
+		}
+		redisTemplate.opsForValue().set("TIMETASK_DZSJWSXXJOB", "RUNING");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		while(true){
 			try {
 				HttpHeaders headers = new HttpHeaders();
@@ -103,6 +120,7 @@ public class DzsjWsxxJob implements StatefulJob{
 				break;
 			}   
 		}
+		redisTemplate.delete("TIMETASK_DZSJWSXXJOB");
 		LOGGER.info("--------结束执行[电子税局文书信息提醒]定时任务----------");
 	}
 
