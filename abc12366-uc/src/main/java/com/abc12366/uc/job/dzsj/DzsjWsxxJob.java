@@ -63,6 +63,7 @@ public class DzsjWsxxJob{
 		
 		if(redisTemplate.hasKey("TIMETASK_DZSJWSXXJOB")){
 			LOGGER.info("[电子税局文书信息提醒]已经在其他节点执行,本次执行跳过.....");
+			return;
 		}
 		redisTemplate.opsForValue().set("TIMETASK_DZSJWSXXJOB", "RUNING");
 		try {
