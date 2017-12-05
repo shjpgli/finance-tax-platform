@@ -831,7 +831,7 @@ public class UserServiceImpl implements UserService {
             String rate = numberFormat.format((float) notUserCount / (float) userCount.getUserCount() * 100);
             data.setRate(rate);
             data.setUserCount(userCount.getUserCount());
-            data.setLossUserCount(lossUserCount.getLossUserCount());
+            data.setLossUserCount(notUserCount);
         }
         return data;
     }
