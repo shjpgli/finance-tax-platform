@@ -68,6 +68,8 @@ public class UserExtendBO {
     @Size(max = 500)
     private String remark;
     private String careerDuration;
+    //实名认证方式
+    private String validType;
 
     public UserExtendBO() {
     }
@@ -318,5 +320,51 @@ public class UserExtendBO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getValidType() {
+        return validType;
+    }
+
+    public void setValidType(String validType) {
+        this.validType = validType;
+    }
+
+    @Override
+    public String toString() {
+        return "UserExtendBO{" +
+                "userId='" + userId + '\'' +
+                ", signature='" + signature + '\'' +
+                ", sex='" + sex + '\'' +
+                ", birthday=" + birthday +
+                ", bloodType='" + bloodType + '\'' +
+                ", weight='" + weight + '\'' +
+                ", height='" + height + '\'' +
+                ", marital='" + marital + '\'' +
+                ", education='" + education + '\'' +
+                ", graduate='" + graduate + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", income='" + income + '\'' +
+                ", postAddress='" + postAddress + '\'' +
+                ", realName='" + realName + '\'' +
+                ", weixin='" + weixin + '\'' +
+                ", qq='" + qq + '\'' +
+                ", safeQuestion='" + safeQuestion + '\'' +
+                ", safeAnswer='" + safeAnswer + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", tags='" + tags + '\'' +
+                ", idcard='" + idcard + '\'' +
+                ", frontImage='" + frontImage + '\'' +
+                ", backImage='" + backImage + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", validStatus='" + validStatus + '\'' +
+                ", validTime=" + validTime +
+                ", remark='" + remark + '\'' +
+                ", careerDuration='" + careerDuration + '\'' +
+                ", validType='" + validType + '\'' +
+                '}';
     }
 }

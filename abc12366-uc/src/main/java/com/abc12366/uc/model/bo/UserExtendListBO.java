@@ -45,6 +45,7 @@ public class UserExtendListBO {
     private Date validTime;
     private String remark;
     private String careerDuration;
+    private String validType;
 
     public UserExtendListBO() {
     }
@@ -343,5 +344,57 @@ public class UserExtendListBO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getValidType() {
+        return validType;
+    }
+
+    public void setValidType(String validType) {
+        this.validType = validType;
+    }
+
+    @Override
+    public String toString() {
+        return "UserExtendListBO{" +
+                "username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", status=" + status +
+                ", userId='" + userId + '\'' +
+                ", signature='" + signature + '\'' +
+                ", sex='" + sex + '\'' +
+                ", birthday=" + birthday +
+                ", bloodType='" + bloodType + '\'' +
+                ", weight='" + weight + '\'' +
+                ", height='" + height + '\'' +
+                ", marital='" + marital + '\'' +
+                ", education='" + education + '\'' +
+                ", graduate='" + graduate + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", income='" + income + '\'' +
+                ", postAddress='" + postAddress + '\'' +
+                ", realName='" + realName + '\'' +
+                ", weixin='" + weixin + '\'' +
+                ", qq='" + qq + '\'' +
+                ", safeQuestion='" + safeQuestion + '\'' +
+                ", safeAnswer='" + safeAnswer + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", area='" + area + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", tags='" + tags + '\'' +
+                ", idcard='" + idcard + '\'' +
+                ", frontImage='" + frontImage + '\'' +
+                ", backImage='" + backImage + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", validStatus='" + validStatus + '\'' +
+                ", validTime=" + validTime +
+                ", remark='" + remark + '\'' +
+                ", careerDuration='" + careerDuration + '\'' +
+                ", validType='" + validType + '\'' +
+                '}';
     }
 }
