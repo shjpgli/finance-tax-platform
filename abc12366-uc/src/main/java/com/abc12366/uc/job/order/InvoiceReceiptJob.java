@@ -21,18 +21,18 @@ public class InvoiceReceiptJob implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceReceiptJob.class);
 
     @Autowired
-    private static InvoiceService invoiceService;
+    private InvoiceService invoiceService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("InvoiceReceiptJob: {}", context.getJobDetail().getKey().getName());
-        initService();
+        //initService();
         invoiceService.automaticReceiptInvoice();
     }
 
-    public static void initService() {
+    /*public static void initService() {
         synchronized (InvoiceReceiptJob.class) {
             invoiceService = (InvoiceService) SpringCtxHolder.getApplicationContext().getBean("invoiceService");
         }
-    }
+    }*/
 }

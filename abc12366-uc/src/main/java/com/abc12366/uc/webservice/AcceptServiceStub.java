@@ -152,8 +152,9 @@ public class AcceptServiceStub extends org.apache.axis2.client.Stub {
             org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
             _operationClient.getOptions().setAction("http://www.chabc.net/tdps/ws/accept");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
-
-
+            
+            //AXIS2超时时间设置
+            _operationClient.getOptions().setTimeOutInMilliSeconds(120000);
             addPropertyToOperationClient(_operationClient, org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR, "&");
 
 

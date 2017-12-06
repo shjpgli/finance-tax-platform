@@ -938,7 +938,6 @@ public class UserServiceImpl implements UserService {
     public List<ExpLevelStatistic> userExpLevel(String year, int page, int size) {
         Date start = DateUtils.strToDate(year, "yyyy");
         Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
-        Date lastStart = DateUtils.strToDate(Integer.parseInt(year) - 1 + "", "yyyy");
         List<ExperienceLevelBO> experienceLevelBOList = experienceLevelRoMapper.selectList(null);
 
         List<ExpLevelStatistic> expLevelStatisticList = new ArrayList<>();
@@ -948,19 +947,22 @@ public class UserServiceImpl implements UserService {
             map.put("end", end);
             map.put("min", experienceLevelBO.getMinValue());
             map.put("max", experienceLevelBO.getMaxValue());
-            float increase = experienceLogService.selectCount(map);
+            float thisYearIncrease = experienceLogService.selectCount(map);
 
-            float increaseUntilNow = experienceLogService.selectCount(map);
+            Map<String, Object> lastYeaMap = new HashMap<>();
+            lastYeaMap.put("end", start);
+            lastYeaMap.put("max", experienceLevelBO.getMaxValue());
+            float lastYearAll = experienceLogService.selectCount(lastYeaMap);
 
             float all = userRoMapper.selectExpCount(map);
 
             ExpLevelStatistic expLevelStatistic = new ExpLevelStatistic();
             expLevelStatistic.setAll((int) all);
-            expLevelStatistic.setThisYearIncrease(increase);
-            expLevelStatistic.setLastYearAll(all - increase);
+            expLevelStatistic.setThisYearIncrease(thisYearIncrease);
+            expLevelStatistic.setLastYearAll(lastYearAll);
             expLevelStatistic.setLevelCode(experienceLevelBO.getName());
             expLevelStatistic.setLevelName(experienceLevelBO.getMedal());
-            expLevelStatistic.setIncreasePercent((all - increase) == 0 ? "/" : new DecimalFormat("#.##").format(increase / (all - increase) * 100) + "%");
+            expLevelStatistic.setIncreasePercent(lastYearAll == 0 ? "/" : new DecimalFormat("#.##").format(thisYearIncrease / lastYearAll * 100) + "%");
             expLevelStatisticList.add(expLevelStatistic);
         }
         return expLevelStatisticList;
@@ -985,15 +987,18 @@ public class UserServiceImpl implements UserService {
             map.put("lastStart", lastStart);
             map.put("lastEnd", start);
             VipLevelStatisticTemp vipLevelStatistic = vipLogService.selectCountByCode(map);
+
+            //int all = vipLogService.selectCountAll(vipLevelBO.getLevelCode());
             VipLevelStatistic levelStatistic = new VipLevelStatistic();
             levelStatistic.setLevelCode(vipLevelBO.getLevelCode());
             levelStatistic.setLevelName(vipLevelBO.getLevel());
-            levelStatistic.setAll((int) vipLevelStatistic.getIncrease());
+            levelStatistic.setAll(vipLevelStatistic.getAllCount());
             levelStatistic.setIncrease((int) vipLevelStatistic.getIncrease());
-            if (vipLevelStatistic.getLastIncrease() < 1) {
+            levelStatistic.setLastYearAll((int) vipLevelStatistic.getLastYearAll());
+            if (vipLevelStatistic.getLastYearAll() == 0) {
                 levelStatistic.setIncreasePercent("/");
             } else {
-                levelStatistic.setIncreasePercent(new DecimalFormat("#.##").format(vipLevelStatistic.getIncrease() / vipLevelStatistic.getLastIncrease() * 100F) + "%");
+                levelStatistic.setIncreasePercent(new DecimalFormat("#.##").format(vipLevelStatistic.getIncrease() / vipLevelStatistic.getLastYearAll() * 100F) + "%");
             }
             vipLevelStatistics.add(levelStatistic);
         }

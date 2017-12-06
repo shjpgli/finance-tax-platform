@@ -15,4 +15,6 @@ public interface VipLogRoMapper {
     List<VipLogBO> selectList(String userId);
 
     VipLevelStatisticTemp selectCountByCode(Map map);
+
+    int selectCountAll(String levelCode);
 }

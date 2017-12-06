@@ -563,7 +563,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         pointsLogService.insertNoVip(pointsLog);
     }
 
-    @Transactional("db1TxManager")
+    //@Transactional("db1TxManager")
     @Override
     public void automaticReceipt() throws Exception {
         Timestamp now = new Timestamp(System.currentTimeMillis());

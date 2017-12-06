@@ -21,20 +21,20 @@ public class OrderReceiptJob implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderReceiptJob.class);
 
     @Autowired
-    private static OrderService orderService;
+    private OrderService orderService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("JobName2: {}", context.getJobDetail().getKey().getName());
-        initService();
+        //initService();
         orderService.automaticReceipt();
     }
 
-    public static void initService() {
+    /*public static void initService() {
         synchronized (OrderReceiptJob.class) {
             orderService = (OrderService) SpringCtxHolder.getApplicationContext().getBean("orderService");
         }
     }
-
+*/
 
 }
