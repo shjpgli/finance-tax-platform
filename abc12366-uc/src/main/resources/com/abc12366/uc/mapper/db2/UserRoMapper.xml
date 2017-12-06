@@ -331,9 +331,9 @@
 
     <select id="userLivenessDetail" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.UserLivenessDetailBO">
         SELECT
-        (SELECT COUNT(1) register FROM uc_user WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        (SELECT COUNT(1) register FROM uc_user WHERE createTime &gt;=#{start} AND createTime &lt;#{end}
         ) register,
-        (SELECT COUNT(DISTINCT userId) yesterday FROM uc_user_login_log WHERE createTime &gt;#{start} AND createTime &lt;#{end}
+        (SELECT COUNT(DISTINCT a.userId) liveUsers FROM uc_user_login_log a join uc_user b on a.userId=b.id WHERE a.createTime &gt;=#{start} AND a.createTime &lt;#{end}
         ) liveUsers,
         (SELECT COUNT(1) FROM uc_user
         ) allRegister

@@ -19,7 +19,13 @@
         (SELECT COUNT(1) increase FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &gt;=#{start} AND createTime &lt; #{end}
         ) increase,
         (SELECT COUNT(1) lastIncrease FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &gt;=#{lastStart} AND createTime &lt;#{lastEnd}
-        ) lastIncrease
+        ) lastIncrease,
+        (SELECT COUNT(1) lastYearAll FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &lt;#{start}
+        ) lastYearAll
         FROM DUAL
+    </select>
+
+    <select id="selectCountAll" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(1) from uc_user where vipLevel=#{levelCode}
     </select>
 </mapper>
