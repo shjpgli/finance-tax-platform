@@ -21,19 +21,19 @@ public class UserBindJob implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserBindJob.class);
 
     @Autowired
-    private static UserBindService userBindService;
+    private UserBindService userBindService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("UserBindJob: {}", context.getJobDetail().getKey().getName());
-        initService();
+        //initService();
         userBindService.automaticBindCancel();
         LOGGER.info("自动取消绑定完成: {}");
     }
 
-    public static void initService() {
+    /*public static void initService() {
         synchronized (UserBindJob.class) {
             userBindService = (UserBindService) SpringCtxHolder.getApplicationContext().getBean("userBindService");
         }
-    }
+    }*/
 }

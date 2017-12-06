@@ -1,7 +1,11 @@
 package com.abc12366.message.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 应用配置文件
@@ -115,5 +119,18 @@ public class ApplicationConfig {
 
     public void setAppSecret(String appSecret) {
         this.appSecret = appSecret;
+    }
+    
+    @Bean
+    @ConfigurationProperties(prefix = "custom.rest.connection")
+    public HttpComponentsClientHttpRequestFactory customHttpRequestFactory() 
+    {
+        return new HttpComponentsClientHttpRequestFactory();
+    }
+
+    @Bean
+    public RestTemplate customRestTemplate()
+    {
+        return new RestTemplate(customHttpRequestFactory());
     }
 }

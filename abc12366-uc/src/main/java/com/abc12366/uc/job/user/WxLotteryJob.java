@@ -32,7 +32,7 @@ public class WxLotteryJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("WxLotteryJob: {}", context.getJobDetail().getKey().getName());
-        activityService = (IActivityService) SpringCtxHolder.getApplicationContext().getBean("activityService");
+        //activityService = (IActivityService) SpringCtxHolder.getApplicationContext().getBean("activityService");
 
         // 接收状态为'空'的微信红包
         WxRedEnvelop unusedRedEnvelop = new WxRedEnvelop.Builder()
