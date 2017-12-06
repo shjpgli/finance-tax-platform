@@ -5,6 +5,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.service.ExperienceLevelService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.util.StringUtil;
 import com.github.pagehelper.PageHelper;
@@ -36,6 +37,9 @@ public class UserStatisController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ExperienceLevelService experienceLevelService;
 
     /**
      * 统计用户，统计维度为【月份】
@@ -91,16 +95,41 @@ public class UserStatisController {
     }
 
     /**
+     * 用户活跃度统计详情中包含的用户信息接口
+     * @param timeInterval 时间区间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/liveness/detail/uinfo")
+    public ResponseEntity userLivenessDetailUinfo(@RequestParam String timeInterval,
+                                                  @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("查询用户活跃度详情包含的用户信息：{}:{}:{}", timeInterval,page,size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<UserListBO> dataList = userService.userLivenessDetailUinfo(timeInterval, page, size);
+        LOGGER.info("查询用户活跃度详情统计包含的用户信息结果返回：{}", dataList);
+        PageInfo<UserListBO> pageInfo = new PageInfo<>(dataList);
+        LOGGER.info("{}", dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
      * 用户经验值等级统计
      * @param year 年份
      * @return ResponseEntity
      */
     @GetMapping(path = "/explevel")
-    public ResponseEntity userExpLevel(@RequestParam String year){
+    public ResponseEntity userExpLevel(@RequestParam String year,
+                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
         LOGGER.info("查询用户经验值等级统计：{}", year);
-        List<ExpLevelStatistic> expLevelStatisticList = userService.userExpLevel(year);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<ExpLevelStatistic> expLevelStatisticList = userService.userExpLevel(year,page,size);
         LOGGER.info("查询用户经验值等级统计结果返回：{}", expLevelStatisticList);
-        return ResponseEntity.ok(Utils.kv("dataList",expLevelStatisticList));
+        PageInfo<ExpLevelStatistic> pageInfo = new PageInfo<>(expLevelStatisticList);
+        List<ExperienceLevelBO> experienceLevelBOList = experienceLevelService.selectList(null);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", experienceLevelBOList.size()));
     }
 
     /**

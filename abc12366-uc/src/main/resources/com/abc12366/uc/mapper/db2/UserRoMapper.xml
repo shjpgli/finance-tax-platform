@@ -374,4 +374,12 @@
                 and m.consum <= #{endCount}
             ]]>
     </select>
+
+    <select id="userLivenessDetailUinfo" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserListBO">
+        SELECT a.id, a.username, a.phone, a.nickname, a.status, a.createTime, a.lastUpdate, a.points, a.exp,
+            a.vipLevel, a.wxnickname
+        FROM uc_user a JOIN
+          (SELECT DISTINCT userId FROM uc_user_login_log where createTime &gt;=#{start} and createTime &lt;#{end}
+            ) b ON a.id=b.userId
+    </select>
 </mapper>
