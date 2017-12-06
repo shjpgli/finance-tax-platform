@@ -52,6 +52,7 @@ public class HndsController {
     @SuppressWarnings({"rawtypes", "unchecked", "static-access"})
     @PostMapping("/login")
     public ResponseEntity wsbsLogin(@RequestBody HndsLoginBo loginBo) {
+    	LOGGER.info("湖南地税登录: {}", JSONObject.toJSONString(loginBo));
         String taxurl = loginBo.toLoginStr(cfg.getHndsUrl());
         LOGGER.info("请求地址:" + taxurl);
         HttpEntity httpEntity = new HttpEntity(new HttpHeaders());
@@ -65,6 +66,7 @@ public class HndsController {
             LOGGER.info("湖南地税登录返回: {}, 耗时:{}", jsonObject, endTime - startTime);
             if ("00".equals(jsonObject.getString("retcode"))) {
                 if (!loginBo.getNsrmc().equals(jsonObject.getString("nsrmc"))) {
+                	LOGGER.info("湖南地税登录返回,纳税人名称不一致>>>传入纳税人名称:{},接口返回纳税人名称:{}", loginBo.getNsrmc(), jsonObject.getString("nsrmc"));
                     return ResponseEntity.ok(Utils.bodyStatus(9999, "当前纳税人识别号不允许单点登录"));
                 }
                 jsonObject.put("sign", HndsSecurityUtils.encodeDES(cfg.getHndsKey(), loginBo.getMainuserid(), loginBo
@@ -77,6 +79,7 @@ public class HndsController {
                     map.put("subuserid", loginBo.getSubuserid());
                 }
                 //登录成功自动绑定
+                LOGGER.info("湖南地税登录,开始绑定纳税人关系: {}", JSONObject.toJSONString(map));
                 int n = hndsBindService.bindHnds(map);
                 if (n == -1) {
                     LOGGER.info("湖南地税登录绑定关系已存在");
