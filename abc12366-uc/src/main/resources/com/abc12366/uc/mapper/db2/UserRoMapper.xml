@@ -74,7 +74,7 @@
                 and createTime >= #{startDate}
             </if>
             <if test="endDate !=null and endDate != ''">
-                and createTime <![CDATA[<=]]> #{endDate}
+                and createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
             </if>
         </where>
         ORDER BY createTime DESC
@@ -281,7 +281,9 @@
         (SELECT COUNT(DISTINCT userId) lastweek FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 7 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
         ) lastweek,
         (SELECT COUNT(DISTINCT userId) last30Days FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL 30 DAY)) AND createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL 0 DAY))
-        ) last30Days
+        ) last30Days,
+        (SELECT COUNT(DISTINCT userId) thismonth FROM uc_user_login_log WHERE createTime &gt;=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND createTime &lt;(SELECT DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))
+        ) thismonth
         FROM DUAL
     </select>
     <select id="statisUserRFM" resultType="com.abc12366.uc.model.bo.UserRFMBO" parameterType="java.util.Map">
@@ -371,5 +373,13 @@
                 and m.consum <= #{startCount}
                 and m.consum <= #{endCount}
             ]]>
+    </select>
+
+    <select id="userLivenessDetailUinfo" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserListBO">
+        SELECT a.id, a.username, a.phone, a.nickname, a.status, a.createTime, a.lastUpdate, a.points, a.exp,
+            a.vipLevel, a.wxnickname
+        FROM uc_user a JOIN
+          (SELECT DISTINCT userId FROM uc_user_login_log where createTime &gt;=#{start} and createTime &lt;#{end}
+            ) b ON a.id=b.userId
     </select>
 </mapper>

@@ -3,7 +3,7 @@ package com.abc12366.uc.config;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.scheduling.quartz.AdaptableJobFactory;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 @Component
-public class QuartzJobFactory extends AdaptableJobFactory {
+public class QuartzJobFactory extends SpringBeanJobFactory {
 
     @Autowired
     private AutowireCapableBeanFactory capableBeanFactory;

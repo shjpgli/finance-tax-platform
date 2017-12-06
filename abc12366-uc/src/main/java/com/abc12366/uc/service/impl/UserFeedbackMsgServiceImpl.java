@@ -77,10 +77,11 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
             return;
         }
         UserExtendBO userExtendBO = getUserExtend();
-        if (userExtendBO == null || userExtendBO.getValidStatus() == null || !StringUtils.isEmpty(userExtendBO.getValidStatus()) || userExtendBO.getValidStatus().equals("2")) {
+        if (userExtendBO != null && !StringUtils.isEmpty(userExtendBO.getValidStatus()) &&
+                (userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_VALIDATED)||
+                        userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_TO_VALIDATE))) {
             return;
         }
-        User user = getUser();
 
         //发信息
         //1.系统消息
@@ -94,7 +95,15 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("remark", RemindConstant.UNREALNAME_WX_4);
         //3.短信消息
         String dxmsg = RemindConstant.UNREALNAME_DX;
-        msgSendService.sendMsg(user, sysMsg, skipUrl, "JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U", dataList, dxmsg);
+
+        MessageSendBo sendBo = new MessageSendBo();
+        sendBo.setUserId(getUser().getId());
+        sendBo.setWebMsg(sysMsg);
+        sendBo.setSkipUrl(skipUrl);
+        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
+        sendBo.setDataList(dataList);
+        sendBo.setPhoneMsg(dxmsg);
+        msgSendService.sendXtxx(sendBo);
     }
 
     @Override
@@ -116,7 +125,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
 
         //发信息
         //1.系统消息
-        String sysMsg = RemindConstant.UNDO_TASK_SYS.replace("{#DATA}",""+undoTaskCount);
+        String sysMsg = RemindConstant.UNDO_TASK_SYS.replace("{#DATA}", "" + undoTaskCount);
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/task.php'>马上做任务</a>";
         //2.微信消息,不做
         //3.短信消息，不做
@@ -173,8 +182,8 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         }
         //发信息
         //1.系统消息
-        String sysMsg = RemindConstant.REALNAME_VALIDATE_SYS.replace("{#DATA.RESULT}",(status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"))
-                                                                .replace("{#DATA.DATE}",DateUtils.dateToStr(new Date()));
+        String sysMsg = RemindConstant.REALNAME_VALIDATE_SYS.replace("{#DATA.RESULT}", (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"))
+                .replace("{#DATA.DATE}", DateUtils.dateToStr(new Date()));
         //2.微信消息
         Map<String, String> dataList = new HashMap<>();
         dataList.put("first", RemindConstant.REALNAME_VALIDATE_WX_1);
@@ -182,11 +191,13 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.REALNAME_VALIDATE_WX_4);
         //3.短信消息
+        String dxMsg = RemindConstant.REALNAME_VALIDATE_DX.replace("{#DATA.RESULT}", (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"))
+                .replace("{#DATA.DATE}", DateUtils.dateToStr(new Date()));
 
         MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
-        sendBo.setPhoneMsg(sysMsg);
+        sendBo.setPhoneMsg(dxMsg);
         sendBo.setDataList(dataList);
         sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
 

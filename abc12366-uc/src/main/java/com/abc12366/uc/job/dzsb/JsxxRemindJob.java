@@ -12,8 +12,7 @@ import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.abc12366.gateway.component.SpringCtxHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.job.DzsbJob;
 import com.abc12366.uc.model.job.DzsbTime;
@@ -35,30 +34,27 @@ public class JsxxRemindJob implements StatefulJob{
 	
     private static String YWLX="NOTIFY_JSXX";
 	
-	private static AcceptClient client;
+    @Autowired
+	private  AcceptClient client;
 	
-	private static IDzsbTimeService dzsbTimeService;
+    @Autowired
+	private  IDzsbTimeService dzsbTimeService;
 	
-	private static IMsgSendService msgSendService;
+    @Autowired
+	private  IMsgSendService msgSendService;
 	
-    private static UserService userService;
-	
-	static{
-		client=(AcceptClient) SpringCtxHolder.getApplicationContext().getBean("client");
-		dzsbTimeService=(IDzsbTimeService) SpringCtxHolder.getApplicationContext().getBean("dzsbTimeService");
-		msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
-		userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");	
-	}
+    @Autowired
+    private  UserService userService;
 	
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 		LOGGER.info("--------开始执行[缴税信息提醒]定时任务----------");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
 		
-		
+        DzsbTime dzsbTime=dzsbTimeService.select(YWLX);
+		boolean isFirst=false;
 		while(true){
-			DzsbTime dzsbTime=dzsbTimeService.select(YWLX);
-			boolean isFirst=false;
+			
 			if(dzsbTime==null){//查询不到数据默认设置当月第一天
 				dzsbTime=new DzsbTime();
 				Calendar c = Calendar.getInstance();    
@@ -110,25 +106,26 @@ public class JsxxRemindJob implements StatefulJob{
 	        		}
 	        		LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]缴税信息，最后一笔日期:"+dzsbXxInfos.get(dzsbXxInfos.size()-1).getLrrq());
 	        		dzsbTime.setLasttime(dzsbXxInfos.get(dzsbXxInfos.size()-1).getLrrq());
-                    if(isFirst){//第一次插入数据
-                    	dzsbTimeService.insert(dzsbTime);
-	        		}else{//非第一次更新数据
-	        			dzsbTimeService.update(dzsbTime);
-	        		}
+                    
 	        		if(!job.getIsExistData() 
 	        				|| dzsbXxInfos.size()<Integer.valueOf(Constant.DZSBQNUM)){//没有数据了
 	        			LOGGER.info("操作当前录入日期缴税信息:全部处理完毕");
 	        			break;
 	        		}
 	        	}else{
-	        		dzsbTimeService.insert(dzsbTime);
+	        		//dzsbTimeService.insert(dzsbTime);
 	        		break;
 	        	}
 	        }else{//查询失败
 	        	LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]缴税信息异常:"+job.getMessage());
 	        	break;
 	        }
-		}	
+		}
+		if(isFirst){//第一次插入数据
+        	dzsbTimeService.insert(dzsbTime);
+		}else{//非第一次更新数据
+			dzsbTimeService.update(dzsbTime);
+		}
 		LOGGER.info("--------结束执行[缴税信息提醒]定时任务----------");
 		
 	}

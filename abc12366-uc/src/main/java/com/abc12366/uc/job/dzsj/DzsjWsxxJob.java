@@ -1,26 +1,28 @@
 package com.abc12366.uc.job.dzsj;
 
-import java.io.IOException;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import sun.misc.BASE64Decoder;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.User;
@@ -39,19 +41,17 @@ import com.alibaba.fastjson.JSONObject;
 public class DzsjWsxxJob implements StatefulJob{
 	private static final Logger LOGGER = LoggerFactory.getLogger(DzsjWsxxJob.class);
 	
-	private final String QCOUNT="1";//查询数量
-
-	private static AppService appService;
+	private final String QCOUNT="200";//查询数量
 	
-    private static UserService userService;
+	@Autowired
+	private  AppService appService;
+	
+	@Autowired
+    private  UserService userService;
     
-    private static IMsgSendService msgSendService;
+    @Autowired
+    private  IMsgSendService msgSendService;
 	
-	static{
-		appService=(AppService) SpringCtxHolder.getApplicationContext().getBean("appService");
-		userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
-        msgSendService=(IMsgSendService) SpringCtxHolder.getApplicationContext().getBean("msgSendService");
-	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -60,7 +60,17 @@ public class DzsjWsxxJob implements StatefulJob{
 		while(true){
 			try {
 				HttpHeaders headers = new HttpHeaders();
-				headers.add(Constant.APP_TOKEN_HEAD,  appService.selectByName("abc12366-admin").getAccessToken());
+				
+				AppBO appBO=appService.selectByName("abc12366-admin");
+		        Date lastRest=appBO.getLastResetTokenTime();
+		        if(lastRest.before(new Date())){
+		        	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
+		        	appService.update(appBO);
+		        }       
+		        String accessToken = appBO.getAccessToken();
+		        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
+				
+				headers.add(Constant.APP_TOKEN_HEAD,  accessToken);
 				headers.add(Constant.VERSION_HEAD,Constant.VERSION_1);
 				String url = SpringCtxHolder.getProperty("abc12366.message.url")+"/hngs/get?api="+Base64.getEncoder().encodeToString(("/fw/xxtx/ws/list?sl="+QCOUNT).getBytes());
 				HttpEntity requestEntity = new HttpEntity(null, headers);
@@ -89,7 +99,6 @@ public class DzsjWsxxJob implements StatefulJob{
 				                
 				                msgSendService.sendMsg(user, sysMsg,"", "x0BXoANGCPnCb4GoA_Lm2hEPTJrdmW0QCUUvtjK5QRQ", dataList, dxmsg);
 							}
-							
 						}
 						if(dzsjWsxx.getSl()==0){//没有剩余消息，退出循环
 							break;

@@ -13,4 +13,8 @@ public interface WxMenuRoMapper {
 
     Button selectOne(String id);
 
+	List<Button> seletFisrtShow();
+
+	List<Button> seletSecShow(String id);
+
 }

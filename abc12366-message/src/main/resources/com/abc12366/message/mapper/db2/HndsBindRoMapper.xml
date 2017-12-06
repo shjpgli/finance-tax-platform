@@ -5,7 +5,7 @@
       
       <select id="findHndsBind" resultType="long" parameterType="java.util.Map">
         SELECT count(userId) FROM abc12366_uc.uc_user_hnds
-        where userId=#{userid} and nsrsbh=#{nsrsbh}
+        where userId=#{userid} and nsrsbh=#{nsrsbh} and status = 1
         <if test="subuserid!=null">
             and subuser=#{subuserid}
         </if>

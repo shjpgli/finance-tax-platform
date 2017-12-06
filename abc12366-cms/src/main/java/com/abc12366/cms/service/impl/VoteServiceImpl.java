@@ -69,6 +69,14 @@ public class VoteServiceImpl implements VoteService {
         return voteList;
     }
 
+    @Override
+    public List<VoteResult> selectResultList(VoteResult voteResult, int page, int size) {
+        voteMapper.updateStatus();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<VoteResult> voteResults = voteRoMapper.selectResultList(voteResult);
+        return voteResults;
+    }
+
     @Transactional("db1TxManager")
     @Override
     public Vote insert(Vote vote) {

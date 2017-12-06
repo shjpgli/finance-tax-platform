@@ -28,6 +28,8 @@ public class UserLivenessSurveyBO {
      */
     private String Last30DaysDevidedbyYesterday;
 
+    private float thismonth;
+
     public float getYesterday() {
         return yesterday;
     }
@@ -68,6 +70,14 @@ public class UserLivenessSurveyBO {
         Last30DaysDevidedbyYesterday = last30DaysDevidedbyYesterday;
     }
 
+    public float getThismonth() {
+        return thismonth;
+    }
+
+    public void setThismonth(float thismonth) {
+        this.thismonth = thismonth;
+    }
+
     @Override
     public String toString() {
         return "UserLivenessSurveyBO{" +
@@ -76,6 +86,7 @@ public class UserLivenessSurveyBO {
                 ", lastweekDevidedbyLastweek='" + lastweekDevidedbyLastweek + '\'' +
                 ", last30Days=" + last30Days +
                 ", Last30DaysDevidedbyYesterday='" + Last30DaysDevidedbyYesterday + '\'' +
+                ", thismonth=" + thismonth +
                 '}';
     }
 }

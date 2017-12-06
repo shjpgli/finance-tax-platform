@@ -73,6 +73,8 @@ public class UserExtend {
     private String remark;
     //从业时间
     private String careerDuration;
+    //实名认证方式
+    private String validType;
 
     public UserExtend() {
     }
@@ -341,6 +343,14 @@ public class UserExtend {
         this.remark = remark;
     }
 
+    public String getValidType() {
+        return validType;
+    }
+
+    public void setValidType(String validType) {
+        this.validType = validType;
+    }
+
     @Override
     public String toString() {
         return "UserExtend{" +
@@ -377,6 +387,7 @@ public class UserExtend {
                 ", validTime=" + validTime +
                 ", remark='" + remark + '\'' +
                 ", careerDuration='" + careerDuration + '\'' +
+                ", validType='" + validType + '\'' +
                 '}';
     }
 }

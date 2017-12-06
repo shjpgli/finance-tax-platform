@@ -51,6 +51,7 @@ public class RealNameValidationController {
                                      @RequestParam(required = false) String realName,
                                      @RequestParam(required = false) String phone,
                                      @RequestParam(required = false) String validStatus,
+                                     @RequestParam(required = false) String validType,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
 
@@ -63,6 +64,7 @@ public class RealNameValidationController {
         map.put("realName", realName);
         map.put("phone", phone);
         map.put("validStatus", validStatus);
+        map.put("validType", validType);
         LOGGER.info("{}:{}:{}", map, page, size);
         List<UserExtendListBO> userExtendBOList = realNameValidationService.selectList(map, page, size);
         PageInfo<UserExtendListBO> pageInfo = new PageInfo<>(userExtendBOList);
