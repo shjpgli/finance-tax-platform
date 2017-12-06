@@ -10,6 +10,8 @@ public class ExpLevelStatistic {
     private String levelName;
     private int all;
     private String increasePercent;
+    private float thisYearIncrease;
+    private float lastYearAll;
 
     public int getAll() {
         return all;
@@ -43,6 +45,22 @@ public class ExpLevelStatistic {
         this.levelName = levelName;
     }
 
+    public float getThisYearIncrease() {
+        return thisYearIncrease;
+    }
+
+    public void setThisYearIncrease(float thisYearIncrease) {
+        this.thisYearIncrease = thisYearIncrease;
+    }
+
+    public float getLastYearAll() {
+        return lastYearAll;
+    }
+
+    public void setLastYearAll(float lastYearAll) {
+        this.lastYearAll = lastYearAll;
+    }
+
     @Override
     public String toString() {
         return "ExpLevelStatistic{" +
@@ -50,6 +68,8 @@ public class ExpLevelStatistic {
                 ", levelName='" + levelName + '\'' +
                 ", all=" + all +
                 ", increasePercent='" + increasePercent + '\'' +
+                ", thisYearIncrease=" + thisYearIncrease +
+                ", lastYearAll=" + lastYearAll +
                 '}';
     }
 }
