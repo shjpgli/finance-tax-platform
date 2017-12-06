@@ -4,9 +4,9 @@
 <mapper namespace="com.abc12366.message.mapper.db1.HndsBindMapper">
 
     <insert id="insert">
-        INSERT INTO abc12366_uc.uc_user_hnds (id,userId,subuser,nsrmc,nsrsbh,shxydm,swjgMc,swjgDm,status,createTime,lastUpdate,password) 
+        INSERT INTO abc12366_uc.uc_user_hnds (id,userId,username,subuser,nsrmc,nsrsbh,shxydm,swjgMc,swjgDm,status,createTime,lastUpdate,password) 
         VALUES
-        (#{id}, #{userid}, #{subuserid}, #{nsrmc}, #{nsrsbh}, #{nsrsbh}, #{nsr_swjg_mc},#{nsr_swjg_dm}, #{status}, #{createTime}, #{lastUpdate}, #{password})
+        (#{id}, #{userid},#{username}, #{subuserid}, #{nsrmc}, #{nsrsbh}, #{nsrsbh}, #{nsr_swjg_mc},#{nsr_swjg_dm}, #{status}, #{createTime}, #{lastUpdate}, #{password})
     </insert>
 
     
