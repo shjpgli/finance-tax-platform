@@ -21,18 +21,18 @@ public class OrderCancelJob implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderCancelJob.class);
 
     @Autowired
-    private static OrderService orderService;
+    private OrderService orderService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("OrderCancelJob: {}", context.getJobDetail().getKey().getName());
-        initService();
+        //initService();
         orderService.automaticCancel();
     }
 
-    public static void initService() {
+    /*public static void initService() {
         synchronized (OrderCancelJob.class) {
             orderService = (OrderService) SpringCtxHolder.getApplicationContext().getBean("orderService");
         }
-    }
+    }*/
 }

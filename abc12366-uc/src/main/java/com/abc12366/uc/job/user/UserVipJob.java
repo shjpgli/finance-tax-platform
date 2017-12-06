@@ -21,18 +21,18 @@ public class UserVipJob implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserVipJob.class);
 
     @Autowired
-    private static UserService userService;
+    private UserService userService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("UserVipJob: {}", context.getJobDetail().getKey().getName());
-        initService();
+        //initService();
         userService.automaticUserCancel();
     }
 
-    public static void initService() {
+   /* public static void initService() {
         synchronized (UserVipJob.class) {
             userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
         }
-    }
+    }*/
 }

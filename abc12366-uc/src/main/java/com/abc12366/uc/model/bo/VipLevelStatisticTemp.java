@@ -9,6 +9,7 @@ public class VipLevelStatisticTemp {
     private float increase;
     private int allCount;
     private float lastIncrease;
+    private float lastYearAll;
 
     public float getIncrease() {
         return increase;
@@ -34,12 +35,21 @@ public class VipLevelStatisticTemp {
         this.lastIncrease = lastIncrease;
     }
 
+    public float getLastYearAll() {
+        return lastYearAll;
+    }
+
+    public void setLastYearAll(float lastYearAll) {
+        this.lastYearAll = lastYearAll;
+    }
+
     @Override
     public String toString() {
         return "VipLevelStatisticTemp{" +
                 "increase=" + increase +
                 ", allCount=" + allCount +
                 ", lastIncrease=" + lastIncrease +
+                ", lastYearAll=" + lastYearAll +
                 '}';
     }
 }

@@ -36,4 +36,11 @@ public interface VipLogService {
      * @return
      */
     VipLevelStatisticTemp selectCountByCode(Map map);
+
+    /**
+     * 查询当前所有该会员等级用户总数
+     * @param levelCode
+     * @return
+     */
+    int selectCountAll(String levelCode);
 }

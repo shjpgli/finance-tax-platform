@@ -77,4 +77,9 @@ public class VipLogServiceImpl implements VipLogService {
     public VipLevelStatisticTemp selectCountByCode(Map map) {
         return vipLogRoMapper.selectCountByCode(map);
     }
+
+    @Override
+    public int selectCountAll(String levelCode) {
+        return vipLogRoMapper.selectCountAll(levelCode);
+    }
 }

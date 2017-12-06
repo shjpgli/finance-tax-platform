@@ -6,6 +6,6 @@
         SELECT id,ip,country,countryId,area,areaId,region,regionId,city,cityId,county,countyId,
         isp,ispId,createTime,updateTime
         FROM uc_ip
-        WHERE ip = #{ip}
+        WHERE ip = #{ip} order by createTime desc limit 1
     </select>
 </mapper>
