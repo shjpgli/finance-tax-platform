@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.Utils;
@@ -14,6 +15,7 @@ import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.UserService;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +62,13 @@ public class MsgSendServiceImpl implements IMsgSendService {
             VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
 
             //获取运营管理系统accessToken
-            String accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+            AppBO appBO=appService.selectByName("abc12366-admin");
+            Date lastRest=appBO.getLastResetTokenTime();
+            if(lastRest.before(new Date())){
+            	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
+            	appService.update(appBO);
+            }       
+            String accessToken = appBO.getAccessToken();
             LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
             //查看业务提醒是否启用
@@ -121,7 +130,14 @@ public class MsgSendServiceImpl implements IMsgSendService {
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
 
         //获取运营管理系统accessToken
-        String accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+        
+        AppBO appBO=appService.selectByName("abc12366-admin");
+        Date lastRest=appBO.getLastResetTokenTime();
+        if(lastRest.before(new Date())){
+        	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
+        	appService.update(appBO);
+        }       
+        String accessToken = appBO.getAccessToken();
         LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
         //查看业务提醒是否启用
@@ -183,7 +199,13 @@ public class MsgSendServiceImpl implements IMsgSendService {
 		            VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
 
 		            //获取运营管理系统accessToken
-		            String accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+		            AppBO appBO=appService.selectByName("abc12366-admin");
+		            Date lastRest=appBO.getLastResetTokenTime();
+		            if(lastRest.before(new Date())){
+		            	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
+		            	appService.update(appBO);
+		            }       
+		            String accessToken = appBO.getAccessToken();
 		            LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
 		            //查看业务提醒是否启用
@@ -245,7 +267,13 @@ public class MsgSendServiceImpl implements IMsgSendService {
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
         
         //获取运营管理系统accessToken
-        String accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+        AppBO appBO=appService.selectByName("abc12366-admin");
+        Date lastRest=appBO.getLastResetTokenTime();
+        if(lastRest.before(new Date())){
+        	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
+        	appService.update(appBO);
+        }       
+        String accessToken = appBO.getAccessToken();
         LOGGER.info("获取运营管理系统accessToken:" + accessToken);
         
         if (findObj != null && findObj.getStatus()) {

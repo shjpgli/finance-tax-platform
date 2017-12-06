@@ -5,10 +5,13 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
+import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.RemindConstant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
+import org.apache.commons.lang3.time.DateUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -71,7 +74,14 @@ public class ReportDateJob implements Job {
         cale.set(Calendar.DAY_OF_MONTH, 0);
         pmonthL = format.format(cale.getTime());
         
-        accessToken = appService.selectByName("abc12366-admin").getAccessToken();
+        AppBO appBO=appService.selectByName("abc12366-admin");
+        Date lastRest=appBO.getLastResetTokenTime();
+        if(lastRest.before(new Date())){
+        	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
+        	appService.update(appBO);
+        }       
+        accessToken = appBO.getAccessToken();
+        LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
         LOGGER.info("电子税局获取办税期限..............");
         HttpHeaders headers2 = new HttpHeaders();
