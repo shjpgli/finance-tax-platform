@@ -93,7 +93,7 @@ public class CjxxRemindJob implements StatefulJob{
         		        			
         		        			DzsbXxInfo dzsbXxInfo=dzsbXxInfos.get(i);
         		        			
-        		        			List<User> users=userService.findByHngsNsrsbh(dzsbXxInfo.getNsrsbh());
+        		        			List<User> users=userService.findByDzsbNsrsbh(dzsbXxInfo.getNsrsbh());
         		        			
         		        			if(users!=null && users.size()>0){
         		        				

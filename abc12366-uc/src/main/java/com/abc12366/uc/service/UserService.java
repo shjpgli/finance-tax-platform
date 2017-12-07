@@ -149,6 +149,14 @@ public interface UserService {
     List<User> findByHngsNsrsbh(String nsrsbh);
 
     /**
+     * 通过绑定的电子申报纳税人识别号查询用户信息
+     *
+     * @param nsrsbh
+     * @return
+     */
+    List<User> findByDzsbNsrsbh(String nsrsbh);
+    
+    /**
      * 根据手机号码查询用户
      *
      * @param phone 手机号码

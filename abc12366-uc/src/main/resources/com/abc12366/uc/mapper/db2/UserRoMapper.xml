@@ -192,7 +192,11 @@
     </select>
     
     <select id="findByHngsNsrsbh" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-        SELECT u.* FROM  uc_user_hngs h, uc_user u where h.userId=u.id and h.nsrsbh=#{nsrshb}
+        SELECT u.* FROM  uc_user_hngs h, uc_user u where h.userId=u.id and h.status=1 and h.nsrsbh=#{nsrshb}
+    </select>
+    
+    <select id="findByDzsbNsrsbh" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
+        SELECT u.* FROM  uc_user_dzsb h, uc_user u where h.userId=u.id and h.status=1 and h.nsrsbh=#{nsrshb}
     </select>
 
     <select id="selectOneByPhone" resultType="com.abc12366.uc.model.bo.UserBO"

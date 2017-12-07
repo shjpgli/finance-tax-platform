@@ -728,6 +728,11 @@ public class UserServiceImpl implements UserService {
     public List<User> findByHngsNsrsbh(String nsrsbh) {
         return userRoMapper.findByHngsNsrsbh(nsrsbh);
     }
+    
+    @Override
+    public List<User> findByDzsbNsrsbh(String nsrsbh) {
+        return userRoMapper.findByDzsbNsrsbh(nsrsbh);
+    }
 
     @Override
     public UserBO selectOneByPhone(String phone) {
