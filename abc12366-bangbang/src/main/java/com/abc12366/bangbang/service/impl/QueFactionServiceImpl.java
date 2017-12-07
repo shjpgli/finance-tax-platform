@@ -177,7 +177,7 @@ public class QueFactionServiceImpl implements QueFactionService {
                 throw new ServiceException(6128);
             }
         }else{
-            throw new ServiceException(6122);
+            throw new ServiceException(6128);
         }
 
         if("VIP0".equals(vipLevel)){

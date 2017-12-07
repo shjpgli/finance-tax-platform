@@ -122,4 +122,12 @@ public interface UserRoMapper {
      */
     List<UserListBO> userLivenessDetailUinfo(Map<String, Date> map);
 
+    /**
+     * 通过绑定的电子申报纳税人识别号查询用户信息
+     *
+     * @param nsrsbh
+     * @return
+     */
+	List<User> findByDzsbNsrsbh(String nsrsbh);
+
 }
