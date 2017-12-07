@@ -124,9 +124,11 @@ public class UserServiceImpl implements UserService {
             for (String userId : userIds) {
                 if (!StringUtils.isEmpty(userId)) {
                     User user = userRoMapper.selectUserById(new User(userId));
-                    UserListBO ul = new UserListBO();
-                    BeanUtils.copyProperties(user, ul);
-                    userList.add(ul);
+                    if (user != null) {
+                        UserListBO ul = new UserListBO();
+                        BeanUtils.copyProperties(user, ul);
+                        userList.add(ul);
+                    }
                 }
             }
         } else {
