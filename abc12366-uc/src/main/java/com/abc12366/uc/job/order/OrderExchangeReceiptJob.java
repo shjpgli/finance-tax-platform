@@ -1,6 +1,5 @@
 package com.abc12366.uc.job.order;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.service.order.OrderExchangeService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -27,17 +26,9 @@ public class OrderExchangeReceiptJob implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("JobName: {}", context.getJobDetail().getKey().getName());
         try {
-            //initService();
             orderExchangeService.automaticReceipt();
         } catch (Exception e) {
             LOGGER.error("{}", e.getMessage());
         }
     }
-
-    /*public static void initService() {
-        synchronized (OrderExchangeReceiptJob.class) {
-            orderExchangeService = (OrderExchangeService) SpringCtxHolder.getApplicationContext().getBean
-                    ("orderExchangeService");
-        }
-    }*/
 }

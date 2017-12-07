@@ -1,6 +1,5 @@
 package com.abc12366.uc.job.order;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.service.order.OrderService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -26,13 +25,7 @@ public class OrderCancelJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("OrderCancelJob: {}", context.getJobDetail().getKey().getName());
-        //initService();
         orderService.automaticCancel();
     }
 
-    /*public static void initService() {
-        synchronized (OrderCancelJob.class) {
-            orderService = (OrderService) SpringCtxHolder.getApplicationContext().getBean("orderService");
-        }
-    }*/
 }
