@@ -48,11 +48,15 @@
     </select>
 
     <select id="selectCount" resultType="java.lang.Float" parameterType="java.util.Map">
-        SELECT COUNT(1) FROM (
-        SELECT MAX(usableExp) lastExp, userId FROM uc_uexp_log
-        where createTime &gt;= #{start} and createTime &lt; #{end}
-        GROUP BY userId HAVING lastExp IS NOT NULL
-        ) a WHERE a.lastExp &gt;=#{min} AND a.lastExp &lt;= #{max}
+        select count(1) from (
+          SELECT u.userId,MAX(u.usableExp) maxexp,MIN(u.usableExp) minexp
+          FROM uc_uexp_log u
+          <where>
+              1=1
+              <if test="start != null"> and u.createtime &gt;=#{start} </if>
+              <if test="end != null"> and u.createTime &lt; #{end} </if>
+          </where>
+            GROUP BY userId HAVING minexp &lt;=#{max} AND maxexp &gt;=#{max}
+        ) a
     </select>
-
 </mapper>

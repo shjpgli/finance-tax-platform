@@ -69,6 +69,14 @@ public class VoteServiceImpl implements VoteService {
         return voteList;
     }
 
+    @Override
+    public List<VoteResult> selectResultList(VoteResult voteResult, int page, int size) {
+        voteMapper.updateStatus();
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<VoteResult> voteResults = voteRoMapper.selectResultList(voteResult);
+        return voteResults;
+    }
+
     @Transactional("db1TxManager")
     @Override
     public Vote insert(Vote vote) {
@@ -216,43 +224,40 @@ public class VoteServiceImpl implements VoteService {
                 }
             }
 
-            // 先删除题目
-            List<Subject> subjectList = subjectRoMapper.selectSubjectList(v.getId());
-            if (subjectList != null && subjectList.size() > 0) {
-                for (Subject subject : subjectList) {
-                    subjectMapper.deleteItem(subject.getId());
-                }
-                subjectMapper.deleteSubject(v.getId());
-            }
             // 再新增题目
             if (vote.getSubjectList() != null && vote.getSubjectList().size() > 0) {
                 for (Subject s : vote.getSubjectList()) {
-                    Subject subject = new Subject.Builder()
-                            .id(Utils.uuid())
-                            .voteId(vote.getId())
-                            .subject(s.getSubject())
-                            .form(s.getForm())
-                            .required(s.getRequired())
-                            .sort(s.getSort())
-                            .createTime(now)
-                            .lastUpdate(now)
-                            .build();
-                    subjectMapper.insertSubject(subject);
-
-                    // 选项
                     if (s.getItemList() != null && s.getItemList().size() > 0) {
-                        for (SubjectItem si : s.getItemList()) {
-                            SubjectItem item = new SubjectItem.Builder()
-                                    .id(Utils.uuid())
-                                    .subjectId(subject.getId())
-                                    .type(si.getType())
-                                    .item(si.getItem())
-                                    .image(si.getImage())
-                                    .detail(si.getDetail())
-                                    .sort(si.getSort())
-                                    .status(si.getStatus())
-                                    .build();
-                            subjectMapper.insertItem(item);
+                        List<Subject> subjects =  v.getSubjectList();
+                        boolean flag = false;
+                        if(subjects != null && subjects.size() > 0){
+                            for(Subject sj :subjects){
+                                if (sj.getId().equals(s.getId())){
+                                    for(SubjectItem si : s.getItemList()){
+                                        for(SubjectItem it : sj.getItemList()){
+                                            if(si.getId().equals(it.getId())){
+                                                flag = true;
+                                                break;
+                                            }else{
+                                                flag = false;
+                                            }
+                                        }
+                                        if(!flag){
+                                            SubjectItem item = new SubjectItem.Builder()
+                                                    .id(Utils.uuid())
+                                                    .subjectId(s.getId())
+                                                    .type(si.getType())
+                                                    .item(si.getItem())
+                                                    .image(si.getImage())
+                                                    .detail(si.getDetail())
+                                                    .sort(si.getSort())
+                                                    .status(si.getStatus())
+                                                    .build();
+                                            subjectMapper.insertItem(item);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

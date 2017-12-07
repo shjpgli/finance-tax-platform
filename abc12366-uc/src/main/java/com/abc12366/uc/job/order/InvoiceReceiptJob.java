@@ -1,6 +1,5 @@
 package com.abc12366.uc.job.order;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,18 +20,12 @@ public class InvoiceReceiptJob implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(InvoiceReceiptJob.class);
 
     @Autowired
-    private static InvoiceService invoiceService;
+    private InvoiceService invoiceService;
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("InvoiceReceiptJob: {}", context.getJobDetail().getKey().getName());
-        initService();
         invoiceService.automaticReceiptInvoice();
     }
 
-    public static void initService() {
-        synchronized (InvoiceReceiptJob.class) {
-            invoiceService = (InvoiceService) SpringCtxHolder.getApplicationContext().getBean("invoiceService");
-        }
-    }
 }

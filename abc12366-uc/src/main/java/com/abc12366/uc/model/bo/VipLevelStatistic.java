@@ -11,6 +11,7 @@ public class VipLevelStatistic {
     private int all;
     private int increase;
     private String increasePercent;
+    private int lastYearAll;
 
     public int getAll() {
         return all;
@@ -52,6 +53,14 @@ public class VipLevelStatistic {
         this.levelName = levelName;
     }
 
+    public int getLastYearAll() {
+        return lastYearAll;
+    }
+
+    public void setLastYearAll(int lastYearAll) {
+        this.lastYearAll = lastYearAll;
+    }
+
     @Override
     public String toString() {
         return "VipLevelStatistic{" +
@@ -60,6 +69,7 @@ public class VipLevelStatistic {
                 ", all=" + all +
                 ", increase=" + increase +
                 ", increasePercent='" + increasePercent + '\'' +
+                ", lastYearAll=" + lastYearAll +
                 '}';
     }
 }

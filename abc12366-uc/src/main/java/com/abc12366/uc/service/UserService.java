@@ -149,6 +149,14 @@ public interface UserService {
     List<User> findByHngsNsrsbh(String nsrsbh);
 
     /**
+     * 通过绑定的电子申报纳税人识别号查询用户信息
+     *
+     * @param nsrsbh
+     * @return
+     */
+    List<User> findByDzsbNsrsbh(String nsrsbh);
+    
+    /**
      * 根据手机号码查询用户
      *
      * @param phone 手机号码
@@ -180,17 +188,23 @@ public interface UserService {
 
     /**
      * 用户活跃度统计(明细)接口
-     * @return UserLivenessSurveyBO
+     * @return Object
      */
     Object userLivenessDetail(String type, String start, String end);
-
-    List<ExpLevelStatistic> userExpLevel(String year);
+    /**
+     * 用户会员等级统计接口
+     * @return ExpLevelStatistic
+     */
+    List<ExpLevelStatistic> userExpLevel(String year,int page,int size);
     /**
      * 用户活跃度统计(概况)接口
      * @return UserLivenessSurveyBO
      */
     UserLivenessSurveyBO userLivenessSurvey();
-
+    /**
+     * 用户会员等级统计接口
+     * @return VipLevelStatistic
+     */
     List<VipLevelStatistic> userVip(String year);
 
     /**
@@ -208,4 +222,13 @@ public interface UserService {
     List<UserExprotInfoBO>  statisUserConsumeLevel(Map<String, Object> map);
 
     UserRFMBO statisUserRFM(Map<String, Object> map);
+
+    /**
+     * 用户活跃度统计详情中包含的用户信息接口
+     * @param timeInterval
+     * @param page
+     * @param size
+     * @return
+     */
+    List<UserListBO> userLivenessDetailUinfo(String timeInterval, int page, int size);
 }

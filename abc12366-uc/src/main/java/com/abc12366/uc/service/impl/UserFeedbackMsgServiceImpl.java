@@ -77,31 +77,23 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
             return;
         }
         UserExtendBO userExtendBO = getUserExtend();
-        if (userExtendBO != null && !StringUtils.isEmpty(userExtendBO.getValidStatus()) && userExtendBO.getValidStatus().equals("2")) {
+        if (userExtendBO != null && !StringUtils.isEmpty(userExtendBO.getValidStatus()) &&
+                (userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_VALIDATED)||
+                        userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_TO_VALIDATE))) {
             return;
         }
-        User user = getUser();
 
         //发信息
         //1.系统消息
         String sysMsg = RemindConstant.UNREALNAME_SYS;
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/userinfolist.html#1_1'>马上去实名认证</a>";
-        //2.微信消息
-        Map<String, String> dataList = new HashMap<>();
-        dataList.put("first", RemindConstant.UNREALNAME_WX_1);
-        dataList.put("keyword1", RemindConstant.UNREALNAME_WX_2);
-        dataList.put("keyword2", DateUtils.dateToStr(new Date()));
-        dataList.put("remark", RemindConstant.UNREALNAME_WX_4);
-        //3.短信消息
-        String dxmsg = RemindConstant.UNREALNAME_DX;
+        //2.微信消息.后改为不做
+        //3.短信消息.后改为不做
 
         MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(getUser().getId());
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
-        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
-        sendBo.setDataList(dataList);
-        sendBo.setPhoneMsg(dxmsg);
         msgSendService.sendXtxx(sendBo);
     }
 
@@ -190,11 +182,13 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.REALNAME_VALIDATE_WX_4);
         //3.短信消息
+        String dxMsg = RemindConstant.REALNAME_VALIDATE_DX.replace("{#DATA.RESULT}", (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"))
+                .replace("{#DATA.DATE}", DateUtils.dateToStr(new Date()));
 
         MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
-        sendBo.setPhoneMsg(sysMsg);
+        sendBo.setPhoneMsg(dxMsg);
         sendBo.setDataList(dataList);
         sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
 

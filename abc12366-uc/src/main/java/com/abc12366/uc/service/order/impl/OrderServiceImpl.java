@@ -1129,7 +1129,7 @@ public class OrderServiceImpl implements OrderService {
         updOrder(order);
     }
 
-    @Transactional("db1TxManager")
+    //@Transactional("db1TxManager")
     @Override
     public void automaticReceipt() {
         Date date = DateUtils.getAddDate(Constant.ORDER_RECEIPT_DAYS);
@@ -1142,7 +1142,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    @Transactional("db1TxManager")
+    //@Transactional("db1TxManager")
     @Override
     public void automaticCancel() {
         Date date = DateUtils.getAddTime(Constant.ORDER_CANCEL_TIME);

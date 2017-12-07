@@ -88,9 +88,6 @@ public interface UserRoMapper {
      */
     UserLossRateBO statisUserCount(Map<String, Object> map);
 
-    List<UserLivenessMonthBO> userLivenessMonthNoLogin(@Param("start")Date start, @Param("end")Date end);
-
-    List<UserLivenessMonthBO> userLivenessMonth(@Param("start")Date start, @Param("end")Date end);
     /**
      * 用户活跃度统计(概况)接口
      * @return UserLivenessSurveyBO
@@ -117,4 +114,20 @@ public interface UserRoMapper {
      * @return
      */
     List<UserExprotInfoBO> statisUserConsumeLevel(Map<String, Object> map);
+
+    /**
+     * 用户活跃度统计详情中包含的用户信息接口
+     * @param map
+     * @return
+     */
+    List<UserListBO> userLivenessDetailUinfo(Map<String, Date> map);
+
+    /**
+     * 通过绑定的电子申报纳税人识别号查询用户信息
+     *
+     * @param nsrsbh
+     * @return
+     */
+	List<User> findByDzsbNsrsbh(String nsrsbh);
+
 }

@@ -37,6 +37,7 @@ public class QuartzConfig {
 
     @Autowired
     private QuartzJobFactory quartzJobFactory;
+    
 
     @Bean
     public Scheduler scheduler() throws IOException, SchedulerException {

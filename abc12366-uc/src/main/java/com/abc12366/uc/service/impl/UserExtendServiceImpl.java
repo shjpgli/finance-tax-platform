@@ -93,6 +93,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             if(userBindService.isRealNameValidatedDzsj(userExtendBO.getIdcard(), userExtendBO.getRealName(), request)){
                 userExtend.setValidStatus("2");
                 userExtend.setValidTime(new Date());
+                userExtend.setValidType("0");
                 userFeedbackMsgService.realNameValidate(userExtendBO.getUserId(),"2");
                 
                 //实名认证 跟新生日和性别
@@ -188,6 +189,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             if(userBindService.isRealNameValidatedDzsj(userExtendUpdateBO.getIdcard(),userExtendUpdateBO.getRealName(), request)){
                 userExtendSecond.setValidStatus("2");
                 userExtendSecond.setValidTime(new Date());
+                userExtendSecond.setValidType("0");
                 userFeedbackMsgService.realNameValidate(userExtendUpdateBO.getUserId(),"2");
                 
               //实名认证 跟新生日和性别

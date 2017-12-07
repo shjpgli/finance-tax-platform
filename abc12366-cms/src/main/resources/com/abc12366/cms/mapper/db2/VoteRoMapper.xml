@@ -39,6 +39,17 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectResultList" resultType="com.abc12366.cms.model.VoteResult" parameterType="com.abc12366.cms.model.VoteResult" >
+        SELECT id,voteId,subjectId,itemId,userId,openId,ip,userAgent
+        FROM cms_vote_result
+        <where>
+            <if test="voteId != null">voteId = #{voteId}</if>
+            <if test="subjectId != null">and subjectId = #{subjectId}</if>
+            <if test="itemId != null">and itemId = #{itemId}</if>
+            <if test="ip != null">and ip = #{ip}</if>
+        </where>
+    </select>
+
     <select id="selectResultCount" parameterType="com.abc12366.cms.model.VoteResult" resultType="java.lang.Integer">
         SELECT count(DISTINCT ip) FROM cms_vote_result
         <where>

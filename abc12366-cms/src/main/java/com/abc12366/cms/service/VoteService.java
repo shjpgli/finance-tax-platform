@@ -7,6 +7,7 @@ import com.abc12366.cms.model.bo.SubItemBo;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 import com.abc12366.cms.model.bo.VotetjListBo;
+import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -45,4 +46,7 @@ public interface VoteService {
     VotetjListBo selecttj(Map<String, Object> map);
 
     String updateItemStatus(SubItemBo subItemBo);
+
+    List<VoteResult> selectResultList(VoteResult voteResult, int page, int size);
+
 }

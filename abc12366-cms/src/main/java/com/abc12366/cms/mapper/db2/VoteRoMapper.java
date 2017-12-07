@@ -61,4 +61,9 @@ public interface VoteRoMapper {
      * 查询（投票统计）
      **/
     List<VoteRotptjBo> selecttptj(Map<String, Object> map);
+
+    /**
+     * 查询投票记录
+     */
+    List<VoteResult> selectResultList(VoteResult voteResult);
 }
