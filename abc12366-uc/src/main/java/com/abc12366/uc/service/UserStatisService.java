@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.RigionStatisBO;
 import com.abc12366.uc.model.bo.TagUserStaticBO;
 
 import java.util.List;
@@ -32,4 +33,5 @@ public interface UserStatisService {
      */
     List<User> userTagUinfo(String type, String start, String end, String tagName);
 
+    RigionStatisBO region(String type, String start, String end);
 }

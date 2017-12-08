@@ -11,4 +11,16 @@
         WHERE a.createTime &gt;=#{start} and a.createTime &lt; #{end}
         AND  c.tagName = #{tagName}
     </select>
+
+    <select id="regionCountry" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+        SELECT b.province regionName,a.province regionCode, COUNT(a.province) all
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
+        WHERE c.createTime &gt;=#{end} and c.createTime &lt;=#{end}  GROUP BY a.province
+    </select>
+
+    <select id="regionProvince" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+        SELECT b.province regionName,a.province regionCode, COUNT(a.province) all
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
+        WHERE c.createTime &gt;=#{end} and c.createTime &lt;=#{end}  GROUP BY a.province
+    </select>
 </mapper>

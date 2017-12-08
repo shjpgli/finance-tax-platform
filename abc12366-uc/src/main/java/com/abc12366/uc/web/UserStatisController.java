@@ -304,4 +304,14 @@ public class UserStatisController {
         LOGGER.info("查询用户标签统计用户详情返回：{}", tagUserStaticBOList);
         return ResponseEntity.ok(Utils.kv("dataList",tagUserStaticBOList));
     }
+
+    @GetMapping(path = "/region")
+    public ResponseEntity region(@RequestParam String type,
+                                       @RequestParam String start,
+                                       @RequestParam String end){
+        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}", type, start, end);
+        userStatisService.region(type, start, end);
+        LOGGER.info("查询用户标签统计用户详情返回：{}");
+        return ResponseEntity.ok(Utils.kv("data",null));
+    }
 }
