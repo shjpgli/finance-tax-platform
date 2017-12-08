@@ -124,9 +124,11 @@ public class UserServiceImpl implements UserService {
             for (String userId : userIds) {
                 if (!StringUtils.isEmpty(userId)) {
                     User user = userRoMapper.selectUserById(new User(userId));
-                    UserListBO ul = new UserListBO();
-                    BeanUtils.copyProperties(user, ul);
-                    userList.add(ul);
+                    if (user != null) {
+                        UserListBO ul = new UserListBO();
+                        BeanUtils.copyProperties(user, ul);
+                        userList.add(ul);
+                    }
                 }
             }
         } else {
@@ -864,6 +866,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object userLivenessDetail(String type, String startStr, String endStr) {
         if (StringUtils.isEmpty(type) || StringUtils.isEmpty(startStr) || StringUtils.isEmpty(endStr)) {
+            return null;
+        }
+        if (!type.equals("year") && !type.trim().equals("month") && !type.trim().equals("day")) {
             return null;
         }
         List<UserLivenessDetailBO> list = new ArrayList<>();
