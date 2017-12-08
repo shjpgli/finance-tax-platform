@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.DzsbTimeRoMapper">
 
     <select id="select" resultType="com.abc12366.uc.model.job.DzsbTime" parameterType="java.lang.String">
-        SELECT *
+        SELECT ywlx , lasttime 
         from uc_dzsbxx_time
         where ywlx=#{ywlx}
     </select>
