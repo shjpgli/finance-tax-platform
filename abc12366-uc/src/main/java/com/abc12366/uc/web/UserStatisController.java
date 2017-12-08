@@ -91,7 +91,7 @@ public class UserStatisController {
     @GetMapping(path = "/liveness/detail")
     public ResponseEntity userLivenessDetail(@RequestParam String type,@RequestParam String start,@RequestParam String end){
         LOGGER.info("查询用户活跃度详情统计：{}:{}:{}", type,start,end);
-        Object object = userService.userLivenessDetail(type,start,end);
+        Object object = userService.userLivenessDetail(type, start, end);
         LOGGER.info("查询用户活跃度详情统计结果返回：{}", object);
         return ResponseEntity.ok(Utils.kv("dataList",object));
     }
@@ -313,5 +313,165 @@ public class UserStatisController {
         userStatisService.region(type, start, end);
         LOGGER.info("查询用户标签统计用户详情返回：{}");
         return ResponseEntity.ok(Utils.kv("data",null));
+
+    }
+    /**
+     * 用户年龄分布统计
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/age")
+    public ResponseEntity statisUserAge(@RequestParam(value = "startTime", required = true) String startTime,
+                                        @RequestParam(value = "endTime", required = true) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        List<UserAgeBO> data = userService.statisUserAge(map);
+        PageInfo<UserAgeBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户年龄分布统计-用户列表
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     *       startNum和endNum为null 查询未知年龄用户
+     * @return
+     */
+    @GetMapping(path = "/age/list")
+    public ResponseEntity statisUserAgeList(@RequestParam(value = "startTime", required = true) String startTime,
+                                            @RequestParam(value = "endTime", required = true) String endTime,
+                                            @RequestParam(value = "startNum", required = false) Integer startAge,
+                                            @RequestParam(value = "endNum", required = false) Integer endAge,
+                                            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        List<UserBO> data = userService.statisUserAgeList(map, startAge, endAge);
+        PageInfo<UserBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+
+    /**
+     * 用户性别分布统计
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/sex")
+    public ResponseEntity statisUserSex(@RequestParam(value = "startTime", required = true) String startTime,
+                                        @RequestParam(value = "endTime", required = true) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        List<UserSexBO> data = userService.statisUserSex(map);
+        PageInfo<UserSexBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户性别分布统计-用户列表
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/sex/list")
+    public ResponseEntity statisUserSexList(@RequestParam(value = "startTime", required = true) String startTime,
+                                            @RequestParam(value = "endTime", required = true) String endTime,
+                                            @RequestParam(value = "sex", required = false) Integer sex,
+                                            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        map.put("sex",sex);
+        List<UserBO> data = userService.statisUserSexList(map);
+        PageInfo<UserBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户服务企业情况统计
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/bind")
+    public ResponseEntity statisUserBind(@RequestParam(value = "startTime", required = true) String startTime,
+                                         @RequestParam(value = "endTime", required = true) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        UserBindBO data = userService.statisUserBind(map);
+        LOGGER.info("list{}", data);
+        return ResponseEntity.ok(Utils.kv("data",data));
+    }
+
+    /**
+     * 用户服务企业情况统计-用户列表
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/bind/list")
+    public ResponseEntity statisUserBindList(@RequestParam(value = "startTime", required = true) String startTime,
+                                             @RequestParam(value = "endTime", required = true) String endTime,
+                                             @RequestParam(value = "startNum", required = true) Integer startNum,
+                                             @RequestParam(value = "endNum", required = true) Integer endNum,
+                                             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String, Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        map.put("startNum", startNum);
+        map.put("endNum", endNum);
+        List<UserBO> data = userService.statisUserBindList(map);
+        PageInfo<UserBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 }
