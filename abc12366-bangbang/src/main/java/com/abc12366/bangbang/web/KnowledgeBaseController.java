@@ -43,6 +43,21 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv("data",map));
     }
 
+
+    /*
+    *
+    * 财税网首页 最新问题、知识
+    *
+    */
+    @GetMapping(path = "/nearestList")
+    public ResponseEntity nearestList(
+            @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
+            @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType){
+        KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(KnowledgePageSize, KnowledgeType, null);
+        List<KnowledgeBase> list = knowledgeBaseService.selectNearestList(param);
+        return ResponseEntity.ok(Utils.kv("dataList",list));
+    }
+
     /*
     *
     * 首页 热点问题、热点知识，不分小类
