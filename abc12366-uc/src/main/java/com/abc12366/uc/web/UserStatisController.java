@@ -7,7 +7,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLevelService;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.util.StringUtil;
+import com.abc12366.uc.service.UserStatisService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.crypto.Data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +40,15 @@ public class UserStatisController {
     @Autowired
     private ExperienceLevelService experienceLevelService;
 
+    @Autowired
+    private UserStatisService userStatisService;
+
     /**
      * 统计用户，统计维度为【月份】
      *
      * @param startTime  开始时间
      * @param endTime  结束时间
-     * @return
+     * @return ResponseEntity
      */
     @GetMapping(path = "/month")
     public ResponseEntity statisUser(@RequestParam(value = "startTime", required = false) String startTime,
@@ -149,7 +151,7 @@ public class UserStatisController {
      * 用户流失率统计
      * @param yearTime 时间（年度）
      * @param months 流失间隔周期（1个月、2个月、3个月…12个月）
-     * @return
+     * @return ResponseEntity
      */
     @GetMapping(path = "/loss")
     public ResponseEntity statisUserLossRate(@RequestParam(value = "yearTime", required = false) String yearTime,
@@ -266,5 +268,40 @@ public class UserStatisController {
         return ResponseEntity.ok(Utils.kv("data",data));
     }
 
+    /**
+     * 用户标签分析统计接口
+     * @param type 时间类型 year，month，day
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param tagName 标签名
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/tag")
+    public ResponseEntity userTag(@RequestParam String type,
+                                  @RequestParam String start,
+                                  @RequestParam String end,
+                                  @RequestParam String tagName){
+        LOGGER.info("查询用户标签统计情况：{}：{}：{}：{}", type, start, end, tagName);
+        List<TagUserStaticBO> tagUserStaticBOList = userStatisService.tag(type, start, end, tagName);
+        return ResponseEntity.ok(Utils.kv("dataList",tagUserStaticBOList));
+    }
 
+    /**
+     * 用户标签分析统计用户详情接口
+     * @param type 时间类型 year，month，day
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param tagName 标签名
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/tag/uinfo")
+    public ResponseEntity userTagUinfo(@RequestParam String type,
+                                  @RequestParam String start,
+                                  @RequestParam String end,
+                                  @RequestParam String tagName){
+        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}：{}", type, start, end, tagName);
+        List<User> tagUserStaticBOList = userStatisService.userTagUinfo(type, start, end, tagName);
+        LOGGER.info("查询用户标签统计用户详情返回：{}", tagUserStaticBOList);
+        return ResponseEntity.ok(Utils.kv("dataList",tagUserStaticBOList));
+    }
 }
