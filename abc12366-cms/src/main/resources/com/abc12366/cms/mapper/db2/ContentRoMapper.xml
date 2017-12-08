@@ -411,6 +411,7 @@
         LEFT JOIN cms_content_count e ON a.contentId = e.contentId
         LEFT JOIN cms_content_topic t ON a.contentId = t.contentId
         WHERE a.status = 2 and c.isDisplay != 0 and d.siteStatus != 0
+        and c.channelId != '0ne8sy4'
         <if test="siteId != null and siteId != ''">
             AND d.siteId = #{siteId}
         </if>
