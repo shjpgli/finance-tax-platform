@@ -223,4 +223,48 @@ public interface UserService {
      * @return
      */
     List<UserListBO> userLivenessDetailUinfo(String timeInterval, int page, int size);
+
+    /**
+     * 用户年龄分布统计
+     * @param map
+     * @return
+     */
+    List<UserAgeBO> statisUserAge(Map<String, Object> map);
+
+    /**
+     * 用户性别分布统计
+     * @param map
+     * @return
+     */
+    List<UserSexBO> statisUserSex(Map<String, Object> map);
+
+    /**
+     * 用户服务企业情况统计
+     * @param map
+     * @return
+     */
+    UserBindBO statisUserBind(Map<String, Object> map);
+
+    /**
+     * 用户服务企业情况统计-用户列表
+     * @param map
+     * @return
+     */
+    List<UserBO> statisUserBindList(Map<String, Object> map);
+
+    /**
+     * 用户年龄分布统计-用户列表
+     * @param map
+     * @param startAge
+     * @param endAge
+     * @return
+     */
+    List<UserBO> statisUserAgeList(Map<String, Object> map, Integer startAge, Integer endAge);
+
+    /**
+     *用户性别分布统计-用户列表
+     * @param map
+     * @return
+     */
+    List<UserBO> statisUserSexList(Map<String, Object> map);
 }

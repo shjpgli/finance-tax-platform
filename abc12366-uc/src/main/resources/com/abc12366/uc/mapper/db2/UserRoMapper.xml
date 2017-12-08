@@ -344,7 +344,7 @@
     </select>
 
     <select id="statisUserConsumeLevel" resultType="com.abc12366.uc.model.bo.UserExprotInfoBO" parameterType="java.util.Map">
-        select * from
+        select m.sumPrice,m.consum,m.id,m.nickName,m.phone,m.realName,m.area from
             (SELECT
             sum(o.totalPrice) AS sumPrice,
             count(u.id) AS consum,
@@ -381,5 +381,212 @@
         FROM uc_user a JOIN
           (SELECT DISTINCT userId FROM uc_user_login_log where createTime &gt;=#{start} and createTime &lt;#{end}
             ) b ON a.id=b.userId
+    </select>
+
+    <!-- 用户总数 -->
+    <select id="selectUserCount" resultType="java.lang.Integer">
+        SELECT count(id) FROM uc_user
+    </select>
+    <!-- 用户年龄段查询 -->
+    <select id="statisUserAge" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(e.userId) from uc_user_extend e
+          LEFT JOIN uc_user u on u.id = e.userId
+          where 1=1
+            <if test="startAge != null">
+                <![CDATA[
+                  and TIMESTAMPDIFF(YEAR, e.birthday, CURDATE()) >= #{startAge}
+                ]]>
+            </if>
+            <if test="endAge != null">
+                <![CDATA[
+                  and TIMESTAMPDIFF(YEAR, e.birthday, CURDATE()) <= #{endAge}
+                ]]>
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+                    and date_format(u.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(u.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+    </select>
+    <!-- 用户年龄段查询未知用户-->
+    <select id="statisUserUnknownAge" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(e.userId) from uc_user_extend e
+          LEFT JOIN uc_user u on u.id = e.userId
+          where
+              e.birthday is null
+            <if test="startTime != null">
+                <![CDATA[
+                    and date_format(u.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(u.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+    </select>
+
+    <!-- 用户年龄段查询用户列表 -->
+    <select id="statisUserAgeList" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBO">
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,uu.oldId from uc_user_extend e
+          LEFT JOIN uc_user uu on uu.id = e.userId
+          where 1=1
+            <if test="startAge != null">
+                <![CDATA[
+                  and TIMESTAMPDIFF(YEAR, e.birthday, CURDATE()) >= #{startAge}
+                ]]>
+            </if>
+            <if test="endAge != null">
+                <![CDATA[
+                  and TIMESTAMPDIFF(YEAR, e.birthday, CURDATE()) <= #{endAge}
+                ]]>
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+                    and date_format(uu.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(uu.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+    </select>
+    <!-- 用户年龄段查询用户列表未知用户 -->
+    <select id="statisUserUnknownAgeList" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBO">
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,uu.oldId from uc_user_extend e
+          LEFT JOIN uc_user uu on uu.id = e.userId
+          where e.birthday is null
+            <if test="startTime != null">
+                <![CDATA[
+                    and date_format(uu.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(uu.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+    </select>
+
+    <!-- 用户性别查询 -->
+    <select id="statisUserSex" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserSexBO">
+        select count(u.userId) as count,e.sex as sexGroup from uc_user_extend e
+          LEFT JOIN uc_user u on u.id = e.userId
+          where 1=1
+            <if test="startTime != null">
+                <![CDATA[
+                    and date_format(u.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(u.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            GROUP BY e.sex
+    </select>
+
+    <!-- 用户性别查询 -->
+    <select id="statisUserSexList" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBO">
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,uu.oldId  from uc_user_extend e
+          LEFT JOIN uc_user uu on u.id = e.userId
+          where
+            <if test="sex != null">
+                e.sex = #{sex}
+            </if>
+            <if test="sex == null">
+                e.sex is null
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+                    and date_format(uu.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+                    and date_format(uu.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+            </if>
+            GROUP BY e.sex
+    </select>
+    <!-- 用户服务企业情况统计 -->
+    <select id="statisUserBind" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBindBO">
+        <![CDATA[
+        select sum(case when 1<= t.tt and t.tt<=5 then 1 else 0 end) as oneToFive,
+        sum(case when 6<= t.tt and t.tt<=10 then 1 else 0 end) as sixToTen,
+        sum(case when 11<= t.tt and t.tt<=20 then 1 else 0 end) as elevenToTwenty,
+        sum(case when 21<= t.tt and t.tt<=30 then 1 else 0 end) as twentyOneToThirty,
+        sum(case when 31<= t.tt and t.tt<=40 then 1 else 0 end) as thirtyOneToForty,
+        sum(case when 41<= t.tt and t.tt<=50 then 1 else 0 end) as fortyOneToFifty,
+        sum(case when 51<= t.tt and t.tt<=100 then 1 else 0 end) as fiftyOneToHundred,
+        sum(case when 101<= t.tt and t.tt<=150 then 1 else 0 end) as hundredOneToHundredFifty,
+        sum(case when 151<= t.tt and t.tt<=200 then 1 else 0 end) as hundredFiftyOneToTwoHundred,
+        sum(case when 201<= t.tt then 1 else 0 end) as twoHundredAbove from
+        (select f.userid,sum(f.tt) as tt from (
+        select userid,count(userid) as tt from uc_user_dzsb use INDEX(idx_createTime) where
+        date_format(createTime, '%Y-%m') >= date_format(#{startTime}, '%Y-%m')
+        and date_format(createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+        group by userid
+        union
+        select userid,count(userid) as tt from uc_user_hnds where
+        date_format(createTime, '%Y-%m') >= date_format(#{startTime}, '%Y-%m')
+        and date_format(createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+        group by userid
+        union
+        select userid,count(userid) as tt from uc_user_hngs where
+        date_format(createTime, '%Y-%m') >= date_format(#{startTime}, '%Y-%m')
+        and date_format(createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+        group by userid) f group by f.userid) t
+        ]]>
+    </select>
+    <!-- 用户服务企业情况统计-用户列表 -->
+    <select id="statisUserBindList" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBO">
+        <![CDATA[
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,uu.oldId from uc_user uu ,(select f.userid,sum(f.tt) as tt from (
+        select userid,count(userid) as tt from uc_user_dzsb use INDEX(idx_createTime) where
+          date_format(createTime, '%Y-%m') >= date_format(#{startTime}, '%Y-%m')
+        and date_format(createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+         group by userid
+        union
+        select userid,count(userid) as tt from uc_user_hnds where
+          date_format(createTime, '%Y-%m') >= date_format(#{startTime}, '%Y-%m')
+        and date_format(createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+         group by userid
+        union
+        select userid,count(userid) as tt from uc_user_hngs where
+          date_format(createTime, '%Y-%m') >= date_format(#{startTime}, '%Y-%m')
+        and date_format(createTime, '%Y-%m') <= date_format(#{endTime}, '%Y-%m')
+         group by userid) f group by f.userid
+        HAVING ]]>
+
+        <if test="startNum != null">
+            <![CDATA[
+              tt >= #{startNum}
+            ]]>
+        </if>
+        <if test="endNum != null">
+            <![CDATA[
+            and  tt <= #{endNum}
+            ]]>
+        </if>
+        ) dd where dd.userid = uu.id
     </select>
 </mapper>

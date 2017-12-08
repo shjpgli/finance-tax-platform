@@ -1064,4 +1064,76 @@ public class UserServiceImpl implements UserService {
         map.put("end", end);
         return userRoMapper.userLivenessDetailUinfo(map);
     }
+
+    @Override
+    public List<UserAgeBO> statisUserAge(Map<String, Object> map) {
+        //0-25  、26-30 、31-35 、36-40 、41-45 、46-50 、51-55 、56-60、61-70、70以上 、未知
+        int[][] ages={{0,25},{26,30},{31,35},{36,40},{41,45},{46,50},{51,55},{56,60},{61,70}};
+
+        List<UserAgeBO> list = new ArrayList<>();
+        UserAgeBO userAgeBO;
+        int count = 0;
+        int total = 0;
+        for(int []  row : ages ){
+            userAgeBO = new UserAgeBO();
+            LOGGER.info("时间段：{},{}",row[0],row[1]);
+            map.put("startAge",row[0]);
+            map.put("endAge",row[1]);
+            userAgeBO.setAgeGroup(row[0]+"-"+row[1]);
+            count = userRoMapper.statisUserAge(map);
+            userAgeBO.setCount(count);
+            list.add(userAgeBO);
+            total = total + count;
+        }
+        map.put("startAge",70);
+        map.put("endAge",null);
+        userAgeBO = new UserAgeBO();
+        userAgeBO.setAgeGroup("70以上");
+        userAgeBO.setCount(userRoMapper.statisUserAge(map));
+        list.add(userAgeBO);
+
+        //查询用户显示
+        userAgeBO = new UserAgeBO();
+        userAgeBO.setAgeGroup("未知");
+        userAgeBO.setCount(userRoMapper.statisUserUnknownAge(map));
+        list.add(userAgeBO);
+        return list;
+    }
+
+    @Override
+    public List<UserBO> statisUserAgeList(Map<String, Object> map, Integer startAge, Integer endAge) {
+        if(startAge != null){
+            map.put("startAge",startAge);
+        }
+        if(endAge != null){
+            map.put("endAge",endAge);
+        }
+        //startNum和endNum为null 查询未知年龄用户
+        if(startAge == null && endAge == null){
+            return userRoMapper.statisUserUnknownAgeList(map);
+        }else{
+            return userRoMapper.statisUserAgeList(map);
+        }
+    }
+
+    @Override
+    public List<UserBO> statisUserSexList(Map<String, Object> map) {
+        return userRoMapper.statisUserSexList(map);
+    }
+
+    @Override
+    public List<UserSexBO> statisUserSex(Map<String, Object> map) {
+        return userRoMapper.statisUserSex(map);
+    }
+
+    @Override
+    public UserBindBO statisUserBind(Map<String, Object> map) {
+        return userRoMapper.statisUserBind(map);
+    }
+
+    @Override
+    public List<UserBO> statisUserBindList(Map<String, Object> map) {
+        return userRoMapper.statisUserBindList(map);
+    }
+
 }
