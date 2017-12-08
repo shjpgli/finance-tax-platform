@@ -119,7 +119,7 @@ public class AuthServiceImpl implements AuthService {
         if (!StringUtils.isEmpty(registerBO.getPhone())) {
             loginBO.setUsernameOrPhone(registerBO.getPhone().trim().toLowerCase());
         }
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User user = userMapper.selectByUsernameOrPhone(loginBO);
         if (user != null) {
             LOGGER.warn("新增失败，参数:{}" + registerBO.toString());
             throw new ServiceException(4117);
@@ -398,7 +398,7 @@ public class AuthServiceImpl implements AuthService {
         LoginBO loginBOQery = new LoginBO();
         if (!StringUtils.isEmpty(loginBO.getPhone())) {
             loginBOQery.setUsernameOrPhone(loginBO.getPhone().trim());
-            user = userRoMapper.selectByUsernameOrPhone(loginBOQery);
+            user = userMapper.selectByUsernameOrPhone(loginBOQery);
         }
         if (user != null) {
             continuePasswordWrong(user.getId());
@@ -410,7 +410,7 @@ public class AuthServiceImpl implements AuthService {
     public String verifyPhone(String phone) throws Exception {
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(phone);
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User user = userMapper.selectByUsernameOrPhone(loginBO);
         if (user == null) {
             LOGGER.warn("登录失败，该用户不存在，参数:{}", phone);
             throw new ServiceException(4018);
@@ -458,7 +458,7 @@ public class AuthServiceImpl implements AuthService {
         // 判断用户是否存在
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(bo.getPhone());
-        User userExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User userExist = userMapper.selectByUsernameOrPhone(loginBO);
         if (userExist == null) {
             throw new ServiceException(4018);
         }

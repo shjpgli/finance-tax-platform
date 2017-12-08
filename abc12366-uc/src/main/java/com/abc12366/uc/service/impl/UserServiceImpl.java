@@ -273,7 +273,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("{}", usernameOrPhone);
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(usernameOrPhone);
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User user = userMapper.selectByUsernameOrPhone(loginBO);
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);
@@ -469,7 +469,7 @@ public class UserServiceImpl implements UserService {
         //新的绑定手机是否已被绑定过
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(bindPhoneBO.getNewPhone());
-        User userPhoneExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User userPhoneExist = userMapper.selectByUsernameOrPhone(loginBO);
         //该手机号码已被绑定
         if (userPhoneExist != null && !bindPhoneBO.getUserId().equals(userPhoneExist.getId())) {
             throw new ServiceException(4858);
@@ -564,7 +564,7 @@ public class UserServiceImpl implements UserService {
         if (!StringUtils.isEmpty(bo.getPhone())) {
             LoginBO loginBO = new LoginBO();
             loginBO.setUsernameOrPhone(bo.getPhone());
-            if (null != userRoMapper.selectByUsernameOrPhone(loginBO)) {
+            if (null != userMapper.selectByUsernameOrPhone(loginBO)) {
                 throw new ServiceException(4183);
             }
         }
@@ -647,7 +647,7 @@ public class UserServiceImpl implements UserService {
 
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(oldPhone.getOldPhone());
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User user = userMapper.selectByUsernameOrPhone(loginBO);
         if (user == null || !userNow.getPhone().equals(oldPhone.getOldPhone())) {
             LOGGER.warn("旧手机校验不通过：", oldPhone);
             throw new ServiceException(4826);
