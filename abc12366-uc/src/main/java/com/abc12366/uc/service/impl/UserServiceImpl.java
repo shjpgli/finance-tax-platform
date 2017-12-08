@@ -868,6 +868,9 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(type) || StringUtils.isEmpty(startStr) || StringUtils.isEmpty(endStr)) {
             return null;
         }
+        if (!type.equals("year") && !type.trim().equals("month") && !type.trim().equals("day")) {
+            return null;
+        }
         List<UserLivenessDetailBO> list = new ArrayList<>();
 
         if (type.trim().equals("year")) {
