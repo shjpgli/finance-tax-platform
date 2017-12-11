@@ -103,7 +103,6 @@ public class SystemRecordInsertBO {
     /**
      * 一级菜单
      */
-    @NotEmpty
     @Length(max = 15)
     private String menua;
 
