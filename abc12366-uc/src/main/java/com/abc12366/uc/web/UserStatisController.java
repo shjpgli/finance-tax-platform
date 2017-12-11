@@ -8,6 +8,7 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLevelService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.service.UserStatisService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -292,26 +293,32 @@ public class UserStatisController {
      * @param start 开始时间
      * @param end 结束时间
      * @param tagName 标签名
+     * @param page 页码
+     * @param size 每页数据数量
      * @return ResponseEntity
      */
     @GetMapping(path = "/tag/uinfo")
     public ResponseEntity userTagUinfo(@RequestParam String type,
-                                  @RequestParam String start,
-                                  @RequestParam String end,
-                                  @RequestParam String tagName){
-        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}：{}", type, start, end, tagName);
+                                        @RequestParam String start,
+                                        @RequestParam String end,
+                                        @RequestParam String tagName,
+                                       @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}：{}:{}:{}", type, start, end, tagName,page,size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<User> tagUserStaticBOList = userStatisService.userTagUinfo(type, start, end, tagName);
         LOGGER.info("查询用户标签统计用户详情返回：{}", tagUserStaticBOList);
-        return ResponseEntity.ok(Utils.kv("dataList",tagUserStaticBOList));
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) tagUserStaticBOList, "total", ((Page) tagUserStaticBOList).getTotal()));
     }
 
     @GetMapping(path = "/region")
     public ResponseEntity region(@RequestParam String type,
-                                       @RequestParam String start,
-                                       @RequestParam String end){
-        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}", type, start, end);
-        userStatisService.region(type, start, end);
-        LOGGER.info("查询用户标签统计用户详情返回：{}");
-        return ResponseEntity.ok(Utils.kv("data",null));
+                                  @RequestParam(required = false) String start,
+                                  @RequestParam(required = false) String end,
+                                  @RequestParam(required = false) String province){
+        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}:{}", type, start, end, province);
+        List<RigionStatisBO> rigionStatisBOList = userStatisService.region(type, start, end, province);
+        LOGGER.info("查询用户标签统计用户详情返回：{}", rigionStatisBOList);
+        return ResponseEntity.ok(Utils.kv("dataList",rigionStatisBOList));
     }
 }

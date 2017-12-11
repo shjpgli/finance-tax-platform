@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserStatisRoMapper {
     List<User> tagCountUsers(@Param("start")Date start, @Param("end")Date end, @Param("tagName")String tagName);
 
-    RigionStatisBO regionCountry(@Param("start")Date start, @Param("end")Date end);
+    List<RigionStatisBO> regionCountry(@Param("start")Date start, @Param("end")Date end);
 
-    RigionStatisBO regionProvince(@Param("start")Date start, @Param("end")Date end);
+    List<RigionStatisBO> regionProvince(@Param("start")Date start, @Param("end")Date end, @Param("province")String province);
 }

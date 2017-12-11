@@ -18,7 +18,7 @@ public class RigionStatisBO {
     /**
      * 数量
      */
-    private int all;
+    private int allCount;
 
     public String getRegionName() {
         return regionName;
@@ -36,12 +36,12 @@ public class RigionStatisBO {
         this.regionCode = regionCode;
     }
 
-    public int getAll() {
-        return all;
+    public int getAllCount() {
+        return allCount;
     }
 
-    public void setAll(int all) {
-        this.all = all;
+    public void setAllCount(int allCount) {
+        this.allCount = allCount;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RigionStatisBO {
         return "RigionStatisBO{" +
                 "regionName='" + regionName + '\'' +
                 ", regionCode='" + regionCode + '\'' +
-                ", all=" + all +
+                ", allCount=" + allCount +
                 '}';
     }
 }

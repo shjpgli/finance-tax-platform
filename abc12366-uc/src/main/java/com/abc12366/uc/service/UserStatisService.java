@@ -33,5 +33,5 @@ public interface UserStatisService {
      */
     List<User> userTagUinfo(String type, String start, String end, String tagName);
 
-    RigionStatisBO region(String type, String start, String end);
+    List<RigionStatisBO> region(String type, String start, String end,String province);
 }
