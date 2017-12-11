@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.model.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -25,6 +26,7 @@ public class SystemRecordInsertBO {
      * 浏览时间
      */
     @NotNull
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date browseDate;
     /**
      * 浏览页面TITLE
@@ -92,6 +94,12 @@ public class SystemRecordInsertBO {
      */
     @Length(max = 20)
     private String ruleCode;
+
+    /**
+     * 纳税人识别号
+     */
+    @Length(max = 32)
+    private String nsrsbh;
 
     public String getUserId() {
         return userId;
@@ -237,6 +245,14 @@ public class SystemRecordInsertBO {
         this.ruleCode = ruleCode;
     }
 
+    public String getNsrsbh() {
+        return nsrsbh;
+    }
+
+    public void setNsrsbh(String nsrsbh) {
+        this.nsrsbh = nsrsbh;
+    }
+
     @Override
     public String toString() {
         return "SystemRecordInsertBO{" +
@@ -258,6 +274,7 @@ public class SystemRecordInsertBO {
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", ruleCode='" + ruleCode + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
                 '}';
     }
 }

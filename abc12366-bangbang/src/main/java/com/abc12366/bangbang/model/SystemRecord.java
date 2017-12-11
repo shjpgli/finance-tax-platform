@@ -112,6 +112,11 @@ public class SystemRecord extends TableBO {
      */
     private String ruleCode;
 
+    /**
+     * 纳税人识别号
+     */
+    private String nsrsbh;
+
     public String getId() {
         return id;
     }
@@ -312,6 +317,14 @@ public class SystemRecord extends TableBO {
         this.ruleCode = ruleCode;
     }
 
+    public String getNsrsbh() {
+        return nsrsbh;
+    }
+
+    public void setNsrsbh(String nsrsbh) {
+        this.nsrsbh = nsrsbh;
+    }
+
     @Override
     public String toString() {
         return "SystemRecord{" +
@@ -340,6 +353,7 @@ public class SystemRecord extends TableBO {
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", ruleCode='" + ruleCode + '\'' +
-                "} " + super.toString();
+                ", nsrsbh='" + nsrsbh + '\'' +
+                '}';
     }
 }
