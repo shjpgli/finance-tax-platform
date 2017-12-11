@@ -18,4 +18,8 @@ public interface UserStatisRoMapper {
     List<RigionStatisBO> regionCountry(@Param("start")Date start, @Param("end")Date end);
 
     List<RigionStatisBO> regionProvince(@Param("start")Date start, @Param("end")Date end, @Param("province")String province);
+
+    List<User> regionCountryUinfo(@Param("start")Date start, @Param("end")Date end);
+
+    List<User> regionProvinceUinfo(@Param("start")Date start, @Param("end")Date end, @Param("province")String province);
 }

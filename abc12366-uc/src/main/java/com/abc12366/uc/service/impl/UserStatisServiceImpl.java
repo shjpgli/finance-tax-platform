@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.uc.mapper.db2.UserStatisRoMapper;
 import com.abc12366.uc.model.User;
@@ -103,5 +104,38 @@ public class UserStatisServiceImpl implements UserStatisService {
             return userStatisRoMapper.regionProvince(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(), province);
         }
         return null;
+    }
+
+    @Override
+    public List<User> regionUinfo(String type, String timeInterval, String province) {
+        if (StringUtils.isEmpty(type)) {
+            return null;
+        }
+        if (!type.trim().equals("country") && !type.trim().equals("province")) {
+            return null;
+        }
+        String[] timeStr = timeInterval.split("～");
+        if(timeStr.length!=2||timeStr[0].trim().length()!=(timeStr[1].trim().length())){
+            throw new ServiceException(4806);
+        }
+        Calendar c1 = Calendar.getInstance();
+        Calendar c3 = Calendar.getInstance();
+        if(!StringUtils.isEmpty(timeStr[0])){
+            c1.setTime(DateUtils.strToDate(timeStr[0], "yyyy-MM-dd HH:mm:ss"));
+        }
+        if(!StringUtils.isEmpty(timeStr[1])){
+            c3.setTime(DateUtils.strToDate(timeStr[1], "yyyy-MM-dd HH:mm:ss"));
+        }
+        if(type.trim().equals("country")){
+            return userStatisRoMapper.regionCountryUinfo(StringUtils.isEmpty(timeStr[0])?null:c1.getTime(), StringUtils.isEmpty(timeStr[1])?null:c3.getTime());
+        } else if(type.trim().equals("province")){
+            return userStatisRoMapper.regionProvinceUinfo(StringUtils.isEmpty(timeStr[0])?null:c1.getTime(), StringUtils.isEmpty(timeStr[1])?null:c3.getTime(), province);
+        }
+        return null;
+    }
+
+    @Override
+    public void bindCount(String type, String start, String end) {
+
     }
 }
