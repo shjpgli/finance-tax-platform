@@ -82,8 +82,8 @@ public class UserStatisServiceImpl implements UserStatisService {
     }
 
     @Override
-    public RigionStatisBO region(String type, String start, String end) {
-        if (StringUtils.isEmpty(type) || StringUtils.isEmpty(start) || StringUtils.isEmpty(end)) {
+    public List<RigionStatisBO> region(String type, String start, String end, String province) {
+        if (StringUtils.isEmpty(type)) {
             return null;
         }
         if (!type.trim().equals("country") && !type.trim().equals("province")) {
@@ -91,12 +91,16 @@ public class UserStatisServiceImpl implements UserStatisService {
         }
         Calendar c1 = Calendar.getInstance();
         Calendar c3 = Calendar.getInstance();
-        c1.setTime(DateUtils.strToDate(start, "yyyy-MM"));
-        c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
+        if(!StringUtils.isEmpty(start)){
+            c1.setTime(DateUtils.strToDate(start, "yyyy-MM"));
+        }
+        if(!StringUtils.isEmpty(end)){
+            c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
+        }
         if(type.trim().equals("country")){
-            return userStatisRoMapper.regionCountry(c1.getTime(), c3.getTime());
+            return userStatisRoMapper.regionCountry(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime());
         } else if(type.trim().equals("province")){
-            return userStatisRoMapper.regionProvince(c1.getTime(), c3.getTime());
+            return userStatisRoMapper.regionProvince(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(), province);
         }
         return null;
     }
