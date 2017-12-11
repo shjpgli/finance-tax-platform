@@ -102,6 +102,19 @@ public class SystemRecordServiceImpl implements SystemRecordService {
                 LOGGER.error("错误：{}", e);
             }
         }
+        if (StringUtils.isEmpty(systemRecord.getPageTitle())) {
+            String pageTitle = "";
+            if (!StringUtils.isEmpty(systemRecord.getMenua())) {
+                pageTitle = systemRecord.getMenua();
+            }
+            if (!StringUtils.isEmpty(systemRecord.getMenub())) {
+                pageTitle += "-" + systemRecord.getMenub();
+            }
+            if (!StringUtils.isEmpty(systemRecord.getMenuc())) {
+                pageTitle += "-" + systemRecord.getMenuc();
+            }
+            systemRecord.setPageTitle(pageTitle);
+        }
         int result = systemRecordMapper.insert(systemRecord);
         if (result != 1) {
             LOGGER.warn("新增失败，参数：" + systemRecord);
