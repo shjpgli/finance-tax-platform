@@ -122,4 +122,74 @@ public interface UserRoMapper {
      */
     List<UserListBO> userLivenessDetailUinfo(Map<String, Date> map);
 
+    /**
+     * 通过绑定的电子申报纳税人识别号查询用户信息
+     *
+     * @param nsrsbh
+     * @return
+     */
+	List<User> findByDzsbNsrsbh(String nsrsbh);
+
+    /**
+     * 用户年龄分布统计
+     * @param map
+     * @return
+     */
+    Integer statisUserAge(Map<String, Object> map);
+
+    /**
+     * 查询用户总数
+     * @return
+     */
+    Integer selectUserCount();
+
+    /**
+     * 用户性别分布统计
+     * @param map
+     * @return
+     */
+    List<UserSexBO> statisUserSex(Map<String, Object> map);
+
+
+    /**
+     * 用户服务企业情况统计
+     * @param map
+     * @return
+     */
+    UserBindBO statisUserBind(Map<String, Object> map);
+
+    /**
+     * 用户服务企业情况统计-用户列表
+     * @param map
+     * @return
+     */
+    List<UserBO> statisUserBindList(Map<String, Object> map);
+
+    /**
+     * 用户年龄分布统计-用户列表
+     * @param map
+     * @return
+     */
+    List<UserBO> statisUserAgeList(Map<String, Object> map);
+
+    /**
+     * 未知年龄-用户列表
+     * @param map
+     * @return
+     */
+    List<UserBO> statisUserUnknownAgeList(Map<String, Object> map);
+
+    /**
+     * 未知年龄-用户统计
+     * @param map
+     * @return
+     */
+    Integer statisUserUnknownAge(Map<String, Object> map);
+
+    /**
+     * 用户性别分布统计-用户列表
+     * @param map
+     * @return
+     */
+    List<UserBO> statisUserSexList(Map<String, Object> map);
 }

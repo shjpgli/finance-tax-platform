@@ -1,6 +1,5 @@
 package com.abc12366.uc.job.user;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.service.UserBindService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -26,14 +25,7 @@ public class UserBindJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("UserBindJob: {}", context.getJobDetail().getKey().getName());
-        //initService();
         userBindService.automaticBindCancel();
         LOGGER.info("自动取消绑定完成: {}");
     }
-
-    /*public static void initService() {
-        synchronized (UserBindJob.class) {
-            userBindService = (UserBindService) SpringCtxHolder.getApplicationContext().getBean("userBindService");
-        }
-    }*/
 }

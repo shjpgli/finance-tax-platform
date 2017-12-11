@@ -91,9 +91,6 @@ public class UserServiceImpl implements UserService {
     private ExperienceLevelService experienceLevelService;
 
     @Autowired
-    private TagService tagService;
-
-    @Autowired
     private VipLevelService vipLevelService;
 
     @Autowired
@@ -105,35 +102,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserListBO> selectList(Map<String, Object> map, int page, int size) {
 
-        List<UserListBO> userList = new ArrayList<>();
-
-        if (!StringUtils.isEmpty(String.valueOf(map.get("realName")).trim())) {
-            // 真实姓名不为空，查询扩展表
-            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            List<UserExtendListBO> userExtendList = userExtendRoMapper.selectList(map);
-            if (userExtendList != null && userExtendList.size() > 0) {
-                for (UserExtendListBO ue : userExtendList) {
-                    map.put("id", ue.getUserId());
-                    userList.addAll(userRoMapper.selectList(map));
-                }
-            }
-        } else if (!StringUtils.isEmpty(map.get("tagId"))) {
-            // 查询条件包含标签时
-            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            List<String> userIds = tagService.selectUserIdsByTagIds(map);
-            for (String userId : userIds) {
-                if (!StringUtils.isEmpty(userId)) {
-                    User user = userRoMapper.selectUserById(new User(userId));
-                    UserListBO ul = new UserListBO();
-                    BeanUtils.copyProperties(user, ul);
-                    userList.add(ul);
-                }
-            }
-        } else {
-            // 查询默认数据
-            PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            userList = userRoMapper.selectList(map);
+        //解析多标签名称参数
+        String tagId = "tagId";
+        List tagIdList = new ArrayList<>();
+        if (!StringUtils.isEmpty(map.get(tagId))) {
+            tagIdList = analysisTagId((String) map.get(tagId), ",");
         }
+        map.put(tagId, tagIdList);
+        map.put("tagIdCount", (tagIdList == null) ? 0 : tagIdList.size());
+
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<UserListBO> userList = userRoMapper.selectList(map);
 
         // 补充真实姓名、用户等级信息
         for (UserListBO user : userList) {
@@ -151,6 +130,25 @@ public class UserServiceImpl implements UserService {
             }
         }
         return userList;
+    }
+
+    /**
+     * 逗号分隔的标签ID转为List
+     *
+     * @param tagId 带逗号分隔的标签ID
+     * @param split 分隔符
+     * @return ID列表
+     */
+    private List analysisTagId(String tagId, String split) {
+        String[] tags = tagId.trim().split(split);
+        List list = Arrays.asList(tags);
+        //去除空的元素
+        for (int i = 0; i < list.size(); i++) {
+            if (StringUtils.isEmpty(list.get(i))) {
+                list.remove(i);
+            }
+        }
+        return list;
     }
 
     @Override
@@ -271,7 +269,7 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("{}", usernameOrPhone);
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(usernameOrPhone);
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User user = userMapper.selectByUsernameOrPhone(loginBO);
         if (user != null) {
             UserBO userDTO = new UserBO();
             BeanUtils.copyProperties(user, userDTO);
@@ -467,7 +465,7 @@ public class UserServiceImpl implements UserService {
         //新的绑定手机是否已被绑定过
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(bindPhoneBO.getNewPhone());
-        User userPhoneExist = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User userPhoneExist = userMapper.selectByUsernameOrPhone(loginBO);
         //该手机号码已被绑定
         if (userPhoneExist != null && !bindPhoneBO.getUserId().equals(userPhoneExist.getId())) {
             throw new ServiceException(4858);
@@ -562,7 +560,7 @@ public class UserServiceImpl implements UserService {
         if (!StringUtils.isEmpty(bo.getPhone())) {
             LoginBO loginBO = new LoginBO();
             loginBO.setUsernameOrPhone(bo.getPhone());
-            if (null != userRoMapper.selectByUsernameOrPhone(loginBO)) {
+            if (null != userMapper.selectByUsernameOrPhone(loginBO)) {
                 throw new ServiceException(4183);
             }
         }
@@ -645,7 +643,7 @@ public class UserServiceImpl implements UserService {
 
         LoginBO loginBO = new LoginBO();
         loginBO.setUsernameOrPhone(oldPhone.getOldPhone());
-        User user = userRoMapper.selectByUsernameOrPhone(loginBO);
+        User user = userMapper.selectByUsernameOrPhone(loginBO);
         if (user == null || !userNow.getPhone().equals(oldPhone.getOldPhone())) {
             LOGGER.warn("旧手机校验不通过：", oldPhone);
             throw new ServiceException(4826);
@@ -727,6 +725,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByHngsNsrsbh(String nsrsbh) {
         return userRoMapper.findByHngsNsrsbh(nsrsbh);
+    }
+
+    @Override
+    public List<User> findByDzsbNsrsbh(String nsrsbh) {
+        return userRoMapper.findByDzsbNsrsbh(nsrsbh);
     }
 
     @Override
@@ -859,6 +862,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object userLivenessDetail(String type, String startStr, String endStr) {
         if (StringUtils.isEmpty(type) || StringUtils.isEmpty(startStr) || StringUtils.isEmpty(endStr)) {
+            return null;
+        }
+        if (!type.equals("year") && !type.trim().equals("month") && !type.trim().equals("day")) {
             return null;
         }
         List<UserLivenessDetailBO> list = new ArrayList<>();
@@ -1069,4 +1075,76 @@ public class UserServiceImpl implements UserService {
         map.put("end", end);
         return userRoMapper.userLivenessDetailUinfo(map);
     }
+
+    @Override
+    public List<UserAgeBO> statisUserAge(Map<String, Object> map) {
+        //0-25  、26-30 、31-35 、36-40 、41-45 、46-50 、51-55 、56-60、61-70、70以上 、未知
+        int[][] ages={{0,25},{26,30},{31,35},{36,40},{41,45},{46,50},{51,55},{56,60},{61,70}};
+
+        List<UserAgeBO> list = new ArrayList<>();
+        UserAgeBO userAgeBO;
+        int count = 0;
+        int total = 0;
+        for(int []  row : ages ){
+            userAgeBO = new UserAgeBO();
+            LOGGER.info("时间段：{},{}",row[0],row[1]);
+            map.put("startAge",row[0]);
+            map.put("endAge",row[1]);
+            userAgeBO.setAgeGroup(row[0]+"-"+row[1]);
+            count = userRoMapper.statisUserAge(map);
+            userAgeBO.setCount(count);
+            list.add(userAgeBO);
+            total = total + count;
+        }
+        map.put("startAge",70);
+        map.put("endAge",null);
+        userAgeBO = new UserAgeBO();
+        userAgeBO.setAgeGroup("70以上");
+        userAgeBO.setCount(userRoMapper.statisUserAge(map));
+        list.add(userAgeBO);
+
+        //查询用户显示
+        userAgeBO = new UserAgeBO();
+        userAgeBO.setAgeGroup("未知");
+        userAgeBO.setCount(userRoMapper.statisUserUnknownAge(map));
+        list.add(userAgeBO);
+        return list;
+    }
+
+    @Override
+    public List<UserBO> statisUserAgeList(Map<String, Object> map, Integer startAge, Integer endAge) {
+        if(startAge != null){
+            map.put("startAge",startAge);
+        }
+        if(endAge != null){
+            map.put("endAge",endAge);
+        }
+        //startNum和endNum为null 查询未知年龄用户
+        if(startAge == null && endAge == null){
+            return userRoMapper.statisUserUnknownAgeList(map);
+        }else{
+            return userRoMapper.statisUserAgeList(map);
+        }
+    }
+
+    @Override
+    public List<UserBO> statisUserSexList(Map<String, Object> map) {
+        return userRoMapper.statisUserSexList(map);
+    }
+
+    @Override
+    public List<UserSexBO> statisUserSex(Map<String, Object> map) {
+        return userRoMapper.statisUserSex(map);
+    }
+
+    @Override
+    public UserBindBO statisUserBind(Map<String, Object> map) {
+        return userRoMapper.statisUserBind(map);
+    }
+
+    @Override
+    public List<UserBO> statisUserBindList(Map<String, Object> map) {
+        return userRoMapper.statisUserBindList(map);
+    }
+
 }

@@ -32,4 +32,11 @@ public class UserDzsbInsertBO {
         this.nsrsbhOrShxydm = nsrsbhOrShxydm;
     }
 
+    @Override
+    public String toString() {
+        return "UserDzsbInsertBO{" +
+                "nsrsbhOrShxydm='" + nsrsbhOrShxydm + '\'' +
+                ", fwmm='" + fwmm + '\'' +
+                '}';
+    }
 }

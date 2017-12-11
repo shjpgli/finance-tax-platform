@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.DzfpRoMapper">
 
     <select id="selectList" resultType="com.abc12366.uc.model.dzfp.Einvocie" parameterType="com.abc12366.uc.model.dzfp.Einvocie">
-        select * 
+        select FPQQLSH,FP_DM,FP_HM,JYM,KPRQ,PDF_URL,SP_URL,TBSTATUS,sendStr,returnCode,returnMessage,KPLX  
         from uc_einvocie 
         <where>
             1=1

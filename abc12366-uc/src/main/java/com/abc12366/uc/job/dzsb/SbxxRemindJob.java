@@ -80,7 +80,8 @@ public class SbxxRemindJob implements StatefulJob{
 	        		//处理数据
 	        		for(int i=0;i<dzsbXxInfos.size();i++){
 	        			DzsbXxInfo dzsbXxInfo=dzsbXxInfos.get(i);
-	        			List<User> users=userService.findByHngsNsrsbh(dzsbXxInfo.getNsrsbh());
+	        			//查电子申报
+	        			List<User> users=userService.findByDzsbNsrsbh(dzsbXxInfo.getNsrsbh());
 	        			if(users!=null && users.size()>0){
 	        				
 	        				String sysMsg="您的纳税企业（"+dzsbXxInfo.getNsrsbh().substring(0,6)+"****** "+dzsbXxInfo.getNsrmc()+"）于"+dzsbXxInfo.getWcrq()+"申报税种："+dzsbXxInfo.getSzmc()+"，申报结果：成功，此信息为财税专家电子报税业务提醒信息，不作为实际申报结果凭证，如有疑议请及时查询申报结果。";

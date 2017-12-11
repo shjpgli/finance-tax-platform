@@ -68,7 +68,7 @@ public class RemindConstant {
     public static final String UPDATE_PWD_SUCCESS_WX_4 = "完成修改，感谢您的使用！";
 
     //未实名认证用户每天第一天登录发消息提醒其尽快进行认证
-    public static final String UNREALNAME_SYS = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证，您还未进行实名认证,请尽快完成实名认证，否则部分功能将无法使用；";
+    public static final String UNREALNAME_SYS = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证，您还未进行实名认证,请尽快完成实名认证，否则部分功能将无法使用!";
 
     public static final String UNREALNAME_WX_1 = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证,";
     public static final String UNREALNAME_WX_2 = "未认证";

@@ -9,6 +9,7 @@ import com.abc12366.uc.model.bo.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -23,11 +24,11 @@ public interface UserBindRoMapper {
 
     UserHnds userHndsSelectById(String id);
 
-    List<UserDzsbListBO> getUserDzsbBind(String userId);
+    List<UserDzsbListBO> getUserDzsbBind(Map<String, String> map);
 
-    List<UserHngsListBO> getUserhngsBind(String userId);
+    List<UserHngsListBO> getUserhngsBind(Map<String, String> map);
 
-    List<UserHndsBO> getUserhndsBind(String userId);
+    List<UserHndsBO> getUserhndsBind(Map<String, String> map);
 
     List<NSRXX> selectListByUserId(String userId);
 

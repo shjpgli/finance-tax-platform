@@ -41,4 +41,13 @@ public class UserHndsInsertBO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public String toString() {
+        return "UserHndsInsertBO{" +
+                "username='" + username + '\'' +
+                ", subuser='" + subuser + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

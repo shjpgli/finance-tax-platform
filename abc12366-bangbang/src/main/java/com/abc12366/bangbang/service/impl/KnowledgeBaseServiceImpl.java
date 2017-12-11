@@ -313,5 +313,9 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 		return knowledgeBaseMapper.wxhotUnClassifyMap(param);
 	}
 
+    @Override
+    public List<KnowledgeBase> selectNearestList(KnowledgeBaseHotParamBO param) {
+        return knowledgeBaseMapper.nearestList(param);
+    }
 
 }

@@ -76,11 +76,6 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
-        if (userDzsbInsertBO == null) {
-            LOGGER.warn("新增失败，参数：null");
-            throw new ServiceException(4101);
-        }
-
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
         //bindLimit(userId);
@@ -426,18 +421,18 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public List<UserDzsbListBO> getUserDzsbBind(String userId) {
-        return userBindRoMapper.getUserDzsbBind(userId);
+    public List<UserDzsbListBO> getUserDzsbBind(Map<String, String> map) {
+        return userBindRoMapper.getUserDzsbBind(map);
     }
 
     @Override
-    public List<UserHngsListBO> getUserhngsBind(String userId) {
-        return userBindRoMapper.getUserhngsBind(userId);
+    public List<UserHngsListBO> getUserhngsBind(Map<String, String> map) {
+        return userBindRoMapper.getUserhngsBind(map);
     }
 
     @Override
-    public List<UserHndsBO> getUserhndsBind(String userId) {
-        return userBindRoMapper.getUserhndsBind(userId);
+    public List<UserHndsBO> getUserhndsBind(Map<String, String> map) {
+        return userBindRoMapper.getUserhndsBind(map);
     }
 
     @Override

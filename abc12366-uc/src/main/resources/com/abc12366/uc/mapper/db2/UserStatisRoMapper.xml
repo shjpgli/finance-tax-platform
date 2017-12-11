@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.UserStatisRoMapper">
+    <select id="tagCountUsers" resultType="com.abc12366.uc.model.User" parameterType="java.lang.Object">
+        SELECT a.id, a.username, insert(a.phone, 4, 4, '****') phone, a.regMail, a.regIP, a.salt, a.nickname,
+                a.status,a.createTime, a.lastUpdate,a.userPicturePath, a.maxUserPicturePath, a.midUserPicturePath,
+                a.minUserPicturePath, a.points, a.exp,a.vipLevel,usernameModifiedTimes,vipExpireDate,a.wxopenid,
+                a.wxheadimg,a.wxnickname
+        FROM uc_user a JOIN uc_subject_tag b JOIN uc_tag c ON a.id=b.subjectId AND b.tagId=c.id
+        WHERE a.createTime &gt;=#{start} and a.createTime &lt; #{end}
+        AND  c.tagName = #{tagName}
+    </select>
+
+    <select id="regionCountry" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+        SELECT b.province regionName,a.province regionCode, COUNT(a.province) allCount
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
+        <where>
+            <if test="start != null">and c.createTime &gt;=#{start}</if>
+            <if test="end != null">and c.createTime &lt;=#{end} </if>
+        </where>
+        GROUP BY a.province
+    </select>
+
+    <select id="regionProvince" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+        SELECT b.city regionName,a.city regionCode, COUNT(a.city) allCount
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_city b ON a.city=b.cityId JOIN uc_province d ON d.provinceId = b.provinceId
+        <where>
+            <if test="start != null">and c.createTime &gt;=#{start}</if>
+            <if test="end != null">and c.createTime &lt;=#{end} </if>
+            <if test="province != null">and d.province=#{province} </if>
+        </where>
+        GROUP BY a.city
+    </select>
+</mapper>

@@ -1,18 +1,13 @@
 package com.abc12366.uc.job.user;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
 import com.abc12366.uc.service.IActivityService;
-import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.service.impl.ActivityService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,8 +27,7 @@ public class WxLotteryJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("WxLotteryJob: {}", context.getJobDetail().getKey().getName());
-        //activityService = (IActivityService) SpringCtxHolder.getApplicationContext().getBean("activityService");
-
+       
         // 接收状态为'空'的微信红包
         WxRedEnvelop unusedRedEnvelop = new WxRedEnvelop.Builder()
                 .sendStatus("1")

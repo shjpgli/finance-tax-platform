@@ -37,7 +37,7 @@ public class AdminLogServiceImpl implements AdminLogService {
                 .createTime(now)
                 .businessUri(bo.getBusinessUri())
                 .businessName(bo.getBusinessName())
-                .businessData(bo.getBusinessData())
+                .businessData((bo.getBusinessData().length()>4000?bo.getBusinessData().substring(0, 3999):bo.getBusinessData()))
                 .method(bo.getMethod())
                 .remark(bo.getRemark())
                 .build();
@@ -57,4 +57,5 @@ public class AdminLogServiceImpl implements AdminLogService {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return adminLogRoMapper.selectList(adminLog);
     }
+    
 }

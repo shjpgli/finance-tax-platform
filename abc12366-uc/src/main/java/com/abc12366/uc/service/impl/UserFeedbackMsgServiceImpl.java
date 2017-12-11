@@ -87,22 +87,13 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //1.系统消息
         String sysMsg = RemindConstant.UNREALNAME_SYS;
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/userinfolist.html#1_1'>马上去实名认证</a>";
-        //2.微信消息
-        Map<String, String> dataList = new HashMap<>();
-        dataList.put("first", RemindConstant.UNREALNAME_WX_1);
-        dataList.put("keyword1", RemindConstant.UNREALNAME_WX_2);
-        dataList.put("keyword2", DateUtils.dateToStr(new Date()));
-        dataList.put("remark", RemindConstant.UNREALNAME_WX_4);
-        //3.短信消息
-        String dxmsg = RemindConstant.UNREALNAME_DX;
+        //2.微信消息.后改为不做
+        //3.短信消息.后改为不做
 
         MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(getUser().getId());
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
-        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
-        sendBo.setDataList(dataList);
-        sendBo.setPhoneMsg(dxmsg);
         msgSendService.sendXtxx(sendBo);
     }
 

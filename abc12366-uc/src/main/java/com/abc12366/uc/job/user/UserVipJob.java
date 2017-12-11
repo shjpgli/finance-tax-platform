@@ -1,6 +1,6 @@
 package com.abc12366.uc.job.user;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
+
 import com.abc12366.uc.service.UserService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -26,13 +26,7 @@ public class UserVipJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("UserVipJob: {}", context.getJobDetail().getKey().getName());
-        //initService();
         userService.automaticUserCancel();
     }
 
-   /* public static void initService() {
-        synchronized (UserVipJob.class) {
-            userService = (UserService) SpringCtxHolder.getApplicationContext().getBean("userService");
-        }
-    }*/
 }

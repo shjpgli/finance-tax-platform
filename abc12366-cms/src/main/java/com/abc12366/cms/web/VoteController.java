@@ -259,6 +259,32 @@ public class VoteController {
         return ResponseEntity.ok(Utils.kv("data", data));
     }
 
+    //不登录也可查看统计信息
+    @GetMapping(path = "/nloginSelecttj")
+    public ResponseEntity nloginSelecttj(@RequestParam(value = "startTime", required = false) String startTime,
+                                   @RequestParam(value = "endTime", required = false) String endTime,
+                                   @RequestParam(value = "voteId", required = false) String voteId) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("voteId", voteId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if (startTime != null && !"".equals(startTime)) {
+                Date startTime1 = sdf.parse(startTime);
+                dataMap.put("startTime", startTime1.getTime() / 1000);
+            }
+            if (endTime != null && !"".equals(endTime)) {
+                Date startTime2 = sdf.parse(endTime);
+                dataMap.put("endTime", startTime2.getTime() / 1000);
+            }
+        } catch (ParseException e) {
+            LOGGER.error("时间类转换异常：{}", e);
+            throw new RuntimeException("时间类型转换异常：{}", e);
+        }
+        VotetjListBo data = voteService.selecttj(dataMap);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
 
     @PutMapping(path = "/updateSubItemStatus")
     public ResponseEntity updateSubItemStatus(@RequestBody SubItemBo subItemBo) {
