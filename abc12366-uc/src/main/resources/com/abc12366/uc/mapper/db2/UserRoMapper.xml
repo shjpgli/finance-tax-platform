@@ -46,20 +46,8 @@
         SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname
         FROM uc_user
         <where>
-            <if test="id != null and id != ''">
-                id=#{id}
-            </if>
-            <if test="username != null and username != ''">
-                and username=#{username}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone=#{phone}
-            </if>
-            <if test="nickname != null and nickname != ''">
-                and nickname=#{nickname}
-            </if>
             <if test="status!=null">
-                and status=#{status}
+                status=#{status}
             </if>
             <if test="vipLevel != null and vipLevel != ''">
                 and vipLevel=#{vipLevel}
@@ -75,6 +63,28 @@
             </if>
             <if test="endDate !=null and endDate != ''">
                 and createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
+            </if>
+            <if test="tagId != null and tagId.size > 0">
+                and id in (SELECT DISTINCT a.subjectId FROM
+                <foreach item="item" collection="tagId" separator="union all" open="(" close=")" index="">
+                    SELECT subjectId FROM uc_subject_tag WHERE tagId=#{item}
+                </foreach>
+                a group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount})
+            </if>
+            <if test="realName != null and realName != ''">
+                and id in (SELECT userId FROM abc12366_uc.uc_user_extend WHERE realName = #{realName})
+            </if>
+            <if test="username != null and username != ''">
+                and username=#{username}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone=#{phone}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname=#{nickname}
+            </if>
+            <if test="id != null and id != ''">
+                and id=#{id}
             </if>
         </where>
         ORDER BY createTime DESC
