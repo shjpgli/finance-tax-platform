@@ -42,4 +42,15 @@ public interface UserStatisService {
      * @return RigionStatisBO
      */
     List<RigionStatisBO> region(String type, String start, String end,String province);
+
+    void bindCount(String type, String start, String end);
+
+    /**
+     * 用户区域统计查询用户详情接口
+     * @param type 区域类型，country、province
+     * @param timeInterval 时间区间
+     * @param province 省名
+     * @return User
+     */
+    List<User> regionUinfo(String type, String timeInterval, String province);
 }
