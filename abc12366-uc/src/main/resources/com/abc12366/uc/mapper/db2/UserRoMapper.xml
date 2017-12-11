@@ -486,7 +486,7 @@
 
     <!-- 用户性别查询 -->
     <select id="statisUserSex" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserSexBO">
-        select count(u.userId) as count,e.sex as sexGroup from uc_user_extend e
+        select count(e.userId) as count,e.sex as sexGroup from uc_user_extend e
           LEFT JOIN uc_user u on u.id = e.userId
           where 1=1
             <if test="startTime != null">
@@ -508,7 +508,7 @@
         uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
         uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
         uu.wxopenid,uu.wxheadimg,uu.wxnickname,uu.oldId  from uc_user_extend e
-          LEFT JOIN uc_user uu on u.id = e.userId
+          LEFT JOIN uc_user uu on uu.id = e.userId
           where
             <if test="sex != null">
                 e.sex = #{sex}
@@ -526,7 +526,6 @@
                     and date_format(uu.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
                 ]]>
             </if>
-            GROUP BY e.sex
     </select>
     <!-- 用户服务企业情况统计 -->
     <select id="statisUserBind" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBindBO">
