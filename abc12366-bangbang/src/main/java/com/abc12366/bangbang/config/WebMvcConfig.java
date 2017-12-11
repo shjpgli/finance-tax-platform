@@ -175,7 +175,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/search/list","/search/cheats/list","/search/question/list")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
-                        "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll",
+                        "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll","/knowledgeBase/nearestList",
                         "/KnowledgeTag/listHot/**","/KnowledgeTag/listHot","/knowledgeBase/hotUnClassifyList","/knowledgeBase/wx/hotUnClassifyList");
 
         // 敏感词拦截
