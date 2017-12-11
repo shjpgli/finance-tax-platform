@@ -6,10 +6,12 @@
     <insert id="insert" parameterType="com.abc12366.bangbang.model.SystemRecord">
         insert into bb_system_record_${yyyyMMdd} (id,userId,sessionId,browseDate,year,week,referer,month,day,hour,
         minute,pageTitle,ruleCode,
-        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,nsrsbh)
+        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,
+        nsrsbh, menua, menub, menuc)
         values (#{id},#{userId},#{sessionId},#{browseDate},#{year},#{week},#{referer},#{month},#{day},#{hour},
         #{minute},#{pageTitle},#{ruleCode},#{pageUrl},#{stayLong},#{feature},#{appName},#{ip},
-        #{location},#{browseType},#{browseVersion},#{os},#{device},#{remark},#{createTime},#{nsrsbh})
+        #{location},#{browseType},#{browseVersion},#{os},#{device},#{remark},#{createTime},
+        #{nsrsbh}, #{menua}, #{menub}, #{menuc})
     </insert>
 
     <update id="updateStay" parameterType="com.abc12366.bangbang.model.bo.SystemRecordBO">

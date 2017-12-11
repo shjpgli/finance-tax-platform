@@ -31,7 +31,6 @@ public class SystemRecordInsertBO {
     /**
      * 浏览页面TITLE
      */
-    @NotEmpty
     @Length(max = 100)
     private String pageTitle;
     /**
@@ -100,6 +99,25 @@ public class SystemRecordInsertBO {
      */
     @Length(max = 32)
     private String nsrsbh;
+
+    /**
+     * 一级菜单
+     */
+    @NotEmpty
+    @Length(max = 15)
+    private String menua;
+
+    /**
+     * 二级菜单
+     */
+    @Length(max = 30)
+    private String menub;
+
+    /**
+     * 三级菜单
+     */
+    @Length(max = 30)
+    private String menuc;
 
     public String getUserId() {
         return userId;
@@ -253,6 +271,30 @@ public class SystemRecordInsertBO {
         this.nsrsbh = nsrsbh;
     }
 
+    public String getMenua() {
+        return menua;
+    }
+
+    public void setMenua(String menua) {
+        this.menua = menua;
+    }
+
+    public String getMenub() {
+        return menub;
+    }
+
+    public void setMenub(String menub) {
+        this.menub = menub;
+    }
+
+    public String getMenuc() {
+        return menuc;
+    }
+
+    public void setMenuc(String menuc) {
+        this.menuc = menuc;
+    }
+
     @Override
     public String toString() {
         return "SystemRecordInsertBO{" +
@@ -275,6 +317,9 @@ public class SystemRecordInsertBO {
                 ", createTime=" + createTime +
                 ", ruleCode='" + ruleCode + '\'' +
                 ", nsrsbh='" + nsrsbh + '\'' +
+                ", menua='" + menua + '\'' +
+                ", menub='" + menub + '\'' +
+                ", menuc='" + menuc + '\'' +
                 '}';
     }
 }
