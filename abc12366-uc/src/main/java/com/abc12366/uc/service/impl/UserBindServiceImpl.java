@@ -76,11 +76,6 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
-        if (userDzsbInsertBO == null) {
-            LOGGER.warn("新增失败，参数：null");
-            throw new ServiceException(4101);
-        }
-
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
         //bindLimit(userId);

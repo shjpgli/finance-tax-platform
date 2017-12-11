@@ -53,4 +53,13 @@ public class NsrResetPwd {
     public void setNsrsbh(String nsrsbh) {
         this.nsrsbh = nsrsbh;
     }
+
+    @Override
+    public String toString() {
+        return "NsrResetPwd{" +
+                "nsrsbh='" + nsrsbh + '\'' +
+                ", frmc='" + frmc + '\'' +
+                ", frzjh='" + frzjh + '\'' +
+                '}';
+    }
 }

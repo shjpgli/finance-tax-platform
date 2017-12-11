@@ -31,4 +31,12 @@ public class NsrLogin {
     public void setFwmm(String fwmm) {
         this.fwmm = fwmm;
     }
+
+    @Override
+    public String toString() {
+        return "NsrLogin{" +
+                "nsrsbhOrShxydm='" + nsrsbhOrShxydm + '\'' +
+                ", fwmm='" + fwmm + '\'' +
+                '}';
+    }
 }

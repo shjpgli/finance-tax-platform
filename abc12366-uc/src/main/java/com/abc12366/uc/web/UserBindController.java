@@ -79,25 +79,25 @@ public class UserBindController {
      */
     @GetMapping(path = "/bind/dzsb/{userId}")
     public ResponseEntity getUserDzsbBind(@PathVariable String userId,
-    		                              @RequestParam(required=false) String nsrsbh,
-    		                              @RequestParam(required=false) String nsrmc,
+                                          @RequestParam(required = false) String nsrsbh,
+                                          @RequestParam(required = false) String nsrmc,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-    	Map<String, String> map=new HashMap<String, String>();
-    	map.put("userId", userId);
-    	if(StringUtils.isNotEmpty(nsrsbh)){
-    		map.put("nsrsbh", nsrsbh);
-    	}
-    	if(StringUtils.isNotEmpty(nsrmc)){
-    		map.put("nsrmc", nsrmc);
-    	}
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        if (StringUtils.isNotEmpty(nsrsbh)) {
+            map.put("nsrsbh", nsrsbh);
+        }
+        if (StringUtils.isNotEmpty(nsrmc)) {
+            map.put("nsrmc", nsrmc);
+        }
         LOGGER.info("{}", map);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<UserDzsbListBO> userDzsbBOList = userBindService.getUserDzsbBind(map);
         LOGGER.info("{}", userDzsbBOList);
         return (userDzsbBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userDzsbBOList, "total", ((Page) userDzsbBOList)
+                ResponseEntity.ok(Utils.kv("dataList", userDzsbBOList, "total", ((Page) userDzsbBOList)
                         .getTotal()));
     }
 
@@ -111,25 +111,25 @@ public class UserBindController {
      */
     @GetMapping(path = "/bind/hngs/{userId}")
     public ResponseEntity getUserhngsBind(@PathVariable String userId,
-								    	  @RequestParam(required=false) String nsrsbh,
-								          @RequestParam(required=false) String nsrmc,
+                                          @RequestParam(required = false) String nsrsbh,
+                                          @RequestParam(required = false) String nsrmc,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-    	Map<String, String> map=new HashMap<String, String>();
-    	map.put("userId", userId);
-    	if(StringUtils.isNotEmpty(nsrsbh)){
-    		map.put("nsrsbh", nsrsbh);
-    	}
-    	if(StringUtils.isNotEmpty(nsrmc)){
-    		map.put("nsrmc", nsrmc);
-    	}
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        if (StringUtils.isNotEmpty(nsrsbh)) {
+            map.put("nsrsbh", nsrsbh);
+        }
+        if (StringUtils.isNotEmpty(nsrmc)) {
+            map.put("nsrmc", nsrmc);
+        }
         LOGGER.info("{}", map);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<UserHngsListBO> userHngsBOList = userBindService.getUserhngsBind(map);
         LOGGER.info("{}", userHngsBOList);
         return (userHngsBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList)
+                ResponseEntity.ok(Utils.kv("dataList", userHngsBOList, "total", ((Page) userHngsBOList)
                         .getTotal()));
     }
 
@@ -143,25 +143,25 @@ public class UserBindController {
      */
     @GetMapping(path = "/bind/hnds/{userId}")
     public ResponseEntity getUserhndsBind(@PathVariable String userId,
-								    	  @RequestParam(required=false) String nsrsbh,
-								          @RequestParam(required=false) String nsrmc,
+                                          @RequestParam(required = false) String nsrsbh,
+                                          @RequestParam(required = false) String nsrmc,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-    	Map<String, String> map=new HashMap<String, String>();
-    	map.put("userId", userId);
-    	if(StringUtils.isNotEmpty(nsrsbh)){
-    		map.put("nsrsbh", nsrsbh);
-    	}
-    	if(StringUtils.isNotEmpty(nsrmc)){
-    		map.put("nsrmc", nsrmc);
-    	}
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        if (StringUtils.isNotEmpty(nsrsbh)) {
+            map.put("nsrsbh", nsrsbh);
+        }
+        if (StringUtils.isNotEmpty(nsrmc)) {
+            map.put("nsrmc", nsrmc);
+        }
         LOGGER.info("{}", map);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<UserHndsBO> userHngsBOList = userBindService.getUserhndsBind(map);
         LOGGER.info("{}", userHngsBOList);
         return (userHngsBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) userHngsBOList, "total", ((Page) userHngsBOList)
+                ResponseEntity.ok(Utils.kv("dataList", userHngsBOList, "total", ((Page) userHngsBOList)
                         .getTotal()));
     }
 
@@ -277,11 +277,9 @@ public class UserBindController {
      * @param login   登陆信息
      * @param request HttpServletRequest
      * @return 用户登陆信息
-     * @throws Exception 网络异常
      */
     @PostMapping(path = "/nsrlogin/dzsj")
-    public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) throws
-            Exception {
+    public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) {
         LOGGER.info("{}", login);
         HngsNsrLoginResponse loginResponse = userBindService.nsrLoginDzsj(login, request);
         return ResponseEntity.ok(loginResponse);
@@ -294,11 +292,10 @@ public class UserBindController {
      * @param xm      姓名
      * @param request HttpServletRequest
      * @return 是否实名认证
-     * @throws Exception 网络异常
      */
     @GetMapping(path = "/realname/dzsj")
     public ResponseEntity isRealNameValidatedDzsj(@RequestParam String sfzjhm, @PathVariable @RequestParam String xm,
-                                                  HttpServletRequest request) throws Exception {
+                                                  HttpServletRequest request) {
         LOGGER.info("调用电子税局实名认证查询接口：{},{}", sfzjhm, xm);
         boolean result = userBindService.isRealNameValidatedDzsj(sfzjhm, xm, request);
         LOGGER.info("电子税局返回查询结果：{}", result);
