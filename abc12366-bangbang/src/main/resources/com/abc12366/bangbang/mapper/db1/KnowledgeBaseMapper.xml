@@ -64,6 +64,14 @@
         WHERE t.categoryCode = t1.code;
     </select>
 
+    <!-- 财税网首页最近问题查询 -->
+    <select id="nearestList" resultType="com.abc12366.bangbang.model.KnowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
+        SELECT a.id, a.subject,a.createTime,a.updateTime FROM bb_knowledge_base a
+        WHERE TYPE = #{KnowledgeType}
+        AND STATUS = 1 AND isOpen = 1 AND (activeTime IS NULL OR activeTime > NOW())
+        ORDER BY a.updateTime DESC LIMIT #{KnowledgePageSize}
+    </select>
+
     <!-- 财税网首页热点问题查询 -->
     <select id="hotUnClassifyList" resultType="com.abc12366.bangbang.model.KnowledgeBase" parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO">
 

@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.RigionStatisBO;
 import com.abc12366.uc.model.bo.TagUserStaticBO;
 
 import java.util.List;
@@ -32,4 +33,13 @@ public interface UserStatisService {
      */
     List<User> userTagUinfo(String type, String start, String end, String tagName);
 
+    /**
+     * 用户区域统计接口
+     * @param type 区域类型，country、province
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param province 省名
+     * @return RigionStatisBO
+     */
+    List<RigionStatisBO> region(String type, String start, String end,String province);
 }

@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.RigionStatisBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -13,4 +14,8 @@ import java.util.List;
  */
 public interface UserStatisRoMapper {
     List<User> tagCountUsers(@Param("start")Date start, @Param("end")Date end, @Param("tagName")String tagName);
+
+    List<RigionStatisBO> regionCountry(@Param("start")Date start, @Param("end")Date end);
+
+    List<RigionStatisBO> regionProvince(@Param("start")Date start, @Param("end")Date end, @Param("province")String province);
 }

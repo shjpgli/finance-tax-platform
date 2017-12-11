@@ -43,6 +43,13 @@ public interface KnowledgeBaseMapper {
     List<KnowledgeBase> hotList(KnowledgeBaseHotParamBO param);
 
     /*
+     *
+     * 财税网首页最新问题查询
+     *
+     **/
+    List<KnowledgeBase> nearestList(KnowledgeBaseHotParamBO param);
+
+    /*
     *
     * 财税网首页热点推荐查询
     *

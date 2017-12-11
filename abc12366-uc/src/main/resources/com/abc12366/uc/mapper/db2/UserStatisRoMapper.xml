@@ -11,4 +11,25 @@
         WHERE a.createTime &gt;=#{start} and a.createTime &lt; #{end}
         AND  c.tagName = #{tagName}
     </select>
+
+    <select id="regionCountry" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+        SELECT b.province regionName,a.province regionCode, COUNT(a.province) allCount
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
+        <where>
+            <if test="start != null">and c.createTime &gt;=#{start}</if>
+            <if test="end != null">and c.createTime &lt;=#{end} </if>
+        </where>
+        GROUP BY a.province
+    </select>
+
+    <select id="regionProvince" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+        SELECT b.city regionName,a.city regionCode, COUNT(a.city) allCount
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_city b ON a.city=b.cityId JOIN uc_province d ON d.provinceId = b.provinceId
+        <where>
+            <if test="start != null">and c.createTime &gt;=#{start}</if>
+            <if test="end != null">and c.createTime &lt;=#{end} </if>
+            <if test="province != null">and d.province=#{province} </if>
+        </where>
+        GROUP BY a.city
+    </select>
 </mapper>

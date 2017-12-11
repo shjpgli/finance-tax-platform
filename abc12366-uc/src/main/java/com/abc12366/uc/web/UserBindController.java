@@ -8,6 +8,8 @@ import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+
+import org.apache.commons.lang.StringUtils;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户绑定办税身份控制器类，以常规JSON形式返回数据
@@ -75,11 +79,21 @@ public class UserBindController {
      */
     @GetMapping(path = "/bind/dzsb/{userId}")
     public ResponseEntity getUserDzsbBind(@PathVariable String userId,
+    		                              @RequestParam(required=false) String nsrsbh,
+    		                              @RequestParam(required=false) String nsrmc,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}", userId);
+    	Map<String, String> map=new HashMap<String, String>();
+    	map.put("userId", userId);
+    	if(StringUtils.isNotEmpty(nsrsbh)){
+    		map.put("nsrsbh", nsrsbh);
+    	}
+    	if(StringUtils.isNotEmpty(nsrmc)){
+    		map.put("nsrmc", nsrmc);
+    	}
+        LOGGER.info("{}", map);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<UserDzsbListBO> userDzsbBOList = userBindService.getUserDzsbBind(userId);
+        List<UserDzsbListBO> userDzsbBOList = userBindService.getUserDzsbBind(map);
         LOGGER.info("{}", userDzsbBOList);
         return (userDzsbBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -97,11 +111,21 @@ public class UserBindController {
      */
     @GetMapping(path = "/bind/hngs/{userId}")
     public ResponseEntity getUserhngsBind(@PathVariable String userId,
+								    	  @RequestParam(required=false) String nsrsbh,
+								          @RequestParam(required=false) String nsrmc,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}", userId);
+    	Map<String, String> map=new HashMap<String, String>();
+    	map.put("userId", userId);
+    	if(StringUtils.isNotEmpty(nsrsbh)){
+    		map.put("nsrsbh", nsrsbh);
+    	}
+    	if(StringUtils.isNotEmpty(nsrmc)){
+    		map.put("nsrmc", nsrmc);
+    	}
+        LOGGER.info("{}", map);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<UserHngsListBO> userHngsBOList = userBindService.getUserhngsBind(userId);
+        List<UserHngsListBO> userHngsBOList = userBindService.getUserhngsBind(map);
         LOGGER.info("{}", userHngsBOList);
         return (userHngsBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -119,11 +143,21 @@ public class UserBindController {
      */
     @GetMapping(path = "/bind/hnds/{userId}")
     public ResponseEntity getUserhndsBind(@PathVariable String userId,
+								    	  @RequestParam(required=false) String nsrsbh,
+								          @RequestParam(required=false) String nsrmc,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}", userId);
+    	Map<String, String> map=new HashMap<String, String>();
+    	map.put("userId", userId);
+    	if(StringUtils.isNotEmpty(nsrsbh)){
+    		map.put("nsrsbh", nsrsbh);
+    	}
+    	if(StringUtils.isNotEmpty(nsrmc)){
+    		map.put("nsrmc", nsrmc);
+    	}
+        LOGGER.info("{}", map);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<UserHndsBO> userHngsBOList = userBindService.getUserhndsBind(userId);
+        List<UserHndsBO> userHngsBOList = userBindService.getUserhndsBind(map);
         LOGGER.info("{}", userHngsBOList);
         return (userHngsBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
