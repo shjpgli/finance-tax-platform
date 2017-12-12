@@ -1,6 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.BindCountInfo;
 import com.abc12366.uc.model.bo.RigionStatisBO;
 import com.abc12366.uc.model.bo.TagUserStaticBO;
 
@@ -43,7 +44,7 @@ public interface UserStatisService {
      */
     List<RigionStatisBO> region(String type, String start, String end,String province);
 
-    void bindCount(String type, String start, String end);
+    Object bindCount(String type, String start, String end);
 
     /**
      * 用户区域统计查询用户详情接口
@@ -53,4 +54,14 @@ public interface UserStatisService {
      * @return User
      */
     List<User> regionUinfo(String type, String timeInterval, String province);
+    /**
+     * 企业绑定情况统计详情
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param start 开始时间
+     * @param page
+     * @param size
+     * @return BindCountInfo
+     */
+    List<BindCountInfo> bindCountInfo(String type, String start,String end, int page, int size);
+
 }

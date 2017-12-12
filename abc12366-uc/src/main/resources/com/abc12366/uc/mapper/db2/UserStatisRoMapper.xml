@@ -33,7 +33,7 @@
         GROUP BY a.city
     </select>
 
-    <select id="regionCountryUinfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.User">
+    <select id="regionProvinceUinfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
         select c.id, c.username, insert(c.phone, 4, 4, '****') phone, c.regMail, c.regIP, c.salt, c.nickname,
         c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
         c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
@@ -42,21 +42,67 @@
         <where>
             <if test="start != null">and c.createTime &gt;=#{start}</if>
             <if test="end != null">and c.createTime &lt;=#{end} </if>
+            <if test="province != null">and b.province=#{province} </if>
         </where>
-        GROUP BY a.province
     </select>
 
-    <select id="regionProvinceUinfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
+    <select id="regionCityUinfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
         select c.id, c.username, insert(c.phone, 4, 4, '****') phone, c.regMail, c.regIP, c.salt, c.nickname,
         c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
         c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
         c.wxheadimg,c.wxnickname
-        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_city b ON a.city=b.cityId JOIN uc_province d ON d.provinceId = b.provinceId
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_city b ON a.city=b.cityId
         <where>
             <if test="start != null">and c.createTime &gt;=#{start}</if>
             <if test="end != null">and c.createTime &lt;=#{end} </if>
-            <if test="province != null">and d.province=#{province} </if>
+            <if test="city != null">and b.city=#{city} </if>
         </where>
-        GROUP BY a.city
+    </select>
+
+    <select id="bindDzsb" parameterType="java.util.Date" resultType="java.lang.Integer">
+        SELECT count(1) FROM uc_user_dzsb
+                  WHERE STATUS='1'
+                  AND createTime &gt;= #{start}
+                  and createTime &lt; #{end}
+    </select>
+
+    <select id="bindHngs" parameterType="java.util.Date" resultType="java.lang.Integer">
+        SELECT count(1) FROM uc_user_hngs
+        WHERE STATUS='1'
+        AND createTime &gt;= #{start}
+        and createTime &lt; #{end}
+    </select>
+
+    <select id="bindHnds" parameterType="java.util.Date" resultType="java.lang.Integer">
+        SELECT count(1) FROM uc_user_hnds
+        WHERE STATUS='1'
+        AND createTime &gt;= #{start}
+        and createTime &lt; #{end}
+    </select>
+
+    <select id="bindDzsbInfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.BindCountInfo">
+        SELECT nsrsbh,nsrmc,swjgdm,swjgmc FROM uc_user_dzsb
+        <where>
+            STATUS='1'
+            <if test="start != null">AND createTime &gt;= #{start}</if>
+            <if test="end != null">and createTime &lt; #{end}</if>
+        </where>
+    </select>
+
+    <select id="bindHngsInfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.BindCountInfo">
+        SELECT nsrsbh,nsrmc,swjgdm,swjgmc FROM uc_user_hngs
+        <where>
+            STATUS='1'
+            <if test="start != null">AND createTime &gt;= #{start}</if>
+            <if test="end != null">and createTime &lt; #{end}</if>
+        </where>
+    </select>
+    <select id="bindHndsInfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.BindCountInfo">
+        SELECT nsrsbh,nsrmc,swjgdm,swjgmc FROM uc_user_hnds
+        <where>
+            STATUS='1'
+            <if test="start != null">AND createTime &gt;= #{start}</if>
+            <if test="end != null">and createTime &lt; #{end}</if>
+        </where>
     </select>
 </mapper>

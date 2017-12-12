@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.BindCountInfo;
 import com.abc12366.uc.model.bo.RigionStatisBO;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,7 +20,19 @@ public interface UserStatisRoMapper {
 
     List<RigionStatisBO> regionProvince(@Param("start")Date start, @Param("end")Date end, @Param("province")String province);
 
-    List<User> regionCountryUinfo(@Param("start")Date start, @Param("end")Date end);
+    List<User> regionProvinceUinfo(@Param("start")Date start, @Param("end")Date end, @Param("province") String province);
 
-    List<User> regionProvinceUinfo(@Param("start")Date start, @Param("end")Date end, @Param("province")String province);
+    List<User> regionCityUinfo(@Param("start")Date start, @Param("end")Date end, @Param("city")String city);
+
+    int bindDzsb(@Param("start")Date start, @Param("end")Date end);
+
+    int bindHngs(@Param("start")Date start, @Param("end")Date end);
+
+    int bindHnds(@Param("start")Date start, @Param("end")Date end);
+
+    List<BindCountInfo> bindDzsbInfo(@Param("start")Date start, @Param("end")Date end);
+
+    List<BindCountInfo> bindHngsInfo(@Param("start")Date start, @Param("end")Date end);
+
+    List<BindCountInfo> bindHndsInfo(@Param("start")Date start, @Param("end")Date end);
 }
