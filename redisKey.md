@@ -1,5 +1,5 @@
-#UCºóÌ¨´æ´¢redisµÄkeyÃüÃû¹æ·¶£ºÎ¨Ò»id+ÏÂ»®Ïß+ÄÚÈİÓ¢ÎÄ
+#UCåå°å­˜å‚¨redisçš„keyå‘½åè§„èŒƒï¼šå”¯ä¸€id+ä¸‹åˆ’çº¿+å†…å®¹è‹±æ–‡
 
-1.ÓÃ»§ĞÅÏ¢£ºuserid+'_UserInfo'
-2.ÓÃ»§À©Õ¹ĞÅÏ¢:userid+'_UserExtend'
-3.ÓÃ»§¾­ÑéÖµĞÅÏ¢£ºuserid+'_MyExperience'
+1.ç”¨æˆ·ä¿¡æ¯ï¼šuserid+'_UserInfo'
+2.ç”¨æˆ·æ‰©å±•ä¿¡æ¯:userid+'_UserExtend'
+3.ç”¨æˆ·ç»éªŒå€¼ä¿¡æ¯ï¼šuserid+'_MyExperience'
