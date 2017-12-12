@@ -305,6 +305,10 @@ public class AuthServiceImpl implements AuthService {
         // 用户信息写入redis
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
                 TimeUnit.SECONDS);
+        
+        valueOperations.set(userBO.getId()+"Info", JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
+                TimeUnit.SECONDS);
+        
         return map;
     }
 

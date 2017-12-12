@@ -19,11 +19,13 @@ import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -35,11 +37,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -98,6 +102,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ExperienceLevelRoMapper experienceLevelRoMapper;
+    
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
 
     @Override
     public List<UserListBO> selectList(Map<String, Object> map, int page, int size) {
@@ -153,15 +160,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User selectUser(String userId) {
-        return userRoMapper.selectOne(userId);
+    	//新增优先查询redis
+    	User user=null;
+    	if(valueOperations.get(userId+"Info")!=null){
+    		user=JSONObject.parseObject(valueOperations.get(userId+"Info"), User.class);
+    	}else{
+    		user=userRoMapper.selectOne(userId);
+    		valueOperations.set(userId+"Info", JSONObject.toJSONString(user),Constant.USER_TOKEN_VALID_SECONDS / 2,TimeUnit.SECONDS);
+    	}
+        return user;
     }
 
     @Override
     public Map selectOne(String userId) {
-        LOGGER.info("{}", userId);
-        User userTemp = userRoMapper.selectOne(userId);
-        UserExtend user_extend = userExtendRoMapper.selectOne(userId);
+    	//新增优先查询redis
+    	LOGGER.info("{}", userId);
+    	User userTemp =null;
+    	UserExtend user_extend=null;
+    	if(valueOperations.get(userId+"Info")!=null && valueOperations.get(userId+"Extend")!=null ){
+    		userTemp=JSONObject.parseObject(valueOperations.get(userId+"Info"), User.class);
+   		    user_extend=JSONObject.parseObject(valueOperations.get(userId+"Extend"), UserExtend.class);
+   		    LOGGER.info("从redis获取用户信息:{}", JSONObject.toJSONString(userTemp));
+    	}else{
+    		userTemp = userRoMapper.selectOne(userId);
+            user_extend = userExtendRoMapper.selectOne(userId);
+            LOGGER.info("从数据库获取用户信息:{}", JSONObject.toJSONString(userTemp)); 
+    	}
         if (userTemp != null) {
+        	
+            valueOperations.set(userId+"Info", JSONObject.toJSONString(userTemp),Constant.USER_TOKEN_VALID_SECONDS / 2,TimeUnit.SECONDS);
+            valueOperations.set(userId+"Extend", JSONObject.toJSONString(user_extend),Constant.USER_TOKEN_VALID_SECONDS / 2,TimeUnit.SECONDS);
+            
             UserBO user = new UserBO();
             BeanUtils.copyProperties(userTemp, user);
             //用户重要信息模糊化处理:电话号码
