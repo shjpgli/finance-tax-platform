@@ -161,9 +161,9 @@ public class UserServiceImpl implements UserService {
     public User selectUser(String userId) {
     	//新增优先查询redis
     	User user = null;
-    	if(redisTemplate.hasKey(userId+"_UserInfo")){
+		if (redisTemplate.hasKey(userId + "_UserInfo")) {
     		user = JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_UserInfo"), User.class);
-    	}else{
+    	} else {
     		user = userRoMapper.selectOne(userId);
     		redisTemplate.opsForValue().set(userId+"_UserInfo", JSONObject.toJSONString(user), RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
     	}

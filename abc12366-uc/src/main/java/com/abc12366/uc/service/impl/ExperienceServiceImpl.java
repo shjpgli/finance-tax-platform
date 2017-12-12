@@ -71,7 +71,8 @@ public class ExperienceServiceImpl implements ExperienceService {
         LOGGER.info("{}", userId);
         MyExperienceBO experienceBO=null;
         if(redisTemplate.hasKey(userId+"_MyExperience")){
-        	experienceBO=JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_MyExperience"), MyExperienceBO.class);
+			experienceBO = JSONObject.parseObject(redisTemplate.opsForValue()
+					.get(userId + "_MyExperience"), MyExperienceBO.class);
     	}else{
     		experienceBO=experienceRoMapper.getMyExperience(userId);
     		if(experienceBO!=null){
