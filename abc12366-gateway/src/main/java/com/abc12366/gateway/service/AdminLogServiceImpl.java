@@ -38,7 +38,7 @@ public class AdminLogServiceImpl implements AdminLogService {
                 .createTime(now)
                 .businessUri(bo.getBusinessUri())
                 .businessName(bo.getBusinessName())
-                .businessData((StringUtils.isEmpty(bo.getBusinessData())||bo.getBusinessData().length()>2000?" ":bo.getBusinessData()))
+                .businessData((StringUtils.isEmpty(bo.getBusinessData())||bo.getBusinessData().length()>2000)?" ":bo.getBusinessData())
                 .method(bo.getMethod())
                 .remark(bo.getRemark())
                 .build();
