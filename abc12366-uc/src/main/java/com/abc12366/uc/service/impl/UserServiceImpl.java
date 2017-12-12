@@ -160,11 +160,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectUser(String userId) {
     	//新增优先查询redis
-    	User user=null;
+    	User user = null;
     	if(redisTemplate.hasKey(userId+"_UserInfo")){
-    		user=JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_UserInfo"), User.class);
+    		user = JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_UserInfo"), User.class);
     	}else{
-    		user=userRoMapper.selectOne(userId);
+    		user = userRoMapper.selectOne(userId);
     		redisTemplate.opsForValue().set(userId+"_UserInfo", JSONObject.toJSONString(user), RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
     	}
         return user;
@@ -174,13 +174,13 @@ public class UserServiceImpl implements UserService {
     public Map selectOne(String userId) {
     	//新增优先查询redis
     	LOGGER.info("{}", userId);
-    	User userTemp =null;
-    	UserExtend user_extend=null;
-    	if(redisTemplate.hasKey(userId+"_UserInfo") && redisTemplate.hasKey(userId+"_UserExtend")){
-    		userTemp=JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_UserInfo"), User.class);
-   		    user_extend=JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_UserExtend"), UserExtend.class);
+    	User userTemp = null;
+    	UserExtend user_extend = null;
+    	if(redisTemplate.hasKey(userId+"_UserInfo") && redisTemplate.hasKey(userId+"_UserExtend")) {
+    		userTemp = JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_UserInfo"), User.class);
+   		    user_extend = JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_UserExtend"), UserExtend.class);
    		    LOGGER.info("从redis获取用户信息:{}", JSONObject.toJSONString(userTemp));
-    	}else{
+    	} else {
     		userTemp = userRoMapper.selectOne(userId);
             user_extend = userExtendRoMapper.selectOne(userId);
             LOGGER.info("从数据库获取用户信息:{}", JSONObject.toJSONString(userTemp)); 
