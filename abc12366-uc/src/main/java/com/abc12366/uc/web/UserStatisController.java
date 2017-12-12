@@ -340,8 +340,8 @@ public class UserStatisController {
      */
     @GetMapping(path = "/region/uinfo")
     public ResponseEntity regionUinfo(@RequestParam String type,
-                                        @RequestParam String timeInterval,
-                                        @RequestParam(required = false) String province,
+                                        @RequestParam(required = false) String timeInterval,
+                                        @RequestParam String province,
                                       @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
         LOGGER.info("查询用户标签统计用户详情：{}：{}：{}:{}", type, timeInterval, province);
@@ -523,7 +523,28 @@ public class UserStatisController {
                                      @RequestParam String start,
                                      @RequestParam String end){
         LOGGER.info("企业绑定情况统计：{}：{}：{}", type,start,end);
-        userStatisService.bindCount(type,start,end);
-        return null;
+        Object o = userStatisService.bindCount(type, start, end);
+        return ResponseEntity.ok(Utils.kv("data", o));
+    }
+
+    /**
+     * 企业绑定情况统计企业详情接口
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param start 开始时间
+     * @param page
+     * @param size
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/count/info")
+    public ResponseEntity bindCountInfo(@RequestParam String type,
+                                        @RequestParam String start,
+                                        @RequestParam(required = false) String end,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}:{}", type,start,end,page,size);
+        List<BindCountInfo> bindCountInfoList = userStatisService.bindCountInfo(type, start,end,page,size);
+        return (bindCountInfoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
     }
 }
