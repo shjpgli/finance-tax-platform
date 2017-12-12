@@ -26,6 +26,7 @@
             i.version = a.version
             AND i.method = a.method
             AND i.uri = a.uri
+        ORDER BY appAccessCount DESC
     </select>
 
     <!--根据apiId列表查询-->
