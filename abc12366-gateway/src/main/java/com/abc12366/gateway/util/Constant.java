@@ -98,4 +98,5 @@ public class Constant {
 	public static final String DZSBQNUM="200";
     //电子申报绑定时间，单位：月
     public final static Integer DZSB_BIND_DATE = 7;
+
 }

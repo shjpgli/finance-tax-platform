@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
@@ -14,16 +15,20 @@ import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.ExperienceRuleService;
 import com.abc12366.uc.service.ExperienceService;
 import com.abc12366.uc.service.PrivilegeItemService;
+import com.alibaba.fastjson.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -57,11 +62,23 @@ public class ExperienceServiceImpl implements ExperienceService {
 
     @Autowired
     private PrivilegeItemService privilegeItemService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public MyExperienceBO getMyExperience(String userId) {
         LOGGER.info("{}", userId);
-        return experienceRoMapper.getMyExperience(userId);
+        MyExperienceBO experienceBO=null;
+        if(redisTemplate.hasKey(userId+"_MyExperience")){
+        	experienceBO=JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_MyExperience"), MyExperienceBO.class);
+    	}else{
+    		experienceBO=experienceRoMapper.getMyExperience(userId);
+    		if(experienceBO!=null){
+    			redisTemplate.opsForValue().set(userId+"_MyExperience", JSONObject.toJSONString(experienceBO), RedisConstant.USER_EXP_TIME_ODFAY, TimeUnit.DAYS);
+    		}
+    	}
+        return experienceBO;
     }
 
     @Transactional("db1TxManager")
@@ -166,6 +183,9 @@ public class ExperienceServiceImpl implements ExperienceService {
         expComputeLog.setCreateTime(new Date());
         expComputeLog.setRuleId(experienceRule.getId());
         experienceMapper.insertComputeLog(expComputeLog);
+        
+        //redis经验值删除
+        redisTemplate.delete(expCalculateBO.getUserId()+"_MyExperience");
     }
 
     @Override
