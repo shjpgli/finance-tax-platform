@@ -61,23 +61,29 @@
 
     <select id="bindDzsb" parameterType="java.util.Date" resultType="java.lang.Integer">
         SELECT count(1) FROM uc_user_dzsb
-                  WHERE STATUS='1'
-                  AND createTime &gt;= #{start}
-                  and createTime &lt; #{end}
+        <where>
+            STATUS='1'
+            <if test="start != null">and createTime &gt;=#{start}</if>
+            <if test="end != null">and createTime &lt;#{end} </if>
+        </where>
     </select>
 
     <select id="bindHngs" parameterType="java.util.Date" resultType="java.lang.Integer">
         SELECT count(1) FROM uc_user_hngs
-        WHERE STATUS='1'
-        AND createTime &gt;= #{start}
-        and createTime &lt; #{end}
+        <where>
+            STATUS='1'
+            <if test="start != null">and createTime &gt;=#{start}</if>
+            <if test="end != null">and createTime &lt;#{end} </if>
+        </where>
     </select>
 
     <select id="bindHnds" parameterType="java.util.Date" resultType="java.lang.Integer">
         SELECT count(1) FROM uc_user_hnds
-        WHERE STATUS='1'
-        AND createTime &gt;= #{start}
-        and createTime &lt; #{end}
+        <where>
+            STATUS='1'
+            <if test="start != null">and createTime &gt;=#{start}</if>
+            <if test="end != null">and createTime &lt;#{end} </if>
+        </where>
     </select>
 
     <select id="bindDzsbInfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.BindCountInfo">
@@ -103,6 +109,55 @@
             STATUS='1'
             <if test="start != null">AND createTime &gt;= #{start}</if>
             <if test="end != null">and createTime &lt; #{end}</if>
+        </where>
+    </select>
+    <select id="bindDzsbLogin" parameterType="java.util.Date" resultType="java.lang.Integer">
+        SELECT count(1) FROM uc_user_dzsb
+        <where>
+            STATUS='1'
+            <if test="start != null">and lastLoginTime &gt;=#{start}</if>
+            <if test="end != null">and lastLoginTime &lt;#{end} </if>
+        </where>
+    </select>
+    <select id="bindHngsLogin" parameterType="java.util.Date" resultType="java.lang.Integer">
+        SELECT count(1) FROM uc_user_hngs
+        <where>
+            STATUS='1'
+            <if test="start != null">and lastUpdate &gt;=#{start}</if>
+            <if test="end != null">and lastUpdate &lt;#{end} </if>
+        </where>
+    </select>
+    <select id="bindHndsLogin" parameterType="java.util.Date" resultType="java.lang.Integer">
+        SELECT count(1) FROM uc_user_hnds
+        <where>
+            STATUS='1'
+            <if test="start != null">and lastUpdate &gt;=#{start}</if>
+            <if test="end != null">and lastUpdate &lt;#{end} </if>
+        </where>
+    </select>
+    <select id="bindDzsbLoginInfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.BindCountInfo">
+        SELECT nsrsbh,nsrmc,swjgdm,swjgmc FROM uc_user_dzsb
+        <where>
+            STATUS='1'
+            <if test="start != null">AND lastLoginTime &gt;= #{start}</if>
+            <if test="end != null">and lastLoginTime &lt; #{end}</if>
+        </where>
+    </select>
+
+    <select id="bindHngsLoginInfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.BindCountInfo">
+        SELECT nsrsbh,nsrmc,swjgdm,swjgmc FROM uc_user_hngs
+        <where>
+            STATUS='1'
+            <if test="start != null">AND lastUpdate &gt;= #{start}</if>
+            <if test="end != null">and lastUpdate &lt; #{end}</if>
+        </where>
+    </select>
+    <select id="bindHndsLoginInfo" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.BindCountInfo">
+        SELECT nsrsbh,nsrmc,swjgdm,swjgmc FROM uc_user_hnds
+        <where>
+            STATUS='1'
+            <if test="start != null">AND lastUpdate &gt;= #{start}</if>
+            <if test="end != null">and lastUpdate &lt; #{end}</if>
         </where>
     </select>
 </mapper>

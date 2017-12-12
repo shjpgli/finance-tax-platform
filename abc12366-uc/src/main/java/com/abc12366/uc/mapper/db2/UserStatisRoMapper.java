@@ -35,4 +35,16 @@ public interface UserStatisRoMapper {
     List<BindCountInfo> bindHngsInfo(@Param("start")Date start, @Param("end")Date end);
 
     List<BindCountInfo> bindHndsInfo(@Param("start")Date start, @Param("end")Date end);
+
+    int bindDzsbLogin(@Param("start")Date start, @Param("end")Date end);
+
+    int bindHngsLogin(@Param("start")Date start, @Param("end")Date end);
+
+    int bindHndsLogin(@Param("start")Date start, @Param("end")Date end);
+
+    List<BindCountInfo> bindDzsbLoginInfo(@Param("start")Date start, @Param("end")Date end);
+
+    List<BindCountInfo> bindHngsLoginInfo(@Param("start")Date start, @Param("end")Date end);
+
+    List<BindCountInfo> bindHndsLoginInfo(@Param("start")Date start, @Param("end")Date end);
 }

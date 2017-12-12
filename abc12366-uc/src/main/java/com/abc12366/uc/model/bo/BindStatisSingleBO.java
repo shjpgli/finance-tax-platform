@@ -6,6 +6,7 @@ package com.abc12366.uc.model.bo;
  * Time: 17:58
  */
 public class BindStatisSingleBO {
+    private String month;
     private String timeInterval;
     private String type;
     private int bindCount;
@@ -37,10 +38,19 @@ public class BindStatisSingleBO {
         this.timeInterval = timeInterval;
     }
 
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
     @Override
     public String toString() {
         return "BindStatisSingleBO{" +
-                "timeInterval='" + timeInterval + '\'' +
+                "month='" + month + '\'' +
+                ", timeInterval='" + timeInterval + '\'' +
                 ", type='" + type + '\'' +
                 ", bindCount=" + bindCount +
                 '}';
