@@ -280,6 +280,22 @@ public class DateUtils {
     }
 
     /**
+     * 获取当前时间（+/-）天数
+     */
+    public static String getDateToYYYYMMDD(int num){
+        SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd");
+        Date today = new Date();
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(today);
+        c.add(Calendar.DAY_OF_MONTH, num);
+
+        Date tomorrow = c.getTime();
+        System.out.println("明天" + f.format(tomorrow));
+
+        return f.format(tomorrow);
+    }
+    /**
      * yyyyMMddHHmmssSSS+三位随机数
      *
      * @return
