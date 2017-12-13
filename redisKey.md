@@ -11,3 +11,4 @@
 9.分管理-根据用户ID查询用户积分情(/points/{userId})：userid+'_Points'
 10.地区管理-根据省ID查市(/city/{provinceId})：provinceId+"_City"
 11.地区管理-根据市ID查区(/area/{cityId})：cityId+"_Area"
+12.获取用户累计签到天数(/check/total)：userid+'_Check'
