@@ -16,13 +16,13 @@ import java.util.List;
 public interface UserStatisRoMapper {
     List<User> tagCountUsers(@Param("start")Date start, @Param("end")Date end, @Param("tagName")String tagName);
 
-    List<RigionStatisBO> regionCountry(@Param("start")Date start, @Param("end")Date end);
+    List<RigionStatisBO> regionCountry(@Param("start")Date start, @Param("end")Date end, @Param("tagName")List<String> tagName);
 
-    List<RigionStatisBO> regionProvince(@Param("start")Date start, @Param("end")Date end, @Param("province")String province);
+    List<RigionStatisBO> regionProvince(@Param("start")Date start, @Param("end")Date end, @Param("province")String province, @Param("tagName")List<String> tagName);
 
-    List<User> regionProvinceUinfo(@Param("start")Date start, @Param("end")Date end, @Param("province") String province);
+    List<User> regionProvinceUinfo(@Param("start")Date start, @Param("end")Date end, @Param("province") String province,@Param("tagName")List<String> tagName);
 
-    List<User> regionCityUinfo(@Param("start")Date start, @Param("end")Date end, @Param("city")String city);
+    List<User> regionCityUinfo(@Param("start")Date start, @Param("end")Date end, @Param("city")String city,@Param("tagName")List<String> tagName);
 
     int bindDzsb(@Param("start")Date start, @Param("end")Date end);
 
@@ -47,4 +47,8 @@ public interface UserStatisRoMapper {
     List<BindCountInfo> bindHngsLoginInfo(@Param("start")Date start, @Param("end")Date end);
 
     List<BindCountInfo> bindHndsLoginInfo(@Param("start")Date start, @Param("end")Date end);
+
+//    void compreFactorsCountry(@Param("start")Date start, @Param("end")Date end,@Param("tagName")String tagName);
+//
+//    void compreFactorsProvince(@Param("start")Date start, @Param("end")Date end,@Param("tagName")String tagName, @Param("province")String province);
 }

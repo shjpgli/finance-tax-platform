@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,7 +84,7 @@ public class UserStatisServiceImpl implements UserStatisService {
     }
 
     @Override
-    public List<RigionStatisBO> region(String type, String start, String end, String province) {
+    public List<RigionStatisBO> region(String type, String start, String end, String province,String tagName) {
         if (StringUtils.isEmpty(type)) {
             return null;
         }
@@ -99,16 +99,20 @@ public class UserStatisServiceImpl implements UserStatisService {
         if(!StringUtils.isEmpty(end)){
             c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
         }
+        List<String> tagNameList = null;
+        if(!StringUtils.isEmpty(tagName)&&tagName.split(",").length>0){
+            tagNameList = Arrays.asList(tagName.split(","));
+        }
         if(type.trim().equals("country")){
-            return userStatisRoMapper.regionCountry(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime());
+            return userStatisRoMapper.regionCountry(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(),tagNameList);
         } else if(type.trim().equals("province")){
-            return userStatisRoMapper.regionProvince(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(), province);
+            return userStatisRoMapper.regionProvince(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(), province,tagNameList);
         }
         return null;
     }
 
     @Override
-    public List<User> regionUinfo(String type, String timeInterval, String province) {
+    public List<User> regionUinfo(String type, String timeInterval, String province,String tagName) {
         if (StringUtils.isEmpty(type)) {
             return null;
         }
@@ -132,11 +136,14 @@ public class UserStatisServiceImpl implements UserStatisService {
                 c3.setTime(DateUtils.strToDate(timeStr[1], "yyyy-MM-dd HH:mm:ss"));
             }
         }
-
+        List<String> tagNameList = null;
+        if(!StringUtils.isEmpty(tagName)&&tagName.split(",").length>0){
+            tagNameList = Arrays.asList(tagName.split(","));
+        }
         if(type.trim().equals("province")){
-            return userStatisRoMapper.regionProvinceUinfo(StringUtils.isEmpty(timeInterval) ? null : c1.getTime(), StringUtils.isEmpty(timeInterval) ? null : c3.getTime(), province);
+            return userStatisRoMapper.regionProvinceUinfo(StringUtils.isEmpty(timeInterval) ? null : c1.getTime(), StringUtils.isEmpty(timeInterval) ? null : c3.getTime(), province,tagNameList);
         } else if(type.trim().equals("city")){
-            return userStatisRoMapper.regionCityUinfo(StringUtils.isEmpty(timeInterval) ? null : c1.getTime(), StringUtils.isEmpty(timeInterval) ? null : c3.getTime(), province);
+            return userStatisRoMapper.regionCityUinfo(StringUtils.isEmpty(timeInterval) ? null : c1.getTime(), StringUtils.isEmpty(timeInterval) ? null : c3.getTime(), province,tagNameList);
         }
         return null;
     }
@@ -314,4 +321,29 @@ public class UserStatisServiceImpl implements UserStatisService {
         }
         return null;
     }
+
+//    @Override
+//    public void comprehensiveFactors(String start, String end, String type, String tagName,String province) {
+//        if (StringUtils.isEmpty(type)) {
+//            return;
+//        }
+//        if (!type.trim().equals("country") && !type.trim().equals("province")) {
+//            return;
+//        }
+//        Calendar c1 = Calendar.getInstance();
+//        Calendar c3 = Calendar.getInstance();
+//        if(!StringUtils.isEmpty(start)){
+//            c1.setTime(DateUtils.strToDate(start, "yyyy-MM"));
+//        }
+//        if(!StringUtils.isEmpty(end)){
+//            c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
+//        }
+//
+//        if(type.trim().equals("country")){
+//            userStatisRoMapper.compreFactorsCountry(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime(),tagName);
+//        } else if(type.trim().equals("province")){
+//            userStatisRoMapper.compreFactorsProvince(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime(), tagName,province);
+//        }
+//        return;
+//    }
 }
