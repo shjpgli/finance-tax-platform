@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.MessageConstant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.PointMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
@@ -12,10 +13,13 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.gateway.util.TaskConstant;
+import com.alibaba.fastjson.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -57,10 +62,23 @@ public class PointsServiceImpl implements PointsService {
 
     @Autowired
     private MessageService messageService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public PointsBO selectOne(String userId) {
-        return pointsRoMapper.selectOne(userId);
+    	PointsBO pointsBO=null;
+    	if(redisTemplate.hasKey(userId+"_Points")){
+    		pointsBO = JSONObject.parseObject(redisTemplate.opsForValue()
+					.get(userId + "_Points"), PointsBO.class);
+    	}else{
+    		pointsBO = pointsRoMapper.selectOne(userId);
+    		if(pointsBO!=null){
+    			redisTemplate.opsForValue().set(userId+"_Points", JSONObject.toJSONString(pointsBO), RedisConstant.USER_EXP_TIME_ODFAY, TimeUnit.DAYS);
+    		}
+    	}
+        return pointsBO;
     }
 
     @Override
@@ -252,6 +270,9 @@ public class PointsServiceImpl implements PointsService {
         pointComputeLog.setRuleId(pointsRuleBO.getId());
         pointMapper.insertComputeLog(pointComputeLog);
 
+        //redis经验值删除
+        redisTemplate.delete(pointCalculateBO.getUserId()+"_Points");
+        
         return pointsRuleBO.getPoints();
     }
 
