@@ -63,7 +63,7 @@
         <if test="endTime!=null and endTime!=''">
             AND DATE_FORMAT(browsetime, '%Y%m%d') &lt;= DATE_FORMAT(#{endTime}, '%Y%m%d')
         </if>
-        GROUP BY DAY(browsetime) order by DAY(browsetime)
+        GROUP BY DAY(browsetime) order by browsetime
     </select>
 
 </mapper>
