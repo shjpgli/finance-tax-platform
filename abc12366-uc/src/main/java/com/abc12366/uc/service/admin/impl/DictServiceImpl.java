@@ -164,10 +164,13 @@ public class DictServiceImpl implements DictService {
         }
         String[] ids = id.split(",");
         for (String dId : ids) {
+        	Dict dict=dictRoMapper.selectById(id);
             int del = dictMapper.delete(dId);
             if (del != 1) {
                 throw new ServiceException(4103);
             }
+            // 删除redis
+            redisTemplate.delete(dict.getDictId() + "_Dict");
         }
     }
 
