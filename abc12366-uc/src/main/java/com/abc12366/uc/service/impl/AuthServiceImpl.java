@@ -307,8 +307,8 @@ public class AuthServiceImpl implements AuthService {
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
                 TimeUnit.SECONDS);
         
-        valueOperations.set(userBO.getId()+"_UserInfo", JSON.toJSONString(userBO), RedisConstant.USER_INFO_TIME_ODFAY / 2,
-                TimeUnit.DAYS);
+       /* valueOperations.set(userBO.getId()+"_UserInfo", JSON.toJSONString(userBO), RedisConstant.USER_INFO_TIME_ODFAY ,
+                TimeUnit.DAYS);*/
         
         return map;
     }
