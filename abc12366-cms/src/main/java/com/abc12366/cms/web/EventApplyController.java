@@ -80,20 +80,22 @@ public class EventApplyController {
                                      @RequestParam(value = "eventId", required = false) String eventId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("eventId", eventId);//活动ID
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            if (startTime != null && !"".equals(startTime)) {
-                Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime() / 1000);
-            }
-            if (endTime != null && !"".equals(endTime)) {
-                Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime() / 1000);
-            }
-        } catch (ParseException e) {
-            LOGGER.error("时间类转换异常：{}", e);
-            throw new RuntimeException("时间类型转换异常：{}", e);
-        }
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        try {
+//            if (startTime != null && !"".equals(startTime)) {
+//                Date startTime1 = sdf.parse(startTime);
+//                dataMap.put("startTime", startTime1.getTime() / 1000);
+//            }
+//            if (endTime != null && !"".equals(endTime)) {
+//                Date startTime2 = sdf.parse(endTime);
+//                dataMap.put("endTime", startTime2.getTime() / 1000);
+//            }
+//        } catch (ParseException e) {
+//            LOGGER.error("时间类转换异常：{}", e);
+//            throw new RuntimeException("时间类型转换异常：{}", e);
+//        }
+        dataMap.put("startTime",startTime);
+        dataMap.put("endTime",endTime);
         EventlltjListBo data = eventApplyService.selectlltj(dataMap);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
