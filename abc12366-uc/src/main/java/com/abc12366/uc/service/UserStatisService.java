@@ -43,7 +43,7 @@ public interface UserStatisService {
      * @param province 省名
      * @return RigionStatisBO
      */
-    List<RigionStatisBO> region(String type, String start, String end,String province);
+    List<RigionStatisBO> region(String type, String start, String end,String province,String tagName);
     /**
      * 企业绑定情况统计
      * @param type 类型,all、dzsb、hngs、hnds
@@ -58,9 +58,10 @@ public interface UserStatisService {
      * @param type 区域类型，country、province
      * @param timeInterval 时间区间
      * @param province 省名
+     * @param tagName 标签名
      * @return User
      */
-    List<User> regionUinfo(String type, String timeInterval, String province);
+    List<User> regionUinfo(String type, String timeInterval, String province,String tagName);
     /**
      * 企业绑定情况统计详情
      * @param type 类型,all、dzsb、hngs、hnds
@@ -89,4 +90,15 @@ public interface UserStatisService {
      * @return BindCountInfo
      */
     List<BindCountInfo> bindLoginInfo(String type, String timeInterval, int page, int size);
+
+    /**
+     * 用户综合属性统计接
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param type 区域类型
+     * @param tagName 标签名称
+     * @param province 省名
+     * @return ResponseEntity
+     */
+//    void comprehensiveFactors(String start, String end, String type, String tagName,String province);
 }

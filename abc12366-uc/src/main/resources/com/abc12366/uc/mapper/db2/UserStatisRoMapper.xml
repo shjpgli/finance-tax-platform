@@ -12,12 +12,18 @@
         AND  c.tagName = #{tagName}
     </select>
 
-    <select id="regionCountry" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+    <select id="regionCountry" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
         SELECT concat(#{start},'～',#{end}) timeInterval,b.province regionName,a.province regionCode, COUNT(a.province) allCount
         FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
         <where>
+            1=1
             <if test="start != null">and c.createTime &gt;=#{start}</if>
             <if test="end != null">and c.createTime &lt;=#{end} </if>
+            <if test="tagName !=null">
+              <foreach collection="tagName" index="index" item="tname">
+                  AND  EXISTS (SELECT 1 FROM uc_subject_tag d JOIN uc_tag e ON d.tagId=e.id WHERE c.id=d.subjectId AND e.tagName=#{tname})
+              </foreach>
+            </if>
         </where>
         GROUP BY a.province
     </select>
@@ -26,9 +32,15 @@
         SELECT concat(#{start},'～',#{end}) timeInterval,b.city regionName,a.city regionCode, COUNT(a.city) allCount
         FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_city b ON a.city=b.cityId JOIN uc_province d ON d.provinceId = b.provinceId
         <where>
+            1=1
             <if test="start != null">and c.createTime &gt;=#{start}</if>
             <if test="end != null">and c.createTime &lt;=#{end} </if>
             <if test="province != null">and d.province=#{province} </if>
+            <if test="tagName !=null">
+                <foreach collection="tagName" index="index" item="tname">
+                    AND  EXISTS (SELECT 1 FROM uc_subject_tag d JOIN uc_tag e ON d.tagId=e.id WHERE c.id=d.subjectId AND e.tagName=#{tname})
+                </foreach>
+            </if>
         </where>
         GROUP BY a.city
     </select>
@@ -40,9 +52,15 @@
         c.wxheadimg,c.wxnickname
         FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
         <where>
+            1=1
             <if test="start != null">and c.createTime &gt;=#{start}</if>
             <if test="end != null">and c.createTime &lt;=#{end} </if>
             <if test="province != null">and b.province=#{province} </if>
+            <if test="tagName !=null">
+                <foreach collection="tagName" index="index" item="tname">
+                    AND  EXISTS (SELECT 1 FROM uc_subject_tag d JOIN uc_tag e ON d.tagId=e.id WHERE c.id=d.subjectId AND e.tagName=#{tname})
+                </foreach>
+            </if>
         </where>
     </select>
 
@@ -53,9 +71,15 @@
         c.wxheadimg,c.wxnickname
         FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_city b ON a.city=b.cityId
         <where>
+            1=1
             <if test="start != null">and c.createTime &gt;=#{start}</if>
             <if test="end != null">and c.createTime &lt;=#{end} </if>
             <if test="city != null">and b.city=#{city} </if>
+            <if test="tagName !=null">
+                <foreach collection="tagName" index="index" item="tname">
+                    AND  EXISTS (SELECT 1 FROM uc_subject_tag d JOIN uc_tag e ON d.tagId=e.id WHERE c.id=d.subjectId AND e.tagName=#{tname})
+                </foreach>
+            </if>
         </where>
     </select>
 
@@ -159,5 +183,15 @@
             <if test="start != null">AND lastUpdate &gt;= #{start}</if>
             <if test="end != null">and lastUpdate &lt; #{end}</if>
         </where>
+    </select>
+    <select id="compreFactorsCountry" parameterType="java.util.Date" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
+        SELECT count(c.id)
+        FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
+            JOIN uc_subject_tag d JOIN uc_tag e ON c.id=d.subjectId AND d.tagId=e.id
+        <where>
+            <if test="start != null">and c.createTime &gt;=#{start}</if>
+            <if test="end != null">and c.createTime &lt;=#{end} </if>
+        </where>
+        GROUP BY a.province
     </select>
 </mapper>
