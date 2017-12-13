@@ -90,15 +90,4 @@ public interface UserStatisService {
      * @return BindCountInfo
      */
     List<BindCountInfo> bindLoginInfo(String type, String timeInterval, int page, int size);
-
-    /**
-     * 用户综合属性统计接
-     * @param start 开始时间
-     * @param end 结束时间
-     * @param type 区域类型
-     * @param tagName 标签名称
-     * @param province 省名
-     * @return ResponseEntity
-     */
-//    void comprehensiveFactors(String start, String end, String type, String tagName,String province);
 }

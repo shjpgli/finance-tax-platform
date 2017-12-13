@@ -588,24 +588,4 @@ public class UserStatisController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
     }
-
-    /**
-     * 用户综合属性统计接口
-     * @param start 开始时间
-     * @param end 结束时间
-     * @param type 区域类型
-     * @param tagName 标签名称
-     * @return ResponseEntity
-     */
-//    @GetMapping(path = "/compre/factors")
-//    public ResponseEntity comprehensiveFactors(@RequestParam String start,
-//                                               @RequestParam String end,
-//                                               @RequestParam String type,
-//                                               @RequestParam String tagName,
-//                                               @RequestParam String province
-//                                               ){
-//        LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}:{}", start,end,type,tagName,province);
-//        userStatisService.comprehensiveFactors(start,end,type,tagName,province);
-//        return null;
-//    }
 }
