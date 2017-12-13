@@ -13,3 +13,4 @@
 11.地区管理-根据市ID查区(/area/{cityId})：cityId+"_Area"
 12.获取用户累计签到天数(/check/total)：userid+'_Check'
 13.查看用户本月任务概况(/task/mytask/survey/{userId})：userid+'_Tasks'
+14.根据等级编码查看会员等级/uvip/level/bo/{levelCode}：levelCode+"_VipLevel"

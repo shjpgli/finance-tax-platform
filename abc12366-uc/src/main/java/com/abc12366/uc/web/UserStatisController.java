@@ -323,10 +323,11 @@ public class UserStatisController {
     public ResponseEntity region(@RequestParam String type,
                                   @RequestParam String start,
                                   @RequestParam String end,
-                                  @RequestParam(required = false) String province
+                                  @RequestParam(required = false) String province,
+                                  @RequestParam(required = false) String tagName
                                  ){
-        LOGGER.info("用户区域统计：{}：{}：{}:{}", type, start, end, province);
-        List<RigionStatisBO> rigionStatisBOList = userStatisService.region(type, start, end, province);
+        LOGGER.info("用户区域统计：{}：{}：{}:{}:{}", type, start, end, province,tagName);
+        List<RigionStatisBO> rigionStatisBOList = userStatisService.region(type, start, end, province,tagName);
         LOGGER.info("用户区域统计返回：{}", rigionStatisBOList);
         return ResponseEntity.ok(Utils.kv("dataList",rigionStatisBOList));
     }
@@ -334,19 +335,21 @@ public class UserStatisController {
     /**
      * 用户区域统计查询用户详情接口
      * @param type 区域类型，country、province
+     * @param tagName 标签名
      * @param timeInterval 时间区间
      * @param province 省名
      * @return ResponseEntity
      */
     @GetMapping(path = "/region/uinfo")
     public ResponseEntity regionUinfo(@RequestParam String type,
+                                      @RequestParam(required = false) String tagName,
                                         @RequestParam(required = false) String timeInterval,
                                         @RequestParam String province,
                                       @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
-        LOGGER.info("用户区域统计查询用户详情：{}：{}：{}:{}", type, timeInterval, province);
+        LOGGER.info("用户区域统计查询用户详情：{}：{}：{}:{}", type, tagName,timeInterval, province);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<User> userList = userStatisService.regionUinfo(type, timeInterval, province);
+        List<User> userList = userStatisService.regionUinfo(type, timeInterval, province,tagName);
         LOGGER.info("用户区域统计查询用户详情返回：{}", userList);
         return (userList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -580,9 +583,29 @@ public class UserStatisController {
                                         @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
                                         @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
         LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}", type,timeInterval,page,size);
-        List<BindCountInfo> bindCountInfoList = userStatisService.bindLoginInfo(type,timeInterval,page,size);
+        List<BindCountInfo> bindCountInfoList = userStatisService.bindLoginInfo(type, timeInterval, page, size);
         return (bindCountInfoList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
     }
+
+    /**
+     * 用户综合属性统计接口
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param type 区域类型
+     * @param tagName 标签名称
+     * @return ResponseEntity
+     */
+//    @GetMapping(path = "/compre/factors")
+//    public ResponseEntity comprehensiveFactors(@RequestParam String start,
+//                                               @RequestParam String end,
+//                                               @RequestParam String type,
+//                                               @RequestParam String tagName,
+//                                               @RequestParam String province
+//                                               ){
+//        LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}:{}", start,end,type,tagName,province);
+//        userStatisService.comprehensiveFactors(start,end,type,tagName,province);
+//        return null;
+//    }
 }
