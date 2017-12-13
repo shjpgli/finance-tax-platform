@@ -9,3 +9,5 @@
 7.字典管理-根据dictId查找(/dict/kv/{dictId})：dictId+'_Dict'
 8.UC用户根据用户名或者电话查询用户(/user/u/{usernameOrPhone})：phone+'_UserPhoneInfo'
 9.分管理-根据用户ID查询用户积分情(/points/{userId})：userid+'_Points'
+10.地区管理-根据省ID查市(/city/{provinceId})：provinceId+"_City"
+11.地区管理-根据市ID查区(/area/{cityId})：cityId+"_Area"
