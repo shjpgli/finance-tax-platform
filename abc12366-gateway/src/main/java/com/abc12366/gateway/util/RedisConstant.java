@@ -12,4 +12,6 @@ public class RedisConstant {
 	public static final long USER_INFO_TIME_ODFAY = 1;
 	// 用户经验值失效 1天
 	public static final long USER_EXP_TIME_ODFAY = 1;
+	//数据字典
+	public static final long DICT_TIME_ODFAY = 30;
 }
