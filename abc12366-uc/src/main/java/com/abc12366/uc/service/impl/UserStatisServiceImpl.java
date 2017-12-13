@@ -104,9 +104,9 @@ public class UserStatisServiceImpl implements UserStatisService {
             tagNameList = Arrays.asList(tagName.split(","));
         }
         if(type.trim().equals("country")){
-            return userStatisRoMapper.regionCountry(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(),tagNameList);
+            return userStatisRoMapper.regionCountry(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(),tagNameList,tagName);
         } else if(type.trim().equals("province")){
-            return userStatisRoMapper.regionProvince(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(), province,tagNameList);
+            return userStatisRoMapper.regionProvince(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime(), province,tagNameList,tagName);
         }
         return null;
     }
@@ -321,29 +321,4 @@ public class UserStatisServiceImpl implements UserStatisService {
         }
         return null;
     }
-
-//    @Override
-//    public void comprehensiveFactors(String start, String end, String type, String tagName,String province) {
-//        if (StringUtils.isEmpty(type)) {
-//            return;
-//        }
-//        if (!type.trim().equals("country") && !type.trim().equals("province")) {
-//            return;
-//        }
-//        Calendar c1 = Calendar.getInstance();
-//        Calendar c3 = Calendar.getInstance();
-//        if(!StringUtils.isEmpty(start)){
-//            c1.setTime(DateUtils.strToDate(start, "yyyy-MM"));
-//        }
-//        if(!StringUtils.isEmpty(end)){
-//            c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
-//        }
-//
-//        if(type.trim().equals("country")){
-//            userStatisRoMapper.compreFactorsCountry(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime(),tagName);
-//        } else if(type.trim().equals("province")){
-//            userStatisRoMapper.compreFactorsProvince(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime(), tagName,province);
-//        }
-//        return;
-//    }
 }
