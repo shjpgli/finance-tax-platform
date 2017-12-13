@@ -24,6 +24,8 @@ public interface EventApplyMapper {
      **/
     int updateStatusList(@Param("applyIds") String[] applyIds);
 
+    int updateStatusNoList(@Param("applyIds") String[] applyIds,@Param("text") String text);
+
     /**
      * 添加
      **/

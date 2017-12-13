@@ -27,6 +27,14 @@
         </foreach>
     </update>
 
+    <update id="updateStatusNoList">
+        update cms_event_apply SET status = 2 , bz=#{text}
+        WHERE applyId in
+        <foreach item="item" index="index" collection="applyIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
     <!-- 添加 -->
     <insert id="insert" parameterType="com.abc12366.cms.model.EventApply">
         INSERT INTO cms_event_apply

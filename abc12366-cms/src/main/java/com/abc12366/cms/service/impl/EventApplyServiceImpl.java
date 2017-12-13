@@ -196,4 +196,15 @@ public class EventApplyServiceImpl implements EventApplyService {
         return "";
     }
 
+
+    @Transactional("db1TxManager")
+    @Override
+    public String updateStatusNoList(String[] applyIds,String text) {
+        //批量审批评论信息
+        int r = eventApplyMapper.updateStatusNoList(applyIds,text);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
+
 }

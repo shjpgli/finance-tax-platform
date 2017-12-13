@@ -175,4 +175,18 @@ public class EventApplyController {
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
+    /**
+     * 批量审批拒绝活动报名信息
+     */
+    @PutMapping(path = "/updateStatusNoList")
+    public ResponseEntity updateStatusNoList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
+        //审批活动报名信息
+        String rtn = eventApplyService.updateStatusNoList(idsBo.getIds(),idsBo.getText());
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
+    }
+
+
+
 }

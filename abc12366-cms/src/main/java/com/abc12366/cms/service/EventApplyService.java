@@ -29,4 +29,6 @@ public interface EventApplyService {
 
     String updateStatusList(String[] applyIds);
 
+    String updateStatusNoList(String[] applyIds,String text);
+
 }
