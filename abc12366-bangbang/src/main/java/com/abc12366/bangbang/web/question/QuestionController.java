@@ -164,7 +164,7 @@ public class QuestionController {
     /**
      * 查询热门问题
      */
-    @GetMapping(path = "/selectListByBrowseNum")
+    @GetMapping(path = "/selectListByBrowseNumForqt")
     public ResponseEntity selectListByBrowseNumForqt(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "title", required = false) String title,
