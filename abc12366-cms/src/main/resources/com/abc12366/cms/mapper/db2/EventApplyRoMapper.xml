@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        applyId, eventId, source, name, tel, email, applytime, status
+        applyId, eventId, source, name, tel, email, applytime, status, userid,bz
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
@@ -19,7 +19,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.cms.model.bo.EventApplyBo" parameterType="java.util.Map">
         SELECT
-        a.applyId, a.eventId, a.source, u.nickname name,u.phone  tel, u.regMail email, a.applytime, a.status
+        a.applyId, a.eventId, a.source, u.nickname name,u.phone  tel, u.regMail email, a.applytime, a.status, a.userid,a.bz
         FROM cms_event_apply a left join cms_user u on a.userid = u.id
         WHERE 1=1
         <if test="name != null and name != ''">
@@ -65,5 +65,6 @@
         </if>
         GROUP BY DAY(browsetime) order by browsetime
     </select>
+
 
 </mapper>
