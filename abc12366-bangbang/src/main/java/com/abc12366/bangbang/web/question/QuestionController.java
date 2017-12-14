@@ -7,12 +7,15 @@ import com.abc12366.bangbang.model.question.QuestionTag;
 import com.abc12366.bangbang.model.question.bo.*;
 import com.abc12366.bangbang.service.QuestionService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 帮帮问题管理模块
@@ -39,6 +43,9 @@ public class QuestionController {
 
     @Autowired
     private QuestionTagRoMapper tagRoMapper;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 问题列表查询
@@ -153,6 +160,29 @@ public class QuestionController {
                         ()));
 
     }
+    
+    /**
+     * 查询热门问题
+     */
+    @GetMapping(path = "/selectListByBrowseNumForqt")
+    public ResponseEntity selectListByBrowseNumForqt(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "tag", required = false) String tag,
+                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);//
+        dataMap.put("tag", tag);//
+        dataMap.put("classifyCode", classifyCode);//s
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<QuestionBo> dataList = questionService.selectListByBrowseNum(dataMap);
+//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+        return (dataList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                        ()));
+
+    }
 
     /**
      * 查询等你回答的问题
@@ -218,6 +248,29 @@ public class QuestionController {
                         ()));
 
     }
+    
+    /**
+     * 帮友热议列表查询
+     */
+    @GetMapping(path = "/selectListryForqt")
+    public ResponseEntity selectListryForqt() {
+    	
+    	if(redisTemplate.hasKey("CMS_SelectListryForqt")){
+    		List<QuestionryBo> dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("CMS_SelectListryForqt"),QuestionryBo.class);
+    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(dataList));
+    		return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
+    	}else{
+    		Map<String, Object> dataMap = new HashMap<>();
+            PageHelper.startPage(1, 15, true).pageSizeZero(true).reasonable(true);
+            List<QuestionryBo> dataList = questionService.selectListry(dataMap);
+            redisTemplate.opsForValue().set("CMS_SelectListryForqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+            return (dataList == null) ?
+                    ResponseEntity.ok(Utils.kv()) :
+                    ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
+                            ()));
+    	}
+    	
+    }
 
     /**
      * 问题新增
@@ -226,6 +279,7 @@ public class QuestionController {
     public ResponseEntity save(@Valid @RequestBody QuestionBo questionBo, HttpServletRequest request) {
         //新增问题信息
         questionBo = questionService.save(questionBo,request);
+        redisTemplate.delete("CMS_SelectListryForqt");
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
 
@@ -257,6 +311,7 @@ public class QuestionController {
                                  @Valid @RequestBody QuestionBo questionBo) {
         //更新问题信息
         questionBo = questionService.update(questionBo);
+        redisTemplate.delete("CMS_SelectListryForqt");
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
 
@@ -270,6 +325,7 @@ public class QuestionController {
     @PutMapping(path = "/updateStatus/{id}")
     public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("id") String id) {
         questionService.updateStatus(id, status);
+        redisTemplate.delete("CMS_SelectListryForqt");
         return ResponseEntity.ok(Utils.kv("data", id));
     }
 
@@ -280,6 +336,7 @@ public class QuestionController {
     public ResponseEntity delete(@PathVariable String id) {
         //删除问题信息
         String rtn = questionService.delete(id);
+        redisTemplate.delete("CMS_SelectListryForqt");
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 

@@ -1,11 +1,14 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -15,6 +18,7 @@ import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户绑定办税身份控制器类，以常规JSON形式返回数据
@@ -38,6 +43,9 @@ public class UserBindController {
 
     @Autowired
     private UserBindService userBindService;
+    
+    @Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 用户绑定纳税人（电子申报）
@@ -69,6 +77,75 @@ public class UserBindController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 根据用户ID查询电子申报绑定列表客户端
+     *
+     * @param userId 用户ID
+     */
+    @GetMapping(path = "/bind/dzsbs/{userId}")
+    public ResponseEntity getUserDzsbBinds(@PathVariable String userId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        List<UserDzsbListBO> userDzsbBOList=null;
+        if(redisTemplate.hasKey(userId+"_DzsbList")){
+        	userDzsbBOList=JSONArray.parseArray(redisTemplate.opsForValue().get(userId+"_DzsbList"),UserDzsbListBO.class);
+        	LOGGER.info("从redis获取电子申报绑定列表:{}", JSONArray.toJSONString(userDzsbBOList));
+        }else{
+        	userDzsbBOList = userBindService.getUserDzsbBind(map);
+        	redisTemplate.opsForValue().set(userId+"_DzsbList",JSONArray.toJSONString(userDzsbBOList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        }
+        LOGGER.info("{}", userDzsbBOList);
+        return (userDzsbBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", userDzsbBOList, "total", userDzsbBOList.size()));
+    }
+    
+    /**
+     * 根据用户ID查询湖南国税绑定列表客户端
+     *
+     * @param userId 用户ID
+     */
+    @GetMapping(path = "/bind/hngss/{userId}")
+    public ResponseEntity getUserhngsBinds(@PathVariable String userId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        List<UserHngsListBO> userHngsListBO=null;
+        if(redisTemplate.hasKey(userId+"_HngsList")){
+        	userHngsListBO=JSONArray.parseArray(redisTemplate.opsForValue().get(userId+"_HngsList"),UserHngsListBO.class);
+        	LOGGER.info("从redis获取湖南国税绑定列表:{}", JSONArray.toJSONString(userHngsListBO));
+        }else{
+        	userHngsListBO = userBindService.getUserhngsBind(map);
+        	redisTemplate.opsForValue().set(userId+"_HngsList",JSONArray.toJSONString(userHngsListBO),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        }
+        LOGGER.info("{}", userHngsListBO);
+        return (userHngsListBO == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", userHngsListBO, "total", userHngsListBO.size()));
+    }
+    
+    /**
+     * 根据用户ID查询湖南地税绑定列表客户端
+     *
+     * @param userId 用户ID
+     */
+    @GetMapping(path = "/bind/hndss/{userId}")
+    public ResponseEntity getUserhndsBinds(@PathVariable String userId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        List<UserHndsBO> uerHndsBO=null;
+        if(redisTemplate.hasKey(userId+"_HndsList")){
+        	uerHndsBO=JSONArray.parseArray(redisTemplate.opsForValue().get(userId+"_HndsList"),UserHndsBO.class);
+        	LOGGER.info("从redis获取湖南国税绑定列表:{}", JSONArray.toJSONString(uerHndsBO));
+        }else{
+        	uerHndsBO = userBindService.getUserhndsBind(map);
+        	redisTemplate.opsForValue().set(userId+"_HndsList",JSONArray.toJSONString(uerHndsBO),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        }
+        LOGGER.info("{}", uerHndsBO);
+        return (uerHndsBO == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", uerHndsBO, "total", uerHndsBO.size()));
+    }
+    
     /**
      * 根据用户ID查询电子申报绑定列表
      *

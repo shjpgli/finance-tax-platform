@@ -13,16 +13,21 @@ import java.util.Date;
  */
 
 public class SystemRecordBO extends TableBO {
+
+    /**
+     * 用户名
+     */
     private String username;
+
+    /**
+     * 经验值规则代码
+     */
     private String ruleCode;
 
-    public String getRuleCode() {
-        return ruleCode;
-    }
-
-    public void setRuleCode(String ruleCode) {
-        this.ruleCode = ruleCode;
-    }
+    /**
+     * 纳税人识别号
+     */
+    private String nsrsbh;
 
     /**
      * PK
@@ -321,10 +326,28 @@ public class SystemRecordBO extends TableBO {
         this.createTime = createTime;
     }
 
+    public String getRuleCode() {
+        return ruleCode;
+    }
+
+    public void setRuleCode(String ruleCode) {
+        this.ruleCode = ruleCode;
+    }
+
+    public String getNsrsbh() {
+        return nsrsbh;
+    }
+
+    public void setNsrsbh(String nsrsbh) {
+        this.nsrsbh = nsrsbh;
+    }
+
     @Override
     public String toString() {
         return "SystemRecordBO{" +
                 "username='" + username + '\'' +
+                ", ruleCode='" + ruleCode + '\'' +
+                ", nsrsbh='" + nsrsbh + '\'' +
                 ", id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", sessionId='" + sessionId + '\'' +
@@ -349,6 +372,6 @@ public class SystemRecordBO extends TableBO {
                 ", device='" + device + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
-                "} " + super.toString();
+                '}';
     }
 }

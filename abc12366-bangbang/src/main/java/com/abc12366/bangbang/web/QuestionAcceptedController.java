@@ -48,6 +48,7 @@ public class QuestionAcceptedController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "userId", required = false) String userId,
                                      @RequestParam(value = "nsrsbh", required = false) String nsrsbh,
+                                     @RequestParam(value = "phone", required = false) String phone,
                                      @RequestParam(value = "name", required = false) String name,
                                      @RequestParam(value = "date", required = false) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -60,6 +61,7 @@ public class QuestionAcceptedController {
         param.setNsrsbh(nsrsbh);
         param.setName(name);
         param.setUserId(userId);
+        param.setPhone(phone);
         List<QuestionAccepted> list = questionAcceptedService.selectAdminList(param);
 
         PageInfo<QuestionAccepted> pageInfo = new PageInfo<>(list);

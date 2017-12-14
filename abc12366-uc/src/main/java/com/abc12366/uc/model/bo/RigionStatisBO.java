@@ -20,6 +20,15 @@ public class RigionStatisBO {
      */
     private int allCount;
 
+    /**
+     * 时间区间
+     */
+    private String timeInterval;
+    /**
+     * 标签名
+     */
+    private String tagName;
+
     public String getRegionName() {
         return regionName;
     }
@@ -44,12 +53,30 @@ public class RigionStatisBO {
         this.allCount = allCount;
     }
 
+    public String getTimeInterval() {
+        return timeInterval;
+    }
+
+    public void setTimeInterval(String timeInterval) {
+        this.timeInterval = timeInterval;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
     @Override
     public String toString() {
         return "RigionStatisBO{" +
                 "regionName='" + regionName + '\'' +
                 ", regionCode='" + regionCode + '\'' +
                 ", allCount=" + allCount +
+                ", timeInterval='" + timeInterval + '\'' +
+                ", tagName='" + tagName + '\'' +
                 '}';
     }
 }

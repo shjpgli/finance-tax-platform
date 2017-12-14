@@ -51,22 +51,54 @@ public class EventApplyServiceImpl implements EventApplyService {
     }
 
     @Override
-    public EventlltjListBo selectlltj(Map<String, Object> map) {
+    public EventlltjListBo selectlltj(Map<String, Object> map,String type) {
         EventlltjListBo eventlltjListBo = new EventlltjListBo();
-        //总浏览次数
-        List<EventlltjBo> list = eventApplyRoMapper.selectlltj(map);
-        map.put("source", "PC");
-        List<EventlltjBo> pclist = eventApplyRoMapper.selectlltj(map);
-        map.put("source", "MobileWeb");
-        List<EventlltjBo> mobileWeblist = eventApplyRoMapper.selectlltj(map);
-        map.put("source", "WeChat");
-        List<EventlltjBo> weChatlist = eventApplyRoMapper.selectlltj(map);
-        Map<String, List<EventlltjBo>> lltj = new HashMap<String, List<EventlltjBo>>();
-        lltj.put("total", list);
-        lltj.put("PC", pclist);
-        lltj.put("MobileWeb", mobileWeblist);
-        lltj.put("WeChat", weChatlist);
-        eventlltjListBo.setLltj(lltj);
+        if("1".equals(type)){
+            //总浏览次数
+            List<EventlltjBo> list = eventApplyRoMapper.selectlltj(map);
+            map.put("source", "PC");
+            List<EventlltjBo> pclist = eventApplyRoMapper.selectlltj(map);
+            map.put("source", "MobileWeb");
+            List<EventlltjBo> mobileWeblist = eventApplyRoMapper.selectlltj(map);
+            map.put("source", "WeChat");
+            List<EventlltjBo> weChatlist = eventApplyRoMapper.selectlltj(map);
+            Map<String, List<EventlltjBo>> lltj = new HashMap<String, List<EventlltjBo>>();
+            lltj.put("total", list);
+            lltj.put("PC", pclist);
+            lltj.put("MobileWeb", mobileWeblist);
+            lltj.put("WeChat", weChatlist);
+            eventlltjListBo.setLltj(lltj);
+        }else if("2".equals(type)){
+            //总浏览次数
+            List<EventlltjBo> list = eventApplyRoMapper.selectlltjyue(map);
+            map.put("source", "PC");
+            List<EventlltjBo> pclist = eventApplyRoMapper.selectlltjyue(map);
+            map.put("source", "MobileWeb");
+            List<EventlltjBo> mobileWeblist = eventApplyRoMapper.selectlltjyue(map);
+            map.put("source", "WeChat");
+            List<EventlltjBo> weChatlist = eventApplyRoMapper.selectlltjyue(map);
+            Map<String, List<EventlltjBo>> lltj = new HashMap<String, List<EventlltjBo>>();
+            lltj.put("total", list);
+            lltj.put("PC", pclist);
+            lltj.put("MobileWeb", mobileWeblist);
+            lltj.put("WeChat", weChatlist);
+            eventlltjListBo.setLltj(lltj);
+        }else if("3".equals(type)){
+            //总浏览次数
+            List<EventlltjBo> list = eventApplyRoMapper.selectlltjnian(map);
+            map.put("source", "PC");
+            List<EventlltjBo> pclist = eventApplyRoMapper.selectlltjnian(map);
+            map.put("source", "MobileWeb");
+            List<EventlltjBo> mobileWeblist = eventApplyRoMapper.selectlltjnian(map);
+            map.put("source", "WeChat");
+            List<EventlltjBo> weChatlist = eventApplyRoMapper.selectlltjnian(map);
+            Map<String, List<EventlltjBo>> lltj = new HashMap<String, List<EventlltjBo>>();
+            lltj.put("total", list);
+            lltj.put("PC", pclist);
+            lltj.put("MobileWeb", mobileWeblist);
+            lltj.put("WeChat", weChatlist);
+            eventlltjListBo.setLltj(lltj);
+        }
         return eventlltjListBo;
     }
 
@@ -195,5 +227,16 @@ public class EventApplyServiceImpl implements EventApplyService {
         LOGGER.info("{}", r);
         return "";
     }
+
+
+    @Transactional("db1TxManager")
+    @Override
+    public String updateStatusNoList(String[] applyIds,String text) {
+        //批量审批评论信息
+        int r = eventApplyMapper.updateStatusNoList(applyIds,text);
+        LOGGER.info("{}", r);
+        return "";
+    }
+
 
 }

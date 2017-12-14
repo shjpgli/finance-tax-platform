@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
@@ -210,7 +211,6 @@ public class AuthServiceImpl implements AuthService {
         bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim().toLowerCase());
         
         //修改登录，从主库查询
-        //User user = userRoMapper.selectByUsernameOrPhone(bo);
         User user = userMapper.selectByUsernameOrPhone(bo);
         if (user == null) {
             LOGGER.warn("登录失败，参数:{}:{}", bo, channel);
@@ -305,6 +305,10 @@ public class AuthServiceImpl implements AuthService {
         // 用户信息写入redis
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
                 TimeUnit.SECONDS);
+        
+       /* valueOperations.set(userBO.getId()+"_UserInfo", JSON.toJSONString(userBO), RedisConstant.USER_INFO_TIME_ODFAY ,
+                TimeUnit.DAYS);*/
+        
         return map;
     }
 

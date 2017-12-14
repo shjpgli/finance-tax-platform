@@ -2,17 +2,20 @@ package com.abc12366.uc.web.invoice;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.invoice.Invoice;
 import com.abc12366.uc.model.invoice.InvoiceBack;
 import com.abc12366.uc.model.invoice.bo.*;
 import com.abc12366.uc.service.invoice.InvoiceService;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 发票控制类
@@ -37,6 +41,9 @@ public class InvoiceController {
 
     @Autowired
     private InvoiceService invoiceService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 发票列表管理
@@ -95,6 +102,34 @@ public class InvoiceController {
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
     }
+    
+    /**
+     * 前段我的历史发票缓存查询
+     * @param userId
+     * @return
+     */
+    @GetMapping(path = "/historyForqt")
+    public ResponseEntity selectListForqt(@RequestParam(value = "userId", required = true) String userId) {
+    	if(redisTemplate.hasKey(userId+"_historyForqt")){
+    		 List<InvoiceBO> invoiceList = JSONArray.parseArray(redisTemplate.opsForValue().get(userId+"_historyForqt"),InvoiceBO.class);
+    		 LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(invoiceList));
+    		 return (invoiceList == null) ?
+                     new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                     ResponseEntity.ok(Utils.kv("dataList", invoiceList, "total", invoiceList.size())); 
+    	}else{
+    		InvoiceBO invoice = new InvoiceBO();
+            invoice.setUserId(userId);
+            PageHelper.startPage(0, 0, true).pageSizeZero(true).reasonable(true);
+            List<InvoiceBO> invoiceList = invoiceService.selectList(invoice);
+            LOGGER.info("{}", invoiceList);
+            redisTemplate.opsForValue().set(userId+"_historyForqt", JSONArray.toJSONString(invoiceList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+            return (invoiceList == null) ?
+                    new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                    ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));
+    	} 
+    }
+    
+    
 
     /**
      * 前台，发票详情查看
@@ -137,6 +172,8 @@ public class InvoiceController {
         InvoiceBO bo = invoiceService.addInvoice(invoiceBO);
 
         LOGGER.info("{}", bo);
+        
+        redisTemplate.delete(userId+"_historyForqt");
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
@@ -164,7 +201,7 @@ public class InvoiceController {
         invoiceBO.setId(id);
         invoiceBO.setUserId(userId);
         InvoiceBO bo = invoiceService.updateInvoice(invoiceBO);
-
+        redisTemplate.delete(userId+"_historyForqt");
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
@@ -183,6 +220,7 @@ public class InvoiceController {
         invoiceBO.setUserId(userId);
         int bo = invoiceService.deleteByIdAndUserId(invoiceBO);
         LOGGER.info("{}", bo);
+        redisTemplate.delete(userId+"_historyForqt");
         return ResponseEntity.ok(Utils.kv("data", bo));
     }
 
@@ -197,6 +235,7 @@ public class InvoiceController {
         invoiceBO.setUserId(userId);
         invoiceBO.setStatus("5");
         invoiceService.confirmInvoice(invoiceBO);
+        redisTemplate.delete(userId+"_historyForqt");
         return ResponseEntity.ok(Utils.kv());
     }
 

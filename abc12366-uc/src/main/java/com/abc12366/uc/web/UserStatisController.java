@@ -321,13 +321,39 @@ public class UserStatisController {
      */
     @GetMapping(path = "/region")
     public ResponseEntity region(@RequestParam String type,
-                                  @RequestParam(required = false) String start,
-                                  @RequestParam(required = false) String end,
-                                  @RequestParam(required = false) String province){
-        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}:{}", type, start, end, province);
-        List<RigionStatisBO> rigionStatisBOList = userStatisService.region(type, start, end, province);
-        LOGGER.info("查询用户标签统计用户详情返回：{}", rigionStatisBOList);
+                                  @RequestParam String start,
+                                  @RequestParam String end,
+                                  @RequestParam(required = false) String province,
+                                  @RequestParam(required = false) String tagName
+                                 ){
+        LOGGER.info("用户区域统计：{}：{}：{}:{}:{}", type, start, end, province,tagName);
+        List<RigionStatisBO> rigionStatisBOList = userStatisService.region(type, start, end, province,tagName);
+        LOGGER.info("用户区域统计返回：{}", rigionStatisBOList);
         return ResponseEntity.ok(Utils.kv("dataList",rigionStatisBOList));
+    }
+
+    /**
+     * 用户区域统计查询用户详情接口
+     * @param type 区域类型，country、province
+     * @param tagName 标签名
+     * @param timeInterval 时间区间
+     * @param province 省名
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/region/uinfo")
+    public ResponseEntity regionUinfo(@RequestParam String type,
+                                      @RequestParam(required = false) String tagName,
+                                        @RequestParam(required = false) String timeInterval,
+                                        @RequestParam String province,
+                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("用户区域统计查询用户详情：{}：{}：{}:{}", type, tagName,timeInterval, province);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<User> userList = userStatisService.regionUinfo(type, timeInterval, province,tagName);
+        LOGGER.info("用户区域统计查询用户详情返回：{}", userList);
+        return (userList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
     }
 
     /**
@@ -488,5 +514,78 @@ public class UserStatisController {
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 企业绑定情况统计
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param start 开始时间
+     * @param end 结束时间
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/count")
+    public ResponseEntity bindCount(@RequestParam String type,
+                                     @RequestParam String start,
+                                     @RequestParam String end){
+        LOGGER.info("企业绑定情况统计：{}：{}：{}", type,start,end);
+        Object o = userStatisService.bindCount(type, start, end);
+        return ResponseEntity.ok(Utils.kv("data", o));
+    }
+
+    /**
+     * 企业绑定情况统计企业详情接口
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param timeInterval 时间区间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/count/info")
+    public ResponseEntity bindCountInfo(@RequestParam String type,
+                                        @RequestParam String timeInterval,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}", type,timeInterval,page,size);
+        List<BindCountInfo> bindCountInfoList = userStatisService.bindCountInfo(type,timeInterval,page,size);
+        return (bindCountInfoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
+    }
+
+    /**
+     * 企业登录情况统计
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param start 开始时间
+     * @param end 结束时间
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/login")
+    public ResponseEntity bindLogin(@RequestParam String type,
+                                    @RequestParam String start,
+                                    @RequestParam String end){
+        LOGGER.info("企业登录情况统计：{}：{}：{}", type,start,end);
+        Object o = userStatisService.bindLogin(type, start, end);
+        LOGGER.info("企业登录情况统计返回：{}");
+        return ResponseEntity.ok(Utils.kv("data", o));
+    }
+
+    /**
+     * 企业绑定情况统计企业详情接口
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param timeInterval 时间区间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/login/info")
+    public ResponseEntity bindLoginInfo(@RequestParam String type,
+                                        @RequestParam String timeInterval,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}", type,timeInterval,page,size);
+        List<BindCountInfo> bindCountInfoList = userStatisService.bindLoginInfo(type, timeInterval, page, size);
+        return (bindCountInfoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
     }
 }

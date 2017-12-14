@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -73,6 +74,9 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Autowired
     private TodoTaskService todoTaskService;
+    
+    @Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
@@ -148,6 +152,8 @@ public class UserBindServiceImpl implements UserBindService {
 
         //绑定税号任务埋点
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
+        
+        redisTemplate.delete(userId+"_DzsbList");
         return userDzsbBO1;
     }
 
@@ -284,6 +290,7 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + userDzsb.toString());
             throw new ServiceException(4102);
         }
+        redisTemplate.delete(userDzsb.getUserId()+"_DzsbList");
         return true;
     }
 
@@ -360,6 +367,8 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userHngs, userHngsBO1);
         //绑定税号任务埋点
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
+        
+        redisTemplate.delete(userId+"_HngsList");
         return userHngsBO1;
     }
 
@@ -375,6 +384,8 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + id);
             throw new ServiceException(4102);
         }
+
+        redisTemplate.delete(userHngs.getUserId()+"_HngsList");
         return true;
     }
 
@@ -402,6 +413,9 @@ public class UserBindServiceImpl implements UserBindService {
         //绑定税号任务埋点
         String userId = Utils.getUserId();
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
+        
+
+        redisTemplate.delete(userId+"_HndsList");
         return userHndsBO1;
     }
 
@@ -417,6 +431,7 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + id);
             throw new ServiceException(4102);
         }
+        redisTemplate.delete(userHnds.getUserId()+"_HndsList");
         return true;
     }
 

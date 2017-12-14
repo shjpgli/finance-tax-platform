@@ -50,6 +50,16 @@ public class EventApply implements Serializable {
      **/
     private String status;
 
+    /**
+     *  用户编号
+     */
+    private String userid;
+
+    /**
+     * 备注或者审核拒绝理由
+     */
+    private String bz;
+
     public String getApplyId() {
         return this.applyId;
     }
@@ -114,4 +124,19 @@ public class EventApply implements Serializable {
         this.status = status;
     }
 
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getBz() {
+        return bz;
+    }
+
+    public void setBz(String bz) {
+        this.bz = bz;
+    }
 }
