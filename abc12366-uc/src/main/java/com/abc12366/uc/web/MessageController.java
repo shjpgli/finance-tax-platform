@@ -1,14 +1,19 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.MessageBO;
 import com.abc12366.uc.model.bo.MessageListBO;
 import com.abc12366.uc.service.MessageService;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * UC发送业务消息接口控制器
@@ -30,6 +36,9 @@ public class MessageController {
 
     @Autowired
     private MessageService messageService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 获取当前用户消息列表
@@ -71,6 +80,37 @@ public class MessageController {
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
+    
+    /**
+     * 获取当前用户消息列表缓存
+     *
+     * @param page 当前页
+     * @param size 每页大小
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/forqt")
+    public ResponseEntity selectListForqt(HttpServletRequest request) throws IOException {
+
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = (String) request.getAttribute(Constant.USER_ID);
+        request.setAttribute("page", 0);
+        request.setAttribute("size", 0);
+        if(redisTemplate.hasKey(userId+"_MessageForqt")){
+        	 MessageListBO data = JSONObject.parseObject(redisTemplate.opsForValue().get(userId+"_MessageForqt"),MessageListBO.class);
+        	 responseEntity = ResponseEntity.ok(data);
+        	 LOGGER.info("从Redis获取数据:"+JSONObject.toJSONString(data));
+        }else{
+        	if (!StringUtils.isEmpty(userId)) {
+                MessageListBO data = messageService.selectList("1",null,null, 0, 0, request);
+                responseEntity = ResponseEntity.ok(data);
+                redisTemplate.opsForValue().set(userId+"_MessageForqt", JSONObject.toJSONString(data),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+            }
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
 
     /**
      * 发送用户消息
@@ -84,7 +124,7 @@ public class MessageController {
 
         MessageBO messageBO = messageService.insert(message, request);
         ResponseEntity responseEntity = ResponseEntity.ok(messageBO);
-
+        redisTemplate.delete(message.getUserId()+"_MessageForqt");
         LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
