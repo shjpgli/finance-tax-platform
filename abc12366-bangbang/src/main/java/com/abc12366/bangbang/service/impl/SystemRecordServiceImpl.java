@@ -6,9 +6,7 @@ import com.abc12366.bangbang.mapper.db1.SystemRecordStatisMapper;
 import com.abc12366.bangbang.mapper.db2.SystemRecordCompanyRoMapper;
 import com.abc12366.bangbang.mapper.db2.SystemRecordRoMapper;
 import com.abc12366.bangbang.mapper.db2.SystemRecordStatisRoMapper;
-import com.abc12366.bangbang.model.SystemRecord;
-import com.abc12366.bangbang.model.SystemRecordCompany;
-import com.abc12366.bangbang.model.SystemRecordStatis;
+import com.abc12366.bangbang.model.*;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 import com.abc12366.bangbang.service.SystemRecordService;
@@ -162,12 +160,18 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         return CompletableFuture.completedFuture(systemRecordBOReturn);
     }
 
+
     @Override
     public List<SystemRecordStatis> statisList(Map<String, Object> map) {
         //查询这个时间段每天的数据有没有做统计
         List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date current = new Date();
         for (Date date : datelist) {
+            if(date.compareTo(date) > 0){
+                LOGGER.warn("起止日期不能大于当前日期");
+                throw new ServiceException(6393);
+            }
             //查询当天有没有数据
             int count = systemRecordStatisRoMapper.selectByDateCount(date);
             if(count == 0){
@@ -179,7 +183,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             }
         }
         //查询子节点
-        List<String> list = GeneralTree.t.getChild((String) map.get("name"));
+        List<String> list = GeneralTree.t.getChild((String) map.get("menu"));
         map.put("list",list);
         List<SystemRecordStatis> dataList = systemRecordStatisRoMapper.statisList(map);
         return dataList;
@@ -209,8 +213,11 @@ public class SystemRecordServiceImpl implements SystemRecordService {
     public List<SystemRecordCompany> statisCompanyList(Map<String, Object> map) {
         //查询这个时间段每天的数据有没有做统计
         List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         for (Date date : datelist) {
+            if(date.compareTo(date) > 0){
+                LOGGER.warn("起止日期不能大于当前日期");
+                throw new ServiceException(6393);
+            }
             //查询当天有没有数据
             int count = systemRecordCompanyRoMapper.selectByDateCount(date);
             if(count == 0){
@@ -222,7 +229,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             }
         }
         //查询子节点
-        List<String> list = GeneralTree.t.getChild((String) map.get("name"));
+        List<String> list = GeneralTree.t.getChild((String) map.get("menu"));
         map.put("list",list);
         List<SystemRecordCompany> dataList = systemRecordCompanyRoMapper.statisList(map);
         return dataList;
@@ -247,6 +254,30 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             LOGGER.warn("查询异常：" + e);
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<User> statisRecordUserList(Map<String, Object> map) {
+        List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
+        List<String> list = new ArrayList<>();
+        for (Date date : datelist) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+            list.add(df.format(date));
+        }
+        map.put("list",list);
+        return systemRecordStatisRoMapper.statisRecordUserList(map);
+    }
+
+    @Override
+    public List<DzsbHngs> statisRecordCompanyList(Map<String, Object> map) {
+        List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
+        List<String> list = new ArrayList<>();
+        for (Date date : datelist) {
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+            list.add(df.format(date));
+        }
+        map.put("list",list);
+        return systemRecordCompanyRoMapper.statisRecordCompanyList(map);
     }
 
     /**
