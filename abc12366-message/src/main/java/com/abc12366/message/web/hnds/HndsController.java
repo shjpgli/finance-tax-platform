@@ -10,6 +10,7 @@ import com.hnds.security.HndsSecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -42,6 +43,9 @@ public class HndsController {
 
     @Autowired
     private IHndsBindService hndsBindService;
+    
+    @Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 地税单点登录
@@ -84,6 +88,8 @@ public class HndsController {
                 if (n == -1) {
                     LOGGER.info("湖南地税登录绑定关系已存在");
                 }
+                
+                redisTemplate.delete(loginBo.getUserId()+"_HndsList");
                 return ResponseEntity.ok(Utils.kv("data", jsonObject));
             } else {
                 return ResponseEntity.ok(Utils.bodyStatus(jsonObject.getString("retcode"), jsonObject.getString

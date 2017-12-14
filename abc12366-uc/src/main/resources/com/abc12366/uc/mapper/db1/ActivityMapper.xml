@@ -72,7 +72,7 @@
             (#{item.id}, #{item.secret}, #{item.createTime}, #{item.activityId}, #{item.startTime}, #{item.endTime},
             #{item.amount}, #{item.amountType}, #{item.probability}, #{item.sendAmount}, #{item.sendStatus},
             #{item.url}, #{item.sendTime}, #{item.receiveStatus}, #{item.receiveTime}, #{item.ip},
-            #{item.openId}, #{item.billno}, #{businessId})
+            #{item.openId}, #{item.billno}, #{item.businessId})
         </foreach>
     </insert>
 

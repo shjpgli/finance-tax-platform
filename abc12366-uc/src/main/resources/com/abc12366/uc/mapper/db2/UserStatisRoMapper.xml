@@ -13,7 +13,7 @@
     </select>
 
     <select id="regionCountry" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
-        SELECT concat(#{start},'～',#{end}) timeInterval,b.province regionName,a.province regionCode, COUNT(a.province) allCount
+        SELECT concat(#{start},'～',#{end}) timeInterval,b.province regionName,a.province regionCode, COUNT(a.province) allCount,#{tagNameStr} tagName
         FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_province b ON a.province=b.provinceId
         <where>
             1=1
@@ -29,7 +29,7 @@
     </select>
 
     <select id="regionProvince" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
-        SELECT concat(#{start},'～',#{end}) timeInterval,b.city regionName,a.city regionCode, COUNT(a.city) allCount
+        SELECT concat(#{start},'～',#{end}) timeInterval,b.city regionName,a.city regionCode, COUNT(a.city) allCount,#{tagNameStr} tagName
         FROM uc_user_extend a JOIN uc_user c ON c.id=a.userId JOIN uc_city b ON a.city=b.cityId JOIN uc_province d ON d.provinceId = b.provinceId
         <where>
             1=1
