@@ -96,6 +96,7 @@ public class AdPageController {
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
         LOGGER.info("{}", responseEntity);
+        redisTemplate.delete("CMS_AdpageListFqt");
         return responseEntity;
     }
 
@@ -130,6 +131,7 @@ public class AdPageController {
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
 
         LOGGER.info("{}", responseEntity);
+        redisTemplate.delete("CMS_AdpageListFqt");
         return responseEntity;
     }
 
@@ -141,6 +143,7 @@ public class AdPageController {
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
 
         LOGGER.info("{}", responseEntity);
+        redisTemplate.delete("CMS_AdpageListFqt");
         return responseEntity;
     }
 
