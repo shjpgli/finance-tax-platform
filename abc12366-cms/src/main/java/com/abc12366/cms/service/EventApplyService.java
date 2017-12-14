@@ -15,7 +15,7 @@ public interface EventApplyService {
 
     EventbmtjBo selectbmtj(Map<String, Object> map);
 
-    EventlltjListBo selectlltj(Map<String, Object> map);
+    EventlltjListBo selectlltj(Map<String, Object> map,String type);
 
     EventApplySaveBo save(EventApplySaveBo eventApplySaveBo);
 

@@ -66,5 +66,42 @@
         GROUP BY DAY(browsetime) order by browsetime
     </select>
 
+    <!-- 查询（浏览统计） -->
+    <select id="selectlltjyue" resultType="com.abc12366.cms.model.bo.EventlltjBo" parameterType="java.util.Map">
+        SELECT DATE_FORMAT(browsetime, '%Y%m') llsj,COUNT(recordId) cnt FROM cms_event_record
+        WHERE 1=1
+        <if test="source != null and source != ''">
+            AND source = #{source}
+        </if>
+        <if test="eventId != null and eventId != ''">
+            AND eventId = #{eventId}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND DATE_FORMAT(browsetime, '%Y%m') &gt;= DATE_FORMAT(#{startTime}, '%Y%m')
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND DATE_FORMAT(browsetime, '%Y%m') &lt;= DATE_FORMAT(#{endTime}, '%Y%m')
+        </if>
+        GROUP BY DATE_FORMAT(browsetime, '%Y%m') order by browsetime
+    </select>
+
+    <!-- 查询（浏览统计） -->
+    <select id="selectlltjnian" resultType="com.abc12366.cms.model.bo.EventlltjBo" parameterType="java.util.Map">
+        SELECT DATE_FORMAT(browsetime, '%Y') llsj,COUNT(recordId) cnt FROM cms_event_record
+        WHERE 1=1
+        <if test="source != null and source != ''">
+            AND source = #{source}
+        </if>
+        <if test="eventId != null and eventId != ''">
+            AND eventId = #{eventId}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND DATE_FORMAT(browsetime, '%Y') &gt;= DATE_FORMAT(#{startTime}, '%Y')
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND DATE_FORMAT(browsetime, '%Y') &lt;= DATE_FORMAT(#{endTime}, '%Y')
+        </if>
+        GROUP BY DATE_FORMAT(browsetime, '%Y') order by browsetime
+    </select>
 
 </mapper>

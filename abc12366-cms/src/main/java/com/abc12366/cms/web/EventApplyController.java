@@ -77,6 +77,7 @@ public class EventApplyController {
     @GetMapping(path = "/selectlltj")
     public ResponseEntity selectlltj(@RequestParam(value = "startTime", required = false) String startTime,
                                      @RequestParam(value = "endTime", required = false) String endTime,
+                                     @RequestParam(value = "type", required = false) String type,
                                      @RequestParam(value = "eventId", required = false) String eventId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("eventId", eventId);//活动ID
@@ -96,7 +97,7 @@ public class EventApplyController {
 //        }
         dataMap.put("startTime",startTime);
         dataMap.put("endTime",endTime);
-        EventlltjListBo data = eventApplyService.selectlltj(dataMap);
+        EventlltjListBo data = eventApplyService.selectlltj(dataMap,type);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
     }
