@@ -8,8 +8,10 @@ package com.abc12366.bangbang.web.statis;
  * @since 1.0.0
  */
 
+import com.abc12366.bangbang.model.DzsbHngs;
 import com.abc12366.bangbang.model.SystemRecordCompany;
 import com.abc12366.bangbang.model.SystemRecordStatis;
+import com.abc12366.bangbang.model.User;
 import com.abc12366.bangbang.service.SystemRecordService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
@@ -49,7 +51,7 @@ public class RecordStatisController {
     @GetMapping
     public ResponseEntity statisList(@RequestParam(value = "startTime", required = true) String startTime,
                                      @RequestParam(value = "endTime", required = true) String endTime,
-                                     @RequestParam(value = "name", required = true) String name,
+                                     @RequestParam(value = "menu", required = true) String menu,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -60,9 +62,45 @@ public class RecordStatisController {
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", DateUtils.strToDate(endTime));
         }
-        map.put("name",name);
+        map.put("menu",menu);
         List<SystemRecordStatis> data = systemRecordService.statisList(map);
         PageInfo<SystemRecordStatis> pageInfo = new PageInfo<>(data);
+
+        LOGGER.info("{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 软件用户行为统计-用户列表
+     * @param startTime
+     * @param endTime
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping(path = "/list")
+    public ResponseEntity statisRecordList(@RequestParam(value = "startTime", required = true) String startTime,
+                                     @RequestParam(value = "endTime", required = true) String endTime,
+                                     @RequestParam(value = "menua", required = false) String menua,
+                                     @RequestParam(value = "menub", required = false) String menub,
+                                     @RequestParam(value = "menuc", required = false) String menuc,
+                                     @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        map.put("menua",menua);
+        map.put("menub",menub);
+        map.put("menuc",menuc);
+        List<User> data = systemRecordService.statisRecordUserList(map);
+        PageInfo<User> pageInfo = new PageInfo<>(data);
 
         LOGGER.info("{}", data);
         return (data == null) ?
@@ -81,7 +119,7 @@ public class RecordStatisController {
     @GetMapping(path = "/company")
     public ResponseEntity statisCompanyList(@RequestParam(value = "startTime", required = true) String startTime,
                                      @RequestParam(value = "endTime", required = true) String endTime,
-                                     @RequestParam(value = "name", required = true) String name,
+                                     @RequestParam(value = "menu", required = true) String menu,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -92,9 +130,45 @@ public class RecordStatisController {
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", DateUtils.strToDate(endTime));
         }
-        map.put("name",name);
+        map.put("menu",menu);
         List<SystemRecordCompany> data = systemRecordService.statisCompanyList(map);
         PageInfo<SystemRecordCompany> pageInfo = new PageInfo<>(data);
+
+        LOGGER.info("{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 企业使用情况统计-企业列表
+     * @param startTime
+     * @param endTime
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping(path = "/company/list")
+    public ResponseEntity statisCompanyList(@RequestParam(value = "startTime", required = true) String startTime,
+                                           @RequestParam(value = "endTime", required = true) String endTime,
+                                           @RequestParam(value = "menua", required = false) String menua,
+                                           @RequestParam(value = "menub", required = false) String menub,
+                                           @RequestParam(value = "menuc", required = false) String menuc,
+                                           @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        map.put("menua",menua);
+        map.put("menub",menub);
+        map.put("menuc",menuc);
+        List<DzsbHngs> data = systemRecordService.statisRecordCompanyList(map);
+        PageInfo<DzsbHngs> pageInfo = new PageInfo<>(data);
 
         LOGGER.info("{}", data);
         return (data == null) ?

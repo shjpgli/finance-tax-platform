@@ -1,8 +1,6 @@
 package com.abc12366.bangbang.service;
 
-import com.abc12366.bangbang.model.SystemRecord;
-import com.abc12366.bangbang.model.SystemRecordCompany;
-import com.abc12366.bangbang.model.SystemRecordStatis;
+import com.abc12366.bangbang.model.*;
 import com.abc12366.bangbang.model.bo.RecordStatisBO;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
@@ -75,4 +73,13 @@ public interface SystemRecordService {
      * @param map
      */
     void autoRecordCompany(Map<String, Object> map);
+
+    /**
+     *用户列表
+     * @param map
+     * @return
+     */
+    List<User> statisRecordUserList(Map<String, Object> map);
+
+    List<DzsbHngs> statisRecordCompanyList(Map<String, Object> map);
 }

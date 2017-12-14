@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.mapper.db2;
 
+import com.abc12366.bangbang.model.DzsbHngs;
 import com.abc12366.bangbang.model.SystemRecordStatis;
+import com.abc12366.bangbang.model.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -44,4 +46,11 @@ public interface SystemRecordStatisRoMapper{
 	 * @return
 	 */
 	int selectByDateCount(@Param("createTime") Date createTime);
+
+	/**
+	 * 软件用户行为统计-用户列表
+	 * @param map
+	 * @return
+	 */
+	List<User> statisRecordUserList(Map<String, Object> map);
 }

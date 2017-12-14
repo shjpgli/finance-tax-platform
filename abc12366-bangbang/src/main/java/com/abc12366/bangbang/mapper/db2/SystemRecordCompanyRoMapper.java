@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.mapper.db2;
 
+import com.abc12366.bangbang.model.DzsbHngs;
 import com.abc12366.bangbang.model.SystemRecordCompany;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,4 +29,6 @@ public interface SystemRecordCompanyRoMapper{
 	int selectByDateCount(@Param("createTime")Date createTime);
 
 	List<SystemRecordCompany> statisList(Map<String, Object> map);
+
+	List<DzsbHngs> statisRecordCompanyList(Map<String, Object> map);
 }
