@@ -377,7 +377,7 @@ public class CheckServiceImpl implements CheckService {
 			total = Integer.parseInt(redisTemplate.opsForValue().get(
 					userId + "_Check"));
 		} else {
-			total = checkRoMapper.checkTotal(userId) == null ? 0 : total;
+			total = checkRoMapper.checkTotal(userId) == null ? 0 : checkRoMapper.checkTotal(userId);
 			redisTemplate.opsForValue().set(userId + "_Check",
 					String.valueOf(total), RedisConstant.USER_INFO_TIME_ODFAY,
 					TimeUnit.DAYS);
