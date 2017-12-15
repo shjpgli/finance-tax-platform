@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class RecordStatisController {
     @GetMapping
     public ResponseEntity statisList(@RequestParam(value = "startTime", required = true) String startTime,
                                      @RequestParam(value = "endTime", required = true) String endTime,
-                                     @RequestParam(value = "menuList", required = true) List<String> menuList,
+                                     @RequestParam(value = "menuList", required = true) String menuList,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -62,7 +63,9 @@ public class RecordStatisController {
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", DateUtils.strToDate(endTime));
         }
-        map.put("list",menuList);
+        String[] menus = menuList.split(",");
+        List<String> list = Arrays.asList(menus);
+        map.put("list",list);
         List<SystemRecordStatis> data = systemRecordService.statisList(map);
         PageInfo<SystemRecordStatis> pageInfo = new PageInfo<>(data);
 
@@ -119,7 +122,7 @@ public class RecordStatisController {
     @GetMapping(path = "/company")
     public ResponseEntity statisCompanyList(@RequestParam(value = "startTime", required = true) String startTime,
                                      @RequestParam(value = "endTime", required = true) String endTime,
-                                            @RequestParam(value = "menuList", required = true) List<String> menuList,
+                                     @RequestParam(value = "menuList", required = true) String menuList,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -130,7 +133,9 @@ public class RecordStatisController {
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", DateUtils.strToDate(endTime));
         }
-        map.put("list",menuList);
+        String[] menus = menuList.split(",");
+        List<String> list = Arrays.asList(menus);
+        map.put("list",list);
         List<SystemRecordCompany> data = systemRecordService.statisCompanyList(map);
         PageInfo<SystemRecordCompany> pageInfo = new PageInfo<>(data);
 
