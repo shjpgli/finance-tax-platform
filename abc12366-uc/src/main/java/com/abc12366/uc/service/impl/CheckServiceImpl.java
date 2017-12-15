@@ -11,7 +11,6 @@ import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.gateway.util.TaskConstant;
-import com.alibaba.fastjson.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -266,7 +265,7 @@ public class CheckServiceImpl implements CheckService {
 		pointsLog.setId(Utils.uuid());
 		pointsLog.setCreateTime(new Date());
 		pointsLog.setUserId(userId);
-		pointsLog.setIncome(pointsRuleBO.getPoints());
+		pointsLog.setOutgo(-pointsRuleBO.getPoints());
 		pointsLog.setRuleId(pointsRuleBO.getId());
 		pointsLog.setLogType("RE_CHECK_IN");
 		pointsLog.setRemark("用户补签消耗" + -pointsRuleBO.getPoints() + "积分");

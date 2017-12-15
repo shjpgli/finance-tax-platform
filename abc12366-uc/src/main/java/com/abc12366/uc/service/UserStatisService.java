@@ -1,10 +1,7 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.BindCountInfo;
-import com.abc12366.uc.model.bo.BindStatisAllBO;
-import com.abc12366.uc.model.bo.RigionStatisBO;
-import com.abc12366.uc.model.bo.TagUserStaticBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.List;
 
@@ -90,4 +87,16 @@ public interface UserStatisService {
      * @return BindCountInfo
      */
     List<BindCountInfo> bindLoginInfo(String type, String timeInterval, int page, int size);
+
+    /**
+     *
+     * @param start
+     * @param end
+     * @param page
+     * @param size
+     * @return
+     */
+    PointAnalysisBO pointAnalysis(String start, String end, int page, int size);
+
+    List<PointRuleinfoBO> pointAnalysisRuleinfo(String ruleId, String timeInterval, int page, int size);
 }

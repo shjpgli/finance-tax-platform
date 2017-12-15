@@ -1,8 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.BindCountInfo;
-import com.abc12366.uc.model.bo.RigionStatisBO;
+import com.abc12366.uc.model.bo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -48,7 +47,9 @@ public interface UserStatisRoMapper {
 
     List<BindCountInfo> bindHndsLoginInfo(@Param("start")Date start, @Param("end")Date end);
 
-//    void compreFactorsCountry(@Param("start")Date start, @Param("end")Date end,@Param("tagName")String tagName);
-//
-//    void compreFactorsProvince(@Param("start")Date start, @Param("end")Date end,@Param("tagName")String tagName, @Param("province")String province);
+    PointAnalysisBO pointAnalysis(@Param("start")Date start, @Param("end")Date end);
+
+    List<PointRuleAnalysisBO> pointRuleAnalysis(@Param("start")Date start, @Param("end")Date end);
+
+    List<PointRuleinfoBO> pointAnalysisRuleinfo(@Param("ruleId")String ruleId, @Param("start")Date start, @Param("end")Date end);
 }
