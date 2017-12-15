@@ -588,4 +588,43 @@ public class UserStatisController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
     }
+
+    /**
+     * 用户积分收支分析接口
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/point/analysis")
+    public ResponseEntity pointAnalysis(@RequestParam String start,
+                                        @RequestParam String end,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("用户积分收支分析：{}：{}：{}:{}",start,end,page,size);
+        PointAnalysisBO pointAnalysisBO = userStatisService.pointAnalysis(start,end,page,size);
+        return ResponseEntity.ok(Utils.kv("data",pointAnalysisBO));
+    }
+
+    /**
+     * 用户积分收支分析规则日志详情接口
+     * @param ruleId 规则id
+     * @param timeInterval 时间区间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/point/analysis/ruleinfo")
+    public ResponseEntity pointAnalysisRuleinfo(@RequestParam String ruleId,
+                                        @RequestParam String timeInterval,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("用户积分收支分析：{}：{}：{}:{}",ruleId,timeInterval,page,size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<PointRuleinfoBO> pointRuleinfoBOList = userStatisService.pointAnalysisRuleinfo(ruleId, timeInterval,page,size);
+        return (pointRuleinfoBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) pointRuleinfoBOList, "total", ((Page) pointRuleinfoBOList).getTotal()));
+    }
 }
