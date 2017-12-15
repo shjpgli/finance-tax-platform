@@ -64,8 +64,10 @@ public class RemindConstant {
     //修改密码成功消息
     public static final String UPDATE_PWD_SUCCESS_SYS = "您的密码于{#DATA.DATE}被修改，请确认为本人操作，如有疑问请联系客服咨询4008873133。";
 
-    public static final String UPDATE_PWD_SUCCESS_WX_1 = "您好,您的密码已通过，";
-    public static final String UPDATE_PWD_SUCCESS_WX_4 = "完成修改，感谢您的使用！";
+    public static final String UPDATE_PWD_SUCCESS_WX_1 = "您好,您的密码已通过";
+    public static final String UPDATE_PWD_SUCCESS_WX_4 = "完成修改，请确认为本人操作，如有疑问请联系客服咨询4008873133。";
+
+    public static final String UPDATE_PWD_SUCCESS_DX = "您的密码于{#DATA.DATE}被修改，请确认为本人操作";
 
     //未实名认证用户每天第一天登录发消息提醒其尽快进行认证
     public static final String UNREALNAME_SYS = "根据国家网信办相关规定，互联网平台的注册用户必须实名认证，您还未进行实名认证,请尽快完成实名认证，否则部分功能将无法使用!";
@@ -89,5 +91,5 @@ public class RemindConstant {
     public static final String REALNAME_VALIDATE_SYS = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE},详情请登录财税专家软件查询！";
     public static final String REALNAME_VALIDATE_WX_1 = "您好，你提交的实名认证信息已审核";
     public static final String REALNAME_VALIDATE_WX_4 = "详情请登录财税专家软件查询！";
-    public static final String REALNAME_VALIDATE_DX = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE}。";
+    public static final String REALNAME_VALIDATE_DX = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE}";
 }

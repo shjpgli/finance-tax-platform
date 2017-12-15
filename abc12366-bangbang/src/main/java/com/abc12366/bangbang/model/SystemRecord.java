@@ -112,6 +112,26 @@ public class SystemRecord extends TableBO {
      */
     private String ruleCode;
 
+    /**
+     * 纳税人识别号
+     */
+    private String nsrsbh;
+
+    /**
+     * 一级菜单
+     */
+    private String menua;
+
+    /**
+     * 二级菜单
+     */
+    private String menub;
+
+    /**
+     * 三级菜单
+     */
+    private String menuc;
+
     public String getId() {
         return id;
     }
@@ -312,6 +332,38 @@ public class SystemRecord extends TableBO {
         this.ruleCode = ruleCode;
     }
 
+    public String getNsrsbh() {
+        return nsrsbh;
+    }
+
+    public void setNsrsbh(String nsrsbh) {
+        this.nsrsbh = nsrsbh;
+    }
+
+    public String getMenua() {
+        return menua;
+    }
+
+    public void setMenua(String menua) {
+        this.menua = menua;
+    }
+
+    public String getMenub() {
+        return menub;
+    }
+
+    public void setMenub(String menub) {
+        this.menub = menub;
+    }
+
+    public String getMenuc() {
+        return menuc;
+    }
+
+    public void setMenuc(String menuc) {
+        this.menuc = menuc;
+    }
+
     @Override
     public String toString() {
         return "SystemRecord{" +
@@ -340,6 +392,7 @@ public class SystemRecord extends TableBO {
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", ruleCode='" + ruleCode + '\'' +
-                "} " + super.toString();
+                ", nsrsbh='" + nsrsbh + '\'' +
+                '}';
     }
 }

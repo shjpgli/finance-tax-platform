@@ -4,12 +4,15 @@ import com.abc12366.cms.model.bo.EventListBo;
 import com.abc12366.cms.model.bo.EventSaveBo;
 import com.abc12366.cms.service.EventService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 活动管理模块
@@ -33,6 +37,9 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+    
     /**
      * 查询活动列表信息
      */
@@ -88,6 +95,7 @@ public class EventController {
         //新增活动信息
         eventSaveBo = eventService.save(eventSaveBo);
         LOGGER.info("{}", eventSaveBo);
+        redisTemplate.delete(eventSaveBo.getEvent().getCategory()+"_ToponeForqt");
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
     }
 
@@ -109,7 +117,13 @@ public class EventController {
     @GetMapping(path = "/topone/{category}")
     public ResponseEntity selecttopone(@PathVariable String category) {
         //查询活动信息
-        EventSaveBo eventSaveBo = eventService.selecttopone(category);
+    	EventSaveBo eventSaveBo = null;
+    	if(redisTemplate.hasKey(category+"_ToponeForqt")){
+    		eventSaveBo = JSONObject.parseObject(redisTemplate.opsForValue().get(category+"_ToponeForqt"),EventSaveBo.class);
+    	}else{
+    		eventSaveBo = eventService.selecttopone(category);
+    		redisTemplate.opsForValue().set(category+"_ToponeForqt",JSONObject.toJSONString(eventSaveBo),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+    	}
         LOGGER.info("{}", eventSaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
     }
@@ -124,6 +138,8 @@ public class EventController {
         LOGGER.info("{}", eventSaveBo);
         //更新活动信息
         eventSaveBo = eventService.update(eventSaveBo);
+        EventSaveBo eventBo = eventService.selectEvent(eventId);
+        redisTemplate.delete(eventBo.getEvent().getCategory()+"_ToponeForqt");
         LOGGER.info("{}", eventSaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
     }
@@ -135,7 +151,9 @@ public class EventController {
     public ResponseEntity delete(@PathVariable String eventId) {
         LOGGER.info("{}", eventId);
         //删除活动信息
+        EventSaveBo eventBo = eventService.selectEvent(eventId);
         String rtn = eventService.delete(eventId);
+        redisTemplate.delete(eventBo.getEvent().getCategory()+"_ToponeForqt");
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

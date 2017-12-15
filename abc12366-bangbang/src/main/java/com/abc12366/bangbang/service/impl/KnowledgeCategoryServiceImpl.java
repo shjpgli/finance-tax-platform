@@ -7,17 +7,22 @@ import com.abc12366.bangbang.model.KnowledgeCategory;
 import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSONArray;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author liuqi
@@ -33,10 +38,19 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     @Autowired
     private KnowledgeCategoryMapper knowledgeCategoryMapper;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public List<KnowledgeCategory> listAll() {
-        return knowledgeCategoryMapper.selectAll();
+    	if(redisTemplate.hasKey("Bangb_KnowledgeCategoryList")){
+    		return JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_KnowledgeCategoryList"),KnowledgeCategory.class);
+    	}else{
+    		List<KnowledgeCategory> list=knowledgeCategoryMapper.selectAll();
+    		redisTemplate.opsForValue().set("Bangb_KnowledgeCategoryList", JSONArray.toJSONString(list), RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
+    		return list;
+    	}
     }
 
     @Override
@@ -60,6 +74,9 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             }
             record.setCode(code);
             knowledgeCategoryMapper.insert(record);
+            
+            redisTemplate.delete("Bangb_KnowledgeCategoryList");
+            
             return record;
         }catch (Exception e){
             LOGGER.error("KnowledgeCategoryServiceImpl.add()", e);
@@ -98,6 +115,9 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             knowledgeCategory.setUpdateUser(Utils.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
+            
+            redisTemplate.delete("Bangb_KnowledgeCategoryList");
+            
             return knowledgeCategory;
         }catch (Exception e){
             LOGGER.error("KnowledgeCategoryServiceImpl.modify()", e);
@@ -114,6 +134,8 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             knowledgeCategory.setUpdateUser(Utils.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
+            
+            redisTemplate.delete("Bangb_KnowledgeCategoryList");
         }catch (Exception e){
             LOGGER.error("KnowledgeCategoryServiceImpl.modifyNameById()", e);
             throw new ServiceException(4513);
@@ -126,6 +148,8 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             if (list != null && !list.isEmpty()) {
                 knowledgeCategoryMapper.batchUpdateSort(list);
             }
+            
+            redisTemplate.delete("Bangb_KnowledgeCategoryList");
         }catch (Exception e){
             LOGGER.error("KnowledgeCategoryServiceImpl.modifySort()", e);
             throw new ServiceException(4513);
@@ -140,6 +164,8 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
         }
         try {
             knowledgeCategoryMapper.deleteByPrimaryKey(id);
+            
+            redisTemplate.delete("Bangb_KnowledgeCategoryList");
         }catch (Exception e){
             LOGGER.error("KnowledgeCategoryServiceImpl.modifySort()", e);
             throw new ServiceException(4512);

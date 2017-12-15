@@ -42,19 +42,19 @@ public class GlobalExceptionHandler {
             bodyStatus = ((ServiceException) e).getBodyStatus();
             LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
             bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    ",来源:财税平台访问" + uri);
+                    "【财税平台】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         } else if (e instanceof DzsbServiceException) {
             bodyStatus = ((DzsbServiceException) e).getBodyStatus();
             LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
             bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    ",来源:电子申报访问" + uri);
+                    "【电子申报】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         } else if (e instanceof DzsjServiceException) {
             bodyStatus = ((DzsjServiceException) e).getBodyStatus();
             LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
             bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    ",来源:电子税局访问" + uri);
+                    "【电子税局】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         }
 
@@ -98,7 +98,7 @@ public class GlobalExceptionHandler {
             bodyStatus = Utils.bodyStatus(5000);
             LOGGER.error("被动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
             bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    ",来源:财税平台访问" + uri);
+                    "【财税平台】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         }
     }

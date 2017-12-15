@@ -67,7 +67,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         sendBo.setWebMsg(sysMsg);
         sendBo.setTemplateid("AYi8h8g7_bKN8Yr9wVDh4ZQ_CIOwsoIzX1A6tx1E5WE");
         sendBo.setDataList(dataList);
-        sendBo.setPhoneMsg(sysMsg);
+        sendBo.setPhoneMsg(RemindConstant.UPDATE_PWD_SUCCESS_DX);
         msgSendService.sendXtxx(sendBo);
     }
 
@@ -221,7 +221,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         map.put("endTime", calendar2.getTime());
         List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);
         boolean isFirstLoginToday = false;
-        if (logList == null || logList.size() <= 1) {
+        if (logList != null && logList.size() == 1) {
             isFirstLoginToday = true;
         }
         return isFirstLoginToday;

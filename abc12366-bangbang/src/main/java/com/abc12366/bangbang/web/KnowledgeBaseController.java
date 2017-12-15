@@ -6,16 +6,22 @@ import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author liuqi
@@ -24,9 +30,13 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/knowledgeBase", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class KnowledgeBaseController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeBaseController.class);
 
     @Autowired
     private KnowledgeBaseService knowledgeBaseService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /*
     *
@@ -68,8 +78,16 @@ public class KnowledgeBaseController {
                                   @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
                                   @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType,
                                   @RequestParam(value = "KnowledgeRecommend", defaultValue = "hot") String KnowledgeRecommend){
-        KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(KnowledgePageSize, KnowledgeType, KnowledgeRecommend);
-        List<KnowledgeBase> list = knowledgeBaseService.hotUnClassifyMap(param);
+    	List<KnowledgeBase> list = null;
+    	if(redisTemplate.hasKey("Bangb_HotUnClassifyList")){
+    		list=JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_HotUnClassifyList"),KnowledgeBase.class);
+    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(list));
+    	}else{
+    		KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(KnowledgePageSize, KnowledgeType, KnowledgeRecommend);
+            list = knowledgeBaseService.hotUnClassifyMap(param);
+            redisTemplate.opsForValue().set("Bangb_HotUnClassifyList",JSONArray.toJSONString(list),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+    	}   
+    	
         return ResponseEntity.ok(Utils.kv("dataList",list));
     }
     
@@ -108,7 +126,7 @@ public class KnowledgeBaseController {
         if(!StringUtils.isEmpty(keywords)){
             keywords = keywords.toUpperCase();
         }
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, true, true);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, true, true,"");
         List<KnowledgeBase> list = knowledgeBaseService.selectUCList(param);
 
         return (list == null) ?
@@ -130,7 +148,7 @@ public class KnowledgeBaseController {
         if(!StringUtils.isEmpty(keywords)){
             keywords = keywords.toUpperCase();
         }
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO("", type, keywords, true, true);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO("", type, keywords, true, true,"");
         List<KnowledgeBase> list = knowledgeBaseService.selectUCListByTag(param);
 
         return (list == null) ?
@@ -150,12 +168,13 @@ public class KnowledgeBaseController {
                                      @RequestParam(value = "type", required = false) String type,
                                      @RequestParam(value = "recommend", required = false) String recommend,
                                      @RequestParam(value = "isOpen", required = false) Boolean isOpen,
+                                     @RequestParam(value = "order", required = false) String order,
                                      @RequestParam(value = "status", required = false) Boolean status) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         if(!StringUtils.isEmpty(keywords)){
             keywords = keywords.toUpperCase();
         }
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status,order);
         param.setRecommend(recommend);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
@@ -210,6 +229,7 @@ public class KnowledgeBaseController {
     @PostMapping(path = "/add")
     public ResponseEntity add(@RequestBody KnowledgeBaseBO knowledgeBaseBO) {
         knowledgeBaseService.add(knowledgeBaseBO);
+        redisTemplate.delete("Bangb_HotUnClassifyList");
         return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
 
@@ -219,6 +239,7 @@ public class KnowledgeBaseController {
     @PutMapping(path = "/modify")
     public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO) {
         knowledgeBaseService.modify(knowledgeBaseBO);
+        redisTemplate.delete("Bangb_HotUnClassifyList");
         return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
 
@@ -228,6 +249,7 @@ public class KnowledgeBaseController {
     @PutMapping(path = "/modifyStatus")
     public ResponseEntity modifyStatus(@RequestBody Map<String, Object> map) {
         knowledgeBaseService.modifyStatus(map);
+        redisTemplate.delete("Bangb_HotUnClassifyList");
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -239,6 +261,7 @@ public class KnowledgeBaseController {
     public ResponseEntity delete(@RequestBody Map<String,List<String>> map) {
         List<String> ids = map.get("ids");
         knowledgeBaseService.delete(ids);
+        redisTemplate.delete("Bangb_HotUnClassifyList");
         return ResponseEntity.ok(Utils.kv());
     }
 }

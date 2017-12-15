@@ -121,7 +121,7 @@ public class AuthController extends BaseController {
     }
 
     @GetMapping(path = "/user/u/openid/{openid}")
-    public ResponseEntity loginByOpenId(@PathVariable String openid, HttpServletRequest request) {
+    public ResponseEntity loginByOpenId(@PathVariable String openid) {
         LOGGER.info("{}", openid);
         UserBO user = userService.selectByopenid(openid);
         if (user == null) {
@@ -191,10 +191,9 @@ public class AuthController extends BaseController {
      *
      * @param token String
      * @return ResponseEntity
-     * @throws Exception Exception
      */
     @DeleteMapping(path = "/logout/{token}")
-    public ResponseEntity logout(@PathVariable String token) throws Exception {
+    public ResponseEntity logout(@PathVariable String token) {
         LOGGER.info("{}", token);
         authService.logout(token);
         return ResponseEntity.ok(Utils.kv());

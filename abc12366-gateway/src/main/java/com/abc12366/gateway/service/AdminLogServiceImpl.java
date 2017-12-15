@@ -9,6 +9,7 @@ import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,7 @@ public class AdminLogServiceImpl implements AdminLogService {
                 .createTime(now)
                 .businessUri(bo.getBusinessUri())
                 .businessName(bo.getBusinessName())
-                .businessData((bo.getBusinessData().length()>4000?bo.getBusinessData().substring(0, 3999):bo.getBusinessData()))
+                .businessData((StringUtils.isEmpty(bo.getBusinessData())||bo.getBusinessData().length()>2000)?" ":bo.getBusinessData())
                 .method(bo.getMethod())
                 .remark(bo.getRemark())
                 .build();

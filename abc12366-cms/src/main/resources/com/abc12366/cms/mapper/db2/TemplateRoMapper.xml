@@ -44,6 +44,9 @@
         <if test="state != null and state != ''">
             AND a.state = #{state}
         </if>
+        <if test="templateName != null and templateName != ''">
+            AND a.templateName = #{templateName}
+        </if>
     </select>
 
 </mapper>

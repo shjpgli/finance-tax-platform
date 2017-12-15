@@ -77,24 +77,27 @@ public class EventApplyController {
     @GetMapping(path = "/selectlltj")
     public ResponseEntity selectlltj(@RequestParam(value = "startTime", required = false) String startTime,
                                      @RequestParam(value = "endTime", required = false) String endTime,
+                                     @RequestParam(value = "type", required = false) String type,
                                      @RequestParam(value = "eventId", required = false) String eventId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("eventId", eventId);//活动ID
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            if (startTime != null && !"".equals(startTime)) {
-                Date startTime1 = sdf.parse(startTime);
-                dataMap.put("startTime", startTime1.getTime() / 1000);
-            }
-            if (endTime != null && !"".equals(endTime)) {
-                Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime() / 1000);
-            }
-        } catch (ParseException e) {
-            LOGGER.error("时间类转换异常：{}", e);
-            throw new RuntimeException("时间类型转换异常：{}", e);
-        }
-        EventlltjListBo data = eventApplyService.selectlltj(dataMap);
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        try {
+//            if (startTime != null && !"".equals(startTime)) {
+//                Date startTime1 = sdf.parse(startTime);
+//                dataMap.put("startTime", startTime1.getTime() / 1000);
+//            }
+//            if (endTime != null && !"".equals(endTime)) {
+//                Date startTime2 = sdf.parse(endTime);
+//                dataMap.put("endTime", startTime2.getTime() / 1000);
+//            }
+//        } catch (ParseException e) {
+//            LOGGER.error("时间类转换异常：{}", e);
+//            throw new RuntimeException("时间类型转换异常：{}", e);
+//        }
+        dataMap.put("startTime",startTime);
+        dataMap.put("endTime",endTime);
+        EventlltjListBo data = eventApplyService.selectlltj(dataMap,type);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
     }
@@ -172,5 +175,19 @@ public class EventApplyController {
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
+
+    /**
+     * 批量审批拒绝活动报名信息
+     */
+    @PutMapping(path = "/updateStatusNoList")
+    public ResponseEntity updateStatusNoList(@RequestBody IdsBo idsBo) {
+        LOGGER.info("{}", idsBo);
+        //审批活动报名信息
+        String rtn = eventApplyService.updateStatusNoList(idsBo.getIds(),idsBo.getText());
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", idsBo));
+    }
+
+
 
 }

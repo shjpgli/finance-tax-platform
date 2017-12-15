@@ -59,6 +59,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
+                        //软件用户行为分析
+                .excludePathPatterns("/record/statis/auto")
+                .excludePathPatterns("/record/statis/company/auto")
                 .excludePathPatterns("/test");
 
 
@@ -104,7 +107,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //查询已解决的问题
                 .excludePathPatterns("/questionbb/selectListAccept")
                         //帮友热议列表查询
-                .excludePathPatterns("/questionbb/selectListry")
+                .excludePathPatterns("/questionbb/selectListry","/questionbb/selectListryForqt")
                         //查询热议标签
                 .excludePathPatterns("/questionbb/selectTagList")
                         //查询最新问题
@@ -173,6 +176,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/qcuser/selectList")
                         /*帮邦搜索*/
                 .excludePathPatterns("/search/list","/search/cheats/list","/search/question/list")
+                //软件用户行为分析
+                .excludePathPatterns("/record/statis/auto")
+                .excludePathPatterns("/record/statis/company/auto")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll","/knowledgeBase/nearestList",

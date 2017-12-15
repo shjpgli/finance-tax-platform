@@ -190,7 +190,21 @@
                         )
                     )
             </if>
-        ORDER BY t_base.updateTime desc
+        <choose>
+            <when test="order!=null and order!=''">
+                <if test="order=='lll'">
+                    ORDER BY t_base.pv desc
+                </if>
+                <if test="order=='gxsj'">
+                    ORDER BY t_base.updateTime desc
+                </if>
+            </when>
+            <otherwise>
+                ORDER BY t_base.updateTime desc
+            </otherwise>
+        </choose>
+
+
     </select>
 
 

@@ -71,7 +71,10 @@ public class JsxxRemindJob implements StatefulJob{
 	        map.put("ywid", YWLX);
 	        map.put("lrrq", dzsbTime.getLasttime());
 	        map.put("maxcount", Constant.DZSBQNUM);
+	        long d1=System.currentTimeMillis();
 	        DzsbJob job=client.processYw(map);
+	        long d2=System.currentTimeMillis();
+	        LOGGER.info("当前录入日期:"+dzsbTime.getLasttime()+",请求耗时:"+(d2-d1));
 	        if("00000000".equals(job.getRescode())){//查询成功
 	        	List<DzsbXxInfo> dzsbXxInfos= job.getDataList();
 	        	if(dzsbXxInfos!=null && dzsbXxInfos.size()>0){//查询到数据
