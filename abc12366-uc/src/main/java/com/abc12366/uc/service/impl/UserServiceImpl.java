@@ -655,6 +655,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserBO updatePhone(UserPhoneBO bo) {
 		User user = selectUser(bo.getId());
+		String oldPhone = user.getPhone();
 		if (user == null) {
 			LOGGER.warn("修改失败");
 			throw new ServiceException(4018);
@@ -677,7 +678,7 @@ public class UserServiceImpl implements UserService {
 		}
 		//管理员修改用户手机记日志
 		try{
-			adminOperationService.insert(new AdminModifyUserPhoneLogBO(bo.getId(), Utils.getAdminId(), user.getPhone(),bo.getPhone(), "管理员后台修改用户手机号码！"));
+			adminOperationService.insert(new AdminModifyUserPhoneLogBO(bo.getId(), Utils.getAdminId(), oldPhone,bo.getPhone(), bo.getReason()));
 		} catch (Exception e){
 
 		}
