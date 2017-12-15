@@ -40,7 +40,8 @@ public class TemplateController {
                                      @RequestParam(value = "siteId", required = false) String siteId,
                                      @RequestParam(value = "isFolder", required = false) String isFolder,
                                      @RequestParam(value = "parentPath", required = false) String parentPath,
-                                     @RequestParam(value = "state", required = false) String state) {
+                                     @RequestParam(value = "state", required = false) String state,
+                                     @RequestParam(value = "templateName", required = false)String templateName) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("templateProperty", templateProperty);//模板属性
         dataMap.put("templateType", templateType);//模板类型
@@ -49,6 +50,7 @@ public class TemplateController {
 
         dataMap.put("parentPath", parentPath);//父节点路径
         dataMap.put("state", state);//启停标志位
+        dataMap.put("templateName",templateName);
         List<TemplateBo> dataList = templateService.selectList(dataMap);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
