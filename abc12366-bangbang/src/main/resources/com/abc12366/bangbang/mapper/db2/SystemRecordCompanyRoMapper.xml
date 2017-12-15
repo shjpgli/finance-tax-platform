@@ -28,7 +28,7 @@
 		select d.nsrsbh,d.nsrmc,d.swjgDm,d.swjgMc from
 		(
 		<foreach collection="list" index="key"  item="yyyyMMdd" separator="union">
-			select r.nsrsbh from bb_system_record_${yyyyMMdd} r where 1 = 1
+			select r.nsrsbh from bb_system_record_${yyyyMMdd} r where r.nsrsbh is not null
 			<if test="menua != null and menua != ''">
 				and r.menua = #{menua}
 			</if>
