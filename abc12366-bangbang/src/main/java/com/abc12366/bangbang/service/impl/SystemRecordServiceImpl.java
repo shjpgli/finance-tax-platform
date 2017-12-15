@@ -209,7 +209,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             }
         }catch (Exception e){
             LOGGER.warn("查询异常：" + e);
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -256,7 +256,6 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             }
         }catch (Exception e){
             LOGGER.warn("查询异常：" + e);
-            e.printStackTrace();
         }
     }
 
@@ -269,7 +268,15 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             list.add(df.format(date));
         }
         map.put("list",list);
-        return systemRecordStatisRoMapper.statisRecordUserList(map);
+
+        List<User> userList;
+        try {
+            userList = systemRecordStatisRoMapper.statisRecordUserList(map);
+        }catch (Exception e){
+            LOGGER.warn("查询SQL异常：" + e);
+            throw new ServiceException(6393,"查询SQL异常");
+        }
+        return userList;
     }
 
     @Override
@@ -281,7 +288,14 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             list.add(df.format(date));
         }
         map.put("list",list);
-        return systemRecordCompanyRoMapper.statisRecordCompanyList(map);
+        List<DzsbHngs> dzsbHngsList;
+        try {
+            dzsbHngsList = systemRecordCompanyRoMapper.statisRecordCompanyList(map);
+        }catch (Exception e){
+            LOGGER.warn("查询SQL异常：" + e);
+            throw new ServiceException(6393,"查询SQL异常");
+        }
+        return dzsbHngsList;
     }
 
     /**
