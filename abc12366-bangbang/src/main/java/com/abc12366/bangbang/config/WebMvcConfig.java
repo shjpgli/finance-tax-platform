@@ -59,6 +59,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/blacklist/**")
                 .excludePathPatterns("/druid/**")
+                        //软件用户行为分析
+                .excludePathPatterns("/record/statis/auto")
+                .excludePathPatterns("/record/statis/company/auto")
                 .excludePathPatterns("/test");
 
 
@@ -173,6 +176,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/qcuser/selectList")
                         /*帮邦搜索*/
                 .excludePathPatterns("/search/list","/search/cheats/list","/search/question/list")
+                //软件用户行为分析
+                .excludePathPatterns("/record/statis/auto")
+                .excludePathPatterns("/record/statis/company/auto")
                 .excludePathPatterns("/hotspot/**")
                 .excludePathPatterns("/knowledgeBase/uc/list","/knowledgeBase/hotList","/knowledgeBase/interestedList/**","/knowledgeBase/relatedList/**",
                         "/knowledgeBase/vote/add","/knowledgeBase/view/**","/knowledgeBase/pv/**","/knowledgeCategory/listAll","/knowledgeBase/nearestList",

@@ -167,8 +167,12 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date current = new Date();
+        if(datelist != null && datelist.size() > 7){
+            LOGGER.warn("起止时间不能超过7天");
+            throw new ServiceException(6393,"起止时间不能超过7天");
+        }
         for (Date date : datelist) {
-            if(date.compareTo(date) > 0){
+            if(date != null &&  date.compareTo(current) > 0){
                 LOGGER.warn("起止日期不能大于当前日期");
                 throw new ServiceException(6393);
             }
@@ -183,8 +187,8 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             }
         }
         //查询子节点
-        List<String> list = GeneralTree.t.getChild((String) map.get("menu"));
-        map.put("list",list);
+//        List<String> list = GeneralTree.t.getChild((String) map.get("menu"));
+//        map.put("list",list);
         List<SystemRecordStatis> dataList = systemRecordStatisRoMapper.statisList(map);
         return dataList;
     }
@@ -229,8 +233,8 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             }
         }
         //查询子节点
-        List<String> list = GeneralTree.t.getChild((String) map.get("menu"));
-        map.put("list",list);
+//        List<String> list = GeneralTree.t.getChild((String) map.get("menu"));
+//        map.put("list",list);
         List<SystemRecordCompany> dataList = systemRecordCompanyRoMapper.statisList(map);
         return dataList;
     }
