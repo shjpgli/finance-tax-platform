@@ -214,6 +214,19 @@ public class KnowledgeBaseController {
         return ResponseEntity.ok(Utils.kv("data", knowledgeBase));
     }
 
+
+    /*
+    *
+    * 知识库采集来源列表
+    *
+    */
+    @GetMapping(path = "/sourceList")
+    public ResponseEntity sourceList(){
+        return ResponseEntity.ok(Utils.kv("data", knowledgeBaseService.selectSourceList()));
+    }
+
+
+
     /**
      * 新增PV 接口
      */

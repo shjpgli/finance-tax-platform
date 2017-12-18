@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.service.impl;
 
+import com.abc12366.bangbang.mapper.db2.KnowledgeBaseRoMapper;
 import com.abc12366.bangbang.util.StringUtil;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper;
@@ -35,6 +36,9 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     @Autowired
     private KnowledgeBaseMapper knowledgeBaseMapper;
+
+    @Autowired
+    private KnowledgeBaseRoMapper knowledgeBaseRoMapper;
 
     @Autowired
     private KnowledgeCategoryMapper knowledgeCategoryMapper;
@@ -158,7 +162,7 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     @Override
     public void deleteById(String id) {
-        int refKnowledgeCnt = knowledgeBaseMapper.selectCntByCategoryId(id);
+        int refKnowledgeCnt = knowledgeBaseRoMapper.selectCntByCategoryId(id);
         if(refKnowledgeCnt > 0){
             throw new ServiceException(4522);
         }
