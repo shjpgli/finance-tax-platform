@@ -6,11 +6,13 @@ import com.abc12366.uc.model.bo.VipLevelBO;
 import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
 import com.abc12366.uc.service.VipLevelService;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,9 @@ public class VipLevelController {
 
     @Autowired
     private VipLevelService vipLevelService;
+    
+    @Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 会员列表查询
@@ -98,7 +103,9 @@ public class VipLevelController {
     @PutMapping(path = "/{id}")
     public ResponseEntity update(@Valid @RequestBody VipLevelUpdateBO vipLevelUpdateBO, @PathVariable String id) {
         LOGGER.info("{}:{}", vipLevelUpdateBO, id);
+        VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
         VipLevelBO vipLevelBOReturn = vipLevelService.update(vipLevelUpdateBO, id);
+        redisTemplate.delete(vipLevelBO.getLevelCode()+"_VipLevel");
         LOGGER.info("{}", vipLevelBOReturn);
         return ResponseEntity.ok(Utils.kv("data", vipLevelBOReturn));
     }
@@ -111,7 +118,9 @@ public class VipLevelController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         LOGGER.info("{}", id);
+        VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
         vipLevelService.delete(id);
+        redisTemplate.delete(vipLevelBO.getLevelCode()+"_VipLevel");
         return ResponseEntity.ok(Utils.kv());
     }
      
@@ -119,7 +128,9 @@ public class VipLevelController {
     @PutMapping(path = "/{id}/{status}")
     public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
         LOGGER.info("{}:{}", id, status);
+        VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
         vipLevelService.enableOrDisable(id, status);
+        redisTemplate.delete(vipLevelBO.getLevelCode()+"_VipLevel");
         return ResponseEntity.ok(Utils.kv());
     }
     
@@ -131,7 +142,15 @@ public class VipLevelController {
     @GetMapping(path = "/bo/{levelCode}")
     public ResponseEntity selectByLevelCode(@PathVariable String levelCode) {
         LOGGER.info("{}", levelCode);
-        VipLevelBO vipLevelBO = vipLevelService.selectByLevelCode(levelCode);
+        VipLevelBO vipLevelBO = null;
+        if(redisTemplate.hasKey(levelCode+"_VipLevel")){
+        	vipLevelBO = JSONObject.parseObject(redisTemplate.opsForValue().get(levelCode+"_VipLevel"),VipLevelBO.class);
+        }else{
+        	vipLevelBO = vipLevelService.selectByLevelCode(levelCode);
+        	if(vipLevelBO != null){
+        		redisTemplate.opsForValue().set(levelCode+"_VipLevel",JSONObject.toJSONString(vipLevelBO));
+        	}
+        }
         return ResponseEntity.ok(Utils.kv("data", vipLevelBO));
     }
 }
