@@ -656,6 +656,7 @@ public class UserServiceImpl implements UserService {
 	public UserBO updatePhone(UserPhoneBO bo) {
 		User user = selectUser(bo.getId());
 		String oldPhone = user.getPhone();
+		String oldUsername = user.getUsername();
 		if (user == null) {
 			LOGGER.warn("修改失败");
 			throw new ServiceException(4018);
@@ -671,6 +672,7 @@ public class UserServiceImpl implements UserService {
 
 		user.setLastUpdate(new Date());
 		user.setPhone(bo.getPhone());
+		user.setUsername(StringUtils.isEmpty(bo.getUsername())?null:bo.getUsername());
 		int result = userMapper.updatePhone(user);
 		if (result != 1) {
 			LOGGER.warn("修改失败");
@@ -678,9 +680,9 @@ public class UserServiceImpl implements UserService {
 		}
 		//管理员修改用户手机记日志
 		try{
-			adminOperationService.insert(new AdminModifyUserPhoneLogBO(bo.getId(), Utils.getAdminId(), oldPhone,bo.getPhone(), bo.getReason()));
+			adminOperationService.insert(new AdminModifyUserPhoneLogBO(bo.getId(), Utils.getAdminId(), oldPhone,bo.getPhone(), bo.getReason(),oldUsername,bo.getUsername()));
 		} catch (Exception e){
-
+			e.printStackTrace();
 		}
 
 		// 删除redis用户信息
