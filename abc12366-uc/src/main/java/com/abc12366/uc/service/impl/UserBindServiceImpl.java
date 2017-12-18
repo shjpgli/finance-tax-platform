@@ -295,7 +295,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception {
+    public UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
         if (userHngsInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
@@ -501,7 +501,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public void resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException,
+    public void resetPassword(NsrResetPwd data, HttpServletRequest request) throws MarshalException,
             ValidationException {
         //校验法人姓名和法人证件号
         Map<String, String> mapVali = new HashMap<>(16);
@@ -528,7 +528,7 @@ public class UserBindServiceImpl implements UserBindService {
         analyzeXmlTY12(respMap, data.getNsrsbh());
     }
 
-    private void analyzeXmlTY12(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    private void analyzeXmlTY12(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
@@ -567,7 +567,7 @@ public class UserBindServiceImpl implements UserBindService {
         analyzeXmlTY03(respMap, data.getNsrsbh());
     }
 
-    public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
@@ -639,7 +639,7 @@ public class UserBindServiceImpl implements UserBindService {
         return object;
     }
 
-    public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
@@ -681,7 +681,7 @@ public class UserBindServiceImpl implements UserBindService {
         return new MD5(fristSbmm + TaskConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
     }
 
-    private void analyzeXmlTY03(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    private void analyzeXmlTY03(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }

@@ -3,7 +3,6 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
@@ -305,10 +304,6 @@ public class AuthServiceImpl implements AuthService {
         // 用户信息写入redis
         valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
                 TimeUnit.SECONDS);
-        
-       /* valueOperations.set(userBO.getId()+"_UserInfo", JSON.toJSONString(userBO), RedisConstant.USER_INFO_TIME_ODFAY ,
-                TimeUnit.DAYS);*/
-        
         return map;
     }
 
