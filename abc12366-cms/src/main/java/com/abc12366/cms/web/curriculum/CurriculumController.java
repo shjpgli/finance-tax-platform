@@ -76,9 +76,9 @@ public class CurriculumController {
 
     }
     
-    /**
+   /* *//**
      * 推荐课程查询
-     */
+     *//*
     @GetMapping(path = "/selectRecommendForqt")
     public ResponseEntity selectRecommendForqt() {
     	List<CurriculumListBo> list = null;
@@ -92,7 +92,7 @@ public class CurriculumController {
         	redisTemplate.opsForValue().set("Bangb_RecommendForqt",JSONArray.toJSONString(list),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
         	return ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
         }
-    }
+    }*/
 
     /**
      * 查询单个课程授课信息
