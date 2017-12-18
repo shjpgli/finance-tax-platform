@@ -91,7 +91,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //获取最热课程
                 .excludePathPatterns("/curriculum/selectListWatch")
                         //获取推荐课程
-                .excludePathPatterns("/curriculum/selectRecommend")
+                .excludePathPatterns("/curriculum/selectRecommend","/curriculum/selectRecommendForqt")
                         //获取会员专享课程
                 .excludePathPatterns("/curriculum/selectListVIP")
                         //课程浏览量增加
