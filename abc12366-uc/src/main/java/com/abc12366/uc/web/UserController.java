@@ -8,6 +8,7 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.IWxGzhService;
 import com.abc12366.uc.service.UserService;
+import com.abc12366.uc.util.StringUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,20 +64,22 @@ public class UserController {
     /**
      * 查询用户列表，支持多标签查询
      *
-     * @param username  用户名
-     * @param phone     手机号
-     * @param nickname  昵称
-     * @param status    用户状态
-     * @param tagId     标签ID
-     * @param realName  真实姓名
-     * @param points    积分
-     * @param exp       经验值
-     * @param vipLevel  会员等级
-     * @param medal     用户等级
-     * @param startDate 注册开始日期, 默认为最近30天
-     * @param endDate   注册结束日期, 默认为当天
-     * @param page      当前页
-     * @param size      每页大小
+     * @param username   用户名
+     * @param phone      手机号
+     * @param nickname   昵称
+     * @param status     用户状态
+     * @param tagId      标签ID
+     * @param realName   真实姓名
+     * @param pointsOper 积分操作符 小于等于：lte，等于：equals，大于等于：gte
+     * @param points     积分
+     * @param expOper    经验值操作符 小于等于：lte，等于：equals，大于等于：gte
+     * @param exp        经验值
+     * @param vipLevel   会员等级
+     * @param medal      用户等级
+     * @param startDate  注册开始日期, 默认为最近30天
+     * @param endDate    注册结束日期, 默认为当天
+     * @param page       当前页
+     * @param size       每页大小
      * @return List 用户列表
      */
     @GetMapping
@@ -87,7 +90,9 @@ public class UserController {
             @RequestParam(required = false) Boolean status,
             @RequestParam(required = false) String tagId,
             @RequestParam(required = false) String realName,
+            @RequestParam(required = false) String pointsOper,
             @RequestParam(required = false) String points,
+            @RequestParam(required = false) String expOper,
             @RequestParam(required = false) String exp,
             @RequestParam(required = false) String vipLevel,
             @RequestParam(required = false) String medal,
@@ -99,7 +104,9 @@ public class UserController {
         Map<String, Object> map = new HashMap<>(16);
         map.put("medal", medal);
         map.put("vipLevel", vipLevel);
+        map.put("expOper", StringUtil.operReplace(expOper));
         map.put("exp", exp);
+        map.put("pointsOper", StringUtil.operReplace(pointsOper));
         map.put("points", points);
         map.put("realName", realName);
         if (!StringUtils.isEmpty(username)) {
