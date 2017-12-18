@@ -52,11 +52,11 @@
             <if test="vipLevel != null and vipLevel != ''">
                 and vipLevel=#{vipLevel}
             </if>
-            <if test="exp!=null and exp != ''">
-                and exp >= #{exp}
+            <if test="exp != null and exp != '' and expOper != null and expOper != ''">
+                and exp ${expOper} #{exp}
             </if>
-            <if test="points!=null and points != ''">
-                and points >= #{points}
+            <if test="points != null and points != '' and pointsOper != null and pointsOper != ''">
+                and points ${pointsOper} #{points}
             </if>
             <if test="startDate !=null and startDate != ''">
                 and createTime >= #{startDate}
