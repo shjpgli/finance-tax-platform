@@ -4,11 +4,11 @@
 <mapper namespace="com.abc12366.uc.mapper.db1.AdminOperationMapper">
 
     <sql id="Base_Column_List">
-        id, userId, adminId, oldPhone, newPhone, createTime, reason
+        id, userId, adminId, oldPhone, newPhone, createTime, reason,oldUsername,newUsername
     </sql>
 
-    <insert id="insert">
+    <insert id="insert" parameterType="com.abc12366.uc.model.bo.AdminModifyUserPhoneLogBO">
         insert into uc_admin_modify_phone_log(<include refid="Base_Column_List"/> )
-        values (#{id},#{userId},#{adminId},#{oldPhone},#{newPhone},#{createTime},#{reason})
+        values (#{id},#{userId},#{adminId},#{oldPhone},#{newPhone},#{createTime},#{reason},#{oldUsername},#{newUsername})
     </insert>
 </mapper>

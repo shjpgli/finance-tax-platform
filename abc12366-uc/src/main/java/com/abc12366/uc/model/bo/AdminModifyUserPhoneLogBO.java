@@ -40,6 +40,14 @@ public class AdminModifyUserPhoneLogBO {
      *原因
      */
     private String reason;
+    /**
+     * 老用户名
+     */
+    private String oldUsername;
+    /**
+     *旧用户名
+     */
+    private String newUsername;
 
     public AdminModifyUserPhoneLogBO() {
     }
@@ -50,6 +58,16 @@ public class AdminModifyUserPhoneLogBO {
         this.oldPhone = oldPhone;
         this.newPhone = newPhone;
         this.reason = reason;
+    }
+
+    public AdminModifyUserPhoneLogBO(String userId, String adminId, String oldPhone, String newPhone, String reason, String oldUsername, String newUsername) {
+        this.userId = userId;
+        this.adminId = adminId;
+        this.oldPhone = oldPhone;
+        this.newPhone = newPhone;
+        this.reason = reason;
+        this.oldUsername = oldUsername;
+        this.newUsername = newUsername;
     }
 
     public String getId() {
@@ -108,6 +126,22 @@ public class AdminModifyUserPhoneLogBO {
         this.reason = reason;
     }
 
+    public String getOldUsername() {
+        return oldUsername;
+    }
+
+    public void setOldUsername(String oldUsername) {
+        this.oldUsername = oldUsername;
+    }
+
+    public String getNewUsername() {
+        return newUsername;
+    }
+
+    public void setNewUsername(String newUsername) {
+        this.newUsername = newUsername;
+    }
+
     @Override
     public String toString() {
         return "AdminModifyUserPhoneLogBO{" +
@@ -118,6 +152,8 @@ public class AdminModifyUserPhoneLogBO {
                 ", newPhone='" + newPhone + '\'' +
                 ", createTime=" + createTime +
                 ", reason='" + reason + '\'' +
+                ", oldUsername='" + oldUsername + '\'' +
+                ", newUsername='" + newUsername + '\'' +
                 '}';
     }
 }
