@@ -61,6 +61,19 @@ public class NoticeController {
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{},{},{}", title, page, size);
+        	 NoticeForqtBO notice = new NoticeForqtBO();
+             notice.setTitle(title);
+             List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, page, size);
+             PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
+             ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                     "total", pageInfo.getTotal()));
+
+             LOGGER.info("{}", responseEntity);
+             return responseEntity;
+    }
+    
+    @GetMapping("/noticesForqt")
+    public ResponseEntity selectListForqtCszj() {
         
         if(redisTemplate.hasKey("CMS_NoticeListFqt")){
         	List<NoticeForqtBO> dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("CMS_NoticeListFqt"),NoticeForqtBO.class);
@@ -68,17 +81,17 @@ public class NoticeController {
     		return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
         }else{
         	 NoticeForqtBO notice = new NoticeForqtBO();
-             notice.setTitle(title);
-             List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, page, size);
+             List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, 1, 9);
              redisTemplate.opsForValue().set("CMS_NoticeListFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
              PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
              ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
                      "total", pageInfo.getTotal()));
-
              LOGGER.info("{}", responseEntity);
              return responseEntity;
         } 
     }
+    
+    
 
     @PostMapping("/notice")
     public ResponseEntity insert(@Valid @RequestBody NoticeBO notice) {
