@@ -6,11 +6,14 @@ import com.abc12366.uc.mapper.db2.UserStatisRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserStatisService;
+import com.abc12366.uc.util.StringUtil;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -320,5 +323,41 @@ public class UserStatisServiceImpl implements UserStatisService {
                 return userStatisRoMapper.bindHndsLoginInfo(StringUtils.isEmpty(timeInterval)?null:c1.getTime(), StringUtils.isEmpty(timeInterval) ? null:c3.getTime());
         }
         return null;
+    }
+
+    @Override
+    public PointAnalysisBO pointAnalysis(String startStr, String endStr, int page, int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<PointRuleAnalysisBO> pointRuleAnalysisBOList = userStatisRoMapper.pointRuleAnalysis(StringUtils.isEmpty(startStr) ? null : DateUtils.strToDate(startStr, "yyyy-MM"),
+                StringUtils.isEmpty(endStr) ? null : DateUtils.strToDate(endStr, "yyyy-MM"));
+
+        PointAnalysisBO pointAnalysisBO = userStatisRoMapper.pointAnalysis(StringUtils.isEmpty(startStr)?null:DateUtils.strToDate(startStr, "yyyy-MM"),
+                StringUtils.isEmpty(endStr)?null:DateUtils.strToDate(endStr, "yyyy-MM"));
+        pointAnalysisBO.setOutInPercent(new DecimalFormat("#.##").format(pointAnalysisBO.getSumIncome() == 0 ? "/" : (pointAnalysisBO.getSumOutgo() - pointAnalysisBO.getSumIncome()) / pointAnalysisBO.getSumIncome() * 100)+"%");
+
+        pointAnalysisBO.setPointRuleAnalysisBOList(pointRuleAnalysisBOList);
+        pointAnalysisBO.setTotal(pointRuleAnalysisBOList == null ? 0 : (int) ((Page) pointRuleAnalysisBOList).getTotal());
+        return pointAnalysisBO;
+    }
+
+    @Override
+    public List<PointRuleinfoBO> pointAnalysisRuleinfo(String ruleId, String timeInterval, int page, int size) {
+        String[] timeStr;
+        Calendar c1 = Calendar.getInstance();
+        Calendar c3 = Calendar.getInstance();
+        if(!StringUtils.isEmpty(timeInterval)){
+            timeStr = timeInterval.split("～");
+            if(timeStr.length!=2||timeStr[0].trim().length()!=(timeStr[1].trim().length())){
+                throw new ServiceException(4806);
+            }
+
+            if(!StringUtils.isEmpty(timeStr[0])){
+                c1.setTime(DateUtils.strToDate(timeStr[0], "yyyy-MM-dd HH:mm:ss"));
+            }
+            if(!StringUtils.isEmpty(timeStr[1])){
+                c3.setTime(DateUtils.strToDate(timeStr[1], "yyyy-MM-dd HH:mm:ss"));
+            }
+        }
+        return userStatisRoMapper.pointAnalysisRuleinfo(ruleId,StringUtils.isEmpty(timeInterval)?null:c1.getTime(), StringUtils.isEmpty(timeInterval) ? null:c3.getTime());
     }
 }

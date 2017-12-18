@@ -126,7 +126,7 @@ public class KnowledgeBaseController {
         if(!StringUtils.isEmpty(keywords)){
             keywords = keywords.toUpperCase();
         }
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, true, true);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, true, true,"");
         List<KnowledgeBase> list = knowledgeBaseService.selectUCList(param);
 
         return (list == null) ?
@@ -148,7 +148,7 @@ public class KnowledgeBaseController {
         if(!StringUtils.isEmpty(keywords)){
             keywords = keywords.toUpperCase();
         }
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO("", type, keywords, true, true);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO("", type, keywords, true, true,"");
         List<KnowledgeBase> list = knowledgeBaseService.selectUCListByTag(param);
 
         return (list == null) ?
@@ -168,12 +168,13 @@ public class KnowledgeBaseController {
                                      @RequestParam(value = "type", required = false) String type,
                                      @RequestParam(value = "recommend", required = false) String recommend,
                                      @RequestParam(value = "isOpen", required = false) Boolean isOpen,
+                                     @RequestParam(value = "order", required = false) String order,
                                      @RequestParam(value = "status", required = false) Boolean status) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         if(!StringUtils.isEmpty(keywords)){
             keywords = keywords.toUpperCase();
         }
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status,order);
         param.setRecommend(recommend);
         List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
 
@@ -212,6 +213,19 @@ public class KnowledgeBaseController {
         KnowledgeBase knowledgeBase = knowledgeBaseService.selectOne(id);
         return ResponseEntity.ok(Utils.kv("data", knowledgeBase));
     }
+
+
+    /*
+    *
+    * 知识库采集来源列表
+    *
+    */
+    @GetMapping(path = "/sourceList")
+    public ResponseEntity sourceList(){
+        return ResponseEntity.ok(Utils.kv("data", knowledgeBaseService.selectSourceList()));
+    }
+
+
 
     /**
      * 新增PV 接口

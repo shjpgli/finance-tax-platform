@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.KnowledgeAttachmentRoMapper;
+import com.abc12366.bangbang.mapper.db2.KnowledgeBaseRoMapper;
 import com.abc12366.bangbang.model.KnowledgeAttachment;
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeRel;
@@ -33,6 +34,9 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     private KnowledgeBaseMapper knowledgeBaseMapper;
 
     @Autowired
+    private KnowledgeBaseRoMapper knowledgeBaseRoMapper;
+
+    @Autowired
     private KnowledgeTagRelMapper knowledgeTagRelMapper;
 
     @Autowired
@@ -49,7 +53,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Override
     public Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO) {
-        List<KnowledgeBase> list = knowledgeBaseMapper.hotList(paramBO);
+        List<KnowledgeBase> list = knowledgeBaseRoMapper.hotList(paramBO);
         if(!list.isEmpty()){
             return category(list);
         }
@@ -58,23 +62,23 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Override
     public List<KnowledgeBase> hotUnClassifyMap(KnowledgeBaseHotParamBO paramBO) {
-        List<KnowledgeBase> list = knowledgeBaseMapper.hotUnClassifyList(paramBO);
+        List<KnowledgeBase> list = knowledgeBaseRoMapper.hotUnClassifyList(paramBO);
         return list;
     }
 
     @Override
     public List<KnowledgeBase> selectUCList(KnowledgeBaseParamBO param) {
-        return knowledgeBaseMapper.selectUCList(param);
+        return knowledgeBaseRoMapper.selectUCList(param);
     }
 
     @Override
     public List<KnowledgeBase> selectUCListByTag(KnowledgeBaseParamBO param) {
-        return knowledgeBaseMapper.selectUCListBytag(param);
+        return knowledgeBaseRoMapper.selectUCListBytag(param);
     }
 
     @Override
     public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
-        List<KnowledgeBase> list = knowledgeBaseMapper.selectList(param);
+        List<KnowledgeBase> list = knowledgeBaseRoMapper.selectList(param);
         if(!list.isEmpty()){
             Date now = new Date();
             List<String> ids = new ArrayList<>();
@@ -98,17 +102,17 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
     @Override
     public List<KnowledgeBase> interestedList(String id, int num) {
-        return knowledgeBaseMapper.interestedList(id, num);
+        return knowledgeBaseRoMapper.interestedList(id, num);
     }
 
     @Override
     public List<KnowledgeBase> relatedList(String id, int num) {
-        return knowledgeBaseMapper.relatedList(id, num);
+        return knowledgeBaseRoMapper.relatedList(id, num);
     }
 
     @Override
     public KnowledgeBase selectOne(String id) {
-        KnowledgeBase knowledgeBase = knowledgeBaseMapper.selectByPrimaryKey(id);
+        KnowledgeBase knowledgeBase = knowledgeBaseRoMapper.selectByPrimaryKey(id);
         if(knowledgeBase != null){
             List<KnowledgeAttachment> list =knowledgeAttachmentRoMapper.selectListByKnowledgeId(id);
             knowledgeBase.setAttachmentList(list);
@@ -310,12 +314,17 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
 
 	@Override
 	public List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param) {
-		return knowledgeBaseMapper.wxhotUnClassifyMap(param);
+		return knowledgeBaseRoMapper.wxhotUnClassifyMap(param);
 	}
 
     @Override
     public List<KnowledgeBase> selectNearestList(KnowledgeBaseHotParamBO param) {
-        return knowledgeBaseMapper.nearestList(param);
+        return knowledgeBaseRoMapper.nearestList(param);
+    }
+
+    @Override
+    public List<String> selectSourceList() {
+        return knowledgeBaseRoMapper.selectSourceList();
     }
 
 }

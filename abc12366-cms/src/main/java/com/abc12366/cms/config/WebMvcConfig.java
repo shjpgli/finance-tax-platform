@@ -76,7 +76,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //根据内容ID查询内容信息
                 .excludePathPatterns("/content/selectContent")
                         //获取财税资讯网
-                .excludePathPatterns("/content/selectListcszxw")
+                .excludePathPatterns("/content/selectListcszxw", "/content/selectListcszxwForqt")
                         //根据栏目id获取财税资讯列表
                 .excludePathPatterns("/content/selectListByChannelId")
                         //获取最新的活动信息
@@ -86,12 +86,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //根据访问量获取文章信息
                 .excludePathPatterns("/content/selectListByviews")
                         //获取推荐课程
-                .excludePathPatterns("/content/selectRecommend")
+                .excludePathPatterns("/content/selectRecommend", "/content/selectRecommendForqt")
                         //帮帮活动查询接口
                 .excludePathPatterns("/bangbang/event/**")
                 .excludePathPatterns("/bangbang/event/details/**")
                         // 财税专家客户端广告页、通知公告
-                .excludePathPatterns("/adpages", "adpages/**", "/notices", "/notices/**")
+                .excludePathPatterns("/adpages", "adpages/**", "/notices", "/notices/**","/noticesForqt")
                         //发现之旅财税资讯列表
                 .excludePathPatterns("/channel/list")
                         //问卷

@@ -266,7 +266,7 @@ public class ContentController {
     	}else{
     		Map<String, Object> dataMap = new HashMap<>();
 	        dataMap.put("siteId", "3ef33a7ece264f859a4c4af37ba458c9");//站点ID
-	        PageHelper.startPage(1, 10, true).pageSizeZero(true).reasonable(true);
+	        PageHelper.startPage(1, 7, true).pageSizeZero(true).reasonable(true);
 	        //查询内容列表
 	        List<ContentsListBo> dataList = contentService.selectListcszxw(dataMap);
 	        redisTemplate.opsForValue().set("CMS_SelectListcszxwFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);

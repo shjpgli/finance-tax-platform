@@ -19,6 +19,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
+import com.abc12366.uc.service.admin.AdminOperationService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -105,6 +106,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
+
+	@Autowired
+	private AdminOperationService adminOperationService;
 
 	@Override
 	public List<UserListBO> selectList(Map<String, Object> map, int page,
@@ -651,6 +655,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserBO updatePhone(UserPhoneBO bo) {
 		User user = selectUser(bo.getId());
+		String oldPhone = user.getPhone();
+		String oldUsername = user.getUsername();
 		if (user == null) {
 			LOGGER.warn("修改失败");
 			throw new ServiceException(4018);
@@ -666,10 +672,17 @@ public class UserServiceImpl implements UserService {
 
 		user.setLastUpdate(new Date());
 		user.setPhone(bo.getPhone());
+		user.setUsername(StringUtils.isEmpty(bo.getUsername())?null:bo.getUsername());
 		int result = userMapper.updatePhone(user);
 		if (result != 1) {
 			LOGGER.warn("修改失败");
 			throw new ServiceException(4102);
+		}
+		//管理员修改用户手机记日志
+		try{
+			adminOperationService.insert(new AdminModifyUserPhoneLogBO(bo.getId(), Utils.getAdminId(), oldPhone,bo.getPhone(), bo.getReason(),oldUsername,bo.getUsername()));
+		} catch (Exception e){
+			e.printStackTrace();
 		}
 
 		// 删除redis用户信息

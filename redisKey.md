@@ -13,4 +13,15 @@
 11.地区管理-根据市ID查区(/area/{cityId})：cityId+"_Area"
 12.获取用户累计签到天数(/check/total)：userid+'_Check'
 13.查看用户本月任务概况(/task/mytask/survey/{userId})：userid+'_Tasks'
-14.根据等级编码查看会员等级/uvip/level/bo/{levelCode}：levelCode+"_VipLevel"
+14.根据等级编码查看会员等级(/uvip/level/bo/{levelCode})：levelCode+"_VipLevel"
+个人消息(/user/message)：userid+'_MessageForqt'
+业务消息服务(/business)：userid+'_BusinessForqt'
+广告轮播图(/adpages)：CMS_AdpageListFqt
+财税资讯列表(/content/selectListcszxw)：CMS_SelectListcszxwFqt
+通知公告(/notices)：CMS_NoticeListFqt
+热点问题(/questionbb/selectListryForqt)：Bangb_HotUnClassifyList
+帮友热议(/questionbb/selectListry)：CMS_SelectListryForqt
+活动中心(/event/topone/{category})：category+"_ToponeForqt"
+推荐课程(/curriculum/selectRecommend)：CMS_Curriculum
+知识库分类(/knowledgeCategory/listAll)：Bangb_KnowledgeCategoryList
+财税资讯(/contentType)：Cms_ContentTypeList

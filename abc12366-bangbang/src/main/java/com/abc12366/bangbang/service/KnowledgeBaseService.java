@@ -42,6 +42,15 @@ public interface KnowledgeBaseService {
     /* 知识库单个查询*/
     KnowledgeBase selectOne(String id);
 
+    List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param);
+
+    /*采集来源列表*/
+    List<String> selectSourceList();
+
+
+
+
+
     /* 新增知识库数据 */
     void add(KnowledgeBase knowledgeBase);
 
@@ -59,7 +68,5 @@ public interface KnowledgeBaseService {
 
     /*修改知识库数据 浏览量*/
     void addPV(String id);
-
-	List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param);
 
 }

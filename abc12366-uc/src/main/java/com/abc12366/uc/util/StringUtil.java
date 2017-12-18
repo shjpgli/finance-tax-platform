@@ -8,13 +8,16 @@
 
 package com.abc12366.uc.util;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * ClassName:StringUtil
  * Date:     2017年6月7日 上午9:47:06
+ *
  * @author likaixuan
  * @version V1.0
- * @since JDK 1.7
  * @see
+ * @since JDK 1.7
  */
 public class StringUtil {
     /**
@@ -52,12 +55,9 @@ public class StringUtil {
     /**
      * replace:(替换字符串函数)
      *
-     * @param strSource
-     *            源字符串
-     * @param strFrom
-     *            要替换的子串
-     * @param strTo
-     *            替换为的字符串
+     * @param strSource 源字符串
+     * @param strFrom   要替换的子串
+     * @param strTo     替换为的字符串
      * @return
      * @since JDK 1.7
      */
@@ -83,6 +83,27 @@ public class StringUtil {
         strDest = strDest + strSource;
         // 返回
         return strDest;
+    }
+
+    /**
+     * 字符退换操作
+     * @param operator 操作符
+     * @return 操作符
+     */
+    public static String operReplace(String operator) {
+        if ("equals".equalsIgnoreCase(operator)) {
+            return "=";
+        } else if ("gte".equalsIgnoreCase(operator)) {
+            return ">=";
+        } else if ("lte".equalsIgnoreCase(operator)) {
+            return "<=";
+        } else if ("lt".equalsIgnoreCase(operator)) {
+            return "<";
+        } else if ("gt".equalsIgnoreCase(operator)) {
+            return ">";
+        } else {
+            return "=";
+        }
     }
 }
 

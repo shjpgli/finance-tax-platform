@@ -37,7 +37,7 @@ public class KnowledgeVoteController {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
 
-        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, knowledgeType, keywords, null, null);
+        KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, knowledgeType, keywords, null, null,"");
         List<KnowledgeVoteLogBO> list = knowledgeVoteService.selectVoteList(param);
 
         return (list == null) ?

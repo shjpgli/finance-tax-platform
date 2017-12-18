@@ -100,20 +100,21 @@ public class CjxxRemindJob implements StatefulJob{
         		        			
         		        			if(users!=null && users.size()>0){
         		        				
-        		        				String sysMsg="财税专家用户提醒，您的企业（"+dzsbXxInfo.getNsrsbh().substring(0,6)+"****** "+dzsbXxInfo.getNsrmc()+"）本月还有未申报的报表种类："+dzsbXxInfo.getSzmc()+"，申报期限："+sbxq+"，实际申报种类以税务局核定信息为准，如已申报请忽略！";
+        		        				String sysMsg="财税专家用户提醒，您的企业（"+dzsbXxInfo.getNsrsbh().substring(0,6)+"****** "+dzsbXxInfo.getNsrmc()+"）本月还有未缴税的税种："+dzsbXxInfo.getSzmc()+"，缴税期限："+sbxq+"，实际缴税情况以税务局信息为准，如已缴税请忽略！";
         		        				
-        		        				String dxmsg="您的企业（"+dzsbXxInfo.getNsrmc()+"）本月还有未申报的报表种类："+dzsbXxInfo.getSzmc()+"，申报期限："+sbxq+"，实际申报种类以税务局核定信息为准，如已申报请忽略";
+        		        				String dxmsg="您的企业（"+dzsbXxInfo.getNsrmc()+"）本月您还有未缴税的税种："+dzsbXxInfo.getSzmc()+"，缴税期限："+sbxq+"，实际缴税情况以税务局信息为准，如已缴税请忽略";
         		        				
         		        				Map<String, String> dataList = new HashMap<String, String>();
-        		        				dataList.put("first", "财税专家会员提醒，您的企业（"+dzsbXxInfo.getNsrsbh().substring(0,6)+"****** "+dzsbXxInfo.getNsrmc()+"）本月还有未申报的报表种类如下");
-        		                        dataList.put("remark", "此信息仅为提醒，实际申报种类以税务局核定信息为准，如已申报请忽略！");
-        		                        dataList.put("keyword1", dzsbXxInfo.getSzmc());
-        		                        dataList.put("keyword2", dzsbXxInfo.getSkssqq()+"至"+dzsbXxInfo.getSkssqz());
-        		                        dataList.put("keyword3", sbxq);
-        		                        dataList.put("keyword3Color", "#00DB00");
+        		        				dataList.put("first", "财税专家会员提醒，您的企业（"+dzsbXxInfo.getNsrsbh().substring(0,6)+"****** "+dzsbXxInfo.getNsrmc()+"）本月还有未缴税的税种如下：");
+        		                        dataList.put("remark", "此信息仅为提醒，实际缴税情况以税务局信息为准，如已缴税请忽略！");
+        		                        dataList.put("keyword1", dzsbXxInfo.getNsrsbh());
+        		                        dataList.put("keyword2", dzsbXxInfo.getNsrmc());
+        		                        dataList.put("keyword3", dzsbXxInfo.getSzmc());
+        		                        dataList.put("keyword4", sbxq);
+        		                        dataList.put("keyword4Color", "#00DB00");
         		                        
         		                        for(int j=0;j<users.size();j++){
-        		                        	msgSendService.sendMsg(users.get(j), sysMsg,"", "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, dxmsg);
+        		                        	msgSendService.sendMsg(users.get(j), sysMsg,"", "ANmj1C1fjZ1ny4S2fhX76E7S7ttG6kYHf5Q0gNtwM5E", dataList, dxmsg);
         		                        }
         		        			}else{
         		        				LOGGER.info("查询当前录入日期["+dzsbTime.getLasttime()+"]催缴信息，未查到相关用户信息,纳税人名称:"+dzsbXxInfo.getNsrmc());
