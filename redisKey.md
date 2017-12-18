@@ -14,3 +14,13 @@
 12.获取用户累计签到天数(/check/total)：userid+'_Check'
 13.查看用户本月任务概况(/task/mytask/survey/{userId})：userid+'_Tasks'
 14.根据等级编码查看会员等级/uvip/level/bo/{levelCode}：levelCode+"_VipLevel"
+个人消息：userid+'_MessageForqt'
+业务消息服务：userid+'_BusinessForqt'
+广告轮播图：CMS_AdpageListFqt
+财税资讯列表：CMS_SelectListcszxwFqt
+通知公告：CMS_NoticeListFqt
+热点问题：Bangb_HotUnClassifyList
+帮友热议：CMS_SelectListryForqt
+活动中心：category+"_ToponeForqt"
+推荐课程：CMS_Curriculum
+知识库分类：Bangb_KnowledgeCategoryList
