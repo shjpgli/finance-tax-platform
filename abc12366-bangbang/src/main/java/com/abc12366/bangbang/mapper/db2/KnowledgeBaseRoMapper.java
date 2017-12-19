@@ -86,4 +86,12 @@ public interface KnowledgeBaseRoMapper {
      */
     List<String> selectSourceList();
 
+    /**
+     * 根据标题查询个数
+     * @param subject
+     * @return
+     */
+    int selectCntBySubject(String subject, String id);
+
+
 }

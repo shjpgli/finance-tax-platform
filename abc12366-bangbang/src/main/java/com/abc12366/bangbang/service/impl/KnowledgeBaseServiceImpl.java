@@ -166,8 +166,13 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     @Transactional("db1TxManager")
     @Override
     public KnowledgeBaseBO add(KnowledgeBaseBO knowledgeBaseBO) {
+        KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
+        String subject = knowledgeBase.getSubject();
+        int cntSubject = knowledgeBaseRoMapper.selectCntBySubject(subject, null);
+        if(cntSubject != 0){
+            throw new ServiceException(4523);
+        }
         try {
-            KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             knowledgeBase.setId(Utils.uuid());
             knowledgeBase.setCreateUser(Utils.getAdminId());
             knowledgeBase.setUpdateUser(Utils.getAdminId());
@@ -200,8 +205,13 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     @Transactional("db1TxManager")
     @Override
     public KnowledgeBaseBO modify(KnowledgeBaseBO knowledgeBaseBO) {
+        KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
+        String subject = knowledgeBase.getSubject();
+        int cntSubject = knowledgeBaseRoMapper.selectCntBySubject(subject, knowledgeBase.getId());
+        if(cntSubject != 0){
+            throw new ServiceException(4523);
+        }
         try {
-            KnowledgeBase knowledgeBase = knowledgeBaseBO.getKnowledgeBase();
             knowledgeBase.setUpdateTime(new Date());
             knowledgeBase.setUpdateUser(Utils.getAdminId());
             String knowledgeId = knowledgeBase.getId();

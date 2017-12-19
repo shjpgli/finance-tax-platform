@@ -224,4 +224,13 @@
 		SELECT DISTINCT source FROM bb_knowledge_base WHERE source IS NOT NULL AND source !=''
 	</select>
 
+
+	<select id="selectCntBySubject" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM bb_knowledge_base WHERE  subject = #{subject}
+		<if test="id != null">
+			AND id != #{id}
+		</if>
+	</select>
+
+
 </mapper>
