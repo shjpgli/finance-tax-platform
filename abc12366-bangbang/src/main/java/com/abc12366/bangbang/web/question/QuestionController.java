@@ -261,7 +261,7 @@ public class QuestionController {
     		return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
     	}else{
     		Map<String, Object> dataMap = new HashMap<>();
-            PageHelper.startPage(1, 10, true).pageSizeZero(true).reasonable(true);
+            PageHelper.startPage(1, 9, true).pageSizeZero(true).reasonable(true);
             List<QuestionryBo> dataList = questionService.selectListry(dataMap);
             redisTemplate.opsForValue().set("CMS_SelectListryForqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
             return (dataList == null) ?

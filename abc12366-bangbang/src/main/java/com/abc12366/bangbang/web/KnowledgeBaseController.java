@@ -61,7 +61,7 @@ public class KnowledgeBaseController {
     */
     @GetMapping(path = "/nearestList")
     public ResponseEntity nearestList(
-            @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
+            @RequestParam(value = "KnowledgePageSize", defaultValue = "9") int KnowledgePageSize,
             @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType){
     	if(redisTemplate.hasKey("Bangb_NearestLists")){
     		List<KnowledgeBase> list=JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_NearestLists"),KnowledgeBase.class);
