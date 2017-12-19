@@ -113,6 +113,20 @@ public class KnowledgeBase {
         return attachmentList;
     }
 
+    /**
+     * 标签名称列表
+     */
+    private List<String> tagNameList;
+
+    public List<String> getTagNameList() {
+        return tagNameList;
+    }
+
+    public KnowledgeBase setTagNameList(List<String> tagNameList) {
+        this.tagNameList = tagNameList;
+        return this;
+    }
+
     public KnowledgeBase setAttachmentList(List<KnowledgeAttachment> attachmentList) {
         this.attachmentList = attachmentList;
         return this;

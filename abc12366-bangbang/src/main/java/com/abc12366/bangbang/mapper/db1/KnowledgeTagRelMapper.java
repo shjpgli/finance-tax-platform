@@ -11,6 +11,13 @@ import java.util.List;
 
 public interface KnowledgeTagRelMapper {
 
+    /**
+     * 查询标签名称
+     * @param knowledgeId
+     * @return
+     */
+    List<String> selectTagNamesByKnowledgeId(String knowledgeId);
+
 
     /**
      * 查询（根据主键ID查询）

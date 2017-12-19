@@ -8,6 +8,16 @@
         id, knowledgeId, tagId
     </sql>
 
+
+    <!-- 查询标签名称 （根据知识库id ）-->
+    <select id="selectTagNamesByKnowledgeId" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT NAME FROM bb_knowledge_tag WHERE id IN (
+            SELECT tagId FROM bb_knowledge_tag_rel
+            WHERE knowledgeId =  #{knowledgeId}
+        )
+        AND STATUS = TRUE
+    </select>
+
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.KnowledgeTagRel" parameterType="java.lang.String">
         SELECT
