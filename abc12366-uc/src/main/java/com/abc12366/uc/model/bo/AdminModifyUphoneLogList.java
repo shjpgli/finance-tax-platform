@@ -48,6 +48,14 @@ public class AdminModifyUphoneLogList {
      *原因
      */
     private String reason;
+    /**
+     * 老用户名
+     */
+    private String oldUsername;
+    /**
+     *旧用户名
+     */
+    private String newUsername;
 
     public String getId() {
         return id;
@@ -129,6 +137,22 @@ public class AdminModifyUphoneLogList {
         this.adminNickname = adminNickname;
     }
 
+    public String getOldUsername() {
+        return oldUsername;
+    }
+
+    public void setOldUsername(String oldUsername) {
+        this.oldUsername = oldUsername;
+    }
+
+    public String getNewUsername() {
+        return newUsername;
+    }
+
+    public void setNewUsername(String newUsername) {
+        this.newUsername = newUsername;
+    }
+
     @Override
     public String toString() {
         return "AdminModifyUphoneLogList{" +
@@ -142,6 +166,8 @@ public class AdminModifyUphoneLogList {
                 ", newPhone='" + newPhone + '\'' +
                 ", createTime=" + createTime +
                 ", reason='" + reason + '\'' +
+                ", oldUsername='" + oldUsername + '\'' +
+                ", newUsername='" + newUsername + '\'' +
                 '}';
     }
 }

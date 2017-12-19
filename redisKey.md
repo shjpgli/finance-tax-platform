@@ -24,4 +24,4 @@
 活动中心(/event/topone/{category})：category+"_ToponeForqt"
 推荐课程(/curriculum/selectRecommend)：CMS_Curriculum
 知识库分类(/knowledgeCategory/listAll)：Bangb_KnowledgeCategoryList
-财税资讯()：Cms_ContentTypeList
+财税资讯(/contentType)：Cms_ContentTypeList

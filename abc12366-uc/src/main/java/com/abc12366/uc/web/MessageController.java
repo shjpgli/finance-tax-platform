@@ -62,13 +62,13 @@ public class MessageController {
 
         request.setAttribute("page", page);
         request.setAttribute("size", size);
-        if (type != null && type.equals("")) {
+        if (type != null && "".equals(type)) {
             type = null;
         }
-        if (busiType != null && busiType.equals("")) {
+        if (busiType != null && "".equals(busiType)) {
             busiType = null;
         }
-        if (status != null && status.equals("")) {
+        if (status != null && "".equals(status)) {
             status = null;
         }
 
@@ -84,8 +84,6 @@ public class MessageController {
     /**
      * 获取当前用户消息列表缓存
      *
-     * @param page 当前页
-     * @param size 每页大小
      * @return ResponseEntity
      */
     @GetMapping(path = "/forqt")
