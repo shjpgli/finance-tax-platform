@@ -91,7 +91,7 @@ public interface KnowledgeBaseRoMapper {
      * @param subject
      * @return
      */
-    int selectCntBySubject(String subject, String id);
+    int selectCntBySubject(@Param("subject")String subject, @Param("id")String id);
 
 
 }
