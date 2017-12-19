@@ -1131,6 +1131,7 @@ public class UserServiceImpl implements UserService {
 
 			Map<String, Object> lastYeaMap = new HashMap<>();
 			lastYeaMap.put("end", start);
+			lastYeaMap.put("min",experienceLevelBO.getMinValue());
 			lastYeaMap.put("max", experienceLevelBO.getMaxValue());
 			float lastYearAll = experienceLogService.selectCount(lastYeaMap);
 
