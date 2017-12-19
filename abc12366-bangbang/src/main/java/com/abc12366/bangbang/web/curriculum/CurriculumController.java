@@ -350,4 +350,16 @@ public class CurriculumController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+
+
+    /**
+     * 根据知识库标签查询课程
+     */
+    @GetMapping(path = "/selectListByKnowledgeId")
+    public ResponseEntity selectListByKnowledgeId(@RequestParam(value = "knowledgeId") String knowledgeId,
+                                                  @RequestParam(value = "num", defaultValue = "3") int num) {
+        List<CurriculumListBo> data = curriculumService.selectByKnowledgeId(knowledgeId, num);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
 }

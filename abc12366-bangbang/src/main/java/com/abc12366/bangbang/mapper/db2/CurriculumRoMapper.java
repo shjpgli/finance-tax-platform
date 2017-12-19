@@ -125,5 +125,11 @@ public interface CurriculumRoMapper {
      **/
     int selectCurriculumCnt(Map<String, Object> map);
 
+    /**
+     * 根据知识库的标签查询
+     * @param knowledgeId
+     * @return
+     */
+    List<CurriculumListBo> selectByKnowledgeId(@Param("knowledgeId")String knowledgeId, @Param("num")int num);
 
 }

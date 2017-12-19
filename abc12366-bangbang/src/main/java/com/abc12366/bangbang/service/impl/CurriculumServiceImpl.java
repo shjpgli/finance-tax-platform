@@ -710,4 +710,9 @@ public class CurriculumServiceImpl implements CurriculumService {
         return "";
     }
 
+    @Override
+    public List<CurriculumListBo> selectByKnowledgeId(String knowledgeId, int num) {
+        return curriculumRoMapper.selectByKnowledgeId(knowledgeId, num);
+    }
+
 }
