@@ -18,12 +18,23 @@ public class KnowledgeBaseParamBO {
 
     private Boolean status;     //是否有效
 
-    public KnowledgeBaseParamBO(String categoryCode, String type, String keywords, Boolean isOpen, Boolean status) {
+    private String order;
+
+    public KnowledgeBaseParamBO(String categoryCode, String type, String keywords, Boolean isOpen, Boolean status,String order) {
         this.categoryCode = categoryCode;
         this.type = type;
         this.keywords = keywords;
         this.isOpen = isOpen;
         this.status = status;
+        this.order=order;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 
     public Boolean getStatus() {

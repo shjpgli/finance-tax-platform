@@ -3,6 +3,8 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.MessageConstant;
+import com.abc12366.gateway.util.RedisConstant;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.PointMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
@@ -10,12 +12,16 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.service.*;
-import com.abc12366.gateway.util.TaskConstant;
+import com.alibaba.fastjson.JSONObject;
+import com.abc12366.uc.service.MessageService;
+import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.PointsRuleService;
+import com.abc12366.uc.service.PointsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -53,14 +60,25 @@ public class PointsServiceImpl implements PointsService {
     private PointsRuleService pointsRuleService;
 
     @Autowired
-    private PrivilegeItemService privilegeItemService;
+    private MessageService messageService;
 
     @Autowired
-    private MessageService messageService;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public PointsBO selectOne(String userId) {
-        return pointsRoMapper.selectOne(userId);
+        PointsBO pointsBO = null;
+        if (redisTemplate.hasKey(userId + "_Points")) {
+            pointsBO = JSONObject.parseObject(redisTemplate.opsForValue()
+                    .get(userId + "_Points"), PointsBO.class);
+        } else {
+            pointsBO = pointsRoMapper.selectOne(userId);
+            if (pointsBO != null) {
+                redisTemplate.opsForValue().set(userId + "_Points", JSONObject.toJSONString(pointsBO), RedisConstant
+                        .USER_EXP_TIME_ODFAY, TimeUnit.DAYS);
+            }
+        }
+        return pointsBO;
     }
 
     @Override
@@ -68,18 +86,18 @@ public class PointsServiceImpl implements PointsService {
         //查询出对应的积分规则
         List<PointCodex> pointCodexList = pointsRoMapper.selectCodexList(pointComputeBO);
         if (pointCodexList == null || pointCodexList.size() < 1) {
-            //return;
             throw new ServiceException("0000", "没有对应的积分规则");
         }
         PointCodex pointCodex = pointCodexList.get(0);
-        if (pointCodex.getUpoint() == null || pointCodex.getUpoint().toString().equals("") || pointCodex.getPeriod() == null || pointCodex.getPeriod().trim().equals("")) {
-//            return;
+        if (pointCodex.getUpoint() == null || "".equals(pointCodex.getUpoint().toString()) || pointCodex.getPeriod()
+                == null || "".equals(pointCodex.getPeriod().trim())) {
             throw new ServiceException(4855);
         }
 
         //查看获取经验值次数是否允许范围内
         String period = pointCodex.getPeriod().toUpperCase();
-        if (period.trim().equals("") || (!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A"))) {
+        if ("".equals(period.trim()) || (!"D".equals(period) && !"M".equals(period) && !"Y".equals(period) && !"A"
+                .equals(period))) {
             return;
         }
         if (!period.trim().equals("A")) {
@@ -116,7 +134,6 @@ public class PointsServiceImpl implements PointsService {
         //根据规则计算用户积分值变化
         User user = userRoMapper.selectOne(pointComputeBO.getUserId());
         if (user == null) {
-//            return;
             throw new ServiceException(4018);
         }
 
@@ -151,9 +168,9 @@ public class PointsServiceImpl implements PointsService {
 
         //再批量新增
         List<PointCodex> pointCodexList = new ArrayList<>();
-        for (int i = 0; i < codexList.size(); i++) {
+        for (PointCodex aCodexList : codexList) {
             PointCodex codex = new PointCodex();
-            BeanUtils.copyProperties(codexList.get(i), codex);
+            BeanUtils.copyProperties(aCodexList, codex);
             codex.setId(Utils.uuid());
             pointMapper.insert(codex);
             pointCodexList.add(codex);
@@ -187,13 +204,13 @@ public class PointsServiceImpl implements PointsService {
 
         //查看获取经验值次数是否允许范围内
         String period = pointsRuleBO.getPeriod().toUpperCase();
-        if (!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A")) {
+        if (!"D".equals(period) && !"M".equals(period) && !"Y".equals(period) && !"A".equals(period)) {
             return 0;
         }
-        if (!period.trim().equals("A")) {
+        if (!"A".equals(period.trim())) {
             Date startTime = new Date();
             Date endTime = new Date();
-            if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
+            if (!"".equals(period.trim()) && ("D".equals(period) || "M".equals(period) || "Y".equals(period))) {
                 switch (period) {
                     case "D":
                         startTime = DateUtils.getFirstHourOfDay();
@@ -212,7 +229,6 @@ public class PointsServiceImpl implements PointsService {
                 PointComputeLogParam param = new PointComputeLogParam();
                 param.setUserId(pointCalculateBO.getUserId());
                 param.setTimeType(period);
-                //param.setUpointCodexId(pointCodex.getId());
                 param.setStartTime(startTime);
                 param.setEndTime(endTime);
                 param.setRuleId(pointsRuleBO.getId());
@@ -225,7 +241,6 @@ public class PointsServiceImpl implements PointsService {
         //根据规则计算用户积分值变化
         User user = userRoMapper.selectValidOne(pointCalculateBO.getUserId());
         if (user == null) {
-//            return;
             throw new ServiceException(4018);
         }
 
@@ -246,11 +261,13 @@ public class PointsServiceImpl implements PointsService {
         PointComputeLog pointComputeLog = new PointComputeLog();
         pointComputeLog.setId(Utils.uuid());
         pointComputeLog.setUserId(pointCalculateBO.getUserId());
-        //pointComputeLog.setUpointCodexId(pointCodex.getId());
         pointComputeLog.setTimeType(period);
         pointComputeLog.setCreateTime(new Date());
         pointComputeLog.setRuleId(pointsRuleBO.getId());
         pointMapper.insertComputeLog(pointComputeLog);
+
+        //redis经验值删除
+        redisTemplate.delete(pointCalculateBO.getUserId() + "_Points");
 
         return pointsRuleBO.getPoints();
     }
@@ -258,7 +275,8 @@ public class PointsServiceImpl implements PointsService {
     @Override
     public void batchAward(PointBatchAwardBO pointBatchAwardBO) {
         //如果积分规则为空则返回
-        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_BANGBANG_BATCH_AWARD_CODE);
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant
+                .POINT_RULE_BANGBANG_BATCH_AWARD_CODE);
         if (pointsRuleBO == null) {
             return;
         }
@@ -300,27 +318,28 @@ public class PointsServiceImpl implements PointsService {
         }
     }
 
+    @Override
     @SuppressWarnings("rawtypes")
-	@Transactional("db1TxManager")
-	public ResponseEntity integralMultiplication(UserBO sendUser,
-			UserBO reciveUser, PointsRuleBO bo) {
-		
-    	PointsLogBO spointsLog = new PointsLogBO();
+    @Transactional("db1TxManager")
+    public ResponseEntity integralMultiplication(UserBO sendUser,
+                                                 UserBO reciveUser, PointsRuleBO bo) {
+
+        PointsLogBO spointsLog = new PointsLogBO();
         spointsLog.setUserId(sendUser.getId());
         spointsLog.setRuleId(bo.getId());
-        spointsLog.setRemark("会员特权积分转让给用户："+reciveUser.getUsername());
+        spointsLog.setRemark("会员特权积分转让给用户：" + reciveUser.getUsername());
         spointsLog.setIncome(0);
         spointsLog.setOutgo(bo.getPoints());
         pointsLogService.insert(spointsLog);
-        
+
         PointsLogBO rpointsLog = new PointsLogBO();
         rpointsLog.setUserId(reciveUser.getId());
         rpointsLog.setRuleId(bo.getId());
-        rpointsLog.setRemark("会员特权积分转让，来自会员用户："+sendUser.getUsername());
+        rpointsLog.setRemark("会员特权积分转让，来自会员用户：" + sendUser.getUsername());
         rpointsLog.setIncome(bo.getPoints());
         rpointsLog.setOutgo(0);
         pointsLogService.insert(rpointsLog);
-    	
-        return ResponseEntity.ok(Utils.kv()) ;
-	}
+
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.OperateMessageMapper">
+
+    <sql id="Base_Column_List">
+        id,taskname,web,wechat,message,content,url,target,sendTime,startTime,endTime,status,createTime ,
+        lastUpdate ,areaOper,areaIds,tagOper,tagIds,regTimeOper,regStartTime,regEndTime ,userIds
+    </sql>
+
+    <insert id="insert" parameterType="com.abc12366.uc.model.admin.OperateMessage">
+        insert into uc_operate_message(<include refid="Base_Column_List"/> )
+        values (#{id},#{taskname},#{web},#{wechat},#{message},#{content},#{url},#{target},#{sendTime},
+        #{startTime},#{endTime},#{status},#{createTime},#{lastUpdate},#{areaOper},#{sendTime},#{areaIds},
+        #{tagOper},#{tagIds},#{regTimeOper},#{regStartTime},#{regEndTime},#{userIds})
+    </insert>
+</mapper>

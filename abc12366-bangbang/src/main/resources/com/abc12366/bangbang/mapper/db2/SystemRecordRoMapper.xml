@@ -5,7 +5,7 @@
 
     <select id="selectList" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO" parameterType="java.util.Map">
         SELECT * FROM (SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,pageUrl,
-        stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,ruleCode,
+        stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,ruleCode,nsrsbh,
         (select username from bb_user bu where bu.id=userId) username
         from bb_system_record_${yyyyMMdd}) t
         <where>
@@ -31,7 +31,7 @@
     <select id="selectOne" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO"
             parameterType="com.abc12366.bangbang.model.SystemRecord">
         SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,
-        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,ruleCode,
+        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,ruleCode,nsrsbh,
         (select username from bb_user bu where bu.id=userId) username
         from bb_system_record_${yyyyMMdd}
         where id=#{id}
@@ -40,7 +40,7 @@
     <select id="findStay" resultType="com.abc12366.bangbang.model.bo.SystemRecordBO"
             parameterType="com.abc12366.bangbang.model.SystemRecord">
         SELECT id,userId,sessionId,browseDate,year,week,referer,month,day,hour,minute,pageTitle,
-        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,ruleCode
+        pageUrl,stayLong,feature,appName,ip,location,browseType,browseVersion,os,device,remark,createTime,ruleCode,nsrsbh
         from bb_system_record_${yyyyMMdd}
         where userId=#{userId} and sessionId=#{sessionId} and day=#{day}
         ORDER BY createTime DESC

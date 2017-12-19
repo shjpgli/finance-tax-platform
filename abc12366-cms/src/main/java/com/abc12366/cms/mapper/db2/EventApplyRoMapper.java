@@ -32,9 +32,19 @@ public interface EventApplyRoMapper {
     EventbmtjBo selectbmtj(Map<String, Object> map);
 
     /**
-     * 查询（根据主键ID查询）
+     * 查询（根据主键ID查询）日期
      **/
     List<EventlltjBo> selectlltj(Map<String, Object> map);
+
+    /**
+     * 查询（根据主键ID查询）月份
+     **/
+    List<EventlltjBo> selectlltjyue(Map<String, Object> map);
+
+    /**
+     * 查询（根据主键ID查询）年份
+     **/
+    List<EventlltjBo> selectlltjnian(Map<String, Object> map);
 
 
 }

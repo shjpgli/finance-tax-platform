@@ -8,6 +8,7 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLevelService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.service.UserStatisService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -91,7 +92,7 @@ public class UserStatisController {
     @GetMapping(path = "/liveness/detail")
     public ResponseEntity userLivenessDetail(@RequestParam String type,@RequestParam String start,@RequestParam String end){
         LOGGER.info("查询用户活跃度详情统计：{}:{}:{}", type,start,end);
-        Object object = userService.userLivenessDetail(type,start,end);
+        Object object = userService.userLivenessDetail(type, start, end);
         LOGGER.info("查询用户活跃度详情统计结果返回：{}", object);
         return ResponseEntity.ok(Utils.kv("dataList",object));
     }
@@ -292,16 +293,338 @@ public class UserStatisController {
      * @param start 开始时间
      * @param end 结束时间
      * @param tagName 标签名
+     * @param page 页码
+     * @param size 每页数据数量
      * @return ResponseEntity
      */
     @GetMapping(path = "/tag/uinfo")
     public ResponseEntity userTagUinfo(@RequestParam String type,
-                                  @RequestParam String start,
-                                  @RequestParam String end,
-                                  @RequestParam String tagName){
-        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}：{}", type, start, end, tagName);
+                                        @RequestParam String start,
+                                        @RequestParam String end,
+                                        @RequestParam String tagName,
+                                       @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("查询用户标签统计用户详情：{}：{}：{}：{}:{}:{}", type, start, end, tagName,page,size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<User> tagUserStaticBOList = userStatisService.userTagUinfo(type, start, end, tagName);
         LOGGER.info("查询用户标签统计用户详情返回：{}", tagUserStaticBOList);
-        return ResponseEntity.ok(Utils.kv("dataList",tagUserStaticBOList));
+        return ResponseEntity.ok(Utils.kv("dataList", (Page) tagUserStaticBOList, "total", ((Page) tagUserStaticBOList).getTotal()));
+    }
+
+    /**
+     * 用户区域统计接口
+     * @param type 区域类型，country、province
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param province 省名
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/region")
+    public ResponseEntity region(@RequestParam String type,
+                                  @RequestParam String start,
+                                  @RequestParam String end,
+                                  @RequestParam(required = false) String province,
+                                  @RequestParam(required = false) String tagName
+                                 ){
+        LOGGER.info("用户区域统计：{}：{}：{}:{}:{}", type, start, end, province,tagName);
+        List<RigionStatisBO> rigionStatisBOList = userStatisService.region(type, start, end, province,tagName);
+        LOGGER.info("用户区域统计返回：{}", rigionStatisBOList);
+        return ResponseEntity.ok(Utils.kv("dataList",rigionStatisBOList));
+    }
+
+    /**
+     * 用户区域统计查询用户详情接口
+     * @param type 区域类型，country、province
+     * @param tagName 标签名
+     * @param timeInterval 时间区间
+     * @param province 省名
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/region/uinfo")
+    public ResponseEntity regionUinfo(@RequestParam String type,
+                                      @RequestParam(required = false) String tagName,
+                                        @RequestParam(required = false) String timeInterval,
+                                        @RequestParam String province,
+                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("用户区域统计查询用户详情：{}：{}：{}:{}", type, tagName,timeInterval, province);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<User> userList = userStatisService.regionUinfo(type, timeInterval, province,tagName);
+        LOGGER.info("用户区域统计查询用户详情返回：{}", userList);
+        return (userList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
+    }
+
+    /**
+     * 用户年龄分布统计
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/age")
+    public ResponseEntity statisUserAge(@RequestParam(value = "startTime", required = true) String startTime,
+                                        @RequestParam(value = "endTime", required = true) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        List<UserAgeBO> data = userService.statisUserAge(map);
+        PageInfo<UserAgeBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户年龄分布统计-用户列表
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     *       startNum和endNum为null 查询未知年龄用户
+     * @return
+     */
+    @GetMapping(path = "/age/list")
+    public ResponseEntity statisUserAgeList(@RequestParam(value = "startTime", required = true) String startTime,
+                                            @RequestParam(value = "endTime", required = true) String endTime,
+                                            @RequestParam(value = "startNum", required = false) Integer startAge,
+                                            @RequestParam(value = "endNum", required = false) Integer endAge,
+                                            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        List<UserBO> data = userService.statisUserAgeList(map, startAge, endAge);
+        PageInfo<UserBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+
+    /**
+     * 用户性别分布统计
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/sex")
+    public ResponseEntity statisUserSex(@RequestParam(value = "startTime", required = true) String startTime,
+                                        @RequestParam(value = "endTime", required = true) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        List<UserSexBO> data = userService.statisUserSex(map);
+        PageInfo<UserSexBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户性别分布统计-用户列表
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/sex/list")
+    public ResponseEntity statisUserSexList(@RequestParam(value = "startTime", required = true) String startTime,
+                                            @RequestParam(value = "endTime", required = true) String endTime,
+                                            @RequestParam(value = "sex", required = false) Integer sex,
+                                            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        map.put("sex",sex);
+        List<UserBO> data = userService.statisUserSexList(map);
+        PageInfo<UserBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 用户服务企业情况统计
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/bind")
+    public ResponseEntity statisUserBind(@RequestParam(value = "startTime", required = true) String startTime,
+                                         @RequestParam(value = "endTime", required = true) String endTime) {
+        Map<String,Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        UserBindBO data = userService.statisUserBind(map);
+        LOGGER.info("list{}", data);
+        return ResponseEntity.ok(Utils.kv("data",data));
+    }
+
+    /**
+     * 用户服务企业情况统计-用户列表
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @GetMapping(path = "/bind/list")
+    public ResponseEntity statisUserBindList(@RequestParam(value = "startTime", required = true) String startTime,
+                                             @RequestParam(value = "endTime", required = true) String endTime,
+                                             @RequestParam(value = "startNum", required = true) Integer startNum,
+                                             @RequestParam(value = "endNum", required = true) Integer endNum,
+                                             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        Map<String, Object> map = new HashMap<>();
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+        map.put("startNum", startNum);
+        map.put("endNum", endNum);
+        List<UserBO> data = userService.statisUserBindList(map);
+        PageInfo<UserBO> pageInfo = new PageInfo<>(data);
+        LOGGER.info("list{}", data);
+        return (data == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 企业绑定情况统计
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param start 开始时间
+     * @param end 结束时间
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/count")
+    public ResponseEntity bindCount(@RequestParam String type,
+                                     @RequestParam String start,
+                                     @RequestParam String end){
+        LOGGER.info("企业绑定情况统计：{}：{}：{}", type,start,end);
+        Object o = userStatisService.bindCount(type, start, end);
+        return ResponseEntity.ok(Utils.kv("data", o));
+    }
+
+    /**
+     * 企业绑定情况统计企业详情接口
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param timeInterval 时间区间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/count/info")
+    public ResponseEntity bindCountInfo(@RequestParam String type,
+                                        @RequestParam String timeInterval,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}", type,timeInterval,page,size);
+        List<BindCountInfo> bindCountInfoList = userStatisService.bindCountInfo(type,timeInterval,page,size);
+        return (bindCountInfoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
+    }
+
+    /**
+     * 企业登录情况统计
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param start 开始时间
+     * @param end 结束时间
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/login")
+    public ResponseEntity bindLogin(@RequestParam String type,
+                                    @RequestParam String start,
+                                    @RequestParam String end){
+        LOGGER.info("企业登录情况统计：{}：{}：{}", type,start,end);
+        Object o = userStatisService.bindLogin(type, start, end);
+        LOGGER.info("企业登录情况统计返回：{}");
+        return ResponseEntity.ok(Utils.kv("data", o));
+    }
+
+    /**
+     * 企业绑定情况统计企业详情接口
+     * @param type 类型,all、dzsb、hngs、hnds
+     * @param timeInterval 时间区间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/login/info")
+    public ResponseEntity bindLoginInfo(@RequestParam String type,
+                                        @RequestParam String timeInterval,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("企业绑定情况统计详情：{}：{}：{}:{}", type,timeInterval,page,size);
+        List<BindCountInfo> bindCountInfoList = userStatisService.bindLoginInfo(type, timeInterval, page, size);
+        return (bindCountInfoList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) bindCountInfoList, "total", ((Page) bindCountInfoList).getTotal()));
+    }
+
+    /**
+     * 用户积分收支分析接口
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/point/analysis")
+    public ResponseEntity pointAnalysis(@RequestParam String start,
+                                        @RequestParam String end,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("用户积分收支分析：{}：{}：{}:{}",start,end,page,size);
+        PointAnalysisBO pointAnalysisBO = userStatisService.pointAnalysis(start,end,page,size);
+        return ResponseEntity.ok(Utils.kv("data",pointAnalysisBO));
+    }
+
+    /**
+     * 用户积分收支分析规则日志详情接口
+     * @param ruleId 规则id
+     * @param timeInterval 时间区间
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/point/analysis/ruleinfo")
+    public ResponseEntity pointAnalysisRuleinfo(@RequestParam String ruleId,
+                                        @RequestParam String timeInterval,
+                                        @RequestParam(required = false,defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(required = false,defaultValue = Constant.pageSize) int size){
+        LOGGER.info("用户积分收支分析：{}：{}：{}:{}",ruleId,timeInterval,page,size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<PointRuleinfoBO> pointRuleinfoBOList = userStatisService.pointAnalysisRuleinfo(ruleId, timeInterval,page,size);
+        return (pointRuleinfoBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) pointRuleinfoBOList, "total", ((Page) pointRuleinfoBOList).getTotal()));
     }
 }

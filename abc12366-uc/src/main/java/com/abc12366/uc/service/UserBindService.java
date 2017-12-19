@@ -9,6 +9,7 @@ import org.exolab.castor.xml.ValidationException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 电子申报、电子税局、湖南地税用户绑定相关服务
@@ -74,26 +75,26 @@ public interface UserBindService {
     /**
      * 根据用户ID查询电子申报绑定列表
      *
-     * @param userId 用户ID
+     * @param map 用户ID
      * @return 电子申报绑定列表
      */
-    List<UserDzsbListBO> getUserDzsbBind(String userId);
+    List<UserDzsbListBO> getUserDzsbBind(Map<String, String> map);
 
     /**
      * 根据用户ID查询电子税局绑定列表
      *
-     * @param userId 用户ID
+     * @param map 用户ID
      * @return 电子税局绑定列表
      */
-    List<UserHngsListBO> getUserhngsBind(String userId);
+    List<UserHngsListBO> getUserhngsBind(Map<String, String> map);
 
     /**
      * 根据用户ID查询湖南地税绑定列表
      *
-     * @param userId 用户ID
+     * @param map 用户ID
      * @return 湖南地税绑定列表
      */
-    List<UserHndsBO> getUserhndsBind(String userId);
+    List<UserHndsBO> getUserhndsBind(Map<String, String> map);
 
     /**
      * 电子申报纳税人登录绑定

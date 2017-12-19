@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -73,14 +74,12 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Autowired
     private TodoTaskService todoTaskService;
+    
+    @Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
-        if (userDzsbInsertBO == null) {
-            LOGGER.warn("新增失败，参数：null");
-            throw new ServiceException(4101);
-        }
-
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
         //bindLimit(userId);
@@ -153,6 +152,8 @@ public class UserBindServiceImpl implements UserBindService {
 
         //绑定税号任务埋点
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
+        
+        redisTemplate.delete(userId+"_DzsbList");
         return userDzsbBO1;
     }
 
@@ -289,11 +290,12 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + userDzsb.toString());
             throw new ServiceException(4102);
         }
+        redisTemplate.delete(userDzsb.getUserId()+"_DzsbList");
         return true;
     }
 
     @Override
-    public UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) throws Exception {
+    public UserHngsBO hngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request) {
         if (userHngsInsertBO == null) {
             LOGGER.warn("新增失败，参数：null");
             throw new ServiceException(4101);
@@ -365,6 +367,8 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userHngs, userHngsBO1);
         //绑定税号任务埋点
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
+        
+        redisTemplate.delete(userId+"_HngsList");
         return userHngsBO1;
     }
 
@@ -380,6 +384,8 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + id);
             throw new ServiceException(4102);
         }
+
+        redisTemplate.delete(userHngs.getUserId()+"_HngsList");
         return true;
     }
 
@@ -407,6 +413,9 @@ public class UserBindServiceImpl implements UserBindService {
         //绑定税号任务埋点
         String userId = Utils.getUserId();
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
+        
+
+        redisTemplate.delete(userId+"_HndsList");
         return userHndsBO1;
     }
 
@@ -422,22 +431,23 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + id);
             throw new ServiceException(4102);
         }
+        redisTemplate.delete(userHnds.getUserId()+"_HndsList");
         return true;
     }
 
     @Override
-    public List<UserDzsbListBO> getUserDzsbBind(String userId) {
-        return userBindRoMapper.getUserDzsbBind(userId);
+    public List<UserDzsbListBO> getUserDzsbBind(Map<String, String> map) {
+        return userBindRoMapper.getUserDzsbBind(map);
     }
 
     @Override
-    public List<UserHngsListBO> getUserhngsBind(String userId) {
-        return userBindRoMapper.getUserhngsBind(userId);
+    public List<UserHngsListBO> getUserhngsBind(Map<String, String> map) {
+        return userBindRoMapper.getUserhngsBind(map);
     }
 
     @Override
-    public List<UserHndsBO> getUserhndsBind(String userId) {
-        return userBindRoMapper.getUserhndsBind(userId);
+    public List<UserHndsBO> getUserhndsBind(Map<String, String> map) {
+        return userBindRoMapper.getUserhndsBind(map);
     }
 
     @Override
@@ -491,7 +501,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public void resetPassword(NsrResetPwd data, HttpServletRequest request) throws IOException, MarshalException,
+    public void resetPassword(NsrResetPwd data, HttpServletRequest request) throws MarshalException,
             ValidationException {
         //校验法人姓名和法人证件号
         Map<String, String> mapVali = new HashMap<>(16);
@@ -518,7 +528,7 @@ public class UserBindServiceImpl implements UserBindService {
         analyzeXmlTY12(respMap, data.getNsrsbh());
     }
 
-    private void analyzeXmlTY12(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    private void analyzeXmlTY12(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
@@ -557,7 +567,7 @@ public class UserBindServiceImpl implements UserBindService {
         analyzeXmlTY03(respMap, data.getNsrsbh());
     }
 
-    public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
@@ -629,7 +639,7 @@ public class UserBindServiceImpl implements UserBindService {
         return object;
     }
 
-    public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    public TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }
@@ -671,7 +681,7 @@ public class UserBindServiceImpl implements UserBindService {
         return new MD5(fristSbmm + TaskConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
     }
 
-    private void analyzeXmlTY03(Map resMap, String nsrsbh) throws MarshalException, ValidationException {
+    private void analyzeXmlTY03(Map resMap, String nsrsbh) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
             throw new ServiceException(4629);
         }

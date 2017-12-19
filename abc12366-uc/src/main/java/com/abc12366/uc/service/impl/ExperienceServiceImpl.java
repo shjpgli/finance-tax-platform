@@ -2,10 +2,10 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
-import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
@@ -13,17 +13,20 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.ExperienceRuleService;
 import com.abc12366.uc.service.ExperienceService;
-import com.abc12366.uc.service.PrivilegeItemService;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Admin: liuguiyao<435720953@qq.com>
@@ -47,24 +50,32 @@ public class ExperienceServiceImpl implements ExperienceService {
     private ExperienceLogService experienceLogService;
 
     @Autowired
-    private ExperienceLogRoMapper experienceLogRoMapper;
-
-    @Autowired
     ExperienceLevelRoMapper experienceLevelRoMapper;
 
     @Autowired
     private ExperienceRuleService experienceRuleService;
 
     @Autowired
-    private PrivilegeItemService privilegeItemService;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public MyExperienceBO getMyExperience(String userId) {
         LOGGER.info("{}", userId);
-        return experienceRoMapper.getMyExperience(userId);
+        MyExperienceBO experienceBO;
+        if (redisTemplate.hasKey(userId + "_MyExperience")) {
+            experienceBO = JSONObject.parseObject(redisTemplate.opsForValue()
+                    .get(userId + "_MyExperience"), MyExperienceBO.class);
+        } else {
+            experienceBO = experienceRoMapper.getMyExperience(userId);
+            if (experienceBO != null) {
+                redisTemplate.opsForValue().set(userId + "_MyExperience", JSONObject.toJSONString(experienceBO),
+                        RedisConstant.USER_EXP_TIME_ODFAY, TimeUnit.DAYS);
+            }
+        }
+        return experienceBO;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public List<ExpCodex> codex(String uexpruleId, List<ExpCodex> codexList) {
         LOGGER.info("{}:{}", uexpruleId, codexList);
@@ -73,9 +84,9 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         //再批量新增
         List<ExpCodex> expCodexList = new ArrayList<>();
-        for (int i = 0; i < codexList.size(); i++) {
+        for (ExpCodex aCodexList : codexList) {
             ExpCodex codex = new ExpCodex();
-            BeanUtils.copyProperties(codexList.get(i), codex);
+            BeanUtils.copyProperties(aCodexList, codex);
             codex.setId(Utils.uuid());
             experienceMapper.insert(codex);
             expCodexList.add(codex);
@@ -107,10 +118,10 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         String period = experienceRule.getPeriod().toUpperCase();
 
-        if (!period.equals("D") && !period.equals("M") && !period.equals("Y") && !period.equals("A")) {
+        if (!"D".equals(period) && !"M".equals(period) && !"Y".equals(period) && !"A".equals(period)) {
             return;
         }
-        if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
+        if (!"".equals(period.trim()) && ("D".equals(period) || "M".equals(period) || "Y".equals(period))) {
             switch (period) {
                 case "D":
                     startTime = DateUtils.getFirstHourOfDay();
@@ -128,7 +139,6 @@ public class ExperienceServiceImpl implements ExperienceService {
             ExpComputeLogParam param = new ExpComputeLogParam();
             param.setUserId(expCalculateBO.getUserId());
             param.setTimeType(period);
-            //param.setUexpCodexId(codex.getId());
             param.setStarTime(startTime);
             param.setEndTime(endTime);
             param.setRuleId(experienceRule.getId());
@@ -141,7 +151,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         //经验值日志,同时修改用户经验值
         User user = userRoMapper.selectValidOne(expCalculateBO.getUserId());
         if (user == null) {
-//            return;
             throw new ServiceException(4018);
         }
 
@@ -161,24 +170,23 @@ public class ExperienceServiceImpl implements ExperienceService {
         ExpComputeLog expComputeLog = new ExpComputeLog();
         expComputeLog.setId(Utils.uuid());
         expComputeLog.setUserId(expCalculateBO.getUserId());
-        //expComputeLog.setUexpCodexId(codex.getId());
         expComputeLog.setTimeType(experienceRule.getPeriod().toUpperCase());
         expComputeLog.setCreateTime(new Date());
         expComputeLog.setRuleId(experienceRule.getId());
         experienceMapper.insertComputeLog(expComputeLog);
+
+        //redis经验值删除
+        redisTemplate.delete(expCalculateBO.getUserId() + "_MyExperience");
     }
 
     @Override
     public void compute(ExpComputeBO expComputeBO) {
-        //experienceRuleService.selectOne(UCConstant.)
         List<ExpCodex> expCodexes = experienceRoMapper.selectOne(expComputeBO);
         if (expCodexes == null || expCodexes.size() < 1) {
-//            return;
             throw new ServiceException(4853);
         }
         ExpCodex codex = expCodexes.get(0);
-        if (codex.getUexp() == null || codex.getUexp().toString().equals("")) {
-//            return;
+        if (codex.getUexp() == null || "".equals(codex.getUexp().toString())) {
             throw new ServiceException(4854);
         }
 
@@ -188,7 +196,7 @@ public class ExperienceServiceImpl implements ExperienceService {
 
 
         String period = codex.getPeriod().toUpperCase();
-        if (!period.trim().equals("") && (period.equals("D") || period.equals("M") || period.equals("Y"))) {
+        if (!"".equals(period.trim()) && ("D".equals(period) || "M".equals(period) || "Y".equals(period))) {
             switch (codex.getPeriod().toUpperCase()) {
                 case "D":
                     startTime = DateUtils.getFirstHourOfDay();
@@ -218,7 +226,6 @@ public class ExperienceServiceImpl implements ExperienceService {
         //经验值日志,同时修改用户经验值
         User user = userRoMapper.selectOne(expComputeBO.getUserId());
         if (user == null) {
-//            return;
             throw new ServiceException(4018);
         }
 

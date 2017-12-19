@@ -4,12 +4,15 @@ import com.abc12366.bangbang.model.bo.IdsBo;
 import com.abc12366.bangbang.model.curriculum.bo.*;
 import com.abc12366.bangbang.service.CurriculumService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 学堂课程管理模块
@@ -33,6 +37,9 @@ public class CurriculumController {
 
     @Autowired
     private CurriculumService curriculumService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 课程列表查询
@@ -138,6 +145,25 @@ public class CurriculumController {
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }
+    
+    /**
+     * 推荐课程查询
+     */
+    @GetMapping(path = "/selectRecommendForqt")
+    public ResponseEntity selectRecommendForqt() {
+    	List<CurriculumListsyBo> list = null;
+        if(redisTemplate.hasKey("Bangb_RecommendForqt")){
+        	list=JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_RecommendForqt"),CurriculumListsyBo.class);
+    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(list));
+    		return ResponseEntity.ok(Utils.kv("dataList", list, "total", list.size()));
+        }else{
+        	Map<String, Object> dataMap = new HashMap<>();
+        	PageHelper.startPage(1, 10, true).pageSizeZero(true).reasonable(true);
+        	list= curriculumService.selectRecommend(dataMap);
+        	redisTemplate.opsForValue().set("Bangb_RecommendForqt",JSONArray.toJSONString(list),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        	return ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
+        }
+    }
 
     /**
      * 查询课程标签列表(前端用无需登录)
@@ -168,6 +194,7 @@ public class CurriculumController {
         String userId = request.getHeader(Constant.USER_TOKEN_HEAD);
         curriculumBo.setCreaterId(userId);
         curriculumBo = curriculumService.save(curriculumBo);
+        redisTemplate.delete("Bangb_RecommendForqt");
         return ResponseEntity.ok(Utils.kv("data", curriculumBo));
     }
 
@@ -229,6 +256,7 @@ public class CurriculumController {
                                  @Valid @RequestBody CurriculumBo curriculumBo) {
         //更新课程信息
         curriculumBo = curriculumService.update(curriculumBo);
+        redisTemplate.delete("Bangb_RecommendForqt");
         return ResponseEntity.ok(Utils.kv("data", curriculumBo));
     }
 
@@ -242,6 +270,7 @@ public class CurriculumController {
     @PutMapping(path = "/updateStatus/{curriculumId}")
     public ResponseEntity updateStatus(@Valid @RequestBody String status, @PathVariable("curriculumId") String curriculumId) {
         curriculumService.updateStatus(curriculumId, status);
+        redisTemplate.delete("Bangb_RecommendForqt");
         return ResponseEntity.ok(Utils.kv("data", curriculumId));
     }
 
@@ -252,6 +281,7 @@ public class CurriculumController {
     public ResponseEntity delete(@PathVariable String curriculumId) {
         //删除课程信息
         String rtn = curriculumService.delete(curriculumId);
+        redisTemplate.delete("Bangb_RecommendForqt");
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
@@ -264,6 +294,7 @@ public class CurriculumController {
         //批量删除课程信息
         String rtn = curriculumService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
+        redisTemplate.delete("Bangb_RecommendForqt");
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 

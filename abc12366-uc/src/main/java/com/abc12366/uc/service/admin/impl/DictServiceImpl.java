@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.admin.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.DictMapper;
 import com.abc12366.uc.mapper.db2.DictRoMapper;
@@ -8,16 +9,21 @@ import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.bo.DictUpdateBO;
 import com.abc12366.uc.service.admin.DictService;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @create 2017-04-26 5:01 PM
@@ -32,6 +38,9 @@ public class DictServiceImpl implements DictService {
 
     @Autowired
     private DictMapper dictMapper;
+    
+    @Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public List<Dict> selectList(Dict dict) {
@@ -86,6 +95,9 @@ public class DictServiceImpl implements DictService {
         dict.setLastUpdate(new Date());
 
         dictMapper.insert(dict);
+        // 删除redis
+        redisTemplate.delete(dict.getDictId() + "_Dict");
+        
         BeanUtils.copyProperties(dict, dictBO);
         return dictBO;
     }
@@ -100,6 +112,10 @@ public class DictServiceImpl implements DictService {
         if (upd != 1) {
             throw new ServiceException(4102);
         }
+        
+        // 删除redis
+        redisTemplate.delete(dictUpdateBO.getDictId() + "_Dict");
+        
         DictBO dictBO = new DictBO();
         BeanUtils.copyProperties(dict, dictBO);
         return dictBO;
@@ -108,11 +124,13 @@ public class DictServiceImpl implements DictService {
     @Transactional("db1TxManager")
     @Override
     public int delete(String id) {
-
+    	Dict dict=dictRoMapper.selectById(id);
         int del = dictMapper.delete(id);
         if (del != 1) {
             throw new ServiceException(4103);
         }
+        // 删除redis
+        redisTemplate.delete(dict.getDictId() + "_Dict");
         return del;
     }
 
@@ -123,7 +141,17 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public List<DictBO> selectDictList(Dict dict) {
-        return dictRoMapper.selectDictList(dict);
+    	List<DictBO> dictBOs=null;
+    	if(redisTemplate.hasKey(dict.getDictId() + "_Dict")){
+    		dictBOs=JSONArray.parseArray(redisTemplate.opsForValue().get(dict.getDictId() + "_Dict"),DictBO.class);
+    		LOGGER.info("从redis获取数据字典信息:{}", JSONArray.toJSONString(dictBOs));
+    	}else{
+    		dictBOs=dictRoMapper.selectDictList(dict);
+    		redisTemplate.opsForValue().set(dict.getDictId() + "_Dict",
+    				JSONArray.toJSONString(dictBOs),
+					RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
+    	}
+        return dictBOs;
     }
 
     @Transactional("db1TxManager")
@@ -136,10 +164,13 @@ public class DictServiceImpl implements DictService {
         }
         String[] ids = id.split(",");
         for (String dId : ids) {
+        	Dict dict=dictRoMapper.selectById(id);
             int del = dictMapper.delete(dId);
             if (del != 1) {
                 throw new ServiceException(4103);
             }
+            // 删除redis
+            redisTemplate.delete(dict.getDictId() + "_Dict");
         }
     }
 

@@ -6,12 +6,15 @@ import com.abc12366.cms.service.ContentService;
 import com.abc12366.cms.service.ModelService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,7 @@ import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 内容管理模块
@@ -41,6 +45,9 @@ public class ContentController {
 
     @Autowired
     private ModelService modelService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 查询内容列表信息
@@ -249,6 +256,24 @@ public class ContentController {
         List<ContentsListBo> dataList = contentService.selectListcszxw(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     }
+    
+    @GetMapping(path = "/selectListcszxwForqt")
+    public ResponseEntity selectListcszxwForqt() {
+    	if(redisTemplate.hasKey("CMS_SelectListcszxwFqt")){
+    		List<ContentsListBo> dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("CMS_SelectListcszxwFqt"),ContentsListBo.class);
+    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(dataList));
+    		return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
+    	}else{
+    		Map<String, Object> dataMap = new HashMap<>();
+	        dataMap.put("siteId", "3ef33a7ece264f859a4c4af37ba458c9");//站点ID
+	        PageHelper.startPage(1, 7, true).pageSizeZero(true).reasonable(true);
+	        //查询内容列表
+	        List<ContentsListBo> dataList = contentService.selectListcszxw(dataMap);
+	        redisTemplate.opsForValue().set("CMS_SelectListcszxwFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+	        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
+    	}
+    }
+    
 
     /**
      * 内容初始化
@@ -267,6 +292,7 @@ public class ContentController {
         dataList.setModelItems(modelItems);
         dataList.setTplPrefix(modelBo.getTplContentPrefix());
         LOGGER.info("{}", dataList);
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", dataList));
     }
 
@@ -279,6 +305,8 @@ public class ContentController {
         //新增内容信息
         contentSaveBo = contentService.save(contentSaveBo);
         LOGGER.info("{}", contentSaveBo);
+        
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
@@ -404,6 +432,7 @@ public class ContentController {
         //更新内容信息
         contentSaveBo = contentService.update(contentSaveBo);
         LOGGER.info("{}", contentSaveBo);
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
 
@@ -416,6 +445,7 @@ public class ContentController {
         //删除内容信息
         String rtn = contentService.delete(contentId);
         LOGGER.info("{}", rtn);
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
@@ -429,6 +459,7 @@ public class ContentController {
         //批量删除内容信息
         String rtn = contentService.deleteList(idsBo.getIds());
         LOGGER.info("{}", rtn);
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", idsBo));
     }
 
@@ -446,6 +477,7 @@ public class ContentController {
             ContentSaveBo contentSaveBo = contentService.selectContent(contentIdstr[i]);
             dataList.add(contentSaveBo);
         }
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
@@ -471,6 +503,7 @@ public class ContentController {
         //更新内容信息
         contentUpdateListBo = contentService.updateList(contentUpdateListBo);
         LOGGER.info("{}", contentUpdateListBo);
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", contentUpdateListBo));
     }
 
@@ -484,6 +517,7 @@ public class ContentController {
         //更新内容信息
         topicListBo = contentService.updatetopicList(topicListBo);
         LOGGER.info("{}", topicListBo);
+        redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", topicListBo));
     }
 

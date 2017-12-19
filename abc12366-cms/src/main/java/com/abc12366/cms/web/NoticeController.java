@@ -1,19 +1,24 @@
 package com.abc12366.cms.web;
 
+import com.abc12366.cms.model.bo.AdPageBO;
 import com.abc12366.cms.model.bo.NoticeBO;
 import com.abc12366.cms.model.bo.NoticeForqtBO;
 import com.abc12366.cms.service.NoticeService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ֪ͨ������������
@@ -29,6 +34,9 @@ public class NoticeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(NoticeController.class);
     @Autowired
     private NoticeService noticeService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @GetMapping("/notice")
     public ResponseEntity selectList(@RequestParam(value = "title", required = false) String title,
@@ -53,18 +61,37 @@ public class NoticeController {
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{},{},{}", title, page, size);
+        	 NoticeForqtBO notice = new NoticeForqtBO();
+             notice.setTitle(title);
+             List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, page, size);
+             PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
+             ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                     "total", pageInfo.getTotal()));
 
-        NoticeForqtBO notice = new NoticeForqtBO();
-        notice.setTitle(title);
-        List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, page, size);
-
-        PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
-        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
-                "total", pageInfo.getTotal()));
-
-        LOGGER.info("{}", responseEntity);
-        return responseEntity;
+             LOGGER.info("{}", responseEntity);
+             return responseEntity;
     }
+    
+    @GetMapping("/noticesForqt")
+    public ResponseEntity selectListForqtCszj() {
+        
+        if(redisTemplate.hasKey("CMS_NoticeListFqt")){
+        	List<NoticeForqtBO> dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("CMS_NoticeListFqt"),NoticeForqtBO.class);
+    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(dataList));
+    		return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
+        }else{
+        	 NoticeForqtBO notice = new NoticeForqtBO();
+             List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, 1, 9);
+             redisTemplate.opsForValue().set("CMS_NoticeListFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+             PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
+             ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                     "total", pageInfo.getTotal()));
+             LOGGER.info("{}", responseEntity);
+             return responseEntity;
+        } 
+    }
+    
+    
 
     @PostMapping("/notice")
     public ResponseEntity insert(@Valid @RequestBody NoticeBO notice) {
@@ -74,6 +101,7 @@ public class NoticeController {
 
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
         LOGGER.info("{}", responseEntity);
+        redisTemplate.delete("CMS_NoticeListFqt");
         return responseEntity;
     }
 
@@ -108,6 +136,7 @@ public class NoticeController {
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", v));
 
         LOGGER.info("{}", responseEntity);
+        redisTemplate.delete("CMS_NoticeListFqt");
         return responseEntity;
     }
 
@@ -119,6 +148,7 @@ public class NoticeController {
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
 
         LOGGER.info("{}", responseEntity);
+        redisTemplate.delete("CMS_NoticeListFqt");
         return responseEntity;
     }
 

@@ -7,6 +7,7 @@ package com.abc12366.message.model;
  * Time: 16:15
  */
 public class PhoneExist {
+    private String username;
     private String phone;
 
     public PhoneExist() {
@@ -20,10 +21,19 @@ public class PhoneExist {
         this.phone = phone;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return "PhoneExist{" +
-                "phone='" + phone + '\'' +
+                "username='" + username + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }

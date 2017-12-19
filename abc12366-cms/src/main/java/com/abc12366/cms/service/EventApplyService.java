@@ -15,7 +15,7 @@ public interface EventApplyService {
 
     EventbmtjBo selectbmtj(Map<String, Object> map);
 
-    EventlltjListBo selectlltj(Map<String, Object> map);
+    EventlltjListBo selectlltj(Map<String, Object> map,String type);
 
     EventApplySaveBo save(EventApplySaveBo eventApplySaveBo);
 
@@ -28,5 +28,7 @@ public interface EventApplyService {
     String deleteList(String[] applyIds);
 
     String updateStatusList(String[] applyIds);
+
+    String updateStatusNoList(String[] applyIds,String text);
 
 }

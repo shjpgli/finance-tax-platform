@@ -18,6 +18,9 @@ public interface KnowledgeBaseService {
     /* 帮助中心首页 热点问题，词条 */
     Map<String, List<KnowledgeBase>> hotMap(KnowledgeBaseHotParamBO paramBO);
 
+    /* 财税网首页 最新问题 */
+    List<KnowledgeBase> selectNearestList(KnowledgeBaseHotParamBO param);
+
     /* 财税网首页 热点问题，词条，不分小类 */
     List<KnowledgeBase> hotUnClassifyMap(KnowledgeBaseHotParamBO paramBO);
 
@@ -39,6 +42,15 @@ public interface KnowledgeBaseService {
     /* 知识库单个查询*/
     KnowledgeBase selectOne(String id);
 
+    List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param);
+
+    /*采集来源列表*/
+    List<String> selectSourceList();
+
+
+
+
+
     /* 新增知识库数据 */
     void add(KnowledgeBase knowledgeBase);
 
@@ -56,7 +68,5 @@ public interface KnowledgeBaseService {
 
     /*修改知识库数据 浏览量*/
     void addPV(String id);
-
-	List<KnowledgeBase> wxhotUnClassifyMap(KnowledgeBaseHotParamBO param);
 
 }

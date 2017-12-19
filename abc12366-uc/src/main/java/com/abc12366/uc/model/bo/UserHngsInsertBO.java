@@ -51,4 +51,14 @@ public class UserHngsInsertBO {
     public void setRole(String role) {
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "UserHngsInsertBO{" +
+                "bsy='" + bsy + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
+    }
 }
