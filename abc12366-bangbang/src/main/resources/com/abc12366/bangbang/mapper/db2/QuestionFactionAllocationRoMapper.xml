@@ -74,7 +74,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectAwardPoint" resultType="java.lang.Integer" parameterType="java.util.Map">
         SELECT
-        sum(awardPoint)
+        IFNULL(sum(awardPoint),0) awardPoint
         FROM bb_question_faction
         WHERE 1=1
         <if test="factionId != null and factionId !=''">
