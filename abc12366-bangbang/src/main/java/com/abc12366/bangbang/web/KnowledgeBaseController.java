@@ -61,11 +61,19 @@ public class KnowledgeBaseController {
     */
     @GetMapping(path = "/nearestList")
     public ResponseEntity nearestList(
-            @RequestParam(value = "KnowledgePageSize", defaultValue = "14") int KnowledgePageSize,
+            @RequestParam(value = "KnowledgePageSize", defaultValue = "9") int KnowledgePageSize,
             @RequestParam(value = "KnowledgeType", defaultValue = "QA") String KnowledgeType){
-        KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(KnowledgePageSize, KnowledgeType, null);
-        List<KnowledgeBase> list = knowledgeBaseService.selectNearestList(param);
-        return ResponseEntity.ok(Utils.kv("dataList",list));
+    	if(redisTemplate.hasKey("Bangb_NearestLists")){
+    		List<KnowledgeBase> list=JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_NearestLists"),KnowledgeBase.class);
+    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(list));
+    		return ResponseEntity.ok(Utils.kv("dataList",list));
+    	}else{
+    		KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(KnowledgePageSize, KnowledgeType, null);
+            List<KnowledgeBase> list = knowledgeBaseService.selectNearestList(param);
+            redisTemplate.opsForValue().set("Bangb_NearestLists",JSONArray.toJSONString(list),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+            return ResponseEntity.ok(Utils.kv("dataList",list));
+    	}
+        
     }
 
     /*
@@ -243,6 +251,7 @@ public class KnowledgeBaseController {
     public ResponseEntity add(@RequestBody KnowledgeBaseBO knowledgeBaseBO) {
         knowledgeBaseService.add(knowledgeBaseBO);
         redisTemplate.delete("Bangb_HotUnClassifyList");
+        redisTemplate.delete("Bangb_NearestLists"); 
         return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
 
@@ -253,6 +262,7 @@ public class KnowledgeBaseController {
     public ResponseEntity modify(@RequestBody KnowledgeBaseBO knowledgeBaseBO) {
         knowledgeBaseService.modify(knowledgeBaseBO);
         redisTemplate.delete("Bangb_HotUnClassifyList");
+        redisTemplate.delete("Bangb_NearestLists");
         return ResponseEntity.ok(Utils.kv("data", knowledgeBaseBO));
     }
 
@@ -263,6 +273,7 @@ public class KnowledgeBaseController {
     public ResponseEntity modifyStatus(@RequestBody Map<String, Object> map) {
         knowledgeBaseService.modifyStatus(map);
         redisTemplate.delete("Bangb_HotUnClassifyList");
+        redisTemplate.delete("Bangb_NearestLists");
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -275,6 +286,7 @@ public class KnowledgeBaseController {
         List<String> ids = map.get("ids");
         knowledgeBaseService.delete(ids);
         redisTemplate.delete("Bangb_HotUnClassifyList");
+        redisTemplate.delete("Bangb_NearestLists");
         return ResponseEntity.ok(Utils.kv());
     }
 }
