@@ -122,6 +122,13 @@ public class UserExtendServiceImpl implements UserExtendService {
 				userExtend.setValidStatus("2");
 				userExtend.setValidTime(new Date());
 				userExtend.setValidType("0");
+				userExtend.setStartTime(new Date());
+				try {
+					userExtend.setEndTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2099-12-30 23:59:59"));
+				} catch (ParseException e1) {
+					LOGGER.warn("新增失败，参数：{}" + userExtend.toString());
+					throw new ServiceException(4112);
+				}
 				userFeedbackMsgService.realNameValidate(
 						userExtendBO.getUserId(), "2");
 
