@@ -167,7 +167,6 @@ public class OrderController {
 
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
-//        order.setGoodsBO(goodsBO);
         order.setIsInvoice(false);
         order.setGoodsType(goodsType);
         if (startTime != null && !"".equals(startTime)) {
@@ -210,7 +209,6 @@ public class OrderController {
 
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
-//        order.setGoodsBO(goodsBO);
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DateUtils.strToDate(startTime));
         }
@@ -287,9 +285,11 @@ public class OrderController {
      */
     @GetMapping(path = "/select/{orderNo}")
     public ResponseEntity selectByOrderNo(@PathVariable("orderNo") String orderNo) {
+        long s = System.currentTimeMillis();
         LOGGER.info("{}", orderNo);
         OrderBO orderBO = orderService.selectByOrderNo(orderNo);
         LOGGER.info("{}", orderBO);
+        LOGGER.info(">>>{}", System.currentTimeMillis() - s);
         return ResponseEntity.ok(Utils.kv("data", orderBO));
     }
 
