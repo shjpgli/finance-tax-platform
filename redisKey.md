@@ -25,3 +25,5 @@
 推荐课程(/curriculum/selectRecommend)：CMS_Curriculum
 知识库分类(/knowledgeCategory/listAll)：Bangb_KnowledgeCategoryList
 财税资讯(/contentType)：Cms_ContentTypeList
+财税网首页 最新问题、知识(/knowledgeBase/nearestList)：Bangb_NearestLists
+问题受理 统计查询(缓存)(/accepted/statis)：Bangb_Accepted
