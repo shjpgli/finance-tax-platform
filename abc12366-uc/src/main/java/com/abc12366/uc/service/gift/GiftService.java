@@ -2,6 +2,7 @@ package com.abc12366.uc.service.gift;
 
 
 import com.abc12366.uc.model.gift.Gift;
+import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.model.gift.bo.*;
 
 import java.util.List;
@@ -106,4 +107,11 @@ public interface GiftService {
      * @return
      */
     List<UgiftApplyBO> selectUgiftApplyList(Map<String, Object> map);
+
+    /**
+     * 根据用户ID查找礼包金额记录
+     * @param map
+     * @return
+     */
+    List<UamountLog> selectUamountLogList(Map<String, Object> map);
 }

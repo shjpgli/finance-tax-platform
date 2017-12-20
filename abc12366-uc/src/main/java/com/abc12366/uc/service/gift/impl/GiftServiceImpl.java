@@ -71,6 +71,9 @@ public class GiftServiceImpl implements GiftService {
     @Autowired
     private DictRoMapper dictRoMapper;
 
+    @Autowired
+    private UamountLogRoMapper uamountLogRoMapper;
+
     @Override
     public List<Gift> selectList(Gift gift) {
         return giftRoMapper.selectList(gift);
@@ -310,6 +313,11 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public List<UgiftApplyBO> selectUgiftApplyList(Map<String, Object> map) {
         return ugiftApplyRoMapper.selectUgiftApplyList(map);
+    }
+
+    @Override
+    public List<UamountLog> selectUamountLogList(Map<String, Object> map) {
+        return uamountLogRoMapper.selectUamountLogList(map);
     }
 
     /**

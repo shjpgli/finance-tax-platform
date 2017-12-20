@@ -3,6 +3,9 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.gift.UamountLog;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 
  * UamountLogMapper数据库操作接口类
@@ -22,4 +25,10 @@ public interface UamountLogRoMapper {
 	UamountLog selectByPrimaryKey(@Param("id") String id);
 
 
+	/**
+	 * 根据用户ID查找礼包金额记录
+	 * @param map
+	 * @return
+	 */
+	List<UamountLog> selectUamountLogList(Map<String, Object> map);
 }

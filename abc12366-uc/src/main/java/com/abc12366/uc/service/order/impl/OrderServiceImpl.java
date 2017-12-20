@@ -661,28 +661,6 @@ public class OrderServiceImpl implements OrderService {
                                 LOGGER.info("插入会员日志: {}", orderNo);
                                 insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
 
-                                //TODO 确认积分是否需要赠送礼包金额
-                                //查询会员礼包业务
-                                User user = userRoMapper.selectOne(userId);
-                                VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-                                obj.setLevelId(user.getVipLevel());
-                                obj.setPrivilegeId(MessageConstant.HYLB_CODE);
-                                //查看会员礼包是否启用
-                                VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-                                if(findObj != null && findObj.getStatus()){
-                                    UamountLog uamountLog = new UamountLog();
-                                    uamountLog.setId(Utils.uuid());
-                                    uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
-                                    uamountLog.setUserId(userId);
-                                    uamountLog.setCreateTime(new Date());
-                                    uamountLog.setRemark("充值"+orderProductBO.getName());
-                                    //赠送积分
-                                    double income = Double.parseDouble(findObj.getVal1());
-                                    uamountLog.setIncome(income);
-                                    uamountLog.setUsable(user.getAmount()+income);
-                                    uamountLogMapper.insert(uamountLog);
-                                }
-
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
                                 sendMemberMsg(orderProductBO, order,request);
@@ -917,6 +895,27 @@ public class OrderServiceImpl implements OrderService {
         vipLogBO.setSource(orderNo);
         vipLogBO.setUserId(userId);
         vipLogService.insert(vipLogBO);
+
+        //查询会员礼包业务
+        User user = userRoMapper.selectOne(userId);
+        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+        obj.setLevelId(user.getVipLevel());
+        obj.setPrivilegeId(MessageConstant.HYLB_CODE);
+        //查看会员礼包是否启用
+        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+        if(findObj != null && findObj.getStatus()){
+            UamountLog uamountLog = new UamountLog();
+            uamountLog.setId(Utils.uuid());
+            uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
+            uamountLog.setUserId(userId);
+            uamountLog.setCreateTime(new Date());
+            uamountLog.setRemark("充值会员，获得积分");
+            //赠送积分
+            double income = Double.parseDouble(findObj.getVal1());
+            uamountLog.setIncome(income);
+            uamountLog.setUsable(user.getAmount()+income);
+            uamountLogMapper.insert(uamountLog);
+        }
     }
 
     /**

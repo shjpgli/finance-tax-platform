@@ -3,6 +3,7 @@ package com.abc12366.uc.web.gift;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.gift.Gift;
+import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.model.gift.UgiftApply;
 import com.abc12366.uc.model.gift.bo.*;
 import com.abc12366.uc.model.order.bo.OrderBO;
@@ -170,7 +171,7 @@ public class GiftController {
      * @param userId 用户ID
      * @return ResponseEntity {@linkplain Gift Gift}列表响应实体
      */
-    @GetMapping(path = "/apply/user/id")
+    @GetMapping(path = "/apply/user/list")
     public ResponseEntity selectUserGiftListById(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                                  @RequestParam(value = "userId", required = true) String userId) {
@@ -275,5 +276,28 @@ public class GiftController {
         Gift data = giftService.selectGiftByGiftId(map);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
+    /**
+     * 后台-根据用户ID查找礼包金额记录
+     *
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @param userId 用户ID
+     * @return ResponseEntity {@linkplain Gift Gift}列表响应实体
+     */
+    @GetMapping(path = "/uamount/list")
+    public ResponseEntity selectUamountLogList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                          @RequestParam(value = "userId", required = false) String userId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        List<UamountLog> dataList = giftService.selectUamountLogList(map);
+        PageInfo<UamountLog> pageInfo = new PageInfo<>(dataList);
+        LOGGER.info("{}", dataList);
+        return (dataList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 }

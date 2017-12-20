@@ -16,4 +16,12 @@
 		 WHERE id = #{id}
 	</select>
 
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectUamountLogList" resultType="com.abc12366.uc.model.gift.UamountLog" parameterType="java.util.Map">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM uc_uamount_log
+		 WHERE userId = #{userId}
+	</select>
+
 </mapper>
