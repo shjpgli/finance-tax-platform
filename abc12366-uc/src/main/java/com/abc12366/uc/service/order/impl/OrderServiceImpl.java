@@ -6,21 +6,19 @@ import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
-import com.abc12366.uc.model.order.ExpressComp;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
+import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.CharUtil;
-import com.abc12366.uc.service.MessageSendUtil;
 import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -127,6 +125,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
+
+    @Autowired
+    private UamountLogMapper uamountLogMapper;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -614,6 +615,7 @@ public class OrderServiceImpl implements OrderService {
             if (orderBO != null) {
                 OrderProductBO pBO = new OrderProductBO();
                 String orderNo = orderBO.getOrderNo();
+                String userId = orderBO.getUserId();
                 pBO.setOrderNo(orderNo);
                 List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
                 for (OrderProductBO orderProductBO : orderProductBOs) {
@@ -631,7 +633,7 @@ public class OrderServiceImpl implements OrderService {
                             order.setOrderStatus("3");
                             //修改订单状态
                             updOrder(order);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "3", "用户付款中", "0");
+                            insertOrderLog(userId, orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
                             if(!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())){
                                 LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}",orderBO.getOrderStatus());
@@ -646,7 +648,7 @@ public class OrderServiceImpl implements OrderService {
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功","0");
+                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功","0");
                             } else if (trading.equals("HYCZ")) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
@@ -654,12 +656,34 @@ public class OrderServiceImpl implements OrderService {
 
                                 insertPoints(orderBO);
                                 LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                                userService.updateUserVipInfo(orderBO.getUserId(), orderProductBO.getSpecInfo());
+                                userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                                 LOGGER.info("插入会员日志: {}", orderNo);
-                                insertVipLog(orderNo, orderBO.getUserId(), orderProductBO.getSpecInfo());
+                                insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
 
-                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
+                                //TODO 确认积分是否需要赠送礼包金额
+                                //查询会员礼包业务
+                                User user = userRoMapper.selectOne(userId);
+                                VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+                                obj.setLevelId(user.getVipLevel());
+                                obj.setPrivilegeId(MessageConstant.HYLB_CODE);
+                                //查看会员礼包是否启用
+                                VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+                                if(findObj != null && findObj.getStatus()){
+                                    UamountLog uamountLog = new UamountLog();
+                                    uamountLog.setId(Utils.uuid());
+                                    uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
+                                    uamountLog.setUserId(userId);
+                                    uamountLog.setCreateTime(new Date());
+                                    uamountLog.setRemark("充值"+orderProductBO.getName());
+                                    //赠送积分
+                                    double income = Double.parseDouble(findObj.getVal1());
+                                    uamountLog.setIncome(income);
+                                    uamountLog.setUsable(user.getAmount()+income);
+                                    uamountLogMapper.insert(uamountLog);
+                                }
+
+                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
                                 sendMemberMsg(orderProductBO, order,request);
                             } else if (trading.equals("CSKT")) {
@@ -668,7 +692,7 @@ public class OrderServiceImpl implements OrderService {
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
+                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
                                 //发送消息
                                 sendPointsMsg(orderProductBO, order,request);
                             }else if (trading.equals("JFCZ")) {
@@ -677,14 +701,14 @@ public class OrderServiceImpl implements OrderService {
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                insertOrderLog(orderBO.getUserId(), orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
+                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
                             }
 //                        }
                         } else if (isPay == 3) {
                             order.setOrderStatus("2");
                             //修改订单状态
                             updOrder(order);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "2", "等待用户付款", "0");
+                            insertOrderLog(userId, orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
 
@@ -696,26 +720,26 @@ public class OrderServiceImpl implements OrderService {
                             //修改订单状态
                             updOrder(order);
                             insertDeductPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "4", "用户付款成功", "0");
+                            insertOrderLog(userId, orderNo, "4", "用户付款成功", "0");
                         } else if (trading.equals("HYCZ")) {
                             order.setOrderStatus("6");
                             //修改订单状态
                             updOrder(order);
                             insertDeductPoints(orderBO);
                             LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                            userService.updateUserVipInfo(orderBO.getUserId(), orderProductBO.getSpecInfo());
+                            userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                             LOGGER.info("插入会员日志: {}", orderNo);
-                            insertVipLog(orderNo, orderBO.getUserId(), orderProductBO.getSpecInfo());
+                            insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
 
-                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单","0");
                             sendMemberMsg(orderProductBO, order,request);
                         }else if (trading.equals("CSKT")) {
                             order.setOrderStatus("6");
                             //修改订单状态
                             updOrder(order);
                             insertDeductPoints(orderBO);
-                            insertOrderLog(orderBO.getUserId(), orderNo, "6", "用户付款成功，完成订单","0");
+                            insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单","0");
                         }
                         insertTradeLog(order,tradeNo);
                     }
