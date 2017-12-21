@@ -45,4 +45,8 @@
         where userId=#{userId} and sessionId=#{sessionId} and day=#{day}
         ORDER BY createTime DESC
     </select>
+
+    <select id="selectRecordCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+        SELECT count(id) from bb_system_record_${yyyyMMdd}
+    </select>
 </mapper>
