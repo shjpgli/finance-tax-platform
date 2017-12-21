@@ -269,9 +269,16 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             sendTag = true;
         }
         //注册时间
-        if (!StringUtils.isEmpty(o.getRegTimeOper()) && o.getRegStartTime() != null && o.getRegEndTime() != null) {
-            if (user.getCreateTime() != null && user.getCreateTime().after(o.getRegStartTime()) && user.getCreateTime().before(o.getRegEndTime())) {
-                sendRegTime = true;
+        if (!StringUtils.isEmpty(o.getRegTimeOper())) {
+            if (o.getRegTimeOper().trim().equals("lte") && o.getRegEndTime() != null) {
+                if(user.getCreateTime() != null&&user.getCreateTime().getTime()<=o.getRegEndTime().getTime()){
+                    sendRegTime = true;
+                }
+            }
+            if (o.getRegTimeOper().trim().equals("gte") && o.getRegStartTime() != null) {
+                if(user.getCreateTime() != null&&user.getCreateTime().getTime()>=o.getRegStartTime().getTime()){
+                    sendRegTime = true;
+                }
             }
         } else {
             sendRegTime = true;
