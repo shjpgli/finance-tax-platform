@@ -20,7 +20,7 @@
     </select>
 
     <select id="selectTagIdList" parameterType="java.lang.String" resultType="java.lang.String">
-        SELECT DISTINCT subjectId FROM uc_subject_tag WHERE userId=#{userId}
+        SELECT DISTINCT tagId FROM uc_subject_tag WHERE subjectId=#{userId}
     </select>
 
     <select id="selectWebLogList" parameterType="java.lang.String" resultType="com.abc12366.uc.model.admin.bo.YyxxLogBO">
