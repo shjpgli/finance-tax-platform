@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.OperateMessageRoMapper">
+    <sql id="Base_Column_List">
+        id,taskname,web,wechat,message,content,url,target,sendTime,startTime,endTime,status,createTime ,
+        lastUpdate ,areaOper,areaIds,tagOper,tagIds,regTimeOper,regStartTime,regEndTime ,userIds,rate
+    </sql>
+
+    <select id="selectList" resultType="com.abc12366.uc.model.admin.bo.OperateMessageBO">
+        select <include refid="Base_Column_List"/> from uc_operate_message
+    </select>
+
+    <select id="selectValidList" resultType="com.abc12366.uc.model.admin.bo.OperateMessageBO" parameterType="java.util.Date">
+        select <include refid="Base_Column_List"/>
+        from uc_operate_message
+        where status='1'
+        and startTime &lt;=#{date}
+        and endTime &gt;=#{date}
+    </select>
+
+    <select id="selectTagIdList" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT DISTINCT subjectId FROM uc_subject_tag WHERE userId=#{userId}
+    </select>
+
+    <select id="selectWebLogList" parameterType="java.lang.String" resultType="com.abc12366.uc.model.admin.bo.YyxxLogBO">
+        select id,userId,messageId,type,createTime
+        from uc_send_yyxx_log
+        <where>
+            userId=#{userId}
+            and messageId = #{messageId}
+            and type=#{type}
+            <if test="start != null">and  createTime &gt;= #{start}</if>
+            <if test="end != null">and createTime &lt; #{end}</if>
+        </where>
+    </select>
+</mapper>

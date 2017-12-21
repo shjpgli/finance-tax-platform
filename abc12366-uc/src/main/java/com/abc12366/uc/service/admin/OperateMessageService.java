@@ -1,6 +1,10 @@
 package com.abc12366.uc.service.admin;
 
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
+
+import java.util.List;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -8,6 +12,17 @@ import com.abc12366.uc.model.admin.bo.OperateMessageBO;
  * Time: 11:03
  */
 public interface OperateMessageService {
-    void insert(OperateMessageBO operateMessageBO);
+    OperateMessageBO insert(OperateMessageBO operateMessageBO);
 
+    List<OperateMessageBO> selectList(int page, int size);
+
+    OperateMessageBO update(OperateMessageBO operateMessageBO);
+
+    void send(String userId);
+
+    void sendYyxx(OperateMessageBO o, User user);
+
+    boolean tagIdContains(List<String> tagIdList, String tagIds);
+
+    void sendPart(OperateMessageBO o,User user, UserExtend userExtend, List<String> tagIdList);
 }

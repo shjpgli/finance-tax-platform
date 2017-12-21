@@ -1,14 +1,19 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
 import com.abc12366.uc.service.admin.OperateMessageService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -20,11 +25,47 @@ import org.springframework.web.bind.annotation.RestController;
 public class OperateMessageController {
     private static final Logger LOGGER = LoggerFactory.getLogger(OperateMessageController.class);
 
+    @Autowired
     private OperateMessageService operateMessageService;
 
-    public ResponseEntity insert(@RequestBody OperateMessageBO operateMessageBO){
-        LOGGER.info("发送运营消息：{}",operateMessageBO);
-        operateMessageService.insert(operateMessageBO);
-        return null;
+    /**
+     * 新增运营消息任务接口
+     * @param operateMessageBO 运营消息任务参数体
+     * @return ResponseEntity
+     */
+    @PostMapping
+    public ResponseEntity insert(@RequestBody @Valid OperateMessageBO operateMessageBO){
+        LOGGER.info("新建运营任务消息：{}",operateMessageBO);
+        OperateMessageBO messageBO = operateMessageService.insert(operateMessageBO);
+        LOGGER.info("新建运营任务消息返回：{}",messageBO);
+        return ResponseEntity.ok(Utils.kv("data",messageBO));
+    }
+
+    /**
+     * 查询运营消息任务列表
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
+    @GetMapping
+    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("查询运营消息列表：{}:{}",page,size);
+        List<OperateMessageBO> operateMessageBOList = operateMessageService.selectList(page,size);
+        return (operateMessageBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) operateMessageBOList, "total", ((Page) operateMessageBOList).getTotal()));
+    }
+
+    /**
+     * 修改运营消息任务接口
+     * @param operateMessageBO 入参
+     * @return ResponseEntity
+     */
+    @PutMapping
+    public ResponseEntity update(@RequestBody OperateMessageBO operateMessageBO){
+        LOGGER.info("更新运营消息任务：{}",operateMessageBO);
+        OperateMessageBO messageBO = operateMessageService.update(operateMessageBO);
+        return ResponseEntity.ok(Utils.kv("data",messageBO));
     }
 }
