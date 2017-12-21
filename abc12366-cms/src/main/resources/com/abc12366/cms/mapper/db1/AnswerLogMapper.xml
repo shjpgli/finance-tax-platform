@@ -28,6 +28,9 @@
             <if test="userId != null">
                 userId,
             </if>
+            <if test="weixinId != null">
+                weixinId,
+            </if>
             <if test="accessTerminal != null">
                 accessTerminal,
             </if>
@@ -51,6 +54,9 @@
             </if>
             <if test="userId!=null">
                 #{userId},
+            </if>
+            <if test="weixinId!=null">
+                #{weixinId},
             </if>
             <if test="accessTerminal!=null">
                 #{accessTerminal},
@@ -76,6 +82,9 @@
             </if>
             <if test="userId != null">
                 userId = #{userId},
+            </if>
+            <if test="weixinId != null">
+                weixinId = #{weixinId},
             </if>
             <if test="accessTerminal != null">
                 accessTerminal = #{accessTerminal},
