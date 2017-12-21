@@ -665,14 +665,23 @@ public class UserServiceImpl implements UserService {
 		if (!StringUtils.isEmpty(bo.getPhone())) {
 			LoginBO loginBO = new LoginBO();
 			loginBO.setUsernameOrPhone(bo.getPhone());
-			if (null != userMapper.selectByUsernameOrPhone(loginBO)) {
+			User userTmp = userMapper.selectByUsernameOrPhone(loginBO);
+			if (null != userTmp && !userTmp.getId().equals(bo.getId())) {
 				throw new ServiceException(4183);
+			}
+		}
+		if (!StringUtils.isEmpty(bo.getUsername())) {
+			LoginBO loginBO = new LoginBO();
+			loginBO.setUsernameOrPhone(bo.getUsername());
+			User userTmp = userMapper.selectByUsernameOrPhone(loginBO);
+			if (null != userTmp && !userTmp.getId().equals(bo.getId())) {
+				throw new ServiceException(4182);
 			}
 		}
 
 		user.setLastUpdate(new Date());
 		user.setPhone(bo.getPhone());
-		user.setUsername(StringUtils.isEmpty(bo.getUsername())?null:bo.getUsername());
+		user.setUsername(bo.getUsername());
 		int result = userMapper.updatePhone(user);
 		if (result != 1) {
 			LOGGER.warn("修改失败");
