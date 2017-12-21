@@ -24,5 +24,5 @@ public interface OperateMessageService {
 
     boolean tagIdContains(List<String> tagIdList, String tagIds);
 
-    void sendPart(OperateMessageBO o,User user, UserExtend userExtend, List<String> tagIdList);
+    void sendPart(OperateMessageBO o, User user, UserExtend userExtend, List<String> tagIdList);
 }

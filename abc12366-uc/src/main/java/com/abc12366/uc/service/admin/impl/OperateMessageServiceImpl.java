@@ -11,7 +11,6 @@ import com.abc12366.uc.mapper.db2.OperateMessageRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Message;
-import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.admin.OperateMessage;
@@ -138,7 +137,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                         if (StringUtils.isEmpty(o.getUserIds())) {
                             break;
                         }
-                        if (!o.getUserIds().contains(userId)) {
+                        if (o.getUserIds().contains(userId)) {
                             sendYyxx(o, user);
                             break;
                         }
@@ -161,22 +160,22 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         //系统消息日志
 
         if (o.getWeb()) {
-            if((o.getRate().equals("O")&&(!sendAready(user.getId(),o.getId(),MessageConstant.YYXX_WEB, null,null)))
-                    ||((o.getRate().equals("D"))&&(!sendAready(user.getId(),o.getId(),MessageConstant.YYXX_WEB, DateUtils.getFirstHourOfDay(),DateUtils.getFirstHourOfLastDay())))){
-                    Message message = new Message();
-                    message.setBusinessId(o.getId());
-                    message.setBusiType(MessageConstant.YYXX_BUSITYPE);
-                    message.setType(MessageConstant.SYS_MESSAGE);
-                    message.setContent(o.getContent());
-                    message.setUserId(user.getId());
-                    message.setUrl(o.getUrl());
-                    messageSendUtil.sendMessage(message, accessToken);
-                    operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(),user.getId(),o.getId(),MessageConstant.YYXX_WEB,new Date()));
+            if ((o.getRate().equals("O") && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_WEB, null, null)))
+                    || ((o.getRate().equals("D")) && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_WEB, DateUtils.getFirstHourOfDay(), DateUtils.getFirstHourOfLastDay())))) {
+                Message message = new Message();
+                message.setBusinessId(o.getId());
+                message.setBusiType(MessageConstant.YYXX_BUSITYPE);
+                message.setType(MessageConstant.SYS_MESSAGE);
+                message.setContent(o.getContent());
+                message.setUserId(user.getId());
+                message.setUrl(o.getUrl());
+                messageSendUtil.sendMessage(message, accessToken);
+                operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(), user.getId(), o.getId(), MessageConstant.YYXX_WEB, new Date()));
             }
         }
         if (o.getWechat() && !StringUtils.isEmpty(user.getWxopenid())) {
-            if((o.getRate().equals("O")&&(!sendAready(user.getId(),o.getId(),MessageConstant.YYXX_WECHAT, null,null)))
-                    ||((o.getRate().equals("D"))&&(!sendAready(user.getId(),o.getId(),MessageConstant.YYXX_WECHAT, DateUtils.getFirstHourOfDay(),DateUtils.getFirstHourOfLastDay())))){
+            if ((o.getRate().equals("O") && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_WECHAT, null, null)))
+                    || ((o.getRate().equals("D")) && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_WECHAT, DateUtils.getFirstHourOfDay(), DateUtils.getFirstHourOfLastDay())))) {
                 Map<String, String> dataList = new HashMap<>();
                 dataList.put("first", RemindConstant.YYXX_WX_FIRST);
                 dataList.put("keyword1", DateUtils.dateToStr(new Date()));
@@ -185,26 +184,26 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                 dataList.put("userId", user.getId());
                 dataList.put("openId", user.getWxopenid());
                 templateService.templateSend("jfQJ8Oh_8KRs6t6KqFrOag5p89kgOUXKHo-Z6rmo3wM", dataList);
-                operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(),user.getId(),o.getId(),MessageConstant.YYXX_WECHAT,new Date()));
+                operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(), user.getId(), o.getId(), MessageConstant.YYXX_WECHAT, new Date()));
             }
         }
         if (o.getMessage() && !StringUtils.isEmpty(user.getPhone())) {
-            if((o.getRate().equals("O")&&(!sendAready(user.getId(),o.getId(),MessageConstant.YYXX_MESSAGE, null,null)))
-                    ||((o.getRate().equals("D"))&&(!sendAready(user.getId(),o.getId(),MessageConstant.YYXX_MESSAGE, DateUtils.getFirstHourOfDay(),DateUtils.getFirstHourOfLastDay())))){
+            if ((o.getRate().equals("O") && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_MESSAGE, null, null)))
+                    || ((o.getRate().equals("D")) && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_MESSAGE, DateUtils.getFirstHourOfDay(), DateUtils.getFirstHourOfLastDay())))) {
                 Map<String, String> maps = new HashMap<>();
                 maps.put("var", o.getContent());
                 List<Map<String, String>> list = new ArrayList<>();
                 list.add(maps);
                 messageSendUtil.sendPhoneMessage(user.getPhone(), MessageConstant.MESSAGE_UPYUN_TEMPLATE_615,
                         list, accessToken);
-                operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(),user.getId(),o.getId(),MessageConstant.YYXX_MESSAGE,new Date()));
+                operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(), user.getId(), o.getId(), MessageConstant.YYXX_MESSAGE, new Date()));
             }
         }
     }
 
-    private boolean sendAready(String userId,String messageId,String type,Date start,Date end) {
-        List<YyxxLogBO> yyxxLogBOList = operateMessageRoMapper.selectWebLogList(userId,messageId,type,start,end);
-        return (yyxxLogBOList!=null&&yyxxLogBOList.size()>0);
+    private boolean sendAready(String userId, String messageId, String type, Date start, Date end) {
+        List<YyxxLogBO> yyxxLogBOList = operateMessageRoMapper.selectWebLogList(userId, messageId, type, start, end);
+        return (yyxxLogBOList != null && yyxxLogBOList.size() > 0);
     }
 
     @Override
