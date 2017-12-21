@@ -168,7 +168,12 @@ public class GiftServiceImpl implements GiftService {
             LOGGER.info("查询礼物异常：{}", gift);
             throw new ServiceException(4104);
         }
+
         UgiftApply ugiftApply = (UgiftApply)map.get("ugiftApply");
+        if(ugiftApply.getGiftNum() <= 0){
+            LOGGER.info("申请数量错误：{}", gift);
+            throw new ServiceException(4104,"申请数量错误");
+        }
         int stock = gift.getStock();
         int finalStock = stock - ugiftApply.getGiftNum();
         //判断库存
@@ -187,7 +192,7 @@ public class GiftServiceImpl implements GiftService {
         //状态：0-已拒绝，1-待处理，2-已审批，3-已发货，4-已完成
         Date date = new Date();
         //更新用户信息和礼包交易信息
-        updateUserAmount(userId, gift.getSellingPrice(),date,0);
+        updateUserAmount(userId, gift.getSellingPrice()*ugiftApply.getGiftNum(),date,0);
         String applyId = getNo();
         UgiftApply apply = new UgiftApply();
         BeanUtils.copyProperties(ugiftApply,apply);
@@ -243,7 +248,7 @@ public class GiftServiceImpl implements GiftService {
         }
         UgiftApply ugiftApply = new UgiftApply();
         ugiftApply.setApplyId(giftCheckBO.getApplyId());
-
+        ugiftApply.setLastUpdate(new Date());
         int status = giftCheckBO.getStatus();
         //审核状态：0：不通过，1：通过
         //礼包申请状态：0-已拒绝，1-待处理，2-已审批，3-已发货，4-已完成
@@ -299,10 +304,22 @@ public class GiftServiceImpl implements GiftService {
 
     @Override
     public void sendGift(GiftSendBO giftSendBO) {
+        //查找礼物申请信息
+        UgiftApplyBO ugiftApplyBO = ugiftApplyRoMapper.selectByApplyId(giftSendBO.getApplyId());
+        if(ugiftApplyBO == null){
+            LOGGER.info("查询礼物申请异常：{}", ugiftApplyBO);
+            throw new ServiceException(7008);
+        }
+        //礼包申请状态：0-已拒绝，1-待处理，2-已审批，3-已发货，4-已完成
+        if(ugiftApplyBO.getStatus() != null && !"2".equals(ugiftApplyBO.getStatus())){
+            LOGGER.info("只有已审批的礼物申请才能进行发货：{}", ugiftApplyBO);
+            throw new ServiceException(7011);
+        }
         UgiftApply ugiftApply = new UgiftApply();
         ugiftApply.setApplyId(giftSendBO.getApplyId());
         ugiftApply.setExpressNo(giftSendBO.getExpressNo());
         ugiftApply.setExpressComp(giftSendBO.getExpressComp());
+        ugiftApply.setLastUpdate(new Date());
         int update = ugiftApplyMapper.update(ugiftApply);
         if(update != 1){
             LOGGER.info("礼物申请发货异常：{}", update);
