@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.bo;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -15,6 +16,7 @@ public class UserPhoneBO {
     @Size(min = 11, max = 11)
     private String phone;
     private String reason;
+    @Size(max = 20)
     private String username;
 
     public String getId() {

@@ -681,7 +681,7 @@ public class UserServiceImpl implements UserService {
 
 		user.setLastUpdate(new Date());
 		user.setPhone(bo.getPhone());
-		user.setUsername(bo.getUsername());
+		user.setUsername(StringUtils.isEmpty(bo.getUsername())?null:bo.getUsername());
 		int result = userMapper.updatePhone(user);
 		if (result != 1) {
 			LOGGER.warn("修改失败");
