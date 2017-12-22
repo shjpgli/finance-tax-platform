@@ -235,14 +235,23 @@ public class UserExtendServiceImpl implements UserExtendService {
 			}
 			UserExtend userExtendSecond = new UserExtend();
 			BeanUtils.copyProperties(userExtendUpdateBO, userExtendSecond);
-			userExtendSecond.setLastUpdate(new Date());
+			Date date = new Date();
+			userExtendSecond.setLastUpdate(date);
 			// 调用电子税局实名认证查询接口查询用户实名认证情况，如果已实名，则财税专家直接将该用户置为已实名
 			if (userBindService.isRealNameValidatedDzsj(
 					userExtendUpdateBO.getIdcard(),
 					userExtendUpdateBO.getRealName(), request)) {
 				userExtendSecond.setValidStatus("2");
-				userExtendSecond.setValidTime(new Date());
+				userExtendSecond.setValidTime(date);
 				userExtendSecond.setValidType("0");
+
+				userExtendSecond.setStartTime(date);
+				try {
+					userExtendSecond.setEndTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2099-12-30 23:59:59"));
+				} catch (ParseException e1) {
+					LOGGER.warn("新增失败，参数：{}" + userExtend.toString());
+					throw new ServiceException(4112);
+				}
 				userFeedbackMsgService.realNameValidate(
 						userExtendUpdateBO.getUserId(), "2");
 
