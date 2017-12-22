@@ -43,6 +43,10 @@
         where id=#{id}
     </update>
 
+    <delete id="delete" parameterType="java.lang.String">
+        delete from uc_operate_message where id=#{id}
+    </delete>
+
     <insert id="yyxxLog" parameterType="com.abc12366.uc.model.admin.bo.YyxxLogBO">
         insert INTO  uc_send_yyxx_log(id,userId,messageId,type,createTime)
         values (#{id},#{userId},#{messageId},#{type},#{createTime})
