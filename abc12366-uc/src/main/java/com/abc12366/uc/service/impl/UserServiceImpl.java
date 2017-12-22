@@ -1033,6 +1033,7 @@ public class UserServiceImpl implements UserService {
 			c1.setTime(DateUtils.strToDate(startStr, "yyyy"));
 			Calendar c2 = Calendar.getInstance();
 			c2.setTime(DateUtils.strToDate(endStr, "yyyy"));
+			c2.add(Calendar.YEAR,1);
 			Calendar c3 = Calendar.getInstance();
 			c3.setTime(DateUtils.strToDate(startStr, "yyyy"));
 			c3.add(Calendar.YEAR, 1);
@@ -1061,6 +1062,7 @@ public class UserServiceImpl implements UserService {
 			c1.setTime(DateUtils.strToDate(startStr, "yyyy-MM"));
 			Calendar c2 = Calendar.getInstance();
 			c2.setTime(DateUtils.strToDate(endStr, "yyyy-MM"));
+			c2.add(Calendar.MONTH,1);
 			int minusYear = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
 			int minus = c2.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12
 					* minusYear;
@@ -1094,6 +1096,7 @@ public class UserServiceImpl implements UserService {
 			c1.setTime(DateUtils.strToDate(startStr, "yyyy-MM-dd"));
 			Calendar c2 = Calendar.getInstance();
 			c2.setTime(DateUtils.strToDate(endStr, "yyyy-MM-dd"));
+			c2.add(Calendar.DAY_OF_YEAR,1);
 			Calendar c3 = Calendar.getInstance();
 			c3.setTime(DateUtils.strToDate(startStr, "yyyy-MM-dd"));
 			c3.add(Calendar.DAY_OF_YEAR, 1);
