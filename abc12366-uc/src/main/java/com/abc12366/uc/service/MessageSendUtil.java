@@ -48,4 +48,12 @@ public interface MessageSendUtil {
      */
     void sendMsg(HttpServletRequest request, User user, Message message,Map<String, String> map,String templateId);
 
+    /**
+     * 发送短信通知方法
+     * @param request
+     * @param content
+     * @param phone
+     */
+    void sendPhoneMessage(HttpServletRequest request, String content, String phone);
+
 }

@@ -11,6 +11,7 @@ import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.gift.*;
 import com.abc12366.uc.model.gift.bo.*;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.gift.GiftService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,9 @@ public class GiftServiceImpl implements GiftService {
 
     @Autowired
     private UamountLogRoMapper uamountLogRoMapper;
+
+    @Autowired
+    private MessageSendUtil messageSendUtil;
 
     @Override
     public List<Gift> selectList(Gift gift) {
@@ -227,7 +232,7 @@ public class GiftServiceImpl implements GiftService {
     }
 
     @Override
-    public void checkGiftBuy(GiftCheckBO giftCheckBO) {
+    public void checkGiftBuy(GiftCheckBO giftCheckBO, HttpServletRequest request) {
         com.abc12366.gateway.model.User user = Utils.getAdminInfo();
         UgiftLog ugiftLog = new UgiftLog();
         ugiftLog.setId(Utils.uuid());
@@ -250,6 +255,7 @@ public class GiftServiceImpl implements GiftService {
         ugiftApply.setApplyId(giftCheckBO.getApplyId());
         ugiftApply.setLastUpdate(new Date());
         int status = giftCheckBO.getStatus();
+        String content="";
         //审核状态：0：不通过，1：通过
         //礼包申请状态：0-已拒绝，1-待处理，2-已审批，3-已发货，4-已完成
         if(status == 0){
@@ -283,6 +289,8 @@ public class GiftServiceImpl implements GiftService {
             }
             //退还用户礼品金额
             updateUserAmount(ugiftApplyBO.getUserId(), giftApplyBO.getGiftAmount(),new Date(),1);
+            content = "很抱歉！您的会员礼包申请未通过，礼包订单号："+ugiftApplyBO.getApplyId()+"，具体原因请至会员礼包申请详情里查询；";
+            messageSendUtil.sendPhoneMessage(request,content,ugiftApplyBO.getPhone());
         }else if(status == 1){
             //修改礼包申请信息
             ugiftApply.setStatus("2");
@@ -298,6 +306,8 @@ public class GiftServiceImpl implements GiftService {
                 LOGGER.info("礼物申请审批异常：{}", insert);
                 throw new ServiceException(7003);
             }
+            content = "恭喜您！您的会员礼包申请已通过，礼包订单号："+ugiftApplyBO.getApplyId()+"，具体原因请至会员礼包申请详情里查询；";
+            messageSendUtil.sendPhoneMessage(request, content, ugiftApplyBO.getPhone());
         }
 
     }

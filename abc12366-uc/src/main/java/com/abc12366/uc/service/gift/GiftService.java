@@ -5,6 +5,7 @@ import com.abc12366.uc.model.gift.Gift;
 import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.model.gift.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -93,7 +94,7 @@ public interface GiftService {
      * 礼物审核
      * @param giftCheckBO
      */
-    void checkGiftBuy(GiftCheckBO giftCheckBO);
+    void checkGiftBuy(GiftCheckBO giftCheckBO, HttpServletRequest request);
 
     /**
      * 礼物发货

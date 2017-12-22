@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -241,9 +242,9 @@ public class GiftController {
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
      */
     @PutMapping(path = "/apply/check")
-    public ResponseEntity checkGiftBuy(@Valid @RequestBody GiftCheckBO giftCheckBO) {
+    public ResponseEntity checkGiftBuy(@Valid @RequestBody GiftCheckBO giftCheckBO, HttpServletRequest request) {
         LOGGER.info("{}", giftCheckBO);
-        giftService.checkGiftBuy(giftCheckBO);
+        giftService.checkGiftBuy(giftCheckBO,request);
         return ResponseEntity.ok(Utils.kv());
     }
 
