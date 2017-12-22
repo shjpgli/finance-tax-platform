@@ -49,10 +49,13 @@ public class OperateMessageController {
      * @return ResponseEntity
      */
     @GetMapping
-    public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+    public ResponseEntity selectList(@RequestParam(required = false) String status,
+                                     @RequestParam(required = false) String name,
+                                     @RequestParam(required = false) String createTime,
+                                    @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("查询运营消息列表：{}:{}", page, size);
-        List<OperateMessageBO> operateMessageBOList = operateMessageService.selectList(page, size);
+        LOGGER.info("查询运营消息列表：{}:{}:{}:{}:{}", status,name,createTime,page, size);
+        List<OperateMessageBO> operateMessageBOList = operateMessageService.selectList(status, name,createTime,page, size);
         return (operateMessageBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) operateMessageBOList, "total", ((Page) operateMessageBOList).getTotal()));
@@ -69,5 +72,41 @@ public class OperateMessageController {
         LOGGER.info("更新运营消息任务：{}", operateMessageBO);
         OperateMessageBO messageBO = operateMessageService.update(operateMessageBO);
         return ResponseEntity.ok(Utils.kv("data", messageBO));
+    }
+
+    /**
+     * 查询运营消息任务详情
+     * @param id 页码
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/{id}")
+    public ResponseEntity selectOne(@PathVariable String id) {
+        LOGGER.info("查询运营消息详情：{}", id);
+        OperateMessageBO operateMessageBO = operateMessageService.selectOne(id);
+        return ResponseEntity.ok(Utils.kv("data",operateMessageBO));
+    }
+
+    /**
+     * 删除运营消息任务
+     * @param id 页码
+     * @return ResponseEntity
+     */
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        LOGGER.info("删除运营消息：{}", id);
+        operateMessageService.delete(id);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 复用运营消息任务
+     * @param id 页码
+     * @return ResponseEntity
+     */
+    @PostMapping(path = "/reuse/{id}")
+    public ResponseEntity reuse(@PathVariable String id) {
+        LOGGER.info("复用运营消息：{}", id);
+        OperateMessageBO operateMessageBO = operateMessageService.reuse(id);
+        return ResponseEntity.ok(Utils.kv("data",operateMessageBO));
     }
 }

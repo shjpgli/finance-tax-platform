@@ -15,4 +15,6 @@ public interface OperateMessageMapper {
     void update(OperateMessageBO operateMessageBO);
 
     void yyxxLog(YyxxLogBO yyxxLogBO);
+
+    void delete(String id);
 }

@@ -9,6 +9,12 @@
 
     <select id="selectList" resultType="com.abc12366.uc.model.admin.bo.OperateMessageBO">
         select <include refid="Base_Column_List"/> from uc_operate_message
+        <where>
+            <if test="status != null and status != ''">status=#{status}</if>
+            <if test="name != null and name != ''">and taskname like CONCAT('%',#{name},'%')</if>
+            <if test="start != null">and createTime &gt;= #{start}</if>
+            <if test="end != null">and createTime &lt; #{end}</if>
+        </where>
     </select>
 
     <select id="selectValidList" resultType="com.abc12366.uc.model.admin.bo.OperateMessageBO" parameterType="java.util.Date">
@@ -17,6 +23,12 @@
         where status='1'
         and startTime &lt;=#{date}
         and endTime &gt;=#{date}
+    </select>
+
+    <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.admin.bo.OperateMessageBO">
+        select <include refid="Base_Column_List"/>
+        from uc_operate_message
+        where id=#{id}
     </select>
 
     <select id="selectTagIdList" parameterType="java.lang.String" resultType="java.lang.String">

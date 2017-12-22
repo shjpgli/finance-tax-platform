@@ -78,10 +78,21 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     }
 
     @Override
-    public List<OperateMessageBO> selectList(int page, int size) {
+    public List<OperateMessageBO> selectList(String status, String name, String createTime, int page, int size) {
         LOGGER.info("查询运营消息列表");
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<OperateMessageBO> tempList = operateMessageRoMapper.selectList();
+        Date start = null;
+        Calendar calendar = null;
+        if (!StringUtils.isEmpty(createTime)) {
+            start = DateUtils.strToDate(createTime, "yyyy-MM-dd");
+            calendar = Calendar.getInstance();
+            calendar.setTime(DateUtils.strToDate(createTime, "yyyy-MM-dd"));
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            System.out.println(start);
+            System.out.println(calendar.getTime());
+        }
+
+        List<OperateMessageBO> tempList = operateMessageRoMapper.selectList(status, name, start, calendar == null ? null : calendar.getTime());
         if (tempList == null || tempList.size() < 1) {
             return null;
         }
@@ -271,12 +282,12 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         //注册时间
         if (!StringUtils.isEmpty(o.getRegTimeOper())) {
             if (o.getRegTimeOper().trim().equals("lte") && o.getRegEndTime() != null) {
-                if(user.getCreateTime() != null&&user.getCreateTime().getTime()<=o.getRegEndTime().getTime()){
+                if (user.getCreateTime() != null && user.getCreateTime().getTime() <= o.getRegEndTime().getTime()) {
                     sendRegTime = true;
                 }
             }
             if (o.getRegTimeOper().trim().equals("gte") && o.getRegStartTime() != null) {
-                if(user.getCreateTime() != null&&user.getCreateTime().getTime()>=o.getRegStartTime().getTime()){
+                if (user.getCreateTime() != null && user.getCreateTime().getTime() >= o.getRegStartTime().getTime()) {
                     sendRegTime = true;
                 }
             }
@@ -287,5 +298,28 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         if (sendArea && sendTag && sendRegTime) {
             sendYyxx(o, user);
         }
+    }
+
+    @Override
+    public OperateMessageBO selectOne(String id) {
+        return operateMessageRoMapper.selectOne(id);
+    }
+
+    @Override
+    public void delete(String id) {
+        operateMessageMapper.delete(id);
+    }
+
+    @Override
+    public OperateMessageBO reuse(String id) {
+        OperateMessageBO o = operateMessageRoMapper.selectOne(id);
+        o.setId(Utils.uuid());
+        Date now = new Date();
+        o.setCreateTime(now);
+        o.setLastUpdate(now);
+        OperateMessage operateMessage = new OperateMessage();
+        BeanUtils.copyProperties(o, operateMessage);
+        operateMessageMapper.insert(operateMessage);
+        return o;
     }
 }

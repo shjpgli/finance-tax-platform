@@ -13,11 +13,13 @@ import java.util.List;
  * Time: 14:45
  */
 public interface OperateMessageRoMapper {
-    List<OperateMessageBO> selectList();
+    List<OperateMessageBO> selectList(@Param("status")String status, @Param("name")String name, @Param("start")Date start, @Param("end")Date end);
 
     List<OperateMessageBO> selectValidList(Date date);
 
     List<String> selectTagIdList(String userId);
 
     List<YyxxLogBO> selectWebLogList(@Param("userId")String userId, @Param("messageId")String messageId, @Param("type")String type, @Param("start")Date start, @Param("end")Date end);
+
+    OperateMessageBO selectOne(String id);
 }

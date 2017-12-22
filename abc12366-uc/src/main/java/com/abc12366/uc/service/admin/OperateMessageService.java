@@ -14,7 +14,7 @@ import java.util.List;
 public interface OperateMessageService {
     OperateMessageBO insert(OperateMessageBO operateMessageBO);
 
-    List<OperateMessageBO> selectList(int page, int size);
+    List<OperateMessageBO> selectList(String status,String name,String createTime,int page, int size);
 
     OperateMessageBO update(OperateMessageBO operateMessageBO);
 
@@ -25,4 +25,10 @@ public interface OperateMessageService {
     boolean tagIdContains(List<String> tagIdList, String tagIds);
 
     void sendPart(OperateMessageBO o, User user, UserExtend userExtend, List<String> tagIdList);
+
+    OperateMessageBO selectOne(String id);
+
+    void delete(String id);
+
+    OperateMessageBO reuse(String id);
 }
