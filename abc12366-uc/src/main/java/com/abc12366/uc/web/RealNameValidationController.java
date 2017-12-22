@@ -36,13 +36,13 @@ public class RealNameValidationController {
     /**
      * 查询用户实名认证列表
      *
-     * @param username 用户名
-     * @param status 用户状态
-     * @param realName 姓名
-     * @param phone 手机号码
+     * @param username    用户名
+     * @param status      用户状态
+     * @param realName    姓名
+     * @param phone       手机号码
      * @param validStatus 实名认证状态
-     * @param page 页码
-     * @param size 每页数据量
+     * @param page        页码
+     * @param size        每页数据量
      * @return ResponseEntity
      */
     @GetMapping
@@ -71,6 +71,15 @@ public class RealNameValidationController {
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
+    /**
+     * 手动审核实名认证
+     *
+     * @param userId             用户ID
+     * @param validStatus        认证状态
+     * @param userExtendUpdateBO 用户扩展信息
+     * @return 用户扩展信息
+     * @throws ParseException 日期转换异常
+     */
     @PutMapping(path = "/{userId}/{validStatus}")
     public ResponseEntity realNameValidate(@PathVariable String userId,
                                            @PathVariable String validStatus,
