@@ -27,6 +27,11 @@ public class AnswerLogBO implements Serializable {
     private String userId;
 
     /**
+     * 微信ID
+     **/
+    private String weixinId;
+
+    /**
      * 接入终端
      **/
     private String accessTerminal;
@@ -173,5 +178,14 @@ public class AnswerLogBO implements Serializable {
 
     public void setAvgTimeLong(Long avgTimeLong) {
         this.avgTimeLong = avgTimeLong;
+    }
+
+    public String getWeixinId() {
+        return weixinId;
+    }
+
+    public AnswerLogBO setWeixinId(String weixinId) {
+        this.weixinId = weixinId;
+        return this;
     }
 }

@@ -23,6 +23,11 @@ public class AnswerLog implements Serializable {
     private String userId;
 
     /**
+     * 微信ID
+     **/
+    private String weixinId;
+
+    /**
      * 接入终端
      **/
     private String accessTerminal;
@@ -98,4 +103,12 @@ public class AnswerLog implements Serializable {
         this.endTime = endTime;
     }
 
+    public String getWeixinId() {
+        return weixinId;
+    }
+
+    public AnswerLog setWeixinId(String weixinId) {
+        this.weixinId = weixinId;
+        return this;
+    }
 }
