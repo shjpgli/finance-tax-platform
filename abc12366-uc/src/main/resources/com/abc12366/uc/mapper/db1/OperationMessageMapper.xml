@@ -36,8 +36,8 @@
             <if test="tagOper != null and tagOper != ''">tagOper=#{tagOper},</if>
             <if test="tagIds != null and tagIds != ''">tagIds=#{tagIds},</if>
             <if test="regTimeOper != null and regTimeOper != ''">regTimeOper=#{regTimeOper},</if>
-            <if test="regStartTime != null and regStartTime != ''">regStartTime=#{regStartTime},</if>
-            <if test="regEndTime != null and regEndTime != ''">regEndTime=#{regEndTime},</if>
+            <if test="regStartTime != null">regStartTime=#{regStartTime},</if>
+            <if test="regEndTime != null">regEndTime=#{regEndTime},</if>
             <if test="userIds != null and userIds != ''">userIds=#{userIds}</if>
         </set>
         where id=#{id}
