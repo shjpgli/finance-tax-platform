@@ -58,7 +58,7 @@
         <set>
             phone = #{phone}
             <if test="lastUpdate != null">,lastUpdate = #{lastUpdate}</if>
-            <if test="username != null">,username = #{username}</if>
+            <if test="username != null and username != ''">,username = #{username}</if>
         </set>
         where id=#{id}
     </update>

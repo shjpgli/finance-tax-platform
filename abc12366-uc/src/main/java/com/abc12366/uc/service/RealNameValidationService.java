@@ -25,6 +25,15 @@ public interface RealNameValidationService {
      */
     List<UserExtendListBO> selectList(Map<String, Object> map, int page, int size);
 
+    /**
+     * 手动审核实名认证
+     *
+     * @param userId             用户ID
+     * @param validStatus        认证状态
+     * @param userExtendUpdateBO 用户扩展信息
+     * @return 用户扩展信息
+     * @throws ParseException 日期转换异常
+     */
     UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
             ParseException;
 

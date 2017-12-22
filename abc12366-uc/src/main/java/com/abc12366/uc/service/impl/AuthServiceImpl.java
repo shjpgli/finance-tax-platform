@@ -17,6 +17,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
+import com.abc12366.uc.service.admin.OperateMessageService;
 import com.abc12366.uc.util.RandomNumber;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -98,6 +99,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private UserFeedbackMsgService userFeedbackMsgService;
+
+    @Autowired
+    private OperateMessageService operateMessageService;
 
     /**
      * 2、新平台采用手机号码+登录密码+短信验证码注册，平台自动产生用户ID、用户名（字母UC+时间戳毫秒数）和用户昵称（财税+6位数字），同时自动绑定手机号码。
@@ -521,6 +525,8 @@ public class AuthServiceImpl implements AuthService {
             userFeedbackMsgService.unrealname();
             userFeedbackMsgService.check();
             userFeedbackMsgService.undotask();
+            //发送运营消息
+            operateMessageService.send(userId);
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("用户登录后发送消息提醒异常：{}", e);

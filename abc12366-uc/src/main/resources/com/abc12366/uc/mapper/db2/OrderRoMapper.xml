@@ -521,7 +521,6 @@
         FROM uc_order o
         LEFT JOIN uc_user u ON u.id = o.userId
 		left join uc_user_extend e on u.id = e.userId
-        left join uc_uvip_level l on l.levelCode = u.vipLevel
         left join uc_uvip_level v on v.levelCode = o.nowVipLevel
         WHERE o.orderNo = #{orderNo}
     </select>

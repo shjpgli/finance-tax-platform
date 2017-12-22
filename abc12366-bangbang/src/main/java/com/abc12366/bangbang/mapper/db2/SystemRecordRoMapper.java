@@ -2,7 +2,9 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.SystemRecord;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
+import org.apache.ibatis.annotations.Param;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +20,11 @@ public interface SystemRecordRoMapper {
     List<SystemRecordBO> findStay(SystemRecord systemRecord);
 
     SystemRecordBO selectOne(SystemRecord systemRecord);
+
+    /**
+     * 查询当天是否有数据
+     * @param yyyyMMdd
+     * @return
+     */
+    int selectRecordCount(@Param("yyyyMMdd")String yyyyMMdd);
 }

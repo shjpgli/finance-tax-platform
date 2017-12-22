@@ -3,12 +3,11 @@ package com.abc12366.uc.web.order;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.*;
-import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.alibaba.fastjson.JSON;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +80,8 @@ public class OrderController {
         LOGGER.info("{}", orderList);
         return (orderList == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo
+                        .getTotal()));
     }
 
     /**
@@ -99,8 +99,10 @@ public class OrderController {
      * @return 订单列表
      */
     @GetMapping(path = "/user")
-    public ResponseEntity selectUserOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectUserOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                          pageNum,
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                      pageSize,
                                               @RequestParam(value = "name", required = false) String name,
                                               @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                               @RequestParam(value = "status", required = true) String status,
@@ -122,7 +124,7 @@ public class OrderController {
         order.setTradeMethod(tradeMethod);
         order.setIsInvoice(isInvoice);
         //查询可退还列表,true：查，false：不查
-        if(isReturn != null && isReturn){
+        if (isReturn != null && isReturn) {
             order.setIsReturn(isReturn);
         }
         if (startTime != null && !"".equals(startTime)) {
@@ -136,7 +138,8 @@ public class OrderController {
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo
+                        .getTotal()));
     }
 
     /**
@@ -152,8 +155,10 @@ public class OrderController {
      * @return 订单列表
      */
     @GetMapping(path = "/user/all")
-    public ResponseEntity selectUserAllOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectUserAllOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                             pageNum,
+                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                         pageSize,
                                                  @RequestParam(value = "name", required = false) String name,
                                                  @RequestParam(value = "userId", required = true) String userId,
                                                  @RequestParam(value = "goodsType", required = false) String goodsType,
@@ -167,7 +172,6 @@ public class OrderController {
 
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
-//        order.setGoodsBO(goodsBO);
         order.setIsInvoice(false);
         order.setGoodsType(goodsType);
         if (startTime != null && !"".equals(startTime)) {
@@ -181,7 +185,8 @@ public class OrderController {
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo
+                        .getTotal()));
     }
 
     /**
@@ -196,11 +201,14 @@ public class OrderController {
      * @return 订单列表
      */
     @GetMapping(path = "/user/all/invoice")
-    public ResponseEntity selectOrderListByInvoice(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectOrderListByInvoice(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                               pageNum,
+                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize)
+                                                           int pageSize,
                                                    @RequestParam(value = "name", required = false) String name,
                                                    @RequestParam(value = "userId", required = true) String userId,
-                                                   @RequestParam(value = "startTime", required = false) String startTime,
+                                                   @RequestParam(value = "startTime", required = false) String
+                                                               startTime,
                                                    @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO order = new OrderBO();
@@ -210,7 +218,6 @@ public class OrderController {
 
         GoodsBO goodsBO = new GoodsBO();
         goodsBO.setName(name);
-//        order.setGoodsBO(goodsBO);
         if (startTime != null && !"".equals(startTime)) {
             order.setStartTime(DateUtils.strToDate(startTime));
         }
@@ -223,11 +230,13 @@ public class OrderController {
         LOGGER.info("{}", orderBOs);
         return (orderBOs == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
-                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo.getTotal()));
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo
+                        .getTotal()));
     }
 
     /**
      * 课程订单查询
+     *
      * @param pageNum   页数
      * @param pageSize  条数
      * @param goodsId   商品ID
@@ -237,11 +246,14 @@ public class OrderController {
      * @return 订单列表
      */
     @GetMapping(path = "/curriculum")
-    public ResponseEntity selectCurriculumOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
-                                                    @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+    public ResponseEntity selectCurriculumOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum)
+                                                                int pageNum,
+                                                    @RequestParam(value = "size", defaultValue = Constant.pageSize)
+                                                            int pageSize,
                                                     @RequestParam(value = "goodsId", required = true) String goodsId,
                                                     @RequestParam(value = "nickname", required = false) String nickname,
-                                                    @RequestParam(value = "startTime", required = false) String startTime,
+                                                    @RequestParam(value = "startTime", required = false) String
+                                                                startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
         OrderBO orderBO = new OrderBO();
@@ -339,11 +351,12 @@ public class OrderController {
      * 用户下单
      *
      * @param orderSubmitBO 订单信息
-     * @param userId  用户 ID
+     * @param userId        用户 ID
      * @return 订单信息
      */
     @PostMapping(path = "/submit/{userId}")
-    public ResponseEntity submitOrder(@Valid @RequestBody OrderSubmitBO orderSubmitBO, @PathVariable("userId") String userId) {
+    public ResponseEntity submitOrder(@Valid @RequestBody OrderSubmitBO orderSubmitBO, @PathVariable("userId") String
+            userId) {
         LOGGER.info("{}", orderSubmitBO);
         orderSubmitBO.setUserId(userId);
         OrderBO bo = orderService.submitOrder(orderSubmitBO);
@@ -359,7 +372,8 @@ public class OrderController {
      * @return 订单信息
      */
     @PostMapping(path = "/update/{userId}")
-    public ResponseEntity updateOrder(@Valid @RequestBody OrderUpdateBO orderUpdateBO, @PathVariable("userId") String userId) {
+    public ResponseEntity updateOrder(@Valid @RequestBody OrderUpdateBO orderUpdateBO, @PathVariable("userId") String
+            userId) {
         LOGGER.info("{}", orderUpdateBO);
         orderUpdateBO.setUserId(userId);
         OrderUpdateBO bo = orderService.updateOrder(orderUpdateBO);
@@ -375,7 +389,8 @@ public class OrderController {
      * @return 订单信息
      */
     @PostMapping(path = "/payment")
-    public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO, HttpServletRequest request) {
+    public ResponseEntity paymentOrderFictitious(@Valid @RequestBody OrderPayBO orderPayBO, HttpServletRequest
+            request) {
         LOGGER.info("{}{}", orderPayBO);
         orderService.paymentOrder(orderPayBO, "RMB", request);
         return ResponseEntity.ok(Utils.kv());
@@ -492,11 +507,13 @@ public class OrderController {
      * @return
      */
     @GetMapping(path = "/goods")
-    public ResponseEntity selectOrderByGoodsIdAndUserId(@RequestParam(value = "goodsId", required = true) String goodsId,
-                                                        @RequestParam(value = "userId", required = true) String userId) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("userId",userId);
-        map.put("goodsId",goodsId);
+    public ResponseEntity selectOrderByGoodsIdAndUserId(@RequestParam(value = "goodsId", required = true) String
+                                                                    goodsId,
+                                                        @RequestParam(value = "userId", required = true) String
+                                                                userId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("goodsId", goodsId);
         LOGGER.info("{}", map);
         OrderBO bo = orderService.selectOrderByGoodsIdAndUserId(map);
         LOGGER.info("{}", bo);
@@ -507,18 +524,18 @@ public class OrderController {
      * 统计订单，统计维度为【订单状态】
      *
      * @param tradeMethod 交易方式
-     * @param startTime  开始时间
-     * @param endTime  结束时间
+     * @param startTime   开始时间
+     * @param endTime     结束时间
      * @return
      */
     @GetMapping(path = "/status/statis")
     public ResponseEntity statisOrderByStatus(@RequestParam(value = "tradeMethod", required = true) String tradeMethod,
-                                      @RequestParam(value = "startTime", required = false) String startTime,
-                                      @RequestParam(value = "endTime", required = false) String endTime) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("tradeMethod",tradeMethod);
+                                              @RequestParam(value = "startTime", required = false) String startTime,
+                                              @RequestParam(value = "endTime", required = false) String endTime) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("tradeMethod", tradeMethod);
         if (startTime != null && !"".equals(startTime)) {
-            map.put("startTime",DateUtils.strToDate(startTime));
+            map.put("startTime", DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", DateUtils.strToDate(endTime));
@@ -536,18 +553,18 @@ public class OrderController {
      * 统计订单，统计维度为【月份】
      *
      * @param tradeMethod 交易方式
-     * @param startTime  开始时间
-     * @param endTime  结束时间
+     * @param startTime   开始时间
+     * @param endTime     结束时间
      * @return
      */
     @GetMapping(path = "/month/statis")
     public ResponseEntity statisOrder(@RequestParam(value = "tradeMethod", required = true) String tradeMethod,
                                       @RequestParam(value = "startTime", required = false) String startTime,
                                       @RequestParam(value = "endTime", required = false) String endTime) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("tradeMethod",tradeMethod);
+        Map<String, Object> map = new HashMap<>();
+        map.put("tradeMethod", tradeMethod);
         if (startTime != null && !"".equals(startTime)) {
-            map.put("startTime",DateUtils.strToDate(startTime));
+            map.put("startTime", DateUtils.strToDate(startTime));
         }
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", DateUtils.strToDate(endTime));
