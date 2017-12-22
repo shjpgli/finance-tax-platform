@@ -3,13 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UserStatisRoMapper">
     <select id="tagCountUsers" resultType="com.abc12366.uc.model.User" parameterType="java.lang.Object">
-        SELECT a.id, a.username, insert(a.phone, 4, 4, '****') phone, a.regMail, a.regIP, a.salt, a.nickname,
+        SELECT a.id, a.username, a.phone, a.regMail, a.regIP, a.salt, a.nickname,
                 a.status,a.createTime, a.lastUpdate,a.userPicturePath, a.maxUserPicturePath, a.midUserPicturePath,
                 a.minUserPicturePath, a.points, a.exp,a.vipLevel,usernameModifiedTimes,vipExpireDate,a.wxopenid,
                 a.wxheadimg,a.wxnickname
         FROM uc_user a JOIN uc_subject_tag b JOIN uc_tag c ON a.id=b.subjectId AND b.tagId=c.id
         WHERE a.createTime &gt;=#{start} and a.createTime &lt; #{end}
         AND  c.tagName = #{tagName}
+        order by a.createTime desc
     </select>
 
     <select id="regionCountry" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.bo.RigionStatisBO">
@@ -46,7 +47,7 @@
     </select>
 
     <select id="regionProvinceUinfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
-        select c.id, c.username, insert(c.phone, 4, 4, '****') phone, c.regMail, c.regIP, c.salt, c.nickname,
+        select c.id, c.username, a.phone, c.regMail, c.regIP, c.salt, c.nickname,
         c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
         c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
         c.wxheadimg,c.wxnickname
@@ -65,7 +66,7 @@
     </select>
 
     <select id="regionCityUinfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
-        select c.id, c.username, insert(c.phone, 4, 4, '****') phone, c.regMail, c.regIP, c.salt, c.nickname,
+        select c.id, c.username, a.phone, c.regMail, c.regIP, c.salt, c.nickname,
         c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
         c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
         c.wxheadimg,c.wxnickname

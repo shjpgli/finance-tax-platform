@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -53,6 +54,9 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
 
     @Autowired
     private UserFeedbackMsgService userFeedbackMsgService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public List<UserExtendListBO> selectList(Map<String, Object> map, int page, int size) {
@@ -109,35 +113,40 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         userExtendUpdate.setValidType("1");
         if (validStatus.equals(TaskConstant.USER_REALNAME_VALIDATED)) {
             userExtendUpdate.setValidTime(new Date());
-            
+
             //实名认证 跟新生日和性别
-            String idCard=userExtend.getIdcard();
-            if(idCard.length()==15){
-            	String id17 = idCard.substring(14, 15);
-            	if (Integer.parseInt(id17) % 2 != 0) {    
-                	userExtendUpdate.setSex("1");
-                } else {    
-                	userExtendUpdate.setSex("0");   
+            String idCard = userExtend.getIdcard();
+            if (idCard.length() == 15) {
+                String id17 = idCard.substring(14, 15);
+                if (Integer.parseInt(id17) % 2 != 0) {
+                    userExtendUpdate.setSex("1");
+                } else {
+                    userExtendUpdate.setSex("0");
                 }
-            	String birthday = idCard.substring(6, 12);    
+                String birthday = idCard.substring(6, 12);
                 Date birthdate = new SimpleDateFormat("yyMMdd").parse(birthday);
                 userExtendUpdate.setBirthday(birthdate);
-            }else if(idCard.length()==18){
-            	String id17 = idCard.substring(16, 17);    
-                if (Integer.parseInt(id17) % 2 != 0) {    
-                	userExtendUpdate.setSex("1");
-                } else {    
-                	userExtendUpdate.setSex("0");   
-                } 
-                String birthday = idCard.substring(6, 14);    
+            } else if (idCard.length() == 18) {
+                String id17 = idCard.substring(16, 17);
+                if (Integer.parseInt(id17) % 2 != 0) {
+                    userExtendUpdate.setSex("1");
+                } else {
+                    userExtendUpdate.setSex("0");
+                }
+                String birthday = idCard.substring(6, 14);
                 Date birthdate = new SimpleDateFormat("yyyyMMdd").parse(birthday);
                 userExtendUpdate.setBirthday(birthdate);
             }
-            
+
         }
         int result = userExtendMapper.update(userExtendUpdate);
         if (result < 1) {
             throw new ServiceException();
+        }
+
+        // 清楚redis缓存
+        if (redisTemplate.hasKey(userId + "_UserExtend")) {
+            redisTemplate.delete(userId + "_UserExtend");
         }
 
         //首次实名认证任务埋点

@@ -198,15 +198,30 @@
     </select>
     
     <select id="selectByWxUserId" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.User">
-        SELECT * FROM uc_user where id=#{id} and wxopenid=#{wxopenid}
+        SELECT id, username, phone, password, regMail,
+          regIP, salt, nickname, status, createTime,
+          lastUpdate, userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath,
+          points, exp, vipLevel, usernameModifiedTimes, vipExpireDate,
+          wxopenid, wxheadimg, wxnickname, bdqudao
+        FROM uc_user where id=#{id} and wxopenid=#{wxopenid}
     </select>
     
     <select id="findByHngsNsrsbh" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-        SELECT u.* FROM  uc_user_hngs h, uc_user u where h.userId=u.id and h.status=1 and h.nsrsbh=#{nsrshb}
+        SELECT u.id, u.username, u.phone, u.password, u.regMail,
+          u.regIP, u.salt, u.nickname, u.status, u.createTime,
+          u.lastUpdate, u.userPicturePath, u.maxUserPicturePath, u.midUserPicturePath, u.minUserPicturePath,
+          u.points, u.exp, u.vipLevel, u.usernameModifiedTimes, u.vipExpireDate,
+          u.wxopenid, u.wxheadimg, u.wxnickname, u.bdqudao
+        FROM  uc_user_hngs h, uc_user u where h.userId=u.id and h.status=1 and h.nsrsbh=#{nsrshb}
     </select>
     
     <select id="findByDzsbNsrsbh" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-        SELECT u.* FROM  uc_user_dzsb h, uc_user u where h.userId=u.id and h.status=1 and h.nsrsbh=#{nsrshb}
+        SELECT u.id, u.username, u.phone, u.password, u.regMail,
+          u.regIP, u.salt, u.nickname, u.status, u.createTime,
+          u.lastUpdate, u.userPicturePath, u.maxUserPicturePath, u.midUserPicturePath, u.minUserPicturePath,
+          u.points, u.exp, u.vipLevel, u.usernameModifiedTimes, u.vipExpireDate,
+          u.wxopenid, u.wxheadimg, u.wxnickname, u.bdqudao
+        FROM  uc_user_dzsb h, uc_user u where h.userId=u.id and h.status=1 and h.nsrsbh=#{nsrshb}
     </select>
 
     <select id="selectOneByPhone" resultType="com.abc12366.uc.model.bo.UserBO"

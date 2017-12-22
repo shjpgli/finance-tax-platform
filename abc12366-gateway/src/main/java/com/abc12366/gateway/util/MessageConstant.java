@@ -80,4 +80,14 @@ public class MessageConstant {
     
     //阿里云短信业务消息模板
     public final static String ALIYUNTEMP_DXTZ="SMS_114060175";
+
+
+    //运营消息业务类型
+    public final static String YYXX_BUSITYPE = "YYXX";
+    //运营消息-系统消息类型
+    public final static String YYXX_WEB="web";
+    //运营消息-微信消息类型
+    public final static String YYXX_WECHAT="wechat";
+    //运营消息-短信消息类型
+    public final static String YYXX_MESSAGE="message";
 }

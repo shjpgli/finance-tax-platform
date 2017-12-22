@@ -242,7 +242,7 @@ public class DateUtils {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);
 
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
         return calendar.getTime();
     }
 

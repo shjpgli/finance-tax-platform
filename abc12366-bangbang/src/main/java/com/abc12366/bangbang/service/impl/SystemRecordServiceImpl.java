@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -263,18 +264,28 @@ public class SystemRecordServiceImpl implements SystemRecordService {
     public List<User> statisRecordUserList(Map<String, Object> map) {
         List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
         List<String> list = new ArrayList<>();
+        //格式化时间条件
         for (Date date : datelist) {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            list.add(df.format(date));
+            String dfDate = df.format(date);
+            //查询当天是否有数据
+            int count;
+            try {
+                count = systemRecordRoMapper.selectRecordCount(dfDate);
+            }catch (Exception e){
+                count = -1;
+            }
+            if(count != -1){
+                list.add(dfDate);
+            }
         }
         map.put("list",list);
-
         List<User> userList;
         try {
             userList = systemRecordStatisRoMapper.statisRecordUserList(map);
         }catch (Exception e){
             LOGGER.warn("查询SQL异常：" + e);
-            throw new ServiceException(6393,"查询SQL异常");
+            throw new ServiceException(6393,"2017-12-12之前的数据不做统计");
         }
         return userList;
     }
@@ -285,7 +296,17 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         List<String> list = new ArrayList<>();
         for (Date date : datelist) {
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            list.add(df.format(date));
+            String dfDate = df.format(date);
+            //查询当天是否有数据
+            int count;
+            try {
+                count = systemRecordRoMapper.selectRecordCount(dfDate);
+            }catch (Exception e){
+                count = -1;
+            }
+            if(count != -1){
+                list.add(dfDate);
+            }
         }
         map.put("list",list);
         List<DzsbHngs> dzsbHngsList;
@@ -293,7 +314,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             dzsbHngsList = systemRecordCompanyRoMapper.statisRecordCompanyList(map);
         }catch (Exception e){
             LOGGER.warn("查询SQL异常：" + e);
-            throw new ServiceException(6393,"查询SQL异常");
+            throw new ServiceException(6393,"2017-12-12之前的数据不做统计");
         }
         return dzsbHngsList;
     }
