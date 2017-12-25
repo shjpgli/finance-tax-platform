@@ -17,10 +17,9 @@ public class QuestionnaireBO implements Serializable {
 
     private String id;
     @NotEmpty
-    @Size(min = 2, max = 100)
+    @Size(min = 0, max = 100)
     private String title;
 
-    @Size(min = 0, max = 255)
     private String simpleDesc;
 
     @NotNull

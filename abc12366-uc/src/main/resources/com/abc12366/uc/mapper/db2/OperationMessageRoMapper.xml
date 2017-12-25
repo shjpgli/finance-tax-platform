@@ -15,6 +15,7 @@
             <if test="start != null">and createTime &gt;= #{start}</if>
             <if test="end != null">and createTime &lt; #{end}</if>
         </where>
+        order by createTime desc
     </select>
 
     <select id="selectValidList" resultType="com.abc12366.uc.model.admin.bo.OperateMessageBO" parameterType="java.util.Date">
