@@ -918,6 +918,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
 	public List<UserStatisBO> statisUserByMonth(Map<String, Object> map) {
 		int day = 0;
 		if (map.get("startTime") != null && map.get("endTime") != null) {
