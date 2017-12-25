@@ -14,16 +14,16 @@
 12.获取用户累计签到天数(/check/total)：userid+'_Check'
 13.查看用户本月任务概况(/task/mytask/survey/{userId})：userid+'_Tasks'
 14.根据等级编码查看会员等级(/uvip/level/bo/{levelCode})：levelCode+"_VipLevel"
-15.个人消息(/user/message)：userid+'_MessageForqt'
-16.业务消息服务(/business)：userid+'_BusinessForqt'
+15.个人消息(/user/msg/unread)：userId + '_UserMsgUnread'
+16.业务消息服务(/business/unread)：userId + '_BusinessMsgUnread'
 17.广告轮播图(/adpages)：CMS_AdpageListFqt
-18.财税资讯列表(/content/selectListcszxw)：CMS_SelectListcszxwFqt
+18.财税资讯列表(/content/selectListcszxwForqt)：CMS_SelectListcszxwFqt
 19.通知公告(/notices)：CMS_NoticeListFqt
 20.热点问题(/questionbb/selectListryForqt)：Bangb_HotUnClassifyList
 21.帮友热议(/questionbb/selectListry)：CMS_SelectListryForqt
 22.活动中心(/event/topone/{category})：category+"_ToponeForqt"
 23.推荐课程(/curriculum/selectRecommend)：CMS_Curriculum
 24.知识库分类(/knowledgeCategory/listAll)：Bangb_KnowledgeCategoryList
-25.财税资讯(/contentType)：Cms_ContentTypeList
+25.财税资讯类型(/contentType)：Cms_ContentTypeList
 26.财税网首页 最新问题、知识(/knowledgeBase/nearestList)：Bangb_NearestLists
 27.问题受理 统计查询(缓存)(/accepted/statis)：Bangb_Accepted

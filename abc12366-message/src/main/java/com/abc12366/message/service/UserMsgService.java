@@ -80,6 +80,7 @@ public interface UserMsgService {
 
     /**
      * 根据用户名查询发给这个用户的消息
+     *
      * @param map
      * @param page
      * @param size
@@ -88,4 +89,12 @@ public interface UserMsgService {
     List<UserMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size);
 
     int unreadCount(UserMessage data);
+
+    /**
+     * 获取未读消息列表
+     *
+     * @param um 查询条件
+     * @return 未读消息列表
+     */
+    List<UserMessage> selectUnreadList(UserMessage um);
 }
