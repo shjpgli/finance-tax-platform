@@ -161,6 +161,9 @@
         <if test="userId != null and userId != ''">
             AND userId = #{userId}
         </if>
+        <if test="weixinId != null and weixinId != ''">
+            AND weixinId = #{weixinId}
+        </if>
     </select>
 
 

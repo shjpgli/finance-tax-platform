@@ -59,6 +59,11 @@ public class QuestionnaireParam implements Serializable {
      **/
     private Integer isPrize;
 
+    /**
+     * 是否每个微信号只能回答一次，true：是；false：否
+     **/
+    private Integer isWxOnce;
+
     public String getQuestionId() {
         return this.questionId;
     }
@@ -139,4 +144,12 @@ public class QuestionnaireParam implements Serializable {
         this.isPrize = isPrize;
     }
 
+    public Integer getIsWxOnce() {
+        return isWxOnce;
+    }
+
+    public QuestionnaireParam setIsWxOnce(Integer isWxOnce) {
+        this.isWxOnce = isWxOnce;
+        return this;
+    }
 }
