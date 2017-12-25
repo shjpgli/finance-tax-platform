@@ -20,7 +20,6 @@ public class QuestionnaireBO implements Serializable {
     @Size(min = 0, max = 100)
     private String title;
 
-    @Size(min = 0, max = 2000)
     private String simpleDesc;
 
     @NotNull
