@@ -1,6 +1,8 @@
 package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.BusinessMsgMapper;
 import com.abc12366.message.mapper.db2.BusinessMsgRoMapper;
@@ -9,17 +11,21 @@ import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.model.bo.BusinessMessageAdmin;
 import com.abc12366.message.service.BusinessMsgService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户消息服务
@@ -39,6 +45,14 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     @Autowired
     private BusinessMsgRoMapper businessMsgRoMapper;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    /**
+     * 业务消息redis未读消息key
+     */
+    private final String BUSINESS_MSG_KEY = "_BusinessMsgUnread";
+
     @Override
     public List<BusinessMessage> selectList(BusinessMessage data, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -54,6 +68,11 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             data.setCreateTime(now);
             data.setLastUpdate(now);
             businessMsgMapper.insert(data);
+
+            String key = data.getUserId() + BUSINESS_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return data;
     }
@@ -63,7 +82,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         List<BusinessMessage> dataList = null;
         if (data != null && data.getUserIds().size() > 0) {
             dataList = new ArrayList<>();
-            for (String userId: data.getUserIds()) {
+            for (String userId : data.getUserIds()) {
                 Timestamp now = new Timestamp(System.currentTimeMillis());
                 BusinessMessage bm = new BusinessMessage.Builder()
                         .id(Utils.uuid())
@@ -77,6 +96,11 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
                         .url(data.getUrl())
                         .build();
                 dataList.add(bm);
+
+                String key = userId + BUSINESS_MSG_KEY;
+                if (redisTemplate.hasKey(key)) {
+                    redisTemplate.delete(key);
+                }
             }
             businessMsgMapper.batchInsert(dataList);
         }
@@ -97,6 +121,11 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             bm.setStatus(data.getStatus());
             bm.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             businessMsgMapper.update(bm);
+
+            String key = data.getUserId() + BUSINESS_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return bm;
     }
@@ -119,6 +148,11 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         if (data.getUserId().equals(bm.getUserId())) {
             bm.setStatus("0");
             this.update(bm);
+
+            String key = data.getUserId() + BUSINESS_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
             return Utils.bodyStatus(2000);
         } else {
             return Utils.bodyStatus(4024);
@@ -134,5 +168,24 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     @Override
     public int unreadCount(BusinessMessage bm) {
         return businessMsgRoMapper.unreadCount(bm);
+    }
+
+    @Override
+    public List<BusinessMessage> selectUnreadList(BusinessMessage bm) {
+        PageHelper.startPage(Integer.parseInt(Constant.pageNum), Integer.parseInt(Constant.pageSize), false)
+                .pageSizeZero(true).reasonable(true);
+        String key = Utils.getUserId() + BUSINESS_MSG_KEY;
+        List<BusinessMessage> dataList;
+        if (redisTemplate.hasKey(key)) {
+            LOGGER.info("From redis read: " + key);
+            dataList = JSONArray.parseArray(redisTemplate.opsForValue().get(key), BusinessMessage.class);
+        } else {
+            dataList = businessMsgRoMapper.selectList(bm);
+            redisTemplate.opsForValue().set(key,
+                    JSONObject.toJSONString(dataList),
+                    RedisConstant.USER_INFO_TIME_ODFAY,
+                    TimeUnit.DAYS);
+        }
+        return dataList;
     }
 }

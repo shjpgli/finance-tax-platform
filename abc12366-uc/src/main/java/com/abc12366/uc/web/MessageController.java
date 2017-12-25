@@ -25,10 +25,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * UC发送业务消息接口控制器
+ * 接口已过期，改为调用帮帮子系统中的BusinessMsgController
+ *
  * User: liuguiyao<435720953@qq.com>
  * Date: 2017-08-09
  * Time: 11:39
  */
+@Deprecated
 @RestController
 @RequestMapping(path = "/message", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class MessageController {
