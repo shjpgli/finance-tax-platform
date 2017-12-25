@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.UgiftApplyRoMapper">
+
+    <!--订单对象-->
+    <resultMap id="ugiftBOResultMap" type="com.abc12366.uc.model.gift.bo.UgiftApplyBO">
+        <result column="applyId" property="applyId" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="expressComp" property="expressComp" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="INTEGER"/>
+
+        <association property="giftApplyBO" javaType="com.abc12366.uc.model.gift.bo.GiftApplyBO">
+            <id column="aId" property="id"/>
+            <result column="applyId" property="applyId"/>
+            <result column="giftId" property="giftId"/>
+            <result column="giftName" property="giftName"/>
+            <result column="giftAmount" property="giftAmount"/>
+            <result column="giftNum" property="giftNum"/>
+        </association>
+    </resultMap>
+    <!-- 通用查询结果列-->
+    <sql id="Base_Column_List">
+		 applyId,	userId,	createTime,	lastUpdate,	status,	expressNo,	expressComp,	name,	phone,	address,	remark
+	</sql>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByPrimaryKey" resultType="com.abc12366.uc.model.gift.UgiftApply" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_ugift_apply
+        WHERE applyId = #{applyId}
+    </select>
+
+    <sql id="Base_BO_List">
+		u.applyId,	u.userId,	u.createTime,	u.lastUpdate,	u.status,	u.expressNo,	u.expressComp,	u.name,	u.phone,	u.address,	u.remark,
+		 		g.id as aId,	g.applyId,	g.giftId,	g.giftName,	g.giftAmount,g.giftNum
+	</sql>
+
+    <!-- 查询（根据ApplyId查询） -->
+    <select id="selectByApplyId" resultMap="ugiftBOResultMap"
+            parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_BO_List"/>
+        FROM uc_ugift_apply u LEFT JOIN uc_gift_apply g on g.applyId = u.applyId
+        WHERE u.applyId = #{applyId}
+    </select>
+
+    <!-- 查询（根据ApplyId查询） -->
+    <select id="selectUgiftApplyList" resultMap="ugiftBOResultMap"
+            parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_BO_List"/>
+        FROM uc_ugift_apply u LEFT JOIN uc_gift_apply g on g.applyId = u.applyId
+        <where>
+            1 = 1
+            <if test="userId != null and userId != ''">
+                and u.userId = #{userId}
+            </if>
+            <if test="status != null and status != ''">
+                and u.status = #{status}
+            </if>
+            <if test="name != null and name != ''">
+                and u.name = #{name}
+            </if>
+            <if test="giftName != null and giftName != ''">
+                and g.giftName = #{giftName}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
