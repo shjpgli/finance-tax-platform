@@ -255,6 +255,7 @@ public class GiftServiceImpl implements GiftService {
         ugiftApply.setApplyId(giftCheckBO.getApplyId());
         ugiftApply.setLastUpdate(new Date());
         int status = giftCheckBO.getStatus();
+        ugiftApply.setRemark(giftCheckBO.getRemark());
         String content="";
         //审核状态：0：不通过，1：通过
         //礼包申请状态：0-已拒绝，1-待处理，2-已审批，3-已发货，4-已完成
@@ -330,6 +331,7 @@ public class GiftServiceImpl implements GiftService {
         ugiftApply.setExpressNo(giftSendBO.getExpressNo());
         ugiftApply.setExpressComp(giftSendBO.getExpressComp());
         ugiftApply.setLastUpdate(new Date());
+        ugiftApply.setStatus("3");
         int update = ugiftApplyMapper.update(ugiftApply);
         if(update != 1){
             LOGGER.info("礼物申请发货异常：{}", update);
