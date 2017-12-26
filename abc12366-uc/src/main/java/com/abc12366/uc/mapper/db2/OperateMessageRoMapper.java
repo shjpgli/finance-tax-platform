@@ -24,5 +24,5 @@ public interface OperateMessageRoMapper {
 
     OperateMessageBO selectOne(String id);
 
-    List<YyxxLogListBO> operateMessageLog(@Param("userId")String userId, @Param("nickName")String nickName);
+    List<YyxxLogListBO> operateMessageLog(@Param("userId")String userId, @Param("nickName")String nickName,@Param("messageId")String messageId);
 }

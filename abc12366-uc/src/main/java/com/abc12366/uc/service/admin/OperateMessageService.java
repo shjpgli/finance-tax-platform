@@ -33,5 +33,5 @@ public interface OperateMessageService {
 
     OperateMessageBO reuse(String id);
 
-    List<YyxxLogListBO> operateMessageLog(String userId, String nickName);
+    List<YyxxLogListBO> operateMessageLog(String userId, String nickName,String messageId);
 }
