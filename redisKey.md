@@ -19,7 +19,7 @@
 * 财税资讯列表(/content/selectListcszxwForqt)：CMS_SelectListcszxwFqt
 * 通知公告(/noticesForqt)：CMS_NoticeListFqt
 * 热点问题(/knowledgeBase/hotUnClassifyList)：Bangb_HotUnClassifyList
-* 帮友热议(/questionbb/selectListry)：CMS_SelectListryForqt
+* 帮友热议(/questionbb/selectListryForqt)：CMS_SelectListryForqt
 * 活动中心(/event/topone/{category})：category + "_ToponeForqt"
 * 知识库分类(/knowledgeCategory/listAll)：Bangb_KnowledgeCategoryList
 * 财税资讯类型(/contentType)：Cms_ContentTypeList

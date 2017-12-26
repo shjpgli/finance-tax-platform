@@ -137,6 +137,11 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         if ("1".equals(data.getStatus())) {
             data.setStatus("2");
             this.update(data);
+
+            String key = data.getUserId() + BUSINESS_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return data;
     }

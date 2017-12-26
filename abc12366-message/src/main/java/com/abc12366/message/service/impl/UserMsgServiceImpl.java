@@ -108,6 +108,11 @@ public class UserMsgServiceImpl implements UserMsgService {
         if ("1".equals(data.getStatus())) {
             data.setStatus("2");
             this.update(data);
+
+            String key = data.getToUserId() + USER_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return data;
     }
