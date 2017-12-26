@@ -1,7 +1,6 @@
 package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.model.BodyStatus;
-import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.BusinessMsgMapper;
@@ -122,7 +121,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             bm.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             businessMsgMapper.update(bm);
 
-            String key = data.getUserId() + BUSINESS_MSG_KEY;
+            String key = bm.getUserId() + BUSINESS_MSG_KEY;
             if (redisTemplate.hasKey(key)) {
                 redisTemplate.delete(key);
             }
@@ -137,6 +136,11 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
         if ("1".equals(data.getStatus())) {
             data.setStatus("2");
             this.update(data);
+
+            String key = data.getUserId() + BUSINESS_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return data;
     }
@@ -149,7 +153,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             bm.setStatus("0");
             this.update(bm);
 
-            String key = data.getUserId() + BUSINESS_MSG_KEY;
+            String key = bm.getUserId() + BUSINESS_MSG_KEY;
             if (redisTemplate.hasKey(key)) {
                 redisTemplate.delete(key);
             }
@@ -172,8 +176,6 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> selectUnreadList(BusinessMessage bm) {
-        PageHelper.startPage(Integer.parseInt(Constant.pageNum), Integer.parseInt(Constant.pageSize), false)
-                .pageSizeZero(true).reasonable(true);
         String key = Utils.getUserId() + BUSINESS_MSG_KEY;
         List<BusinessMessage> dataList;
         if (redisTemplate.hasKey(key)) {

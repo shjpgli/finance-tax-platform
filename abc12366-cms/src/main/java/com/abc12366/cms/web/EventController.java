@@ -39,7 +39,7 @@ public class EventController {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-    
+
     /**
      * 查询活动列表信息
      */
@@ -68,12 +68,12 @@ public class EventController {
      */
     @GetMapping(path = "/selectEventList")
     public ResponseEntity selectEventList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "title", required = false) String title,
-                                     @RequestParam(value = "category", required = false) String category,
-                                     @RequestParam(value = "begintime", required = false) String begintime,
-                                     @RequestParam(value = "endtime", required = false) String endtime,
-                                     @RequestParam(value = "status", required = false) String status) {
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                          @RequestParam(value = "title", required = false) String title,
+                                          @RequestParam(value = "category", required = false) String category,
+                                          @RequestParam(value = "begintime", required = false) String begintime,
+                                          @RequestParam(value = "endtime", required = false) String endtime,
+                                          @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//标题
         dataMap.put("status", status);//状态
@@ -95,7 +95,7 @@ public class EventController {
         //新增活动信息
         eventSaveBo = eventService.save(eventSaveBo);
         LOGGER.info("{}", eventSaveBo);
-        redisTemplate.delete(eventSaveBo.getEvent().getCategory()+"_ToponeForqt");
+        redisTemplate.delete(eventSaveBo.getEvent().getCategory() + "_ToponeForqt");
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
     }
 
@@ -117,13 +117,15 @@ public class EventController {
     @GetMapping(path = "/topone/{category}")
     public ResponseEntity selecttopone(@PathVariable String category) {
         //查询活动信息
-    	EventSaveBo eventSaveBo = null;
-    	if(redisTemplate.hasKey(category+"_ToponeForqt")){
-    		eventSaveBo = JSONObject.parseObject(redisTemplate.opsForValue().get(category+"_ToponeForqt"),EventSaveBo.class);
-    	}else{
-    		eventSaveBo = eventService.selecttopone(category);
-    		redisTemplate.opsForValue().set(category+"_ToponeForqt",JSONObject.toJSONString(eventSaveBo),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
-    	}
+        EventSaveBo eventSaveBo = null;
+        if (redisTemplate.hasKey(category + "_ToponeForqt")) {
+            eventSaveBo = JSONObject.parseObject(redisTemplate.opsForValue().get(category + "_ToponeForqt"),
+                    EventSaveBo.class);
+        } else {
+            eventSaveBo = eventService.selecttopone(category);
+            redisTemplate.opsForValue().set(category + "_ToponeForqt", JSONObject.toJSONString(eventSaveBo),
+                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        }
         LOGGER.info("{}", eventSaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
     }
@@ -139,7 +141,7 @@ public class EventController {
         //更新活动信息
         eventSaveBo = eventService.update(eventSaveBo);
         EventSaveBo eventBo = eventService.selectEvent(eventId);
-        redisTemplate.delete(eventBo.getEvent().getCategory()+"_ToponeForqt");
+        redisTemplate.delete(eventBo.getEvent().getCategory() + "_ToponeForqt");
         LOGGER.info("{}", eventSaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));
     }
@@ -153,7 +155,7 @@ public class EventController {
         //删除活动信息
         EventSaveBo eventBo = eventService.selectEvent(eventId);
         String rtn = eventService.delete(eventId);
-        redisTemplate.delete(eventBo.getEvent().getCategory()+"_ToponeForqt");
+        redisTemplate.delete(eventBo.getEvent().getCategory() + "_ToponeForqt");
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

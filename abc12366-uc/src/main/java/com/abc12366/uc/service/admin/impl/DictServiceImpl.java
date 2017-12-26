@@ -10,8 +10,6 @@ import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.bo.DictUpdateBO;
 import com.abc12366.uc.service.admin.DictService;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,9 +37,11 @@ public class DictServiceImpl implements DictService {
 
     @Autowired
     private DictMapper dictMapper;
-    
+
     @Autowired
-	private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
+
+    private final String DICT_KEY = "_Dict";
 
     @Override
     public List<Dict> selectList(Dict dict) {
@@ -78,7 +79,7 @@ public class DictServiceImpl implements DictService {
         return dictBO;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public DictBO insert(DictBO dictBO) {
         //dictId，fieldKey确定数据唯一性
@@ -96,13 +97,13 @@ public class DictServiceImpl implements DictService {
 
         dictMapper.insert(dict);
         // 删除redis
-        redisTemplate.delete(dict.getDictId() + "_Dict");
-        
+        redisTemplate.delete(dict.getDictId() + DICT_KEY);
+
         BeanUtils.copyProperties(dict, dictBO);
         return dictBO;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public DictBO update(DictUpdateBO dictUpdateBO) {
         Dict dict = new Dict();
@@ -112,25 +113,25 @@ public class DictServiceImpl implements DictService {
         if (upd != 1) {
             throw new ServiceException(4102);
         }
-        
+
         // 删除redis
-        redisTemplate.delete(dictUpdateBO.getDictId() + "_Dict");
-        
+        redisTemplate.delete(dictUpdateBO.getDictId() + DICT_KEY);
+
         DictBO dictBO = new DictBO();
         BeanUtils.copyProperties(dict, dictBO);
         return dictBO;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public int delete(String id) {
-    	Dict dict=dictRoMapper.selectById(id);
+        Dict dict = dictRoMapper.selectById(id);
         int del = dictMapper.delete(id);
         if (del != 1) {
             throw new ServiceException(4103);
         }
         // 删除redis
-        redisTemplate.delete(dict.getDictId() + "_Dict");
+        redisTemplate.delete(dict.getDictId() + DICT_KEY);
         return del;
     }
 
@@ -141,20 +142,20 @@ public class DictServiceImpl implements DictService {
 
     @Override
     public List<DictBO> selectDictList(Dict dict) {
-    	List<DictBO> dictBOs=null;
-    	if(redisTemplate.hasKey(dict.getDictId() + "_Dict")){
-    		dictBOs=JSONArray.parseArray(redisTemplate.opsForValue().get(dict.getDictId() + "_Dict"),DictBO.class);
-    		LOGGER.info("从redis获取数据字典信息:{}", JSONArray.toJSONString(dictBOs));
-    	}else{
-    		dictBOs=dictRoMapper.selectDictList(dict);
-    		redisTemplate.opsForValue().set(dict.getDictId() + "_Dict",
-    				JSONArray.toJSONString(dictBOs),
-					RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
-    	}
+        List<DictBO> dictBOs;
+        if (redisTemplate.hasKey(dict.getDictId() + DICT_KEY)) {
+            dictBOs = JSONArray.parseArray(redisTemplate.opsForValue().get(dict.getDictId() + DICT_KEY), DictBO.class);
+            LOGGER.info("从redis获取数据字典信息:{}", JSONArray.toJSONString(dictBOs));
+        } else {
+            dictBOs = dictRoMapper.selectDictList(dict);
+            redisTemplate.opsForValue().set(dict.getDictId() + DICT_KEY,
+                    JSONArray.toJSONString(dictBOs),
+                    RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
+        }
         return dictBOs;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
     @Override
     public void batchDelete(Dict bo) {
         String id = bo.getId();
@@ -164,13 +165,13 @@ public class DictServiceImpl implements DictService {
         }
         String[] ids = id.split(",");
         for (String dId : ids) {
-        	Dict dict=dictRoMapper.selectById(id);
+            Dict dict = dictRoMapper.selectById(id);
             int del = dictMapper.delete(dId);
             if (del != 1) {
                 throw new ServiceException(4103);
             }
             // 删除redis
-            redisTemplate.delete(dict.getDictId() + "_Dict");
+            redisTemplate.delete(dict.getDictId() + DICT_KEY);
         }
     }
 
