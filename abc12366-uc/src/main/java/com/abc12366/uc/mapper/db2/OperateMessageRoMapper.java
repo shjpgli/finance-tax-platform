@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogBO;
+import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -22,4 +23,6 @@ public interface OperateMessageRoMapper {
     List<YyxxLogBO> selectWebLogList(@Param("userId")String userId, @Param("messageId")String messageId, @Param("type")String type, @Param("start")Date start, @Param("end")Date end);
 
     OperateMessageBO selectOne(String id);
+
+    List<YyxxLogListBO> operateMessageLog(@Param("userId")String userId, @Param("nickName")String nickName);
 }
