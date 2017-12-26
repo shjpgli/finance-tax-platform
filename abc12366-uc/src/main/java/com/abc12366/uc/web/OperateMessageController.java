@@ -115,11 +115,12 @@ public class OperateMessageController {
     @GetMapping(path = "/log")
     public ResponseEntity operateMessageLog(@RequestParam(required = false) String userId,
                                             @RequestParam(required = false) String nickName,
+                                            @RequestParam(required = false) String messageId,
                                             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
-        LOGGER.info("运营消息日志，{}:{}:{}:{}",userId,nickName,page,size);
+        LOGGER.info("运营消息日志，{}:{}:{}:{}:{}",userId,nickName,page,size,messageId);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<YyxxLogListBO> listBOList = operateMessageService.operateMessageLog(userId,nickName);
+        List<YyxxLogListBO> listBOList = operateMessageService.operateMessageLog(userId,nickName,messageId);
         return (listBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) listBOList, "total", ((Page) listBOList).getTotal()));

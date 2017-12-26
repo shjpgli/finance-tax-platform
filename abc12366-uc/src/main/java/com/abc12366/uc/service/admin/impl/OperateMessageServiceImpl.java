@@ -325,7 +325,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     }
 
     @Override
-    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName) {
-        return operateMessageRoMapper.operateMessageLog(userId,nickName);
+    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName,String messageId) {
+        return operateMessageRoMapper.operateMessageLog(userId,nickName,messageId);
     }
 }
