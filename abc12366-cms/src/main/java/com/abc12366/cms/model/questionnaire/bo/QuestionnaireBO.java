@@ -34,8 +34,8 @@ public class QuestionnaireBO implements Serializable {
     private Double accessNum;
     private String sceneCode;
     private String tradeCode;
-
     private String skinUrl;
+    private String endDesc;
 
     private QuestionnaireParam questionnaireParam;
 
@@ -167,5 +167,14 @@ public class QuestionnaireBO implements Serializable {
 
     public void setAccessNum(Double accessNum) {
         this.accessNum = accessNum;
+    }
+
+    public String getEndDesc() {
+        return endDesc;
+    }
+
+    public QuestionnaireBO setEndDesc(String endDesc) {
+        this.endDesc = endDesc;
+        return this;
     }
 }
