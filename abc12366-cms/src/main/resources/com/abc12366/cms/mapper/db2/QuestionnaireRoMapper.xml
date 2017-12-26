@@ -32,6 +32,7 @@
             <result column="recoveryEndTime" property="recoveryEndTime" jdbcType="TIMESTAMP"/>
             <result column="isLoginAuth" property="isLoginAuth" jdbcType="INTEGER"/>
             <result column="isAnswerOnce" property="isAnswerOnce" jdbcType="INTEGER"/>
+            <result column="isWxOnce" property="isWxOnce" jdbcType="INTEGER"/>
             <result column="isUserRange" property="isUserRange" jdbcType="INTEGER"/>
             <result column="isAnswerRemind" property="isAnswerRemind" jdbcType="INTEGER"/>
             <result column="isPrize" property="isPrize" jdbcType="INTEGER"/>
@@ -53,7 +54,7 @@
         q.id, q.title, q.simpleDesc, q.status, q.createUser, q.createTime, q.updateTime, q.updateUser, q.recoveryRate,
         q.accessRate, q.sceneCode, q.skinUrl,q.tradeCode,
         p.questionId, p.isDisplayNumber, p.isBackspace, p.isDisplayResults, p.recoveryEndTime, p.isLoginAuth,
-        p.isAnswerOnce, p.isUserRange, p.isAnswerRemind, p.isPrize
+        p.isAnswerOnce, p.isWxOnce, p.isUserRange, p.isAnswerRemind, p.isPrize
         FROM cms_paper_questionnaire q
         LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId
         WHERE id = #{id}
@@ -66,7 +67,7 @@
         COUNT(a.id) recoveryRate FROM cms_paper_answer_log a
         WHERE q.id=a.questionId) recoveryRate, q.accessRate, q.sceneCode, q.skinUrl,q.tradeCode,
         p.questionId, p.isDisplayNumber, p.isBackspace, p.isDisplayResults, p.recoveryEndTime, p.isLoginAuth,
-        p.isAnswerOnce, p.isUserRange, p.isAnswerRemind, p.isPrize
+        p.isAnswerOnce, p.isWxOnce, p.isUserRange, p.isAnswerRemind, p.isPrize
         FROM cms_paper_questionnaire q
         LEFT JOIN cms_paper_questionnaire_param p on q.id = p.questionId
         order by q.updateTime desc
