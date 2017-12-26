@@ -76,6 +76,7 @@
               ]]>
             </if>
         </where>
+        ORDER BY startTime
     </select>
 
     <!-- 查询问卷答题平均时间 -->
