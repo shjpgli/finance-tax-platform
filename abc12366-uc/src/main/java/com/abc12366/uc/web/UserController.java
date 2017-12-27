@@ -117,13 +117,7 @@ public class UserController {
         map.put("nickname", nickname);
         map.put("status", status);
         map.put("tagId", tagId);
-        if (StringUtils.isEmpty(startDate)) {
-            startDate = DateUtils.dateToString(DateUtils.getAddDate(30));
-        }
         map.put("startDate", startDate);
-        if (StringUtils.isEmpty(endDate)) {
-            endDate = DateUtils.dateToString(new Date());
-        }
         map.put("endDate", endDate);
         LOGGER.info("{}:{}:{}", map, page, size);
 
