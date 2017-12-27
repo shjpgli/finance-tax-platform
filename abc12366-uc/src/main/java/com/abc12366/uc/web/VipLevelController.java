@@ -34,16 +34,17 @@ public class VipLevelController {
 
     @Autowired
     private VipLevelService vipLevelService;
-    
+
     @Autowired
-	private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 会员列表查询
+     *
      * @param level  会员等级
      * @param status 状态
-     * @param page 页数
-     * @param size 大小
+     * @param page   页数
+     * @param size   大小
      * @return
      */
     @GetMapping
@@ -71,6 +72,7 @@ public class VipLevelController {
 
     /**
      * 查看单个会员
+     *
      * @param id 会员id
      * @return
      */
@@ -82,7 +84,8 @@ public class VipLevelController {
     }
 
     /**
-     * 新增会员 
+     * 新增会员
+     *
      * @param vipLevelInsertBO 会员信息
      * @return
      */
@@ -96,8 +99,9 @@ public class VipLevelController {
 
     /**
      * 更新会员
+     *
      * @param vipLevelUpdateBO 会员信息
-     * @param id 会员ID
+     * @param id               会员ID
      * @return
      */
     @PutMapping(path = "/{id}")
@@ -105,13 +109,14 @@ public class VipLevelController {
         LOGGER.info("{}:{}", vipLevelUpdateBO, id);
         VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
         VipLevelBO vipLevelBOReturn = vipLevelService.update(vipLevelUpdateBO, id);
-        redisTemplate.delete(vipLevelBO.getLevelCode()+"_VipLevel");
+        redisTemplate.delete(vipLevelBO.getLevelCode() + "_VipLevel");
         LOGGER.info("{}", vipLevelBOReturn);
         return ResponseEntity.ok(Utils.kv("data", vipLevelBOReturn));
     }
 
     /**
      * 删除会员
+     *
      * @param id 会员id
      * @return
      */
@@ -120,22 +125,23 @@ public class VipLevelController {
         LOGGER.info("{}", id);
         VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
         vipLevelService.delete(id);
-        redisTemplate.delete(vipLevelBO.getLevelCode()+"_VipLevel");
+        redisTemplate.delete(vipLevelBO.getLevelCode() + "_VipLevel");
         return ResponseEntity.ok(Utils.kv());
     }
-     
+
     //启用、禁用会员等级接口
     @PutMapping(path = "/{id}/{status}")
     public ResponseEntity enableOrDisable(@PathVariable String id, @PathVariable String status) {
         LOGGER.info("{}:{}", id, status);
         VipLevelBO vipLevelBO = vipLevelService.selectOne(id);
         vipLevelService.enableOrDisable(id, status);
-        redisTemplate.delete(vipLevelBO.getLevelCode()+"_VipLevel");
+        redisTemplate.delete(vipLevelBO.getLevelCode() + "_VipLevel");
         return ResponseEntity.ok(Utils.kv());
     }
-    
+
     /**
      * 通过code查找会员
+     *
      * @param levelCode 会员code
      * @return
      */
@@ -143,13 +149,14 @@ public class VipLevelController {
     public ResponseEntity selectByLevelCode(@PathVariable String levelCode) {
         LOGGER.info("{}", levelCode);
         VipLevelBO vipLevelBO = null;
-        if(redisTemplate.hasKey(levelCode+"_VipLevel")){
-        	vipLevelBO = JSONObject.parseObject(redisTemplate.opsForValue().get(levelCode+"_VipLevel"),VipLevelBO.class);
-        }else{
-        	vipLevelBO = vipLevelService.selectByLevelCode(levelCode);
-        	if(vipLevelBO != null){
-        		redisTemplate.opsForValue().set(levelCode+"_VipLevel",JSONObject.toJSONString(vipLevelBO));
-        	}
+        if (redisTemplate.hasKey(levelCode + "_VipLevel")) {
+            vipLevelBO = JSONObject.parseObject(redisTemplate.opsForValue().get(levelCode + "_VipLevel"), VipLevelBO
+                    .class);
+        } else {
+            vipLevelBO = vipLevelService.selectByLevelCode(levelCode);
+            if (vipLevelBO != null) {
+                redisTemplate.opsForValue().set(levelCode + "_VipLevel", JSONObject.toJSONString(vipLevelBO));
+            }
         }
         return ResponseEntity.ok(Utils.kv("data", vipLevelBO));
     }

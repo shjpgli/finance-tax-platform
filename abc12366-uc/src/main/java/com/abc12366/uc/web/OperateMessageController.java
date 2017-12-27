@@ -3,8 +3,10 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
+import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 import com.abc12366.uc.service.admin.OperateMessageService;
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,5 +110,19 @@ public class OperateMessageController {
         LOGGER.info("复用运营消息：{}", id);
         OperateMessageBO operateMessageBO = operateMessageService.reuse(id);
         return ResponseEntity.ok(Utils.kv("data",operateMessageBO));
+    }
+
+    @GetMapping(path = "/log")
+    public ResponseEntity operateMessageLog(@RequestParam(required = false) String userId,
+                                            @RequestParam(required = false) String nickName,
+                                            @RequestParam(required = false) String messageId,
+                                            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("运营消息日志，{}:{}:{}:{}:{}",userId,nickName,page,size,messageId);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<YyxxLogListBO> listBOList = operateMessageService.operateMessageLog(userId,nickName,messageId);
+        return (listBOList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) listBOList, "total", ((Page) listBOList).getTotal()));
     }
 }

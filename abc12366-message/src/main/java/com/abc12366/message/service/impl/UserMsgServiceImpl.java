@@ -1,7 +1,6 @@
 package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.model.BodyStatus;
-import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.UserMsgMapper;
@@ -93,7 +92,7 @@ public class UserMsgServiceImpl implements UserMsgService {
             um.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             userMsgMapper.update(um);
 
-            String key = data.getToUserId() + USER_MSG_KEY;
+            String key = um.getToUserId() + USER_MSG_KEY;
             if (redisTemplate.hasKey(key)) {
                 redisTemplate.delete(key);
             }
@@ -108,6 +107,11 @@ public class UserMsgServiceImpl implements UserMsgService {
         if ("1".equals(data.getStatus())) {
             data.setStatus("2");
             this.update(data);
+
+            String key = data.getToUserId() + USER_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return data;
     }
@@ -120,7 +124,7 @@ public class UserMsgServiceImpl implements UserMsgService {
             um.setStatus("0");
             this.update(um);
 
-            String key = data.getToUserId() + USER_MSG_KEY;
+            String key = um.getToUserId() + USER_MSG_KEY;
             if (redisTemplate.hasKey(key)) {
                 redisTemplate.delete(key);
             }
@@ -178,8 +182,6 @@ public class UserMsgServiceImpl implements UserMsgService {
 
     @Override
     public List<UserMessage> selectUnreadList(UserMessage um) {
-        PageHelper.startPage(Integer.parseInt(Constant.pageNum), Integer.parseInt(Constant.pageSize), false)
-                .pageSizeZero(true).reasonable(true);
         String key = Utils.getUserId() + USER_MSG_KEY;
         List<UserMessage> dataList;
         if (redisTemplate.hasKey(key)) {

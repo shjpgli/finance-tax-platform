@@ -16,6 +16,7 @@ import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.admin.OperateMessage;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogBO;
+import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.admin.OperateMessageService;
@@ -321,5 +322,10 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         BeanUtils.copyProperties(o, operateMessage);
         operateMessageMapper.insert(operateMessage);
         return o;
+    }
+
+    @Override
+    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName,String messageId) {
+        return operateMessageRoMapper.operateMessageLog(userId,nickName,messageId);
     }
 }
