@@ -221,6 +221,7 @@ public class GiftServiceImpl implements GiftService {
         ugiftLog.setAdminId(user.getId());
         ugiftLog.setRemark(giftCheckBO.getRemark());
         ugiftLog.setApplyId(giftCheckBO.getApplyId());
+        ugiftLog.setCreateTime(new Date());
 
         //查找礼物申请信息
         UgiftApplyBO ugiftApplyBO = ugiftApplyRoMapper.selectByApplyId(giftCheckBO.getApplyId());
