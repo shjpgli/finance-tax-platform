@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User selectUser(String userId) {
 		// 新增优先查询redis
-		User user = null;
+		User user;
 		if (redisTemplate.hasKey(userId + "_UserInfo")) {
 			user = JSONObject.parseObject(
 					redisTemplate.opsForValue().get(userId + "_UserInfo"),
@@ -189,8 +189,8 @@ public class UserServiceImpl implements UserService {
 	public Map selectOne(String userId) {
 		// 新增优先查询redis
 		LOGGER.info("{}", userId);
-		User userTemp = null;
-		UserExtend user_extend = null;
+		User userTemp;
+		UserExtend user_extend;
 		if (redisTemplate.hasKey(userId + "_UserInfo")
 				&& redisTemplate.hasKey(userId + "_UserExtend")) {
 			userTemp = JSONObject.parseObject(
@@ -796,13 +796,11 @@ public class UserServiceImpl implements UserService {
 		User userTemp = selectUser(userId);
 		UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
 		if (userTemp != null) {
-			UserBO user = new UserBO();
-			BeanUtils.copyProperties(userTemp, user);
-			user.setPassword(null);
+			userTemp.setPassword(null);
 			Map<String, Object> map = new HashMap<>();
-			map.put("user", user);
+			map.put("user", userTemp);
 			map.put("user_extend", userExtend);
-			LOGGER.info("{}：{}", user, userExtend);
+			LOGGER.info("{}：{}", userTemp, userExtend);
 			return map;
 		}
 		return null;

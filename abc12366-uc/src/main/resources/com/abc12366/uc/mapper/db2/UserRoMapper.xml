@@ -43,7 +43,7 @@
     </select>
 
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
-        SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname
+        SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname, amount
         FROM uc_user
         <where>
             <if test="status!=null">
