@@ -101,6 +101,12 @@ public interface GiftService {
     void sendGift(GiftSendBO giftSendBO);
 
     /**
+     * 礼物收货
+     * @param applyId 申请单ID
+     */
+    void receiveApply(String applyId);
+
+    /**
      * 前台-用户的礼物申请列表
      *
      * @param map

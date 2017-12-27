@@ -2,6 +2,7 @@ package com.abc12366.uc.service.gift.impl;
 
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.Utils;
@@ -317,6 +318,25 @@ public class GiftServiceImpl implements GiftService {
         // 加入礼包申请日志
         com.abc12366.gateway.model.User admin = Utils.getAdminInfo();
         insertUgiftLog(ugiftApplyBO.getApplyId(), admin.getId(), admin.getNickname(), "申请单开始发货", "3");
+    }
+
+    @Override
+    public void receiveApply(String applyId) {
+        UgiftApplyBO data = ugiftApplyRoMapper.selectByApplyId(applyId);
+        if (!"3".equals(data.getStatus())) {
+            LOGGER.warn("只有已审批的礼物申请才能进行发货:{}", applyId);
+            throw new ServiceException(7012);
+        }
+        // 更新申请单状态
+        UgiftApply updateBo = new UgiftApply();
+        updateBo.setApplyId(data.getApplyId());
+        updateBo.setStatus("4");
+        updateBo.setLastUpdate(new Date());
+        ugiftApplyMapper.update(updateBo);
+
+        // 插入生申请单日志
+        UCUserBO user = Utils.getUserInfo();
+        insertUgiftLog(applyId, user.getId(), user.getNickname(), "用户完成收货", "4");
     }
 
     @Override

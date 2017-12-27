@@ -21,5 +21,6 @@
         <include refid="Base_Column_List"/>
         FROM uc_ugift_log
         WHERE applyId = #{applyId}
+        ORDER BY createTime DESC
     </select>
 </mapper>

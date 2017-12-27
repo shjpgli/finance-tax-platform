@@ -253,6 +253,13 @@ public class GiftController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    @PutMapping("/apply/receive/{applyId}")
+    public ResponseEntity receiveApply(@PathVariable("applyId") String applyId) {
+        LOGGER.info("{}", applyId);
+        giftService.receiveApply(applyId);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
     /**
      * 根据ID查找用户已领取礼物详情
      *
