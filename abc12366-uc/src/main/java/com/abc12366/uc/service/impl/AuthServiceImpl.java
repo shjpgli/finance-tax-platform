@@ -219,6 +219,10 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("登录失败，参数:{}:{}", bo, channel);
             throw new ServiceException(4018);
         }
+        
+        //登录删除用户缓存，防止缓存不及时刷新
+        redisTemplate.delete(user.getId()+"_UserInfo");
+        
         // 无效用户不允许登录
         if (!user.getStatus()) {
             throw new ServiceException(4038);
