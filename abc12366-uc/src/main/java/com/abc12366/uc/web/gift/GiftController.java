@@ -164,7 +164,7 @@ public class GiftController {
      */
     @GetMapping(path = "/apply/user/list")
     public ResponseEntity selectUserGiftListById(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
-                                                             pageNum,
+                                                         pageNum,
                                                  @RequestParam(value = "size", defaultValue = Constant.pageSize) int
                                                          pageSize,
                                                  @RequestParam(value = "userId") String userId) {
@@ -253,6 +253,12 @@ public class GiftController {
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 用户收货
+     *
+     * @param applyId 申请单ID
+     * @return 成功或失败
+     */
     @PutMapping("/apply/receive/{applyId}")
     public ResponseEntity receiveApply(@PathVariable("applyId") String applyId) {
         LOGGER.info("{}", applyId);
@@ -288,7 +294,7 @@ public class GiftController {
      */
     @GetMapping(path = "/uamount/list")
     public ResponseEntity selectUamountLogList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
-                                                           pageNum,
+                                                       pageNum,
                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
                                                        pageSize,
                                                @RequestParam(value = "userId", required = false) String userId) {
