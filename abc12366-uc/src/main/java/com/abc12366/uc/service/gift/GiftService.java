@@ -3,6 +3,7 @@ package com.abc12366.uc.service.gift;
 
 import com.abc12366.uc.model.gift.Gift;
 import com.abc12366.uc.model.gift.UamountLog;
+import com.abc12366.uc.model.gift.UgiftLog;
 import com.abc12366.uc.model.gift.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +38,7 @@ public interface GiftService {
 
     /**
      * 新增礼物
+     *
      * @param gift
      * @return
      */
@@ -68,13 +70,6 @@ public interface GiftService {
     Gift selectById(String id);
 
     /**
-     * 批量删除礼物
-     *
-     * @param ids 礼物主键字符串，逗号分隔ID
-     */
-    void batchDelete(String ids);
-
-    /**
      * 根据礼物名称查询礼物
      *
      * @param map
@@ -85,6 +80,7 @@ public interface GiftService {
 
     /**
      * 用户兑换礼物
+     *
      * @param map
      * @return
      */
@@ -92,18 +88,21 @@ public interface GiftService {
 
     /**
      * 礼物审核
+     *
      * @param giftCheckBO
      */
     void checkGiftBuy(GiftCheckBO giftCheckBO, HttpServletRequest request);
 
     /**
      * 礼物发货
+     *
      * @param giftSendBO
      */
     void sendGift(GiftSendBO giftSendBO);
 
     /**
      * 前台-用户的礼物申请列表
+     *
      * @param map
      * @return
      */
@@ -111,8 +110,17 @@ public interface GiftService {
 
     /**
      * 根据用户ID查找礼包金额记录
+     *
      * @param map
      * @return
      */
     List<UamountLog> selectUamountLogList(Map<String, Object> map);
+
+    /**
+     * 查询申请单日志
+     *
+     * @param applyId 申请单ID
+     * @return 日志列表
+     */
+    List<UgiftLog> selectApplyLogList(String applyId);
 }
