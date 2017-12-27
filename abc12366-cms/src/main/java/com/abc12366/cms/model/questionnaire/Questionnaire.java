@@ -72,6 +72,11 @@ public class Questionnaire implements Serializable {
      **/
     private String skinUrl;
 
+    /**
+     * 结束语
+     **/
+    private String endDesc;
+
     public String getId() {
         return this.id;
     }
@@ -174,5 +179,14 @@ public class Questionnaire implements Serializable {
 
     public void setSkinUrl(String skinUrl) {
         this.skinUrl = skinUrl;
+    }
+
+    public String getEndDesc() {
+        return endDesc;
+    }
+
+    public Questionnaire setEndDesc(String endDesc) {
+        this.endDesc = endDesc;
+        return this;
     }
 }
