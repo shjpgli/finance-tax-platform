@@ -50,5 +50,6 @@ public interface CurriculumService {
 
     String updateBrowsesDay(String curriculumId);
 
+    List<CurriculumListBo> selectByKnowledgeId(String knowledgeId, int num);
 
 }

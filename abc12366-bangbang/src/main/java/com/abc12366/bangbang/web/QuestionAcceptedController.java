@@ -42,27 +42,28 @@ public class QuestionAcceptedController {
 
     /**
      * 问题受理 分页查询-后台
-     * @param page  页数
-     * @param size  条数
-     * @param userId    用户ID
-     * @param nsrsbh    纳税人识别号
-     * @param name  名字
-     * @param date  时间
+     *
+     * @param page   页数
+     * @param size   条数
+     * @param userId 用户ID
+     * @param nsrsbh 纳税人识别号
+     * @param name   名字
+     * @param date   时间
      * @return
      */
     @GetMapping(path = "/admin/list")
     public ResponseEntity selectAdminList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "userId", required = false) String userId,
-                                     @RequestParam(value = "nsrsbh", required = false) String nsrsbh,
-                                     @RequestParam(value = "phone", required = false) String phone,
-                                     @RequestParam(value = "name", required = false) String name,
-                                     @RequestParam(value = "date", required = false) String date) {
+                                          @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                          @RequestParam(value = "userId", required = false) String userId,
+                                          @RequestParam(value = "nsrsbh", required = false) String nsrsbh,
+                                          @RequestParam(value = "phone", required = false) String phone,
+                                          @RequestParam(value = "name", required = false) String name,
+                                          @RequestParam(value = "date", required = false) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         QuestionAcceptedBO param = new QuestionAcceptedBO();
-        if(date != null && !"".equals(date)) {
+        if (date != null && !"".equals(date)) {
             param.setDate(date);
-        }else{
+        } else {
             param.setDate(DateUtils.dateYearToString(new Date()));
         }
         param.setNsrsbh(nsrsbh);
@@ -79,13 +80,14 @@ public class QuestionAcceptedController {
     }
 
     /**
-     *  问题受理 分页查询
+     * 问题受理 分页查询
      * * @param page  页数
-     * @param size  条数
-     * @param userId    用户ID
-     * @param nsrsbh    纳税人识别号
-     * @param name  名字
-     * @param date  时间
+     *
+     * @param size   条数
+     * @param userId 用户ID
+     * @param nsrsbh 纳税人识别号
+     * @param name   名字
+     * @param date   时间
      * @return
      */
     @GetMapping(path = "/list")
@@ -97,9 +99,9 @@ public class QuestionAcceptedController {
                                      @RequestParam(value = "date", required = false) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         QuestionAcceptedBO param = new QuestionAcceptedBO();
-        if(date != null && !"".equals(date)) {
+        if (date != null && !"".equals(date)) {
             param.setDate(date);
-        }else{
+        } else {
             param.setDate(DateUtils.dateYearToString(new Date()));
         }
         param.setNsrsbh(nsrsbh);
@@ -116,20 +118,21 @@ public class QuestionAcceptedController {
 
     /**
      * 问题受理 统计查询
-     * @param page  页数
-     * @param size  条数
-     * @param userId    用户ID
-     * @param date  时间
+     *
+     * @param page   页数
+     * @param size   条数
+     * @param userId 用户ID
+     * @param date   时间
      * @return
      */
     @GetMapping(path = "/statis")
     public ResponseEntity selectStatisList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "userId", required = false) String userId,
-                                     @RequestParam(value = "date", required = false) String date) {
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                           @RequestParam(value = "userId", required = false) String userId,
+                                           @RequestParam(value = "date", required = false) String date) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         QuestionAcceptedBO param = new QuestionAcceptedBO();
-        if(date != null && !"".equals(date)) {
+        if (date != null && !"".equals(date)) {
             param.setDate(date);
         }
         param.setUserId(userId);
@@ -141,40 +144,43 @@ public class QuestionAcceptedController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
-    
+
     /**
      * 问题受理 统计查询(缓存)
-     * @param userId    用户ID
-     * @param date  时间
+     *
+     * @param userId 用户ID
+     * @param date   时间
      * @return
      */
     @GetMapping(path = "/statiss")
     public ResponseEntity selectStatisLists(
-                                     @RequestParam(value = "userId", required = false) String userId,
-                                     @RequestParam(value = "date", required = false) String date) {
-    	if(redisTemplate.hasKey("Bangb_Accepted")){
-    		List<QuestionAcceptedBO> list = JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_Accepted"),QuestionAcceptedBO.class);
-    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(list));
-    		return (list == null) ?
+            @RequestParam(value = "userId", required = false) String userId,
+            @RequestParam(value = "date", required = false) String date) {
+        if (redisTemplate.hasKey("Bangb_Accepted")) {
+            List<QuestionAcceptedBO> list = JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_Accepted"),
+                    QuestionAcceptedBO.class);
+            LOGGER.info("从Redis获取数据:" + JSONArray.toJSONString(list));
+            return (list == null) ?
                     ResponseEntity.ok(Utils.kv()) :
                     ResponseEntity.ok(Utils.kv("dataList", list, "total", list.size()));
-    	}else{
-    		PageHelper.startPage(0, 0, true).pageSizeZero(true).reasonable(true);
+        } else {
+            PageHelper.startPage(0, 0, true).pageSizeZero(true).reasonable(true);
             QuestionAcceptedBO param = new QuestionAcceptedBO();
-            if(date != null && !"".equals(date)) {
+            if (date != null && !"".equals(date)) {
                 param.setDate(date);
             }
             param.setUserId(userId);
             List<QuestionAcceptedBO> list = questionAcceptedService.selectStatisList(param);
-            redisTemplate.opsForValue().set("Bangb_Accepted", JSONArray.toJSONString(list),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set("Bangb_Accepted", JSONArray.toJSONString(list), RedisConstant
+                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
 
             PageInfo<QuestionAcceptedBO> pageInfo = new PageInfo<>(list);
 
             return (list == null) ?
                     ResponseEntity.ok(Utils.kv()) :
                     ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-    	}
-        
+        }
+
     }
 
     /***
@@ -188,8 +194,8 @@ public class QuestionAcceptedController {
     }
 
     /**
-    * 删除问题受理 接口
-    */
+     * 删除问题受理 接口
+     */
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         questionAcceptedService.delete(id);

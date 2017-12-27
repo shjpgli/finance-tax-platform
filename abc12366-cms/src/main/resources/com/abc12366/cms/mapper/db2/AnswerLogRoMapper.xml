@@ -5,13 +5,14 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        id, questionId, userId, accessTerminal, ipAddress, startTime, endTime
+        id, questionId, userId, weixinId, accessTerminal, ipAddress, startTime, endTime
     </sql>
 
     <resultMap id="answerLogBOResultMap" type="com.abc12366.cms.model.questionnaire.bo.AnswerLogBO">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="questionId" property="questionId" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="weixinId" property="weixinId" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="accessTerminal" property="accessTerminal" jdbcType="VARCHAR"/>
         <result column="ipAddress" property="ipAddress" jdbcType="VARCHAR"/>
@@ -75,6 +76,7 @@
               ]]>
             </if>
         </where>
+        ORDER BY startTime
     </select>
 
     <!-- 查询问卷答题平均时间 -->
@@ -159,6 +161,9 @@
         </if>
         <if test="userId != null and userId != ''">
             AND userId = #{userId}
+        </if>
+        <if test="weixinId != null and weixinId != ''">
+            AND weixinId = #{weixinId}
         </if>
     </select>
 

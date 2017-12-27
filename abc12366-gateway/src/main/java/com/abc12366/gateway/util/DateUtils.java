@@ -328,6 +328,20 @@ public class DateUtils {
      *
      * @return
      */
+    public static String getGiftIdString() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("LW");
+        buffer.append(df.format(new Date()));
+        //buffer.append(getRandom());
+        return buffer.toString();
+    }
+
+    /**
+     * 获取用户订单号
+     *
+     * @return
+     */
     public static String getInvoiceOrderString() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         StringBuffer buffer = new StringBuffer();

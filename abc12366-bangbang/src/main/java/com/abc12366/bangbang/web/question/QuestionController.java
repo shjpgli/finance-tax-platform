@@ -43,7 +43,7 @@ public class QuestionController {
 
     @Autowired
     private QuestionTagRoMapper tagRoMapper;
-    
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
@@ -57,12 +57,11 @@ public class QuestionController {
                                      @RequestParam(value = "tag", required = false) String tag,
                                      @RequestParam(value = "classifyCode", required = false) String classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("title", title);//
-        dataMap.put("tag", tag);//
-        dataMap.put("classifyCode", classifyCode);//
+        dataMap.put("title", title);
+        dataMap.put("tag", tag);
+        dataMap.put("classifyCode", classifyCode);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectList(dataMap);
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         return (dataList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
@@ -75,17 +74,16 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectListNew")
     public ResponseEntity selectListNew(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "title", required = false) String title,
-                                     @RequestParam(value = "tag", required = false) String tag,
-                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                        @RequestParam(value = "title", required = false) String title,
+                                        @RequestParam(value = "tag", required = false) String tag,
+                                        @RequestParam(value = "classifyCode", required = false) String classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("title", title);//
-        dataMap.put("tag", tag);//
-        dataMap.put("classifyCode", classifyCode);//
+        dataMap.put("title", title);
+        dataMap.put("tag", tag);
+        dataMap.put("classifyCode", classifyCode);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectList(dataMap);
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         return (dataList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
@@ -98,17 +96,17 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectListRecommend")
     public ResponseEntity selectListRecommend(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                                @RequestParam(value = "title", required = false) String title,
-                                                @RequestParam(value = "tag", required = false) String tag,
-                                                @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+                                              @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                              @RequestParam(value = "title", required = false) String title,
+                                              @RequestParam(value = "tag", required = false) String tag,
+                                              @RequestParam(value = "classifyCode", required = false) String
+                                                          classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("title", title);//
-        dataMap.put("tag", tag);//
-        dataMap.put("classifyCode", classifyCode);//s
+        dataMap.put("title", title);
+        dataMap.put("tag", tag);
+        dataMap.put("classifyCode", classifyCode);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> dataList = questionService.selectListRecommend(dataMap);
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         return (dataList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
@@ -120,10 +118,11 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectListByPoints")
     public ResponseEntity selectListByPoints(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                                @RequestParam(value = "title", required = false) String title,
-                                                @RequestParam(value = "tag", required = false) String tag,
-                                                @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+                                             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                             @RequestParam(value = "title", required = false) String title,
+                                             @RequestParam(value = "tag", required = false) String tag,
+                                             @RequestParam(value = "classifyCode", required = false) String
+                                                         classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//
         dataMap.put("tag", tag);//
@@ -143,10 +142,12 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectListByBrowseNum")
     public ResponseEntity selectListByBrowseNum(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "title", required = false) String title,
-                                     @RequestParam(value = "tag", required = false) String tag,
-                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+                                                @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                        size,
+                                                @RequestParam(value = "title", required = false) String title,
+                                                @RequestParam(value = "tag", required = false) String tag,
+                                                @RequestParam(value = "classifyCode", required = false) String
+                                                            classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//
         dataMap.put("tag", tag);//
@@ -160,16 +161,19 @@ public class QuestionController {
                         ()));
 
     }
-    
+
     /**
      * 查询热门问题
      */
     @GetMapping(path = "/selectListByBrowseNumForqt")
-    public ResponseEntity selectListByBrowseNumForqt(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "title", required = false) String title,
-                                     @RequestParam(value = "tag", required = false) String tag,
-                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+    public ResponseEntity selectListByBrowseNumForqt(@RequestParam(value = "page", defaultValue = Constant.pageNum)
+                                                                 int page,
+                                                     @RequestParam(value = "size", defaultValue = Constant.pageSize)
+                                                             int size,
+                                                     @RequestParam(value = "title", required = false) String title,
+                                                     @RequestParam(value = "tag", required = false) String tag,
+                                                     @RequestParam(value = "classifyCode", required = false) String
+                                                                 classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//
         dataMap.put("tag", tag);//
@@ -189,11 +193,11 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectListWait")
     public ResponseEntity selectListWait(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "title", required = false) String title,
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                         @RequestParam(value = "title", required = false) String title,
                                          @RequestParam(value = "userId", required = false) String userId,
-                                     @RequestParam(value = "tag", required = false) String tag,
-                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+                                         @RequestParam(value = "tag", required = false) String tag,
+                                         @RequestParam(value = "classifyCode", required = false) String classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//
         dataMap.put("userId", userId);//
@@ -214,10 +218,11 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectListAccept")
     public ResponseEntity selectListAccept(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "title", required = false) String title,
-                                     @RequestParam(value = "tag", required = false) String tag,
-                                     @RequestParam(value = "classifyCode", required = false) String classifyCode) {
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                           @RequestParam(value = "title", required = false) String title,
+                                           @RequestParam(value = "tag", required = false) String tag,
+                                           @RequestParam(value = "classifyCode", required = false) String
+                                                       classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//
         dataMap.put("tag", tag);//
@@ -237,7 +242,7 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectListry")
     public ResponseEntity selectListry(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                       @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         Map<String, Object> dataMap = new HashMap<>();
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionryBo> dataList = questionService.selectListry(dataMap);
@@ -248,28 +253,30 @@ public class QuestionController {
                         ()));
 
     }
-    
+
     /**
      * 帮友热议列表查询
      */
     @GetMapping(path = "/selectListryForqt")
     public ResponseEntity selectListryForqt() {
-    	
-    	if(redisTemplate.hasKey("CMS_SelectListryForqt")){
-    		List<QuestionryBo> dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("CMS_SelectListryForqt"),QuestionryBo.class);
-    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(dataList));
-    		return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
-    	}else{
-    		Map<String, Object> dataMap = new HashMap<>();
+
+        if (redisTemplate.hasKey("CMS_SelectListryForqt")) {
+            List<QuestionryBo> dataList = JSONArray.parseArray(redisTemplate.opsForValue().get
+                    ("CMS_SelectListryForqt"), QuestionryBo.class);
+            LOGGER.info("从Redis获取数据:" + JSONArray.toJSONString(dataList));
+            return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
+        } else {
+            Map<String, Object> dataMap = new HashMap<>();
             PageHelper.startPage(1, 9, true).pageSizeZero(true).reasonable(true);
             List<QuestionryBo> dataList = questionService.selectListry(dataMap);
-            redisTemplate.opsForValue().set("CMS_SelectListryForqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set("CMS_SelectListryForqt", JSONArray.toJSONString(dataList), RedisConstant
+                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
             return (dataList == null) ?
                     ResponseEntity.ok(Utils.kv()) :
                     ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
                             ()));
-    	}
-    	
+        }
+
     }
 
     /**
@@ -278,7 +285,7 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity save(@Valid @RequestBody QuestionBo questionBo, HttpServletRequest request) {
         //新增问题信息
-        questionBo = questionService.save(questionBo,request);
+        questionBo = questionService.save(questionBo, request);
         redisTemplate.delete("CMS_SelectListryForqt");
         return ResponseEntity.ok(Utils.kv("data", questionBo));
     }
@@ -387,8 +394,8 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectTipList/{userId}")
     public ResponseEntity selectTipList(@PathVariable String userId,
-                                     @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionjbBo> questionBoList = questionService.selectTipList(userId);
@@ -403,14 +410,14 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectInviteList/{userId}")
     public ResponseEntity selectInviteList(@PathVariable String userId,
-                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> questionBoList = questionService.selectInviteList(userId);
-        if(questionBoList != null){
-            for(QuestionBo questionBo : questionBoList){
-                if(questionBo.getId() != null){
+        if (questionBoList != null) {
+            for (QuestionBo questionBo : questionBoList) {
+                if (questionBo.getId() != null) {
                     List<QuestionTag> tagList = tagRoMapper.selectList(questionBo.getId());
                     questionBo.setTagList(tagList);
                 }
@@ -427,10 +434,10 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectMyQuestionList")
     public ResponseEntity selectMyQuestionList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                        @RequestParam(value = "isAccept", required = false) String isAccept,
-                                        @RequestParam(value = "isTip", required = false) String isTip,
-                                        @RequestParam(value = "userId", required = false) String userId) {
+                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                               @RequestParam(value = "isAccept", required = false) String isAccept,
+                                               @RequestParam(value = "isTip", required = false) String isTip,
+                                               @RequestParam(value = "userId", required = false) String userId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("isAccept", isAccept);//是否被采纳，1为被采纳
         dataMap.put("isTip", isTip);//是否被举报，1为被举报
@@ -455,14 +462,16 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectMyManageQuesList/{userId}")
     public ResponseEntity selectMyManageQuesList(@PathVariable String userId,
-                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                                 @RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                         page,
+                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                             size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionBo> questionBoList = questionService.selectMyManageQuesList(userId);
-        if(questionBoList != null){
-            for(QuestionBo questionBo : questionBoList){
-                if(questionBo.getId() != null){
+        if (questionBoList != null) {
+            for (QuestionBo questionBo : questionBoList) {
+                if (questionBo.getId() != null) {
                     List<QuestionTag> tagList = tagRoMapper.selectList(questionBo.getId());
                     questionBo.setTagList(tagList);
                 }
@@ -479,14 +488,15 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectTagList/{id}")
     public ResponseEntity selectTagList(@PathVariable String id,
-                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                        @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", id, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionTag> questionTagList = questionService.selectTagList(id);
         return (questionTagList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) questionTagList, "total", ((Page) questionTagList).getTotal
+                ResponseEntity.ok(Utils.kv("dataList", (Page) questionTagList, "total", ((Page) questionTagList)
+                        .getTotal
                         ()));
     }
 
@@ -515,8 +525,8 @@ public class QuestionController {
      */
     @GetMapping(path = "/selectQcDtList/{userId}")
     public ResponseEntity selectQcDtList(@PathVariable String userId,
-                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+                                         @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}", userId, page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionDtBo> questionBoList = questionService.selectQcDtList(userId);

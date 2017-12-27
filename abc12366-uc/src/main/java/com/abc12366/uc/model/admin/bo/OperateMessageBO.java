@@ -42,9 +42,9 @@ public class OperateMessageBO {
     private String tagOper;
     private String tagIds;
     private String regTimeOper;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date regStartTime;
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date regEndTime;
     private String userIds;
     @NotEmpty(message = "频率不能为空")

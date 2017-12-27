@@ -42,29 +42,31 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     @Autowired
     private KnowledgeCategoryMapper knowledgeCategoryMapper;
-    
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public List<KnowledgeCategory> listAll() {
-    	if(redisTemplate.hasKey("Bangb_KnowledgeCategoryList")){
-    		return JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_KnowledgeCategoryList"),KnowledgeCategory.class);
-    	}else{
-    		List<KnowledgeCategory> list=knowledgeCategoryMapper.selectAll();
-    		redisTemplate.opsForValue().set("Bangb_KnowledgeCategoryList", JSONArray.toJSONString(list), RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
-    		return list;
-    	}
+        if (redisTemplate.hasKey("Bangb_KnowledgeCategoryList")) {
+            return JSONArray.parseArray(redisTemplate.opsForValue().get("Bangb_KnowledgeCategoryList"),
+                    KnowledgeCategory.class);
+        } else {
+            List<KnowledgeCategory> list = knowledgeCategoryMapper.selectAll();
+            redisTemplate.opsForValue().set("Bangb_KnowledgeCategoryList", JSONArray.toJSONString(list),
+                    RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
+            return list;
+        }
     }
 
     @Override
     public KnowledgeCategory add(KnowledgeCategory record) {
-        try{
+        try {
             record.setId(Utils.uuid());
             record.setCreateUser(Utils.getAdminId());
             record.setUpdateUser(Utils.getAdminId());
             String parentCode = StringUtil.nullToString(record.getParentCode());
-            if("0".equals(parentCode)){
+            if ("0".equals(parentCode)) {
                 parentCode = "";
             }
             String code = parentCode + genCodes(6);
@@ -78,11 +80,11 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             }
             record.setCode(code);
             knowledgeCategoryMapper.insert(record);
-            
+
             redisTemplate.delete("Bangb_KnowledgeCategoryList");
-            
+
             return record;
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("KnowledgeCategoryServiceImpl.add()", e);
             throw new ServiceException(4511);
         }
@@ -91,17 +93,17 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     @Transactional("db1TxManager")
     @Override
     public KnowledgeCategory modify(KnowledgeCategory knowledgeCategory) {
-        try{
+        try {
             String parentCode = knowledgeCategory.getParentCode();
             String id = knowledgeCategory.getId();
             /* 如果修改分类的时候，修改了父节点，判断 */
-            if(!StringUtils.isEmpty(parentCode) && !StringUtils.isEmpty(id)){
+            if (!StringUtils.isEmpty(parentCode) && !StringUtils.isEmpty(id)) {
                 KnowledgeCategory cate = knowledgeCategoryMapper.selectByPrimaryKey(id);
                 String cateCode = cate.getCode();
-                if(parentCode.equals("0")){
-                    parentCode = "" ;
+                if (parentCode.equals("0")) {
+                    parentCode = "";
                 }
-                if(!cateCode.substring(0, cateCode.length()-6).equals(parentCode)){
+                if (!cateCode.substring(0, cateCode.length() - 6).equals(parentCode)) {
                     String newCode = parentCode + genCodes(6);
                     for (; ; ) {
                         KnowledgeCategory rs = knowledgeCategoryMapper.selectByCode(newCode);
@@ -119,11 +121,11 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             knowledgeCategory.setUpdateUser(Utils.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
-            
+
             redisTemplate.delete("Bangb_KnowledgeCategoryList");
-            
+
             return knowledgeCategory;
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("KnowledgeCategoryServiceImpl.modify()", e);
             throw new ServiceException(4513);
         }
@@ -131,16 +133,16 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
 
     @Override
     public void modifyNameById(String id, String name) {
-        try{
+        try {
             KnowledgeCategory knowledgeCategory = new KnowledgeCategory();
             knowledgeCategory.setId(id);
             knowledgeCategory.setName(name);
             knowledgeCategory.setUpdateUser(Utils.getAdminId());
             knowledgeCategory.setUpdateTime(new Date());
             knowledgeCategoryMapper.updateByPrimaryKeySelective(knowledgeCategory);
-            
+
             redisTemplate.delete("Bangb_KnowledgeCategoryList");
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("KnowledgeCategoryServiceImpl.modifyNameById()", e);
             throw new ServiceException(4513);
         }
@@ -152,9 +154,9 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
             if (list != null && !list.isEmpty()) {
                 knowledgeCategoryMapper.batchUpdateSort(list);
             }
-            
+
             redisTemplate.delete("Bangb_KnowledgeCategoryList");
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("KnowledgeCategoryServiceImpl.modifySort()", e);
             throw new ServiceException(4513);
         }
@@ -163,14 +165,14 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
     @Override
     public void deleteById(String id) {
         int refKnowledgeCnt = knowledgeBaseRoMapper.selectCntByCategoryId(id);
-        if(refKnowledgeCnt > 0){
+        if (refKnowledgeCnt > 0) {
             throw new ServiceException(4522);
         }
         try {
             knowledgeCategoryMapper.deleteByPrimaryKey(id);
-            
+
             redisTemplate.delete("Bangb_KnowledgeCategoryList");
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("KnowledgeCategoryServiceImpl.modifySort()", e);
             throw new ServiceException(4512);
         }

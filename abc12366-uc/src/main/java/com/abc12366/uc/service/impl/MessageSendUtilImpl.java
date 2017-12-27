@@ -225,7 +225,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
      * @param content
      * @param user
      */
-    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
+    public void sendPhoneMessage(HttpServletRequest request, String content, User user) {
         //发送短信
         Map<String, String> maps = new HashMap<String, String>();
         maps.put("var", content);
@@ -236,4 +236,21 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         sendPhoneMessage(user.getPhone(), MessageConstant.MESSAGE_UPYUN_TEMPLATE_615, list, accessToken);
     }
 
+
+    /**
+     * 发送短信通知方法
+     * @param request
+     * @param content
+     * @param phone
+     */
+    public void sendPhoneMessage(HttpServletRequest request, String content, String phone) {
+        //发送短信
+        Map<String, String> maps = new HashMap<String, String>();
+        maps.put("var", content);
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+        list.add(maps);
+
+        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+        sendPhoneMessage(phone, MessageConstant.MESSAGE_UPYUN_TEMPLATE_615, list, accessToken);
+    }
 }

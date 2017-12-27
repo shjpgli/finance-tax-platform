@@ -22,6 +22,10 @@ public class UserListBO {
     private String levelName;
     private String medal;
     private String medalIcon;
+    /**
+     * 礼包金额
+     */
+    private Double amount;
 
     public UserListBO() {
     }
@@ -138,6 +142,14 @@ public class UserListBO {
         this.medalIcon = medalIcon;
     }
 
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
     @Override
     public String toString() {
         return "UserListBO{" +
@@ -155,6 +167,7 @@ public class UserListBO {
                 ", levelName='" + levelName + '\'' +
                 ", medal='" + medal + '\'' +
                 ", medalIcon='" + medalIcon + '\'' +
+                ", amount=" + amount +
                 '}';
     }
 }

@@ -21,7 +21,9 @@ public interface BusinessMsgService {
 
     BusinessMessage insert(BusinessMessage data);
 
-    // 发送批量业务消息
+    /**
+     * 发送批量业务消息
+     */
     List<BusinessMessage> insert(BusinessBatchMessage data);
 
     BusinessMessage update(BusinessMessage data);
@@ -32,6 +34,7 @@ public interface BusinessMsgService {
 
     /**
      * 根据用户名查询业务消息
+     *
      * @param map
      * @param page
      * @param size
@@ -46,4 +49,12 @@ public interface BusinessMsgService {
      * @return 消息未读总数
      */
     int unreadCount(BusinessMessage bm);
+
+    /**
+     * 查询未读消息列表
+     *
+     * @param bm 业务消息条件
+     * @return 业务消息未读列表
+     */
+    List<BusinessMessage> selectUnreadList(BusinessMessage bm);
 }

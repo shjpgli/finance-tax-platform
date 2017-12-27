@@ -298,5 +298,15 @@
         </if>
     </select>
 
+    <select id="selectByKnowledgeId"  resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo">
+        SELECT curriculumId,title,sellPrice,updateTime,browseNum,watchNum,cover,issueTime,isFree
+          FROM  bb_curriculum WHERE STATUS =  '1' AND curriculumId IN (
+            SELECT DISTINCT(curriculumId) FROM bb_curriculum_label WHERE labelId IN(
+                SELECT tagId FROM bb_knowledge_tag_rel WHERE knowledgeId = #{knowledgeId}
+            )
+        )
+        ORDER BY browseNum DESC
+        LIMIT #{num}
+    </select>
 
 </mapper>

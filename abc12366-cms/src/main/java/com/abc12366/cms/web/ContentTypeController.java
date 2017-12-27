@@ -32,21 +32,22 @@ public class ContentTypeController {
 
     @Autowired
     private ContentTypeService contentTypeService;
-    
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     @GetMapping
     public ResponseEntity selectList() {
         //查询内容类型列表
-    	List<ContentType> dataList = null;
-    	if(redisTemplate.hasKey("Cms_ContentTypeList")){
-    		dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("Cms_ContentTypeList"),ContentType.class);
-    		LOGGER.info("从Redis获取数据:"+JSONArray.toJSONString(dataList));
-    	}else{
-    		dataList = contentTypeService.selectList();
-    		redisTemplate.opsForValue().set("Cms_ContentTypeList", JSONArray.toJSONString(dataList), RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
-    	}
+        List<ContentType> dataList = null;
+        if (redisTemplate.hasKey("Cms_ContentTypeList")) {
+            dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("Cms_ContentTypeList"), ContentType.class);
+            LOGGER.info("从Redis获取数据:" + JSONArray.toJSONString(dataList));
+        } else {
+            dataList = contentTypeService.selectList();
+            redisTemplate.opsForValue().set("Cms_ContentTypeList", JSONArray.toJSONString(dataList), RedisConstant
+                    .DICT_TIME_ODFAY, TimeUnit.DAYS);
+        }
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(dataList);
     }
@@ -57,7 +58,7 @@ public class ContentTypeController {
         //新增内容类型
         String rtn = contentTypeService.save(contentType);
         LOGGER.info("{}", rtn);
-    	redisTemplate.delete("Cms_ContentTypeList");
+        redisTemplate.delete("Cms_ContentTypeList");
         return ResponseEntity.ok(rtn);
     }
 
@@ -78,7 +79,7 @@ public class ContentTypeController {
         //更新内容类型
         String rtn = contentTypeService.update(contentType);
         LOGGER.info("{}", rtn);
-    	redisTemplate.delete("Cms_ContentTypeList");
+        redisTemplate.delete("Cms_ContentTypeList");
         return ResponseEntity.ok(rtn);
     }
 
@@ -88,7 +89,7 @@ public class ContentTypeController {
         //删除内容类型
         String rtn = contentTypeService.delete(typeId);
         LOGGER.info("{}", rtn);
-    	redisTemplate.delete("Cms_ContentTypeList");
+        redisTemplate.delete("Cms_ContentTypeList");
         return ResponseEntity.ok(rtn);
     }
 

@@ -33,7 +33,7 @@ public class AreaServiceImpl implements AreaService {
 
     @Autowired
     private ProvinceRoMapper provinceRoMapper;
-    
+
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -50,14 +50,15 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public List<City> selectCityByProId(String provinceId) {
-    	List<City> list=null;
-    	if(redisTemplate.hasKey(provinceId+"_City")){
-    		list=JSONArray.parseArray(redisTemplate.opsForValue().get(provinceId+"_City"),City.class);
-    		logger.info("从Redis获取城市信息:"+JSONArray.toJSONString(list));
-    	}else{
-    		list=cityRoMapper.selectCityByProId(provinceId);
-    		redisTemplate.opsForValue().set(provinceId+"_City", JSONArray.toJSONString(list), RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
-    	}
+        List<City> list;
+        if (redisTemplate.hasKey(provinceId + "_City")) {
+            list = JSONArray.parseArray(redisTemplate.opsForValue().get(provinceId + "_City"), City.class);
+            logger.info("从Redis获取城市信息:" + JSONArray.toJSONString(list));
+        } else {
+            list = cityRoMapper.selectCityByProId(provinceId);
+            redisTemplate.opsForValue().set(provinceId + "_City", JSONArray.toJSONString(list), RedisConstant
+                    .DICT_TIME_ODFAY, TimeUnit.DAYS);
+        }
         return list;
     }
 
@@ -68,14 +69,14 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public List<Area> selectAreaByCityId(String cityId) {
-    	List<Area> list=null;
-    	if(redisTemplate.hasKey(cityId+"_Area")){
-    		list=JSONArray.parseArray(redisTemplate.opsForValue().get(cityId+"_Area"),Area.class);
-    		logger.info("从Redis获取地区信息:"+JSONArray.toJSONString(list));
-    	}else{
-    		list=areaRoMapper.selectAreaByCityId(cityId);
-    		redisTemplate.opsForValue().set(cityId+"_Area", JSONArray.toJSONString(list), RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
-    	}
+        List<Area> list;
+        if (redisTemplate.hasKey(cityId + "_Area")) {
+            list = JSONArray.parseArray(redisTemplate.opsForValue().get(cityId + "_Area"), Area.class);
+            logger.info("从Redis获取地区信息:" + JSONArray.toJSONString(list));
+        } else {
+            list = areaRoMapper.selectAreaByCityId(cityId);
+            redisTemplate.opsForValue().set(cityId + "_Area", JSONArray.toJSONString(list), RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
+        }
         return list;
     }
 }

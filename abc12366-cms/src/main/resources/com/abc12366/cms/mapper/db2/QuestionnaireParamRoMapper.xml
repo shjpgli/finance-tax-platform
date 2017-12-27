@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-        questionId, isDisplayNumber, isBackspace, isDisplayResults, recoveryEndTime, isLoginAuth, isAnswerOnce,
+        questionId, isDisplayNumber, isBackspace, isDisplayResults, recoveryEndTime, isLoginAuth, isAnswerOnce,isWxOnce,
         isUserRange, isAnswerRemind, isPrize
     </sql>
 

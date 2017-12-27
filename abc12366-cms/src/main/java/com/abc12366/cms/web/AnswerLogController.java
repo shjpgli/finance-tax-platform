@@ -208,10 +208,12 @@ public class AnswerLogController {
 
     @GetMapping(path = "/selectdtcnt")
     public ResponseEntity selectdtcnt(@RequestParam(value = "userId", required = false) String userId,
+                                      @RequestParam(value = "weixinId", required = false) String weixinId,
                                    @RequestParam(value = "questionId", required = false) String questionId) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("questionId", questionId);
         dataMap.put("userId", userId);
+        dataMap.put("weixinId", weixinId);
         int data = answerLogService.selectdtcnt(dataMap);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
