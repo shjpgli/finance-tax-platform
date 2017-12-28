@@ -39,4 +39,11 @@ public interface UgiftApplyRoMapper {
      * @return
      */
     List<UgiftApplyBO> selectUgiftApplyList(Map<String, Object> map);
+
+    /**
+     * 查询会员礼包申请详情
+     * @param map
+     * @return
+     */
+    UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map);
 }

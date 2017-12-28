@@ -129,4 +129,11 @@ public interface GiftService {
      * @return 日志列表
      */
     List<UgiftLog> selectApplyLogList(String applyId);
+
+    /**
+     *
+     * @param map
+     * @return
+     */
+    UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map);
 }
