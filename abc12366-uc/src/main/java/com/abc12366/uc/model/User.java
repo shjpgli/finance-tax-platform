@@ -44,20 +44,20 @@ public class User {
      */
     private String oldId;
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
     /**
      * 礼包金额
      */
-    private double amount;
+    private Double amount;
 
     public User() {
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public User(String id) {
