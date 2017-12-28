@@ -244,7 +244,7 @@ public class GiftController {
      * @param giftCheckBO 礼物审核BO 礼物发货BO
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
      */
-    @PutMapping(path = "/apply/check/{adminId}")
+    @PutMapping(path = "/apply/check")
     public ResponseEntity checkGiftBuy(@Valid @RequestBody GiftCheckBO giftCheckBO, HttpServletRequest request) {
         LOGGER.info("{}", giftCheckBO);
         giftService.checkGiftBuy(giftCheckBO, request);
