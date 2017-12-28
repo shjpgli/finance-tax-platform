@@ -211,18 +211,15 @@ public class GiftController {
     /**
      * 用户兑换礼物申请
      *
-     * @param giftId 礼物名称
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
      */
-    @PostMapping(path = "/apply/user/{userId}/{giftId}")
-    public ResponseEntity buyGift(@Valid @RequestBody UgiftApply ugiftApply,
-                                  @PathVariable("giftId") String giftId,
+    @PostMapping(path = "/apply/user/{userId}")
+    public ResponseEntity buyGift(@Valid @RequestBody UgiftApplyBO ugiftApplyBO,
                                   @PathVariable("userId") String userId) {
-        LOGGER.info("{},{}", giftId, userId);
-        Map<String, Object> map = new HashMap<>();
-        map.put("userId", userId);
-        map.put("giftId", giftId);
-        map.put("ugiftApply", ugiftApply);
+        LOGGER.info("{},{}", userId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("ugiftApply",ugiftApplyBO);
         giftService.buyGift(map);
         return ResponseEntity.ok(Utils.kv());
     }
@@ -233,7 +230,7 @@ public class GiftController {
      * @param giftCheckBO 礼物审核BO 礼物发货BO
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
      */
-    @PutMapping(path = "/apply/check")
+    @PutMapping(path = "/apply/check/{adminId}")
     public ResponseEntity checkGiftBuy(@Valid @RequestBody GiftCheckBO giftCheckBO, HttpServletRequest request) {
         LOGGER.info("{}", giftCheckBO);
         giftService.checkGiftBuy(giftCheckBO, request);
