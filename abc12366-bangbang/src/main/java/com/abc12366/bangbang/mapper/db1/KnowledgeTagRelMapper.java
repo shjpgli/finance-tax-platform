@@ -22,7 +22,12 @@ public interface KnowledgeTagRelMapper {
     /**
      * 查询（根据主键ID查询）
      **/
-    KnowledgeTagRel selectByPrimaryKey(@Param("id") Long id);
+    KnowledgeTagRel selectByPrimaryKey(@Param("id") String id);
+
+    /**
+     * 查询
+     **/
+    KnowledgeTagRel selectByKnowledgeIdAndTagId(@Param("knowledgeId") String knowledgeId, @Param("tagId") String tagId );
 
     /**
      * 删除（根据主键ID删除）

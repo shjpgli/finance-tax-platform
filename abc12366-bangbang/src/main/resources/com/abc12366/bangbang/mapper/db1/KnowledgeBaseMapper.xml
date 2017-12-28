@@ -142,7 +142,9 @@
             <if test="type != null">
                 type = #{type},
             </if>
-            recommend = #{recommend},
+            <if test="recommend != null">
+                recommend = #{recommend},
+            </if>
             <if test="subject != null">
                 subject = #{subject},
             </if>

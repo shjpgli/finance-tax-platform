@@ -93,5 +93,11 @@ public interface KnowledgeBaseRoMapper {
      */
     int selectCntBySubject(@Param("subject")String subject, @Param("id")String id);
 
+    /**
+     * 根据标题查询匹配标题的知识库
+     * @param subject
+     * @return
+     */
+    List<KnowledgeBase> selectBySubject(@Param("subject")String subject);
 
 }
