@@ -218,15 +218,8 @@ public class GiftServiceImpl implements GiftService {
 
     @Override
     public void checkGiftBuy(GiftCheckBO giftCheckBO, HttpServletRequest request) {
-        com.abc12366.gateway.model.User user = Utils.getAdminInfo();
-        UgiftLog ugiftLog = new UgiftLog();
-        ugiftLog.setId(Utils.uuid());
-        ugiftLog.setAdminName(user.getUsername());
-        ugiftLog.setAdminId(user.getId());
-        ugiftLog.setRemark(giftCheckBO.getRemark());
-        ugiftLog.setApplyId(giftCheckBO.getApplyId());
-        ugiftLog.setCreateTime(new Date());
 
+        com.abc12366.gateway.model.User user = Utils.getAdminInfo();
         //查找礼物申请信息
         UgiftApplyBO ugiftApplyBO = ugiftApplyRoMapper.selectByApplyId(giftCheckBO.getApplyId());
         if (ugiftApplyBO == null) {
@@ -253,9 +246,9 @@ public class GiftServiceImpl implements GiftService {
                 LOGGER.info("修改礼物申请异常：{}", ugUpdate);
                 throw new ServiceException(7006);
             }
+
             //加入礼包申请日志
-            ugiftLog.setAction(selectFieldValue("giftStatus", "0"));
-            ugiftLogMapper.insert(ugiftLog);
+            insertUgiftLog(giftCheckBO.getApplyId(), user.getId(), user.getNickname(), giftCheckBO.getRemark(), "0");
 
             //退还库存
             //查找礼包申请表与礼包关联信息，礼物信息
@@ -286,8 +279,7 @@ public class GiftServiceImpl implements GiftService {
                 throw new ServiceException(7006);
             }
             //加入礼包申请日志
-            ugiftLog.setAction(selectFieldValue("giftStatus", "2"));
-            ugiftLogMapper.insert(ugiftLog);
+            insertUgiftLog(giftCheckBO.getApplyId(), user.getId(), user.getNickname(), giftCheckBO.getRemark(), "2");
 
             content = "恭喜您！您的会员礼包申请已通过，礼包订单号：" + ugiftApplyBO.getApplyId() + "，具体原因请至会员礼包申请详情里查询；";
             messageSendUtil.sendPhoneMessage(request, content, ugiftApplyBO.getPhone());
@@ -357,6 +349,11 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public List<UgiftLog> selectApplyLogList(String applyId) {
         return ugiftLogRoMapper.selectListByApplyId(applyId);
+    }
+
+    @Override
+    public UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map) {
+        return ugiftApplyRoMapper.selectUgiftApplyBO(map);
     }
 
     /**

@@ -4,7 +4,6 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.gift.Gift;
 import com.abc12366.uc.model.gift.UamountLog;
-import com.abc12366.uc.model.gift.UgiftApply;
 import com.abc12366.uc.model.gift.UgiftLog;
 import com.abc12366.uc.model.gift.bo.GiftBO;
 import com.abc12366.uc.model.gift.bo.GiftCheckBO;
@@ -209,6 +208,21 @@ public class GiftController {
     }
 
     /**
+     * 后台-查询礼包申请详情
+     * @param applyId
+     * @return
+     */
+    @GetMapping(path = "/apply/{applyId}")
+    public ResponseEntity selectApplyList(@PathVariable("applyId") String applyId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("applyId", applyId);
+        UgiftApplyBO data = giftService.selectUgiftApplyBO(map);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
+
+    /**
      * 用户兑换礼物申请
      *
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
@@ -266,17 +280,18 @@ public class GiftController {
     /**
      * 根据ID查找用户已领取礼物详情
      *
-     * @param giftId 礼物名称
+     * @param applyId 申请单ID
+     * @param userId userId
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
      */
-    @GetMapping(path = "/apply/user/{userId}/{giftId}")
-    public ResponseEntity selectGiftByGiftId(@PathVariable("giftId") String giftId,
+    @GetMapping(path = "/apply/user/{userId}/{applyId}")
+    public ResponseEntity selectGiftByGiftId(@PathVariable("applyId") String applyId,
                                              @PathVariable("userId") String userId) {
-        LOGGER.info("{},{}", giftId, userId);
+        LOGGER.info("{},{}", applyId, userId);
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
-        map.put("giftId", giftId);
-        Gift data = giftService.selectGiftByGiftId(map);
+        map.put("applyId", applyId);
+        UgiftApplyBO data = giftService.selectUgiftApplyBO(map);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
     }
