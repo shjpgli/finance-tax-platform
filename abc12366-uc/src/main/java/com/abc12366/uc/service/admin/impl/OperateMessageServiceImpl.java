@@ -15,6 +15,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.admin.OperateMessage;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
+import com.abc12366.uc.model.admin.bo.OperateMessageUpdateBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 import com.abc12366.uc.service.IWxTemplateService;
@@ -109,13 +110,15 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     }
 
     @Override
-    public OperateMessageBO update(OperateMessageBO operateMessageBO) {
+    public OperateMessageBO update(OperateMessageUpdateBO operateMessageBO) {
         if (operateMessageBO == null || StringUtils.isEmpty(operateMessageBO.getId())) {
             return null;
         }
-        operateMessageBO.setLastUpdate(new Date());
-        operateMessageMapper.update(operateMessageBO);
-        return operateMessageBO;
+        OperateMessageBO messageBO = new OperateMessageBO();
+        BeanUtils.copyProperties(operateMessageBO,messageBO);
+        messageBO.setLastUpdate(new Date());
+        operateMessageMapper.update(messageBO);
+        return selectOne(operateMessageBO.getId());
     }
 
     @Override
@@ -254,10 +257,9 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                 }
                 //地域排除
             } else if (o.getAreaOper().trim().equals("ne")) {
-                if (userExtend == null ||
-                        ((StringUtils.isEmpty(userExtend.getProvince()) || (!StringUtils.isEmpty(userExtend.getProvince()))) && !o.getAreaIds().contains(userExtend.getProvince()))
-                                && ((StringUtils.isEmpty(userExtend.getCity()) || (!StringUtils.isEmpty(userExtend.getCity()))) && !o.getAreaIds().contains(userExtend.getProvince()))
-                                && ((StringUtils.isEmpty(userExtend.getArea()) || (!StringUtils.isEmpty(userExtend.getArea()))) && !o.getAreaIds().contains(userExtend.getProvince()))) {
+                if (userExtend == null ||( ((StringUtils.isEmpty(userExtend.getProvince()))||(!o.getAreaIds().contains(userExtend.getProvince()))) &&
+                        ((StringUtils.isEmpty(userExtend.getCity()))||(!o.getAreaIds().contains(userExtend.getCity())))&&
+                        ((StringUtils.isEmpty(userExtend.getArea()))||(!o.getAreaIds().contains(userExtend.getArea()))) ) ) {
                     sendArea = true;
                 }
             }

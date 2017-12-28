@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
+import com.abc12366.uc.model.admin.bo.OperateMessageUpdateBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 import com.abc12366.uc.service.admin.OperateMessageService;
 import com.github.pagehelper.Page;
@@ -70,7 +71,7 @@ public class OperateMessageController {
      * @return ResponseEntity
      */
     @PutMapping
-    public ResponseEntity update(@RequestBody OperateMessageBO operateMessageBO) {
+    public ResponseEntity update(@RequestBody @Valid OperateMessageUpdateBO operateMessageBO) {
         LOGGER.info("更新运营消息任务：{}", operateMessageBO);
         OperateMessageBO messageBO = operateMessageService.update(operateMessageBO);
         return ResponseEntity.ok(Utils.kv("data", messageBO));
