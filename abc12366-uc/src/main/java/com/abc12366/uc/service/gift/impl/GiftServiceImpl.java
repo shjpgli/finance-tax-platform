@@ -166,68 +166,71 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public void buyGift(Map<String, Object> map) {
         //查询礼物信息
-        String giftId = (String) map.get("giftId");
         String userId = (String) map.get("userId");
-        Gift gift = giftRoMapper.selectByPrimaryKey(giftId);
-        if(gift == null){
-            LOGGER.info("查询礼物异常：{}", gift);
-            throw new ServiceException(4104);
-        }
+        UgiftApplyBO ugiftApply = (UgiftApplyBO)map.get("ugiftApply");
+        List<GiftApplyBO> giftApplyList = ugiftApply.getGiftApplyBOList();
+        for(GiftApplyBO giftApply : giftApplyList){
+            Gift gift = giftRoMapper.selectByPrimaryKey(giftApply.getGiftId());
+            if(gift == null){
+                LOGGER.info("查询礼物异常：{}", gift);
+                throw new ServiceException(4104);
+            }
 
-        UgiftApply ugiftApply = (UgiftApply)map.get("ugiftApply");
-        if(ugiftApply.getGiftNum() <= 0){
-            LOGGER.info("申请数量错误：{}", gift);
-            throw new ServiceException(4104,"申请数量错误");
-        }
-        int stock = gift.getStock();
-        int finalStock = stock - ugiftApply.getGiftNum();
-        //判断库存
-        if(stock == 0 || finalStock < 0){
-            LOGGER.info("礼物库存不足，请联系管理员：{}", gift);
-            throw new ServiceException(7002);
-        }
+            int giftNum = giftApply.getGiftNum();
+            if(giftNum <= 0){
+                LOGGER.info("申请数量错误：{}", gift);
+                throw new ServiceException(4104,"申请数量错误");
+            }
+            int stock = gift.getStock();
+            int finalStock = stock - giftNum;
+            //判断库存
+            if(stock == 0 || finalStock < 0){
+                LOGGER.info("礼物库存不足，请联系管理员：{}", gift);
+                throw new ServiceException(7002);
+            }
 
-        //减去礼物库存
-        gift.setStock(finalStock);
-        int gUpdate = giftMapper.update(gift);
-        if(gUpdate != 1){
-            LOGGER.info("修改会员礼包异常：{}", gUpdate);
-            throw new ServiceException(4102);
-        }
-        //状态：0-已拒绝，1-待处理，2-已审批，3-已发货，4-已完成
-        Date date = new Date();
-        //更新用户信息和礼包交易信息
-        updateUserAmount(userId, gift.getSellingPrice()*ugiftApply.getGiftNum(),date,0);
-        String applyId = getNo();
-        UgiftApply apply = new UgiftApply();
-        BeanUtils.copyProperties(ugiftApply,apply);
-        apply.setApplyId(applyId);
-        apply.setUserId(userId);
-        apply.setCreateTime(date);
-        apply.setLastUpdate(date);
-        apply.setStatus("1");
+            //减去礼物库存
+            gift.setStock(finalStock);
+            int gUpdate = giftMapper.update(gift);
+            if(gUpdate != 1){
+                LOGGER.info("修改会员礼包异常：{}", gUpdate);
+                throw new ServiceException(4102);
+            }
+            //状态：0-已拒绝，1-待处理，2-已审批，3-已发货，4-已完成
+            Date date = new Date();
+            //更新用户信息和礼包交易信息
+            updateUserAmount(userId, gift.getSellingPrice()*giftNum,date,0);
+            String applyId = getNo();
+            UgiftApply apply = new UgiftApply();
+            BeanUtils.copyProperties(ugiftApply,apply);
+            apply.setApplyId(applyId);
+            apply.setUserId(userId);
+            apply.setCreateTime(date);
+            apply.setLastUpdate(date);
+            apply.setStatus("1");
 
-        //新增会员礼包申请表
-        int aInsert = ugiftApplyMapper.insert(apply);
-        if(aInsert != 1){
-            LOGGER.info("新增会员礼包申请异常：{}", aInsert);
-            throw new ServiceException(4101);
+            //新增会员礼包申请表
+            int aInsert = ugiftApplyMapper.insert(apply);
+            if(aInsert != 1){
+                LOGGER.info("新增会员礼包申请异常：{}", aInsert);
+                throw new ServiceException(4101);
+            }
+            //新增礼包申请表与礼包关联表
+            GiftApply tempApply = new GiftApply();
+            tempApply.setId(Utils.uuid());
+            tempApply.setApplyId(applyId);
+            tempApply.setGiftId(giftApply.getGiftId());
+            tempApply.setGiftAmount(gift.getSellingPrice());
+            tempApply.setGiftName(gift.getName());
+            tempApply.setGiftNum(giftNum);
+            int inst = giftApplyMapper.insert(tempApply);
+            if(inst != 1){
+                LOGGER.info("新增礼包申请表与礼包关联表异常：{}", inst);
+                throw new ServiceException(4101);
+            }
+            //加入礼包申请日志
+            insertUgiftLog(applyId,"","","礼物申请新增","1");
         }
-        //新增礼包申请表与礼包关联表
-        GiftApply giftApply = new GiftApply();
-        giftApply.setId(Utils.uuid());
-        giftApply.setApplyId(applyId);
-        giftApply.setGiftId(giftId);
-        giftApply.setGiftAmount(gift.getSellingPrice());
-        giftApply.setGiftName(gift.getName());
-        giftApply.setGiftNum(ugiftApply.getGiftNum());
-        int inst = giftApplyMapper.insert(giftApply);
-        if(inst != 1){
-            LOGGER.info("新增礼包申请表与礼包关联表异常：{}", inst);
-            throw new ServiceException(4101);
-        }
-        //加入礼包申请日志
-        insertUgiftLog(applyId,"","","礼物申请新增","1");
 
     }
 
@@ -275,21 +278,24 @@ public class GiftServiceImpl implements GiftService {
             }
             //退还库存
             //查找礼包申请表与礼包关联信息，礼物信息
-            GiftApplyBO giftApplyBO = ugiftApplyBO.getGiftApplyBO();
-            Gift gift = giftRoMapper.selectByPrimaryKey(giftApplyBO.getGiftId());
-            if(gift == null){
-                LOGGER.info("礼物信息查询异常：{}", insert);
-                throw new ServiceException(7004);
+
+            List<GiftApplyBO> giftApplyBOList = ugiftApplyBO.getGiftApplyBOList();
+            for(GiftApplyBO giftApplyBO:giftApplyBOList){
+                Gift gift = giftRoMapper.selectByPrimaryKey(giftApplyBO.getGiftId());
+                if(gift == null){
+                    LOGGER.info("礼物信息查询异常：{}", insert);
+                    throw new ServiceException(7004);
+                }
+                gift.setStock(gift.getStock()+giftApplyBO.getGiftNum());
+                int gUpdate = giftMapper.update(gift);
+                if(gUpdate != 1){
+                    LOGGER.info("礼物信息修改异常：{}", gUpdate);
+                    throw new ServiceException(7005);
+                }
+                //退还用户礼品金额
+                updateUserAmount(ugiftApplyBO.getUserId(), giftApplyBO.getGiftAmount(),new Date(),1);
+                content = "很抱歉！您的会员礼包申请未通过，礼包订单号："+ugiftApplyBO.getApplyId()+"，具体原因请至会员礼包申请详情里查询；";
             }
-            gift.setStock(gift.getStock()+giftApplyBO.getGiftNum());
-            int gUpdate = giftMapper.update(gift);
-            if(gUpdate != 1){
-                LOGGER.info("礼物信息修改异常：{}", gUpdate);
-                throw new ServiceException(7005);
-            }
-            //退还用户礼品金额
-            updateUserAmount(ugiftApplyBO.getUserId(), giftApplyBO.getGiftAmount(),new Date(),1);
-            content = "很抱歉！您的会员礼包申请未通过，礼包订单号："+ugiftApplyBO.getApplyId()+"，具体原因请至会员礼包申请详情里查询；";
             messageSendUtil.sendPhoneMessage(request,content,ugiftApplyBO.getPhone());
         }else if(status == 1){
             //修改礼包申请信息

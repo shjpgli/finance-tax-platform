@@ -1,7 +1,7 @@
 package com.abc12366.uc.model.gift.bo;
-import com.abc12366.uc.model.gift.GiftApply;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -45,8 +45,9 @@ public class UgiftApplyBO implements Serializable {
 	/**备注**/
 	private String remark;
 
-	private GiftApplyBO giftApplyBO;
+	private List<GiftApplyBO> giftApplyBOList;
 
+	private List<UgiftLogBO> ugiftLogBOList;
 
 	public void setApplyId(String applyId){
 		this.applyId = applyId;
@@ -136,11 +137,19 @@ public class UgiftApplyBO implements Serializable {
 		return this.remark;
 	}
 
-    public GiftApplyBO getGiftApplyBO() {
-        return giftApplyBO;
+	public List<GiftApplyBO> getGiftApplyBOList() {
+		return giftApplyBOList;
+	}
+
+	public void setGiftApplyBOList(List<GiftApplyBO> giftApplyBOList) {
+		this.giftApplyBOList = giftApplyBOList;
+	}
+
+    public List<UgiftLogBO> getUgiftLogBOList() {
+        return ugiftLogBOList;
     }
 
-    public void setGiftApplyBO(GiftApplyBO giftApplyBO) {
-        this.giftApplyBO = giftApplyBO;
+    public void setUgiftLogBOList(List<UgiftLogBO> ugiftLogBOList) {
+        this.ugiftLogBOList = ugiftLogBOList;
     }
 }
