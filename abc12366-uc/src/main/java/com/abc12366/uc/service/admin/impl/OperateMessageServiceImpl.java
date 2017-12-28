@@ -318,6 +318,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         Date now = new Date();
         o.setCreateTime(now);
         o.setLastUpdate(now);
+        o.setStatus("0");
         OperateMessage operateMessage = new OperateMessage();
         BeanUtils.copyProperties(o, operateMessage);
         operateMessageMapper.insert(operateMessage);
