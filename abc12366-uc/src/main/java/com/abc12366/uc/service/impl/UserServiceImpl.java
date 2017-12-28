@@ -189,31 +189,29 @@ public class UserServiceImpl implements UserService {
 	public Map selectOne(String userId) {
 		// 新增优先查询redis
 		LOGGER.info("{}", userId);
-		User userTemp;
-		UserExtend user_extend;
+		User user;
+		UserExtend userExtend;
 		if (redisTemplate.hasKey(userId + "_UserInfo")
 				&& redisTemplate.hasKey(userId + "_UserExtend")) {
-			userTemp = JSONObject.parseObject(
+			user = JSONObject.parseObject(
 					redisTemplate.opsForValue().get(userId + "_UserInfo"),
 					User.class);
-			user_extend = JSONObject.parseObject(redisTemplate.opsForValue()
+			userExtend = JSONObject.parseObject(redisTemplate.opsForValue()
 					.get(userId + "_UserExtend"), UserExtend.class);
-			LOGGER.info("从redis获取用户信息:{}", JSONObject.toJSONString(userTemp));
+			LOGGER.info("从redis获取用户信息:{}", JSONObject.toJSONString(user));
 		} else {
-			userTemp = userRoMapper.selectOne(userId);
-			user_extend = userExtendRoMapper.selectOne(userId);
-			LOGGER.info("从数据库获取用户信息:{}", JSONObject.toJSONString(userTemp));
+			user = userRoMapper.selectOne(userId);
+			userExtend = userExtendRoMapper.selectOne(userId);
+			LOGGER.info("从数据库获取用户信息:{}", JSONObject.toJSONString(user));
 		}
-		if (userTemp != null) {
+		if (user != null) {
 			redisTemplate.opsForValue().set(userId + "_UserInfo",
-					JSONObject.toJSONString(userTemp),
+					JSONObject.toJSONString(user),
 					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
 			redisTemplate.opsForValue().set(userId + "_UserExtend",
-					JSONObject.toJSONString(user_extend),
+					JSONObject.toJSONString(userExtend),
 					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
 
-			UserBO user = new UserBO();
-			BeanUtils.copyProperties(userTemp, user);
 			// 用户重要信息模糊化处理:电话号码
 			if (!StringUtils.isEmpty(user.getPhone())
 					&& user.getPhone().length() >= 8) {
@@ -225,7 +223,7 @@ public class UserServiceImpl implements UserService {
 			user.setPassword(null);
 			Map<String, Object> map = new HashMap<>();
 			map.put("user", user);
-			map.put("user_extend", user_extend);
+			map.put("user_extend", userExtend);
 			LOGGER.info("{}", map);
 			return map;
 		}
