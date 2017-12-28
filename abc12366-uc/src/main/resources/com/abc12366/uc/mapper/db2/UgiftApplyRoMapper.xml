@@ -73,6 +73,7 @@
         id,	applyId,	action,	createTime,	adminId,	adminName,	remark
         FROM uc_ugift_log
         where applyId = #{applyId}
+        GROUP by createTime asc
     </select>
 
     <!-- 查询（根据ApplyId查询） -->
@@ -82,6 +83,22 @@
         <include refid="Base_BO_List"/>
         FROM uc_ugift_apply u
         WHERE u.applyId = #{applyId}
+    </select>
+    <!-- （查询会员礼包申请详情） -->
+    <select id="selectUgiftApplyBO" resultMap="ugiftBOResultMap"
+            parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_BO_List"/>
+        FROM uc_ugift_apply u
+        <where>
+            1 = 1
+            <if test="userId != null and userId != ''">
+                and u.userId = #{userId}
+            </if>
+            <if test="applyId != null and applyId != ''">
+                and u.applyId = #{applyId}
+            </if>
+        </where>
     </select>
 
     <!-- 查询（根据ApplyId查询） -->

@@ -112,6 +112,15 @@ public class OperateMessageController {
         return ResponseEntity.ok(Utils.kv("data",operateMessageBO));
     }
 
+    /**
+     * 运营消息发送情况查询接口
+     * @param userId 用户id
+     * @param nickName 用户昵称
+     * @param messageId 运营消息id
+     * @param page 页码
+     * @param size 每页数据量
+     * @return ResponseEntity
+     */
     @GetMapping(path = "/log")
     public ResponseEntity operateMessageLog(@RequestParam(required = false) String userId,
                                             @RequestParam(required = false) String nickName,
