@@ -211,9 +211,9 @@ public class GiftServiceImpl implements GiftService {
                 LOGGER.info("新增礼包申请表与礼包关联表异常：{}", inst);
                 throw new ServiceException(4101);
             }
-            User user = userRoMapper.selectOne(userId);
+            UCUserBO ucUserBO = Utils.getUserInfo();
             //加入礼包申请日志
-            insertUgiftLog(applyId,user.getId(),user.getNickname(),"礼物申请新增","1");
+            insertUgiftLog(applyId,ucUserBO.getId(),ucUserBO.getNickname(),"礼物申请新增","1");
         }
     }
 
