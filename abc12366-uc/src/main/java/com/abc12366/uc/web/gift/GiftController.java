@@ -184,7 +184,7 @@ public class GiftController {
      * @param pageNum  当前页
      * @param pageSize 每页大小
      * @param name     收件人名称
-     * @param giftName 礼品名称
+     * @param applyId 申请单号
      * @param status   状态
      * @return ResponseEntity {@linkplain Gift Gift}列表响应实体
      */
@@ -192,12 +192,12 @@ public class GiftController {
     public ResponseEntity selectApplyList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                           @RequestParam(value = "status", required = false) String status,
-                                          @RequestParam(value = "giftName", required = false) String giftName,
+                                          @RequestParam(value = "applyId", required = false) String applyId,
                                           @RequestParam(value = "name", required = false) String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
         map.put("name", name);
-        map.put("giftName", giftName);
+        map.put("applyId", applyId);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<UgiftApplyBO> dataList = giftService.selectUgiftApplyList(map);
         PageInfo<UgiftApplyBO> pageInfo = new PageInfo<>(dataList);
