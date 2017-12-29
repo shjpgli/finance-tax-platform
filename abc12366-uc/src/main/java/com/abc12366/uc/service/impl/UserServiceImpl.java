@@ -171,17 +171,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User selectUser(String userId) {
 		// 新增优先查询redis
-		User user;
-		if (redisTemplate.hasKey(userId + "_UserInfo")) {
-			user = JSONObject.parseObject(
-					redisTemplate.opsForValue().get(userId + "_UserInfo"),
-					User.class);
-		} else {
-			user = userRoMapper.selectOne(userId);
-			redisTemplate.opsForValue().set(userId + "_UserInfo",
-					JSONObject.toJSONString(user),
-					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
-		}
+		User user = userRoMapper.selectOne(userId);
+	
 		return user;
 	}
 
@@ -189,28 +180,9 @@ public class UserServiceImpl implements UserService {
 	public Map selectOne(String userId) {
 		// 新增优先查询redis
 		LOGGER.info("{}", userId);
-		User user;
-		UserExtend userExtend;
-		if (redisTemplate.hasKey(userId + "_UserInfo")
-				&& redisTemplate.hasKey(userId + "_UserExtend")) {
-			user = JSONObject.parseObject(
-					redisTemplate.opsForValue().get(userId + "_UserInfo"),
-					User.class);
-			userExtend = JSONObject.parseObject(redisTemplate.opsForValue()
-					.get(userId + "_UserExtend"), UserExtend.class);
-			LOGGER.info("从redis获取用户信息:{}", JSONObject.toJSONString(user));
-		} else {
-			user = userRoMapper.selectOne(userId);
-			userExtend = userExtendRoMapper.selectOne(userId);
-			LOGGER.info("从数据库获取用户信息:{}", JSONObject.toJSONString(user));
-		}
-		if (user != null) {
-			redisTemplate.opsForValue().set(userId + "_UserInfo",
-					JSONObject.toJSONString(user),
-					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
-			redisTemplate.opsForValue().set(userId + "_UserExtend",
-					JSONObject.toJSONString(userExtend),
-					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+		User user = userRoMapper.selectOne(userId);
+		UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+     	if (user != null) {
 
 			// 用户重要信息模糊化处理:电话号码
 			if (!StringUtils.isEmpty(user.getPhone())
@@ -248,8 +220,6 @@ public class UserServiceImpl implements UserService {
 			}
 			throw new ServiceException(4624);
 		}
-		// 删除redis用户信息
-		redisTemplate.delete(id + "_UserInfo");
 	}
 
 	@Override
@@ -323,9 +293,6 @@ public class UserServiceImpl implements UserService {
 		}
 		LOGGER.info("{}", userDTO);
 
-		// 删除redis用户信息
-		redisTemplate.delete(userUpdateBO.getId() + "_UserInfo");
-		redisTemplate.delete(userUpdateBO.getId() + "_UserExtend");
 
 		return userDTO;
 	}
@@ -365,9 +332,6 @@ public class UserServiceImpl implements UserService {
 				UserBO userBO = new UserBO();
 				BeanUtils.copyProperties(user, userBO);
 				LOGGER.info("{}", userBO);
-
-				// 删除redis用户信息
-				redisTemplate.delete(userId + "_UserInfo");
 
 				return userBO;
 			}
@@ -459,8 +423,6 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 
-		// 删除redis用户信息
-		redisTemplate.delete(userId + "_UserInfo");
 
 		return true;
 	}
@@ -505,8 +467,6 @@ public class UserServiceImpl implements UserService {
 		user.setLastUpdate(new Date());
 		userMapper.update(user);
 
-		// 删除redis用户信息
-		redisTemplate.delete(userId + "_UserInfo");
 	}
 
 	@Override
@@ -532,8 +492,6 @@ public class UserServiceImpl implements UserService {
 			bo.setUserId(user.getId());
 			vipLogService.insert(bo);
 
-			// 删除redis用户信息
-			redisTemplate.delete(user.getId() + "_UserInfo");
 		}
 	}
 
@@ -598,8 +556,6 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(4102);
 		}
 
-		// 删除redis用户信息
-		redisTemplate.delete(user.getId() + "_UserInfo");
 
 	}
 
@@ -691,9 +647,6 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-
-		// 删除redis用户信息
-		redisTemplate.delete(user.getId() + "_UserInfo");
 
 		UserBO userDTO = new UserBO();
 		BeanUtils.copyProperties(user, userDTO);
@@ -828,9 +781,6 @@ public class UserServiceImpl implements UserService {
 			return 1;
 		} else {
 			LOGGER.info("微信绑定账号与此账号不符合，更新绑定关系");
-
-			// 删除redis用户信息
-			redisTemplate.delete(userUpdateDTO.getId() + "_UserInfo");
 
 			users.setWxheadimg(userUpdateDTO.getWxheadimg());
 			users.setWxnickname(userUpdateDTO.getWxnickname());

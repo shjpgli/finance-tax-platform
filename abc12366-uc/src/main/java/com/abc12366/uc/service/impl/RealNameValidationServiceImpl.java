@@ -144,11 +144,6 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
             throw new ServiceException();
         }
 
-        // 清楚redis缓存
-        if (redisTemplate.hasKey(userId + "_UserExtend")) {
-            redisTemplate.delete(userId + "_UserExtend");
-        }
-
         //首次实名认证任务埋点
         if (validStatus.equals(TaskConstant.USER_REALNAME_VALIDATED)) {
             todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);

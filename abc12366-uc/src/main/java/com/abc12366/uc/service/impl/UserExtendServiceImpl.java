@@ -62,20 +62,12 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
-        UserExtend userExtend = null;
-        if (redisTemplate.hasKey(userId + "_UserExtend")) {
-            userExtend = JSONObject.parseObject(redisTemplate.opsForValue()
-                    .get(userId + "_UserExtend"), UserExtend.class);
-        } else {
-            userExtend = userExtendRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
 
-        }
+
         if (userExtend == null) {
             return null;
         }
-        redisTemplate.opsForValue().set(userId + "_UserExtend",
-                JSONObject.toJSONString(userExtend),
-                RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
 
         if (userExtend.getValidStatus().equals(
                 TaskConstant.USER_REALNAME_VALIDATED)) {
@@ -172,9 +164,6 @@ public class UserExtendServiceImpl implements UserExtendService {
                 throw new ServiceException(4112);
             }
 
-            redisTemplate.opsForValue().set(userExtend.getUserId() + "_UserExtend",
-                    JSONObject.toJSONString(userExtend),
-                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
 
             UserExtendBO userExtendBO1 = new UserExtendBO();
             BeanUtils.copyProperties(userExtend, userExtendBO1);
@@ -198,8 +187,6 @@ public class UserExtendServiceImpl implements UserExtendService {
             throw new ServiceException(4103);
         }
 
-        // 删除redis用户信息
-        redisTemplate.delete(userId + "_UserExtend");
 
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);
@@ -295,8 +282,6 @@ public class UserExtendServiceImpl implements UserExtendService {
                 LOGGER.warn("修改失败，参数：{}" + userExtendUpdateBO);
                 throw new ServiceException(4102);
             }
-            // 删除redis用户信息
-            redisTemplate.delete(userExtendUpdateBO.getUserId() + "_UserExtend");
 
             UserExtend userExtend2 = userExtendRoMapper
                     .selectOne(userExtendSecond.getUserId());
