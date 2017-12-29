@@ -73,7 +73,7 @@
         id,	applyId,	action,	createTime,	adminId,	adminName,	remark
         FROM uc_ugift_log
         where applyId = #{applyId}
-        GROUP by createTime asc
+        order by createTime asc
     </select>
 
     <!-- 查询（根据ApplyId查询） -->
@@ -118,11 +118,11 @@
             <if test="name != null and name != ''">
                 and u.name = #{name}
             </if>
-            <if test="giftName != null and giftName != ''">
-                and g.giftName = #{giftName}
+            <if test="applyId != null and applyId != ''">
+                and u.applyId = #{applyId}
             </if>
         </where>
-        GROUP  by u.lastUpdate DESC
+        order  by u.lastUpdate DESC
     </select>
 
 </mapper>
