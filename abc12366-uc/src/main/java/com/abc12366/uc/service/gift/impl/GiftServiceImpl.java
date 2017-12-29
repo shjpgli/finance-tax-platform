@@ -417,6 +417,10 @@ public class GiftServiceImpl implements GiftService {
     private void updateUserAmount(String userId, double sellingPrice, Date date, int type) {
         User user = userRoMapper.selectOne(userId);
         double amount = 0;
+        double userAmount = 0;
+        if(user.getAmount() != null){
+            userAmount = user.getAmount();
+        }
         //礼物金额扣除
         UamountLog uamountLog = new UamountLog();
         uamountLog.setId(Utils.uuid());
@@ -425,7 +429,7 @@ public class GiftServiceImpl implements GiftService {
         uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
 
         if (type == 0) {
-            amount = user.getAmount() - sellingPrice;
+            amount = userAmount - sellingPrice;
             if (amount < 0) {
                 LOGGER.info("礼包金额不足：{}", amount);
                 throw new ServiceException(7001);
@@ -434,7 +438,7 @@ public class GiftServiceImpl implements GiftService {
             uamountLog.setRemark("兑换礼品，使用金额");
             uamountLog.setOutgo(sellingPrice);
         } else if (type == 1) {
-            amount = user.getAmount() + sellingPrice;
+            amount = userAmount + sellingPrice;
             uamountLog.setUsable(amount);
             uamountLog.setRemark("礼品申请不通过，退还金额");
             uamountLog.setIncome(sellingPrice);

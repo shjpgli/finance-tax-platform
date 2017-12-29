@@ -915,14 +915,18 @@ public class OrderServiceImpl implements OrderService {
             uamountLog.setRemark("充值会员，获得积分");
             //赠送积分
             double income = Double.parseDouble(findObj.getVal1());
+            double amount = 0;
+            if(user.getAmount() != null){
+                amount = user.getAmount();
+            }
             uamountLog.setIncome(income);
-            uamountLog.setUsable(user.getAmount()+income);
+            uamountLog.setUsable(amount+income);
             //插入礼包积分记录
             uamountLogMapper.insert(uamountLog);
             //修改礼包积分
             User temp = new User();
             temp.setId(user.getId());
-            temp.setAmount(user.getAmount()+income);
+            temp.setAmount(amount+income);
             userMapper.update(temp);
         }
     }
