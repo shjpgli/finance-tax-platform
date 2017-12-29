@@ -1,4 +1,5 @@
 package com.abc12366.uc.model.gift.bo;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -18,6 +19,7 @@ public class GiftCheckBO implements Serializable {
 	private int status;
 
 	/**备注**/
+    @Size(min = 0, max = 150)
 	private String remark;
 
 	public String getApplyId() {

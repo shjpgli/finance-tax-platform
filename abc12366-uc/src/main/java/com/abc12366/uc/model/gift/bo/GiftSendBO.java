@@ -1,4 +1,7 @@
 package com.abc12366.uc.model.gift.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -15,9 +18,13 @@ public class GiftSendBO implements Serializable {
 	private String applyId;
 
 	/**快递单号**/
+    @NotEmpty
+	@Size(min = 0, max = 16)
 	private String expressNo;
 
 	/**快递公司**/
+    @NotEmpty
+	@Size(min = 0, max = 100)
 	private String expressComp;
 
 	public String getApplyId() {
