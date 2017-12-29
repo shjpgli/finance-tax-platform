@@ -129,6 +129,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private UamountLogMapper uamountLogMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -914,7 +917,11 @@ public class OrderServiceImpl implements OrderService {
             double income = Double.parseDouble(findObj.getVal1());
             uamountLog.setIncome(income);
             uamountLog.setUsable(user.getAmount()+income);
+            //插入礼包积分记录
             uamountLogMapper.insert(uamountLog);
+            //修改礼包积分
+            user.setAmount(user.getAmount()+income);
+            userMapper.update(user);
         }
     }
 
