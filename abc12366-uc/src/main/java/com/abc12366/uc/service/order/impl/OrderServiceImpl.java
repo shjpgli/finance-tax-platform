@@ -920,8 +920,10 @@ public class OrderServiceImpl implements OrderService {
             //插入礼包积分记录
             uamountLogMapper.insert(uamountLog);
             //修改礼包积分
-            user.setAmount(user.getAmount()+income);
-            userMapper.update(user);
+            User temp = new User();
+            temp.setId(user.getId());
+            temp.setAmount(user.getAmount()+income);
+            userMapper.update(temp);
         }
     }
 
