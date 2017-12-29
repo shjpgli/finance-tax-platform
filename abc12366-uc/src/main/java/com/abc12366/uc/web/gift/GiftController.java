@@ -4,7 +4,6 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.gift.Gift;
 import com.abc12366.uc.model.gift.UamountLog;
-import com.abc12366.uc.model.gift.UgiftApply;
 import com.abc12366.uc.model.gift.UgiftLog;
 import com.abc12366.uc.model.gift.bo.GiftBO;
 import com.abc12366.uc.model.gift.bo.GiftCheckBO;
@@ -185,7 +184,7 @@ public class GiftController {
      * @param pageNum  当前页
      * @param pageSize 每页大小
      * @param name     收件人名称
-     * @param giftName 礼品名称
+     * @param applyId 申请单号
      * @param status   状态
      * @return ResponseEntity {@linkplain Gift Gift}列表响应实体
      */
@@ -193,12 +192,12 @@ public class GiftController {
     public ResponseEntity selectApplyList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
                                           @RequestParam(value = "status", required = false) String status,
-                                          @RequestParam(value = "giftName", required = false) String giftName,
+                                          @RequestParam(value = "applyId", required = false) String applyId,
                                           @RequestParam(value = "name", required = false) String name) {
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
         map.put("name", name);
-        map.put("giftName", giftName);
+        map.put("applyId", applyId);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         List<UgiftApplyBO> dataList = giftService.selectUgiftApplyList(map);
         PageInfo<UgiftApplyBO> pageInfo = new PageInfo<>(dataList);
@@ -209,20 +208,32 @@ public class GiftController {
     }
 
     /**
+     * 后台-查询礼包申请详情
+     * @param applyId
+     * @return
+     */
+    @GetMapping(path = "/apply/{applyId}")
+    public ResponseEntity selectApplyList(@PathVariable("applyId") String applyId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("applyId", applyId);
+        UgiftApplyBO data = giftService.selectUgiftApplyBO(map);
+        LOGGER.info("{}", data);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
+
+    /**
      * 用户兑换礼物申请
      *
-     * @param giftId 礼物名称
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
      */
-    @PostMapping(path = "/apply/user/{userId}/{giftId}")
-    public ResponseEntity buyGift(@Valid @RequestBody UgiftApply ugiftApply,
-                                  @PathVariable("giftId") String giftId,
+    @PostMapping(path = "/apply/user/{userId}")
+    public ResponseEntity buyGift(@Valid @RequestBody UgiftApplyBO ugiftApplyBO,
                                   @PathVariable("userId") String userId) {
-        LOGGER.info("{},{}", giftId, userId);
-        Map<String, Object> map = new HashMap<>();
-        map.put("userId", userId);
-        map.put("giftId", giftId);
-        map.put("ugiftApply", ugiftApply);
+        LOGGER.info("{},{}", userId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("ugiftApply",ugiftApplyBO);
         giftService.buyGift(map);
         return ResponseEntity.ok(Utils.kv());
     }
@@ -269,17 +280,18 @@ public class GiftController {
     /**
      * 根据ID查找用户已领取礼物详情
      *
-     * @param giftId 礼物名称
+     * @param applyId 申请单ID
+     * @param userId userId
      * @return ResponseEntity {@linkplain Gift Gift}响应实体
      */
-    @GetMapping(path = "/apply/user/{userId}/{giftId}")
-    public ResponseEntity selectGiftByGiftId(@PathVariable("giftId") String giftId,
+    @GetMapping(path = "/apply/user/{userId}/{applyId}")
+    public ResponseEntity selectGiftByGiftId(@PathVariable("applyId") String applyId,
                                              @PathVariable("userId") String userId) {
-        LOGGER.info("{},{}", giftId, userId);
+        LOGGER.info("{},{}", applyId, userId);
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
-        map.put("giftId", giftId);
-        Gift data = giftService.selectGiftByGiftId(map);
+        map.put("applyId", applyId);
+        UgiftApplyBO data = giftService.selectUgiftApplyBO(map);
         LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data", data));
     }

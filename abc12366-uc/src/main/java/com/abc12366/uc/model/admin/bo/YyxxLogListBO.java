@@ -8,11 +8,29 @@ import java.util.Date;
  * Time: 16:10
  */
 public class YyxxLogListBO {
+    /**
+     * 日志id
+     */
     private String id;
+    /**
+     *用户id
+     */
     private String userId;
+    /**
+     *运营消息id
+     */
     private String messageId;
+    /**
+     *消息类型，web-站内，wechat-微信，message-短信
+     */
     private String type;
+    /**
+     *创建时间
+     */
     private Date createTime;
+    /**
+     *用户昵称
+     */
     private String nickName;
 
     public YyxxLogListBO() {

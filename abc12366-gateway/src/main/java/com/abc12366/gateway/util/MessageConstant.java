@@ -68,7 +68,7 @@ public class MessageConstant {
     //系统提醒代码
     public static final String XTTX_CODE = "A_XTTX";
     //会员礼包
-    public static final String HYLB_CODE = "A_YHLB";
+    public static final String HYLB_CODE = "A_HYLB";
 
 
     //消息类型，1：系统消息，2：帮帮消息
