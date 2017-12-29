@@ -73,7 +73,7 @@
         id,	applyId,	action,	createTime,	adminId,	adminName,	remark
         FROM uc_ugift_log
         where applyId = #{applyId}
-        order by createTime asc
+        order by createTime desc
     </select>
 
     <!-- 查询（根据ApplyId查询） -->
