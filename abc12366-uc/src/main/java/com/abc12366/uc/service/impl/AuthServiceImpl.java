@@ -504,7 +504,6 @@ public class AuthServiceImpl implements AuthService {
         String userId = Utils.getUserId();
         
         //登录删除用户缓存，防止缓存不及时刷新
-        redisTemplate.delete(userId+"_UserInfo");
         redisTemplate.delete(userId+"_Points");
         redisTemplate.delete(userId+"_MyExperience");
 

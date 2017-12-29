@@ -129,6 +129,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private UamountLogMapper uamountLogMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -899,7 +902,7 @@ public class OrderServiceImpl implements OrderService {
         //查询会员礼包业务
         User user = userRoMapper.selectOne(userId);
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
+        obj.setLevelId(memberLevel);
         obj.setPrivilegeId(MessageConstant.HYLB_CODE);
         //查看会员礼包是否启用
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
@@ -914,7 +917,13 @@ public class OrderServiceImpl implements OrderService {
             double income = Double.parseDouble(findObj.getVal1());
             uamountLog.setIncome(income);
             uamountLog.setUsable(user.getAmount()+income);
+            //插入礼包积分记录
             uamountLogMapper.insert(uamountLog);
+            //修改礼包积分
+            User temp = new User();
+            temp.setId(user.getId());
+            temp.setAmount(user.getAmount()+income);
+            userMapper.update(temp);
         }
     }
 
