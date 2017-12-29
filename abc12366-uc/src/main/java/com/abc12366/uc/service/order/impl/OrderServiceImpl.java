@@ -902,7 +902,7 @@ public class OrderServiceImpl implements OrderService {
         //查询会员礼包业务
         User user = userRoMapper.selectOne(userId);
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
+        obj.setLevelId(memberLevel);
         obj.setPrivilegeId(MessageConstant.HYLB_CODE);
         //查看会员礼包是否启用
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
