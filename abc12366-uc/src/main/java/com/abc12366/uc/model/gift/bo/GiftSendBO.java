@@ -19,12 +19,12 @@ public class GiftSendBO implements Serializable {
 
 	/**快递单号**/
     @NotEmpty
-	@Size(min = 0, max = 16)
+	@Size(min = 2, max = 16)
 	private String expressNo;
 
 	/**快递公司**/
     @NotEmpty
-	@Size(min = 0, max = 100)
+	@Size(min = 2, max = 100)
 	private String expressComp;
 
 	public String getApplyId() {
