@@ -8,7 +8,6 @@ import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -371,11 +370,26 @@ public class UserBindController {
      * @return 是否实名认证
      */
     @GetMapping(path = "/realname/dzsj")
-    public ResponseEntity isRealNameValidatedDzsj(@RequestParam String sfzjhm, @PathVariable @RequestParam String xm,
+    public ResponseEntity isRealNameValidatedDzsj(@RequestParam String sfzjhm, @RequestParam String xm,
                                                   HttpServletRequest request) {
         LOGGER.info("调用电子税局实名认证查询接口：{},{}", sfzjhm, xm);
         boolean result = userBindService.isRealNameValidatedDzsj(sfzjhm, xm, request);
         LOGGER.info("电子税局返回查询结果：{}", result);
         return ResponseEntity.ok(Utils.kv("data", result));
+    }
+
+    /**
+     * 更新电子申报绑定关系
+     * @param userId 用户id
+     * @param nsrsbh 纳税人识别号
+     * @return ResponseEntity
+     */
+    @PutMapping(path = "/bind/dzsb/{userId}/{nsrsbh}")
+    public ResponseEntity updateDzsb(@PathVariable String userId,
+                                     @PathVariable String nsrsbh) {
+        LOGGER.info("更新电子申报绑定关系：{},{}", userId, nsrsbh);
+        UserDzsbListBO userDzsb = userBindService.updateDzsb(userId, nsrsbh);
+        LOGGER.info("更新电子申报绑定关系返回：{}");
+        return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
 }

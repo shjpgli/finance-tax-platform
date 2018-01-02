@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
@@ -160,4 +161,20 @@ public interface UserBindService {
      * @return HngsNsrLoginResponse
      */
     HngsNsrLoginResponse nsrLoginDzsj(UserHngsInsertBO login, HttpServletRequest request);
+
+    /**
+     * 更新电子申报绑定关系
+     * @param userId 用户id
+     * @param nsrsbh 纳税人识别号
+     * @return UserDzsbListBO
+     */
+    UserDzsbListBO updateDzsb(String userId, String nsrsbh);
+
+    /**
+     * 更新电子申报绑定关系
+     * @param userId 用户id
+     * @param ty21Object 电子申报返回税号信息
+     * @return UserDzsb
+     */
+    UserDzsb updateDzsb(String userId, TY21Xml2Object ty21Object);
 }

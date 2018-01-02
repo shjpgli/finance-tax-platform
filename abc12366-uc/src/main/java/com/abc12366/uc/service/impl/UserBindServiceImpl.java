@@ -41,7 +41,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.security.interfaces.RSAPublicKey;
 import java.sql.Timestamp;
 import java.util.*;
@@ -142,6 +141,7 @@ public class UserBindServiceImpl implements UserBindService {
         }
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());
+        userDzsb.setDjrq(ty21Object.getDJRQ());
         int result = userBindMapper.dzsbBind(userDzsb);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());
@@ -467,36 +467,7 @@ public class UserBindServiceImpl implements UserBindService {
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
         LOGGER.info("{}", ty21Object);
         //更新用户绑定信息
-        UserDzsb userDzsb = new UserDzsb();
-
-        userDzsb.setId(Utils.uuid());
-        Date date = new Date();
-        userDzsb.setCreateTime(date);
-        userDzsb.setLastUpdate(date);
-        userDzsb.setStatus(true);
-        userDzsb.setUserId(userId);
-        userDzsb.setDjxh(ty21Object.getDJXH());
-        userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
-        userDzsb.setNsrmc(ty21Object.getNSRMC());
-        userDzsb.setShxydm(ty21Object.getSHXYDM());
-        userDzsb.setLastLoginTime(new Date());
-        userDzsb.setNsrlx(ty21Object.getNSRLX());
-        userDzsb.setSfgtjzh(ty21Object.getSFGTJZH());
-        if (ty21Object.getSHXYDM() == null || "".equals(ty21Object.getSHXYDM().trim())) {
-            userDzsb.setShxydm(ty21Object.getY_NSRSBH());
-        }
-        userDzsb.setSwjgMc(ty21Object.getSWJGMC());
-        userDzsb.setSwjgDm(ty21Object.getSWJGDM());
-        if (ty21Object.getRJDQR() != null && !"".equals(ty21Object.getRJDQR().trim())) {
-            userDzsb.setExpireTime(DateUtils.strToDate(ty21Object.getRJDQR()));
-        }
-        if (ty21Object.getYQDQR() != null && !"".equals(ty21Object.getYQDQR().trim())) {
-            userDzsb.setExpandExpireTime(DateUtils.strToDate(ty21Object.getYQDQR()));
-        }
-        userDzsb.setFrmc(ty21Object.getFRXM());
-        userDzsb.setFrzjh(ty21Object.getFRZJH());
-        userBindMapper.update(userDzsb);
-
+        updateDzsb(userId,ty21Object);
         return ty21Object;
     }
 
@@ -632,6 +603,9 @@ public class UserBindServiceImpl implements UserBindService {
                 if ("SFGTJZH".equals(mx.getCODE())) {
                     object.setSFGTJZH(mx.getVALUE());
                 }
+                if ("DJRQ".equals(mx.getCODE())) {
+                    object.setDJRQ(mx.getVALUE());
+                }
             }
         } else {
             throw new DzsbServiceException("9999", jbxxcx.getCWYY());
@@ -663,11 +637,50 @@ public class UserBindServiceImpl implements UserBindService {
         if ("1".equals(cxjg)) {
             com.abc12366.uc.jrxt.model.TY11Response.MXXX[] mxxxes = jbxxcx.getMXXXS().getMXXX();
             for (com.abc12366.uc.jrxt.model.TY11Response.MXXX mx : mxxxes) {
+                if ("LOGINTOKEN".equals(mx.getCODE())) {
+                    object.setLOGINTOKEN(mx.getVALUE());
+                }
+                if ("DLSJ".equals(mx.getCODE())) {
+                    object.setDLSJ(mx.getVALUE());
+                }
+                if ("Y_NSRSBH".equals(mx.getCODE())) {
+                    object.setY_NSRSBH(mx.getVALUE());
+                }
+                if ("NSRMC".equals(mx.getCODE())) {
+                    object.setNSRMC(mx.getVALUE());
+                }
+                if ("SHXYDM".equals(mx.getCODE())) {
+                    object.setSHXYDM(mx.getVALUE());
+                }
+                if ("SWJGDM".equals(mx.getCODE())) {
+                    object.setSWJGDM(mx.getVALUE());
+                }
+                if ("SWJGMC".equals(mx.getCODE())) {
+                    object.setSWJGMC(mx.getVALUE());
+                }
+                if ("DJXH".equals(mx.getCODE())) {
+                    object.setDJXH(mx.getVALUE());
+                }
                 if ("FRXM".equals(mx.getCODE())) {
                     object.setFRXM(mx.getVALUE());
                 }
                 if ("FRZJH".equals(mx.getCODE())) {
                     object.setFRZJH(mx.getVALUE());
+                }
+                if ("RJDQR".equals(mx.getCODE())) {
+                    object.setRJDQR(mx.getVALUE());
+                }
+                if ("YQDQR".equals(mx.getCODE())) {
+                    object.setYQDQR(mx.getVALUE());
+                }
+                if ("NSRLX".equals(mx.getCODE())) {
+                    object.setNSRLX(mx.getVALUE());
+                }
+                if ("SFGTJZH".equals(mx.getCODE())) {
+                    object.setSFGTJZH(mx.getVALUE());
+                }
+                if ("DJRQ".equals(mx.getCODE())) {
+                    object.setDJRQ(mx.getVALUE());
                 }
             }
         } else {
@@ -741,5 +754,61 @@ public class UserBindServiceImpl implements UserBindService {
             userBindMapper.updateHngs(userHngs);
         }
         return loginResponse;
+    }
+
+    @Override
+    public UserDzsbListBO updateDzsb(String userId, String nsrsbh) {
+        Map<String, String> mapVali = new HashMap<>(16);
+        mapVali.put("serviceid", "TY11");
+        mapVali.put("NSRSBH", nsrsbh);
+        Map respMapVali = client.process(mapVali);
+        LOGGER.info("{}", respMapVali);
+        //调用tdps查询这个税号的基本信息
+        TY21Xml2Object ty21Object = new TY21Xml2Object();
+        try {
+            ty21Object = analyzeXmlTY11(respMapVali, nsrsbh);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+
+        //更新用户绑定信息
+        UserDzsb userDzsb = updateDzsb(userId,ty21Object);
+        UserDzsbListBO userDzsbBO = new UserDzsbListBO();
+        BeanUtils.copyProperties(userDzsb,userDzsbBO);
+        return userDzsbBO;
+    }
+
+    @Override
+    public UserDzsb updateDzsb(String userId, TY21Xml2Object ty21Object) {
+        if (StringUtils.isEmpty(userId)||ty21Object==null||StringUtils.isEmpty(ty21Object.getY_NSRSBH())||StringUtils.isEmpty(ty21Object.getDJXH())){
+            return null;
+        }
+        //更新用户绑定信息
+        UserDzsb userDzsb = new UserDzsb();
+        Date date = new Date();
+        userDzsb.setLastUpdate(date);
+        userDzsb.setUserId(userId);
+        userDzsb.setDjxh(ty21Object.getDJXH());
+        userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
+        userDzsb.setNsrmc(ty21Object.getNSRMC());
+        userDzsb.setShxydm(ty21Object.getSHXYDM());
+        userDzsb.setNsrlx(ty21Object.getNSRLX());
+        userDzsb.setSfgtjzh(ty21Object.getSFGTJZH());
+        if (ty21Object.getSHXYDM() == null || "".equals(ty21Object.getSHXYDM().trim())) {
+            userDzsb.setShxydm(ty21Object.getY_NSRSBH());
+        }
+        userDzsb.setSwjgMc(ty21Object.getSWJGMC());
+        userDzsb.setSwjgDm(ty21Object.getSWJGDM());
+        if (ty21Object.getRJDQR() != null && !"".equals(ty21Object.getRJDQR().trim())) {
+            userDzsb.setExpireTime(DateUtils.strToDate(ty21Object.getRJDQR()));
+        }
+        if (ty21Object.getYQDQR() != null && !"".equals(ty21Object.getYQDQR().trim())) {
+            userDzsb.setExpandExpireTime(DateUtils.strToDate(ty21Object.getYQDQR()));
+        }
+        userDzsb.setFrmc(ty21Object.getFRXM());
+        userDzsb.setFrzjh(ty21Object.getFRZJH());
+        userDzsb.setDjrq(ty21Object.getDJRQ());
+        userBindMapper.update(userDzsb);
+        return userDzsb;
     }
 }

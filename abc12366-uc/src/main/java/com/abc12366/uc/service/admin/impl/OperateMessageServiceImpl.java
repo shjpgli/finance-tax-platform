@@ -90,23 +90,15 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.strToDate(createTime, "yyyy-MM-dd"));
             calendar.add(Calendar.DAY_OF_YEAR, 1);
-            System.out.println(start);
-            System.out.println(calendar.getTime());
         }
-
-        List<OperateMessageBO> tempList = operateMessageRoMapper.selectList(status, name, start, calendar == null ? null : calendar.getTime());
-        if (tempList == null || tempList.size() < 1) {
-            return null;
+        Date now = null;
+        if ("1".equals(status.trim()) || "2".equals(status.trim())) {
+            now = new Date();
         }
-        for (int i = 0; i < tempList.size(); i++) {
-            if (tempList.get(i).getStatus().equals("1")) {
-                Date now = new Date();
-                if (now.after(tempList.get(i).getEndTime())) {
-                    tempList.get(i).setStatus("2");
-                }
-            }
+        if (!StringUtils.isEmpty(status) && status.trim().equals("2")) {
+            return operateMessageRoMapper.selectFinishedList(name, start, calendar == null ? null : calendar.getTime(), now);
         }
-        return tempList;
+        return operateMessageRoMapper.selectList(status, name, start, calendar == null ? null : calendar.getTime(), now);
     }
 
     @Override
@@ -257,9 +249,9 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                 }
                 //地域排除
             } else if (o.getAreaOper().trim().equals("ne")) {
-                if (userExtend == null ||( ((StringUtils.isEmpty(userExtend.getProvince()))||(!o.getAreaIds().contains(userExtend.getProvince()))) &&
-                        ((StringUtils.isEmpty(userExtend.getCity()))||(!o.getAreaIds().contains(userExtend.getCity())))&&
-                        ((StringUtils.isEmpty(userExtend.getArea()))||(!o.getAreaIds().contains(userExtend.getArea()))) ) ) {
+                if (userExtend == null || (((StringUtils.isEmpty(userExtend.getProvince())) || (!o.getAreaIds().contains(userExtend.getProvince()))) &&
+                        ((StringUtils.isEmpty(userExtend.getCity())) || (!o.getAreaIds().contains(userExtend.getCity()))) &&
+                        ((StringUtils.isEmpty(userExtend.getArea())) || (!o.getAreaIds().contains(userExtend.getArea()))))) {
                     sendArea = true;
                 }
             }
@@ -328,7 +320,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     }
 
     @Override
-    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName,String messageId) {
-        return operateMessageRoMapper.operateMessageLog(userId,nickName,messageId);
+    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName, String messageId) {
+        return operateMessageRoMapper.operateMessageLog(userId, nickName, messageId);
     }
 }
