@@ -63,6 +63,9 @@ public class UserBindController {
         LOGGER.info("{}:{}", userDzsbInsertBO, request);
         UserDzsbBO userDzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
         LOGGER.info("{}", userDzsb);
+        
+        String userId = Utils.getUserId(request);
+        redisTemplate.delete(userId+"_DzsbList");
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
 
@@ -73,9 +76,14 @@ public class UserBindController {
      * @return 是否解绑成功
      */
     @PutMapping(path = "/unbind/dzsb/{id}")
-    public ResponseEntity userDzsbUnbind(@PathVariable String id) {
+    public ResponseEntity userDzsbUnbind(@PathVariable String id,HttpServletRequest
+            request) {
         LOGGER.info("{}", id);
         userBindService.dzsbUnbind(id);
+        
+        String userId = Utils.getUserId(request);
+        redisTemplate.delete(userId+"_DzsbList");
+        
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -257,6 +265,10 @@ public class UserBindController {
             request) throws Exception {
         LOGGER.info("{}:{}", userHngsInsertBO, request);
         UserHngsBO userHngs = userBindService.hngsBind(userHngsInsertBO, request);
+        
+        String userId = Utils.getUserId(request);
+        redisTemplate.delete(userId+"_HngsList");
+        
         return ResponseEntity.ok(Utils.kv("data", userHngs));
     }
 
@@ -267,9 +279,14 @@ public class UserBindController {
      * @return ResponseEntity
      */
     @PutMapping(path = "/unbind/hngs/{id}")
-    public ResponseEntity userHngsUnbind(@PathVariable String id) {
+    public ResponseEntity userHngsUnbind(@PathVariable String id,HttpServletRequest
+            request) {
         LOGGER.info("{}", id);
         userBindService.hngsUnbind(id);
+        
+        String userId = Utils.getUserId(request);
+        redisTemplate.delete(userId+"_HngsList");
+        
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -285,6 +302,10 @@ public class UserBindController {
             request) {
         LOGGER.info("{}:{}", userHndsInsertBO, request);
         UserHndsBO userHnds = userBindService.hndsBind(userHndsInsertBO, request);
+        
+        String userId = Utils.getUserId(request);
+        redisTemplate.delete(userId+"_HndsList");
+        
         return ResponseEntity.ok(Utils.kv("data", userHnds));
     }
 
@@ -295,9 +316,14 @@ public class UserBindController {
      * @return ResponseEntity
      */
     @PutMapping(path = "/unbind/hnds/{id}")
-    public ResponseEntity userHndsUnbind(@PathVariable String id) {
+    public ResponseEntity userHndsUnbind(@PathVariable String id,HttpServletRequest
+            request) {
         LOGGER.info("{}", id);
         userBindService.hndsUnbind(id);
+        
+        String userId = Utils.getUserId(request);
+        redisTemplate.delete(userId+"_HngsList");
+        
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -393,6 +419,9 @@ public class UserBindController {
         LOGGER.info("更新电子申报绑定关系：{},{}", userId, nsrsbh);
         UserDzsbListBO userDzsb = userBindService.updateDzsb(userId, nsrsbh);
         LOGGER.info("更新电子申报绑定关系返回：{}");
+
+        redisTemplate.delete(userId+"_DzsbList");
+        
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
 
