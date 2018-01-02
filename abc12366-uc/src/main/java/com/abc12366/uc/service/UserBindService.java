@@ -177,4 +177,11 @@ public interface UserBindService {
      * @return UserDzsb
      */
     UserDzsb updateDzsb(String userId, TY21Xml2Object ty21Object);
+
+    /**
+     * 查询电子申报绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    UserDzsb dzsbDetail(String id);
 }
