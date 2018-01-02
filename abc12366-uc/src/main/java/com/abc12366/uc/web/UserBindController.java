@@ -64,8 +64,8 @@ public class UserBindController {
         UserDzsbBO userDzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
         LOGGER.info("{}", userDzsb);
         
-        String userId = Utils.getUserId(request);
-        redisTemplate.delete(userId+"_DzsbList");
+        //String userId = Utils.getUserId(request);
+        //redisTemplate.delete(userId+"_DzsbList");
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
 
@@ -81,8 +81,8 @@ public class UserBindController {
         LOGGER.info("{}", id);
         userBindService.dzsbUnbind(id);
         
-        String userId = Utils.getUserId(request);
-        redisTemplate.delete(userId+"_DzsbList");
+        //String userId = Utils.getUserId(request);
+        //redisTemplate.delete(userId+"_DzsbList");
         
         return ResponseEntity.ok(Utils.kv());
     }
@@ -266,8 +266,8 @@ public class UserBindController {
         LOGGER.info("{}:{}", userHngsInsertBO, request);
         UserHngsBO userHngs = userBindService.hngsBind(userHngsInsertBO, request);
         
-        String userId = Utils.getUserId(request);
-        redisTemplate.delete(userId+"_HngsList");
+        //String userId = Utils.getUserId(request);
+        //redisTemplate.delete(userId+"_HngsList");
         
         return ResponseEntity.ok(Utils.kv("data", userHngs));
     }
@@ -284,8 +284,8 @@ public class UserBindController {
         LOGGER.info("{}", id);
         userBindService.hngsUnbind(id);
         
-        String userId = Utils.getUserId(request);
-        redisTemplate.delete(userId+"_HngsList");
+        //String userId = Utils.getUserId(request);
+        //redisTemplate.delete(userId+"_HngsList");
         
         return ResponseEntity.ok(Utils.kv());
     }
@@ -303,8 +303,8 @@ public class UserBindController {
         LOGGER.info("{}:{}", userHndsInsertBO, request);
         UserHndsBO userHnds = userBindService.hndsBind(userHndsInsertBO, request);
         
-        String userId = Utils.getUserId(request);
-        redisTemplate.delete(userId+"_HndsList");
+        //String userId = Utils.getUserId(request);
+        //redisTemplate.delete(userId+"_HndsList");
         
         return ResponseEntity.ok(Utils.kv("data", userHnds));
     }
@@ -321,8 +321,8 @@ public class UserBindController {
         LOGGER.info("{}", id);
         userBindService.hndsUnbind(id);
         
-        String userId = Utils.getUserId(request);
-        redisTemplate.delete(userId+"_HndsList");
+        //String userId = Utils.getUserId(request);
+        //redisTemplate.delete(userId+"_HndsList");
         
         return ResponseEntity.ok(Utils.kv());
     }
@@ -420,7 +420,7 @@ public class UserBindController {
         UserDzsbListBO userDzsb = userBindService.updateDzsb(userId, nsrsbh);
         LOGGER.info("更新电子申报绑定关系返回：{}");
 
-        redisTemplate.delete(userId+"_DzsbList");
+        //redisTemplate.delete(userId+"_DzsbList");
         
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
