@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 访问记录控制类
@@ -84,8 +81,10 @@ public class AccessLogController {
                 dataMap.put("startTime", startTime1.getTime() / 1000);
             }
             if (endTime != null && !"".equals(endTime)) {
-                Date startTime2 = sdf.parse(endTime);
-                dataMap.put("endTime", startTime2.getTime() / 1000);
+                Calendar calendar = new GregorianCalendar();
+                calendar.setTime(sdf.parse(endTime));
+                calendar.add(Calendar.DATE, 1);
+                dataMap.put("endTime", calendar.getTime().getTime() / 1000);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);

@@ -3,6 +3,8 @@ package com.abc12366.uc.service.admin;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
+import com.abc12366.uc.model.admin.bo.OperateMessageUpdateBO;
+import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public interface OperateMessageService {
 
     List<OperateMessageBO> selectList(String status,String name,String createTime,int page, int size);
 
-    OperateMessageBO update(OperateMessageBO operateMessageBO);
+    OperateMessageBO update(OperateMessageUpdateBO operateMessageBO);
 
     void send(String userId);
 
@@ -31,4 +33,6 @@ public interface OperateMessageService {
     void delete(String id);
 
     OperateMessageBO reuse(String id);
+
+    List<YyxxLogListBO> operateMessageLog(String userId, String nickName,String messageId);
 }

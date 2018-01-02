@@ -219,6 +219,7 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.warn("登录失败，参数:{}:{}", bo, channel);
             throw new ServiceException(4018);
         }
+        
         // 无效用户不允许登录
         if (!user.getStatus()) {
             throw new ServiceException(4038);
@@ -258,7 +259,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4102);
         }
 
-        Token queryToken = tokenRoMapper.selectOne(user.getId(), Utils.getAppId());
+        Token queryToken = tokenMapper.selectOne(user.getId(), Utils.getAppId());
         // 假如uc_token表有记录（根据userId和appId），则更新，没有则新增
         String userToken = Utils.uuid();
         int result02;
@@ -501,6 +502,10 @@ public class AuthServiceImpl implements AuthService {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
         String userId = Utils.getUserId();
+        
+        //登录删除用户缓存，防止缓存不及时刷新
+        redisTemplate.delete(userId+"_Points");
+        redisTemplate.delete(userId+"_MyExperience");
 
         //如果用户当天定时任务没有完成，就在登录的时候生成
         todoTaskService.generateAllTodoTaskList(userId);

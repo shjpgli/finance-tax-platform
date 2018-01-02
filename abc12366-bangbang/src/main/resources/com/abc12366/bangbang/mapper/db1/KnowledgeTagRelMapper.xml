@@ -26,6 +26,14 @@
         WHERE id = #{id}
     </select>
 
+    <!-- 查询 -->
+    <select id="selectByKnowledgeIdAndTagId" resultType="com.abc12366.bangbang.model.KnowledgeTagRel">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM bb_knowledge_tag_rel
+        WHERE knowledgeId = #{knowledgeId} AND tagId = #{tagId}
+    </select>
+
     <!--删除：根据主键ID删除-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         DELETE FROM bb_knowledge_tag_rel

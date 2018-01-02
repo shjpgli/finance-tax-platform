@@ -35,6 +35,9 @@
             <if test="isAnswerOnce != null">
                 isAnswerOnce,
             </if>
+            <if test="isWxOnce != null">
+                isWxOnce,
+            </if>
             <if test="isUserRange != null">
                 isUserRange,
             </if>
@@ -68,6 +71,9 @@
             <if test="isAnswerOnce!=null">
                 #{isAnswerOnce},
             </if>
+            <if test="isWxOnce != null">
+                #{isWxOnce},
+            </if>
             <if test="isUserRange!=null">
                 #{isUserRange},
             </if>
@@ -99,6 +105,9 @@
             </if>
             <if test="isAnswerOnce != null">
                 isAnswerOnce = #{isAnswerOnce},
+            </if>
+            <if test="isWxOnce != null">
+                isWxOnce = #{isWxOnce},
             </if>
             <if test="isUserRange != null">
                 isUserRange = #{isUserRange},

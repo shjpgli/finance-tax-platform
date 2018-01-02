@@ -4,7 +4,8 @@
 <mapper namespace="com.abc12366.uc.mapper.db2.UserBindRoMapper">
 
     <select id="userDzsbSelectById" resultType="com.abc12366.uc.model.UserDzsb">
-        select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
+        select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate,
+        expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq
         from uc_user_dzsb
         where id=#{id}
     </select>

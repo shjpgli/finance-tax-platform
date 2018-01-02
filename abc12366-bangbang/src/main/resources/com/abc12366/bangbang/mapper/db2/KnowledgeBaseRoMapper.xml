@@ -228,5 +228,7 @@
 		</if>
 	</select>
 
-
+	<select id="selectBySubject" resultType="com.abc12366.bangbang.model.KnowledgeBase">
+		SELECT id, subject FROM bb_knowledge_base WHERE UPPER(subject) LIKE CONCAT('%',#{subject},'%')
+	</select>
 </mapper>

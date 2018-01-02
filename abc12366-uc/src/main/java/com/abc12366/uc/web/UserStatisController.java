@@ -570,7 +570,7 @@ public class UserStatisController {
     }
 
     /**
-     * 企业绑定情况统计企业详情接口
+     * 企业登录统计企业详情接口
      * @param type 类型,all、dzsb、hngs、hnds
      * @param timeInterval 时间区间
      * @param page 页码

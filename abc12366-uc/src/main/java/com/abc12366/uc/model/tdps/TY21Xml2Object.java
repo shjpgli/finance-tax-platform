@@ -20,6 +20,7 @@ public class TY21Xml2Object {
     private String YQDQR;
     private String NSRLX;
     private String SFGTJZH;
+    private String DJRQ;
 
     public TY21Xml2Object() {
     }
@@ -136,6 +137,14 @@ public class TY21Xml2Object {
         this.SFGTJZH = SFGTJZH;
     }
 
+    public String getDJRQ() {
+        return DJRQ;
+    }
+
+    public void setDJRQ(String DJRQ) {
+        this.DJRQ = DJRQ;
+    }
+
     @Override
     public String toString() {
         return "TY21Xml2Object{" +
@@ -153,6 +162,7 @@ public class TY21Xml2Object {
                 ", YQDQR='" + YQDQR + '\'' +
                 ", NSRLX='" + NSRLX + '\'' +
                 ", SFGTJZH='" + SFGTJZH + '\'' +
+                ", DJRQ='" + DJRQ + '\'' +
                 '}';
     }
 }

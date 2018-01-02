@@ -358,8 +358,8 @@ public class CurriculumController {
     @GetMapping(path = "/selectListByKnowledgeId")
     public ResponseEntity selectListByKnowledgeId(@RequestParam(value = "knowledgeId") String knowledgeId,
                                                   @RequestParam(value = "num", defaultValue = "3") int num) {
-        List<CurriculumListBo> data = curriculumService.selectByKnowledgeId(knowledgeId, num);
-        return ResponseEntity.ok(Utils.kv("data", data));
+        List<CurriculumListBo> dataList = curriculumService.selectByKnowledgeId(knowledgeId, num);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList));
     }
 
 }

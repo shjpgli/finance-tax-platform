@@ -112,7 +112,8 @@
     </select>
 
     <select id="selectDzsb" resultType="com.abc12366.uc.model.bo.UserDzsbBO" parameterType="java.lang.String">
-        select id,userId,djxh,nsrsbh,nsrmc,shxydm,swjgMc,swjgDm,status,createTime,lastUpdate
+        select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate,
+        expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq
         from uc_user_dzsb
         where id=#{id}
     </select>

@@ -69,6 +69,30 @@ public class UserMsgController {
     }
 
     /**
+     * 获取当前业务消息列表（缓存）
+     *
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/unread")
+    public ResponseEntity selectListForUnread(HttpServletRequest request) {
+
+        // request USER_ID为空
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
+        String userId = (String) request.getAttribute(Constant.USER_ID);
+        if (!StringUtils.isEmpty(userId)) {
+            UserMessage um = new UserMessage.Builder().toUserId(userId).status("1").build();
+            List<UserMessage> dataList = userMsgService.selectUnreadList(um);
+
+            PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
+            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
+                    "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
+        }
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
+    /**
      * 查询用户消息未读数量
      *
      * @param type 消息类型，默认查询所有消息

@@ -2,7 +2,6 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,13 +115,7 @@ public class UserController {
         map.put("nickname", nickname);
         map.put("status", status);
         map.put("tagId", tagId);
-        if (StringUtils.isEmpty(startDate)) {
-            startDate = DateUtils.dateToString(DateUtils.getAddDate(30));
-        }
         map.put("startDate", startDate);
-        if (StringUtils.isEmpty(endDate)) {
-            endDate = DateUtils.dateToString(new Date());
-        }
         map.put("endDate", endDate);
         LOGGER.info("{}:{}:{}", map, page, size);
 
@@ -133,26 +125,26 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
-    //根据用户ID查询用户
+    /**
+     * 根据用户ID查询用户
+     */
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> selectOne(@PathVariable String id) {
         LOGGER.info("{}", id);
         Map map = userService.selectOne(id);
         LOGGER.info("{}", map);
-        return (map == null) ?
-                ResponseEntity.ok(Utils.kv("user", null, "user_extend", null)) :
-                ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
+        return ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
 
-    //根据用户ID查询用户(后台管理系统使用，敏感信息不做模糊化处理)
+    /**
+     * 根据用户ID查询用户(后台管理系统使用，敏感信息不做模糊化处理)
+     */
     @GetMapping(path = "/admin/{id}")
     public ResponseEntity<?> selectOneForAdmin(@PathVariable String id) {
         LOGGER.info("{}", id);
         Map map = userService.selectOneForAdmin(id);
         LOGGER.info("{}", map);
-        return (map == null) ?
-                ResponseEntity.ok(Utils.kv("user", null, "user_extend", null)) :
-                ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
+        return ResponseEntity.ok(Utils.kv("user", map.get("user"), "user_extend", map.get("user_extend")));
     }
 
     @GetMapping(path = "/wx/{id}")

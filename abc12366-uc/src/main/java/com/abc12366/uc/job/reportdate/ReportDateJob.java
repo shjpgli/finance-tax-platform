@@ -83,7 +83,7 @@ public class ReportDateJob implements Job {
         accessToken = appBO.getAccessToken();
         LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
-        LOGGER.info("电子税局获取办税期限..............");
+        LOGGER.info("开始电子税局获取办税期限..............");
         HttpHeaders headers2 = new HttpHeaders();
     	headers2.add("Access-Token", accessToken);
     	headers2.add("Version", "1");
@@ -94,6 +94,8 @@ public class ReportDateJob implements Job {
 				httpEntity, String.class);
 
         JSONObject json = JSONObject.parseObject(String.valueOf(responseEntity2.getBody()));
+        LOGGER.info("结束电子税局获取办税期限:"+json.toJSONString());
+        
         if ("000".equals(json.getString("code"))) {
         	JSONArray array = json.getJSONArray("dataList");
             String dateM = new SimpleDateFormat("yyyy-MM").format(new Date());

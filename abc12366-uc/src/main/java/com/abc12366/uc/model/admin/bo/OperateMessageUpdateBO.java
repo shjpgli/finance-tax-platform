@@ -12,34 +12,26 @@ import java.util.Date;
  * Date: 2017-12-18
  * Time: 15:07
  */
-public class OperateMessageBO {
+public class OperateMessageUpdateBO {
+    @NotEmpty(message = "运营消息ID不能为空")
     private String id;
-    @NotEmpty(message = "任务名称不能为空")
     @Size(max = 150 ,message = "运营消息名称长度不能超过150")
     private String taskname;
-    @NotNull(message = "是否发送系统消息不能为空")
     private Boolean web;
-    @NotNull(message = "是否发送微信不能为空")
     private Boolean wechat;
-    @NotNull(message = "是否发送短信不能为空")
     private Boolean message;
-    @NotEmpty(message = "消息内容不能为空")
     @Size(max = 800 ,message = "运营消息内容长度不能超过800")
     private String content;
     @Size(max = 100 ,message = "消息链接长度不能超过100")
     private String url;
-    @NotEmpty(message = "目标人群不能为空")
     @Size(max = 1 ,message = "目标人群长度不能超过1")
     private String target;
-    @NotEmpty(message = "推送时间不能为空")
     @Size(max = 1 ,message = "推送时间长度不能超过1")
     private String sendTime;
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
-    @NotNull(message = "结束时间不能为空")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
-    @NotEmpty(message = "状态不能为空")
     @Size(max = 1 ,message = "状态长度不能超过1")
     private String status;
     private Date createTime;
@@ -59,7 +51,6 @@ public class OperateMessageBO {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date regEndTime;
     private String userIds;
-    @NotEmpty(message = "频率不能为空")
     @Size(max = 1 ,message = "频率长度不能超过1")
     private String rate;
 

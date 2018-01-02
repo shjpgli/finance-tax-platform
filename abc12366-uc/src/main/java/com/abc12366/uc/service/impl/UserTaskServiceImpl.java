@@ -38,10 +38,10 @@ public class UserTaskServiceImpl implements UserTaskService {
 
     @Autowired
     private UserTaskMapper userTaskMapper;
-    
 
-	@Autowired
-	private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public UserTaskBO insert(UserTaskInsertBO userTaskInsertBO, String userId) {
@@ -61,10 +61,10 @@ public class UserTaskServiceImpl implements UserTaskService {
             LOGGER.warn("新增失败，参数为：", userTask);
             throw new ServiceException(4101);
         }
-        
+
         // 删除redis用户信息
-     	redisTemplate.delete(userId + "_Tasks");
-        
+        redisTemplate.delete(userId + "_Tasks");
+
         UserTaskBO userTaskBO = new UserTaskBO();
         BeanUtils.copyProperties(userTask, userTaskBO);
         return userTaskBO;
@@ -87,10 +87,10 @@ public class UserTaskServiceImpl implements UserTaskService {
             LOGGER.warn("修改失败，参数:", userTask);
             throw new ServiceException(4102);
         }
-        
+
         // 删除redis用户信息
-     	redisTemplate.delete(userId + "_Tasks");
-        
+        redisTemplate.delete(userId + "_Tasks");
+
         UserTaskBO userTaskBO = new UserTaskBO();
         BeanUtils.copyProperties(userTask, userTaskBO);
         return userTaskBO;
@@ -108,9 +108,9 @@ public class UserTaskServiceImpl implements UserTaskService {
             LOGGER.warn("删除失败，参数:", map);
             throw new ServiceException(4103);
         }
-        
+
         // 删除redis用户信息
-     	redisTemplate.delete(map.get("userId") + "_Tasks");
+        redisTemplate.delete(map.get("userId") + "_Tasks");
         return true;
     }
 
@@ -139,11 +139,12 @@ public class UserTaskServiceImpl implements UserTaskService {
 
     @Override
     public MyTaskSurvey selectMyTaskSurvey(String userId) {
-    	MyTaskSurvey myTaskSurvey =null;
-    	if(redisTemplate.hasKey(userId + "_Tasks")){
-    		myTaskSurvey=JSONObject.parseObject(redisTemplate.opsForValue().get(userId + "_Tasks"),MyTaskSurvey.class);
-    	}else{
-    		myTaskSurvey = userTaskRoMapper.selectMyTaskSurvey(userId);
+        MyTaskSurvey myTaskSurvey = null;
+        if (redisTemplate.hasKey(userId + "_Tasks")) {
+            myTaskSurvey = JSONObject.parseObject(redisTemplate.opsForValue().get(userId + "_Tasks"), MyTaskSurvey
+                    .class);
+        } else {
+            myTaskSurvey = userTaskRoMapper.selectMyTaskSurvey(userId);
 
             //没有任何此用户的任务数据，则返回空
             if (myTaskSurvey == null) {
@@ -162,9 +163,10 @@ public class UserTaskServiceImpl implements UserTaskService {
                     myTaskSurvey.setTaskRange(i + "");
                 }
             }
-            redisTemplate.opsForValue().set(userId + "_Tasks",JSONObject.toJSONString(myTaskSurvey), RedisConstant.USER_INFO_TIME_ODFAY,
-					TimeUnit.DAYS);
-    	}
+            redisTemplate.opsForValue().set(userId + "_Tasks", JSONObject.toJSONString(myTaskSurvey), RedisConstant
+                            .USER_INFO_TIME_ODFAY,
+                    TimeUnit.DAYS);
+        }
         return myTaskSurvey;
     }
 }

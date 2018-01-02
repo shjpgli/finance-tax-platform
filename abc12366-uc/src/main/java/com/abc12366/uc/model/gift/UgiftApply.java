@@ -1,11 +1,12 @@
 package com.abc12366.uc.model.gift;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
- * 
+ *
  * 会员礼包申请表
- * 
+ *
  **/
 @SuppressWarnings("serial")
 public class UgiftApply implements Serializable {
@@ -42,9 +43,6 @@ public class UgiftApply implements Serializable {
 
 	/**备注**/
 	private String remark;
-
-	private int giftNum;
-
 
 	public void setApplyId(String applyId){
 		this.applyId = applyId;
@@ -132,13 +130,5 @@ public class UgiftApply implements Serializable {
 
 	public String getRemark(){
 		return this.remark;
-	}
-
-	public int getGiftNum() {
-		return giftNum;
-	}
-
-	public void setGiftNum(int giftNum) {
-		this.giftNum = giftNum;
 	}
 }

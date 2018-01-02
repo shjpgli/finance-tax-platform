@@ -15,7 +15,9 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.admin.OperateMessage;
 import com.abc12366.uc.model.admin.bo.OperateMessageBO;
+import com.abc12366.uc.model.admin.bo.OperateMessageUpdateBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogBO;
+import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.admin.OperateMessageService;
@@ -88,33 +90,27 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.strToDate(createTime, "yyyy-MM-dd"));
             calendar.add(Calendar.DAY_OF_YEAR, 1);
-            System.out.println(start);
-            System.out.println(calendar.getTime());
         }
-
-        List<OperateMessageBO> tempList = operateMessageRoMapper.selectList(status, name, start, calendar == null ? null : calendar.getTime());
-        if (tempList == null || tempList.size() < 1) {
-            return null;
+        Date now = null;
+        if ("1".equals(status.trim()) || "2".equals(status.trim())) {
+            now = new Date();
         }
-        for (int i = 0; i < tempList.size(); i++) {
-            if (tempList.get(i).getStatus().equals("1")) {
-                Date now = new Date();
-                if (now.after(tempList.get(i).getEndTime())) {
-                    tempList.get(i).setStatus("2");
-                }
-            }
+        if (!StringUtils.isEmpty(status) && status.trim().equals("2")) {
+            return operateMessageRoMapper.selectFinishedList(name, start, calendar == null ? null : calendar.getTime(), now);
         }
-        return tempList;
+        return operateMessageRoMapper.selectList(status, name, start, calendar == null ? null : calendar.getTime(), now);
     }
 
     @Override
-    public OperateMessageBO update(OperateMessageBO operateMessageBO) {
+    public OperateMessageBO update(OperateMessageUpdateBO operateMessageBO) {
         if (operateMessageBO == null || StringUtils.isEmpty(operateMessageBO.getId())) {
             return null;
         }
-        operateMessageBO.setLastUpdate(new Date());
-        operateMessageMapper.update(operateMessageBO);
-        return operateMessageBO;
+        OperateMessageBO messageBO = new OperateMessageBO();
+        BeanUtils.copyProperties(operateMessageBO,messageBO);
+        messageBO.setLastUpdate(new Date());
+        operateMessageMapper.update(messageBO);
+        return selectOne(operateMessageBO.getId());
     }
 
     @Override
@@ -253,10 +249,9 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                 }
                 //地域排除
             } else if (o.getAreaOper().trim().equals("ne")) {
-                if (userExtend == null ||
-                        ((StringUtils.isEmpty(userExtend.getProvince()) || (!StringUtils.isEmpty(userExtend.getProvince()))) && !o.getAreaIds().contains(userExtend.getProvince()))
-                                && ((StringUtils.isEmpty(userExtend.getCity()) || (!StringUtils.isEmpty(userExtend.getCity()))) && !o.getAreaIds().contains(userExtend.getProvince()))
-                                && ((StringUtils.isEmpty(userExtend.getArea()) || (!StringUtils.isEmpty(userExtend.getArea()))) && !o.getAreaIds().contains(userExtend.getProvince()))) {
+                if (userExtend == null || (((StringUtils.isEmpty(userExtend.getProvince())) || (!o.getAreaIds().contains(userExtend.getProvince()))) &&
+                        ((StringUtils.isEmpty(userExtend.getCity())) || (!o.getAreaIds().contains(userExtend.getCity()))) &&
+                        ((StringUtils.isEmpty(userExtend.getArea())) || (!o.getAreaIds().contains(userExtend.getArea()))))) {
                     sendArea = true;
                 }
             }
@@ -317,9 +312,15 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         Date now = new Date();
         o.setCreateTime(now);
         o.setLastUpdate(now);
+        o.setStatus("0");
         OperateMessage operateMessage = new OperateMessage();
         BeanUtils.copyProperties(o, operateMessage);
         operateMessageMapper.insert(operateMessage);
         return o;
+    }
+
+    @Override
+    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName, String messageId) {
+        return operateMessageRoMapper.operateMessageLog(userId, nickName, messageId);
     }
 }

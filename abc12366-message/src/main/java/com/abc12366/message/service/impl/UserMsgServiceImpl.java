@@ -1,6 +1,7 @@
 package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
@@ -10,17 +11,21 @@ import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户消息服务
@@ -40,6 +45,14 @@ public class UserMsgServiceImpl implements UserMsgService {
     @Autowired
     private UserMsgRoMapper userMsgRoMapper;
 
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
+    /**
+     * 业务消息redis未读消息key
+     */
+    private final String USER_MSG_KEY = "_UserMsgUnread";
+
     @Override
     public List<UserMessage> selectList(UserMessage data, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -55,6 +68,11 @@ public class UserMsgServiceImpl implements UserMsgService {
             data.setCreateTime(now);
             data.setLastUpdate(now);
             userMsgMapper.insert(data);
+
+            String key = data.getToUserId() + USER_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return data;
     }
@@ -73,6 +91,11 @@ public class UserMsgServiceImpl implements UserMsgService {
             um.setStatus(data.getStatus());
             um.setLastUpdate(new Timestamp(System.currentTimeMillis()));
             userMsgMapper.update(um);
+
+            String key = um.getToUserId() + USER_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return um;
     }
@@ -84,6 +107,11 @@ public class UserMsgServiceImpl implements UserMsgService {
         if ("1".equals(data.getStatus())) {
             data.setStatus("2");
             this.update(data);
+
+            String key = data.getToUserId() + USER_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
         }
         return data;
     }
@@ -95,6 +123,11 @@ public class UserMsgServiceImpl implements UserMsgService {
         if (data.getToUserId().equals(um.getToUserId())) {
             um.setStatus("0");
             this.update(um);
+
+            String key = um.getToUserId() + USER_MSG_KEY;
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.delete(key);
+            }
             return Utils.bodyStatus(2000);
         } else {
             return Utils.bodyStatus(4024);
@@ -119,6 +152,11 @@ public class UserMsgServiceImpl implements UserMsgService {
                         .type(data.getType())
                         .build();
                 dataList.add(bm);
+
+                String key = userId + USER_MSG_KEY;
+                if (redisTemplate.hasKey(key)) {
+                    redisTemplate.delete(key);
+                }
             }
             userMsgMapper.batchInsert(dataList);
         }
@@ -140,5 +178,22 @@ public class UserMsgServiceImpl implements UserMsgService {
     @Override
     public int unreadCount(UserMessage data) {
         return userMsgRoMapper.unreadCount(data);
+    }
+
+    @Override
+    public List<UserMessage> selectUnreadList(UserMessage um) {
+        String key = Utils.getUserId() + USER_MSG_KEY;
+        List<UserMessage> dataList;
+        if (redisTemplate.hasKey(key)) {
+            LOGGER.info("From redis read: " + key);
+            dataList = JSONArray.parseArray(redisTemplate.opsForValue().get(key), UserMessage.class);
+        } else {
+            dataList = userMsgRoMapper.selectList(um);
+            redisTemplate.opsForValue().set(key,
+                    JSONObject.toJSONString(dataList),
+                    RedisConstant.USER_INFO_TIME_ODFAY,
+                    TimeUnit.DAYS);
+        }
+        return dataList;
     }
 }
