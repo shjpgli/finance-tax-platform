@@ -4,6 +4,8 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.UserDzsb;
+import com.abc12366.uc.model.UserHnds;
+import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindService;
@@ -401,9 +403,35 @@ public class UserBindController {
      */
     @GetMapping(path = "/bind/dzsb/detail/{id}")
     public ResponseEntity dzsbDetail(@PathVariable String id) {
-    LOGGER.info("更新电子申报绑定关系详情：{}", id);
-    UserDzsb userDzsb = userBindService.dzsbDetail(id);
-    LOGGER.info("更新电子申报绑定关系返回：{}");
-    return ResponseEntity.ok(Utils.kv("data", userDzsb));
-}
+        LOGGER.info("查询电子申报绑定关系详情：{}", id);
+        UserDzsb userDzsb = userBindService.dzsbDetail(id);
+        LOGGER.info("查询电子申报绑定关系详情返回：{}");
+        return ResponseEntity.ok(Utils.kv("data", userDzsb));
+    }
+
+    /**
+     * 查询湖南国税绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/hngs/detail/{id}")
+    public ResponseEntity hngsDetail(@PathVariable String id) {
+        LOGGER.info("查询湖南国税绑定关系详情：{}", id);
+        UserHngs userHngs = userBindService.hngsDetail(id);
+        LOGGER.info("查询湖南国税绑定关系详情返回：{}");
+        return ResponseEntity.ok(Utils.kv("data", userHngs));
+    }
+
+    /**
+     * 查询湖南地税绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/bind/hnds/detail/{id}")
+    public ResponseEntity hndsDetail(@PathVariable String id) {
+        LOGGER.info("查询湖南地税绑定关系详情：{}", id);
+        UserHnds userHnds = userBindService.hndsDetail(id);
+        LOGGER.info("查询湖南地税绑定关系详情返回：{}");
+        return ResponseEntity.ok(Utils.kv("data", userHnds));
+    }
 }

@@ -1,6 +1,8 @@
 package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.UserDzsb;
+import com.abc12366.uc.model.UserHnds;
+import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
@@ -184,4 +186,18 @@ public interface UserBindService {
      * @return ResponseEntity
      */
     UserDzsb dzsbDetail(String id);
+
+    /**
+     * 查询湖南国税绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    UserHngs hngsDetail(String id);
+
+    /**
+     * 查询湖南地税绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    UserHnds hndsDetail(String id);
 }

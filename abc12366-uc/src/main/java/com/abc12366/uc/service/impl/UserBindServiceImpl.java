@@ -816,4 +816,14 @@ public class UserBindServiceImpl implements UserBindService {
     public UserDzsb dzsbDetail(String id) {
         return userBindRoMapper.userDzsbSelectById(id);
     }
+
+    @Override
+    public UserHngs hngsDetail(String id) {
+        return userBindRoMapper.userHngsSelectById(id);
+    }
+
+    @Override
+    public UserHnds hndsDetail(String id) {
+        return userBindRoMapper.userHndsSelectById(id);
+    }
 }
