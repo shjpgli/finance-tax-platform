@@ -1,7 +1,5 @@
 ### UC后台存储redis的key命名规范：唯一id+下划线+内容英文
 
-* 用户信息(/user/{userId})：userId + '_UserInfo'
-* 用户扩展信息(/user/{userId}):userId + '_UserExtend'
 * 用户经验值信息(/experience/{userId})：userId + '_MyExperience'
 * 电子申报绑定列表(/bind/dzsbs/{userId})：userId + '_DzsbList'
 * 电子税局绑定列表(/bind/hngss/{userId})：userId + '_HngsList'

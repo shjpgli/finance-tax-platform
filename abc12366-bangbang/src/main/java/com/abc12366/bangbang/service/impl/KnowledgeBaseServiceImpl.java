@@ -260,6 +260,7 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         }
     }
 
+
     private void addTagRel(KnowledgeBaseBO knowledgeBaseBO) {
         List<String> tagIds = knowledgeBaseBO.getTagIds();
         if (tagIds != null && !tagIds.isEmpty()) {
@@ -344,4 +345,42 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
         return knowledgeBaseRoMapper.selectSourceList();
     }
 
+    @Override
+    public List<KnowledgeBase> selectBySubject(String subject) {
+        return knowledgeBaseRoMapper.selectBySubject(subject);
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public void modify(List<KnowledgeBase> list) {
+        try {
+            for (KnowledgeBase knowledgeBase: list){
+                knowledgeBaseMapper.updateByPrimaryKeySelective(knowledgeBase);
+            }
+        }catch (Exception e){
+            LOGGER.error("KnowledgeBaseServiceImpl.modify(List<KnowledgeBase> list):" + e);
+            throw new ServiceException(4502);
+        }
+    }
+
+    @Transactional("db1TxManager")
+    @Override
+    public void batchModifyTag(List<KnowledgeTagRel> list) {
+        try {
+            List<KnowledgeTagRel> addList = new ArrayList<>();
+            for (KnowledgeTagRel tagRel : list){
+                KnowledgeTagRel rel = knowledgeTagRelMapper.selectByKnowledgeIdAndTagId(tagRel.getKnowledgeId(), tagRel.getTagId());
+                if(rel == null){
+                    tagRel.setId(Utils.uuid());
+                    addList.add(tagRel);
+                }
+            }
+            if(!addList.isEmpty()){
+                knowledgeTagRelMapper.insertBatch(addList);
+            }
+        }catch (Exception e){
+            LOGGER.error("KnowledgeBaseServiceImpl.batchModifyTag(List<KnowledgeTagRel> list):" + e);
+            throw new ServiceException(4502);
+        }
+    }
 }

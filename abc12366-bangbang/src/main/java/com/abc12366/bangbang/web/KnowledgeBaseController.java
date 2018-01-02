@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.KnowledgeTagRel;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
@@ -283,6 +284,39 @@ public class KnowledgeBaseController {
     public ResponseEntity delete(@RequestBody Map<String, List<String>> map) {
         List<String> ids = map.get("ids");
         knowledgeBaseService.delete(ids);
+        redisTemplate.delete("Bangb_HotUnClassifyList");
+        redisTemplate.delete("Bangb_NearestLists");
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 根据标题查询匹配的知识库
+     */
+    @GetMapping(path = "/selectBySubject")
+    public ResponseEntity selectBySubject(@RequestParam(value = "subject") String subject) {
+        List<KnowledgeBase> list = knowledgeBaseService.selectBySubject(subject.toUpperCase());
+        return (list == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", list));
+    }
+
+    /**
+     * 批量修改知识库类别 接口
+     */
+    @PutMapping(path = "/modifyCategoryCode")
+    public ResponseEntity modifyCategoryCode(@RequestBody List<KnowledgeBase> knowledgeBases) {
+        knowledgeBaseService.modify(knowledgeBases);
+        redisTemplate.delete("Bangb_HotUnClassifyList");
+        redisTemplate.delete("Bangb_NearestLists");
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 批量修改知识库标签 接口
+     */
+    @PutMapping(path = "/modifyTag")
+    public ResponseEntity modifyTag(@RequestBody List<KnowledgeTagRel> knowledgeTagRels) {
+        knowledgeBaseService.batchModifyTag(knowledgeTagRels);
         redisTemplate.delete("Bangb_HotUnClassifyList");
         redisTemplate.delete("Bangb_NearestLists");
         return ResponseEntity.ok(Utils.kv());

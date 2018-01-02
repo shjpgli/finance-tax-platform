@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
+import com.abc12366.bangbang.model.KnowledgeTagRel;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
@@ -47,7 +48,8 @@ public interface KnowledgeBaseService {
     /*采集来源列表*/
     List<String> selectSourceList();
 
-
+    /*根据标题查询匹配的知识库*/
+    List<KnowledgeBase> selectBySubject(String subject);
 
 
 
@@ -69,4 +71,9 @@ public interface KnowledgeBaseService {
     /*修改知识库数据 浏览量*/
     void addPV(String id);
 
+    /*修改*/
+    void modify(List<KnowledgeBase> list);
+
+    /*批量修改标签*/
+    void batchModifyTag(List<KnowledgeTagRel> list);
 }

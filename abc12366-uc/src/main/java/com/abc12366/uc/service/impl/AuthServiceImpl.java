@@ -259,7 +259,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4102);
         }
 
-        Token queryToken = tokenRoMapper.selectOne(user.getId(), Utils.getAppId());
+        Token queryToken = tokenMapper.selectOne(user.getId(), Utils.getAppId());
         // 假如uc_token表有记录（根据userId和appId），则更新，没有则新增
         String userToken = Utils.uuid();
         int result02;
@@ -504,7 +504,6 @@ public class AuthServiceImpl implements AuthService {
         String userId = Utils.getUserId();
         
         //登录删除用户缓存，防止缓存不及时刷新
-        redisTemplate.delete(userId+"_UserInfo");
         redisTemplate.delete(userId+"_Points");
         redisTemplate.delete(userId+"_MyExperience");
 
