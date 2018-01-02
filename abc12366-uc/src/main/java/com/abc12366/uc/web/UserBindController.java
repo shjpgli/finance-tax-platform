@@ -322,7 +322,7 @@ public class UserBindController {
         userBindService.hndsUnbind(id);
         
         String userId = Utils.getUserId(request);
-        redisTemplate.delete(userId+"_HngsList");
+        redisTemplate.delete(userId+"_HndsList");
         
         return ResponseEntity.ok(Utils.kv());
     }
