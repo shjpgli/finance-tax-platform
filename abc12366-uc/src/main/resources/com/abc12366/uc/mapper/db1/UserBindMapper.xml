@@ -78,7 +78,7 @@
             <if test="frzjh!=null and frzjh !=''">uud.frzjh = #{frzjh},</if>
             <if test="lastLoginTime!=null">uud.lastLoginTime = #{lastLoginTime},</if>
             <if test="nsrlx!=null and nsrlx !=''">uud.nsrlx = #{nsrlx},</if>
-            <if test="sfgtjzh!=null and sfgtjzh !=''">uud.sfgtjzh = #{sfgtjzh}</if>
+            <if test="sfgtjzh!=null and sfgtjzh !=''">uud.sfgtjzh = #{sfgtjzh},</if>
             <if test="djrq!=null and djrq !=''">uud.djrq = #{djrq}</if>
         </set>
         where uud.userId = #{userId}
