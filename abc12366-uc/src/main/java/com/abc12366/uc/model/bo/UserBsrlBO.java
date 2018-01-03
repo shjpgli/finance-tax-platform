@@ -1,4 +1,7 @@
 package com.abc12366.uc.model.bo;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -15,15 +18,21 @@ public class UserBsrlBO implements Serializable {
 	private String calId;
 
 	/**申报月份**/
+    @NotEmpty
+    @Size(max = 10)
 	private String sbyf;
 
 	/**申报时间**/
+    @NotEmpty
+    @Size(max = 10)
 	private String sbrq;
 
 	/**修改时间**/
+    @Size(max = 10)
 	private String xgsj;
 
 	/**描述**/
+    @Size(max = 250)
 	private String description;
 
 
