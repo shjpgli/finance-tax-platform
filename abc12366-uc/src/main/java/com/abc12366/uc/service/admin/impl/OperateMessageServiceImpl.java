@@ -93,10 +93,10 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         }
         Date now = null;
         if (StringUtils.isEmpty(status)) {
-            List<OperateMessageBO> allList = operateMessageRoMapper.selectList("1", name, start, calendar == null ? null : calendar.getTime(), now);
+            List<OperateMessageBO> allList = operateMessageRoMapper.selectList(null, name, start, calendar == null ? null : calendar.getTime(), now);
             for (OperateMessageBO o : allList) {
                 long nowTimeMillis = System.currentTimeMillis();
-                if (o.getEndTime() == null || o.getEndTime().getTime() < nowTimeMillis) {
+                if (o.getStatus().equals("1")&&(o.getEndTime() == null || o.getEndTime().getTime() < nowTimeMillis)) {
                     o.setStatus("2");
                 }
             }
