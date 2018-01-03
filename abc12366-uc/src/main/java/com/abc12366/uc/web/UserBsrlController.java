@@ -3,16 +3,9 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserBsrl;
-import com.abc12366.uc.model.bo.*;
-import com.abc12366.uc.model.order.bo.OrderBO;
-import com.abc12366.uc.model.order.bo.OrderSubmitBO;
-import com.abc12366.uc.service.ExperienceLevelService;
+import com.abc12366.uc.model.bo.UserBsrlBO;
 import com.abc12366.uc.service.UserBsrlService;
-import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.service.UserStatisService;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -83,7 +76,7 @@ public class UserBsrlController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectById(@PathVariable("id") String id) {
-        UserBindBO data = userBsrlService.selectById(id);
+        UserBsrlBO data = userBsrlService.selectById(id);
         LOGGER.info("data{}", data);
         return ResponseEntity.ok(Utils.kv("data",data));
     }

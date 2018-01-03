@@ -25,7 +25,7 @@ public interface UserBsrlService {
      * @param id
      * @return
      */
-    UserBindBO selectById(String id);
+    UserBsrlBO selectById(String id);
 
     /**
      * 新增办理日历

@@ -41,6 +41,7 @@
                 ]]>
             </if>
         </where>
+        order by sbyf asc
     </select>
 
     <!-- 查询（根据主键ID查询） -->

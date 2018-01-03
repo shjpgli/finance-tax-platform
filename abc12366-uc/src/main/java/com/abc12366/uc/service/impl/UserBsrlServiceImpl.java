@@ -3,11 +3,9 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db1.UserBsrlMapper;
 import com.abc12366.uc.mapper.db2.UserBsrlRoMapper;
 import com.abc12366.uc.model.UserBsrl;
-import com.abc12366.uc.model.bo.UserBindBO;
 import com.abc12366.uc.model.bo.UserBsrlBO;
 import com.abc12366.uc.service.UserBsrlService;
 import org.slf4j.Logger;
@@ -40,7 +38,7 @@ public class UserBsrlServiceImpl implements UserBsrlService {
     }
 
     @Override
-    public UserBindBO selectById(String id) {
+    public UserBsrlBO selectById(String id) {
         return userBsrlRoMapper.selectById(id);
     }
 
