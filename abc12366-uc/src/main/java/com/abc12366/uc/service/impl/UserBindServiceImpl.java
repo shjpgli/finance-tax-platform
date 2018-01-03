@@ -73,9 +73,9 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Autowired
     private TodoTaskService todoTaskService;
-    
+
     @Autowired
-	private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
@@ -152,8 +152,8 @@ public class UserBindServiceImpl implements UserBindService {
 
         //绑定税号任务埋点
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
-        
-        redisTemplate.delete(userId+"_DzsbList");
+
+        redisTemplate.delete(userId + "_DzsbList");
         return userDzsbBO1;
     }
 
@@ -251,7 +251,7 @@ public class UserBindServiceImpl implements UserBindService {
     public void automaticBindCancel() {
         Date date = DateUtils.getAddMonth(Constant.DZSB_BIND_DATE);
         List<String> ids = userBindRoMapper.selectListByDate(date);
-        if(ids != null && ids.size() > 0){
+        if (ids != null && ids.size() > 0) {
             int size = ids.size();
             int num = (size) % 100 == 0 ? (size / 100) : (size / 100 + 1);// 按每100条记录查询
             int start = 0;
@@ -270,7 +270,7 @@ public class UserBindServiceImpl implements UserBindService {
                 try {
                     userBindMapper.updateBatch(map);
                 } catch (Exception e) {
-                    LOGGER.error("automaticBindCancel.updateBatch(List<String> idList){}{}",page.toString(), e);
+                    LOGGER.error("automaticBindCancel.updateBatch(List<String> idList){}{}", page.toString(), e);
                     throw new ServiceException(4923);
                 }
                 page.clear();
@@ -290,7 +290,7 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + userDzsb.toString());
             throw new ServiceException(4102);
         }
-        redisTemplate.delete(userDzsb.getUserId()+"_DzsbList");
+        redisTemplate.delete(userDzsb.getUserId() + "_DzsbList");
         return true;
     }
 
@@ -367,8 +367,8 @@ public class UserBindServiceImpl implements UserBindService {
         BeanUtils.copyProperties(userHngs, userHngsBO1);
         //绑定税号任务埋点
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
-        
-        redisTemplate.delete(userId+"_HngsList");
+
+        redisTemplate.delete(userId + "_HngsList");
         return userHngsBO1;
     }
 
@@ -385,7 +385,7 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4102);
         }
 
-        redisTemplate.delete(userHngs.getUserId()+"_HngsList");
+        redisTemplate.delete(userHngs.getUserId() + "_HngsList");
         return true;
     }
 
@@ -413,9 +413,9 @@ public class UserBindServiceImpl implements UserBindService {
         //绑定税号任务埋点
         String userId = Utils.getUserId();
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
-        
 
-        redisTemplate.delete(userId+"_HndsList");
+
+        redisTemplate.delete(userId + "_HndsList");
         return userHndsBO1;
     }
 
@@ -431,7 +431,7 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + id);
             throw new ServiceException(4102);
         }
-        redisTemplate.delete(userHnds.getUserId()+"_HndsList");
+        redisTemplate.delete(userHnds.getUserId() + "_HndsList");
         return true;
     }
 
@@ -467,7 +467,7 @@ public class UserBindServiceImpl implements UserBindService {
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
         LOGGER.info("{}", ty21Object);
         //更新用户绑定信息
-        updateDzsb(userId,ty21Object);
+        updateDzsb(userId, ty21Object);
         return ty21Object;
     }
 
@@ -772,15 +772,21 @@ public class UserBindServiceImpl implements UserBindService {
         }
 
         //更新用户绑定信息
-        UserDzsb userDzsb = updateDzsb(userId,ty21Object);
+        UserDzsb userDzsb = updateDzsb(userId, ty21Object);
         UserDzsbListBO userDzsbBO = new UserDzsbListBO();
-        BeanUtils.copyProperties(userDzsb,userDzsbBO);
+        BeanUtils.copyProperties(userDzsb, userDzsbBO);
+
+        // 清除缓存
+        if (redisTemplate.hasKey(userId + "_DzsbList")) {
+            redisTemplate.delete(userId + "_DzsbList");
+        }
         return userDzsbBO;
     }
 
     @Override
     public UserDzsb updateDzsb(String userId, TY21Xml2Object ty21Object) {
-        if (StringUtils.isEmpty(userId)||ty21Object==null||StringUtils.isEmpty(ty21Object.getY_NSRSBH())||StringUtils.isEmpty(ty21Object.getDJXH())){
+        if (StringUtils.isEmpty(userId) || ty21Object == null || StringUtils.isEmpty(ty21Object.getY_NSRSBH()) ||
+                StringUtils.isEmpty(ty21Object.getDJXH())) {
             return null;
         }
         //更新用户绑定信息
