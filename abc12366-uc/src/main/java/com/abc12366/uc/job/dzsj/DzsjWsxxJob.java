@@ -1,11 +1,15 @@
 package com.abc12366.uc.job.dzsj;
 
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.model.bo.AppBO;
+import com.abc12366.gateway.service.AppService;
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.job.DzsjWsxx;
+import com.abc12366.uc.model.job.WsxxInfo;
+import com.abc12366.uc.service.IMsgSendService;
+import com.abc12366.uc.service.UserService;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.time.DateUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -18,19 +22,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
 import sun.misc.BASE64Decoder;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.gateway.model.bo.AppBO;
-import com.abc12366.gateway.service.AppService;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.job.DzsjWsxx;
-import com.abc12366.uc.model.job.WsxxInfo;
-import com.abc12366.uc.service.IMsgSendService;
-import com.abc12366.uc.service.UserService;
-import com.alibaba.fastjson.JSONObject;
+import java.util.*;
 
 /**
  * 电子税局文书信息消息提醒

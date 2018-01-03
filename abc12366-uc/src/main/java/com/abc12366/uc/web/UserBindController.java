@@ -13,7 +13,6 @@ import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-
 import org.apache.commons.lang.StringUtils;
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
@@ -63,9 +62,7 @@ public class UserBindController {
         LOGGER.info("{}:{}", userDzsbInsertBO, request);
         UserDzsbBO userDzsb = userBindService.dzsbBind(userDzsbInsertBO, request);
         LOGGER.info("{}", userDzsb);
-        
-        //String userId = Utils.getUserId(request);
-        //redisTemplate.delete(userId+"_DzsbList");
+
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
 
@@ -80,9 +77,6 @@ public class UserBindController {
             request) {
         LOGGER.info("{}", id);
         userBindService.dzsbUnbind(id);
-        
-        //String userId = Utils.getUserId(request);
-        //redisTemplate.delete(userId+"_DzsbList");
         
         return ResponseEntity.ok(Utils.kv());
     }
@@ -266,9 +260,6 @@ public class UserBindController {
         LOGGER.info("{}:{}", userHngsInsertBO, request);
         UserHngsBO userHngs = userBindService.hngsBind(userHngsInsertBO, request);
         
-        //String userId = Utils.getUserId(request);
-        //redisTemplate.delete(userId+"_HngsList");
-        
         return ResponseEntity.ok(Utils.kv("data", userHngs));
     }
 
@@ -283,9 +274,6 @@ public class UserBindController {
             request) {
         LOGGER.info("{}", id);
         userBindService.hngsUnbind(id);
-        
-        //String userId = Utils.getUserId(request);
-        //redisTemplate.delete(userId+"_HngsList");
         
         return ResponseEntity.ok(Utils.kv());
     }
@@ -303,9 +291,6 @@ public class UserBindController {
         LOGGER.info("{}:{}", userHndsInsertBO, request);
         UserHndsBO userHnds = userBindService.hndsBind(userHndsInsertBO, request);
         
-        //String userId = Utils.getUserId(request);
-        //redisTemplate.delete(userId+"_HndsList");
-        
         return ResponseEntity.ok(Utils.kv("data", userHnds));
     }
 
@@ -320,9 +305,6 @@ public class UserBindController {
             request) {
         LOGGER.info("{}", id);
         userBindService.hndsUnbind(id);
-        
-        //String userId = Utils.getUserId(request);
-        //redisTemplate.delete(userId+"_HndsList");
         
         return ResponseEntity.ok(Utils.kv());
     }
@@ -419,8 +401,6 @@ public class UserBindController {
         LOGGER.info("更新电子申报绑定关系：{},{}", userId, nsrsbh);
         UserDzsbListBO userDzsb = userBindService.updateDzsb(userId, nsrsbh);
         LOGGER.info("更新电子申报绑定关系返回：{}");
-
-        //redisTemplate.delete(userId+"_DzsbList");
         
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }

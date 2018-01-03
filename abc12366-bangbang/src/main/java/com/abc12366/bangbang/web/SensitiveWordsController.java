@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.web;
 
 import com.abc12366.bangbang.model.SensitiveWords;
-import com.abc12366.bangbang.service.SensitiveWordFilter;
 import com.abc12366.bangbang.service.SensitiveWordsService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -10,7 +9,6 @@ import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

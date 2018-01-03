@@ -4,8 +4,6 @@ import com.abc12366.bangbang.model.question.QuestionFactionAllocation;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationManageBo;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
  * 
  * QuestionFactionAllocationMapper数据库操作接口类

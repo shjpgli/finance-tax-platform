@@ -4,7 +4,10 @@ package com.abc12366.uc.service.gift;
 import com.abc12366.uc.model.gift.Gift;
 import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.model.gift.UgiftLog;
-import com.abc12366.uc.model.gift.bo.*;
+import com.abc12366.uc.model.gift.bo.GiftBO;
+import com.abc12366.uc.model.gift.bo.GiftCheckBO;
+import com.abc12366.uc.model.gift.bo.GiftSendBO;
+import com.abc12366.uc.model.gift.bo.UgiftApplyBO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

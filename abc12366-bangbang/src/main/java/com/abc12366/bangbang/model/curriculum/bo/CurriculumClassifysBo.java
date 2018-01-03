@@ -1,5 +1,4 @@
 package com.abc12366.bangbang.model.curriculum.bo;
-import com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag;
 
 import java.io.Serializable;
 import java.util.List;

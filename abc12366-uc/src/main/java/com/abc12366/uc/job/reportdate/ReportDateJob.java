@@ -1,16 +1,15 @@
 package com.abc12366.uc.job.reportdate;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.model.bo.AppBO;
+import com.abc12366.gateway.service.AppService;
+import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.gateway.model.bo.AppBO;
-import com.abc12366.gateway.service.AppService;
-import com.abc12366.gateway.util.RemindConstant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import org.apache.commons.lang3.time.DateUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -24,7 +23,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
 import sun.misc.BASE64Encoder;
 
 import java.text.SimpleDateFormat;

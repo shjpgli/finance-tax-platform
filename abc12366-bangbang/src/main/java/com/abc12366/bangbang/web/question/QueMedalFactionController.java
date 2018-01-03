@@ -1,9 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.QuestionMedalFactionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionMedalUserBo;
 import com.abc12366.bangbang.service.QueMedalFactionService;
-import com.abc12366.bangbang.service.QueMedalUserService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;

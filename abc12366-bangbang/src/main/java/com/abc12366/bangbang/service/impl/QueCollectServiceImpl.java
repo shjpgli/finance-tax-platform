@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.QuestionCollectMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionCollectRoMapper;
@@ -9,6 +8,7 @@ import com.abc12366.bangbang.model.question.QuestionCollect;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.service.QueCollectService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.RestTemplateUtil;

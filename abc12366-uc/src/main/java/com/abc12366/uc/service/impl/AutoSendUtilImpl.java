@@ -2,19 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.MessageConstant;
-import com.abc12366.gateway.util.RemindConstant;
-import com.abc12366.gateway.util.RestTemplateUtil;
-import com.abc12366.uc.mapper.db2.VipPrivilegeLevelRoMapper;
-import com.abc12366.uc.model.Message;
-import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.bo.MessageBO;
-import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
 import com.abc12366.uc.service.AutoSendUtil;
-import com.abc12366.uc.service.IWxTemplateService;
-import com.abc12366.uc.service.MessageSendUtil;
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +11,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

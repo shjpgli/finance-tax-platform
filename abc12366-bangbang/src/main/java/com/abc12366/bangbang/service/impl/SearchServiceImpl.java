@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.mapper.db1.ReturnVisitMapper;
 import com.abc12366.bangbang.mapper.db2.SearchMapper;
 import com.abc12366.bangbang.model.question.CheatsSearchBo;
 import com.abc12366.bangbang.model.question.QuestionSearchBo;

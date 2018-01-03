@@ -2,7 +2,6 @@ package com.abc12366.bangbang.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author lizhongwei

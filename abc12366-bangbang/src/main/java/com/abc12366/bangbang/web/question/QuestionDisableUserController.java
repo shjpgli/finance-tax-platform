@@ -2,9 +2,7 @@ package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionDisableUser;
 import com.abc12366.bangbang.model.question.bo.QuestionDisableUserBo;
-import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 import com.abc12366.bangbang.service.QuestionDisableUserService;
-import com.abc12366.bangbang.service.QuestionTipOffService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;

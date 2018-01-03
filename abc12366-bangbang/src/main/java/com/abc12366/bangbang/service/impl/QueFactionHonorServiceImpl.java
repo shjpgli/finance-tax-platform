@@ -1,23 +1,15 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.mapper.db1.QuestionFactionInformMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionHonorRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionFactionInformRoMapper;
-import com.abc12366.bangbang.model.question.QuestionFactionInform;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionInformBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionPhBo;
 import com.abc12366.bangbang.service.QueFactionHonorService;
-import com.abc12366.bangbang.service.QueFactionInformService;
 import com.abc12366.gateway.exception.ServiceException;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by xieyanmao on 2017/9/14.

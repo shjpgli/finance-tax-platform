@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceLogMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
@@ -9,7 +10,6 @@ import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceLog;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.uc.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

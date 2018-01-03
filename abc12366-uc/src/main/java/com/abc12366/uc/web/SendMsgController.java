@@ -1,5 +1,9 @@
 package com.abc12366.uc.web;
 
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.uc.model.MessageSendBo;
+import com.abc12366.uc.service.IMsgSendService;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.MessageSendBo;
-import com.abc12366.uc.service.IMsgSendService;
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * 前段三类消息发送接口

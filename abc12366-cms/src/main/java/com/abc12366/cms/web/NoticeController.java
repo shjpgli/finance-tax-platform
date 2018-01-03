@@ -1,6 +1,5 @@
 package com.abc12366.cms.web;
 
-import com.abc12366.cms.model.bo.AdPageBO;
 import com.abc12366.cms.model.bo.NoticeBO;
 import com.abc12366.cms.model.bo.NoticeForqtBO;
 import com.abc12366.cms.service.NoticeService;
