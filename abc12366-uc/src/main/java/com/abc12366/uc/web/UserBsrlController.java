@@ -99,7 +99,7 @@ public class UserBsrlController {
      * @param userBsrlBO 办理日历对象
      */
     @PutMapping
-    public ResponseEntity submitOrder(@Valid @RequestBody UserBsrlBO userBsrlBO) {
+    public ResponseEntity update(@Valid @RequestBody UserBsrlBO userBsrlBO) {
         LOGGER.info("{}", userBsrlBO);
         UserBsrlBO bo = userBsrlService.update(userBsrlBO);
         LOGGER.info("{}", bo);
