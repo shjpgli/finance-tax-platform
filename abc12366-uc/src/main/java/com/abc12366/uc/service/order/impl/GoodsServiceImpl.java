@@ -4,7 +4,6 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
-import com.abc12366.uc.model.order.UvipPrice;
 import com.abc12366.uc.model.bo.DictBO;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.GoodsBO;

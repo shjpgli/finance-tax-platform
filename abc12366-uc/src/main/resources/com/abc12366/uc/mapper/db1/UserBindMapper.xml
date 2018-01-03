@@ -5,9 +5,10 @@
 
     <insert id="dzsbBind" parameterType="com.abc12366.uc.model.UserDzsb">
         insert into uc_user_dzsb(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status,
-        createTime,lastUpdate,expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh)
+        createTime,lastUpdate,expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq)
         values (#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm}, #{status},
-        #{createTime}, #{lastUpdate}, #{expireTime}, #{expandExpireTime}, #{frmc},#{frzjh},#{lastLoginTime},#{nsrlx},#{sfgtjzh})
+        #{createTime}, #{lastUpdate}, #{expireTime}, #{expandExpireTime}, #{frmc},#{frzjh},#{lastLoginTime},
+        #{nsrlx},#{sfgtjzh},#{djrq})
     </insert>
 
     <update id="dzsbUnbind" parameterType="java.lang.String">
@@ -65,19 +66,20 @@
     <update id="update" parameterType="com.abc12366.uc.model.UserDzsb">
         update uc_user_dzsb uud
         <set>
-            <if test="nsrsbh!=null">uud.nsrsbh = #{nsrsbh},</if>
-            <if test="nsrmc!=null">uud.nsrmc = #{nsrmc},</if>
-            <if test="shxydm!=null">uud.shxydm = #{shxydm},</if>
-            <if test="swjgMc!=null">uud.swjgMc = #{swjgMc},</if>
-            <if test="swjgDm!=null">uud.swjgDm = #{swjgDm},</if>
+            <if test="nsrsbh!=null and nsrsbh !=''">uud.nsrsbh = #{nsrsbh},</if>
+            <if test="nsrmc!=null and nsrmc !=''">uud.nsrmc = #{nsrmc},</if>
+            <if test="shxydm!=null  and shxydm !=''">uud.shxydm = #{shxydm},</if>
+            <if test="swjgMc!=null  and swjgMc !=''">uud.swjgMc = #{swjgMc},</if>
+            <if test="swjgDm!=null  and swjgDm !=''">uud.swjgDm = #{swjgDm},</if>
             <if test="lastUpdate!=null">uud.lastUpdate = #{lastUpdate},</if>
             <if test="expireTime!=null">uud.expireTime = #{expireTime},</if>
             <if test="expandExpireTime!=null">uud.expandExpireTime = #{expandExpireTime},</if>
-            <if test="frmc!=null">uud.frmc = #{frmc},</if>
-            <if test="frzjh!=null">uud.frzjh = #{frzjh},</if>
+            <if test="frmc!=null and frmc !=''">uud.frmc = #{frmc},</if>
+            <if test="frzjh!=null and frzjh !=''">uud.frzjh = #{frzjh},</if>
             <if test="lastLoginTime!=null">uud.lastLoginTime = #{lastLoginTime},</if>
-            <if test="nsrlx!=null">uud.nsrlx = #{nsrlx},</if>
-            <if test="sfgtjzh!=null">uud.sfgtjzh = #{sfgtjzh}</if>
+            <if test="nsrlx!=null and nsrlx !=''">uud.nsrlx = #{nsrlx},</if>
+            <if test="sfgtjzh!=null and sfgtjzh !=''">uud.sfgtjzh = #{sfgtjzh},</if>
+            <if test="djrq!=null and djrq !=''">uud.djrq = #{djrq}</if>
         </set>
         where uud.userId = #{userId}
         and uud.djxh = #{djxh}

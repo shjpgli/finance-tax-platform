@@ -1,17 +1,16 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.mapper.db2.KnowledgeBaseRoMapper;
-import com.abc12366.bangbang.util.StringUtil;
 import com.abc12366.bangbang.mapper.db1.KnowledgeBaseMapper;
 import com.abc12366.bangbang.mapper.db1.KnowledgeCategoryMapper;
+import com.abc12366.bangbang.mapper.db2.KnowledgeBaseRoMapper;
 import com.abc12366.bangbang.model.KnowledgeCategory;
 import com.abc12366.bangbang.model.bo.SortBO;
 import com.abc12366.bangbang.service.KnowledgeCategoryService;
+import com.abc12366.bangbang.util.StringUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.alibaba.fastjson.JSONArray;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -31,6 +31,7 @@ public class UserDzsbBO {
     private Date lastLoginTime;
     private String nsrlx;
     private String sfgtjzh;
+    private String djrq;
 
     public UserDzsbBO() {
     }
@@ -179,6 +180,14 @@ public class UserDzsbBO {
         this.sfgtjzh = sfgtjzh;
     }
 
+    public String getDjrq() {
+        return djrq;
+    }
+
+    public void setDjrq(String djrq) {
+        this.djrq = djrq;
+    }
+
     @Override
     public String toString() {
         return "UserDzsbBO{" +
@@ -200,6 +209,7 @@ public class UserDzsbBO {
                 ", lastLoginTime=" + lastLoginTime +
                 ", nsrlx='" + nsrlx + '\'' +
                 ", sfgtjzh='" + sfgtjzh + '\'' +
+                ", djrq='" + djrq + '\'' +
                 '}';
     }
 }

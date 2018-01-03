@@ -3,7 +3,6 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.bo.RSAResponse;
 import com.abc12366.uc.wsbssoa.utils.RSA;
-
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

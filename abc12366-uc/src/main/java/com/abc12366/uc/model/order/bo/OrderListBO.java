@@ -1,7 +1,5 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.abc12366.uc.model.order.bo.OrderProductBO;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

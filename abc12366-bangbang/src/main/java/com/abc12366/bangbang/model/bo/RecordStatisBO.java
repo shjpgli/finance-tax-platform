@@ -2,8 +2,6 @@ package com.abc12366.bangbang.model.bo;
 
 import com.abc12366.gateway.model.bo.TableBO;
 
-import java.util.Date;
-
 /**
  * 用户操作日志BO
  *

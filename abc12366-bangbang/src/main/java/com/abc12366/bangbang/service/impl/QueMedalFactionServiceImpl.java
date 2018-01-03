@@ -1,11 +1,8 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db2.QuestionMedalFactionRoMapper;
-import com.abc12366.bangbang.mapper.db2.QuestionMedalUserRoMapper;
 import com.abc12366.bangbang.model.question.bo.QuestionMedalFactionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionMedalUserBo;
 import com.abc12366.bangbang.service.QueMedalFactionService;
-import com.abc12366.bangbang.service.QueMedalUserService;
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

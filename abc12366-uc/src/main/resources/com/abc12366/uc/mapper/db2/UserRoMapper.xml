@@ -65,11 +65,11 @@
                 and createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
             </if>
             <if test="tagId != null and tagId.size > 0">
-                and id in (SELECT DISTINCT a.subjectId FROM
+                and EXISTS (SELECT DISTINCT a.subjectId FROM
                 <foreach item="item" collection="tagId" separator="union all" open="(" close=")" index="">
                     SELECT subjectId FROM uc_subject_tag WHERE tagId=#{item}
                 </foreach>
-                a group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount})
+                a WHERE a.subjectId = id group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount})
             </if>
             <if test="realName != null and realName != ''">
                 and id in (SELECT userId FROM abc12366_uc.uc_user_extend WHERE realName = #{realName})

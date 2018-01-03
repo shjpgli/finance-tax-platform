@@ -3,8 +3,6 @@ package com.abc12366.bangbang.mapper.db1;
 import com.abc12366.bangbang.model.question.QuestionInvite;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Map;
-
 /**
  * 
  * QuestionInviteMapper数据库操作接口类

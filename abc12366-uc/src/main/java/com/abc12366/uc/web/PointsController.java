@@ -2,7 +2,9 @@ package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.PointBatchAwardBO;
+import com.abc12366.uc.model.bo.PointCalculateBO;
+import com.abc12366.uc.model.bo.PointsBO;
 import com.abc12366.uc.service.PointsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

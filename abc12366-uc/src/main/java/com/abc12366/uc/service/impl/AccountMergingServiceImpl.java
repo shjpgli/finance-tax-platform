@@ -1,17 +1,5 @@
 package com.abc12366.uc.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.AccountMergingMapper;
 import com.abc12366.uc.mapper.db1.InvoiceLogMapper;
@@ -29,6 +17,17 @@ import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.service.order.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountMergingServiceImpl implements IAccountMergingService {

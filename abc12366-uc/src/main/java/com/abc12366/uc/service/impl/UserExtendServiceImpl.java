@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
@@ -13,8 +12,6 @@ import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
-import com.alibaba.fastjson.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +25,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author liuguiyao

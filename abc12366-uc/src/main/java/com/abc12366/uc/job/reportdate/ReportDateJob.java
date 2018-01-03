@@ -1,16 +1,15 @@
 package com.abc12366.uc.job.reportdate;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.model.bo.AppBO;
+import com.abc12366.gateway.service.AppService;
+import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.gateway.model.bo.AppBO;
-import com.abc12366.gateway.service.AppService;
-import com.abc12366.gateway.util.RemindConstant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import org.apache.commons.lang3.time.DateUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -24,7 +23,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
 import sun.misc.BASE64Encoder;
 
 import java.text.SimpleDateFormat;
@@ -83,7 +81,7 @@ public class ReportDateJob implements Job {
         accessToken = appBO.getAccessToken();
         LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
-        LOGGER.info("电子税局获取办税期限..............");
+        LOGGER.info("开始电子税局获取办税期限..............");
         HttpHeaders headers2 = new HttpHeaders();
     	headers2.add("Access-Token", accessToken);
     	headers2.add("Version", "1");
@@ -94,6 +92,8 @@ public class ReportDateJob implements Job {
 				httpEntity, String.class);
 
         JSONObject json = JSONObject.parseObject(String.valueOf(responseEntity2.getBody()));
+        LOGGER.info("结束电子税局获取办税期限:"+json.toJSONString());
+        
         if ("000".equals(json.getString("code"))) {
         	JSONArray array = json.getJSONArray("dataList");
             String dateM = new SimpleDateFormat("yyyy-MM").format(new Date());

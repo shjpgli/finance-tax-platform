@@ -1,16 +1,15 @@
 package com.abc12366.message.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.HndsBindMapper;
 import com.abc12366.message.mapper.db2.HndsBindRoMapper;
 import com.abc12366.message.service.IHndsBindService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.HashMap;
 /**
  *  湖南地税登录成功绑定实现类
  * @author zhushuai 2017-11-7

@@ -2,7 +2,10 @@ package com.abc12366.uc.service.admin;
 
 import com.abc12366.uc.model.admin.Admin;
 import com.abc12366.uc.model.admin.AdminExtend;
-import com.abc12366.uc.model.admin.bo.*;
+import com.abc12366.uc.model.admin.bo.AdminBO;
+import com.abc12366.uc.model.admin.bo.AdminUpdateBO;
+import com.abc12366.uc.model.admin.bo.LoginInfoBO;
+import com.abc12366.uc.model.admin.bo.UserPasswordBO;
 
 import java.util.List;
 

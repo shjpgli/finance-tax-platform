@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.mapper.db2;
 
-import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import org.apache.ibatis.annotations.Param;
 

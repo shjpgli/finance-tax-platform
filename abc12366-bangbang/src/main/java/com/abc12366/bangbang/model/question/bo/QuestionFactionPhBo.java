@@ -1,10 +1,6 @@
 package com.abc12366.bangbang.model.question.bo;
-import com.abc12366.bangbang.model.question.QuestionFactionClassify;
-import com.abc12366.bangbang.model.question.QuestionFactionTag;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 
 /**

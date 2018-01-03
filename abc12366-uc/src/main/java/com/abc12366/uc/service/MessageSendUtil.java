@@ -6,7 +6,6 @@ import com.abc12366.uc.model.bo.MessageBO;
 import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.List;
 import java.util.Map;
 

@@ -2,8 +2,8 @@ package com.abc12366.uc.web.order;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.order.ProductRepo;
 import com.abc12366.uc.model.bo.DictBO;
+import com.abc12366.uc.model.order.ProductRepo;
 import com.abc12366.uc.model.order.bo.GoodsBO;
 import com.abc12366.uc.model.order.bo.ProductBO;
 import com.abc12366.uc.model.order.bo.ProductRepoBO;

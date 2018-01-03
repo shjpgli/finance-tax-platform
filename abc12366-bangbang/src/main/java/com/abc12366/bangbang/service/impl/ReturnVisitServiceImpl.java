@@ -6,7 +6,6 @@ import com.abc12366.bangbang.mapper.db2.ReturnVisitRoMapper;
 import com.abc12366.bangbang.model.ReturnVisit;
 import com.abc12366.bangbang.model.bo.ReturnVisitBO;
 import com.abc12366.bangbang.model.bo.UCUserBO;
-import com.abc12366.bangbang.model.question.bo.QuestionAcceptedBO;
 import com.abc12366.bangbang.service.ReturnVisitService;
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;

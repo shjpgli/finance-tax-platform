@@ -2,8 +2,8 @@ package com.abc12366.uc.web.order;
 
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.order.TradeLog;
 import com.abc12366.uc.model.bo.TradeBillBO;
+import com.abc12366.uc.model.order.TradeLog;
 import com.abc12366.uc.model.order.bo.TradeLogBO;
 import com.abc12366.uc.service.order.TradeLogService;
 import com.github.pagehelper.PageInfo;
