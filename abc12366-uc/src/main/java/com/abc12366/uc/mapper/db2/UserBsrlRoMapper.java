@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.UserBsrl;
 import com.abc12366.uc.model.bo.UserBindBO;
+import com.abc12366.uc.model.bo.UserBsrlBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -35,4 +36,11 @@ public interface UserBsrlRoMapper {
      * @return
      */
     UserBindBO selectById(String id);
+
+    /**
+     * 根据申报月份查询
+     * @param month
+     * @return
+     */
+    UserBsrlBO selectBySbyf(String month);
 }

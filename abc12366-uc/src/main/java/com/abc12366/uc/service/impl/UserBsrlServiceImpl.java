@@ -46,6 +46,13 @@ public class UserBsrlServiceImpl implements UserBsrlService {
 
     @Override
     public UserBsrlBO insert(UserBsrlBO userBsrlBO) {
+        //查询申报月份是否唯一
+        String month = userBsrlBO.getSbyf();
+        UserBsrlBO bo = userBsrlRoMapper.selectBySbyf(month);
+        if(bo != null){
+            LOGGER.info("申报月份已存在：{}", bo);
+            throw new ServiceException(4101,"申报月份已存在");
+        }
         userBsrlBO.setCalId(Utils.uuid());
         userBsrlBO.setXgsj(DateUtils.dateToString(new Date()));
         UserBsrl userBsrl = new UserBsrl();
@@ -61,6 +68,14 @@ public class UserBsrlServiceImpl implements UserBsrlService {
 
     @Override
     public UserBsrlBO update(UserBsrlBO userBsrlBO) {
+        //查询申报月份是否唯一
+        String month = userBsrlBO.getSbyf();
+        UserBsrlBO bo = userBsrlRoMapper.selectBySbyf(month);
+        if(bo != null && !userBsrlBO.getCalId().equals(bo.getCalId())){
+            LOGGER.info("申报月份已存在：{}", bo);
+            throw new ServiceException(4101,"申报月份已存在");
+        }
+
         userBsrlBO.setXgsj(DateUtils.dateToString(new Date()));
         UserBsrl userBsrl = new UserBsrl();
         BeanUtils.copyProperties(userBsrlBO,userBsrl);
