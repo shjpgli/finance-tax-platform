@@ -13,9 +13,9 @@
     <select id="selectHotTag" resultType="java.lang.String" parameterType="java.lang.Integer">
           SELECT name FROM bb_knowledge_tag WHERE id IN (
             SELECT * FROM (
-              SELECT tagId FROM bb_knowledge_tag_rel GROUP BY tagId ORDER BY COUNT(1) DESC LIMIT #{num}
+              SELECT tagId FROM bb_knowledge_tag_rel GROUP BY tagId ORDER BY COUNT(1) DESC
             )AS t
-          )
+          ) AND STATUS = TRUE LIMIT #{num}
     </select>
     <!-- 查询（根据主键ID查询） -->
     <select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.KnowledgeTag" parameterType="java.lang.String">
