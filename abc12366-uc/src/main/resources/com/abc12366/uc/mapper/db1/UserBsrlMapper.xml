@@ -5,7 +5,7 @@
 
 
 	<!--删除：根据主键ID删除-->
-	<delete id="delete" parameterType="java.lang.Integer">
+	<delete id="delete" parameterType="java.lang.String">
 		 DELETE FROM uc_user_bsrl
 		 WHERE calId = #{calId}
 	</delete>

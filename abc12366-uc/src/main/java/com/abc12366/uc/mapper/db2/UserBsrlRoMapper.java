@@ -35,7 +35,7 @@ public interface UserBsrlRoMapper {
      * @param id
      * @return
      */
-    UserBindBO selectById(String id);
+    UserBsrlBO selectById(String id);
 
     /**
      * 根据申报月份查询
