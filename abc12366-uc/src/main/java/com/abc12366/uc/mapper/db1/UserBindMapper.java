@@ -4,7 +4,6 @@ import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 
-import java.util.List;
 import java.util.Map;
 
 /**

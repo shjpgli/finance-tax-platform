@@ -5,7 +5,6 @@ import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.VipLevelMapper;
 import com.abc12366.uc.mapper.db2.VipLevelRoMapper;
-import com.abc12366.uc.model.MyTaskSurvey;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.VipLevel;
 import com.abc12366.uc.model.bo.VipLevelBO;
@@ -13,7 +12,6 @@ import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
 import com.abc12366.uc.service.VipLevelService;
 import com.alibaba.fastjson.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

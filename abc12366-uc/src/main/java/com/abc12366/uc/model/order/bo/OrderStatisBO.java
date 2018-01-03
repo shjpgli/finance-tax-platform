@@ -1,7 +1,6 @@
 package com.abc12366.uc.model.order.bo;
 
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**

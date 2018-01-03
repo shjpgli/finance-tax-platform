@@ -1,11 +1,10 @@
 package com.abc12366.uc.service;
 
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-
 import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 /**
  * 消息发送接口

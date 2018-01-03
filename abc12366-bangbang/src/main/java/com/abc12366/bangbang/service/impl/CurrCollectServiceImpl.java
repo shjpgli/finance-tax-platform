@@ -1,15 +1,15 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.CurriculumCollectMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumCollectRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumCollect;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumCollectBo;
 import com.abc12366.bangbang.service.CurrCollectService;
-import com.abc12366.gateway.util.RestTemplateUtil;
-import com.abc12366.gateway.util.TaskConstant;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -10,7 +10,6 @@ import com.abc12366.uc.model.UserTask;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserTaskService;
 import com.alibaba.fastjson.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.mapper.db2;
 
-import com.abc12366.bangbang.model.DzsbHngs;
 import com.abc12366.bangbang.model.SystemRecordStatis;
 import com.abc12366.bangbang.model.User;
 import org.apache.ibatis.annotations.Param;

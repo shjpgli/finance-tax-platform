@@ -1,7 +1,6 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.bo.AdPageBO;
-import com.abc12366.cms.model.bo.ContentsListBo;
 import com.abc12366.cms.service.AdPageService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.RedisConstant;

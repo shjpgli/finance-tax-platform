@@ -1,8 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.gift.Gift;
-import com.abc12366.uc.model.gift.bo.GiftBO;
-import com.abc12366.uc.model.gift.bo.GiftUpdateBO;
 import org.apache.ibatis.annotations.Param;
 
 /**

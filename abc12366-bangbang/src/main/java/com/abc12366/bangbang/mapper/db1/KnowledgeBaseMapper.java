@@ -1,8 +1,6 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
-import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
-import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

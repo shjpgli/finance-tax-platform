@@ -1,8 +1,6 @@
 package com.abc12366.bangbang.service;
 
 
-
-import com.abc12366.bangbang.model.question.bo.QuestionFactionAllocationBo;
 import com.abc12366.bangbang.model.question.bo.QuestionMedalUserBo;
 
 import java.util.List;

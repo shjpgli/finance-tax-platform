@@ -3,7 +3,6 @@ package com.abc12366.uc.service.admin.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.uc.mapper.db1.AdminServiceUserMapper;
 import com.abc12366.uc.mapper.db2.AdminServiceUserRoMapper;
-import com.abc12366.uc.model.admin.AdminService;
 import com.abc12366.uc.model.admin.AdminServiceUser;
 import com.abc12366.uc.model.admin.bo.AdminServiceUserBo;
 import com.abc12366.uc.service.admin.AdminServUserService;

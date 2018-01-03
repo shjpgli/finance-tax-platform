@@ -1,12 +1,10 @@
 package com.abc12366.cms.web;
 
 import com.abc12366.cms.model.ContentType;
-import com.abc12366.cms.model.bo.AdPageBO;
 import com.abc12366.cms.service.ContentTypeService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.RedisConstant;
 import com.alibaba.fastjson.JSONArray;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

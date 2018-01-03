@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * User: liuguiyao<435720953@qq.com>

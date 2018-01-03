@@ -1,9 +1,9 @@
 package com.abc12366.uc.model.invoice.bo;
 
-import com.abc12366.uc.model.order.bo.DeliveryMethodBO;
-import com.abc12366.uc.model.invoice.InvoiceLog;
-import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.InvoiceLog;
+import com.abc12366.uc.model.order.bo.DeliveryMethodBO;
+import com.abc12366.uc.model.order.bo.OrderBO;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;

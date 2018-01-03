@@ -1,7 +1,5 @@
 package com.abc12366.uc.model;
 
-import java.util.Date;
-
 /**
  * 用户签到排行返回参数实体类
  * User: liuguiyao<435720953@qq.com>

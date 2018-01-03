@@ -1,11 +1,10 @@
 package com.abc12366.uc.service;
 
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.model.bo.UserBO;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
 
 /**
  * 账号合并service

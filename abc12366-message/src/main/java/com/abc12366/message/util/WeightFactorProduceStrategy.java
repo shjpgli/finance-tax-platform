@@ -1,11 +1,11 @@
 package com.abc12366.message.util;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.util.MessageConstant;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.gateway.util.MessageConstant;
 /**
  * 按照权重轮询选择短信通道
  * @author zhushuai 2017-11-29

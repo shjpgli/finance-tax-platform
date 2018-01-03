@@ -1,8 +1,9 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.abc12366.uc.model.order.ExpressComp;
-import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.bo.DictBO;
+import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.invoice.bo.InvoiceBO;
+import com.abc12366.uc.model.order.ExpressComp;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;

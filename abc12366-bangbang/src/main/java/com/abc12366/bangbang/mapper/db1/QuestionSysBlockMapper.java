@@ -1,10 +1,7 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
-import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
 import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * 

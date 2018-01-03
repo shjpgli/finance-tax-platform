@@ -1,6 +1,5 @@
 package com.abc12366.uc.service.invoice;
 
-import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.invoice.Invoice;
 import com.abc12366.uc.model.invoice.InvoiceBack;
 import com.abc12366.uc.model.invoice.bo.*;

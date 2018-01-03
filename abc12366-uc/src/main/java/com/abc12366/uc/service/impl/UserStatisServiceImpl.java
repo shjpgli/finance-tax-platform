@@ -6,7 +6,6 @@ import com.abc12366.uc.mapper.db2.UserStatisRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserStatisService;
-import com.abc12366.uc.util.StringUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;

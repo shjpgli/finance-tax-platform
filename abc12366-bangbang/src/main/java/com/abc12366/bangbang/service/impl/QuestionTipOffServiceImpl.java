@@ -1,16 +1,16 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.model.BaseObject;
-import com.abc12366.bangbang.model.Message;
-import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
-import com.abc12366.bangbang.service.MessageSendUtil;
-import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionTipOffRoMapper;
+import com.abc12366.bangbang.model.BaseObject;
+import com.abc12366.bangbang.model.Message;
 import com.abc12366.bangbang.model.question.QuestionTipOff;
+import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffStatus;
+import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.service.QuestionTipOffService;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;

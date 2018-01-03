@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.model.question.bo;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Author liuQi

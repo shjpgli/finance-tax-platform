@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.curriculum.CurriculumClassifyTag;
-import com.abc12366.bangbang.model.question.QuestionClassifyTag;
 import org.apache.ibatis.annotations.Param;
 
 /**
