@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.order;
 
 import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.OrderBack;
 import com.abc12366.uc.model.order.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -95,14 +94,6 @@ public interface OrderService {
     void deleteOrder(OrderBO orderBO);
 
     /**
-     * 订单反馈
-     *
-     * @param orderBO 订单编号
-     * @return 订单对象
-     */
-    OrderBO feedback(OrderBO orderBO);
-
-    /**
      * 取消订单
      *
      * @param orderCancelBO 订单取消对象
@@ -119,38 +110,6 @@ public interface OrderService {
      * @return 订单列表
      */
     List<OrderBO> selectUserAllOrderList(OrderBO order, int pageNum, int pageSize);
-
-    /**
-     * 申请退单
-     *
-     * @param orderBack 订单退单对象
-     * @return 订单退单对象
-     */
-    OrderBack applyBackOrder(OrderBack orderBack);
-
-    /**
-     * 提交退单申请
-     *
-     * @param orderBack 订单退单对象
-     * @return 订单退单对象
-     */
-    OrderBack submitBackOrder(OrderBack orderBack);
-
-    /**
-     * 管理员同意退单
-     *
-     * @param orderBack 订单退单对象
-     * @return 订单退单对象
-     */
-    OrderBack backCheckOrder(OrderBack orderBack);
-
-    /**
-     * 查询退单列表
-     *
-     * @param orderBackBO 订单退单对象
-     * @return 订单退单对象
-     */
-    List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO);
 
     /**
      * 修改支付状态
@@ -267,14 +226,6 @@ public interface OrderService {
      * @return
      */
     OrderBO selectByOrderNoAdmin(String orderNo);
-
-    /**
-     * 开通会员
-     * @param orderVipBO 订单信息
-     * @return
-     */
-    OrderBO openVip(OrderVipBO orderVipBO,HttpServletRequest request);
-
 
     /**
      * 根据交易流水号查询订单合并内容
