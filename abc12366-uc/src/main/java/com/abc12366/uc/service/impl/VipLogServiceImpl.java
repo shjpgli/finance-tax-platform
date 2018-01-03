@@ -4,7 +4,9 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.VipLogMapper;
+import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.mapper.db2.VipLogRoMapper;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.VipLog;
 import com.abc12366.uc.model.bo.VipLevelStatisticTemp;
 import com.abc12366.uc.model.bo.VipLogBO;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +38,9 @@ public class VipLogServiceImpl implements VipLogService {
 
     @Autowired
     private VipLogMapper vipLogMapper;
+
+    @Autowired
+    private UserRoMapper userRoMapper;
 
     @Override
     public List<VipLogBO> selectList(String userId) {
@@ -59,7 +65,14 @@ public class VipLogServiceImpl implements VipLogService {
             // 普通用户到期时间为创建时间加10年
             calendar.add(Calendar.YEAR, 10);
         } else {
-            // 会员到期时间为创建时间加一年
+            // 会员到期时间为创建时间加一年,加入是会员未到期再购买则在原有到期时间基础上再延长一年
+            if (!StringUtils.isEmpty(vipLogBO.getUserId()) && !StringUtils.isEmpty(vipLogBO.getLevelId())) {
+                User user = userRoMapper.selectOne(vipLogBO.getUserId());
+                if (user != null && user.getVipExpireDate() != null && !StringUtils.isEmpty(user.getVipLevel())
+                        && vipLogBO.getLevelId().equals(user.getVipLevel())) {
+                    calendar.setTime(user.getVipExpireDate());
+                }
+            }
             calendar.add(Calendar.YEAR, 1);
         }
         vipLog.setVipExpireDate(calendar.getTime());
