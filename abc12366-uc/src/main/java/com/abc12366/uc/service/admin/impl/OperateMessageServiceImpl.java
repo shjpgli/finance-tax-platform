@@ -92,6 +92,16 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
         Date now = null;
+        if (StringUtils.isEmpty(status)) {
+            List<OperateMessageBO> allList = operateMessageRoMapper.selectList("1", name, start, calendar == null ? null : calendar.getTime(), now);
+            for (OperateMessageBO o : allList) {
+                long nowTimeMillis = System.currentTimeMillis();
+                if (o.getEndTime() == null || o.getEndTime().getTime() < nowTimeMillis) {
+                    o.setStatus("2");
+                }
+            }
+            return allList;
+        }
         if ("1".equals(status.trim()) || "2".equals(status.trim())) {
             now = new Date();
         }
@@ -107,7 +117,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             return null;
         }
         OperateMessageBO messageBO = new OperateMessageBO();
-        BeanUtils.copyProperties(operateMessageBO,messageBO);
+        BeanUtils.copyProperties(operateMessageBO, messageBO);
         messageBO.setLastUpdate(new Date());
         operateMessageMapper.update(messageBO);
         return selectOne(operateMessageBO.getId());
