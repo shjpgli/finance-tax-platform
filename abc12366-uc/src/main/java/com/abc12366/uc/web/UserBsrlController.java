@@ -4,7 +4,6 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.UserBsrl;
-import com.abc12366.uc.model.bo.UserBindBO;
 import com.abc12366.uc.model.bo.UserBsrlBO;
 import com.abc12366.uc.service.UserBsrlService;
 import com.github.pagehelper.PageHelper;
@@ -77,7 +76,7 @@ public class UserBsrlController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity selectById(@PathVariable("id") String id) {
-        UserBindBO data = userBsrlService.selectById(id);
+        UserBsrlBO data = userBsrlService.selectById(id);
         LOGGER.info("data{}", data);
         return ResponseEntity.ok(Utils.kv("data",data));
     }
