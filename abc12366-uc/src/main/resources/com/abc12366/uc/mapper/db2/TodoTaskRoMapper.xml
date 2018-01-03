@@ -147,7 +147,7 @@
     <select id="selectNormalTaskList" resultType="com.abc12366.uc.model.TodoTaskFront" parameterType="java.lang.String">
         SELECT
         a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
-        a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
+        a.lastUpdate,b.skipURL skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
         and b.type = '2'
@@ -158,7 +158,7 @@
         UNION ALL
         SELECT
         a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
-        a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
+        a.lastUpdate,b.skipURL skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
         and b.type = '2'
@@ -169,7 +169,7 @@
         UNION ALL
         SELECT
         a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
-        a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
+        a.lastUpdate,b.skipURL skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
         and b.type = '2'
@@ -182,7 +182,7 @@
     <select id="selectOnetimeTaskList" resultType="com.abc12366.uc.model.TodoTaskFront" parameterType="java.lang.String">
         SELECT
         a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
-        a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
+        a.lastUpdate,b.skipURL skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
         and b.type = '1'
@@ -193,7 +193,7 @@
     <select id="selectSpecialTaskList" resultType="com.abc12366.uc.model.TodoTaskFront" parameterType="java.lang.String">
         SELECT
         a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
-        a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
+        a.lastUpdate,b.skipURL skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
         and b.status='1'
@@ -213,7 +213,7 @@
     <select id="selectBangbangTaskList" resultType="com.abc12366.uc.model.TodoTaskFront" parameterType="java.lang.String">
         SELECT
         a.id,a.userId,a.sysTaskId, a.allCount, a.finishedCount, a.awardType, a.type,a.award, a.status,a.createTime,
-        a.lastUpdate,a.skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
+        a.lastUpdate,b.skipURL skipUrl,a.ruleId,a.dateType,a.startTime,a.endTime,b.name,b.remark,b.imageUrl,b.rule
         FROM uc_user_task_todo a join uc_sys_task b on a.sysTaskId=b.id
         WHERE a.userId = #{userId}
         and b.status='1'
