@@ -3,6 +3,7 @@ package com.abc12366.uc.service.gift.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.UCUserBO;
+import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.Utils;
@@ -12,6 +13,7 @@ import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.gift.*;
 import com.abc12366.uc.model.gift.bo.*;
+import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.gift.GiftService;
 import org.slf4j.Logger;
@@ -355,6 +357,18 @@ public class GiftServiceImpl implements GiftService {
     @Override
     public UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map) {
         return ugiftApplyRoMapper.selectUgiftApplyBO(map);
+    }
+
+    @Override
+    public void automaticReceipt() {
+        Date date = DateUtils.getAddDate(Constant.ORDER_RECEIPT_DAYS);
+        //查询15天之前未确认的订单
+        List<Gift> giftList = giftRoMapper.selectReceiptGiftByDate(date);
+        for (Gift gift : giftList) {
+            gift.setStatus("4");
+            giftMapper.update(gift);
+            insertUgiftLog(gift.getId(), "", "管理员", "系统自动确认收货", "4");
+        }
     }
 
     /**
