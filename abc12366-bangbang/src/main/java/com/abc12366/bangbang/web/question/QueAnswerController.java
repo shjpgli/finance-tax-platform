@@ -190,8 +190,8 @@ public class QueAnswerController {
      * @return
      */
     @PutMapping(path = "/updateIsAccept/{id}")
-    public ResponseEntity updateIsAccept(@Valid @RequestBody String questionId, @PathVariable("id") String id) {
-        queAnswerService.updateIsAccept(questionId,id);
+    public ResponseEntity updateIsAccept(@Valid @RequestBody String questionId, @PathVariable("id") String id, HttpServletRequest request) {
+        queAnswerService.updateIsAccept(questionId,id,request);
         return ResponseEntity.ok(Utils.kv("data", id));
     }
 
