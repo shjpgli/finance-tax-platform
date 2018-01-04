@@ -349,7 +349,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
         dataMap.put("id", id);
         //查询是否自己回答的
         int answerCnt = answerRoMapper.selectIsMyAnswer(dataMap);
-        if(cnt >0){
+        if(answerCnt >0){
             //不能采纳自己回答的
             throw new ServiceException(6193);
         }
