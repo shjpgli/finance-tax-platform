@@ -120,8 +120,8 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             throw new ServiceException(6373);
         }
 
-        JSONObject jsonStu = JSONObject.fromObject(answerBo);
-        LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
+//        JSONObject jsonStu = JSONObject.fromObject(answerBo);
+//        LOGGER.info("新增问题回复信息:{}", jsonStu.toString());
 
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("userId", answerBo.getUserId());
@@ -337,11 +337,21 @@ public class QueAnswerServiceImpl implements QueAnswerService {
     }
 
     @Override
-    public String updateIsAccept(String questionId,String id) {
+    public String updateIsAccept(String questionId,String id, HttpServletRequest request) {
         int cnt = answerRoMapper.selectAcceptCnt(questionId);
         if(cnt >0){
             //该问题已有采纳的回复，请勿重复采纳
             throw new ServiceException(6190);
+        }
+        String userId = Utils.getUserId(request);
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("userId", userId);
+        dataMap.put("id", id);
+        //查询是否自己回答的
+        int answerCnt = answerRoMapper.selectIsMyAnswer(dataMap);
+        if(answerCnt >0){
+            //不能采纳自己回答的
+            throw new ServiceException(6193);
         }
         //设置为采纳
         try {

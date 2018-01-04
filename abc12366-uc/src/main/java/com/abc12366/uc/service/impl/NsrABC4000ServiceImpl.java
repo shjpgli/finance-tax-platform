@@ -35,7 +35,7 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     @Override
     public ResponseForAbc4000 selectList(String userId) {
         LOGGER.info("{}", userId);
-        List<NSRXX> nsrxxList = userBindRoMapper.selectListByUserId(userId);
+        List<NSRXX> nsrxxList = userBindMapper.selectListByUserId(userId);
         Date date = new Date();
         for (int i = 0; i < nsrxxList.size(); i++) {
             nsrxxList.get(i).setDqxtsj(date);

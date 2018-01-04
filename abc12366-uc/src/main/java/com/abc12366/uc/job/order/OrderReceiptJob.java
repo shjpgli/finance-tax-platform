@@ -1,5 +1,6 @@
 package com.abc12366.uc.job.order;
 
+import com.abc12366.uc.service.gift.GiftService;
 import com.abc12366.uc.service.order.OrderService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,10 +22,16 @@ public class OrderReceiptJob implements Job {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private GiftService giftService;
+
     @Override
     public void execute(JobExecutionContext context) {
         LOGGER.info("JobName2: {}", context.getJobDetail().getKey().getName());
+        //商品订单自动收货
         orderService.automaticReceipt();
+        //会员礼包自动收货
+        giftService.automaticReceipt();
     }
 
 

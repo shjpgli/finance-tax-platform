@@ -58,6 +58,13 @@ public interface QuestionAnswerRoMapper {
 
     /**
      *
+     * 查询是否自己回答的
+     *
+     **/
+    int  selectIsMyAnswer(Map<String, Object> map);
+
+    /**
+     *
      * 查询问题是否采纳过
      *
      **/
