@@ -87,11 +87,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //获取课程大类小类标签集合
                 .excludePathPatterns("/classify/selectClassifyListsy")
                         //获取最新课程
-                .excludePathPatterns("/curriculum/selectListNew","/curriculum/selectListByKnowledgeId")
+                .excludePathPatterns("/curriculum/selectListNew", "/curriculum/selectListByKnowledgeId")
                         //获取最热课程
                 .excludePathPatterns("/curriculum/selectListWatch")
                         //获取推荐课程
-                .excludePathPatterns("/curriculum/selectRecommend","/curriculum/selectRecommendForqt")
+                .excludePathPatterns("/curriculum/selectRecommend", "/curriculum/selectRecommendForqt")
                         //获取会员专享课程
                 .excludePathPatterns("/curriculum/selectListVIP")
                         //课程浏览量增加
@@ -107,7 +107,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //查询已解决的问题
                 .excludePathPatterns("/questionbb/selectListAccept")
                         //帮友热议列表查询
-                .excludePathPatterns("/questionbb/selectListry","/questionbb/selectListryForqt")
+                .excludePathPatterns("/questionbb/selectListry", "/questionbb/selectListryForqt")
                         //查询热议标签
                 .excludePathPatterns("/questionbb/selectTagList")
                         //查询最新问题
@@ -170,6 +170,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/cheats/selectTagList")
                         //查询单个秘籍信息
                 .excludePathPatterns("/cheats/selectCheats/**")
+                        //更新秘籍浏览量
+                .excludePathPatterns("/cheats/updateBrowseNum/**")
                         //秘籍评论列表查询
                 .excludePathPatterns("/cheatsComment/selectList")
                         //帮邦用户列表查询
