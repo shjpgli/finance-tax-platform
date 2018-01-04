@@ -494,6 +494,7 @@
                     and date_format(uu.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
                 ]]>
             </if>
+        order by uu.createTime desc
     </select>
     <!-- 用户年龄段查询用户列表未知用户 -->
     <select id="statisUserUnknownAgeList" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBO">
@@ -557,6 +558,7 @@
                     and date_format(uu.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
                 ]]>
             </if>
+        order by uu.createTime desc
     </select>
     <!-- 用户服务企业情况统计 -->
     <select id="statisUserBind" parameterType="java.util.Map" resultType="com.abc12366.uc.model.bo.UserBindBO">
