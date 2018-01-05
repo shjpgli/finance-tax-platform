@@ -5,7 +5,7 @@
 
     <select id="userDzsbSelectById" resultType="com.abc12366.uc.model.UserDzsb">
         select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate,
-        expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq
+        expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq,bdgroup,remark
         from uc_user_dzsb
         where id=#{id}
     </select>
@@ -20,12 +20,14 @@
 
     <select id="getUserDzsbBind" resultType="com.abc12366.uc.model.bo.UserDzsbListBO" parameterType="java.lang.String">
         select uud.id, uud.userId, uud.djxh, uud.nsrsbh, uud.nsrmc, uud.shxydm, uud.swjgMc, uud.swjgDm, uud.status,
-          uud.createTime, uud.lastUpdate, uud.expireTime, uud.expandExpireTime
+          uud.createTime, uud.lastUpdate, uud.expireTime, uud.expandExpireTime,uud.bdgroup,uud.remark 
         from uc_user_dzsb uud use INDEX(uc_user_dzsb_userId_index,idx_nsrsbh)
         where userId=#{userId}
         and status=1
         <if test="nsrmc != null"> and uud.nsrmc like CONCAT('%',#{nsrmc},'%') </if>
         <if test="nsrsbh != null"> and uud.nsrsbh =#{nsrsbh} </if>
+        <if test="bdgroup != null"> and uud.bdgroup like CONCAT('%',#{bdgroup},'%') </if>
+        <if test="remark != null"> and uud.remark like CONCAT('%',#{remark},'%')  </if>
         order by uud.createTime desc
     </select>
 
@@ -91,7 +93,9 @@
         uud.expireTime dqr,
         uud.swjgMc swjgmc,
         uud.swjgDm swjgdm,
-        uud.expandExpireTime yqdqr
+        uud.expandExpireTime yqdqr,
+        uud.bdgroup,
+        uud.remark 
         from uc_user_dzsb uud
         where uud.userId = #{userId}
         and uud.status = '1'
@@ -106,7 +110,9 @@
         uud.expireTime dqr,
         uud.swjgMc swjgmc,
         uud.swjgDm swjgdm,
-        uud.expandExpireTime yqdqr
+        uud.expandExpireTime yqdqr,
+        uud.bdgroup,
+        uud.remark 
         from uc_user_dzsb uud
         where uud.userId = #{userId}
         and uud.status = '1'
@@ -114,7 +120,7 @@
     </select>
 
     <select id="dzsbCount" resultType="com.abc12366.uc.model.UserDzsb">
-        select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate
+        select id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate,bdgroup,remark 
         from uc_user_dzsb
         where userId=#{userId}
         and status=1
@@ -148,10 +154,10 @@
 
     <insert id="dzsbBind" parameterType="com.abc12366.uc.model.UserDzsb">
         insert into uc_user_dzsb(id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status,
-        createTime,lastUpdate,expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq)
+        createTime,lastUpdate,expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq,bdgroup,remark)
         values (#{id}, #{userId}, #{djxh}, #{nsrsbh}, #{nsrmc}, #{shxydm}, #{swjgMc}, #{swjgDm}, #{status},
         #{createTime}, #{lastUpdate}, #{expireTime}, #{expandExpireTime}, #{frmc},#{frzjh},#{lastLoginTime},
-        #{nsrlx},#{sfgtjzh},#{djrq})
+        #{nsrlx},#{sfgtjzh},#{djrq},#{bdgroup},#{remark})
     </insert>
 
     <update id="dzsbUnbind" parameterType="java.lang.String">
@@ -223,6 +229,8 @@
             <if test="nsrlx!=null and nsrlx !=''">uud.nsrlx = #{nsrlx},</if>
             <if test="sfgtjzh!=null and sfgtjzh !=''">uud.sfgtjzh = #{sfgtjzh},</if>
             <if test="djrq!=null and djrq !=''">uud.djrq = #{djrq}</if>
+            <if test="bdgroup!=null and bdgroup !=''">uud.bdgroup = #{bdgroup}</if>
+            <if test="remark!=null and remark !=''">uud.remark = #{remark}</if>
         </set>
         where uud.userId = #{userId}
         and uud.djxh = #{djxh}

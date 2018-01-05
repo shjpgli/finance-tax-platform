@@ -166,6 +166,8 @@ public class UserBindController {
     public ResponseEntity getUserDzsbBind(@PathVariable String userId,
                                           @RequestParam(required = false) String nsrsbh,
                                           @RequestParam(required = false) String nsrmc,
+                                          @RequestParam(required = false) String bdgroup,
+                                          @RequestParam(required = false) String remark,
                                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                           @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         Map<String, String> map = new HashMap<>();
@@ -175,6 +177,12 @@ public class UserBindController {
         }
         if (StringUtils.isNotEmpty(nsrmc)) {
             map.put("nsrmc", nsrmc);
+        }
+        if (StringUtils.isNotEmpty(bdgroup)) {
+            map.put("bdgroup", bdgroup);
+        }
+        if (StringUtils.isNotEmpty(remark)) {
+            map.put("remark", remark);
         }
         LOGGER.info("{}", map);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);

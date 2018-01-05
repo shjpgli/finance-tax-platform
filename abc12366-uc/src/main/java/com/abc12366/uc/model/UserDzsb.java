@@ -85,8 +85,27 @@ public class UserDzsb {
      *税务登记日期
      */
     private String djrq;
+    
+    private String bdgroup;
+    private String remark;
 
-    public UserDzsb() {
+    public String getBdgroup() {
+		return bdgroup;
+	}
+
+	public void setBdgroup(String bdgroup) {
+		this.bdgroup = bdgroup;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public UserDzsb() {
     }
 
     public Date getExpireTime() {
