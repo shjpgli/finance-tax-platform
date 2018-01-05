@@ -1294,5 +1294,36 @@ public class UserServiceImpl implements UserService {
 	public List<UserBO> statisUserBindList(Map<String, Object> map) {
 		return userRoMapper.statisUserBindList(map);
 	}
+	@Override
+	public void resetPassword(UserResetPwdBO resetPwdBO) {
+		User u = userMapper.selectOne(resetPwdBO.getUserId());
+		if (u == null) {
+			throw new ServiceException(4018);
+		}
 
+		if(StringUtils.isEmpty(u.getSalt())){
+			throw new ServiceException(4205);
+		}
+
+		User newUser = new User();
+		newUser.setId(resetPwdBO.getUserId());
+		newUser.setLastUpdate(new Date());
+		String defaultPwd;
+		try {
+			defaultPwd = Utils.md5(Utils.md5(Constant.USER_DEFAULT_PASSWORD) + u.getSalt());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(4106);
+		}
+		newUser.setPassword(defaultPwd);
+		int result = userMapper.updatePassword(newUser);
+		if (result < 1) {
+			throw new ServiceException(4103);
+		}
+		try {
+			adminOperationService.insert(new AdminModifyUserPhoneLogBO(resetPwdBO.getUserId(), Utils.getAdminId(), null, null, resetPwdBO.getReason(), null, null));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
