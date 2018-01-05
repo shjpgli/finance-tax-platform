@@ -7,6 +7,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
+import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
 	private UserRoMapper userRoMapper;
 
 	@Autowired
-	private UserExtendRoMapper userExtendRoMapper;
+	private UserExtendMapper userExtendMapper;
 
 	@Autowired
 	private TokenMapper tokenMapper;
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
 
 		// 补充真实姓名、用户等级信息
 		for (UserListBO user : userList) {
-			UserExtend ue = userExtendRoMapper.selectOneForAdmin(user.getId());
+			UserExtend ue = userExtendMapper.selectOneForAdmin(user.getId());
 			if (ue != null) {
 				user.setRealName(ue.getRealName());
 			}
@@ -179,7 +180,7 @@ public class UserServiceImpl implements UserService {
 		// 新增优先查询redis
 		LOGGER.info("{}", userId);
 		User user = userMapper.selectOne(userId);
-		UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+		UserExtend userExtend = userExtendMapper.selectOne(userId);
      	if (user != null) {
 
 			// 用户重要信息模糊化处理:电话号码
@@ -727,7 +728,7 @@ public class UserServiceImpl implements UserService {
 	public IsRealNameBO isRealName() {
 		IsRealNameBO isRealName = new IsRealNameBO();
 		String userId = Utils.getUserId();
-		UserExtend userExtend = userExtendRoMapper.isRealName(userId);
+		UserExtend userExtend = userExtendMapper.isRealName(userId);
 		if (userExtend != null
 				&& userExtend.getValidStatus() != null
 				&& userExtend.getValidStatus().equals(
@@ -743,7 +744,7 @@ public class UserServiceImpl implements UserService {
 	public Map selectOneForAdmin(String userId) {
 		LOGGER.info("{}", userId);
 		User userTemp = selectUser(userId);
-		UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
+		UserExtend userExtend = userExtendMapper.selectOneForAdmin(userId);
 		if (userTemp != null) {
 			userTemp.setPassword(null);
 			Map<String, Object> map = new HashMap<>();

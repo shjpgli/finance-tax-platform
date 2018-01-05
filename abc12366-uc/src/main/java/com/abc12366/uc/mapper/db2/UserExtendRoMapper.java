@@ -11,19 +11,7 @@ import java.util.Map;
  */
 public interface UserExtendRoMapper {
 
-    UserExtend selectOne(String userId);
-
-    List<UserExtendListBO> selectList(Map map);
-
-    UserExtend isRealName(String userId);
-
-    UserExtend selectOneForAdmin(String userId);
-
-    /**
-     * 查询认证状态为【待认证】数量
-     * @return Integer 数量
-     */
-    Integer selectTodoListCount();
+    
 
 	List<Map<String, String>> canmerging(Map map);
 }

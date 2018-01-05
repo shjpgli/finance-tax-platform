@@ -70,12 +70,12 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
             if (userList.size() > 0) {
                 for (UserListBO bo : userList) {
                     map.put("userId", bo.getId());
-                    dataList.addAll(userExtendRoMapper.selectList(map));
+                    dataList.addAll(userExtendMapper.selectList(map));
                 }
             }
         } else {
             PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            dataList = userExtendRoMapper.selectList(map);
+            dataList = userExtendMapper.selectList(map);
         }
 
         for (UserExtendListBO bo : dataList) {
@@ -95,7 +95,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     public UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
             ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
-        UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
+        UserExtend userExtend = userExtendMapper.selectOneForAdmin(userId);
         if (userExtend == null) {
             throw new ServiceException(4701);
         }
@@ -151,7 +151,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         }
 
         UserExtendBO userExtendBO = new UserExtendBO();
-        UserExtend userExtend1 = userExtendRoMapper.selectOne(userExtendUpdate.getUserId());
+        UserExtend userExtend1 = userExtendMapper.selectOne(userExtendUpdate.getUserId());
         BeanUtils.copyProperties(userExtend1, userExtendBO);
 
         userFeedbackMsgService.realNameValidate(userId, validStatus);
@@ -160,7 +160,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
 
     @Override
     public Integer selectTodoListCount() {
-        return userExtendRoMapper.selectTodoListCount();
+        return userExtendMapper.selectTodoListCount();
     }
 
     public Date getSpecifiedDate(String date) throws ParseException {
