@@ -59,7 +59,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private OrderRoMapper orderRoMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private OrderInvoiceMapper orderInvoiceMapper;
@@ -405,7 +405,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4102);
             }
 
-            User user = userRoMapper.selectOne(invoiceTemp.getUserId());
+            User user = userMapper.selectOne(invoiceTemp.getUserId());
 
             //发送消息
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
@@ -871,7 +871,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      * 纸质发票开具发送消息
      */
     private void sendZzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
-        User user = userRoMapper.selectOne(invoiceBO.getUserId());
+        User user = userMapper.selectOne(invoiceBO.getUserId());
         //发送消息
         Message message = new Message();
         message.setBusinessId(invoiceBO.getId());
@@ -897,7 +897,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      * 电子发票开具发送消息
      */
     private void sendDzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
-        User user = userRoMapper.selectOne(invoiceBO.getUserId());
+        User user = userMapper.selectOne(invoiceBO.getUserId());
         //查询是否发红包
         String isRedPackage = selectFieldValue();
         String redPackage = "";
@@ -956,7 +956,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setStatus("3");
         //修改订单和发票对应关系
         orderInvoiceMapper.updateByInvoiceId(invoiceCheckBO.getId());
-        User user = userRoMapper.selectOne(invoiceBO.getUserId());
+        User user = userMapper.selectOne(invoiceBO.getUserId());
         //发送消息
         Message message = new Message();
         message.setBusinessId(invoiceBO.getId());

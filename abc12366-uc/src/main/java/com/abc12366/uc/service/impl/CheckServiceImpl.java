@@ -6,6 +6,7 @@ import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.CheckMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.CheckRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Check;
@@ -55,7 +56,7 @@ public class CheckServiceImpl implements CheckService {
     private VipPrivilegeLevelService vipPrivilegeLevelService;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -65,7 +66,7 @@ public class CheckServiceImpl implements CheckService {
     public int check(Check check) {
         User user = null;
         if (!StringUtils.isEmpty(check.getUserId())) {
-            user = userRoMapper.selectOne(check.getUserId());
+            user = userMapper.selectOne(check.getUserId());
         }
         if (user == null) {
             return 0;

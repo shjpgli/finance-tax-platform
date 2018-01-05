@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db1.VipLogMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.mapper.db2.VipLogRoMapper;
@@ -40,7 +41,7 @@ public class VipLogServiceImpl implements VipLogService {
     private VipLogMapper vipLogMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Override
     public List<VipLogBO> selectList(String userId) {
@@ -67,7 +68,7 @@ public class VipLogServiceImpl implements VipLogService {
         } else {
             // 会员到期时间为创建时间加一年,加入是会员未到期再购买则在原有到期时间基础上再延长一年
             if (!StringUtils.isEmpty(vipLogBO.getUserId()) && !StringUtils.isEmpty(vipLogBO.getLevelId())) {
-                User user = userRoMapper.selectOne(vipLogBO.getUserId());
+                User user = userMapper.selectOne(vipLogBO.getUserId());
                 if (user != null && user.getVipExpireDate() != null && !StringUtils.isEmpty(user.getVipLevel())
                         && vipLogBO.getLevelId().equals(user.getVipLevel())) {
                     calendar.setTime(user.getVipExpireDate());

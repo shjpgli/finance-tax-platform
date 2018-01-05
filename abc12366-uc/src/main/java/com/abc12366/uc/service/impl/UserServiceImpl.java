@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
 
 		PageHelper.startPage(page, size, true).pageSizeZero(true)
 				.reasonable(true);
-		List<UserListBO> userList = userRoMapper.selectList(map);
+		List<UserListBO> userList = userMapper.selectList(map);
 
 		// 补充真实姓名、用户等级信息
 		for (UserListBO user : userList) {
@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User selectUser(String userId) {
 		// 新增优先查询redis
-		User user = userRoMapper.selectOne(userId);
+		User user = userMapper.selectOne(userId);
 	
 		return user;
 	}
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
 	public Map selectOne(String userId) {
 		// 新增优先查询redis
 		LOGGER.info("{}", userId);
-		User user = userRoMapper.selectOne(userId);
+		User user = userMapper.selectOne(userId);
 		UserExtend userExtend = userExtendRoMapper.selectOne(userId);
      	if (user != null) {
 
@@ -248,7 +248,7 @@ public class UserServiceImpl implements UserService {
 		if (userUpdateBO.getUsername() != null) {
 			LoginBO loginBO = new LoginBO();
 			loginBO.setUsernameOrPhone(userUpdateBO.getUsername());
-			User userOnly = userRoMapper.selectByUsernameOrPhone(loginBO);
+			User userOnly = userMapper.selectByUsernameOrPhone(loginBO);
 			if (userOnly != null
 					&& !userOnly.getId().equals(userUpdateBO.getId())) {
 				throw new ServiceException(4182);
@@ -340,7 +340,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserBO authAndRefreshToken(String token) {
 		LOGGER.info("{}", token);
-		UserBO user = userRoMapper.selectOneByToken(token);
+		UserBO user = userMapper.selectOneByToken(token);
 		if (user != null) {
 			tokenMapper.updateLastTokenResetTime(token);
 			// 用户重要信息模糊化处理:电话号码
@@ -469,12 +469,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserBO selectByopenid(String openid) {
-		return userRoMapper.selectByopenid(openid);
+		return userMapper.selectByopenid(openid);
 	}
 
 	@Override
 	public void automaticUserCancel() {
-		List<User> userList = userRoMapper.selectUserVipList(new Date());
+		List<User> userList = userMapper.selectUserVipList(new Date());
 		LOGGER.info("VIP到期，自动取消", userList);
 		for (User user : userList) {
 			LOGGER.info("VIP到期，取消用户", user);
@@ -495,7 +495,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserSimpleInfoBO selectSimple(String userId) {
-		return userRoMapper.selectSimple(userId);
+		return userMapper.selectSimple(userId);
 	}
 
 	@Override
@@ -712,7 +712,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void verifyOldPhone(oldPhoneBO oldPhone) {
 		String userId = Utils.getUserId();
-		User userNow = userRoMapper.selectOne(userId);
+		User userNow = userMapper.selectOne(userId);
 
 		LoginBO loginBO = new LoginBO();
 		loginBO.setUsernameOrPhone(oldPhone.getOldPhone());
@@ -758,12 +758,12 @@ public class UserServiceImpl implements UserService {
 	// 获取总用户数
 	@Override
 	public int getAllNomalCont() {
-		return userRoMapper.getAllNomalCont();
+		return userMapper.getAllNomalCont();
 	}
 
 	@Override
 	public List<UserBO> getNomalList(Map<String, Object> map) {
-		return userRoMapper.getNomalList(map);
+		return userMapper.getNomalList(map);
 	}
 
 	@Override
@@ -773,7 +773,7 @@ public class UserServiceImpl implements UserService {
 		users.setId(userUpdateDTO.getId());
 		users.setWxopenid(userUpdateDTO.getWxopenid());
 
-		User user = userRoMapper.selectByWxUserId(users);
+		User user = userMapper.selectByWxUserId(users);
 		if (user != null) {
 			LOGGER.info("微信已绑定此账号");
 			return 1;
@@ -798,7 +798,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findByHngsNsrsbh(String nsrsbh) {
-		return userRoMapper.findByHngsNsrsbh(nsrsbh);
+		return userMapper.findByHngsNsrsbh(nsrsbh);
 	}
 
 	@Override
@@ -808,12 +808,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserBO selectOneByPhone(String phone) {
-		return userRoMapper.selectOneByPhone(phone);
+		return userMapper.selectOneByPhone(phone);
 	}
 
 	@Override
 	public User selectUserById(User user) {
-		return userRoMapper.selectUserById(user);
+		return userMapper.selectUserById(user);
 	}
 
 	/**

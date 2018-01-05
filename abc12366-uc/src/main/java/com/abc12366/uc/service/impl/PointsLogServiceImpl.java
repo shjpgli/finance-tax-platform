@@ -61,7 +61,7 @@ public class PointsLogServiceImpl implements PointsLogService {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-        User user = userRoMapper.selectOne(pointsLogBO.getUserId());
+        User user = userMapper.selectOne(pointsLogBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }
@@ -113,7 +113,7 @@ public class PointsLogServiceImpl implements PointsLogService {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-        User user = userRoMapper.selectOne(pointsLogBO.getUserId());
+        User user = userMapper.selectOne(pointsLogBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }
@@ -159,7 +159,7 @@ public class PointsLogServiceImpl implements PointsLogService {
             LOGGER.error("积分日志参数不正确：{}",pointsLogBO);
             return null;
         }
-        User user = userRoMapper.selectOne(pointsLogBO.getUserId());
+        User user = userMapper.selectOne(pointsLogBO.getUserId());
         if (user == null || StringUtils.isEmpty(user.getVipLevel())) {
             LOGGER.error("不存在这个用户：{}", pointsLogBO.getUserId());
             return null;

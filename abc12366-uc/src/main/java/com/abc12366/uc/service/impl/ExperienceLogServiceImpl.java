@@ -67,7 +67,7 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
             throw new ServiceException(4101);
         }
 
-        User user = userRoMapper.selectOne(experienceLogBO.getUserId());
+        User user = userMapper.selectOne(experienceLogBO.getUserId());
         if (user == null) {
             LOGGER.warn("新增失败,userId为不存在用户的id,参数为：userId=" + experienceLogBO.getUserId());
             throw new ServiceException("23333", "新增失败,不存在的用户Id=" + experienceLogBO.getUserId());
@@ -130,7 +130,7 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         if (StringUtils.isEmpty(id)) {
             return;
         }
-        User user = userRoMapper.selectOne(id);
+        User user = userMapper.selectOne(id);
         if (user == null || user.getExp() == null) {
             return;
         }
