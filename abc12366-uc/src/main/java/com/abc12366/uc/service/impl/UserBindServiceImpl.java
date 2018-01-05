@@ -80,7 +80,7 @@ public class UserBindServiceImpl implements UserBindService {
         //用户会员绑定企业数量限制
         String userId = Utils.getUserId(request);
         //bindLimit(userId);
-        
+
         redisTemplate.delete(userId + "_DzsbList");
 
         //查看是否重复绑定
@@ -88,7 +88,7 @@ public class UserBindServiceImpl implements UserBindService {
         queryParam.setUserId(userId);
         queryParam.setNsrsbh(userDzsbInsertBO.getNsrsbhOrShxydm());
         queryParam.setShxydm(userDzsbInsertBO.getNsrsbhOrShxydm());
-		List<NSRXXBO> nsrxxboList = userBindMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
+        List<NSRXXBO> nsrxxboList = userBindMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
         if (nsrxxboList != null && nsrxxboList.size() >= 1) {
             throw new ServiceException(4632);
         }
@@ -280,7 +280,7 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public boolean dzsbUnbind(String id) {
         UserDzsb userDzsb = userBindMapper.userDzsbSelectById(id);
-        
+
         if (userDzsb == null) {
             LOGGER.warn("修改失败，参数：null");
             throw new ServiceException(4102);
@@ -291,7 +291,7 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + userDzsb.toString());
             throw new ServiceException(4102);
         }
-        
+
         return true;
     }
 
@@ -377,7 +377,7 @@ public class UserBindServiceImpl implements UserBindService {
     @Override
     public boolean hngsUnbind(String id) {
         UserHngs userHngs = userBindMapper.userHngsSelectById(id);
-        
+
         if (userHngs == null) {
             LOGGER.warn("修改失败，参数：null");
             throw new ServiceException(4102);
@@ -389,7 +389,7 @@ public class UserBindServiceImpl implements UserBindService {
             throw new ServiceException(4102);
         }
 
-        
+
         return true;
     }
 
@@ -399,7 +399,7 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-        String userId=Utils.getUserId(request);
+        String userId = Utils.getUserId(request);
         redisTemplate.delete(userId + "_HndsList");
         UserHnds userHnds = new UserHnds();
         Date date = new Date();
@@ -420,7 +420,6 @@ public class UserBindServiceImpl implements UserBindService {
         todoTaskService.doTask(userId, TaskConstant.SYS_TASK_COURSE_BDSH_CODE);
 
 
-        
         return userHndsBO1;
     }
 
@@ -437,7 +436,7 @@ public class UserBindServiceImpl implements UserBindService {
             LOGGER.warn("修改失败，参数：{}" + id);
             throw new ServiceException(4102);
         }
-        
+
         return true;
     }
 
@@ -533,7 +532,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public void updatePassword(UpdatePwd data) throws MarshalException, ValidationException {
+    public void updatePassword(UpdatePwd data) throws ValidationException {
         Map<String, String> map = new HashMap<>(16);
         map.put("serviceid", "TY03");
         map.put("NSRSBH", data.getNsrsbh());
@@ -729,12 +728,12 @@ public class UserBindServiceImpl implements UserBindService {
         HngsNsrLoginResponse loginResponse = loginWsbsHngs(login, request);
         //更新绑定关系
         if (loginResponse != null) {
-        	
-        	String userId=Utils.getUserId(request);
-        	if (redisTemplate.hasKey(userId + "_HngsList")) {
+
+            String userId = Utils.getUserId(request);
+            if (redisTemplate.hasKey(userId + "_HngsList")) {
                 redisTemplate.delete(userId + "_HngsList");
             }
-        	
+
             UserHngs userHngs = new UserHngs();
             userHngs.setUserId(userId);
             userHngs.setDjxh(loginResponse.getDjxh());
@@ -770,12 +769,12 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Override
     public UserDzsbListBO updateDzsb(String userId, String nsrsbh) {
-    	
-    	// 清除缓存
+
+        // 清除缓存
         if (redisTemplate.hasKey(userId + "_DzsbList")) {
             redisTemplate.delete(userId + "_DzsbList");
         }
-        
+
         Map<String, String> mapVali = new HashMap<>(16);
         mapVali.put("serviceid", "TY11");
         mapVali.put("NSRSBH", nsrsbh);
@@ -794,14 +793,14 @@ public class UserBindServiceImpl implements UserBindService {
         UserDzsbListBO userDzsbBO = new UserDzsbListBO();
         BeanUtils.copyProperties(userDzsb, userDzsbBO);
 
-        
+
         return userDzsbBO;
     }
 
     @Override
     public UserDzsb updateDzsb(String userId, TY21Xml2Object ty21Object) {
-    	redisTemplate.delete(userId + "_DzsbList");
-    	
+        redisTemplate.delete(userId + "_DzsbList");
+
         if (StringUtils.isEmpty(userId) || ty21Object == null || StringUtils.isEmpty(ty21Object.getY_NSRSBH()) ||
                 StringUtils.isEmpty(ty21Object.getDJXH())) {
             return null;

@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.uc.mapper.db1.UserBindMapper;
-import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.abc4000.ABC4000CallbackBO;
 import com.abc12366.uc.model.abc4000.NSRXX;
@@ -25,9 +24,6 @@ import java.util.List;
 @Service
 public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     private static final Logger LOGGER = LoggerFactory.getLogger(NsrABC4000ServiceImpl.class);
-
-    @Autowired
-    private UserBindRoMapper userBindRoMapper;
 
     @Autowired
     private UserBindMapper userBindMapper;

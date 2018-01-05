@@ -347,12 +347,10 @@ public class UserBindController {
      *
      * @param data 修改密码信息
      * @return ResponseEntity
-     * @throws MarshalException    解包异常
      * @throws ValidationException 验证异常
      */
     @PostMapping(path = "/shb/updatepassword")
-    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePwd data) throws MarshalException,
-            ValidationException {
+    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePwd data) throws ValidationException {
         LOGGER.info("用户修改纳税人登录电子申报密码，{}", data);
         userBindService.updatePassword(data);
         return ResponseEntity.ok(Utils.kv());
