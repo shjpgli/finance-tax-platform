@@ -142,6 +142,8 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setFrmc(ty21Object.getFRXM());
         userDzsb.setFrzjh(ty21Object.getFRZJH());
         userDzsb.setDjrq(ty21Object.getDJRQ());
+        userDzsb.setBdgroup(userDzsbInsertBO.getBdgroup());
+        userDzsb.setRemark(userDzsbInsertBO.getRemark());
         int result = userBindMapper.dzsbBind(userDzsb);
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());

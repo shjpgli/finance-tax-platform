@@ -12,8 +12,30 @@ public class UserDzsbInsertBO {
     private String nsrsbhOrShxydm;
     @NotEmpty
     private String fwmm;
+    
+    private String bdgroup;
+    
+    private String remark;
+    
+    
 
-    public UserDzsbInsertBO() {
+    public String getBdgroup() {
+		return bdgroup;
+	}
+
+	public void setBdgroup(String bdgroup) {
+		this.bdgroup = bdgroup;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public UserDzsbInsertBO() {
     }
 
     public String getFwmm() {
