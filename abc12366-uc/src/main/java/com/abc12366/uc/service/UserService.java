@@ -271,4 +271,10 @@ public interface UserService {
      * @return
      */
     List<UserBO> statisUserSexList(Map<String, Object> map);
+
+    /**
+     * 重置用户密码
+     * @param resetPwdBO
+     */
+    void resetPassword(UserResetPwdBO resetPwdBO);
 }
