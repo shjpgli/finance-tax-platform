@@ -47,7 +47,7 @@
     </select>
 
     <select id="regionProvinceUinfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
-        select c.id, c.username, a.phone, c.regMail, c.regIP, c.salt, c.nickname,
+        select c.id, c.username, c.phone, c.regMail, c.regIP, c.salt, c.nickname,
         c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
         c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
         c.wxheadimg,c.wxnickname
@@ -66,7 +66,7 @@
     </select>
 
     <select id="regionCityUinfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
-        select c.id, c.username, a.phone, c.regMail, c.regIP, c.salt, c.nickname,
+        select c.id, c.username, c.phone, c.regMail, c.regIP, c.salt, c.nickname,
         c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
         c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
         c.wxheadimg,c.wxnickname
