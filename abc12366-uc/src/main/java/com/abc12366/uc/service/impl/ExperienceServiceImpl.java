@@ -5,6 +5,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
@@ -44,7 +45,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     private ExperienceMapper experienceMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private ExperienceLogService experienceLogService;
@@ -149,7 +150,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         //经验值日志,同时修改用户经验值
-        User user = userRoMapper.selectValidOne(expCalculateBO.getUserId());
+        User user = userMapper.selectValidOne(expCalculateBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }
@@ -224,7 +225,7 @@ public class ExperienceServiceImpl implements ExperienceService {
         }
 
         //经验值日志,同时修改用户经验值
-        User user = userRoMapper.selectOne(expComputeBO.getUserId());
+        User user = userMapper.selectOne(expComputeBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }

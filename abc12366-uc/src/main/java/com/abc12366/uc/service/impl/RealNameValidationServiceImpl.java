@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
@@ -44,7 +45,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     private UserExtendRoMapper userExtendRoMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private UserExtendMapper userExtendMapper;
@@ -65,7 +66,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
                 || !StringUtils.isEmpty(map.get("status"))
                 || !StringUtils.isEmpty(map.get("phone"))) {
             PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            List<UserListBO> userList = userRoMapper.selectList(map);
+            List<UserListBO> userList = userMapper.selectList(map);
             if (userList.size() > 0) {
                 for (UserListBO bo : userList) {
                     map.put("userId", bo.getId());
@@ -78,7 +79,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
         }
 
         for (UserExtendListBO bo : dataList) {
-            User user = userRoMapper.selectUserById(new User(bo.getUserId()));
+            User user = userMapper.selectUserById(new User(bo.getUserId()));
             if (user != null) {
                 bo.setUsername(user.getUsername());
                 bo.setPhone(user.getPhone());

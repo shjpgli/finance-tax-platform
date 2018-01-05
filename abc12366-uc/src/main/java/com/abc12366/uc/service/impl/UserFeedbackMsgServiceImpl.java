@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.*;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.MessageSendBo;
@@ -44,7 +45,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
     private TodoTaskService todoTaskService;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFeedbackMsgServiceImpl.class);
 
@@ -167,7 +168,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
             LOGGER.info("给用户发送实名认证情况消息通知参数异常：userId:{},status:{}", userId, status);
             return;
         }
-        User user = userRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
         if (user == null) {
             LOGGER.info("给用户发送实名认证情况消息通知失败，因为用户不存在");
         }
@@ -196,7 +197,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
     }
 
     private User getUser() {
-        return userRoMapper.selectOne((String) ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+        return userMapper.selectOne((String) ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .getRequest().getAttribute(Constant.USER_ID));
     }
 

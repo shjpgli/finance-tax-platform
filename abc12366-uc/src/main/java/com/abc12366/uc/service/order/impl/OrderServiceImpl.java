@@ -649,7 +649,7 @@ public class OrderServiceImpl implements OrderService {
      * 购买会员，消息发送
      */
     private void sendMemberMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
-        User user = userRoMapper.selectOne(order.getUserId());
+        User user = userMapper.selectOne(order.getUserId());
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setBusiType(MessageConstant.SPDD);
@@ -677,7 +677,7 @@ public class OrderServiceImpl implements OrderService {
      * 积分充值，消息发送
      */
     private void sendPointsMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
-        User user = userRoMapper.selectOne(order.getUserId());
+        User user = userMapper.selectOne(order.getUserId());
         //组装web消息
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
@@ -730,7 +730,7 @@ public class OrderServiceImpl implements OrderService {
         vipLogService.insert(vipLogBO);
 
         //查询会员礼包业务
-        User user = userRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
         obj.setLevelId(memberLevel);
         obj.setPrivilegeId(MessageConstant.HYLB_CODE);
@@ -890,7 +890,7 @@ public class OrderServiceImpl implements OrderService {
             insertOrderLog(data.getUserId(), order.getOrderNo(), "5", "管理员已发货", "0");
 
             //查询用户信息
-            User user = userRoMapper.selectOne(data.getUserId());
+            User user = userMapper.selectOne(data.getUserId());
 
             //组装web消息
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
@@ -953,7 +953,7 @@ public class OrderServiceImpl implements OrderService {
                     ("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         }
 
-        User user = userRoMapper.selectOne(order.getUserId());
+        User user = userMapper.selectOne(order.getUserId());
         Map<String, String> map = new HashMap<>();
         map.put("userId", user.getId());
         map.put("openId", user.getWxopenid());
