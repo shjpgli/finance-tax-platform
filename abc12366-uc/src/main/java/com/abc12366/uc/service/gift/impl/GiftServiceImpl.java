@@ -429,7 +429,7 @@ public class GiftServiceImpl implements GiftService {
      * @param type         类型，0：减去，1：加上
      */
     private void updateUserAmount(String userId, double sellingPrice, Date date, int type) {
-        User user = userRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
         double amount = 0;
         double userAmount = 0;
         if(user.getAmount() != null){

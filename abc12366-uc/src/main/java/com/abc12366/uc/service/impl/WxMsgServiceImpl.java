@@ -115,7 +115,7 @@ public class WxMsgServiceImpl implements IWxMsgService {
                         		}
                         	}else{*///其他渠道关注
                         	    //关注公众号，完成任务
-		                       	UserBO userBO= userRoMapper.selectByopenid(map.get("FromUserName"));
+		                       	UserBO userBO= userMapper.selectByopenid(map.get("FromUserName"));
 		                       	if(userBO!=null){
 		                       	     LOGGER.info("用户关注公众号，做任务，USERID:"+userBO.getId());
 		                       		 todoTaskService.doTask(userBO.getId(), TaskConstant.SYS_TASK_GZCSZJGZH_CODE);

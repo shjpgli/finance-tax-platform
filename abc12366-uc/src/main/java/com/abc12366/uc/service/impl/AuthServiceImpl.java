@@ -519,7 +519,7 @@ public class AuthServiceImpl implements AuthService {
         //登录任务日志
         todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
-        User user = userRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
             todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
@@ -546,7 +546,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void continuePasswordWrong(String userId) {
         //记录用户连续输错密码次数
-        List<UserLoginPasswordWrongCount> wrongCountList = userRoMapper.selectContinuePwdWrong(userId);
+        List<UserLoginPasswordWrongCount> wrongCountList = userMapper.selectContinuePwdWrong(userId);
         UserLoginPasswordWrongCount wrongCount;
         if (wrongCountList == null || wrongCountList.size() != 1) {
             if (wrongCountList != null && wrongCountList.size() > 1) {
@@ -576,7 +576,7 @@ public class AuthServiceImpl implements AuthService {
      * @param userId 用户ID
      */
     private void isUserLocked(String userId) {
-        List<UserLoginPasswordWrongCount> wrongCountList = userRoMapper.selectContinuePwdWrong(userId);
+        List<UserLoginPasswordWrongCount> wrongCountList = userMapper.selectContinuePwdWrong(userId);
         if (wrongCountList != null && wrongCountList.size() > 0) {
             UserLoginPasswordWrongCount wrongCount = wrongCountList.get(0);
             if (wrongCount.getLimitTime().getTime() >= System.currentTimeMillis()) {
@@ -591,7 +591,7 @@ public class AuthServiceImpl implements AuthService {
      * @param userId 用户ID
      */
     private void resetContinuePasswordWrong(String userId) {
-        List<UserLoginPasswordWrongCount> wrongCountList = userRoMapper.selectContinuePwdWrong(userId);
+        List<UserLoginPasswordWrongCount> wrongCountList = userMapper.selectContinuePwdWrong(userId);
         UserLoginPasswordWrongCount wrongCount;
         if (wrongCountList == null || wrongCountList.size() != 1) {
             if (wrongCountList != null && wrongCountList.size() > 1) {
