@@ -44,9 +44,9 @@ public class UserBindController {
 
     @Autowired
     private UserBindService userBindService;
-    
+
     @Autowired
-	private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     /**
      * 用户绑定纳税人（电子申报）
@@ -73,11 +73,10 @@ public class UserBindController {
      * @return 是否解绑成功
      */
     @PutMapping(path = "/unbind/dzsb/{id}")
-    public ResponseEntity userDzsbUnbind(@PathVariable String id,HttpServletRequest
-            request) {
+    public ResponseEntity userDzsbUnbind(@PathVariable String id) {
         LOGGER.info("{}", id);
         userBindService.dzsbUnbind(id);
-        
+
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -90,20 +89,22 @@ public class UserBindController {
     public ResponseEntity getUserDzsbBinds(@PathVariable String userId) {
         Map<String, String> map = new HashMap<>();
         map.put("userId", userId);
-        List<UserDzsbListBO> userDzsbBOList=null;
-        if(redisTemplate.hasKey(userId+"_DzsbList")){
-        	userDzsbBOList=JSONArray.parseArray(redisTemplate.opsForValue().get(userId+"_DzsbList"),UserDzsbListBO.class);
-        	LOGGER.info("从redis获取电子申报绑定列表:{}", JSONArray.toJSONString(userDzsbBOList));
-        }else{
-        	userDzsbBOList = userBindService.getUserDzsbBind(map);
-        	redisTemplate.opsForValue().set(userId+"_DzsbList",JSONArray.toJSONString(userDzsbBOList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        List<UserDzsbListBO> userDzsbBOList = null;
+        if (redisTemplate.hasKey(userId + "_DzsbList")) {
+            userDzsbBOList = JSONArray.parseArray(redisTemplate.opsForValue().get(userId + "_DzsbList"),
+                    UserDzsbListBO.class);
+            LOGGER.info("从redis获取电子申报绑定列表:{}", JSONArray.toJSONString(userDzsbBOList));
+        } else {
+            userDzsbBOList = userBindService.getUserDzsbBind(map);
+            redisTemplate.opsForValue().set(userId + "_DzsbList", JSONArray.toJSONString(userDzsbBOList),
+                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
         }
         LOGGER.info("{}", userDzsbBOList);
         return (userDzsbBOList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", userDzsbBOList, "total", userDzsbBOList.size()));
     }
-    
+
     /**
      * 根据用户ID查询湖南国税绑定列表客户端
      *
@@ -113,20 +114,22 @@ public class UserBindController {
     public ResponseEntity getUserhngsBinds(@PathVariable String userId) {
         Map<String, String> map = new HashMap<>();
         map.put("userId", userId);
-        List<UserHngsListBO> userHngsListBO=null;
-        if(redisTemplate.hasKey(userId+"_HngsList")){
-        	userHngsListBO=JSONArray.parseArray(redisTemplate.opsForValue().get(userId+"_HngsList"),UserHngsListBO.class);
-        	LOGGER.info("从redis获取湖南国税绑定列表:{}", JSONArray.toJSONString(userHngsListBO));
-        }else{
-        	userHngsListBO = userBindService.getUserhngsBind(map);
-        	redisTemplate.opsForValue().set(userId+"_HngsList",JSONArray.toJSONString(userHngsListBO),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        List<UserHngsListBO> userHngsListBO = null;
+        if (redisTemplate.hasKey(userId + "_HngsList")) {
+            userHngsListBO = JSONArray.parseArray(redisTemplate.opsForValue().get(userId + "_HngsList"),
+                    UserHngsListBO.class);
+            LOGGER.info("从redis获取湖南国税绑定列表:{}", JSONArray.toJSONString(userHngsListBO));
+        } else {
+            userHngsListBO = userBindService.getUserhngsBind(map);
+            redisTemplate.opsForValue().set(userId + "_HngsList", JSONArray.toJSONString(userHngsListBO),
+                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
         }
         LOGGER.info("{}", userHngsListBO);
         return (userHngsListBO == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", userHngsListBO, "total", userHngsListBO.size()));
     }
-    
+
     /**
      * 根据用户ID查询湖南地税绑定列表客户端
      *
@@ -136,20 +139,21 @@ public class UserBindController {
     public ResponseEntity getUserhndsBinds(@PathVariable String userId) {
         Map<String, String> map = new HashMap<>();
         map.put("userId", userId);
-        List<UserHndsBO> uerHndsBO=null;
-        if(redisTemplate.hasKey(userId+"_HndsList")){
-        	uerHndsBO=JSONArray.parseArray(redisTemplate.opsForValue().get(userId+"_HndsList"),UserHndsBO.class);
-        	LOGGER.info("从redis获取湖南国税绑定列表:{}", JSONArray.toJSONString(uerHndsBO));
-        }else{
-        	uerHndsBO = userBindService.getUserhndsBind(map);
-        	redisTemplate.opsForValue().set(userId+"_HndsList",JSONArray.toJSONString(uerHndsBO),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        List<UserHndsBO> uerHndsBO = null;
+        if (redisTemplate.hasKey(userId + "_HndsList")) {
+            uerHndsBO = JSONArray.parseArray(redisTemplate.opsForValue().get(userId + "_HndsList"), UserHndsBO.class);
+            LOGGER.info("从redis获取湖南国税绑定列表:{}", JSONArray.toJSONString(uerHndsBO));
+        } else {
+            uerHndsBO = userBindService.getUserhndsBind(map);
+            redisTemplate.opsForValue().set(userId + "_HndsList", JSONArray.toJSONString(uerHndsBO), RedisConstant
+                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
         }
         LOGGER.info("{}", uerHndsBO);
         return (uerHndsBO == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", uerHndsBO, "total", uerHndsBO.size()));
     }
-    
+
     /**
      * 根据用户ID查询电子申报绑定列表
      *
@@ -259,7 +263,7 @@ public class UserBindController {
             request) throws Exception {
         LOGGER.info("{}:{}", userHngsInsertBO, request);
         UserHngsBO userHngs = userBindService.hngsBind(userHngsInsertBO, request);
-        
+
         return ResponseEntity.ok(Utils.kv("data", userHngs));
     }
 
@@ -270,11 +274,11 @@ public class UserBindController {
      * @return ResponseEntity
      */
     @PutMapping(path = "/unbind/hngs/{id}")
-    public ResponseEntity userHngsUnbind(@PathVariable String id,HttpServletRequest
+    public ResponseEntity userHngsUnbind(@PathVariable String id, HttpServletRequest
             request) {
         LOGGER.info("{}", id);
         userBindService.hngsUnbind(id);
-        
+
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -290,7 +294,7 @@ public class UserBindController {
             request) {
         LOGGER.info("{}:{}", userHndsInsertBO, request);
         UserHndsBO userHnds = userBindService.hndsBind(userHndsInsertBO, request);
-        
+
         return ResponseEntity.ok(Utils.kv("data", userHnds));
     }
 
@@ -301,11 +305,10 @@ public class UserBindController {
      * @return ResponseEntity
      */
     @PutMapping(path = "/unbind/hnds/{id}")
-    public ResponseEntity userHndsUnbind(@PathVariable String id,HttpServletRequest
-            request) {
+    public ResponseEntity userHndsUnbind(@PathVariable String id) {
         LOGGER.info("{}", id);
         userBindService.hndsUnbind(id);
-        
+
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -389,6 +392,7 @@ public class UserBindController {
 
     /**
      * 更新电子申报绑定关系
+     *
      * @param userId 用户id
      * @param nsrsbh 纳税人识别号
      * @return ResponseEntity
@@ -399,12 +403,13 @@ public class UserBindController {
         LOGGER.info("更新电子申报绑定关系：{},{}", userId, nsrsbh);
         UserDzsbListBO userDzsb = userBindService.updateDzsb(userId, nsrsbh);
         LOGGER.info("更新电子申报绑定关系返回：{}");
-        
+
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
 
     /**
      * 查询电子申报绑定关系详情
+     *
      * @param id 绑定关系id
      * @return ResponseEntity
      */
@@ -418,6 +423,7 @@ public class UserBindController {
 
     /**
      * 查询湖南国税绑定关系详情
+     *
      * @param id 绑定关系id
      * @return ResponseEntity
      */
@@ -431,6 +437,7 @@ public class UserBindController {
 
     /**
      * 查询湖南地税绑定关系详情
+     *
      * @param id 绑定关系id
      * @return ResponseEntity
      */
