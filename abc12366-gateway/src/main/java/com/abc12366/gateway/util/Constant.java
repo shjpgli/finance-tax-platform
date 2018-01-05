@@ -98,4 +98,6 @@ public class Constant {
 	// 电子申报绑定时间，单位：月
 	public final static Integer DZSB_BIND_DATE = 7;
 
+	//用户重置密码的默认密码
+	public final static String USER_DEFAULT_PASSWORD = "abc12366";
 }

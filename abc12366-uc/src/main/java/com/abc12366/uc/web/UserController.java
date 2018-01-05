@@ -326,4 +326,15 @@ public class UserController {
         return ResponseEntity.ok(Utils.kv("data", user));
     }
 
+    /**
+     * 重置用户密码接口
+     * @param resetPwdBO
+     * @return ResponseEntity
+     */
+    @PutMapping(path = "/resetpwd")
+    public ResponseEntity resetPassword(@Valid @RequestBody UserResetPwdBO resetPwdBO){
+        LOGGER.info("重置用户密码：{}",resetPwdBO);
+        userService.resetPassword(resetPwdBO);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }
