@@ -607,12 +607,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserBO updatePhone(UserPhoneBO bo) {
 		User user = selectUser(bo.getId());
-		String oldPhone = user.getPhone();
-		String oldUsername = user.getUsername();
 		if (user == null) {
 			LOGGER.warn("修改失败");
 			throw new ServiceException(4018);
 		}
+		String oldPhone = user.getPhone();
+		String oldUsername = user.getUsername();
 
 		if (!StringUtils.isEmpty(bo.getPhone())) {
 			LoginBO loginBO = new LoginBO();
