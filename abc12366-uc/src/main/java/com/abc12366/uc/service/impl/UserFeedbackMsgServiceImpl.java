@@ -68,7 +68,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         sendBo.setWebMsg(sysMsg);
         sendBo.setTemplateid("AYi8h8g7_bKN8Yr9wVDh4ZQ_CIOwsoIzX1A6tx1E5WE");
         sendBo.setDataList(dataList);
-        sendBo.setPhoneMsg(RemindConstant.UPDATE_PWD_SUCCESS_DX);
+        sendBo.setPhoneMsg(RemindConstant.UPDATE_PWD_SUCCESS_DX.replace("{#DATA.DATE}", DateUtils.dateToStr(new Date())));
         msgSendService.sendXtxx(sendBo);
     }
 
