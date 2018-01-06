@@ -99,6 +99,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private UserRoMapper userRoMapper;
+    
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private TradeMapper tradeMapper;
@@ -251,7 +254,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         throw new ServiceException(4102, "物流公司查询失败");
                     }
 
-                    User user = userRoMapper.selectOne(order.getUserId());
+                    User user = userMapper.selectOne(order.getUserId());
                     Message message = new Message();
                     message.setBusinessId(order.getOrderNo());
                     message.setType("SPDD");
@@ -454,7 +457,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         //将订单状态改成已结束
                                         order.setOrderStatus("7");
                                         orderMapper.update(order);
-                                        User user = userRoMapper.selectOne(order.getUserId());
+                                        User user = userMapper.selectOne(order.getUserId());
                                         //查询会员特权-业务提醒
                                         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
                                         obj.setLevelId(user.getVipLevel());
@@ -640,7 +643,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(4102, "订单信息查询失败");
             }
 
-            User user = userRoMapper.selectOne(order.getUserId());
+            User user = userMapper.selectOne(order.getUserId());
             //服务类型：1-换货 2-退货
             Message message = new Message();
             String content = "";
@@ -694,7 +697,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
                 throw new ServiceException(4102, "订单信息查询失败");
             }
-            User user = userRoMapper.selectOne(order.getUserId());
+            User user = userMapper.selectOne(order.getUserId());
 
             Message message = new Message();
             String content = "";

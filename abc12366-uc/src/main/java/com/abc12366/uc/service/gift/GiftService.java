@@ -139,4 +139,9 @@ public interface GiftService {
      * @return
      */
     UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map);
+
+    /**
+     * 会员礼包自动收货
+     */
+    void automaticReceipt();
 }

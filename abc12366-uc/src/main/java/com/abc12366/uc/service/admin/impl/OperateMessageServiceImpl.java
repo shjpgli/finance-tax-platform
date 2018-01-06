@@ -7,6 +7,8 @@ import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.OperateMessageMapper;
+import com.abc12366.uc.mapper.db1.UserExtendMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.OperateMessageRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
@@ -48,7 +50,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     private OperateMessageRoMapper operateMessageRoMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private MessageSendUtil messageSendUtil;
@@ -60,7 +62,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     private IWxTemplateService templateService;
 
     @Autowired
-    private UserExtendRoMapper userExtendRoMapper;
+    private UserExtendMapper userExtendMapper;
 
     @Override
     public OperateMessageBO insert(OperateMessageBO operateMessageBO) {
@@ -125,8 +127,8 @@ public class OperateMessageServiceImpl implements OperateMessageService {
 
     @Override
     public void send(String userId) {
-        User user = userRoMapper.selectOne(userId);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
+        UserExtend userExtend = userExtendMapper.selectOne(userId);
         List<String> tagIdList = operateMessageRoMapper.selectTagIdList(userId);
         if (user == null) {
             return;

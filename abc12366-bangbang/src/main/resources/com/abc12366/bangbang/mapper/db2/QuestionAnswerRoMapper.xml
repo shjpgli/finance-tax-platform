@@ -97,6 +97,14 @@
         WHERE questionId = #{questionId} AND userId = #{userId}
     </select>
 
+    <!-- 查询是否自己回答的 -->
+    <select id="selectIsMyAnswer" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        count(id)
+        FROM bb_question_answer
+        WHERE id = #{id} AND userId = #{userId}
+    </select>
+
     <!-- 查询问题是否采纳过 -->
     <select id="selectAcceptCnt" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT

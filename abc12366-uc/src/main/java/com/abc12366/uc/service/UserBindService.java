@@ -125,10 +125,9 @@ public interface UserBindService {
      * 修改电子申报密码
      *
      * @param data 修改密码信息
-     * @throws MarshalException    解包异常
      * @throws ValidationException 验证异常
      */
-    void updatePassword(UpdatePwd data) throws MarshalException, ValidationException;
+    void updatePassword(UpdatePwd data) throws ValidationException;
 
     /**
      * 电子税局纳税人登录绑定

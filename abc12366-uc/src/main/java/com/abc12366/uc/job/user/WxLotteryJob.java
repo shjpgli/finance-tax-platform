@@ -4,7 +4,6 @@ import com.abc12366.uc.model.weixin.WxRedEnvelop;
 import com.abc12366.uc.service.IActivityService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,9 @@ public class WxLotteryJob implements Job {
     private IActivityService activityService;
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) {
         LOGGER.info("WxLotteryJob: {}", context.getJobDetail().getKey().getName());
-       
+
         // 接收状态为'空'的微信红包
         WxRedEnvelop unusedRedEnvelop = new WxRedEnvelop.Builder()
                 .sendStatus("1")
@@ -46,7 +45,7 @@ public class WxLotteryJob implements Job {
         unusedDataList.addAll(sentDataList);
 
 
-        for(WxRedEnvelop wre : unusedDataList) {
+        for (WxRedEnvelop wre : unusedDataList) {
             LOGGER.info("同步口令ID: {}", wre.getId());
             WxRedEnvelop data = activityService.gethbinfo(wre.getId());
             LOGGER.info("同步完成信息: {}", data);

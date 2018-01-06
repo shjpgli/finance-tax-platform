@@ -3,7 +3,6 @@ package com.abc12366.uc.job.order;
 import com.abc12366.uc.service.order.OrderExchangeService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class OrderExchangeReceiptJob implements Job {
     private OrderExchangeService orderExchangeService;
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) {
         LOGGER.info("JobName: {}", context.getJobDetail().getKey().getName());
         try {
             orderExchangeService.automaticReceipt();

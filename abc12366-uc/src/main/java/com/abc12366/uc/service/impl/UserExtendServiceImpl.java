@@ -58,7 +58,7 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendMapper.selectOne(userId);
 
 
         if (userExtend == null) {
@@ -88,7 +88,7 @@ public class UserExtendServiceImpl implements UserExtendService {
         LOGGER.info("{}", userExtendBO);
         if (userExtendBO.getUserId() != null
                 && !"".equals(userExtendBO.getUserId())) {
-            UserExtend userExtend = userExtendRoMapper.selectOne(userExtendBO.getUserId());
+            UserExtend userExtend = userExtendMapper.selectOne(userExtendBO.getUserId());
             if (userExtend != null) {
                 UserExtendBO userExtendOld = new UserExtendBO();
                 BeanUtils.copyProperties(userExtend, userExtendOld);
@@ -172,7 +172,7 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Override
     public UserExtendBO delete(String userId) {
         LOGGER.info("{}", userId);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendMapper.selectOne(userId);
         if (userExtend == null) {
             LOGGER.warn("删除失败，参数：{}" + userId);
             throw new ServiceException(4103);
@@ -204,7 +204,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             throw new ServiceException(4190);
         }
         if (!userExtendUpdateBO.getUserId().equals("")) {
-            UserExtend userExtend = userExtendRoMapper
+            UserExtend userExtend = userExtendMapper
                     .selectOne(userExtendUpdateBO.getUserId());
             if (userExtend == null) {
                 UserExtendBO userExtendBO = new UserExtendBO();
@@ -279,7 +279,7 @@ public class UserExtendServiceImpl implements UserExtendService {
                 throw new ServiceException(4102);
             }
 
-            UserExtend userExtend2 = userExtendRoMapper
+            UserExtend userExtend2 = userExtendMapper
                     .selectOne(userExtendSecond.getUserId());
             BeanUtils.copyProperties(userExtend2, userExtendBO);
             LOGGER.info("{}", userExtendBO);

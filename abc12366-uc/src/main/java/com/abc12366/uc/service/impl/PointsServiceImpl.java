@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.PointMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Message;
@@ -44,7 +45,7 @@ public class PointsServiceImpl implements PointsService {
     private PointsRoMapper pointsRoMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private PointsLogService pointsLogService;
@@ -128,7 +129,7 @@ public class PointsServiceImpl implements PointsService {
             }
         }
         //根据规则计算用户积分值变化
-        User user = userRoMapper.selectOne(pointComputeBO.getUserId());
+        User user = userMapper.selectOne(pointComputeBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }
@@ -235,7 +236,7 @@ public class PointsServiceImpl implements PointsService {
             }
         }
         //根据规则计算用户积分值变化
-        User user = userRoMapper.selectValidOne(pointCalculateBO.getUserId());
+        User user = userMapper.selectValidOne(pointCalculateBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }
