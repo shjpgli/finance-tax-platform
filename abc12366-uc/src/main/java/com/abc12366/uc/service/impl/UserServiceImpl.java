@@ -1321,6 +1321,7 @@ public class UserServiceImpl implements UserService {
 		if (result < 1) {
 			throw new ServiceException(4103);
 		}
+		userMapper.deleteContinuePwdWrong(resetPwdBO.getUserId());
 		try {
 			adminOperationService.insert(new AdminModifyUserPhoneLogBO(resetPwdBO.getUserId(), Utils.getAdminId(), null, null, resetPwdBO.getReason(), null, null));
 		} catch (Exception e) {
