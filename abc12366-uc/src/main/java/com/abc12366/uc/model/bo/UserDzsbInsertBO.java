@@ -12,9 +12,9 @@ public class UserDzsbInsertBO {
 	private String nsrsbhOrShxydm;
 	@NotEmpty
 	private String fwmm;
-	@Size(max = 10, message = "分组最大长度不能超过10位")
+	@Size(max = 10)
 	private String bdgroup;
-	@Size(max = 150, message = "分组最大长度不能超过150位")
+	@Size(max = 150)
 	private String remark;
 
 	public String getBdgroup() {
