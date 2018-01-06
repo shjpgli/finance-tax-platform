@@ -10,6 +10,7 @@ import com.abc12366.uc.service.NsrABC4000Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,9 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
 
     @Autowired
     private UserBindMapper userBindMapper;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public ResponseForAbc4000 selectList(String userId) {
@@ -48,6 +52,9 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     @Override
     public ResponseForAbc4000Simple update(ABC4000CallbackBO data) {
         LOGGER.info("{}", data);
+        
+        redisTemplate.delete(data.getUserid() + "_DzsbList");
+        
         UserDzsb userDzsb = new UserDzsb();
         userDzsb.setStatus(true);
         userDzsb.setUserId(data.getUserid());
