@@ -35,7 +35,7 @@ import java.util.concurrent.CompletableFuture;
  * @author lingsuzhi <554600654@qq.com.com>
  * @create 2017-08-16
  */
-@Service
+@Service("systemRecordService")
 public class SystemRecordServiceImpl implements SystemRecordService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemRecordServiceImpl.class);
