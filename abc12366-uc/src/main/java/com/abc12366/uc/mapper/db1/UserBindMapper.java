@@ -62,7 +62,7 @@ public interface UserBindMapper {
      * @param queryParam 纳税人识别号、社会信用代码必传
      * @return 纳税人绑定信息
      */
-    List<NSRXXBO> selectListByUserIdAndNsrsbhOrShxydm(UserDzsb queryParam);
+    List<UserDzsb> selectListByUserIdAndNsrsbhOrShxydm(UserDzsb queryParam);
 
     /**
      * 根据'用户ID，纳税人识别号'查询是否存在绑定信息
@@ -70,7 +70,7 @@ public interface UserBindMapper {
      * @param queryParam 纳税人识别号必传
      * @return 纳税人绑定信息
      */
-    List<NSRXXBO> selectListByUserIdAndNsrsbh(UserDzsb queryParam);
+    List<UserDzsb> selectListByUserIdAndNsrsbh(UserDzsb queryParam);
 
     List<UserDzsb> dzsbCount(String userId);
 
@@ -81,4 +81,6 @@ public interface UserBindMapper {
     List<ShxydmBO> bindCount(String userId);
 
     List<String> selectListByDate(Date date);
+
+    int deleteDzsb(String id);
 }

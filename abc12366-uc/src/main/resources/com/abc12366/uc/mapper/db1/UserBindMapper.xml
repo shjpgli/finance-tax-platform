@@ -86,36 +86,19 @@
     </select>
 
     <select id="selectListByUserIdAndNsrsbhOrShxydm" parameterType="com.abc12366.uc.model.UserDzsb" resultType="com.abc12366.uc.model.abc4000.NSRXX">
-        select uud.nsrsbh nsrsbh,
-        uud.shxydm shxydm,
-        uud.nsrmc nsrmc,
-        uud.createTime bdsj,
-        uud.expireTime dqr,
-        uud.swjgMc swjgmc,
-        uud.swjgDm swjgdm,
-        uud.expandExpireTime yqdqr,
-        uud.bdgroup,
-        uud.remark 
+        select 	id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate,
+        expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq,bdgroup,remark
         from uc_user_dzsb uud
         where uud.userId = #{userId}
         and uud.status = '1'
         and (nsrsbh = #{nsrsbh} OR shxydm=#{shxydm})
     </select>
 
-    <select id="selectListByUserIdAndNsrsbh" parameterType="com.abc12366.uc.model.UserDzsb" resultType="com.abc12366.uc.model.abc4000.NSRXX">
-        select uud.nsrsbh nsrsbh,
-        uud.shxydm shxydm,
-        uud.nsrmc nsrmc,
-        uud.createTime bdsj,
-        uud.expireTime dqr,
-        uud.swjgMc swjgmc,
-        uud.swjgDm swjgdm,
-        uud.expandExpireTime yqdqr,
-        uud.bdgroup,
-        uud.remark 
+    <select id="selectListByUserIdAndNsrsbh" parameterType="com.abc12366.uc.model.UserDzsb" resultType="com.abc12366.uc.model.UserDzsb">
+        select 	id, userId, djxh, nsrsbh, nsrmc, shxydm, swjgMc, swjgDm, status, createTime, lastUpdate,
+        expireTime,expandExpireTime,frmc,frzjh,lastLoginTime,nsrlx,sfgtjzh,djrq,bdgroup,remark
         from uc_user_dzsb uud
         where uud.userId = #{userId}
-        and uud.status = '1'
         and nsrsbh = #{nsrsbh}
     </select>
 
@@ -232,9 +215,7 @@
             <if test="bdgroup!=null and bdgroup !=''">uud.bdgroup = #{bdgroup}</if>
             <if test="remark!=null and remark !=''">uud.remark = #{remark}</if>
         </set>
-        where uud.userId = #{userId}
-        and uud.djxh = #{djxh}
-        and status=1
+        where id=#{id}
     </update>
 
     <update id="updateHngs" parameterType="com.abc12366.uc.model.UserHngs">
@@ -254,4 +235,7 @@
         and uud.djxh = #{djxh}
         and status=1
     </update>
+    <delete id="deleteDzsb" parameterType="java.lang.String">
+        delete from uc_user_dzsb where id = #{id}
+    </delete>
 </mapper>

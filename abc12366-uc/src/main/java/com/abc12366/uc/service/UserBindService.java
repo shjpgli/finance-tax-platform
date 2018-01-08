@@ -177,7 +177,7 @@ public interface UserBindService {
      * @param ty21Object 电子申报返回税号信息
      * @return UserDzsb
      */
-    UserDzsb updateDzsb(String userId, TY21Xml2Object ty21Object);
+    UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object);
 
     /**
      * 查询电子申报绑定关系详情
