@@ -198,6 +198,7 @@
     <update id="update" parameterType="com.abc12366.uc.model.UserDzsb">
         update uc_user_dzsb uud
         <set>
+            uud.status = #{status},
             <if test="nsrsbh!=null and nsrsbh !=''">uud.nsrsbh = #{nsrsbh},</if>
             <if test="nsrmc!=null and nsrmc !=''">uud.nsrmc = #{nsrmc},</if>
             <if test="shxydm!=null  and shxydm !=''">uud.shxydm = #{shxydm},</if>
