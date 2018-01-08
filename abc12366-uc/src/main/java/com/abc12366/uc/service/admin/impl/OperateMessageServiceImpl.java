@@ -197,8 +197,9 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                     || ((o.getRate().equals("D")) && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_WECHAT, DateUtils.getFirstHourOfDay(), DateUtils.getFirstHourOfLastDay())))) {
                 Map<String, String> dataList = new HashMap<>();
                 dataList.put("first", RemindConstant.YYXX_WX_FIRST);
-                dataList.put("keyword1", DateUtils.dateToStr(new Date()));
-                dataList.put("keyword2", o.getContent());
+                dataList.put("keyword1", RemindConstant.YYXX_WX_KEY1);
+                dataList.put("keyword2", DateUtils.dateToStr(new Date()));
+                dataList.put("keyword3", o.getContent());
                 dataList.put("remark", RemindConstant.YYXX_WX_REMARK);
                 dataList.put("userId", user.getId());
                 dataList.put("openId", user.getWxopenid());
