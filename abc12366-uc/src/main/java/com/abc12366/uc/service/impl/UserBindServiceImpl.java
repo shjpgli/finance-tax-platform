@@ -845,6 +845,7 @@ public class UserBindServiceImpl implements UserBindService {
         UserDzsb userDzsb = new UserDzsb();
         Date date = new Date();
         userDzsb.setId(id);
+        userDzsb.setStatus(true);
         userDzsb.setLastUpdate(date);
         userDzsb.setUserId(userId);
         userDzsb.setDjxh(ty21Object.getDJXH());
