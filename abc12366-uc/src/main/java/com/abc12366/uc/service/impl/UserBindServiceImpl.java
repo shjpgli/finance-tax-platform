@@ -470,16 +470,6 @@ public class UserBindServiceImpl implements UserBindService {
     public TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
         String userId = Utils.getUserId(request);
-
-        //查看是否有有效绑定
-        UserDzsb queryParam = new UserDzsb();
-        queryParam.setUserId(userId);
-        queryParam.setNsrsbh(login.getNsrsbhOrShxydm());
-        queryParam.setShxydm(login.getNsrsbhOrShxydm());
-        List<UserDzsb> nsrxxboList = userBindMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
-        if (nsrxxboList == null || nsrxxboList.size() < 1) {
-            throw new ServiceException(4639);
-        }
         Map<String, String> map = new HashMap<>(16);
         map.put("serviceid", "TY21");
         map.put("nsrsbh", login.getNsrsbhOrShxydm());
@@ -493,6 +483,7 @@ public class UserBindServiceImpl implements UserBindService {
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
         LOGGER.info("{}", ty21Object);
         //更新用户绑定信息
+        UserDzsb queryParam = new UserDzsb();
         queryParam.setUserId(userId);
         queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
         List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
