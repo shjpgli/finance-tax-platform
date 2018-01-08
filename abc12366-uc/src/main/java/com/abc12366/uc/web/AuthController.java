@@ -1,6 +1,7 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.gateway.web.BaseController;
@@ -142,7 +143,7 @@ public class AuthController extends BaseController {
      */
     @GetMapping(path = "/login/todo")
     public ResponseEntity todoAfterLogin(HttpServletRequest request) {
-        CompletableFuture cf = authService.todoAfterLogin(request);
+        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(request);
         CompletableFuture.allOf(cf);
         LOGGER.info("todoAfterLogin");
         return ResponseEntity.ok(Utils.kv());
