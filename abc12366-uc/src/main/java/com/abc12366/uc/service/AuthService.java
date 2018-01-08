@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,5 +82,5 @@ public interface AuthService {
     /**
      * 登陆之后需要处理的业务
      */
-    CompletableFuture todoAfterLogin(HttpServletRequest request);
+    CompletableFuture<BodyStatus> todoAfterLogin(HttpServletRequest request);
 }
