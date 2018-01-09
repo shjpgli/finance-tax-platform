@@ -6,6 +6,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.BusinessMessageAdmin;
 import com.abc12366.message.service.BusinessMsgService;
 import com.github.pagehelper.PageInfo;
@@ -279,6 +280,21 @@ public class BusinessMsgController {
         }
 
         LOGGER.info("发送给{}的消息有：{}", username, dataList);
+        return responseEntity;
+    }
+
+    /**
+     * 批量将消息置为已读
+     *
+     * @param bo 消息ID集合
+     * @return ResponseEntity
+     */
+    @PutMapping(path = "/batch")
+    public ResponseEntity batchUpdateToRead(@RequestBody BatchUpdateMsgToReadBO bo) {
+        LOGGER.info("{}", bo);
+        businessMsgService.batchUpdateToRead(bo);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
 }

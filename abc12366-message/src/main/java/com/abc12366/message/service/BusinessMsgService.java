@@ -3,6 +3,7 @@ package com.abc12366.message.service;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.BusinessMessageAdmin;
 
 import java.util.List;
@@ -57,4 +58,10 @@ public interface BusinessMsgService {
      * @return 业务消息未读列表
      */
     List<BusinessMessage> selectUnreadList(BusinessMessage bm);
+
+    /**
+     * 批量更新消息为已读
+     * @param bo
+     */
+    void batchUpdateToRead(BatchUpdateMsgToReadBO bo);
 }

@@ -1,6 +1,7 @@
 package com.abc12366.message.mapper.db1;
 
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface UserMsgMapper {
     void update(UserMessage data);
 
     void batchInsert(List<UserMessage> dataList);
+
+    void updateBatch(BatchUpdateMsgToReadBO bo);
 }

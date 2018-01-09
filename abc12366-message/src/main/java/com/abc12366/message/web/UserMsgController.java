@@ -6,6 +6,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
@@ -281,6 +282,20 @@ public class UserMsgController {
         }
 
         LOGGER.info("查询到的用户的消息有：{}", dataList);
+        return responseEntity;
+    }
+    /**
+     * 批量将消息置为已读
+     *
+     * @param bo 消息ID集合
+     * @return ResponseEntity
+     */
+    @PutMapping(path = "/batch")
+    public ResponseEntity batchUpdateToRead(@RequestBody BatchUpdateMsgToReadBO bo) {
+        LOGGER.info("{}", bo);
+        userMsgService.batchUpdateToRead(bo);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+        LOGGER.info("{}", responseEntity);
         return responseEntity;
     }
 }
