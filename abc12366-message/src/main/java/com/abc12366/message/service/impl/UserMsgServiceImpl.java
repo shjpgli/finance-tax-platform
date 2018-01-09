@@ -1,5 +1,6 @@
 package com.abc12366.message.service.impl;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
@@ -7,6 +8,7 @@ import com.abc12366.message.mapper.db1.UserMsgMapper;
 import com.abc12366.message.mapper.db2.UserMsgRoMapper;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 import com.abc12366.message.service.UserMsgService;
@@ -195,5 +197,16 @@ public class UserMsgServiceImpl implements UserMsgService {
                     TimeUnit.DAYS);
         }
         return dataList;
+    }
+
+    @Override
+    public void batchUpdateToRead(BatchUpdateMsgToReadBO bo) {
+        if(bo==null||bo.getIds()==null||bo.getIds().size()<1){
+            return;
+        }
+        if(bo.getIds().size()>100){
+            throw new ServiceException(4206);
+        }
+        userMsgMapper.updateBatch(bo);
     }
 }
