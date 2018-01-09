@@ -12,4 +12,13 @@
         where type=#{type}
         and phone=#{phone}
     </delete>
+
+    <select id="selectList" parameterType="com.abc12366.message.model.PhoneCode"
+            resultType="com.abc12366.message.model.bo.PhoneCodeBO">
+        select id, phone, code, expireDate, type
+        from msg_phone_code
+        where type=#{type}
+        and phone=#{phone}
+        and code=#{code}
+    </select>
 </mapper>
