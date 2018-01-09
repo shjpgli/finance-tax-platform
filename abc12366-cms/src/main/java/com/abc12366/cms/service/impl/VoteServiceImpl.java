@@ -201,6 +201,8 @@ public class VoteServiceImpl implements VoteService {
             v.setStatus(vote.getStatus());
             v.setChannel(vote.getChannel());
             v.setLastUpdate(now);
+            v.setNop(vote.getNop());
+            v.setNov(vote.getNov());
             voteMapper.update(v);
 
             // 先删除附加信息
