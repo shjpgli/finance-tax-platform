@@ -313,7 +313,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean isAuthentication(String userToken, HttpServletRequest request) {
-        Token token = tokenRoMapper.isAuthentication(userToken);
+        Token token = tokenMapper.isAuthentication(userToken);
         if (token == null) {
             throw new ServiceException(4016);
         }

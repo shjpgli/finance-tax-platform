@@ -34,4 +34,10 @@
         where userId = #{userId}
         and appId = #{appId}
     </select>
+
+    <select id="isAuthentication" resultType="com.abc12366.uc.model.Token" parameterType="java.lang.String">
+        select id, appId, userId, token, lastTokenResetTime
+        from uc_token
+        where token = #{token}
+    </select>
 </mapper>

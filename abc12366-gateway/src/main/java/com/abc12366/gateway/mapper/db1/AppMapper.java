@@ -10,6 +10,8 @@ import com.abc12366.gateway.model.App;
  */
 public interface AppMapper {
 
+    App selectOne(App app);
+
     int insert(App newApp);
 
     int update(App app);
