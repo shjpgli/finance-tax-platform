@@ -115,7 +115,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         phoneCodeParam.setType(verifyParam.getType().trim());
         phoneCodeParam.setPhone(verifyParam.getPhone().trim());
         phoneCodeParam.setCode(verifyParam.getCode().trim());
-        List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectList(phoneCodeParam);
+        List<PhoneCodeBO> phoneCodeBOList = phoneCodeMapper.selectList(phoneCodeParam);
         if (phoneCodeBOList == null) {
             throw new ServiceException(4202);
         }

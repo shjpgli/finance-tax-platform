@@ -1,6 +1,9 @@
 package com.abc12366.message.mapper.db1;
 
 import com.abc12366.message.model.PhoneCode;
+import com.abc12366.message.model.bo.PhoneCodeBO;
+
+import java.util.List;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -11,4 +14,6 @@ public interface PhoneCodeMapper {
     int insert(PhoneCode phoneCode);
 
     int delete(PhoneCode phoneCodeDel);
+
+    List<PhoneCodeBO> selectList(PhoneCode phoneCode);
 }
