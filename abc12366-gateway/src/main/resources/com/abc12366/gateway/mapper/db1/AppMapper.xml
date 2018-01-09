@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.gateway.mapper.db1.AppMapper">
+
+    <select id="selectOne" resultType="com.abc12366.gateway.model.App" parameterType="com.abc12366.gateway.model.App">
+        SELECT id, name,nickname, password, accessToken, lastResetTokenTime, startTime, endTime, remark, status,
+        createTime, lastUpdate
+        FROM gw_app
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            <if test="accessToken != null">
+                AND accessToken = #{accessToken}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
     <insert id="insert" parameterType="com.abc12366.gateway.model.App">
         INSERT INTO gw_app
         <trim prefix="(" suffix=")" suffixOverrides=",">

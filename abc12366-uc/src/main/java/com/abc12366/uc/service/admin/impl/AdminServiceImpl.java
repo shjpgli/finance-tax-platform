@@ -481,7 +481,7 @@ public class AdminServiceImpl implements AdminService {
         LoginInfo loginInfo = new LoginInfo();
         loginInfo.setToken(token);
         //验证Token是否存在
-        LoginInfo info = loginInfoRoMapper.selectInfoByToken(loginInfo);
+        LoginInfo info = loginInfoMapper.selectInfoByToken(loginInfo);
         if (info == null) {
             LOGGER.warn("Admin-Token不存在{}", loginInfo);
             throw new ServiceException(4128);
@@ -501,7 +501,7 @@ public class AdminServiceImpl implements AdminService {
             LOGGER.warn("修改Admin-token有效时间失败{}", info);
             throw new ServiceException(4129);
         }
-        return loginInfoRoMapper.selectLoginInfoByToken(token);
+        return loginInfoMapper.selectLoginInfoByToken(token);
     }
 
     @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)

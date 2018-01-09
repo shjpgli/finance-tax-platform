@@ -1,6 +1,7 @@
 package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.admin.LoginInfo;
+import com.abc12366.uc.model.admin.bo.LoginInfoBO;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -35,4 +36,7 @@ public interface LoginInfoMapper {
      **/
     int updateByPrimaryKey(LoginInfo record);
 
+    LoginInfo selectInfoByToken(LoginInfo loginInfo);
+
+    LoginInfoBO selectLoginInfoByToken(String token);
 }

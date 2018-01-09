@@ -9,7 +9,6 @@ import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
-import com.abc12366.uc.model.abc4000.NSRXXBO;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.RSAService;
@@ -88,7 +87,7 @@ public class UserBindServiceImpl implements UserBindService {
         queryParam.setUserId(userId);
         queryParam.setNsrsbh(userDzsbInsertBO.getNsrsbhOrShxydm());
         queryParam.setShxydm(userDzsbInsertBO.getNsrsbhOrShxydm());
-        List<NSRXXBO> nsrxxboList = userBindMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
+        List<UserDzsb> nsrxxboList = userBindMapper.selectListByUserIdAndNsrsbhOrShxydm(queryParam);
         if (nsrxxboList != null && nsrxxboList.size() >= 1) {
             throw new ServiceException(4632);
         }
@@ -109,10 +108,7 @@ public class UserBindServiceImpl implements UserBindService {
         //查看是否重复绑定
         queryParam.setUserId(userId);
         queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
-        List<NSRXXBO> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
-        if (nsrxxboList2 != null && nsrxxboList2.size() >= 1) {
-            throw new ServiceException(4632);
-        }
+        List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
 
         UserDzsb userDzsb = new UserDzsb();
         userDzsb.setId(Utils.uuid());
@@ -144,7 +140,20 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setDjrq(ty21Object.getDJRQ());
         userDzsb.setBdgroup(userDzsbInsertBO.getBdgroup());
         userDzsb.setRemark(userDzsbInsertBO.getRemark());
-        int result = userBindMapper.dzsbBind(userDzsb);
+        int result;
+        if(nsrxxboList2==null||nsrxxboList2.size()==0){
+            result = userBindMapper.dzsbBind(userDzsb);
+        } else if(nsrxxboList2.size()==1){
+            userDzsb.setId(nsrxxboList2.get(0).getId());
+            result = userBindMapper.update(userDzsb);
+        } else{
+            userDzsb.setId(nsrxxboList2.get(0).getId());
+            result = userBindMapper.update(userDzsb);
+            nsrxxboList2.remove(nsrxxboList2.get(0));
+            for(UserDzsb ud : nsrxxboList2){
+                userBindMapper.deleteDzsb(ud.getId());
+            }
+        }
         if (result < 1) {
             LOGGER.warn("新增失败，参数：{}" + userDzsb.toString());
             throw new ServiceException(4101);
@@ -474,7 +483,19 @@ public class UserBindServiceImpl implements UserBindService {
         TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
         LOGGER.info("{}", ty21Object);
         //更新用户绑定信息
-        updateDzsb(userId, ty21Object);
+        UserDzsb queryParam = new UserDzsb();
+        queryParam.setUserId(userId);
+        queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
+        List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
+        if(nsrxxboList2.size()==1){
+            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+        } else if(nsrxxboList2.size()>1){
+            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+            nsrxxboList2.remove(nsrxxboList2.get(0));
+            for(UserDzsb ud : nsrxxboList2){
+                userBindMapper.deleteDzsb(ud.getId());
+            }
+        }
         return ty21Object;
     }
 
@@ -791,16 +812,29 @@ public class UserBindServiceImpl implements UserBindService {
         }
 
         //更新用户绑定信息
-        UserDzsb userDzsb = updateDzsb(userId, ty21Object);
+        UserDzsb queryParam = new UserDzsb();
+        queryParam.setUserId(userId);
+        queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
+        List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
+        UserDzsb userDzsbRetu = new UserDzsb();
+        if(nsrxxboList2==null||nsrxxboList2.size()<1){
+            return null;
+        }else if(nsrxxboList2.size()==1){
+            userDzsbRetu = updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+        } else if(nsrxxboList2.size()>1){
+            userDzsbRetu = updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+            nsrxxboList2.remove(nsrxxboList2.get(0));
+            for(UserDzsb ud : nsrxxboList2){
+                userBindMapper.deleteDzsb(ud.getId());
+            }
+        }
         UserDzsbListBO userDzsbBO = new UserDzsbListBO();
-        BeanUtils.copyProperties(userDzsb, userDzsbBO);
-
-
+        BeanUtils.copyProperties(userDzsbRetu, userDzsbBO);
         return userDzsbBO;
     }
 
     @Override
-    public UserDzsb updateDzsb(String userId, TY21Xml2Object ty21Object) {
+    public UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object) {
         redisTemplate.delete(userId + "_DzsbList");
 
         if (StringUtils.isEmpty(userId) || ty21Object == null || StringUtils.isEmpty(ty21Object.getY_NSRSBH()) ||
@@ -810,6 +844,8 @@ public class UserBindServiceImpl implements UserBindService {
         //更新用户绑定信息
         UserDzsb userDzsb = new UserDzsb();
         Date date = new Date();
+        userDzsb.setId(id);
+        userDzsb.setStatus(true);
         userDzsb.setLastUpdate(date);
         userDzsb.setUserId(userId);
         userDzsb.setDjxh(ty21Object.getDJXH());

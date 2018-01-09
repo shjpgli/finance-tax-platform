@@ -71,6 +71,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/content/updateViewsDay/**")
                         //获取标签
                 .excludePathPatterns("/content/selectContentType")
+                        //根据内容标签名称、栏目名称查询内容列表信息
+                .excludePathPatterns("/content/selectListByTagName")
                         //根据内容标签查询内容列表信息
                 .excludePathPatterns("/content/selectListByContentType")
                         //根据内容ID查询内容信息

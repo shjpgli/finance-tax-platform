@@ -93,8 +93,9 @@ public class RemindConstant {
     public static final String REALNAME_VALIDATE_WX_4 = "详情请登录财税专家软件查询！";
     public static final String REALNAME_VALIDATE_DX = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE}";
 
-    //运营消息微信消息remark
+    //运营消息微信消息first
     public static final String YYXX_WX_FIRST = "财税专家提醒";
+    public static final String YYXX_WX_KEY1 = "业务提醒";
     //运营消息微信消息remark
     public static final String YYXX_WX_REMARK = "详情请登录软件查询，咨询4008873133";
 }

@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
@@ -10,7 +11,6 @@ import com.abc12366.uc.mapper.db1.UcUserLoginLogMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
@@ -30,6 +30,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -44,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author lijun <ljun51@outlook.com>
- * @create 2017-03-27 4:07 PM
+ * @date 2017-03-27 4:07 PM
  * @since 1.0.0
  */
 @Service
@@ -57,9 +58,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private UserRoMapper userRoMapper;
 
     @Autowired
     private TokenRoMapper tokenRoMapper;
@@ -315,7 +313,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean isAuthentication(String userToken, HttpServletRequest request) {
-        Token token = tokenRoMapper.isAuthentication(userToken);
+        Token token = tokenMapper.isAuthentication(userToken);
         if (token == null) {
             throw new ServiceException(4016);
         }
@@ -378,7 +376,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
             BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
-            if (object.getCode().equals("2000")) {
+            if ("2000".equals(object.getCode())) {
                 return true;
             }
         }
@@ -495,8 +493,9 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
+    @Async
     @Override
-    public CompletableFuture todoAfterLogin(HttpServletRequest request) {
+    public CompletableFuture<BodyStatus> todoAfterLogin(HttpServletRequest request) {
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));

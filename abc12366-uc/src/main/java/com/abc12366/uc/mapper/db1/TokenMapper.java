@@ -17,4 +17,6 @@ public interface TokenMapper {
     void updateLastTokenResetTime(String token);
 
     Token selectOne(@Param("userId") String userId, @Param("appId") String appId);
+
+    Token isAuthentication(String userToken);
 }
