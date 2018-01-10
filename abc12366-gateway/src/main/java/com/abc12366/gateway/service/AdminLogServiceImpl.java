@@ -36,7 +36,7 @@ public class AdminLogServiceImpl implements AdminLogService {
         Date now = new Date();
         AdminLog adminLog = new AdminLog.Builder()
                 .id(Utils.uuid())
-                .userId(Utils.getAdminId())
+                .userId(bo.getAdminId())
                 .createTime(now)
                 .businessUri(bo.getBusinessUri())
                 .businessName(bo.getBusinessName())

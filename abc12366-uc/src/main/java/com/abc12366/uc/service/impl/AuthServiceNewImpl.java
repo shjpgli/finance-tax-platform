@@ -1,25 +1,5 @@
 package com.abc12366.uc.service.impl;
 
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.TaskConstant;
@@ -30,21 +10,27 @@ import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.ResetPasswordBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserExtendBO;
-import com.abc12366.uc.model.bo.UserReturnBO;
-import com.abc12366.uc.service.AuthServiceNew;
-import com.abc12366.uc.service.RSAService;
-import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.uc.service.UserExtendService;
-import com.abc12366.uc.service.UserFeedbackMsgService;
+import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.service.*;
 import com.abc12366.uc.util.RandomNumber;
 import com.alibaba.fastjson.JSON;
-import com.google.code.springcryptoutils.core.cipher.asymmetric.Base64EncodedCipherer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AuthServiceNewImpl implements AuthServiceNew {
@@ -75,7 +61,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 	@Autowired
     private RSAService rsaService;
     
-	
+	@Override
     @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
 	public UserReturnBO register(RegisterBO registerBO, HttpServletRequest request) {
     	LOGGER.info("{}", registerBO);
@@ -395,7 +381,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 
 		// 判断是否有用户token请求头
 		String token = request.getHeader(Constant.USER_TOKEN_HEAD);
-		if (token == null || token.equals("")) {
+		if (token == null || "".equals(token)) {
 			throw new ServiceException(4199);
 		}
 
@@ -437,7 +423,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 
 		try {
 			// 发消息
-			userFeedbackMsgService.updatePasswordSuccessNotice();
+			userFeedbackMsgService.updatePasswordSuccessNotice(userId);
 			// 首次修改密码任务埋点
 			todoTaskService.doTask(userExist.getId(),
 					TaskConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);

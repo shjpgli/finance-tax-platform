@@ -75,11 +75,21 @@ public class AuthController extends BaseController {
      * @return 用户基本信息、用户token、token有效时间
      */
     @PostMapping(path = "/login")
-    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO){
+    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request){
         LOGGER.info("{}", loginBO);
-        Map token = authService.login(loginBO, "1");
-        LOGGER.info("{}", token);
-        return ResponseEntity.ok(Utils.kv("data", token));
+        Map data = authService.login(loginBO, "1");
+        LOGGER.info("{}", data);
+
+        // 设置CLIENT_IP地址
+        data.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+        LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
+        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
+        CompletableFuture.allOf(cf);
+        // 清空不需要的内容
+        data.remove(Constant.USER_ID);
+        data.remove("user_phone");
+        data.remove(Constant.CLIENT_IP);
+        return ResponseEntity.ok(Utils.kv("data", data));
     }
 
     /**
@@ -89,11 +99,21 @@ public class AuthController extends BaseController {
      * @return 用户基本信息、用户token、token有效时间
      */
     @PostMapping(path = "/login/js")
-    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO) {
+    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) {
         LOGGER.info("{}", loginBO);
-        Map token = authService.login(loginBO, "2");
-        LOGGER.info("{}", token);
-        return ResponseEntity.ok(Utils.kv("data", token));
+        Map data = authService.login(loginBO, "2");
+        LOGGER.info("{}", data);
+
+        // 设置CLIENT_IP地址
+        data.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+        LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
+        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
+        CompletableFuture.allOf(cf);
+        // 清空不需要的内容
+        data.remove(Constant.USER_ID);
+        data.remove("user_phone");
+        data.remove(Constant.CLIENT_IP);
+        return ResponseEntity.ok(Utils.kv("data", data));
     }
 
     /**
@@ -112,9 +132,19 @@ public class AuthController extends BaseController {
             //如果用户当天定时任务没有完成，就在登录的时候生成
             LoginBO login = new LoginBO();
             login.setUsernameOrPhone(loginBO.getPhone());
-            Map token = authService.login(login, "3");
-            LOGGER.info("{}", token);
-            return ResponseEntity.ok(Utils.kv("data", token));
+            Map data = authService.login(login, "3");
+            LOGGER.info("{}", data);
+
+            // 设置CLIENT_IP地址
+            data.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+            LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
+            CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
+            CompletableFuture.allOf(cf);
+            // 清空不需要的内容
+            data.remove(Constant.USER_ID);
+            data.remove("user_phone");
+            data.remove(Constant.CLIENT_IP);
+            return ResponseEntity.ok(Utils.kv("data", data));
         } else {
             authService.loginByVerifyFail(loginBO);
             return null;
@@ -122,7 +152,7 @@ public class AuthController extends BaseController {
     }
 
     @GetMapping(path = "/user/u/openid/{openid}")
-    public ResponseEntity loginByOpenId(@PathVariable String openid) {
+    public ResponseEntity loginByOpenId(@PathVariable String openid, HttpServletRequest request) {
         LOGGER.info("{}", openid);
         UserBO user = userService.selectByopenid(openid);
         if (user == null) {
@@ -130,22 +160,29 @@ public class AuthController extends BaseController {
         }
         LoginBO bo = new LoginBO();
         bo.setUsernameOrPhone(user.getUsername());
-        Map token = authService.login(bo, "4");
-        LOGGER.info("{}", user);
-        return ResponseEntity.ok(Utils.kv("data", token));
+        Map data = authService.login(bo, "4");
+        LOGGER.info("{}", data);
+
+        // 设置CLIENT_IP地址
+        data.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+        LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
+        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
+        CompletableFuture.allOf(cf);
+        // 清空不需要的内容
+        data.remove(Constant.USER_ID);
+        data.remove("user_phone");
+        data.remove(Constant.CLIENT_IP);
+        return ResponseEntity.ok(Utils.kv("data", data));
     }
 
     /**
      * 登陆成功之后需要处理的业务
      *
-     * @param request HttpServletRequest
      * @return 无
      */
+    @Deprecated
     @GetMapping(path = "/login/todo")
-    public ResponseEntity todoAfterLogin(HttpServletRequest request) {
-        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(request);
-        CompletableFuture.allOf(cf);
-        LOGGER.info("todoAfterLogin");
+    public ResponseEntity todoAfterLogin() {
         return ResponseEntity.ok(Utils.kv());
     }
 

@@ -30,6 +30,10 @@ public class AdminLogBO {
     @Length(max = 50)
     private String remark;
 
+    @NotEmpty
+    @Length(max = 64)
+    private String adminId;
+
     public String getBusinessUri() {
         return businessUri;
     }
@@ -70,6 +74,14 @@ public class AdminLogBO {
         this.remark = remark;
     }
 
+    public String getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
+    }
+
     @Override
     public String toString() {
         return "AdminLogBO{" +
@@ -78,6 +90,7 @@ public class AdminLogBO {
                 ", businessData='" + businessData + '\'' +
                 ", method='" + method + '\'' +
                 ", remark='" + remark + '\'' +
+                ", adminId='" + adminId + '\'' +
                 '}';
     }
 }
