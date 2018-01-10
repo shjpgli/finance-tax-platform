@@ -6,7 +6,6 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ExperienceLogMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLogRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.ExperienceLog;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
@@ -37,9 +36,6 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
 
     @Autowired
     private ExperienceLogMapper experienceLogMapper;
-
-    @Autowired
-    private UserRoMapper userRoMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -126,25 +122,19 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
         return experienceLogReturn;
     }
 
-    private void expLevelUpgradeAward(String id, int newExp) {
-        if (StringUtils.isEmpty(id)) {
+    private void expLevelUpgradeAward(String userId, int newExp) {
+        if (StringUtils.isEmpty(userId)) {
             return;
         }
-        User user = userMapper.selectOne(id);
+        User user = userMapper.selectOne(userId);
         if (user == null || user.getExp() == null) {
             return;
         }
 
-        MyExperienceBO myExperienceBO = experienceService.getMyExperience(id);
+        MyExperienceBO myExperienceBO = experienceService.getMyExperience(userId);
         if (myExperienceBO == null || StringUtils.isEmpty(myExperienceBO.getNextLevelExp())) {
             return;
         }
-
-//        PrivilegeItem privilegeItem = privilegeItemService.selecOneByUser(id);
-//        if (privilegeItem == null || privilegeItem.getYhsjjl() <= 0) {
-//            return;
-//        }
-
 
         if (newExp >= Integer.parseInt(myExperienceBO.getNextLevelExp())) {
             //如果积分规则为空则返回
@@ -162,14 +152,13 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
                 VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectLevelIdPrivilegeId(vipPrivilegeLevelBOPar);
                 if (vipPrivilegeLevelBO != null && vipPrivilegeLevelBO.getStatus()) {
                     if (!StringUtils.isEmpty(vipPrivilegeLevelBO.getVal1())) {
-                        //points = (int) (points * Float.parseFloat(vipPrivilegeLevelBO.getVal1()));
                         times = Float.parseFloat(vipPrivilegeLevelBO.getVal1());
                     }
                 }
             }
 
             PointsLogBO pointsLogBO = new PointsLogBO();
-            pointsLogBO.setUserId(id);
+            pointsLogBO.setUserId(userId);
             pointsLogBO.setIncome((int) (pointsRuleBO.getPoints() * times));
             pointsLogBO.setOutgo(0);
             pointsLogBO.setRuleId(pointsRuleBO.getId());
@@ -177,7 +166,7 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
             pointsLogService.insert(pointsLogBO);
 
             try {
-                userFeedbackMsgService.expLevelUp();
+                userFeedbackMsgService.expLevelUp(userId);
             } catch (Exception e) {
                 e.printStackTrace();
             }

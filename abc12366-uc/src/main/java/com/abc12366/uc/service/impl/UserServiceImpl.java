@@ -373,7 +373,7 @@ public class UserServiceImpl implements UserService {
 
 		// 判断是否有用户token请求头
 		String token = request.getHeader(Constant.USER_TOKEN_HEAD);
-		if (token == null || token.equals("")) {
+		if (token == null || "".equals(token)) {
 			throw new ServiceException(4199);
 		}
 
@@ -416,15 +416,13 @@ public class UserServiceImpl implements UserService {
 
 		try {
 			// 发消息
-			userFeedbackMsgService.updatePasswordSuccessNotice();
+			userFeedbackMsgService.updatePasswordSuccessNotice(userId);
 			// 首次修改密码任务埋点
 			todoTaskService.doTask(userExist.getId(),
 					TaskConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-
 		return true;
 	}
 
