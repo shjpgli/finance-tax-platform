@@ -500,7 +500,7 @@ public class AuthServiceImpl implements AuthService {
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
         }
-        String userId = Utils.getUserId();
+        String userId = Utils.getUserId(request);
         
         //登录删除用户缓存，防止缓存不及时刷新
         redisTemplate.delete(userId+"_Points");
