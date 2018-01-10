@@ -38,6 +38,7 @@ import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserReturnBO;
 import com.abc12366.uc.service.AuthServiceNew;
+import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
@@ -72,12 +73,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 	private UserFeedbackMsgService userFeedbackMsgService;
 	
 	@Autowired
-    @Qualifier("b64AsymmetricEncrypter")
-    private Base64EncodedCipherer encrypter;
-
-    @Autowired
-    @Qualifier("b64AsymmetricDecrypter")
-    private Base64EncodedCipherer decrypter;
+    private RSAService rsaService;
     
 	
     @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
@@ -109,7 +105,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
             //新的密码规则
             //password = rsaService.decode(registerBO.getPassword());
         	
-        	password = decrypter.encrypt(registerBO.getPassword());
+        	password = rsaService.decodenNew(registerBO.getPassword());
             salt = Utils.salt();
             encodePassword = Utils.md5(password + salt);
         } catch (Exception e) {
@@ -200,9 +196,9 @@ public class AuthServiceNewImpl implements AuthServiceNew {
             // 现在的加密版本
             if ("1".equals(channel)) {
                 //password = rsaService.decode(bo.getPassword());
-            	password = decrypter.encrypt(bo.getPassword());
+            	password = rsaService.decodenNew(bo.getPassword());
             } else if ("2".equals(channel)) {
-            	password = decrypter.encrypt(bo.getPassword());
+            	password = rsaService.decodeStringFromJsNew(bo.getPassword());
                 //password = rsaService.decodeStringFromJs(bo.getPassword());
             } else {
                 password = user.getPassword();
@@ -364,7 +360,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
             throw new ServiceException(4023);
         }
 
-        String password = decrypter.encrypt(bo.getPassword());
+        String password = rsaService.decodenNew(bo.getPassword());
         String encodePassword = Utils.md5(password + userExist.getSalt());
 
         // 修改密码不能为旧密码
@@ -420,7 +416,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 		// userExist.getSalt());
 
 		// 新的加密
-		String encodePassword = decrypter.encrypt(passwordUpdateBO.getPassword());
+		String encodePassword = rsaService.decodenNew(passwordUpdateBO.getPassword());
 
 		// 修改密码不能为旧密码
 		if (encodePassword.equals(userExist.getPassword())) {
