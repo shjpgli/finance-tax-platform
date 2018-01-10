@@ -128,7 +128,8 @@ public class AuthControllerNew {
      * @return true:成功, false:失败
      * @throws Exception md5加密异常
      */
-    @PostMapping(path = "/resetpasswordnew")
+    @SuppressWarnings("rawtypes")
+	@PostMapping(path = "/resetpasswordnew")
     public ResponseEntity resetPasswordByPhone(@Valid @RequestBody ResetPasswordBO bo) throws Exception {
         LOGGER.info("{}", bo);
         boolean result = authServiceNew.resetPasswordByPhone(bo);
@@ -136,8 +137,9 @@ public class AuthControllerNew {
         return ResponseEntity.ok(Utils.kv("data", result));
     }
     
-  //用户修改密码
-    @PutMapping(path = "/passwordnew")
+    //用户修改密码
+    @SuppressWarnings("rawtypes")
+	@PutMapping(path = "/passwordnew")
     public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest
             request) {
         LOGGER.info("用户修改密码：{}", passwordUpdateBO);

@@ -20,4 +20,8 @@ public interface RSAService {
      * @return
      */
     String decodeStringFromJs(String str);
+
+	String decodenNew(String password);
+	
+	public String decodeStringFromJsNew(String str);
 }
