@@ -77,4 +77,45 @@ public class AuthControllerNew {
         return ResponseEntity.ok(Utils.kv("data", token));
     }
     
+    /**
+     * 用户登录方法：用于js做接口调用进行登录(此场景多用于移动客户端登录)
+     *
+     * @param loginBO LoginBO
+     * @return 用户基本信息、用户token、token有效时间
+     */
+    @SuppressWarnings("rawtypes")
+	@PostMapping(path = "/login/jsnew")
+    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO) {
+        LOGGER.info("{}", loginBO);
+        Map token = authServiceNew.login(loginBO, "2");
+        LOGGER.info("{}", token);
+        return ResponseEntity.ok(Utils.kv("data", token));
+    }
+
+    /**
+     * 用户通过手机号码+验证码的方式进行登录
+     *
+     * @param loginBO VerifyingCodeBO
+     * @param request HttpServletRequest
+     * @return 用户基本信息、用户token、token有效时间
+     */
+    @SuppressWarnings("rawtypes")
+	@PostMapping(path = "/verifyloginnew")
+    public ResponseEntity verifylogin(@Valid @RequestBody VerifyingCodeBO loginBO, HttpServletRequest request) {
+        LOGGER.info("{}", loginBO);
+
+        //进行手机验证码验证
+        if (authService.verifyCode(loginBO, request)) {
+            //如果用户当天定时任务没有完成，就在登录的时候生成
+            LoginBO login = new LoginBO();
+            login.setUsernameOrPhone(loginBO.getPhone());
+            Map token = authServiceNew.login(login, "3");
+            LOGGER.info("{}", token);
+            return ResponseEntity.ok(Utils.kv("data", token));
+        } else {
+            authService.loginByVerifyFail(loginBO);
+            return null;
+        }
+    }
+    
 }

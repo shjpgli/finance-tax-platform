@@ -63,9 +63,6 @@ public class AuthServiceNewImpl implements AuthServiceNew {
     private ValueOperations<String, String> valueOperations;
 	
 	@Autowired
-    private UserRoMapper userRoMapper;
-	
-	@Autowired
     @Qualifier("b64AsymmetricEncrypter")
     private Base64EncodedCipherer encrypter;
 
