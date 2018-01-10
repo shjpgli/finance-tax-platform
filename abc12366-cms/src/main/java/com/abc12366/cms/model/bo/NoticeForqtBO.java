@@ -2,7 +2,6 @@ package com.abc12366.cms.model.bo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 

@@ -1,9 +1,7 @@
 package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionMedalFaction;
-import com.abc12366.bangbang.model.question.QuestionMedalUser;
 import com.abc12366.bangbang.model.question.bo.QuestionMedalFactionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionMedalUserBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

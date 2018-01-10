@@ -115,7 +115,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         phoneCodeParam.setType(verifyParam.getType().trim());
         phoneCodeParam.setPhone(verifyParam.getPhone().trim());
         phoneCodeParam.setCode(verifyParam.getCode().trim());
-        List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectList(phoneCodeParam);
+        List<PhoneCodeBO> phoneCodeBOList = phoneCodeMapper.selectList(phoneCodeParam);
         if (phoneCodeBOList == null) {
             throw new ServiceException(4202);
         }
@@ -278,21 +278,21 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             String msg = neteaseTemplateResponseBO.getMsg();
             if ("200".equals(respCode)) {
                 //记日志
-                messageLog("wy", phone, type, type + ":" + code, "1", respCode, "发送成功");
+                messageLog("wy", phone, type, code, "1", respCode, "发送成功");
                 return true;
             } else if ("416".equals(respCode) || "417".equals(respCode) || "419".equals(respCode)) {
                 //如果发送失败状态码是416、417、419中的一个，就将异常信息抛出给用户
                 //记日志
-                messageLog("wy", phone, type, type + ":" + code, "4", respCode, msg);
+                messageLog("wy", phone, type, code, "4", respCode, msg);
                 throw new ServiceException(respCode, msg);
             } else {
                 //记日志
-                messageLog("wy", phone, type, type + ":" + code, "4", "4204", "网易短信发送通道异常");
+                messageLog("wy", phone, type, code, "4", "4204", "网易短信发送通道异常");
                 return false;
             }
         }
         //记日志
-        messageLog("wy", phone, type, type + ":" + code, "4", "4204", "网易短信发送通道异常");
+        messageLog("wy", phone, type, code, "4", "4204", "网易短信发送通道异常");
         return false;
     }
 
@@ -348,9 +348,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             //记日志
             MessageSendLog sendLog = new MessageSendLog(
                     MessageConstant.MSG_CHANNEL_YOUPAI,
-                    phone, MessageConstant
-                    .MOBILE_MSG_BUSI_TYPE,
-                    (type + ":" + code),
+                    phone, type,
+                    code,
                     MessageConstant.SEND_MSG_STATUS_FAIL,
                     MessageConstant.SEND_MSG_CHANNEL_ERROR_CODE,
                     MessageConstant.SEND_MSG_CHANNEL_ERROR_YOUPAI);
@@ -366,8 +365,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
                 MessageSendLog sendLog = new MessageSendLog(
                         MessageConstant.MSG_CHANNEL_YOUPAI,
                         phone,
-                        MessageConstant.MOBILE_MSG_BUSI_TYPE,
-                        (type + ":" + code),
+                        type,
+                        code,
                         MessageConstant.SEND_MSG_STATUS_SUCCESS,
                         MessageConstant.SEND_MSG_SUCCESS_CODE,
                         MessageConstant.SEND_MSG_SUCCESS_CONTENT);
@@ -378,8 +377,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
                 MessageSendLog sendLog = new MessageSendLog(
                         MessageConstant.MSG_CHANNEL_YOUPAI,
                         phone,
-                        MessageConstant.MOBILE_MSG_BUSI_TYPE,
-                        (type + ":" + code),
+                        type,
+                        code,
                         MessageConstant.SEND_MSG_STATUS_FAIL,
                         response.getError_code(),
                         response.getMessage());

@@ -2,7 +2,6 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionCollect;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
-import com.abc12366.bangbang.model.question.bo.QuestionCollectBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

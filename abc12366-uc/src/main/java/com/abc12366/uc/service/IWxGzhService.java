@@ -2,9 +2,8 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.weixin.bo.gzh.GzhInfo;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface IWxGzhService {
 

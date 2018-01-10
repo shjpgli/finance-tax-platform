@@ -5,10 +5,9 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
-import com.abc12366.uc.model.*;
+import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.Message;
-import com.abc12366.uc.model.order.bo.UserAddressBO;
-import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
@@ -20,14 +19,13 @@ import com.abc12366.uc.model.order.OrderExchange;
 import com.abc12366.uc.model.order.OrderInvoice;
 import com.abc12366.uc.model.order.bo.OrderBO;
 import com.abc12366.uc.model.order.bo.OrderProductBO;
+import com.abc12366.uc.model.order.bo.UserAddressBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
 import com.abc12366.uc.service.IActivityService;
-import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.util.CharUtil;
 import com.abc12366.uc.webservice.DzfpClient;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -61,7 +59,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private OrderRoMapper orderRoMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private OrderInvoiceMapper orderInvoiceMapper;
@@ -100,12 +98,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     private UserAddressRoMapper userAddressRoMapper;
 
     @Autowired
-    private IWxTemplateService templateService;
-
-    @Autowired
-    private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
-
-    @Autowired
     private DictRoMapper dictRoMapper;
 
     @Autowired
@@ -114,9 +106,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private DzfpRoMapper dzfpRoMapper;
 
-    @Autowired
-    private DzfpMapper dzfpMapper;
-
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
         return invoiceRoMapper.selectList(invoice);
@@ -124,9 +113,6 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     /**
      * 查询单个订单
-     *
-     * @param id
-     * @return
      */
     @Override
     public InvoiceBO selectOne(String id) {
@@ -136,11 +122,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     /**
      * 修改发票申请
-     *
-     * @param invoiceBO
-     * @return
      */
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public InvoiceBO updateInvoice(InvoiceBO invoiceBO) {
         Invoice invoice = new Invoice();
@@ -174,11 +157,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     /**
      * 根据订单ID和用户ID删除发票订单
-     *
-     * @param invoiceBO
-     * @return
      */
-    @Transactional("db1TxManager")
     @Override
     public int deleteByIdAndUserId(InvoiceBO invoiceBO) {
         Invoice invoice = new Invoice();
@@ -192,11 +171,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     /**
      * 索要发票
-     *
-     * @param invoiceBO
-     * @return
      */
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public InvoiceBO addInvoice(InvoiceBO invoiceBO) {
 
@@ -248,23 +224,22 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceBO.setAmount(amount);
 
         //查询地址信息，纸质发票时才查询地址
-        if(invoiceBO.getProperty() != null && "1".equals(invoiceBO.getProperty())){
-            if (invoiceBO != null && invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
+        if (invoiceBO.getProperty() != null && "1".equals(invoiceBO.getProperty())) {
+            if (invoiceBO.getAddressId() != null && !"".equals(invoiceBO.getAddressId())) {
                 UserAddressBO userAddress = userAddressRoMapper.selectById(invoiceBO.getAddressId());
                 if (userAddress != null) {
-                    StringBuffer address = new StringBuffer();
-                    address.append(userAddress.getProvinceName() + "-");
-                    address.append(userAddress.getCityName() + "-");
-                    address.append(userAddress.getAreaName() + "-");
-                    address.append(userAddress.getDetail());
+                    String address = (userAddress.getProvinceName() + "-") +
+                            userAddress.getCityName() + "-" +
+                            userAddress.getAreaName() + "-" +
+                            userAddress.getDetail();
                     invoiceBO.setConsignee(userAddress.getName());
                     invoiceBO.setContactNumber(userAddress.getPhone());
-                    invoiceBO.setShippingAddress(address.toString());
+                    invoiceBO.setShippingAddress(address);
                 }
             }
         }
         //发票抬头为个人时，去掉纳税人识别号等数据
-        if(invoiceBO.getName() != null && "1".equals(invoiceBO.getName())){
+        if (invoiceBO.getName() != null && "1".equals(invoiceBO.getName())) {
             invoiceBO.setNsrsbh(null);
             invoiceBO.setNsrmc(null);
             invoiceBO.setAddress(null);
@@ -284,7 +259,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceBO;
     }
 
-    @Transactional("db1TxManager")
     private void insertInvoiceLog(String invoiceId, String userId, String opertion) {
         //加入发票操作日志
         InvoiceLog invoiceLog = new InvoiceLog();
@@ -300,30 +274,16 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public List<InvoiceExcel> selectInvoicePrintExcelList(InvoiceBO invoice) {
         invoice.setStatus("2");
         List<InvoiceBO> invoiceBOList = invoiceRoMapper.selectList(invoice);
-        List<InvoiceExcel> excelList = new ArrayList<InvoiceExcel>();
-        Express express = null;
+        List<InvoiceExcel> excelList = new ArrayList<>();
         if (invoiceBOList != null) {
-            InvoiceExcel excel = null;
+            InvoiceExcel excel;
             for (InvoiceBO bo : invoiceBOList) {
                 excel = new InvoiceExcel();
-                //导出之前，生成订单表数据，及订单表与快递关系表数据
-//                express = new Express();
-//                express.setId(Utils.uuid());
-//                express.setInvoiceOrderNo(bo.getId());
-//                express.setUserId(bo.getUserId());
-//                express.setCreateTime(new Date());
-                //Express exp = expressRoMapper.selectbyInvoiceOrderNo(invoice.getId());
-//                expressMapper.deleteByInvoiceOrderNo(bo.getId());
-//                int insertExpress = expressMapper.insert(express);
-//                if (insertExpress != 1) {
-//                    LOGGER.info("生成订单表数据失败：{}", express);
-//                    throw new ServiceException(4142);
-//                }
                 excel.setInvoiceOrderNo(bo.getId());
                 excel.setNsrsbh(bo.getNsrsbh());
                 if ("1".equals(bo.getName())) {
@@ -340,9 +300,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                 excel.setAmountSmall(bo.getAmount());
                 excel.setDrawer(Utils.getAdminInfo().getNickname());
                 List<OrderBO> orderBOList = bo.getOrderBOList();
-                StringBuffer remark = new StringBuffer();
+                StringBuilder remark = new StringBuilder();
                 for (OrderBO orderBO : orderBOList) {
-                    remark.append("订单号：" + orderBO.getOrderNo());
+                    remark.append("订单号：").append(orderBO.getOrderNo());
                     remark.append("  ");
                     remark.append("支付方式：");
                     if ("WEIXIN".equals(orderBO.getPayMethod())) {
@@ -361,26 +321,15 @@ public class InvoiceServiceImpl implements InvoiceService {
         return excelList;
     }
 
-    //拼接地址信息
-//    private UserAddressBO setUserAddress(InvoiceBO bo, StringBuffer address) {
-//        UserAddressBO userAddress = bo.getUserAddressBO();
-//        address.append(userAddress.getProvinceName() + "-");
-//        address.append(userAddress.getCityName() + "-");
-//        address.append(userAddress.getAreaName() + "-");
-//        address.append(userAddress.getDetail());
-//        return userAddress;
-//    }
-
     @Override
     public List<InvoiceExpressExcel> selectInvoiceExpressExcelList(InvoiceBO invoice) {
         //发票申请状态，1：待审批，2：已审批，3：已拒绝，4：已发货，5：已退票，6：已收货，7：待发货
         invoice.setStatus("7");
         List<InvoiceBO> invoiceBOList = invoiceRoMapper.selectList(invoice);
         List<InvoiceBO> invoiceDatas = invoiceRoMapper.selectList(invoice);
-        List<InvoiceExpressExcel> excelList = new ArrayList<InvoiceExpressExcel>();
-        Express express = null;
+        List<InvoiceExpressExcel> excelList = new ArrayList<>();
         if (invoiceBOList != null) {
-            InvoiceExpressExcel excel = null;
+            InvoiceExpressExcel excel;
             for (InvoiceBO bo : invoiceBOList) {
                 excel = new InvoiceExpressExcel();
                 excel.setInvoiceOrderNo(bo.getId());
@@ -392,20 +341,13 @@ public class InvoiceServiceImpl implements InvoiceService {
                 excel.setPhone(phone);
                 excel.setAddress(address);
                 boolean isAlike = false;
-                StringBuffer invoiceNos = new StringBuffer();
+                StringBuilder invoiceNos = new StringBuilder();
                 int num = 0;
                 if (address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
                     for (InvoiceBO data : invoiceDatas) {
                         String addressBuffer = data.getShippingAddress();
                         String phoneTemp = data.getContactNumber();
-                        /*if (data.getUserAddressBO() != null) {
-                            UserAddressBO userAddressBO = setUserAddress(data, addressBuffer);
-                            phoneTemp = userAddressBO.getPhone();
-                        }else {
-                            LOGGER.info("收货人地址信息异常：{}", bo);
-                            throw new ServiceException(4909);
-                        }*/
-                        //有地址和电话相同的
+                        // 有地址和电话相同的
                         if (address.equals(addressBuffer) && phone.equals(phoneTemp)) {
                             isAlike = true;
                             //寄托货物信息合并
@@ -433,7 +375,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return excelList;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void insertInvoiceExpressExcelList(List<InvoiceExpressExcel> expressExcelList, String expressCompId,
                                               HttpServletRequest request) {
@@ -463,7 +405,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4102);
             }
 
-            User user = userRoMapper.selectOne(invoiceTemp.getUserId());
+            User user = userMapper.selectOne(invoiceTemp.getUserId());
 
             //发送消息
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
@@ -483,7 +425,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             message.setContent(content);
             message.setUserId(invoiceTemp.getUserId());
 
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             map.put("userId", user.getId());
             map.put("openId", user.getWxopenid());
             map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
@@ -494,12 +436,12 @@ public class InvoiceServiceImpl implements InvoiceService {
             map.put("keyword4", expressExcel.getWaybillNum());
             map.put("keyword5", invoiceTemp.getInvoiceNo());
             String templateId = "lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas";
-            messageSendUtil.sendMsg(request, user, message,map,templateId);
+            messageSendUtil.sendMsg(request, user, message, map, templateId);
 
         }
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void insertInvoicePrintExcelList(List<InvoiceExcel> invoiceList) {
         for (InvoiceExcel invoiceExcel : invoiceList) {
@@ -508,7 +450,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             temp.setInvoiceCode(invoiceExcel.getInvoiceCode());
             InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(temp);
             if (invoiceDetail == null) {
-                LOGGER.info("发票号码或发票代码不存在：{}", invoiceDetail);
+                LOGGER.info("发票号码或发票代码不存在");
                 throw new ServiceException(4913, "发票号码或发票代码不存在");
             }
             if (!"3".equals(invoiceDetail.getStatus())) {
@@ -547,7 +489,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             }
             //修改发票详情表
             List<OrderBO> orderBOList = invoiceTemp.getOrderBOList();
-            StringBuffer remark = new StringBuffer();
+            StringBuilder remark = new StringBuilder();
             for (OrderBO orderBO : orderBOList) {
                 remark.append(orderBO.getOrderNo());
                 remark.append("  ");
@@ -601,13 +543,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRoMapper.selectTodoListCount();
     }
 
-    @Transactional(value = "db1TxManager",rollbackFor = {ServiceException.class,SQLException.class})
+    @Transactional(value = "db1TxManager", rollbackFor = {ServiceException.class, SQLException.class})
     @Override
     public void invoiceCheck() {
         Einvocie einvocie = new Einvocie();
         einvocie.setTBSTATUS("0");
         List<Einvocie> list = dzfpRoMapper.selectList(einvocie);
-        for(Einvocie data : list){
+        for (Einvocie data : list) {
             //更新发票库存信息
             InvoiceDetail tail = new InvoiceDetail();
             tail.setInvoiceNo(data.getFP_HM());
@@ -617,21 +559,21 @@ public class InvoiceServiceImpl implements InvoiceService {
             //根据发票号码和发票代码查找发票详细信息表
             InvoiceDetail detail = invoiceDetailRoMapper.selectByInvoiceNoAndCode(tail);
             if (detail == null) {
-                LOGGER.info("发票号码为XXX的未找到库存，请入库后再进行同步：{}", detail);
-                throw new ServiceException(4186,"发票号码为"+data.getFP_HM()+"的未找到库存，请入库后再进行同步");
+                LOGGER.info("发票号码为XXX的未找到库存，请入库后再进行同步");
+                throw new ServiceException(4186, "发票号码为" + data.getFP_HM() + "的未找到库存，请入库后再进行同步");
             }
             if (detail.getStatus() != null && !"3".equals(detail.getStatus())) {
                 LOGGER.info("发票详情信息未签收，请签收后再进行同步：{}", tail);
-                throw new ServiceException(4187,"发票号码为"+data.getFP_HM()+"的未领用完成，请签收后再进行同步");
+                throw new ServiceException(4187, "发票号码为" + data.getFP_HM() + "的未领用完成，请签收后再进行同步");
             }
 
             //更新电子发票开票日志信息
             data.setTBSTATUS("1");
 
             int dz = invoiceDetailMapper.updateDZFP(data);
-            if(dz != 1){
+            if (dz != 1) {
                 LOGGER.info("更新电子发票开票日志信息失败：{}", tail);
-                throw new ServiceException(4187,"更新电子发票开票日志信息失败");
+                throw new ServiceException(4187, "更新电子发票开票日志信息失败");
             }
 
             tail.setId(detail.getId());
@@ -647,7 +589,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public InvoiceBackBO refund(InvoiceBackBO invoiceBackBO) {
         invoiceBackBO.setId(Utils.uuid());
@@ -668,7 +610,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceBackBO;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public InvoiceBackBO refundCheck(InvoiceBack invoiceBack) {
         Express express = expressRoMapper.selectByPrimaryKey(invoiceBack.getExpressId());
@@ -694,7 +636,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         if (invoiceBack.getStatus() != null && "4".equals(invoiceBack.getStatus())) {
 
             List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoice.getId());
-            Order order = null;
+            Order order;
             for (OrderInvoice orderInvoice : orderInvoiceList) {
                 order = new Order();
                 order.setOrderNo(orderInvoice.getOrderNo());
@@ -707,7 +649,6 @@ public class InvoiceServiceImpl implements InvoiceService {
                 }
             }
             //修改订单和发票对应关系
-            //orderInvoiceMapper.deleteByInvoiceId(invoice.getId());
             orderInvoiceMapper.updateByInvoiceId(invoice.getId());
 
         }
@@ -748,106 +689,109 @@ public class InvoiceServiceImpl implements InvoiceService {
         //是否通过
         InvoiceBO invoiceBO = invoiceRoMapper.selectById(invoiceCheckBO.getId());
         //1：纸质发票，2：电子发票；电子发票直接把发票信息插入
-        if (invoiceCheckBO.getIsBilling()) if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
+        if (invoiceCheckBO.getIsBilling()) {
+            if (invoiceBO.getProperty() != null && "2".equals(invoiceBO.getProperty())) {
 
-            String id = invoiceCheckBO.getId();
-            String fpqqlsh = id.substring(5, id.length());
-            Einvocie einvocie = dzfpRoMapper.selectOne(fpqqlsh);
-            if(einvocie == null){
-                //发票信息填充
-                DzfpGetReq dzfpGetReq = new DzfpGetReq();
+                String id = invoiceCheckBO.getId();
+                String fpqqlsh = id.substring(5, id.length());
+                Einvocie einvocie = dzfpRoMapper.selectOne(fpqqlsh);
+                if (einvocie == null) {
+                    //发票信息填充
+                    DzfpGetReq dzfpGetReq = new DzfpGetReq();
 
-                dzfpGetReq.setFpqqlsh(fpqqlsh);
-                dzfpGetReq.setZsfs("0"); //
-                dzfpGetReq.setKplx("0"); //开票0，退票1
-                dzfpGetReq.setKpr(Utils.getAdminInfo().getNickname());
+                    dzfpGetReq.setFpqqlsh(fpqqlsh);
+                    dzfpGetReq.setZsfs("0");
+                    //开票0，退票1
+                    dzfpGetReq.setKplx("0");
+                    dzfpGetReq.setKpr(Utils.getAdminInfo().getNickname());
 
-                if ("1".equals(invoiceBO.getName())) {
-                    dzfpGetReq.setGmf_mc("个人");
-                } else if ("2".equals(invoiceBO.getName())) {
-                    dzfpGetReq.setGmf_mc(invoiceBO.getNsrmc());
-                    dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
-                }
-                dzfpGetReq.setGmf_dzyx(invoiceBO.getEmail());
+                    if ("1".equals(invoiceBO.getName())) {
+                        dzfpGetReq.setGmf_mc("个人");
+                    } else if ("2".equals(invoiceBO.getName())) {
+                        dzfpGetReq.setGmf_mc(invoiceBO.getNsrmc());
+                        dzfpGetReq.setGmf_nsrsbh(invoiceBO.getNsrsbh());
+                    }
+                    dzfpGetReq.setGmf_dzyx(invoiceBO.getEmail());
 
-                List<InvoiceXm> invoiceXmList = new ArrayList<InvoiceXm>();
-                List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
-                StringBuffer buffer = new StringBuffer();
-                if(orderBOs != null && orderBOs.size() > 0){
-                    for(OrderBO orderBO : orderBOs){
-                        InvoiceXm invoiceXm = new InvoiceXm();
-                        invoiceXm.setXmmc(invoiceBO.getContentDetail());
-                        //商品编码
-                        invoiceXm.setSpbm("1010105000000000000");
-                        //价格
-                        invoiceXm.setTotalAmt(orderBO.getTotalPrice());
-                        //数量
-                        invoiceXm.setXmsl(Double.valueOf(1));
-                        invoiceXm.setFphxz("0");
-                        invoiceXm.setYhzcbs("0");
-                        invoiceXmList.add(invoiceXm);
+                    List<InvoiceXm> invoiceXmList = new ArrayList<>();
+                    List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
+                    StringBuilder buffer = new StringBuilder();
+                    if (orderBOs != null && orderBOs.size() > 0) {
+                        for (OrderBO orderBO : orderBOs) {
+                            InvoiceXm invoiceXm = new InvoiceXm();
+                            invoiceXm.setXmmc(invoiceBO.getContentDetail());
+                            //商品编码
+                            invoiceXm.setSpbm("1010105000000000000");
+                            //价格
+                            invoiceXm.setTotalAmt(orderBO.getTotalPrice());
+                            //数量
+                            invoiceXm.setXmsl(1d);
+                            invoiceXm.setFphxz("0");
+                            invoiceXm.setYhzcbs("0");
+                            invoiceXmList.add(invoiceXm);
 
-                        List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
-                        if(productBOs != null && productBOs.size() > 0){
-                            for (OrderProductBO pBO : productBOs){
-                                if(pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())){
-                                    buffer.append("培训课程,");
-                                }else{
-                                    buffer.append(pBO.getName());
-                                    buffer.append(",");
+                            List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
+                            if (productBOs != null && productBOs.size() > 0) {
+                                for (OrderProductBO pBO : productBOs) {
+                                    if (pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())) {
+                                        buffer.append("培训课程,");
+                                    } else {
+                                        buffer.append(pBO.getName());
+                                        buffer.append(",");
+                                    }
                                 }
                             }
                         }
+                        if (buffer.length() > 0) {
+                            dzfpGetReq.setBz(buffer.deleteCharAt(buffer.length() - 1).toString());
+                        }
                     }
-                    if(buffer.length() > 0){
-                        dzfpGetReq.setBz(buffer.deleteCharAt(buffer.length()-1).toString());
+                    dzfpGetReq.setInvoiceXms(invoiceXmList);
+                    try {
+                        einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
+                    } catch (Exception e) {
+                        LOGGER.error("电子发票webservice调用异常,原因：", e);
+                        throw new ServiceException(4908);
+                    }
+                    if (!"0000".equals(einvocie.getReturnCode())) {
+                        LOGGER.error("发票开票异常：{}", einvocie);
+                        throw new ServiceException(4908, einvocie.getReturnMessage());
                     }
                 }
-                dzfpGetReq.setInvoiceXms(invoiceXmList);
-                try {
-                    einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", dzfpGetReq.tosendXml(), Einvocie.class);
-                } catch (Exception e) {
-                    LOGGER.error("电子发票webservice调用异常,原因：", e);
-                    throw new ServiceException(4908);
+                invoiceNo = einvocie.getFP_HM();
+                invoiceCode = einvocie.getFP_DM();
+                invoiceBO.setInvoiceNo(invoiceNo);
+                invoiceBO.setInvoiceCode(invoiceCode);
+                //更新发票详情信息，更新成功就去修改开票日志表
+                if (updInvoiceDetail(einvocie, invoiceBO.getId())) {
+                    Einvocie temp = new Einvocie();
+                    temp.setTBSTATUS("1");
+                    temp.setFPQQLSH(fpqqlsh);
+                    invoiceDetailMapper.updateDZFP(temp);
                 }
-                if (!"0000".equals(einvocie.getReturnCode())) {
-                    LOGGER.error("发票开票异常：{}", einvocie);
-                    throw new ServiceException(4908, einvocie.getReturnMessage());
+                invoice.setStatus("5");
+                sendDzfpMessage(request, invoiceBO);
+            } else {
+                if (invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())) {
+                    InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId
+                            ());
+                    if (invoiceDetail == null) {
+                        LOGGER.info("发票详情信息不能为空");
+                        throw new ServiceException(4186);
+                    }
+                    invoiceDetail.setStatus("2");
+                    int dUpdate = invoiceDetailMapper.update(invoiceDetail);
+                    if (dUpdate != 1) {
+                        LOGGER.info("发票详情信息修改失败：{}", invoiceDetail);
+                        throw new ServiceException(4187);
+                    }
+                    invoiceNo = invoiceDetail.getInvoiceNo();
+                    invoiceCode = invoiceDetail.getInvoiceCode();
                 }
+                invoice.setStatus("2");
+                sendZzfpMessage(request, invoiceBO);
             }
-            invoiceNo = einvocie.getFP_HM();
-            invoiceCode = einvocie.getFP_DM();
-            invoiceBO.setInvoiceNo(invoiceNo);
-            invoiceBO.setInvoiceCode(invoiceCode);
-            //更新发票详情信息，更新成功就去修改开票日志表
-            if(updInvoiceDetail(einvocie,invoiceBO.getId())){
-                Einvocie temp = new Einvocie();
-                temp.setTBSTATUS("1");
-                temp.setFPQQLSH(fpqqlsh);
-                invoiceDetailMapper.updateDZFP(temp);
-            }
-            invoice.setStatus("5");
-            sendDzfpMessage(request, invoiceBO);
         } else {
-            if (invoiceCheckBO.getDetailId() != null && !"".equals(invoiceCheckBO.getDetailId())) {
-                InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByPrimaryKey(invoiceCheckBO.getDetailId());
-                if (invoiceDetail == null) {
-                    LOGGER.info("发票详情信息不能为空：{}", invoiceDetail);
-                    throw new ServiceException(4186);
-                }
-                invoiceDetail.setStatus("2");
-                int dUpdate = invoiceDetailMapper.update(invoiceDetail);
-                if (dUpdate != 1) {
-                    LOGGER.info("发票详情信息修改失败：{}", invoiceDetail);
-                    throw new ServiceException(4187);
-                }
-                invoiceNo = invoiceDetail.getInvoiceNo();
-                invoiceCode = invoiceDetail.getInvoiceCode();
-            }
-            invoice.setStatus("2");
-            sendZzfpMessage(request, invoiceBO);
-        }
-        else {
             //发票审核不通过
             checkInvoiceRefuse(invoiceCheckBO, request, invoice, invoiceBO);
 
@@ -869,15 +813,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     /**
      * 获取微信红包字典信息
      */
-    private String selectWechatPassword(String dictId, String businessId) {
+    private String selectWechatPassword(String businessId) {
         Dict dict = new Dict();
-        dict.setDictId(dictId);
+        dict.setDictId("wechat_hongbao");
         dict = dictRoMapper.selectOne(dict);
         String password = "";
-        if(dict != null){
+        if (dict != null) {
             password = dict.getFieldValue();
             WxRedEnvelopBO data = iActivityService.generateSecret(password, businessId);
-            if(data != null && data.getSecret() != null){
+            if (data != null && data.getSecret() != null) {
                 password = data.getSecret();
             }
         }
@@ -887,9 +831,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     /**
      * 电子发票是否生成红包口令,0：否；1：是
      */
-    private String selectFieldValue(String dictId) {
+    private String selectFieldValue() {
         Dict dict = new Dict();
-        dict.setDictId(dictId);
+        dict.setDictId("dzfp_is_redpackage");
         dict = dictRoMapper.selectOne(dict);
         return dict != null ? dict.getFieldValue() : "";
     }
@@ -916,7 +860,6 @@ public class InvoiceServiceImpl implements InvoiceService {
             int dUpdate = invoiceDetailMapper.update(tail);
             if (dUpdate != 1) {
                 LOGGER.info("发票详情信息修改失败：{}", tail);
-                //throw new ServiceException(4187);
                 return false;
             }
             return true;
@@ -926,12 +869,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     /**
      * 纸质发票开具发送消息
-     *
-     * @param request
-     * @param invoiceBO
      */
     private void sendZzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
-        User user = userRoMapper.selectOne(invoiceBO.getUserId());
+        User user = userMapper.selectOne(invoiceBO.getUserId());
         //发送消息
         Message message = new Message();
         message.setBusinessId(invoiceBO.getId());
@@ -942,7 +882,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         message.setContent(content);
         message.setUserId(invoiceBO.getUserId());
 
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("userId", user.getId());
         map.put("openId", user.getWxopenid());
         map.put("first", "您好，审核结果如下");
@@ -950,24 +890,21 @@ public class InvoiceServiceImpl implements InvoiceService {
         map.put("keyword1", invoiceBO.getId());
         map.put("keyword2", content);
         String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
-        messageSendUtil.sendMsg(request, user, message,map,templateId);
+        messageSendUtil.sendMsg(request, user, message, map, templateId);
     }
 
     /**
      * 电子发票开具发送消息
-     *
-     * @param request
-     * @param invoiceBO
      */
     private void sendDzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
-        User user = userRoMapper.selectOne(invoiceBO.getUserId());
+        User user = userMapper.selectOne(invoiceBO.getUserId());
         //查询是否发红包
-        String isRedPackage = selectFieldValue("dzfp_is_redpackage");
+        String isRedPackage = selectFieldValue();
         String redPackage = "";
-        if(isRedPackage != null && "1".equals(isRedPackage)){
+        if (isRedPackage != null && "1".equals(isRedPackage)) {
             //获取微信红包信息
             redPackage = RemindConstant.RED_PACKAGE.replaceAll("\\{#DATA.PACKAGE\\}",
-                    selectWechatPassword("wechat_hongbao", invoiceBO.getId()));
+                    selectWechatPassword(invoiceBO.getId()));
         }
 
         //发送消息
@@ -977,14 +914,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         message.setType(MessageConstant.SYS_MESSAGE);
 
         String content = RemindConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
-                invoiceBO.getId())+redPackage;
+                invoiceBO.getId()) + redPackage;
         message.setContent(content);
         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
                 "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(invoiceBO.getUserId());
 
         //发送微信消息
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("userId", user.getId());
         map.put("openId", user.getWxopenid());
         map.put("first", "您申请的电子发票已开具");
@@ -994,7 +931,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         map.put("keyword3", String.valueOf(invoiceBO.getAmount()));
         map.put("keyword4", DateUtils.dateToStr(new Date()));
         String templateId = "8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM";
-        messageSendUtil.sendMsg(request, user, message,map,templateId);
+        messageSendUtil.sendMsg(request, user, message, map, templateId);
     }
 
     /**
@@ -1003,7 +940,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private void checkInvoiceRefuse(InvoiceCheckBO invoiceCheckBO, HttpServletRequest request, Invoice invoice,
                                     InvoiceBO invoiceBO) {
         List<OrderInvoice> orderInvoiceList = orderInvoiceRoMapper.selectByInvoiceId(invoiceCheckBO.getId());
-        Order order = null;
+        Order order;
         //修改订单是否已开发票状态
         for (OrderInvoice orderInvoice : orderInvoiceList) {
             order = new Order();
@@ -1019,7 +956,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoice.setStatus("3");
         //修改订单和发票对应关系
         orderInvoiceMapper.updateByInvoiceId(invoiceCheckBO.getId());
-        User user = userRoMapper.selectOne(invoiceBO.getUserId());
+        User user = userMapper.selectOne(invoiceBO.getUserId());
         //发送消息
         Message message = new Message();
         message.setBusinessId(invoiceBO.getId());
@@ -1041,7 +978,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(invoiceBO.getUserId());
 
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("userId", user.getId());
         map.put("openId", user.getWxopenid());
         map.put("first", "您好，审核结果如下");
@@ -1049,7 +986,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         map.put("keyword1", invoiceBO.getId());
         map.put("keyword2", content);
         String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
-        messageSendUtil.sendMsg(request, user, message,map,templateId);
+        messageSendUtil.sendMsg(request, user, message, map, templateId);
     }
 
 }

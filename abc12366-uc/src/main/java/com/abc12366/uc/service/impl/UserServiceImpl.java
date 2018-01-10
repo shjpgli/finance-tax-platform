@@ -4,10 +4,10 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
+import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
@@ -21,7 +21,6 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.admin.AdminOperationService;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,12 +37,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService {
 	private UserRoMapper userRoMapper;
 
 	@Autowired
-	private UserExtendRoMapper userExtendRoMapper;
+	private UserExtendMapper userExtendMapper;
 
 	@Autowired
 	private TokenMapper tokenMapper;
@@ -125,11 +124,11 @@ public class UserServiceImpl implements UserService {
 
 		PageHelper.startPage(page, size, true).pageSizeZero(true)
 				.reasonable(true);
-		List<UserListBO> userList = userRoMapper.selectList(map);
+		List<UserListBO> userList = userMapper.selectList(map);
 
 		// 补充真实姓名、用户等级信息
 		for (UserListBO user : userList) {
-			UserExtend ue = userExtendRoMapper.selectOneForAdmin(user.getId());
+			UserExtend ue = userExtendMapper.selectOneForAdmin(user.getId());
 			if (ue != null) {
 				user.setRealName(ue.getRealName());
 			}
@@ -171,17 +170,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User selectUser(String userId) {
 		// 新增优先查询redis
-		User user;
-		if (redisTemplate.hasKey(userId + "_UserInfo")) {
-			user = JSONObject.parseObject(
-					redisTemplate.opsForValue().get(userId + "_UserInfo"),
-					User.class);
-		} else {
-			user = userRoMapper.selectOne(userId);
-			redisTemplate.opsForValue().set(userId + "_UserInfo",
-					JSONObject.toJSONString(user),
-					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
-		}
+		User user = userMapper.selectOne(userId);
+	
 		return user;
 	}
 
@@ -189,28 +179,9 @@ public class UserServiceImpl implements UserService {
 	public Map selectOne(String userId) {
 		// 新增优先查询redis
 		LOGGER.info("{}", userId);
-		User user;
-		UserExtend userExtend;
-		if (redisTemplate.hasKey(userId + "_UserInfo")
-				&& redisTemplate.hasKey(userId + "_UserExtend")) {
-			user = JSONObject.parseObject(
-					redisTemplate.opsForValue().get(userId + "_UserInfo"),
-					User.class);
-			userExtend = JSONObject.parseObject(redisTemplate.opsForValue()
-					.get(userId + "_UserExtend"), UserExtend.class);
-			LOGGER.info("从redis获取用户信息:{}", JSONObject.toJSONString(user));
-		} else {
-			user = userRoMapper.selectOne(userId);
-			userExtend = userExtendRoMapper.selectOne(userId);
-			LOGGER.info("从数据库获取用户信息:{}", JSONObject.toJSONString(user));
-		}
-		if (user != null) {
-			redisTemplate.opsForValue().set(userId + "_UserInfo",
-					JSONObject.toJSONString(user),
-					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
-			redisTemplate.opsForValue().set(userId + "_UserExtend",
-					JSONObject.toJSONString(userExtend),
-					RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+		User user = userMapper.selectOne(userId);
+		UserExtend userExtend = userExtendMapper.selectOne(userId);
+     	if (user != null) {
 
 			// 用户重要信息模糊化处理:电话号码
 			if (!StringUtils.isEmpty(user.getPhone())
@@ -248,8 +219,6 @@ public class UserServiceImpl implements UserService {
 			}
 			throw new ServiceException(4624);
 		}
-		// 删除redis用户信息
-		redisTemplate.delete(id + "_UserInfo");
 	}
 
 	@Override
@@ -280,7 +249,7 @@ public class UserServiceImpl implements UserService {
 		if (userUpdateBO.getUsername() != null) {
 			LoginBO loginBO = new LoginBO();
 			loginBO.setUsernameOrPhone(userUpdateBO.getUsername());
-			User userOnly = userRoMapper.selectByUsernameOrPhone(loginBO);
+			User userOnly = userMapper.selectByUsernameOrPhone(loginBO);
 			if (userOnly != null
 					&& !userOnly.getId().equals(userUpdateBO.getId())) {
 				throw new ServiceException(4182);
@@ -323,9 +292,6 @@ public class UserServiceImpl implements UserService {
 		}
 		LOGGER.info("{}", userDTO);
 
-		// 删除redis用户信息
-		redisTemplate.delete(userUpdateBO.getId() + "_UserInfo");
-		redisTemplate.delete(userUpdateBO.getId() + "_UserExtend");
 
 		return userDTO;
 	}
@@ -366,9 +332,6 @@ public class UserServiceImpl implements UserService {
 				BeanUtils.copyProperties(user, userBO);
 				LOGGER.info("{}", userBO);
 
-				// 删除redis用户信息
-				redisTemplate.delete(userId + "_UserInfo");
-
 				return userBO;
 			}
 		}
@@ -378,7 +341,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserBO authAndRefreshToken(String token) {
 		LOGGER.info("{}", token);
-		UserBO user = userRoMapper.selectOneByToken(token);
+		UserBO user = userMapper.selectOneByToken(token);
 		if (user != null) {
 			tokenMapper.updateLastTokenResetTime(token);
 			// 用户重要信息模糊化处理:电话号码
@@ -459,8 +422,6 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 
-		// 删除redis用户信息
-		redisTemplate.delete(userId + "_UserInfo");
 
 		return true;
 	}
@@ -505,18 +466,16 @@ public class UserServiceImpl implements UserService {
 		user.setLastUpdate(new Date());
 		userMapper.update(user);
 
-		// 删除redis用户信息
-		redisTemplate.delete(userId + "_UserInfo");
 	}
 
 	@Override
 	public UserBO selectByopenid(String openid) {
-		return userRoMapper.selectByopenid(openid);
+		return userMapper.selectByopenid(openid);
 	}
 
 	@Override
 	public void automaticUserCancel() {
-		List<User> userList = userRoMapper.selectUserVipList(new Date());
+		List<User> userList = userMapper.selectUserVipList(new Date());
 		LOGGER.info("VIP到期，自动取消", userList);
 		for (User user : userList) {
 			LOGGER.info("VIP到期，取消用户", user);
@@ -532,14 +491,12 @@ public class UserServiceImpl implements UserService {
 			bo.setUserId(user.getId());
 			vipLogService.insert(bo);
 
-			// 删除redis用户信息
-			redisTemplate.delete(user.getId() + "_UserInfo");
 		}
 	}
 
 	@Override
 	public UserSimpleInfoBO selectSimple(String userId) {
-		return userRoMapper.selectSimple(userId);
+		return userMapper.selectSimple(userId);
 	}
 
 	@Override
@@ -598,8 +555,6 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(4102);
 		}
 
-		// 删除redis用户信息
-		redisTemplate.delete(user.getId() + "_UserInfo");
 
 	}
 
@@ -653,12 +608,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserBO updatePhone(UserPhoneBO bo) {
 		User user = selectUser(bo.getId());
-		String oldPhone = user.getPhone();
-		String oldUsername = user.getUsername();
 		if (user == null) {
 			LOGGER.warn("修改失败");
 			throw new ServiceException(4018);
 		}
+		String oldPhone = user.getPhone();
+		String oldUsername = user.getUsername();
 
 		if (!StringUtils.isEmpty(bo.getPhone())) {
 			LoginBO loginBO = new LoginBO();
@@ -691,9 +646,6 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-
-		// 删除redis用户信息
-		redisTemplate.delete(user.getId() + "_UserInfo");
 
 		UserBO userDTO = new UserBO();
 		BeanUtils.copyProperties(user, userDTO);
@@ -761,7 +713,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void verifyOldPhone(oldPhoneBO oldPhone) {
 		String userId = Utils.getUserId();
-		User userNow = userRoMapper.selectOne(userId);
+		User userNow = userMapper.selectOne(userId);
 
 		LoginBO loginBO = new LoginBO();
 		loginBO.setUsernameOrPhone(oldPhone.getOldPhone());
@@ -776,7 +728,7 @@ public class UserServiceImpl implements UserService {
 	public IsRealNameBO isRealName() {
 		IsRealNameBO isRealName = new IsRealNameBO();
 		String userId = Utils.getUserId();
-		UserExtend userExtend = userExtendRoMapper.isRealName(userId);
+		UserExtend userExtend = userExtendMapper.isRealName(userId);
 		if (userExtend != null
 				&& userExtend.getValidStatus() != null
 				&& userExtend.getValidStatus().equals(
@@ -792,7 +744,7 @@ public class UserServiceImpl implements UserService {
 	public Map selectOneForAdmin(String userId) {
 		LOGGER.info("{}", userId);
 		User userTemp = selectUser(userId);
-		UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
+		UserExtend userExtend = userExtendMapper.selectOneForAdmin(userId);
 		if (userTemp != null) {
 			userTemp.setPassword(null);
 			Map<String, Object> map = new HashMap<>();
@@ -807,12 +759,12 @@ public class UserServiceImpl implements UserService {
 	// 获取总用户数
 	@Override
 	public int getAllNomalCont() {
-		return userRoMapper.getAllNomalCont();
+		return userMapper.getAllNomalCont();
 	}
 
 	@Override
 	public List<UserBO> getNomalList(Map<String, Object> map) {
-		return userRoMapper.getNomalList(map);
+		return userMapper.getNomalList(map);
 	}
 
 	@Override
@@ -822,15 +774,12 @@ public class UserServiceImpl implements UserService {
 		users.setId(userUpdateDTO.getId());
 		users.setWxopenid(userUpdateDTO.getWxopenid());
 
-		User user = userRoMapper.selectByWxUserId(users);
+		User user = userMapper.selectByWxUserId(users);
 		if (user != null) {
 			LOGGER.info("微信已绑定此账号");
 			return 1;
 		} else {
 			LOGGER.info("微信绑定账号与此账号不符合，更新绑定关系");
-
-			// 删除redis用户信息
-			redisTemplate.delete(userUpdateDTO.getId() + "_UserInfo");
 
 			users.setWxheadimg(userUpdateDTO.getWxheadimg());
 			users.setWxnickname(userUpdateDTO.getWxnickname());
@@ -850,7 +799,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findByHngsNsrsbh(String nsrsbh) {
-		return userRoMapper.findByHngsNsrsbh(nsrsbh);
+		return userMapper.findByHngsNsrsbh(nsrsbh);
 	}
 
 	@Override
@@ -860,12 +809,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserBO selectOneByPhone(String phone) {
-		return userRoMapper.selectOneByPhone(phone);
+		return userMapper.selectOneByPhone(phone);
 	}
 
 	@Override
 	public User selectUserById(User user) {
-		return userRoMapper.selectUserById(user);
+		return userMapper.selectUserById(user);
 	}
 
 	/**
@@ -1346,5 +1295,37 @@ public class UserServiceImpl implements UserService {
 	public List<UserBO> statisUserBindList(Map<String, Object> map) {
 		return userRoMapper.statisUserBindList(map);
 	}
+	@Override
+	public void resetPassword(UserResetPwdBO resetPwdBO) {
+		User u = userMapper.selectOne(resetPwdBO.getUserId());
+		if (u == null) {
+			throw new ServiceException(4018);
+		}
 
+		if(StringUtils.isEmpty(u.getSalt())){
+			throw new ServiceException(4205);
+		}
+
+		User newUser = new User();
+		newUser.setId(resetPwdBO.getUserId());
+		newUser.setLastUpdate(new Date());
+		String defaultPwd;
+		try {
+			defaultPwd = Utils.md5(Utils.md5(Constant.USER_DEFAULT_PASSWORD) + u.getSalt());
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ServiceException(4106);
+		}
+		newUser.setPassword(defaultPwd);
+		int result = userMapper.updatePassword(newUser);
+		if (result < 1) {
+			throw new ServiceException(4103);
+		}
+		userMapper.deleteContinuePwdWrong(resetPwdBO.getUserId());
+		try {
+			adminOperationService.insert(new AdminModifyUserPhoneLogBO(resetPwdBO.getUserId(), Utils.getAdminId(), null, null, resetPwdBO.getReason(), null, null));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

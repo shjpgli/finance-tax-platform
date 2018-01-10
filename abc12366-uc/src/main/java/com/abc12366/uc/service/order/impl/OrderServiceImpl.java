@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -55,15 +56,6 @@ public class OrderServiceImpl implements OrderService {
     private OrderProductRoMapper orderProductRoMapper;
 
     @Autowired
-    private OrderBackMapper orderBackMap;
-
-    @Autowired
-    private OrderBackRoMapper orderBackRoMap;
-
-    @Autowired
-    private GoodsRoMapper goodsRoMapper;
-
-    @Autowired
     private ProductRoMapper productRoMapper;
 
     @Autowired
@@ -82,9 +74,6 @@ public class OrderServiceImpl implements OrderService {
     private PointsLogService pointsLogService;
 
     @Autowired
-    private UvipPriceRoMapper uvipPriceRoMapper;
-
-    @Autowired
     private OrderProductspecMapper orderProductspecMapper;
 
     @Autowired
@@ -97,16 +86,10 @@ public class OrderServiceImpl implements OrderService {
     private TradeLogMapper tradeLogMapper;
 
     @Autowired
-    private TradeLogRoMapper tradeLogRoMapper;
-
-    @Autowired
     private TradeMapper tradeMapper;
 
     @Autowired
     private TradeRoMapper traderoMapper;
-
-    @Autowired
-    private UserAddressRoMapper userAddressRoMapper;
 
     @Autowired
     private ExpressCompRoMapper expressCompRoMapper;
@@ -121,13 +104,13 @@ public class OrderServiceImpl implements OrderService {
     private PointsRuleService pointsRuleService;
 
     @Autowired
-    private IWxTemplateService templateService;
-
-    @Autowired
     private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
 
     @Autowired
     private UamountLogMapper uamountLogMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -137,12 +120,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderBO selectByOrderNo(String orderNo) {
-        OrderBO orderBO = orderRoMapper.selectById(orderNo);
-        return orderBO;
+        return orderRoMapper.selectById(orderNo);
     }
 
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderBO joinCart(OrderBO orderBO) {
         //判断产品数量
@@ -165,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderBO updateCart(OrderBO orderBO) {
         Order order = new Order();
@@ -187,11 +169,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderList(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> orderBOList = orderRoMapper.selectOrderList(order);
-        return orderBOList;
+        return orderRoMapper.selectOrderList(order);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void deleteCart(OrderBO orderBO) {
         Order order = new Order();
@@ -203,7 +184,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderBO submitOrder(OrderSubmitBO orderSubmitBO) {
         Date date = new Date();
@@ -302,8 +283,8 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理人民币购买服务
      */
-    @Transactional("db1TxManager")
-    private void operationMoneyServiceOrder(OrderBO orderBO, Order order, OrderProductBO orderProductBO, String orderStatus) {
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
+    void operationMoneyServiceOrder(OrderBO orderBO, Order order, OrderProductBO orderProductBO, String orderStatus) {
         orderProductBO.setOrderNo(orderBO.getOrderNo());
         orderBO.setOrderStatus(orderStatus);
         BeanUtils.copyProperties(orderBO, order);
@@ -326,8 +307,8 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 处理人民币充值积分订单
      */
-    @Transactional("db1TxManager")
-    private void operationMoneyRechargeOrder(Order order, OrderProductBO orderProductBO, String orderStatus) {
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
+    void operationMoneyRechargeOrder(Order order, OrderProductBO orderProductBO, String orderStatus) {
         // 查询用户信息
         order.setOrderStatus(orderStatus);
         orderProductBO.setOrderNo(order.getOrderNo());
@@ -348,40 +329,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 处理积分订单
-     */
-    private void operationPointsOrder(OrderBO orderBO, Order order, OrderProductBO orderProductBO, String orderStatus) {
-        orderProductBO.setOrderNo(orderBO.getOrderNo());
-        //加入订单信息,
-        orderBO.setOrderStatus(orderStatus);
-
-        BeanUtils.copyProperties(orderBO, order);
-        int insert = orderMapper.insert(order);
-        if (insert != 1) {
-            LOGGER.info("提交产品订单失败：{}", orderBO);
-            throw new ServiceException(4139);
-        }
-
-        orderProductBO.setOrderNo(orderBO.getOrderNo());
-        OrderProduct orderProduct = new OrderProduct();
-        BeanUtils.copyProperties(orderProductBO, orderProduct);
-
-        int opInsert = orderProductMapper.insert(orderProduct);
-        if (opInsert != 1) {
-            LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
-            throw new ServiceException(4167);
-        }
-    }
-
-
-    /**
      * 加入订单日志
      */
     private void insertOrderLog(String userId, String orderNo, String status, String remark, String logType) {
         //加入订单日志信息
         OrderLog orderLog = new OrderLog();
         orderLog.setId(Utils.uuid());
-        orderLog.setAction(selectFieldValue("orderStatus", status));
+        orderLog.setAction(selectFieldValue(status));
         orderLog.setOrderNo(orderNo);
         orderLog.setCreateTime(new Date());
         orderLog.setCreateUser(userId);
@@ -394,9 +348,9 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private String selectFieldValue(String fieldValue, String value) {
+    private String selectFieldValue(String value) {
         Dict dict = new Dict();
-        dict.setDictId(fieldValue);
+        dict.setDictId("orderStatus");
         dict.setFieldValue(value);
         dict = dictRoMapper.selectOne(dict);
         return dict != null ? dict.getFieldKey() : "";
@@ -407,17 +361,16 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectCartList(order);
     }
 
-    @Transactional("db1TxManager")
     @Override
     public void submitCart(Order order) {
-        OrderBO temp = orderRoMapper.selectOrder(order);
+        orderRoMapper.selectOrder(order);
         //验证产品信息
         //将购物车状态修改为新订单状态
         order.setOrderStatus("1");
         orderMapper.update(order);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void deleteOrder(OrderBO orderBO) {
         Order order = new Order();
@@ -443,22 +396,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    @Transactional("db1TxManager")
-    @Override
-    public OrderBO feedback(OrderBO orderBO) {
-        Order order = new Order();
-        order.setUserId(orderBO.getUserId());
-        order.setOrderNo(orderBO.getOrderNo());
-        //order.setFeedback(orderBO.getFeedback());
-        int upd = orderMapper.update(order);
-        if (upd != 1) {
-            LOGGER.info("反馈信息失败：{}", orderBO);
-            throw new ServiceException(4141);
-        }
-        return orderRoMapper.selectOrder(order);
-    }
-
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderBO cancelOrder(OrderCancelBO orderCancelBO) {
         OrderBO bo = orderRoMapper.selectById(orderCancelBO.getOrderNo());
@@ -466,7 +404,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("订单信息不存在：{}", orderCancelBO);
             throw new ServiceException(4134);
         }
-        if (!bo.getOrderStatus().equals("2")) {
+        if (!"2".equals(bo.getOrderStatus())) {
             LOGGER.info("只有待支付可以取消订单：{}", orderCancelBO);
             throw new ServiceException(4189);
         }
@@ -480,7 +418,7 @@ public class OrderServiceImpl implements OrderService {
         }
         //查询订单和交易记录对应关系
         Trade trade = traderoMapper.selectOrderNo(bo.getOrderNo());
-        if(trade != null){
+        if (trade != null) {
             TradeLog tradeLog = new TradeLog();
             tradeLog.setTradeNo(trade.getTradeNo());
             tradeLog.setTradeStatus("4");
@@ -495,116 +433,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectUserAllOrderList(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> oList = orderRoMapper.selectUserAllOrderList(order);
-        return oList;
+        return orderRoMapper.selectUserAllOrderList(order);
     }
 
-    @Transactional("db1TxManager")
-    @Override
-    public OrderBack applyBackOrder(OrderBack orderBack) {
-        OrderBO bo = orderRoMapper.selectById(orderBack.getOrderNo());
-        if (bo == null) {
-            LOGGER.info("订单信息不存在：{}", orderBack);
-            throw new ServiceException(4134);
-        }
-        if (bo.getIsInvoice()) {
-            LOGGER.info("该订单已开发票，请先发起发票退单：{}", bo);
-            throw new ServiceException(4188);
-        }
-        orderBack.setId(Utils.uuid());
-        Date date = new Date();
-        orderBack.setCreateTime(date);
-        orderBack.setLastUpdate(date);
-        orderBackMap.insert(orderBack);
-        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "1", "用户提交退单", "1");
-        return orderBack;
-    }
-
-    @Transactional("db1TxManager")
-    @Override
-    public OrderBack submitBackOrder(OrderBack orderBack) {
-        orderBack.setId(Utils.uuid());
-        orderBack.setLastUpdate(new Date());
-        int upd = orderBackMap.insert(orderBack);
-        if (upd != 1) {
-            LOGGER.info("新增失败：{}", orderBack);
-            throw new ServiceException(4101);
-        }
-
-        //修改订单状态
-        Order order = new Order();
-        order.setOrderNo(orderBack.getOrderNo());
-        order.setOrderStatus("7");
-        int oUpdate = orderMapper.update(order);
-        if (oUpdate != 1) {
-            LOGGER.info("修改失败：{}", order);
-            throw new ServiceException(4102);
-        }
-        insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "7", "用户填写快递号", "1");
-        return orderBack;
-    }
-
-    @Override
-    public OrderBack backCheckOrder(OrderBack orderBack) {
-        Date date = new Date();
-        orderBack.setLastUpdate(date);
-        int upd = orderBackMap.update(orderBack);
-        if (upd != 1) {
-            LOGGER.info("修改失败：{}", orderBack);
-            throw new ServiceException(4102);
-        }
-        //0：允许，1：不允许，
-        if ("0".equals(orderBack.getStatus())) {
-            //修改订单状态，6：退款
-            Order order = new Order();
-            String orderNo = orderBack.getOrderNo();
-            order.setOrderNo(orderNo);
-            order.setOrderStatus("6");
-            orderMapper.update(order);
-            insertOrderLog(orderBack.getUserId(), orderNo, "6", "管理员允许退单", "1");
-
-            //获取订单和产品关系信息
-            OrderProductBO pBO = new OrderProductBO();
-            pBO.setOrderNo(orderBack.getOrderNo());
-            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
-            for (OrderProductBO orderProductBO : orderProductBOs) {
-                //增加Product库存数量
-                ProductBO productBO = new ProductBO();
-                int stock = productBO.getStock() + orderProductBO.getNum();
-                productBO.setStock(stock);
-                Product product = new Product();
-                BeanUtils.copyProperties(productBO, product);
-                productMapper.update(product);
-                //库存表数据处理
-                ProductRepo repo = new ProductRepo();
-                repo.setId(Utils.uuid());
-                repo.setGoodsId(productBO.getGoodsId());
-                repo.setProductId(productBO.getId());
-                repo.setIncome(orderProductBO.getNum());
-                repo.setStock(stock);
-                repo.setCreateTime(date);
-                repo.setLastUpdate(date);
-                repo.setRemark(orderBack.getOrderNo());
-                repo.setOptionUser(orderBack.getUserId());
-                productRepoMapper.insert(repo);
-            }
-
-        } else if ("1".equals(orderBack.getStatus())) {
-            Order order = new Order();
-            order.setOrderNo(orderBack.getOrderNo());
-            order.setOrderStatus("6");
-            orderMapper.update(order);
-            insertOrderLog(orderBack.getUserId(), orderBack.getOrderNo(), "6", "管理员不允许退单", "1");
-        }
-        return orderBack;
-    }
-
-    @Override
-    public List<OrderBackBO> selectOrderBackList(OrderBackBO orderBackBO) {
-        return orderBackRoMap.selectOrderBackList(orderBackBO);
-    }
-
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void paymentOrder(OrderPayBO orderPayBO, String type, HttpServletRequest request) {
         String tradeNo = orderPayBO.getTradeNo();
@@ -635,21 +467,21 @@ public class OrderServiceImpl implements OrderService {
                             updOrder(order);
                             insertOrderLog(userId, orderNo, "3", "用户付款中", "0");
                         } else if (isPay == 2) {
-                            if(!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())){
-                                LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}",orderBO.getOrderStatus());
+                            if (!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())) {
+                                LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}", orderBO.getOrderStatus());
                                 throw new ServiceException(4925);
                             }
                             //判断是否需要查询产品库存信息
                             setTodoTask(orderBO);
-                            if (trading.equals("UCSC")) {
+                            if ("UCSC".equals(trading)) {
                                 updateStock(orderBO, orderProductBO);
                                 order.setOrderStatus("4");
                                 //修改订单状态
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功","0");
-                            } else if (trading.equals("HYCZ")) {
+                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功", "0");
+                            } else if ("HYCZ".equals(trading)) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
                                 updOrder(order);
@@ -663,25 +495,24 @@ public class OrderServiceImpl implements OrderService {
 
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
-                                sendMemberMsg(orderProductBO, order,request);
-                            } else if (trading.equals("CSKT")) {
+                                sendMemberMsg(orderProductBO, order, request);
+                            } else if ("CSKT".equals(trading)) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
+                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
-                                sendPointsMsg(orderProductBO, order,request);
-                            }else if (trading.equals("JFCZ")) {
+                                sendPointsMsg(orderProductBO, order, request);
+                            } else if ("JFCZ".equals(trading)) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单","0");
+                                insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                             }
-//                        }
                         } else if (isPay == 3) {
                             order.setOrderStatus("2");
                             //修改订单状态
@@ -692,14 +523,14 @@ public class OrderServiceImpl implements OrderService {
 
                         //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
                         //判断是否需要查询产品库存信息
-                        if (trading.equals("UCSC")) {
+                        if ("UCSC".equals(trading)) {
                             updateStock(orderBO, orderProductBO);
                             order.setOrderStatus("4");
                             //修改订单状态
                             updOrder(order);
                             insertDeductPoints(orderBO);
                             insertOrderLog(userId, orderNo, "4", "用户付款成功", "0");
-                        } else if (trading.equals("HYCZ")) {
+                        } else if ("HYCZ".equals(trading)) {
                             order.setOrderStatus("6");
                             //修改订单状态
                             updOrder(order);
@@ -710,16 +541,16 @@ public class OrderServiceImpl implements OrderService {
                             LOGGER.info("插入会员日志: {}", orderNo);
                             insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
 
-                            insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单","0");
-                            sendMemberMsg(orderProductBO, order,request);
-                        }else if (trading.equals("CSKT")) {
+                            insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
+                            sendMemberMsg(orderProductBO, order, request);
+                        } else if ("CSKT".equals(trading)) {
                             order.setOrderStatus("6");
                             //修改订单状态
                             updOrder(order);
                             insertDeductPoints(orderBO);
-                            insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单","0");
+                            insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
                         }
-                        insertTradeLog(order,tradeNo);
+                        insertTradeLog(order, tradeNo);
                     }
                 }
             }
@@ -728,7 +559,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void updOrder(Order order) {
         int update = orderMapper.update(order);
-        if(update != 1){
+        if (update != 1) {
             LOGGER.warn("修改失败，参数：{}", order);
             throw new ServiceException(4102);
         }
@@ -736,8 +567,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 加入消费赠送积分规则
-     *
-     * @param order
      */
     private void setTodoTask(OrderBO order) {
         double amount = order.getTotalPrice();
@@ -767,8 +596,7 @@ public class OrderServiceImpl implements OrderService {
         int stock = prBO.getStock() - num;
         if (stock < 0) {
             LOGGER.info("库存不足,请联系管理员：{}", stock);
-            orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
-            //throw new ServiceException(4905);
+            orderBO.setRemark(orderProductBO.getName() + "库存不足,请联系客服。");
         }
         prBO.setStock(stock);
         Product product = new Product();
@@ -801,7 +629,7 @@ public class OrderServiceImpl implements OrderService {
             List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
             for (OrderProductBO orderProductBO : orderProductBOs) {
                 //查询产品库存信息
-                if(orderProductBO.getProductId() != null && !"".equals(orderProductBO.getProductId())){
+                if (orderProductBO.getProductId() != null && !"".equals(orderProductBO.getProductId())) {
                     ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
                     orderProductBO.setOrderNo(orderBO.getOrderNo());
                     //减去Product库存数量
@@ -809,7 +637,7 @@ public class OrderServiceImpl implements OrderService {
                     int stock = prBO.getStock() - num;
                     if (stock < 0) {
                         LOGGER.info("库存不足,请联系管理员：{}", stock);
-                        orderBO.setRemark(orderProductBO.getName()+"库存不足,请联系客服。");
+                        orderBO.setRemark(orderProductBO.getName() + "库存不足,请联系客服。");
                         throw new ServiceException(4905);
                     }
                 }
@@ -821,17 +649,19 @@ public class OrderServiceImpl implements OrderService {
      * 购买会员，消息发送
      */
     private void sendMemberMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
-        User user = userRoMapper.selectOne(order.getUserId());
+        User user = userMapper.selectOne(order.getUserId());
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
         String content = RemindConstant.BUYING_MEMBERS_PREFIX.replaceAll("\\{#DATA.VIP\\}", orderProductBO.getName());
         message.setContent(content);
-        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        message.setUrl
+                ("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">"
+                        + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
 
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("userId", user.getId());
         map.put("openId", user.getWxopenid());
         map.put("first", "亲爱的" + user.getUsername() + "，恭喜您成功升级为 VIP 会员！");
@@ -840,56 +670,59 @@ public class OrderServiceImpl implements OrderService {
         map.put("keyword2", orderProductBO.getName());
         map.put("keyword3", DateUtils.dateToStr(new Date()));
         String templateId = "GrA5UnnYg39Rhs2nyDzwoFiYfmZh5sFkNXTZWGGmrkY";
-        messageSendUtil.sendMsg(request, user, message,map,templateId);
+        messageSendUtil.sendMsg(request, user, message, map, templateId);
     }
 
     /**
      * 积分充值，消息发送
      */
     private void sendPointsMsg(OrderProductBO orderProductBO, Order order, HttpServletRequest request) {
-        User user = userRoMapper.selectOne(order.getUserId());
+        User user = userMapper.selectOne(order.getUserId());
         //组装web消息
         Message message = new Message();
         message.setBusinessId(order.getOrderNo());
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
-        String content = RemindConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user.getPoints()));
-        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        String content = RemindConstant.INTEGRAL_RECHARGE.replaceAll("\\{#DATA.POINT\\}", String.valueOf(user
+                .getPoints()));
+        message.setUrl
+                ("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">"
+                        + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(order.getUserId());
         message.setContent(content);
 
         //组装微信消息
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("userId", user.getId());
         map.put("openId", user.getWxopenid());
-        map.put("first", "亲爱的"+user.getUsername()+"，你已兑换成功。");
+        map.put("first", "亲爱的" + user.getUsername() + "，你已兑换成功。");
         map.put("remark", "感谢你的使用。");
         map.put("keyword1", orderProductBO.getName());
         map.put("keyword2", String.valueOf(order.getGiftPoints()));
         String templateId = "mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU";
-        messageSendUtil.sendMsg(request, user, message,map,templateId);
+        messageSendUtil.sendMsg(request, user, message, map, templateId);
     }
 
     /**
      * 插入交易流水记录
      */
-    private void insertTradeLog(Order order,String tradeNo) {
+    private void insertTradeLog(Order order, String tradeNo) {
         //加入交易日志
-            TradeLog tradeLog = new TradeLog();
-            tradeLog.setTradeNo(tradeNo);
-            tradeLog.setAliTrandeNo(tradeNo);
-            tradeLog.setTradeStatus("2");
-            tradeLog.setTradeType("1");
-            tradeLog.setAmount(order.getTotalPrice());
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            tradeLog.setTradeTime(now);
-            tradeLog.setCreateTime(now);
-            tradeLog.setLastUpdate(now);
-            tradeLog.setPayMethod(order.getPayMethod());
-            tradeLogMapper.update(tradeLog);
+        TradeLog tradeLog = new TradeLog();
+        tradeLog.setTradeNo(tradeNo);
+        tradeLog.setAliTrandeNo(tradeNo);
+        tradeLog.setTradeStatus("2");
+        tradeLog.setTradeType("1");
+        tradeLog.setAmount(order.getTotalPrice());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        tradeLog.setTradeTime(now);
+        tradeLog.setCreateTime(now);
+        tradeLog.setLastUpdate(now);
+        tradeLog.setPayMethod(order.getPayMethod());
+        tradeLogMapper.update(tradeLog);
     }
 
-    public void insertVipLog(String orderNo, String userId, String memberLevel) {
+    private void insertVipLog(String orderNo, String userId, String memberLevel) {
         VipLogBO vipLogBO = new VipLogBO();
         vipLogBO.setLevelId(memberLevel);
         vipLogBO.setSource(orderNo);
@@ -897,13 +730,13 @@ public class OrderServiceImpl implements OrderService {
         vipLogService.insert(vipLogBO);
 
         //查询会员礼包业务
-        User user = userRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel());
+        obj.setLevelId(memberLevel);
         obj.setPrivilegeId(MessageConstant.HYLB_CODE);
         //查看会员礼包是否启用
         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        if(findObj != null && findObj.getStatus()){
+        if (findObj != null && findObj.getStatus()) {
             UamountLog uamountLog = new UamountLog();
             uamountLog.setId(Utils.uuid());
             uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
@@ -912,16 +745,24 @@ public class OrderServiceImpl implements OrderService {
             uamountLog.setRemark("充值会员，获得积分");
             //赠送积分
             double income = Double.parseDouble(findObj.getVal1());
+            double amount = 0;
+            if (user.getAmount() != null) {
+                amount = user.getAmount();
+            }
             uamountLog.setIncome(income);
-            uamountLog.setUsable(user.getAmount()+income);
+            uamountLog.setUsable(amount + income);
+            //插入礼包积分记录
             uamountLogMapper.insert(uamountLog);
+            //修改礼包积分
+            User temp = new User();
+            temp.setId(user.getId());
+            temp.setAmount(amount + income);
+            userMapper.update(temp);
         }
     }
 
     /**
      * 插入可获得的积分
-     *
-     * @param orderBO
      */
     private void insertPoints(OrderBO orderBO) {
         if (orderBO != null && orderBO.getGiftPoints() != null && orderBO.getGiftPoints() > 0) {
@@ -944,8 +785,6 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 插入所扣去的积分
-     *
-     * @param orderBO
      */
     private void insertDeductPoints(OrderBO orderBO) {
         //如果积分规则为空则返回
@@ -965,8 +804,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderListBO> selectExprotOrder(Order order) {
         List<OrderBO> orderBOList = orderRoMapper.selectExprotOrder(order);
-        List<OrderBO> orderDataList = new ArrayList<>();
-        orderDataList.addAll(orderBOList);
+        List<OrderBO> orderDataList = new ArrayList<>(orderBOList);
         List<OrderListBO> orderListBOList = new ArrayList<>();
 
         for (OrderBO bo : orderBOList) {
@@ -976,15 +814,11 @@ public class OrderServiceImpl implements OrderService {
             String address = bo.getShippingAddress();
             String phone = bo.getContactNumber();
             String consignee = bo.getConsignee();
-//            if(bo.getUserAddressBO() != null){
-//                UserAddressBO userAddress = setUserAddress(bo, address);
             orderListBO.setAddress(address);
-//                phone = userAddress.getPhone();
             orderListBO.setPhone(phone);
             orderListBO.setFullName(bo.getConsignee());
-//            }
             boolean isAlike = false;
-            StringBuffer goodsName = new StringBuffer();
+            StringBuilder goodsName = new StringBuilder();
             int num = 0;
             if (address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
                 for (OrderBO data : orderDataList) {
@@ -1030,16 +864,6 @@ public class OrderServiceImpl implements OrderService {
         return orderListBOList;
     }
 
-    /*//拼接地址信息
-    private UserAddressBO setUserAddress(OrderBO bo, StringBuffer address) {
-        UserAddressBO userAddress = bo.getUserAddressBO();
-        address.append(userAddress.getProvinceName() + "-");
-        address.append(userAddress.getCityName() + "-");
-        address.append(userAddress.getAreaName() + "-");
-        address.append(userAddress.getDetail());
-        return userAddress;
-    }*/
-
     @Override
     public void selectImportOrder(List<OrderBO> orderBOList, String expressCompId, HttpServletRequest request) {
         for (OrderBO bo : orderBOList) {
@@ -1065,10 +889,8 @@ public class OrderServiceImpl implements OrderService {
             updOrder(order);
             insertOrderLog(data.getUserId(), order.getOrderNo(), "5", "管理员已发货", "0");
 
-
-
             //查询用户信息
-            User user = userRoMapper.selectOne(data.getUserId());
+            User user = userMapper.selectOne(data.getUserId());
 
             //组装web消息
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
@@ -1077,7 +899,8 @@ public class OrderServiceImpl implements OrderService {
                 throw new ServiceException(4102, "物流公司查询失败");
             }
             Message message = new Message();
-            String content = RemindConstant.DELIVER_GOODS_PREFIX+order.getOrderNo()+ RemindConstant.DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
+            String content = RemindConstant.DELIVER_GOODS_PREFIX + order.getOrderNo() + RemindConstant
+                    .DELIVER_GOODS_YDH + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
             message.setBusinessId(data.getOrderNo());
             message.setBusiType(MessageConstant.SPDD);
             message.setType(MessageConstant.SYS_MESSAGE);
@@ -1094,11 +917,11 @@ public class OrderServiceImpl implements OrderService {
             map.put("keyword2", Utils.getAdminInfo().getNickname());
             map.put("keyword3", DateUtils.dateToStr(new Date()));
             String templateId = "mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU";
-            messageSendUtil.sendMsg(request, user, message,map,templateId);
+            messageSendUtil.sendMsg(request, user, message, map, templateId);
         }
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void sendOrder(OrderOperationBO orderOperationBO, HttpServletRequest request) {
         //订单状态，2：待支付，3：支付中，4：待发货，5：待收货，6：已完成，7：已取消
@@ -1120,16 +943,18 @@ public class OrderServiceImpl implements OrderService {
         message.setBusiType(MessageConstant.SPDD);
         message.setType(MessageConstant.SYS_MESSAGE);
         if (expressComp != null) {
-            content = RemindConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() + RemindConstant.SUFFIX;
+            content = RemindConstant.DELIVER_GOODS_PREFIX + expressComp.getCompName() + "+" + order.getExpressNo() +
+                    RemindConstant.SUFFIX;
             message.setContent(content);
         } else {
             content = RemindConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + RemindConstant.SUFFIX;
             message.setContent(content);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            message.setUrl
+                    ("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         }
 
-        User user = userRoMapper.selectOne(order.getUserId());
-        Map<String, String> map = new HashMap<String, String>();
+        User user = userMapper.selectOne(order.getUserId());
+        Map<String, String> map = new HashMap<>();
         map.put("userId", user.getId());
         map.put("openId", user.getWxopenid());
         map.put("first", "你有新的订单提醒：");
@@ -1138,11 +963,11 @@ public class OrderServiceImpl implements OrderService {
         map.put("keyword2", Utils.getAdminInfo().getNickname());
         map.put("keyword3", DateUtils.dateToStr(new Date()));
         String templateId = "mfSWjnagZEzWLYz1Xp8LfQXKLos2fBE7QFoShCwGJkU";
-        messageSendUtil.sendMsg(request, user, message,map,templateId);
+        messageSendUtil.sendMsg(request, user, message, map, templateId);
 
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void invalidOrder(OrderOperationBO orderOperationBO) {
         orderOperationBO.setOrderStatus("6");
@@ -1152,7 +977,6 @@ public class OrderServiceImpl implements OrderService {
         updOrder(order);
     }
 
-    //@Transactional("db1TxManager")
     @Override
     public void automaticReceipt() {
         Date date = DateUtils.getAddDate(Constant.ORDER_RECEIPT_DAYS);
@@ -1165,7 +989,6 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    //@Transactional("db1TxManager")
     @Override
     public void automaticCancel() {
         Date date = DateUtils.getAddTime(Constant.ORDER_CANCEL_TIME);
@@ -1183,7 +1006,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectOrderByGoodsIdAndUserId(map);
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderUpdateBO updateOrder(OrderUpdateBO orderUpdateBO) {
         Order order = new Order();
@@ -1195,7 +1018,7 @@ public class OrderServiceImpl implements OrderService {
         return orderUpdateBO;
     }
 
-    @Transactional("db1TxManager")
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void confirmOrder(Order order) {
         order.setOrderStatus("6");
@@ -1207,8 +1030,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderBO> selectOrderListByInvoice(OrderBO order, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<OrderBO> oList = orderRoMapper.selectOrderListByInvoice(order);
-        return oList;
+        return orderRoMapper.selectOrderListByInvoice(order);
     }
 
     @Override
@@ -1233,40 +1055,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderBO openVip(OrderVipBO orderVipBO, HttpServletRequest request) {
-        String orderNo = orderVipBO.getOrderNo();
-        OrderBO orderBO = orderRoMapper.selectByOrderNoAdmin(orderNo);
-        if (orderBO == null) {
-            LOGGER.warn("订单信息不存在：{}", orderBO);
-            throw new ServiceException(4921);
-        }
-        if (orderBO.getStatus() != null && !"4".equals(orderBO.getStatus())) {
-            LOGGER.warn("订单还未支付完成，不能开通会员服务：{}", orderBO);
-            throw new ServiceException(4921);
-        }
-
-        String levelCode = orderVipBO.getLevelCode();
-        LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-        userService.updateUserVipInfo(orderBO.getUserId(), levelCode);
-
-        LOGGER.info("插入会员日志: {}", orderNo);
-        insertVipLog(orderNo, orderBO.getUserId(), levelCode);
-
-        Order order = new Order();
-        orderBO.setOrderStatus("6");
-        BeanUtils.copyProperties(orderBO, order);
-        orderMapper.update(order);
-
-        insertOrderLog(orderBO.getUserId(), orderNo, "6", "完成订单", "0");
-
-        List<OrderProductBO> orderProductBOs = orderBO.getOrderProductBOList();
-        for (OrderProductBO orderProductBO : orderProductBOs) {
-            sendMemberMsg(orderProductBO, order, request);
-        }
-        return orderBO;
-    }
-
-    @Override
     public OrderTradeBO selectOrderTrade(String tradeNo) {
 
         return orderRoMapper.selectOrderTrade(tradeNo);
@@ -1284,7 +1072,6 @@ public class OrderServiceImpl implements OrderService {
         }
         //订单状态，2：待付款，3：付款中，4：付款成功，5：已发货，6：已完成，7：已结束，8：付款失败，9：已退单，11：已删除
         if ("11".equals(bo.getOrderStatus())) {
-            //order.setOrderStatus("9");
             int del = orderMapper.delete(order.getOrderNo());
             if (del != 1) {
                 LOGGER.info("删除失败：{}", orderBO);

@@ -1,13 +1,16 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.uc.mapper.db1.UserBindMapper;
-import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
-import com.abc12366.uc.model.abc4000.*;
+import com.abc12366.uc.model.abc4000.ABC4000CallbackBO;
+import com.abc12366.uc.model.abc4000.NSRXX;
+import com.abc12366.uc.model.abc4000.ResponseForAbc4000;
+import com.abc12366.uc.model.abc4000.ResponseForAbc4000Simple;
 import com.abc12366.uc.service.NsrABC4000Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +27,15 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     private static final Logger LOGGER = LoggerFactory.getLogger(NsrABC4000ServiceImpl.class);
 
     @Autowired
-    private UserBindRoMapper userBindRoMapper;
-
-    @Autowired
     private UserBindMapper userBindMapper;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public ResponseForAbc4000 selectList(String userId) {
         LOGGER.info("{}", userId);
-        List<NSRXX> nsrxxList = userBindRoMapper.selectListByUserId(userId);
+        List<NSRXX> nsrxxList = userBindMapper.selectListByUserId(userId);
         Date date = new Date();
         for (int i = 0; i < nsrxxList.size(); i++) {
             nsrxxList.get(i).setDqxtsj(date);
@@ -49,6 +52,9 @@ public class NsrABC4000ServiceImpl implements NsrABC4000Service {
     @Override
     public ResponseForAbc4000Simple update(ABC4000CallbackBO data) {
         LOGGER.info("{}", data);
+        
+        redisTemplate.delete(data.getUserid() + "_DzsbList");
+        
         UserDzsb userDzsb = new UserDzsb();
         userDzsb.setStatus(true);
         userDzsb.setUserId(data.getUserid());

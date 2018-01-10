@@ -10,7 +10,6 @@ import com.abc12366.bangbang.model.*;
 import com.abc12366.bangbang.model.bo.SystemRecordBO;
 import com.abc12366.bangbang.model.bo.SystemRecordInsertBO;
 import com.abc12366.bangbang.service.SystemRecordService;
-import com.abc12366.bangbang.util.GeneralTree;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.TableBO;
@@ -28,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +35,7 @@ import java.util.concurrent.CompletableFuture;
  * @author lingsuzhi <554600654@qq.com.com>
  * @create 2017-08-16
  */
-@Service
+@Service("systemRecordService")
 public class SystemRecordServiceImpl implements SystemRecordService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemRecordServiceImpl.class);

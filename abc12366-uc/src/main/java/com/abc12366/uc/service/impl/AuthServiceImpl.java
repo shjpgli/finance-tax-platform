@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
@@ -10,7 +11,6 @@ import com.abc12366.uc.mapper.db1.UcUserLoginLogMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
@@ -30,6 +30,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -44,7 +45,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author lijun <ljun51@outlook.com>
- * @create 2017-03-27 4:07 PM
+ * @date 2017-03-27 4:07 PM
  * @since 1.0.0
  */
 @Service
@@ -57,9 +58,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private UserRoMapper userRoMapper;
 
     @Autowired
     private TokenRoMapper tokenRoMapper;
@@ -259,7 +257,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException(4102);
         }
 
-        Token queryToken = tokenRoMapper.selectOne(user.getId(), Utils.getAppId());
+        Token queryToken = tokenMapper.selectOne(user.getId(), Utils.getAppId());
         // 假如uc_token表有记录（根据userId和appId），则更新，没有则新增
         String userToken = Utils.uuid();
         int result02;
@@ -315,7 +313,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean isAuthentication(String userToken, HttpServletRequest request) {
-        Token token = tokenRoMapper.isAuthentication(userToken);
+        Token token = tokenMapper.isAuthentication(userToken);
         if (token == null) {
             throw new ServiceException(4016);
         }
@@ -378,7 +376,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (responseEntity != null && responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.hasBody()) {
             BaseObject object = JSON.parseObject(String.valueOf(responseEntity.getBody()), BaseObject.class);
-            if (object.getCode().equals("2000")) {
+            if ("2000".equals(object.getCode())) {
                 return true;
             }
         }
@@ -495,8 +493,9 @@ public class AuthServiceImpl implements AuthService {
         return true;
     }
 
+    @Async
     @Override
-    public CompletableFuture todoAfterLogin(HttpServletRequest request) {
+    public CompletableFuture<BodyStatus> todoAfterLogin(HttpServletRequest request) {
         // 记录用户IP归属
         if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
             ipService.merge(request.getHeader(Constant.CLIENT_IP));
@@ -504,7 +503,6 @@ public class AuthServiceImpl implements AuthService {
         String userId = Utils.getUserId();
         
         //登录删除用户缓存，防止缓存不及时刷新
-        redisTemplate.delete(userId+"_UserInfo");
         redisTemplate.delete(userId+"_Points");
         redisTemplate.delete(userId+"_MyExperience");
 
@@ -520,7 +518,7 @@ public class AuthServiceImpl implements AuthService {
         //登录任务日志
         todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
-        User user = userRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
         //首次绑定手机任务埋点
         if (!StringUtils.isEmpty(user.getPhone())) {
             todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
@@ -547,7 +545,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void continuePasswordWrong(String userId) {
         //记录用户连续输错密码次数
-        List<UserLoginPasswordWrongCount> wrongCountList = userRoMapper.selectContinuePwdWrong(userId);
+        List<UserLoginPasswordWrongCount> wrongCountList = userMapper.selectContinuePwdWrong(userId);
         UserLoginPasswordWrongCount wrongCount;
         if (wrongCountList == null || wrongCountList.size() != 1) {
             if (wrongCountList != null && wrongCountList.size() > 1) {
@@ -577,7 +575,7 @@ public class AuthServiceImpl implements AuthService {
      * @param userId 用户ID
      */
     private void isUserLocked(String userId) {
-        List<UserLoginPasswordWrongCount> wrongCountList = userRoMapper.selectContinuePwdWrong(userId);
+        List<UserLoginPasswordWrongCount> wrongCountList = userMapper.selectContinuePwdWrong(userId);
         if (wrongCountList != null && wrongCountList.size() > 0) {
             UserLoginPasswordWrongCount wrongCount = wrongCountList.get(0);
             if (wrongCount.getLimitTime().getTime() >= System.currentTimeMillis()) {
@@ -592,7 +590,7 @@ public class AuthServiceImpl implements AuthService {
      * @param userId 用户ID
      */
     private void resetContinuePasswordWrong(String userId) {
-        List<UserLoginPasswordWrongCount> wrongCountList = userRoMapper.selectContinuePwdWrong(userId);
+        List<UserLoginPasswordWrongCount> wrongCountList = userMapper.selectContinuePwdWrong(userId);
         UserLoginPasswordWrongCount wrongCount;
         if (wrongCountList == null || wrongCountList.size() != 1) {
             if (wrongCountList != null && wrongCountList.size() > 1) {

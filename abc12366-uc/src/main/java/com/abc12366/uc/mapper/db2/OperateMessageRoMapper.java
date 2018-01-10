@@ -14,7 +14,7 @@ import java.util.List;
  * Time: 14:45
  */
 public interface OperateMessageRoMapper {
-    List<OperateMessageBO> selectList(@Param("status")String status, @Param("name")String name, @Param("start")Date start, @Param("end")Date end);
+    List<OperateMessageBO> selectList(@Param("status")String status, @Param("name")String name, @Param("start")Date start, @Param("end")Date end, @Param("now") Date now);
 
     List<OperateMessageBO> selectValidList(Date date);
 
@@ -25,4 +25,6 @@ public interface OperateMessageRoMapper {
     OperateMessageBO selectOne(String id);
 
     List<YyxxLogListBO> operateMessageLog(@Param("userId")String userId, @Param("nickName")String nickName,@Param("messageId")String messageId);
+
+    List<OperateMessageBO> selectFinishedList(@Param("name")String name, @Param("start")Date start, @Param("end")Date end, @Param("now") Date now);
 }

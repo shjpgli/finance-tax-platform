@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.bangbang.mapper.db1.CheatsCollectMapper;
 import com.abc12366.bangbang.mapper.db1.CheatsMapper;
 import com.abc12366.bangbang.mapper.db2.CheatsCollectRoMapper;
@@ -9,6 +8,7 @@ import com.abc12366.bangbang.model.question.CheatsCollect;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.service.CheatsCollectService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
+import com.abc12366.bangbang.util.MapUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
 import org.slf4j.Logger;

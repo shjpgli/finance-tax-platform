@@ -31,8 +31,27 @@ public class UserDzsbBO {
     private Date lastLoginTime;
     private String nsrlx;
     private String sfgtjzh;
+    private String djrq;
+    private String bdgroup;
+    private String remark;
 
-    public UserDzsbBO() {
+    public String getBdgroup() {
+		return bdgroup;
+	}
+
+	public void setBdgroup(String bdgroup) {
+		this.bdgroup = bdgroup;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public UserDzsbBO() {
     }
 
     public String getId() {
@@ -179,6 +198,14 @@ public class UserDzsbBO {
         this.sfgtjzh = sfgtjzh;
     }
 
+    public String getDjrq() {
+        return djrq;
+    }
+
+    public void setDjrq(String djrq) {
+        this.djrq = djrq;
+    }
+
     @Override
     public String toString() {
         return "UserDzsbBO{" +
@@ -200,6 +227,7 @@ public class UserDzsbBO {
                 ", lastLoginTime=" + lastLoginTime +
                 ", nsrlx='" + nsrlx + '\'' +
                 ", sfgtjzh='" + sfgtjzh + '\'' +
+                ", djrq='" + djrq + '\'' +
                 '}';
     }
 }

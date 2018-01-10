@@ -134,4 +134,206 @@
             </if>
         </where>
     </select>
+    
+    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
+        SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname, amount
+        FROM uc_user
+        <where>
+            <if test="status!=null">
+                status=#{status}
+            </if>
+            <if test="vipLevel != null and vipLevel != ''">
+                and vipLevel=#{vipLevel}
+            </if>
+            <if test="exp != null and exp != '' and expOper != null and expOper != ''">
+                and exp ${expOper} #{exp}
+            </if>
+            <if test="points != null and points != '' and pointsOper != null and pointsOper != ''">
+                and points ${pointsOper} #{points}
+            </if>
+            <if test="startDate !=null and startDate != ''">
+                and createTime >= #{startDate}
+            </if>
+            <if test="endDate !=null and endDate != ''">
+                and createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
+            </if>
+            <if test="tagId != null and tagId.size > 0">
+                and EXISTS (SELECT DISTINCT a.subjectId FROM
+                <foreach item="item" collection="tagId" separator="union all" open="(" close=")" index="">
+                    SELECT subjectId FROM uc_subject_tag WHERE tagId=#{item}
+                </foreach>
+                a WHERE a.subjectId = id group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount})
+            </if>
+            <if test="realName != null and realName != ''">
+                and id in (SELECT userId FROM abc12366_uc.uc_user_extend WHERE realName = #{realName})
+            </if>
+            <if test="username != null and username != ''">
+                and username=#{username}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone=#{phone}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname=#{nickname}
+            </if>
+            <if test="id != null and id != ''">
+                and id=#{id}
+            </if>
+        </where>
+        ORDER BY createTime DESC
+    </select>
+    
+    <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
+       select uu.id, uu.username, uu.password, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname, uu.oldId,uu.amount,
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName,
+        IFNULL(
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;= (SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) level,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) levelName
+        from uc_user uu
+        where uu.id = #{id}
+    </select>
+    
+    <select id="selectOneByToken" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
+        select uu.id, uu.username, uu.phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status, uu.createTime,
+        uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
+        uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName,
+        IFNULL(
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.name FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;= (SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) level,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) levelName
+        from uc_user uu, uc_token ut
+        where uu.id=ut.userId
+        and ut.token=#{userToken}
+    </select>
+    
+    <select id="selectListExcludedId" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
+        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname,
+        uu.status,
+        uu.createTime, uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
+        uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname 
+        from uc_user uu
+        where uu.id != #{id}
+    </select>
+    
+    <select id="selectValidOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
+        select uu.id, uu.username, uu.password, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname
+        from uc_user uu
+        where uu.id = #{id}
+        and status=1
+    </select>
+    
+    <select id="selectByopenid" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.lang.String">
+        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,
+        uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath, uu.minUserPicturePath, uu.points, uu.exp,
+        uu.vipLevel,usernameModifiedTimes,vipExpireDate,uu.wxopenid,uu.wxheadimg,uu.wxnickname,
+        (select uul.level from uc_uvip_level uul where uul.levelCode = uu.vipLevel limit 1) vipLevelName,
+        IFNULL(
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uu.exp &gt;= uul.minValue AND uu.exp &lt;= uul.maxValue LIMIT 1),
+        (SELECT uul.medal FROM uc_uexp_level uul WHERE uul.status='1' AND uul.minValue &gt;=(SELECT MAX(uull.minValue) FROM uc_uexp_level uull WHERE uull.status='1' LIMIT 1) AND uul.minValue &lt;=uu.exp)
+        ) levelName
+        from uc_user uu
+        where uu.wxopenid = #{wxopenid}
+    </select>
+    
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectUserVipList" resultType="com.abc12366.uc.model.User" parameterType="java.util.Date">
+        select id
+        from uc_user
+        WHERE status = true
+        <![CDATA[
+                and date_format(vipExpireDate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
+                ]]>
+    </select>
+    
+    <select id="selectContinuePwdWrong" resultType="com.abc12366.uc.model.UserLoginPasswordWrongCount" parameterType="java.lang.String">
+        select id, userId, count, limitTime
+        from uc_login_password_wrong_count
+        where userId = #{userId}
+    </select>
+    
+    <select id="selectSimple" parameterType="java.lang.String" resultType="com.abc12366.uc.model.bo.UserSimpleInfoBO">
+        select uu.id, uu.nickName, uu.userPicturePath, uue.tags, uue.signature, uue.education,
+         uue.graduate, uue.occupation, uue.income, uue.careerDuration
+        from uc_user uu
+        left join uc_user_extend uue
+        on uue.userId = uu.id
+        where uu.id = #{userId}
+    </select>
+    
+    <select id="getAllNomalCont" resultType="java.lang.Integer">
+        select count(id) from uc_user where status = true
+    </select>
+    
+    <select id="getNomalList" resultType="com.abc12366.uc.model.bo.UserBO" parameterType="java.util.Map">
+        SELECT u.id,u.wxopenid,u.phone,u.vipLevel,u.vipExpireDate,l.level as vipLevelName
+        FROM uc_user u, uc_uvip_level l
+        where
+        u.status = true
+        and l.status = true
+        and u.vipLevel=l.levelCode
+        LIMIT #{begin},#{size}
+    </select>
+    
+    <select id="selectByWxUserId" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.User">
+        SELECT id, username, phone, password, regMail,
+          regIP, salt, nickname, status, createTime,
+          lastUpdate, userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath,
+          points, exp, vipLevel, usernameModifiedTimes, vipExpireDate,
+          wxopenid, wxheadimg, wxnickname, bdqudao
+        FROM uc_user where id=#{id} and wxopenid=#{wxopenid}
+    </select>
+    
+    <select id="findByHngsNsrsbh" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
+        SELECT u.id, u.username, u.phone, u.password, u.regMail,
+          u.regIP, u.salt, u.nickname, u.status, u.createTime,
+          u.lastUpdate, u.userPicturePath, u.maxUserPicturePath, u.midUserPicturePath, u.minUserPicturePath,
+          u.points, u.exp, u.vipLevel, u.usernameModifiedTimes, u.vipExpireDate,
+          u.wxopenid, u.wxheadimg, u.wxnickname, u.bdqudao
+        FROM  uc_user_hngs h, uc_user u where h.userId=u.id and h.status=1 and h.nsrsbh=#{nsrshb}
+    </select>
+    
+    <select id="selectOneByPhone" resultType="com.abc12366.uc.model.bo.UserBO"
+            parameterType="java.lang.String">
+        select uu.id, uu.username, insert(uu.phone, 4, 4, '****') phone, uu.regMail, uu.regIP, uu.salt, uu.nickname, uu.status,
+        uu.createTime, uu.lastUpdate,uu.userPicturePath, uu.maxUserPicturePath, uu.midUserPicturePath,
+        uu.minUserPicturePath, uu.points, uu.exp,uu.vipLevel,uu.usernameModifiedTimes,uu.vipExpireDate,
+        uu.wxopenid,uu.wxheadimg,uu.wxnickname,uu.oldId
+        from uc_user uu
+        where phone=#{phone}
+    </select>
+    
+    <select id="selectUserById" resultType="com.abc12366.uc.model.User" parameterType="com.abc12366.uc.model.User">
+        SELECT id, username, phone, password, regMail, regIP, salt, nickname, status, createTime,
+          lastUpdate, userPicturePath, maxUserPicturePath, midUserPicturePath, minUserPicturePath,
+          points, exp, vipLevel, usernameModifiedTimes, vipExpireDate, wxopenid, wxheadimg, wxnickname, bdqudao, oldId
+        FROM uc_user
+        <where>
+            <if test="id != null and id != ''">
+                id=#{id}
+            </if>
+            <if test="wxopenid != null and wxopenid != ''">
+                wxopenid=#{wxopenid}
+            </if>
+        </where>
+    </select>
 </mapper>

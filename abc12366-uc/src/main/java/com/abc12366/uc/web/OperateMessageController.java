@@ -135,4 +135,9 @@ public class OperateMessageController {
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) listBOList, "total", ((Page) listBOList).getTotal()));
     }
+
+    @GetMapping(path = "/shorturl/{surl}")
+    public String shortUrl(@PathVariable String surl){
+        return "http://uc.abc12366.com/login";
+    }
 }

@@ -1,11 +1,18 @@
 package com.abc12366.uc.web;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.mapper.db2.VipPrivilegeLevelRoMapper;
+import com.abc12366.uc.model.UserExtend;
+import com.abc12366.uc.model.bo.PointsRuleBO;
+import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
+import com.abc12366.uc.service.IAccountMergingService;
+import com.abc12366.uc.service.PointsLogService;
+import com.abc12366.uc.service.PointsRuleService;
+import com.abc12366.uc.service.UserService;
+import com.abc12366.uc.util.wx.SignUtil;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +23,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db2.VipPrivilegeLevelRoMapper;
-import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.bo.PointsRuleBO;
-import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
-import com.abc12366.uc.service.IAccountMergingService;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.PointsRuleService;
-import com.abc12366.uc.service.UserService;
-import com.abc12366.uc.util.wx.SignUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.abc12366.uc.model.bo.UserBO;
-import com.github.pagehelper.Page;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 账号合并

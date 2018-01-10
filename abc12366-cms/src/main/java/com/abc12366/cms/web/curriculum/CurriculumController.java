@@ -6,9 +6,7 @@ import com.abc12366.cms.model.curriculum.bo.CurriculumListBo;
 import com.abc12366.cms.model.curriculum.bo.CurriculumSituationBo;
 import com.abc12366.cms.service.CurriculumService;
 import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
-import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
@@ -22,7 +20,6 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 学堂课程管理模块

@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.mapper.db2;
 
-import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import org.apache.ibatis.annotations.Param;
 
@@ -56,6 +55,13 @@ public interface QuestionAnswerRoMapper {
      *
      **/
     int  selectMyAnswerCnt(Map<String, Object> map);
+
+    /**
+     *
+     * 查询是否自己回答的
+     *
+     **/
+    int  selectIsMyAnswer(Map<String, Object> map);
 
     /**
      *

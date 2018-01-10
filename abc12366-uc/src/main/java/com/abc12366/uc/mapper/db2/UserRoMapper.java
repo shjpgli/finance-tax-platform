@@ -16,55 +16,7 @@ import java.util.Map;
  */
 public interface UserRoMapper {
 
-    /**
-     * 后台用户列表查询
-     *
-     * @param map 查询参数
-     * @return 用户列表List
-     */
-    List<UserListBO> selectList(Map map);
-
-    User selectOne(String id);
-
-    User selectByUsernameOrPhone(LoginBO loginBO);
-
-    UserBO selectOneByToken(String userToken);
-
-    List<UserBO> selectListExcludedId(String id);
-
-    User selectValidOne(String userId);
-
-    UserBO selectByopenid(String openid);
-
-    /**
-     * 查询过期的会员列表
-     *
-     * @param date 目前定义为当前日期
-     * @return List<User> 过期的用户列表
-     */
-    List<User> selectUserVipList(@Param("date") Date date);
-
-    List<UserLoginPasswordWrongCount> selectContinuePwdWrong(String id);
-
-    UserSimpleInfoBO selectSimple(String userId);
-
-    int getAllNomalCont();
-
-    List<UserBO> getNomalList(Map<String, Object> map);
-
-    User selectByWxUserId(User users);
-
-    List<User> findByHngsNsrsbh(String nsrsbh);
-
-    UserBO selectOneByPhone(String phone);
-
-    /**
-     * 根据用户ID查询用户基本表信息
-     *
-     * @param user 用户条件
-     * @return 用户基本表信息
-     */
-    User selectUserById(User user);
+    
 
     /**
      * 统计用户，统计维度为【创建时间】

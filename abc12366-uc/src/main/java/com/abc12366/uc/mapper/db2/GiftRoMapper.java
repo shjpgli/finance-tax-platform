@@ -4,6 +4,7 @@ import com.abc12366.uc.model.gift.Gift;
 import com.abc12366.uc.model.gift.bo.GiftBO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,4 +44,11 @@ public interface GiftRoMapper {
      * @return
      */
     Gift selectGiftByGiftId(Map<String, Object> map);
+
+    /**
+     * 查询自动收货信息
+     * @param date
+     * @return
+     */
+    List<Gift> selectReceiptGiftByDate(@Param("date")Date date);
 }

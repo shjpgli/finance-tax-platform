@@ -7,9 +7,7 @@ import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.bo.MessageBO;
 import com.abc12366.uc.model.bo.MessageListBO;
 import com.abc12366.uc.service.MessageService;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -116,7 +116,7 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         app.setAccessToken(accessToken);
         app.setStatus(true);
-        app = appRoMapper.selectOne(app);
+        app = appMapper.selectOne(app);
         //判断app是否正常
         if (app == null) {
             LOGGER.warn("APP不存在或APP未启用, accessToken: {}", accessToken);
@@ -137,7 +137,7 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         app.setAccessToken(accessToken);
         app.setStatus(true);
-        app = appRoMapper.selectOne(app);
+        app = appMapper.selectOne(app);
         //判断app是否正常
         if (app == null) {
             LOGGER.warn("APP不存在或APP未启用, accessToken: {}", accessToken);

@@ -9,26 +9,103 @@ import java.util.Date;
  * @since 2.0.0
  */
 public class UserDzsb {
+    /**
+     * 绑定状态
+     */
     boolean status;
+    /**
+     *绑定关系数据主键
+     */
     private String id;
+    /**
+     *用户ID
+     */
     private String userId;
+    /**
+     *登记序号
+     */
     private String djxh;
+    /**
+     *纳税人识别号
+     */
     private String nsrsbh;
+    /**
+     *纳税人名称
+     */
     private String nsrmc;
+    /**
+     *社会信用代码
+     */
     private String shxydm;
+    /**
+     *税务机关名称
+     */
     private String swjgMc;
+    /**
+     *税务机关代码
+     */
     private String swjgDm;
+    /**
+     *创建时间
+     */
     private Date createTime;
+    /**
+     *最后更新时间
+     */
     private Date lastUpdate;
+    /**
+     *软件到期日
+     */
     private Date expireTime;
+    /**
+     *延期到期日
+     */
     private Date expandExpireTime;
+    /**
+     *法人名称
+     */
     private String frmc;
+    /**
+     *法人证件号
+     */
     private String frzjh;
+    /**
+     *最后登陆时间
+     */
     private Date lastLoginTime;
+    /**
+     *纳税人类型
+     */
     private String nsrlx;
+    /**
+     *是否个体建账户
+     */
     private String sfgtjzh;
+    /**
+     *税务登记日期
+     */
+    private String djrq;
+    
+    private String bdgroup;
+    private String remark;
 
-    public UserDzsb() {
+    public String getBdgroup() {
+		return bdgroup;
+	}
+
+	public void setBdgroup(String bdgroup) {
+		this.bdgroup = bdgroup;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public UserDzsb() {
     }
 
     public Date getExpireTime() {
@@ -175,6 +252,14 @@ public class UserDzsb {
         this.sfgtjzh = sfgtjzh;
     }
 
+    public String getDjrq() {
+        return djrq;
+    }
+
+    public void setDjrq(String djrq) {
+        this.djrq = djrq;
+    }
+
     @Override
     public String toString() {
         return "UserDzsb{" +
@@ -196,6 +281,7 @@ public class UserDzsb {
                 ", lastLoginTime=" + lastLoginTime +
                 ", nsrlx='" + nsrlx + '\'' +
                 ", sfgtjzh='" + sfgtjzh + '\'' +
+                ", djrq='" + djrq + '\'' +
                 '}';
     }
 }

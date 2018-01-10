@@ -31,4 +31,13 @@
     <delete id="delete">
         DELETE FROM msg_user_message WHERE id = #{id}
     </delete>
+
+    <update id="updateBatch" parameterType="java.util.List">
+        update msg_user_message
+        set status='2',lastUpdate=now()
+        where id in
+        <foreach collection="ids" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

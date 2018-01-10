@@ -48,7 +48,7 @@ public class RemindConstant {
     public static final String ELECTRON_INVOICE_CHECK_REFUSE = "很抱歉！您的电子发票申请审核未通过，发票订单号：{#DATA.INVOICE}，具体原因请至发票申请详情里查询；";
     /**虚拟商品**/
     //购买会员
-    public static final String BUYING_MEMBERS_PREFIX = "恭喜您！您已成功升级为{#DATA.VIP}，请及时了解{#DATA.VIP}相关权益；";
+    public static final String BUYING_MEMBERS_PREFIX = "恭喜您！您已成功升级为{#DATA.VIP}，请及时了解{#DATA.VIP}相关权益";
     public static final String BUYING_MEMBERS_SUFFIX = "查看详细会员权益";
     //积分充值
     public static final String INTEGRAL_RECHARGE = "恭喜您！您的积分已充值成功，当前积分为{#DATA.POINT}分，详情请查看积分明细；";
@@ -93,8 +93,9 @@ public class RemindConstant {
     public static final String REALNAME_VALIDATE_WX_4 = "详情请登录财税专家软件查询！";
     public static final String REALNAME_VALIDATE_DX = "您好，你提交的实名认证信息已审核,审核结果：{#DATA.RESULT},时间：{#DATA.DATE}";
 
-    //运营消息微信消息remark
+    //运营消息微信消息first
     public static final String YYXX_WX_FIRST = "财税专家提醒";
+    public static final String YYXX_WX_KEY1 = "业务提醒";
     //运营消息微信消息remark
     public static final String YYXX_WX_REMARK = "详情请登录软件查询，咨询4008873133";
 }

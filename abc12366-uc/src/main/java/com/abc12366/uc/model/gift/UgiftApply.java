@@ -1,6 +1,6 @@
 package com.abc12366.uc.model.gift;
+
 import java.io.Serializable;
-import java.util.List;
 
 
 /**

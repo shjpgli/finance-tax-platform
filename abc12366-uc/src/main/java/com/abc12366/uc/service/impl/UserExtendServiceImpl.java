@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
@@ -13,8 +12,6 @@ import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
-import com.alibaba.fastjson.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +25,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author liuguiyao
@@ -62,20 +58,12 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
-        UserExtend userExtend = null;
-        if (redisTemplate.hasKey(userId + "_UserExtend")) {
-            userExtend = JSONObject.parseObject(redisTemplate.opsForValue()
-                    .get(userId + "_UserExtend"), UserExtend.class);
-        } else {
-            userExtend = userExtendRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendMapper.selectOne(userId);
 
-        }
+
         if (userExtend == null) {
             return null;
         }
-        redisTemplate.opsForValue().set(userId + "_UserExtend",
-                JSONObject.toJSONString(userExtend),
-                RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
 
         if (userExtend.getValidStatus().equals(
                 TaskConstant.USER_REALNAME_VALIDATED)) {
@@ -100,7 +88,7 @@ public class UserExtendServiceImpl implements UserExtendService {
         LOGGER.info("{}", userExtendBO);
         if (userExtendBO.getUserId() != null
                 && !"".equals(userExtendBO.getUserId())) {
-            UserExtend userExtend = userExtendRoMapper.selectOne(userExtendBO.getUserId());
+            UserExtend userExtend = userExtendMapper.selectOne(userExtendBO.getUserId());
             if (userExtend != null) {
                 UserExtendBO userExtendOld = new UserExtendBO();
                 BeanUtils.copyProperties(userExtend, userExtendOld);
@@ -172,9 +160,6 @@ public class UserExtendServiceImpl implements UserExtendService {
                 throw new ServiceException(4112);
             }
 
-            redisTemplate.opsForValue().set(userExtend.getUserId() + "_UserExtend",
-                    JSONObject.toJSONString(userExtend),
-                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
 
             UserExtendBO userExtendBO1 = new UserExtendBO();
             BeanUtils.copyProperties(userExtend, userExtendBO1);
@@ -187,7 +172,7 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Override
     public UserExtendBO delete(String userId) {
         LOGGER.info("{}", userId);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        UserExtend userExtend = userExtendMapper.selectOne(userId);
         if (userExtend == null) {
             LOGGER.warn("删除失败，参数：{}" + userId);
             throw new ServiceException(4103);
@@ -198,8 +183,6 @@ public class UserExtendServiceImpl implements UserExtendService {
             throw new ServiceException(4103);
         }
 
-        // 删除redis用户信息
-        redisTemplate.delete(userId + "_UserExtend");
 
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);
@@ -221,7 +204,7 @@ public class UserExtendServiceImpl implements UserExtendService {
             throw new ServiceException(4190);
         }
         if (!userExtendUpdateBO.getUserId().equals("")) {
-            UserExtend userExtend = userExtendRoMapper
+            UserExtend userExtend = userExtendMapper
                     .selectOne(userExtendUpdateBO.getUserId());
             if (userExtend == null) {
                 UserExtendBO userExtendBO = new UserExtendBO();
@@ -295,10 +278,8 @@ public class UserExtendServiceImpl implements UserExtendService {
                 LOGGER.warn("修改失败，参数：{}" + userExtendUpdateBO);
                 throw new ServiceException(4102);
             }
-            // 删除redis用户信息
-            redisTemplate.delete(userExtendUpdateBO.getUserId() + "_UserExtend");
 
-            UserExtend userExtend2 = userExtendRoMapper
+            UserExtend userExtend2 = userExtendMapper
                     .selectOne(userExtendSecond.getUserId());
             BeanUtils.copyProperties(userExtend2, userExtendBO);
             LOGGER.info("{}", userExtendBO);

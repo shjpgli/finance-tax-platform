@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TodoTaskMapper;
 import com.abc12366.uc.mapper.db2.TodoTaskRoMapper;
@@ -12,7 +13,6 @@ import com.abc12366.uc.service.ExperienceLogService;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.SysTaskService;
 import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.gateway.util.TaskConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -141,7 +144,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         }
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //根据用户ID和系统任务ID查看有时间限制的任务是否生成
-            List<TodoTask> todoTaskList = todoTaskRoMapper.selectTimeLimitedOneByUserIdAndSysTaskId(userId, sysTaskBO.getId());
+            List<TodoTask> todoTaskList = todoTaskMapper.selectTimeLimitedOneByUserIdAndSysTaskId(userId, sysTaskBO.getId());
             //过滤掉已生成的特殊任务
             if (todoTaskList != null && todoTaskList.size() > 0) {
                 continue;
@@ -168,7 +171,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Override
     public TodoTask selectOne(String userId, String sysTaskId) {
-        return todoTaskRoMapper.selectOneByDayBySysTaskId(userId, sysTaskId);
+        return todoTaskMapper.selectOneByDayBySysTaskId(userId, sysTaskId);
     }
 
     @Override
@@ -198,44 +201,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         if (StringUtils.isEmpty(userId)) {
             return;
         }
-//        String type = UCConstant.SPECIAL_TASK_TYPE;
-//        List<SysTaskBO> sysTaskBOList = sysTaskService.selectTimeLimitedListByType(type);
-//        //过滤掉已生成的特殊任务
-//        List<SysTaskBO> filteredSysTaskBOList = fileterExistSpecialSysTask(sysTaskBOList, userId);
-//        if (filteredSysTaskBOList == null || filteredSysTaskBOList.size() < 1) {
-//            return;
-//        }
-//        for (SysTaskBO sysTaskBO : sysTaskBOList) {
-//            TodoTask todoTaskTmp = todoTaskRoMapper.selectOneByDayBySysTaskId(userId, sysTaskBO.getId());
-//            if (todoTaskTmp == null) {
-//                TodoTask todoTask = new TodoTask();
-//                todoTask.setId(Utils.uuid());
-//                todoTask.setUserId(userId);
-//                todoTask.setSysTaskId(sysTaskBO.getId());
-//                todoTask.setAllCount(sysTaskBO.getCount());
-//                todoTask.setFinishedCount(0);
-//                todoTask.setAwardType(sysTaskBO.getAwardType());
-//                todoTask.setType(sysTaskBO.getType());
-//                todoTask.setAward(sysTaskBO.getAward());
-//                todoTask.setStatus(UCConstant.TASK_UNFINISHED);
-//                todoTask.setSkipUrl(sysTaskBO.getSkipURL());
-//                todoTask.setRuleId(sysTaskBO.getRuleId());
-//                Date date = new Date();
-//                todoTask.setCreateTime(date);
-//                todoTask.setLastUpdate(date);
-//                todoTask.setDateType(sysTaskBO.getDateType());
-//                if (sysTaskBO.getType().trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
-//                    long now = System.currentTimeMillis();
-//                    //如果特殊任务已过期则不需要生成了
-//                    if (now > sysTaskBO.getEndTime().getTime()) {
-//                        continue;
-//                    }
-//                    todoTask.setStartTime(sysTaskBO.getStartTime());
-//                    todoTask.setEndTime(sysTaskBO.getEndTime());
-//                }
-//                insert(todoTask);
-//            }
-//        }
 
         List<SysTaskBO> sysTaskBOList = sysTaskService.selectTimeLimitedListByType(TaskConstant.SPECIAL_TASK_TYPE);
         if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
@@ -243,7 +208,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         }
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //根据用户ID和系统任务ID查看有时间限制的任务是否生成
-            List<TodoTask> todoTaskList = todoTaskRoMapper.selectTimeLimitedOneByUserIdAndSysTaskId(userId, sysTaskBO.getId());
+            List<TodoTask> todoTaskList = todoTaskMapper.selectTimeLimitedOneByUserIdAndSysTaskId(userId, sysTaskBO.getId());
             //过滤掉已生成的特殊任务
             if (todoTaskList != null && todoTaskList.size() > 0) {
                 continue;
@@ -252,44 +217,12 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         }
     }
 
-    //将系统任务列表中在有效期范围内已生成的过滤掉
-//    private List<SysTaskBO> fileterExistSpecialSysTask(List<SysTaskBO> sysTaskBOList, String userId) {
-//        if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
-//            return null;
-//        }
-//        List<SysTaskBO> sysTaskBOListReturn = new ArrayList<>();
-//        sysTaskBOListReturn.addAll(sysTaskBOList);
-//        for (SysTaskBO sysTaskBO : sysTaskBOList) {
-//            List<TodoTask> todoTaskList = todoTaskRoMapper.selectListByUserIdAndSysId(userId, sysTaskBO.getId());
-//            //如果在有效期内未生成该用户对应的该条特殊任务则不用过滤
-//            if (todoTaskList == null || todoTaskList.size() < 1) {
-//                continue;
-//            }
-//            //如果在有效期内已经生成该用户对应的该条特殊任务则过滤
-//            for (TodoTask todoTask : todoTaskList) {
-//                if (todoTask.getCreateTime().getTime() > sysTaskBO.getStartTime().getTime()
-//                        && todoTask.getCreateTime().getTime() <= sysTaskBO.getEndTime().getTime()) {
-//                    sysTaskBOListReturn.remove(sysTaskBO);
-//                    break;
-//                }
-//            }
-//        }
-//        return sysTaskBOListReturn;
-//    }
-
     //生成一次性任务
     private void generateOneTimeTaskList(String userId) {
-//        String dateType = UCConstant.TASK_TIME_ONETIME_TYPE;
-//        List<TodoTask> taskList = todoTaskRoMapper.selectListOneTime(userId, dateType);
-//        if (taskList != null && taskList.size() > 0) {
-//            return;
-//        }
-//        generateTaskListByDateType(userId, dateType);
-
         List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NEW_USER_TASK_TYPE, TaskConstant.TASK_TIME_ONETIME_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如成长任务已生成则不用再生成
-            List<TodoTask> taskList = todoTaskRoMapper.selectListOneTime(userId, sysTaskBO.getId());
+            List<TodoTask> taskList = todoTaskMapper.selectListOneTime(userId, sysTaskBO.getId());
             if (taskList != null && taskList.size() > 0) {
                 continue;
             }
@@ -299,17 +232,10 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     //生成日度任务
     private void generateDayTaskList(String userId) {
-//        String dateType = UCConstant.TASK_TIME_DAY_TYPE;
-//        List<TodoTask> taskList = todoTaskRoMapper.selectListByDay(userId, dateType);
-//        if (taskList != null && taskList.size() > 0) {
-//            return;
-//        }
-//        generateTaskListByDateType(userId, dateType);
-
         List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NORMAL_TASK_TYPE, TaskConstant.TASK_TIME_DAY_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如日度任务已生成则不用再生成
-            List<TodoTask> taskList = todoTaskRoMapper.selectListByDay(userId, sysTaskBO.getId());
+            List<TodoTask> taskList = todoTaskMapper.selectListByDay(userId, sysTaskBO.getId());
             if (taskList != null && taskList.size() > 0) {
                 continue;
             }
@@ -319,17 +245,10 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     //生成年度任务
     private void generateYearTaskList(String userId) {
-//        String dateType = UCConstant.TASK_TIME_YEAR_TYPE;
-//        List<TodoTask> taskList = todoTaskRoMapper.selectListByYear(userId, dateType);
-//        if (taskList != null && taskList.size() > 0) {
-//            return;
-//        }
-//        generateTaskListByDateType(userId, dateType);
-
         List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NORMAL_TASK_TYPE, TaskConstant.TASK_TIME_YEAR_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如年度任务已生成则不用再生成
-            List<TodoTask> taskList = todoTaskRoMapper.selectListByYear(userId, sysTaskBO.getId());
+            List<TodoTask> taskList = todoTaskMapper.selectListByYear(userId, sysTaskBO.getId());
             if (taskList != null && taskList.size() > 0) {
                 continue;
             }
@@ -339,16 +258,10 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     //生成月度任务
     private void generateMonthTaskList(String userId) {
-//        String dateType = UCConstant.TASK_TIME_MONTH_TYPE;
-//        List<TodoTask> taskList = todoTaskRoMapper.selectListByMonth(userId, dateType);
-//        if (taskList != null && taskList.size() > 0) {
-//            return;
-//        }
-//        generateTaskListByDateType(userId, dateType);
         List<SysTaskBO> sysTaskBOList = sysTaskService.selectValidListByTypeAndDateType(TaskConstant.NORMAL_TASK_TYPE, TaskConstant.TASK_TIME_MONTH_TYPE);
         for (SysTaskBO sysTaskBO : sysTaskBOList) {
             //假如月度任务已生成则不用再生成
-            List<TodoTask> taskList = todoTaskRoMapper.selectListByMonth(userId, sysTaskBO.getId());
+            List<TodoTask> taskList = todoTaskMapper.selectListByMonth(userId, sysTaskBO.getId());
             if (taskList != null && taskList.size() > 0) {
                 continue;
             }
@@ -429,7 +342,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     //做一次性任务
     @Transactional("db1TxManager")
     public void doTaskOneTime(String userId, SysTaskBO sysTaskBO) {
-        TodoTask todoTask = todoTaskRoMapper.selectOneTime(userId, sysTaskBO.getId());
+        TodoTask todoTask = todoTaskMapper.selectOneTime(userId, sysTaskBO.getId());
 
         finishTask(userId, todoTask);
     }
@@ -437,7 +350,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     //做频率为一天的任务
     @Transactional("db1TxManager")
     private void doTaskDay(String userId, SysTaskBO sysTaskBO) {
-        TodoTask todoTask = todoTaskRoMapper.selectOneByDay(userId, sysTaskBO.getId());
+        TodoTask todoTask = todoTaskMapper.selectOneByDay(userId, sysTaskBO.getId());
 
         finishTask(userId, todoTask);
 
@@ -446,7 +359,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     //做频率为一月的任务
     @Transactional("db1TxManager")
     private void doTaskMonth(String userId, SysTaskBO sysTaskBO) {
-        TodoTask todoTask = todoTaskRoMapper.selectOneByMonth(userId, sysTaskBO.getId());
+        TodoTask todoTask = todoTaskMapper.selectOneByMonth(userId, sysTaskBO.getId());
 
         finishTask(userId, todoTask);
     }
@@ -454,7 +367,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     //做频率为一年的任务
     @Transactional("db1TxManager")
     private void doTaskYear(String userId, SysTaskBO sysTaskBO) {
-        TodoTask todoTask = todoTaskRoMapper.selectOneByYear(userId, sysTaskBO.getId());
+        TodoTask todoTask = todoTaskMapper.selectOneByYear(userId, sysTaskBO.getId());
 
         finishTask(userId, todoTask);
     }
@@ -471,52 +384,10 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         map.put("userId", userId);
         map.put("sysTaskId", sysTaskBO.getId());
         map.put("startTime", sysTaskBO.getStartTime());
-        TodoTask todoTask = todoTaskRoMapper.selectSpecial(map);
+        TodoTask todoTask = todoTaskMapper.selectSpecial(map);
 
         finishTask(userId, todoTask);
     }
-
-//    private void generateTaskListByDateType(String userId, String dateType) {
-//        List<SysTaskBO> sysTaskBOList = sysTaskService.selectListByDateType(dateType);
-//
-//        if (sysTaskBOList == null || sysTaskBOList.size() < 1) {
-//            return;
-//        }
-//        for (SysTaskBO sysTaskBO : sysTaskBOList) {
-//            //假如成长任务已生成则不用再生成
-//            List<TodoTask> taskList = todoTaskRoMapper.selectListByUserIdAndSysId(userId, sysTaskBO.getId());
-//            if (taskList != null && taskList.size() > 0) {
-//                continue;
-//            }
-//
-//            TodoTask todoTask = new TodoTask();
-//            todoTask.setId(Utils.uuid());
-//            todoTask.setUserId(userId);
-//            todoTask.setSysTaskId(sysTaskBO.getId());
-//            todoTask.setAllCount(sysTaskBO.getCount());
-//            todoTask.setFinishedCount(0);
-//            todoTask.setAwardType(sysTaskBO.getAwardType());
-//            todoTask.setType(sysTaskBO.getType());
-//            todoTask.setAward(sysTaskBO.getAward());
-//            todoTask.setStatus(UCConstant.TASK_UNFINISHED);
-//            todoTask.setSkipUrl(sysTaskBO.getSkipURL());
-//            todoTask.setRuleId(sysTaskBO.getRuleId());
-//            Date date = new Date();
-//            todoTask.setCreateTime(date);
-//            todoTask.setLastUpdate(date);
-//            todoTask.setDateType(sysTaskBO.getDateType());
-//            if (sysTaskBO.getType().trim().equals(UCConstant.SPECIAL_TASK_TYPE)) {
-//                long now = System.currentTimeMillis();
-//                //如果特殊任务已过期则不需要生成了
-//                if (now > sysTaskBO.getEndTime().getTime()) {
-//                    continue;
-//                }
-//                todoTask.setStartTime(sysTaskBO.getStartTime());
-//                todoTask.setEndTime(sysTaskBO.getEndTime());
-//            }
-//            insert(todoTask);
-//        }
-//    }
 
     @Override
     public List<TodoTaskFront> selectNormalTaskList(String userId) {

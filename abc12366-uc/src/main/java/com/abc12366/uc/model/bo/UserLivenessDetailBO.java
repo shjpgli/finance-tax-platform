@@ -1,7 +1,5 @@
 package com.abc12366.uc.model.bo;
 
-import java.util.List;
-
 /**
  * 用户活跃度统计bo
  * User: liuguiyao<435720953@qq.com>

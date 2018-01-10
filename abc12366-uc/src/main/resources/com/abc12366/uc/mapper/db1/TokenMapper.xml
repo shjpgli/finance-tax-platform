@@ -27,4 +27,17 @@
     <delete id="delete" parameterType="java.lang.String">
         delete from uc_token where token=#{token}
     </delete>
+
+    <select id="selectOne" resultType="com.abc12366.uc.model.Token">
+        select id, appId, userId, token, lastTokenResetTime
+        from uc_token
+        where userId = #{userId}
+        and appId = #{appId}
+    </select>
+
+    <select id="isAuthentication" resultType="com.abc12366.uc.model.Token" parameterType="java.lang.String">
+        select id, appId, userId, token, lastTokenResetTime
+        from uc_token
+        where token = #{token}
+    </select>
 </mapper>

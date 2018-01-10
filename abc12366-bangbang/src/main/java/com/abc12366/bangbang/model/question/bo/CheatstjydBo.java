@@ -1,8 +1,6 @@
 package com.abc12366.bangbang.model.question.bo;
-import com.abc12366.bangbang.model.question.CheatsTag;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 /**

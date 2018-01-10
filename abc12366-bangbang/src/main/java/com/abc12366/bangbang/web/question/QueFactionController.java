@@ -1,6 +1,5 @@
 package com.abc12366.bangbang.web.question;
 
-import com.abc12366.bangbang.mapper.db1.QuestionFactionClassifyMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionClassifyRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionTagRoMapper;
 import com.abc12366.bangbang.model.question.QuestionFactionClassify;

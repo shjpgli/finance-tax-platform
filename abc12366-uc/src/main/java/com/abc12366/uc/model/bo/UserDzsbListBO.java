@@ -21,8 +21,29 @@ public class UserDzsbListBO {
     private Boolean status;
     private Date createTime;
     private Date lastUpdate;
+    private String djrq;
+    private String bdgroup;
+    private String remark;
+    
+    
 
-    /**
+    public String getBdgroup() {
+		return bdgroup;
+	}
+
+	public void setBdgroup(String bdgroup) {
+		this.bdgroup = bdgroup;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	/**
      * 软件到期日
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
@@ -140,6 +161,14 @@ public class UserDzsbListBO {
         this.expandExpireTime = expandExpireTime;
     }
 
+    public String getDjrq() {
+        return djrq;
+    }
+
+    public void setDjrq(String djrq) {
+        this.djrq = djrq;
+    }
+
     @Override
     public String toString() {
         return "UserDzsbListBO{" +
@@ -154,6 +183,7 @@ public class UserDzsbListBO {
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", djrq='" + djrq + '\'' +
                 ", expireTime=" + expireTime +
                 ", expandExpireTime=" + expandExpireTime +
                 '}';

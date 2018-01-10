@@ -1,10 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
-import com.abc12366.bangbang.mapper.db2.QuestionFactionHonorRoMapper;
 import com.abc12366.bangbang.mapper.db2.QuestionFactionTaskRoMapper;
-import com.abc12366.bangbang.model.question.bo.QuestionFactionPhBo;
 import com.abc12366.bangbang.model.question.bo.QuestionFactionTaskBo;
-import com.abc12366.bangbang.service.QueFactionHonorService;
 import com.abc12366.bangbang.service.QueFactionTaskService;
 import com.abc12366.gateway.exception.ServiceException;
 import org.slf4j.Logger;

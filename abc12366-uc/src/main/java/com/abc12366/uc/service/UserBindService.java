@@ -1,5 +1,8 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.UserDzsb;
+import com.abc12366.uc.model.UserHnds;
+import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
@@ -122,10 +125,9 @@ public interface UserBindService {
      * 修改电子申报密码
      *
      * @param data 修改密码信息
-     * @throws MarshalException    解包异常
      * @throws ValidationException 验证异常
      */
-    void updatePassword(UpdatePwd data) throws MarshalException, ValidationException;
+    void updatePassword(UpdatePwd data) throws ValidationException;
 
     /**
      * 电子税局纳税人登录绑定
@@ -160,4 +162,41 @@ public interface UserBindService {
      * @return HngsNsrLoginResponse
      */
     HngsNsrLoginResponse nsrLoginDzsj(UserHngsInsertBO login, HttpServletRequest request);
+
+    /**
+     * 更新电子申报绑定关系
+     * @param userId 用户id
+     * @param nsrsbh 纳税人识别号
+     * @return UserDzsbListBO
+     */
+    UserDzsbListBO updateDzsb(String userId, String nsrsbh);
+
+    /**
+     * 更新电子申报绑定关系
+     * @param userId 用户id
+     * @param ty21Object 电子申报返回税号信息
+     * @return UserDzsb
+     */
+    UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object);
+
+    /**
+     * 查询电子申报绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    UserDzsb dzsbDetail(String id);
+
+    /**
+     * 查询湖南国税绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    UserHngs hngsDetail(String id);
+
+    /**
+     * 查询湖南地税绑定关系详情
+     * @param id 绑定关系id
+     * @return ResponseEntity
+     */
+    UserHnds hndsDetail(String id);
 }

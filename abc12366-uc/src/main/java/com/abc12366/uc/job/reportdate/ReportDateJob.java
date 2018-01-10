@@ -1,20 +1,18 @@
 package com.abc12366.uc.job.reportdate;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.model.bo.AppBO;
+import com.abc12366.gateway.service.AppService;
+import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.service.IMsgSendService;
 import com.abc12366.uc.service.UserService;
-import com.abc12366.gateway.model.bo.AppBO;
-import com.abc12366.gateway.service.AppService;
-import com.abc12366.gateway.util.RemindConstant;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import org.apache.commons.lang3.time.DateUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
 import sun.misc.BASE64Encoder;
 
 import java.text.SimpleDateFormat;
@@ -43,7 +40,7 @@ public class ReportDateJob implements Job {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private AppService appService;
 
@@ -62,7 +59,7 @@ public class ReportDateJob implements Job {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public void execute(JobExecutionContext arg0) throws JobExecutionException {
+    public void execute(JobExecutionContext arg0) {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal_1 = Calendar.getInstance();//获取当前日期
@@ -73,29 +70,33 @@ public class ReportDateJob implements Job {
         Calendar cale = Calendar.getInstance();
         cale.set(Calendar.DAY_OF_MONTH, 0);
         pmonthL = format.format(cale.getTime());
-        
-        AppBO appBO=appService.selectByName("abc12366-admin");
-        Date lastRest=appBO.getLastResetTokenTime();
-        if(lastRest.before(new Date())){
-        	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
-        	appService.update(appBO);
-        }       
+
+        AppBO appBO = appService.selectByName("abc12366-admin");
+        Date lastRest = appBO.getLastResetTokenTime();
+        if (lastRest.before(new Date())) {
+            appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
+            appService.update(appBO);
+        }
         accessToken = appBO.getAccessToken();
         LOGGER.info("获取运营管理系统accessToken:" + accessToken);
 
-        LOGGER.info("电子税局获取办税期限..............");
+        LOGGER.info("开始电子税局获取办税期限..............");
         HttpHeaders headers2 = new HttpHeaders();
-    	headers2.add("Access-Token", accessToken);
-    	headers2.add("Version", "1");
+        headers2.add("Access-Token", accessToken);
+        headers2.add("Version", "1");
         HttpEntity httpEntity = new HttpEntity(headers2);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("abc12366.message.url") +"/hngs/get?api="
-                        +new BASE64Encoder().encode(("/ggfw/bsrl/getsbrq?sbnf=" + new SimpleDateFormat("yyyy").format(new Date())).getBytes()), HttpMethod.GET,
-				httpEntity, String.class);
+        ResponseEntity responseEntity2 = restTemplate.exchange(SpringCtxHolder.getProperty("abc12366.message.url") +
+                        "/hngs/get?api="
+                        + new BASE64Encoder().encode(("/ggfw/bsrl/getsbrq?sbnf=" + new SimpleDateFormat("yyyy")
+                        .format(new Date())).getBytes()), HttpMethod.GET,
+                httpEntity, String.class);
 
         JSONObject json = JSONObject.parseObject(String.valueOf(responseEntity2.getBody()));
+        LOGGER.info("结束电子税局获取办税期限:" + json.toJSONString());
+
         if ("000".equals(json.getString("code"))) {
-        	JSONArray array = json.getJSONArray("dataList");
+            JSONArray array = json.getJSONArray("dataList");
             String dateM = new SimpleDateFormat("yyyy-MM").format(new Date());
             for (Object obj : array) {
                 JSONObject object = (JSONObject) obj;
@@ -118,7 +119,7 @@ public class ReportDateJob implements Job {
 
         //创建线程池
         ExecutorService executorService = new ThreadPoolExecutor(threadNum, threadNum, 0L, TimeUnit.SECONDS, new
-				ArrayBlockingQueue<Runnable>(threadNum), new ThreadFactory() {
+                ArrayBlockingQueue<Runnable>(threadNum), new ThreadFactory() {
 
             @Override
             public Thread newThread(Runnable runnable) {
@@ -169,15 +170,17 @@ public class ReportDateJob implements Job {
 
             //业务处理
             for (UserBO userBO : userList) {
-            	User user = new User();
+                User user = new User();
                 BeanUtils.copyProperties(userBO, user);
                 LOGGER.info("用户:" + JSONObject.toJSONString(user));
                 //1.会员是否快到期
                 if (!"VIP0".equalsIgnoreCase(userBO.getVipLevel())
                         && chargeDate(userBO.getVipExpireDate())) {
-                	LOGGER.info("用户:" + userBO.getId() + ",会员过期信息提醒：" + userBO.getVipLevel()+";过期时间:"+userBO.getVipExpireDate());
-                    String sysMsg= RemindConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
-                    
+                    LOGGER.info("用户:" + userBO.getId() + ",会员过期信息提醒：" + userBO.getVipLevel() + ";过期时间:" + userBO
+                            .getVipExpireDate());
+                    String sysMsg = RemindConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName())
+                            .replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
+
                     Map<String, String> dataList = new HashMap<String, String>();
                     dataList.put("first", "您的会员即将过期");
                     dataList.put("remark", "您的财税专家会员即将过期，为不影响您正常使用请及时续费。");
@@ -185,19 +188,21 @@ public class ReportDateJob implements Job {
                     dataList.put("keyword1Color", "#00DB00");
                     dataList.put("keyword2", getFormat(userBO.getVipExpireDate()));
                     dataList.put("keyword2Color", "#00DB00");
-                    dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url")+new BASE64Encoder().encode(userBO.getWxopenid().getBytes()));
-                   
+                    dataList.put("url", SpringCtxHolder.getProperty("mbxx.hygq.url") + new BASE64Encoder().encode
+                            (userBO.getWxopenid().getBytes()));
+
                     String vdxMsg = RemindConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO
-							.getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
-							()));
-                    
-                    msgSendService.sendMsg(user, sysMsg, "","tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList, vdxMsg);
+                            .getVipLevelName()).replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate
+                            ()));
+
+                    msgSendService.sendMsg(user, sysMsg, "", "tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList,
+                            vdxMsg);
                 }
 
                 //2.申报期信息发送
                 LOGGER.info("用户:" + userBO.getId() + ",申报期信息提醒：" + userBO.getVipLevel());
-                String sysMsg= RemindConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
-                
+                String sysMsg = RemindConstant.SBQXXTMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
+
                 Map<String, String> dataList = new HashMap<String, String>();
                 dataList.put("first", "财税专家会员提醒，本月纳税申报可申报的报表种类如下：");
                 dataList.put("remark", "实际申报种类以税务局核定信息为准，请您在申报期限内及时进行申报缴税！");
@@ -208,10 +213,11 @@ public class ReportDateJob implements Job {
                 dataList.put("keyword3", shenqqix);
                 dataList.put("keyword3Color", "#00DB00");
                 dataList.put("url", SpringCtxHolder.getProperty("mbxx.sbqx.url"));
-                
+
                 String vdxMsg = RemindConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
-                
-                msgSendService.sendMsg(user, sysMsg, "", "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList, vdxMsg);
+
+                msgSendService.sendMsg(user, sysMsg, "", "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList,
+                        vdxMsg);
             }
             return 1;
         }
@@ -219,6 +225,7 @@ public class ReportDateJob implements Job {
 
     /**
      * 判断会员是否会在三个月之内到期
+     *
      * @param dates Date
      * @return boolean
      */
@@ -234,12 +241,14 @@ public class ReportDateJob implements Job {
 
     /**
      * 格式化时间
+     *
      * @param date
      * @return
      */
     public String getFormat(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        return calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日";
+        return calendar.get(Calendar.YEAR) + "年" + (calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar
+                .DAY_OF_MONTH) + "日";
     }
 }

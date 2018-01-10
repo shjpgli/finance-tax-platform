@@ -1,9 +1,7 @@
 package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.service.CheatsCollectService;
-import com.abc12366.bangbang.service.QueCollectService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;

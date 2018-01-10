@@ -7,6 +7,8 @@ import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.OperateMessageMapper;
+import com.abc12366.uc.mapper.db1.UserExtendMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.OperateMessageRoMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
@@ -48,7 +50,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     private OperateMessageRoMapper operateMessageRoMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private MessageSendUtil messageSendUtil;
@@ -60,7 +62,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     private IWxTemplateService templateService;
 
     @Autowired
-    private UserExtendRoMapper userExtendRoMapper;
+    private UserExtendMapper userExtendMapper;
 
     @Override
     public OperateMessageBO insert(OperateMessageBO operateMessageBO) {
@@ -90,23 +92,25 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.strToDate(createTime, "yyyy-MM-dd"));
             calendar.add(Calendar.DAY_OF_YEAR, 1);
-            System.out.println(start);
-            System.out.println(calendar.getTime());
         }
-
-        List<OperateMessageBO> tempList = operateMessageRoMapper.selectList(status, name, start, calendar == null ? null : calendar.getTime());
-        if (tempList == null || tempList.size() < 1) {
-            return null;
-        }
-        for (int i = 0; i < tempList.size(); i++) {
-            if (tempList.get(i).getStatus().equals("1")) {
-                Date now = new Date();
-                if (now.after(tempList.get(i).getEndTime())) {
-                    tempList.get(i).setStatus("2");
+        Date now = null;
+        if (StringUtils.isEmpty(status)) {
+            List<OperateMessageBO> allList = operateMessageRoMapper.selectList(null, name, start, calendar == null ? null : calendar.getTime(), now);
+            for (OperateMessageBO o : allList) {
+                long nowTimeMillis = System.currentTimeMillis();
+                if (o.getStatus().equals("1")&&(o.getEndTime() == null || o.getEndTime().getTime() < nowTimeMillis)) {
+                    o.setStatus("2");
                 }
             }
+            return allList;
         }
-        return tempList;
+        if ("1".equals(status.trim()) || "2".equals(status.trim())) {
+            now = new Date();
+        }
+        if (!StringUtils.isEmpty(status) && status.trim().equals("2")) {
+            return operateMessageRoMapper.selectFinishedList(name, start, calendar == null ? null : calendar.getTime(), now);
+        }
+        return operateMessageRoMapper.selectList(status, name, start, calendar == null ? null : calendar.getTime(), now);
     }
 
     @Override
@@ -115,7 +119,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             return null;
         }
         OperateMessageBO messageBO = new OperateMessageBO();
-        BeanUtils.copyProperties(operateMessageBO,messageBO);
+        BeanUtils.copyProperties(operateMessageBO, messageBO);
         messageBO.setLastUpdate(new Date());
         operateMessageMapper.update(messageBO);
         return selectOne(operateMessageBO.getId());
@@ -123,8 +127,8 @@ public class OperateMessageServiceImpl implements OperateMessageService {
 
     @Override
     public void send(String userId) {
-        User user = userRoMapper.selectOne(userId);
-        UserExtend userExtend = userExtendRoMapper.selectOne(userId);
+        User user = userMapper.selectOne(userId);
+        UserExtend userExtend = userExtendMapper.selectOne(userId);
         List<String> tagIdList = operateMessageRoMapper.selectTagIdList(userId);
         if (user == null) {
             return;
@@ -193,8 +197,9 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                     || ((o.getRate().equals("D")) && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_WECHAT, DateUtils.getFirstHourOfDay(), DateUtils.getFirstHourOfLastDay())))) {
                 Map<String, String> dataList = new HashMap<>();
                 dataList.put("first", RemindConstant.YYXX_WX_FIRST);
-                dataList.put("keyword1", DateUtils.dateToStr(new Date()));
-                dataList.put("keyword2", o.getContent());
+                dataList.put("keyword1", RemindConstant.YYXX_WX_KEY1);
+                dataList.put("keyword2", DateUtils.dateToStr(new Date()));
+                dataList.put("keyword3", o.getContent());
                 dataList.put("remark", RemindConstant.YYXX_WX_REMARK);
                 dataList.put("userId", user.getId());
                 dataList.put("openId", user.getWxopenid());
@@ -257,9 +262,9 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                 }
                 //地域排除
             } else if (o.getAreaOper().trim().equals("ne")) {
-                if (userExtend == null ||( ((StringUtils.isEmpty(userExtend.getProvince()))||(!o.getAreaIds().contains(userExtend.getProvince()))) &&
-                        ((StringUtils.isEmpty(userExtend.getCity()))||(!o.getAreaIds().contains(userExtend.getCity())))&&
-                        ((StringUtils.isEmpty(userExtend.getArea()))||(!o.getAreaIds().contains(userExtend.getArea()))) ) ) {
+                if (userExtend == null || (((StringUtils.isEmpty(userExtend.getProvince())) || (!o.getAreaIds().contains(userExtend.getProvince()))) &&
+                        ((StringUtils.isEmpty(userExtend.getCity())) || (!o.getAreaIds().contains(userExtend.getCity()))) &&
+                        ((StringUtils.isEmpty(userExtend.getArea())) || (!o.getAreaIds().contains(userExtend.getArea()))))) {
                     sendArea = true;
                 }
             }
@@ -328,7 +333,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     }
 
     @Override
-    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName,String messageId) {
-        return operateMessageRoMapper.operateMessageLog(userId,nickName,messageId);
+    public List<YyxxLogListBO> operateMessageLog(String userId, String nickName, String messageId) {
+        return operateMessageRoMapper.operateMessageLog(userId, nickName, messageId);
     }
 }

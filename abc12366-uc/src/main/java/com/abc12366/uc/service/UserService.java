@@ -3,7 +3,6 @@ package com.abc12366.uc.service;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -272,4 +271,10 @@ public interface UserService {
      * @return
      */
     List<UserBO> statisUserSexList(Map<String, Object> map);
+
+    /**
+     * 重置用户密码
+     * @param resetPwdBO
+     */
+    void resetPassword(UserResetPwdBO resetPwdBO);
 }

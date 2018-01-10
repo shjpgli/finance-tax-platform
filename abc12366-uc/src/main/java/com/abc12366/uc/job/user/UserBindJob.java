@@ -3,7 +3,6 @@ package com.abc12366.uc.job.user;
 import com.abc12366.uc.service.UserBindService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class UserBindJob implements Job {
     private UserBindService userBindService;
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    public void execute(JobExecutionContext context) {
         LOGGER.info("UserBindJob: {}", context.getJobDetail().getKey().getName());
         userBindService.automaticBindCancel();
         LOGGER.info("自动取消绑定完成: {}");

@@ -6,24 +6,21 @@ package com.abc12366.uc.web;
  */
 
 
+import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.LotteryActivityipBO;
-
-import java.util.List;
-import java.util.Map;
-
 import com.abc12366.uc.service.LotteryActivityipService;
-
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.Utils;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/lotteryactivityip", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)

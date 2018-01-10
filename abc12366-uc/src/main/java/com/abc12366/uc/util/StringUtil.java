@@ -8,8 +8,6 @@
 
 package com.abc12366.uc.util;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * ClassName:StringUtil
  * Date:     2017年6月7日 上午9:47:06

@@ -35,16 +35,19 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     @Override
     public List<UserAddress> selectList(String userId) {
-        List<UserAddress> addressList = userAddressRoMapper.selectList(userId);
-        return addressList;
+        return userAddressRoMapper.selectList(userId);
     }
 
     @Override
     public UserAddressBO selectOne(UserAddress userAddress) {
         UserAddress address = userAddressRoMapper.selectOne(userAddress);
-        UserAddressBO bo = new UserAddressBO();
-        BeanUtils.copyProperties(address, bo);
-        return bo;
+        if (address != null) {
+            UserAddressBO bo = new UserAddressBO();
+            BeanUtils.copyProperties(address, bo);
+            return bo;
+        } else {
+            return null;
+        }
     }
 
     @Transactional("db1TxManager")

@@ -7,7 +7,6 @@ import com.abc12366.cms.model.bo.SubItemBo;
 import com.abc12366.cms.model.bo.VoteStatAreaBO;
 import com.abc12366.cms.model.bo.VoteStatBrowserBO;
 import com.abc12366.cms.model.bo.VotetjListBo;
-import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

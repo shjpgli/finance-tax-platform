@@ -8,6 +8,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -29,6 +30,7 @@ public class AdminLogServiceImpl implements AdminLogService {
     @Autowired
     private AdminLogRoMapper adminLogRoMapper;
 
+    @Async
     @Override
     public CompletableFuture<AdminLog> insert(AdminLogBO bo) {
         Date now = new Date();

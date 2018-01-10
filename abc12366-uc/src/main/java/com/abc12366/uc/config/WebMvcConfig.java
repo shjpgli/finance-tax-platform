@@ -127,6 +127,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 根据微信活动生成红包口令, 查询微信红包活动
                 .excludePathPatterns("/wx/redpack/{activityId}", "/wx/activity/redpack")
                         // 批量用户奖励积分接口
-                .excludePathPatterns("/points/batch/award");
+                .excludePathPatterns("/points/batch/award")
+                        // 长链接转短链接接口
+                .excludePathPatterns("/long2short")
+                        // 办税日历查询
+                .excludePathPatterns("/user/bsrl");
     }
 }

@@ -3,7 +3,6 @@ package com.abc12366.bangbang.mapper.db2;
 import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.bo.CheatsBo;
 import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
-import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

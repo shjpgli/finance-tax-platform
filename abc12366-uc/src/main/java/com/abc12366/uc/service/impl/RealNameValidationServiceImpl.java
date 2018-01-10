@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
@@ -44,7 +45,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     private UserExtendRoMapper userExtendRoMapper;
 
     @Autowired
-    private UserRoMapper userRoMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private UserExtendMapper userExtendMapper;
@@ -65,20 +66,20 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
                 || !StringUtils.isEmpty(map.get("status"))
                 || !StringUtils.isEmpty(map.get("phone"))) {
             PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            List<UserListBO> userList = userRoMapper.selectList(map);
+            List<UserListBO> userList = userMapper.selectList(map);
             if (userList.size() > 0) {
                 for (UserListBO bo : userList) {
                     map.put("userId", bo.getId());
-                    dataList.addAll(userExtendRoMapper.selectList(map));
+                    dataList.addAll(userExtendMapper.selectList(map));
                 }
             }
         } else {
             PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-            dataList = userExtendRoMapper.selectList(map);
+            dataList = userExtendMapper.selectList(map);
         }
 
         for (UserExtendListBO bo : dataList) {
-            User user = userRoMapper.selectUserById(new User(bo.getUserId()));
+            User user = userMapper.selectUserById(new User(bo.getUserId()));
             if (user != null) {
                 bo.setUsername(user.getUsername());
                 bo.setPhone(user.getPhone());
@@ -94,7 +95,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
     public UserExtendBO validate(String userId, String validStatus, UserExtendUpdateBO userExtendUpdateBO) throws
             ParseException {
         LOGGER.info("{}:{}:{}", userId, validStatus, userExtendUpdateBO);
-        UserExtend userExtend = userExtendRoMapper.selectOneForAdmin(userId);
+        UserExtend userExtend = userExtendMapper.selectOneForAdmin(userId);
         if (userExtend == null) {
             throw new ServiceException(4701);
         }
@@ -144,18 +145,13 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
             throw new ServiceException();
         }
 
-        // 清楚redis缓存
-        if (redisTemplate.hasKey(userId + "_UserExtend")) {
-            redisTemplate.delete(userId + "_UserExtend");
-        }
-
         //首次实名认证任务埋点
         if (validStatus.equals(TaskConstant.USER_REALNAME_VALIDATED)) {
             todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
         }
 
         UserExtendBO userExtendBO = new UserExtendBO();
-        UserExtend userExtend1 = userExtendRoMapper.selectOne(userExtendUpdate.getUserId());
+        UserExtend userExtend1 = userExtendMapper.selectOne(userExtendUpdate.getUserId());
         BeanUtils.copyProperties(userExtend1, userExtendBO);
 
         userFeedbackMsgService.realNameValidate(userId, validStatus);
@@ -164,7 +160,7 @@ public class RealNameValidationServiceImpl implements RealNameValidationService 
 
     @Override
     public Integer selectTodoListCount() {
-        return userExtendRoMapper.selectTodoListCount();
+        return userExtendMapper.selectTodoListCount();
     }
 
     public Date getSpecifiedDate(String date) throws ParseException {
