@@ -2,22 +2,18 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.TaskConstant;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.TokenMapper;
+import com.abc12366.uc.mapper.db1.UamountLogMapper;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
-import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
-import com.abc12366.uc.mapper.db2.TokenRoMapper;
-import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.admin.AdminOperationService;
 import com.alibaba.fastjson.JSON;
@@ -109,7 +105,13 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private AdminOperationService adminOperationService;
 
-	@Override
+    @Autowired
+    private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
+
+    @Autowired
+    private UamountLogMapper uamountLogMapper;
+
+    @Override
 	public List<UserListBO> selectList(Map<String, Object> map, int page,
 			int size) {
 
@@ -459,11 +461,47 @@ public class UserServiceImpl implements UserService {
 			calendar.setTime(userTmp.getVipExpireDate());
 			calendar.add(Calendar.YEAR, 1); // 年份加1
 		}
+
+        double usable = 0;
+		//查询会员礼包业务
+		User temp = userMapper.selectOne(userId);
+		VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+		obj.setLevelId(vipLevel.trim().toUpperCase());
+		obj.setPrivilegeId(MessageConstant.HYLB_CODE);
+		//查看会员礼包是否启用
+		VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+		if (findObj != null && findObj.getStatus()) {
+			UamountLog uamountLog = new UamountLog();
+			uamountLog.setId(Utils.uuid());
+			uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
+			uamountLog.setUserId(userId);
+			uamountLog.setCreateTime(new Date());
+			uamountLog.setRemark("充值会员，获得礼包金额");
+			//赠送积分
+			double income = Double.parseDouble(findObj.getVal1());
+			double amount = 0;
+			if (temp.getAmount() != null) {
+				amount = temp.getAmount();
+			}
+            usable = amount + income;
+			uamountLog.setIncome(income);
+			uamountLog.setUsable(usable);
+			//插入礼包积分记录
+			uamountLogMapper.insert(uamountLog);
+			//修改礼包积分
+			/*User temp = new User();
+			temp.setId(user.getId());
+			temp.setAmount(usable);
+			userMapper.update(temp);*/
+		}
+
 		User user = new User();
 		user.setId(userId);
 		user.setVipLevel(vipLevel.trim().toUpperCase());
 		user.setVipExpireDate(calendar.getTime());
 		user.setLastUpdate(new Date());
+        //会员礼包金额
+        user.setAmount(usable);
 		userMapper.update(user);
 
 	}
