@@ -104,12 +104,6 @@ public class OrderServiceImpl implements OrderService {
     private PointsRuleService pointsRuleService;
 
     @Autowired
-    private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
-
-    @Autowired
-    private UamountLogMapper uamountLogMapper;
-
-    @Autowired
     private UserMapper userMapper;
 
     @Override
@@ -728,37 +722,6 @@ public class OrderServiceImpl implements OrderService {
         vipLogBO.setSource(orderNo);
         vipLogBO.setUserId(userId);
         vipLogService.insert(vipLogBO);
-
-        //查询会员礼包业务
-        User user = userMapper.selectOne(userId);
-        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(memberLevel);
-        obj.setPrivilegeId(MessageConstant.HYLB_CODE);
-        //查看会员礼包是否启用
-        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-        if (findObj != null && findObj.getStatus()) {
-            UamountLog uamountLog = new UamountLog();
-            uamountLog.setId(Utils.uuid());
-            uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
-            uamountLog.setUserId(userId);
-            uamountLog.setCreateTime(new Date());
-            uamountLog.setRemark("充值会员，获得积分");
-            //赠送积分
-            double income = Double.parseDouble(findObj.getVal1());
-            double amount = 0;
-            if (user.getAmount() != null) {
-                amount = user.getAmount();
-            }
-            uamountLog.setIncome(income);
-            uamountLog.setUsable(amount + income);
-            //插入礼包积分记录
-            uamountLogMapper.insert(uamountLog);
-            //修改礼包积分
-            User temp = new User();
-            temp.setId(user.getId());
-            temp.setAmount(amount + income);
-            userMapper.update(temp);
-        }
     }
 
     /**
