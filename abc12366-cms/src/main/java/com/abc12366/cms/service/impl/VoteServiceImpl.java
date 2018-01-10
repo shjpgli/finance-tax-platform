@@ -303,6 +303,19 @@ public class VoteServiceImpl implements VoteService {
     }
 
     @Override
+    public void deleteLog(String id) {
+        VoteResult result = new VoteResult.Builder().voteId(id).build();
+        List<VoteResult>  results = selectResultList(result, 0, 0);
+        if(results != null){
+            // 删除投票信息
+            voteMapper.deleteLog(id);
+        }else{
+            throw new ServiceException(4012);
+        }
+    }
+
+
+    @Override
     public List<VoteResult> vote(String voteId, List<VoteResult> resultList, HttpServletRequest request) {
         Vote v = selectOne(voteId);
         if (v != null) {

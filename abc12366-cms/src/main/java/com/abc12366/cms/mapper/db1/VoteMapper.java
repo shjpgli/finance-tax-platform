@@ -21,4 +21,6 @@ public interface VoteMapper {
     void insertHistory(VoteHistory history);
 
     void updateStatus();
+
+    void deleteLog(String id);
 }
