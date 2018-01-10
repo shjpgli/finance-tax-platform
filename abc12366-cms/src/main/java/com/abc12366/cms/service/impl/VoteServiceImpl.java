@@ -60,7 +60,13 @@ public class VoteServiceImpl implements VoteService {
         // 根据发票状态、IP查询参与人数
         if (voteList != null && voteList.size() > 0) {
             //0:停用，1：启用，3：草稿，4：结束
-            voteList.stream().filter(v -> v.getStatus()==1 || v.getStatus()==4).forEach(v -> {
+         /*   voteList.stream().filter(v -> v.getStatus()==1 || v.getStatus()==4).forEach(v -> {
+                VoteResult vr = new VoteResult.Builder().voteId(v.getId()).build();
+                v.setNop(voteRoMapper.selectResultCount(vr));
+                v.setNov(voteRoMapper.selectHistoryCount(v.getId()));
+            });*/
+
+            voteList.stream().forEach(v -> {
                 VoteResult vr = new VoteResult.Builder().voteId(v.getId()).build();
                 v.setNop(voteRoMapper.selectResultCount(vr));
                 v.setNov(voteRoMapper.selectHistoryCount(v.getId()));
@@ -201,8 +207,6 @@ public class VoteServiceImpl implements VoteService {
             v.setStatus(vote.getStatus());
             v.setChannel(vote.getChannel());
             v.setLastUpdate(now);
-            v.setNop(vote.getNop());
-            v.setNov(vote.getNov());
             voteMapper.update(v);
 
             // 先删除附加信息
