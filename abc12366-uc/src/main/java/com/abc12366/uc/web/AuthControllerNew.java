@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,9 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.RegisterBO;
+import com.abc12366.uc.model.bo.ResetPasswordBO;
 import com.abc12366.uc.model.bo.UserReturnBO;
 import com.abc12366.uc.model.bo.VerifyingCodeBO;
 import com.abc12366.uc.service.AuthService;
@@ -116,6 +119,32 @@ public class AuthControllerNew {
             authService.loginByVerifyFail(loginBO);
             return null;
         }
+    }
+    
+    /**
+     * 通过手机号修改密码
+     *
+     * @param bo ResetPasswordBO
+     * @return true:成功, false:失败
+     * @throws Exception md5加密异常
+     */
+    @PostMapping(path = "/resetpasswordnew")
+    public ResponseEntity resetPasswordByPhone(@Valid @RequestBody ResetPasswordBO bo) throws Exception {
+        LOGGER.info("{}", bo);
+        boolean result = authServiceNew.resetPasswordByPhone(bo);
+        LOGGER.info("{}", result);
+        return ResponseEntity.ok(Utils.kv("data", result));
+    }
+    
+  //用户修改密码
+    @PutMapping(path = "/passwordnew")
+    public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest
+            request) {
+        LOGGER.info("用户修改密码：{}", passwordUpdateBO);
+        Boolean message = authServiceNew.updatePassword(passwordUpdateBO, request);
+        LOGGER.info("{}", message);
+        LOGGER.info("用户修改密码结果：{}", message);
+        return ResponseEntity.ok(Utils.kv("data", message));
     }
     
 }

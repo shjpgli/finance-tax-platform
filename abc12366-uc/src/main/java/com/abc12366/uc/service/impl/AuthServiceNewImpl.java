@@ -26,18 +26,21 @@ import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
+import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.LoginBO;
+import com.abc12366.uc.model.bo.PasswordUpdateBO;
 import com.abc12366.uc.model.bo.RegisterBO;
+import com.abc12366.uc.model.bo.ResetPasswordBO;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserReturnBO;
 import com.abc12366.uc.service.AuthServiceNew;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserExtendService;
+import com.abc12366.uc.service.UserFeedbackMsgService;
 import com.abc12366.uc.util.RandomNumber;
 import com.alibaba.fastjson.JSON;
 import com.google.code.springcryptoutils.core.cipher.asymmetric.Base64EncodedCipherer;
@@ -59,8 +62,14 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 	@Autowired
     private TokenMapper tokenMapper;
 	
+	@Autowired
+	private TokenRoMapper tokenRoMapper;
+	
 	@Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOperations;
+	
+	@Autowired
+	private UserFeedbackMsgService userFeedbackMsgService;
 	
 	@Autowired
     @Qualifier("b64AsymmetricEncrypter")
@@ -337,5 +346,111 @@ public class AuthServiceNewImpl implements AuthServiceNew {
             userMapper.updateContinuePwdWrong(wrongCount);
         }
     }
+
+
+    @Override
+    public boolean resetPasswordByPhone(ResetPasswordBO bo) throws Exception {
+        // 判断用户是否存在
+        LoginBO loginBO = new LoginBO();
+        loginBO.setUsernameOrPhone(bo.getPhone());
+        User userExist = userMapper.selectByUsernameOrPhone(loginBO);
+        if (userExist == null) {
+            throw new ServiceException(4018);
+        }
+
+        // 验证手机号时存储的token是否与用户传输的相同
+        Token queryToken = tokenMapper.selectOne(userExist.getId(), Utils.getAppId());
+        if (queryToken == null || !bo.getToken().equals(queryToken.getToken())) {
+            throw new ServiceException(4023);
+        }
+
+        String password = decrypter.encrypt(bo.getPassword());
+        String encodePassword = Utils.md5(password + userExist.getSalt());
+
+        // 修改密码不能为旧密码
+        if (encodePassword.equals(userExist.getPassword())) {
+            throw new ServiceException(4040);
+        }
+
+        // 更新密码
+        User user = new User();
+        user.setId(userExist.getId());
+        user.setPassword(encodePassword);
+        user.setLastUpdate(new Date());
+        int result = userMapper.updatePassword(user);
+        if (result != 1) {
+            throw new ServiceException(4023);
+        }
+        // 删除token
+        tokenMapper.delete(bo.getToken());
+        return true;
+    }
+
+
+	@Override
+	public Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request) {
+		LOGGER.info("{}", passwordUpdateBO);
+		String userId = Utils.getUserId();
+		// 判断用户是否存在
+		User userExist = userMapper.selectOne(userId);
+		if (userExist == null) {
+			throw new ServiceException(4018);
+		}
+
+		// 判断是否有用户token请求头
+		String token = request.getHeader(Constant.USER_TOKEN_HEAD);
+		if (token == null || token.equals("")) {
+			throw new ServiceException(4199);
+		}
+
+		// 判断库表是否存在该token
+		Token tokenExist = tokenRoMapper.isAuthentication(token);
+		if (tokenExist == null) {
+			throw new ServiceException(4179);
+		}
+
+		// 判断user-token是否与被修改用户是同一个
+		if (!userExist.getId().equals(tokenExist.getUserId())) {
+			throw new ServiceException(4191);
+		}
+
+		// 密码加密
+		// String encodePassword =
+		// PasswordUtils.encodePassword(passwordUpdateBO.getPassword(),
+		// userExist.getSalt());
+
+		// 新的加密
+		String encodePassword = decrypter.encrypt(passwordUpdateBO.getPassword());
+
+		// 修改密码不能为旧密码
+		if (encodePassword.equals(userExist.getPassword())) {
+			throw new ServiceException(4040);
+		}
+
+		// 改库..
+		User user = new User();
+		user.setId(userExist.getId());
+		user.setPassword(encodePassword);
+		user.setLastUpdate(new Date());
+		int result = userMapper.updatePassword(user);
+		if (result != 1) {
+			throw new ServiceException(4023);
+		}
+		// 删除token
+		tokenMapper.delete(token);
+
+		try {
+			// 发消息
+			userFeedbackMsgService.updatePasswordSuccessNotice();
+			// 首次修改密码任务埋点
+			todoTaskService.doTask(userExist.getId(),
+					TaskConstant.SYS_TASK_FIRST_UPDATE_PASSWROD_CODE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+		return true;
+	}
 
 }
