@@ -71,11 +71,12 @@ public class PointsLogServiceImpl implements PointsLogService {
         if (user.getPoints() != null) {
             priPoints = user.getPoints();
         }
+        LOGGER.info("用户当前可用积分：{}",priPoints);
         int usablePoints = priPoints + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
         if (usablePoints < 0) {
             throw new ServiceException(4635);
         }
-
+        LOGGER.info("用户积分计算后可用积分：{}",usablePoints);
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
         user.setLastUpdate(new Date());
