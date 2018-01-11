@@ -336,4 +336,21 @@
             </if>
         </where>
     </select>
+
+    <update id="updateExp" parameterType="com.abc12366.uc.model.User">
+        update uc_user
+        <set>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+            <if test="exp != null">exp = #{exp}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="updatePoints" parameterType="com.abc12366.uc.model.User">
+        update uc_user
+        <set>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+            <if test="points != null">points = #{points}</if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>
