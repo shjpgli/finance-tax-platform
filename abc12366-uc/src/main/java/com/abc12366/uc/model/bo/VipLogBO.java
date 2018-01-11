@@ -12,6 +12,10 @@ public class VipLogBO {
     private String userId;
     private String source;
     private String levelId;
+    /**
+     * 会员等级描述
+     */
+    private String level;
     private Date createTime;
     private Date vipExpireDate;
 
@@ -77,5 +81,13 @@ public class VipLogBO {
                 ", createTime=" + createTime +
                 ", vipExpireDate=" + vipExpireDate +
                 '}';
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

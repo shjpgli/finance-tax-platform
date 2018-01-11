@@ -1237,6 +1237,7 @@ public class OrderServiceImpl implements OrderService {
                                     }
                                     //更新会员日志
                                     vipLogBO.setId(Utils.uuid());
+                                    vipLogBO.setCreateTime(new Date());
                                     vipLogService.insert(vipLogBO);
                                     //修改用户信息
                                     user.setVipLevel(vipLogBO.getLevelId());
@@ -1304,7 +1305,7 @@ public class OrderServiceImpl implements OrderService {
         message.setType(MessageConstant.SYS_MESSAGE);
         String content = RemindConstant.REFUND_PREFIX + refundRes.getRefund_fee() + RemindConstant.REFUND_SUFFIX + orderBO.getOrderNo();
         message.setContent(content);
-        //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + orderBO.getId() + "/" + orderBO.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + orderBO.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         message.setUserId(orderBO.getUserId());
 
         Map<String, String> map = new HashMap<String, String>();

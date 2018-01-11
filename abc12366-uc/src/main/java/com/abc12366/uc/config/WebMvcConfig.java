@@ -129,7 +129,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 批量用户奖励积分接口
                 .excludePathPatterns("/points/batch/award")
                         // 长链接转短链接接口
-                .excludePathPatterns("/long2short")
+                .excludePathPatterns("/long2short", "/tinyurl")
                         // 办税日历查询
                 .excludePathPatterns("/user/bsrl");
     }

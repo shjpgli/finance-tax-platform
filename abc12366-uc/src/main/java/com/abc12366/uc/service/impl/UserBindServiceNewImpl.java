@@ -22,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
@@ -36,6 +37,7 @@ import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHngs;
+import com.abc12366.uc.model.bo.NsrLogin;
 import com.abc12366.uc.model.bo.UserDzsbBO;
 import com.abc12366.uc.model.bo.UserDzsbInsertBO;
 import com.abc12366.uc.model.bo.UserHngsBO;
@@ -387,6 +389,79 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
             return nsrLoginResponse;
         }
         return null;
+    }
+
+	@Override
+	public TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception{
+		LOGGER.info("{}", login);
+        String userId = Utils.getUserId(request);
+        Map<String, String> map = new HashMap<>(16);
+        map.put("serviceid", "TY21");
+        map.put("nsrsbh", login.getNsrsbhOrShxydm());
+        String pwdDecode1 = rsaService.decodeStringFromJsNew(login.getFwmm());
+        String pwdDecode2 = fwmmEncode(pwdDecode1);
+        map.put("fwmm", pwdDecode2);
+        map.put("userid", userId);
+        Map<String, String> resMap = client.process(map);
+        LOGGER.info("{}", resMap);
+
+        TY21Xml2Object ty21Object = analyzeXmlTY21(resMap, login.getNsrsbhOrShxydm());
+        LOGGER.info("{}", ty21Object);
+        //更新用户绑定信息
+        UserDzsb queryParam = new UserDzsb();
+        queryParam.setUserId(userId);
+        queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
+        List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
+        if(nsrxxboList2.size()==1){
+            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+        } else if(nsrxxboList2.size()>1){
+            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+            nsrxxboList2.remove(nsrxxboList2.get(0));
+            for(UserDzsb ud : nsrxxboList2){
+                userBindMapper.deleteDzsb(ud.getId());
+            }
+        }
+        return ty21Object;
+	}
+	
+	
+	
+    public UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object) {
+        redisTemplate.delete(userId + "_DzsbList");
+
+        if (StringUtils.isEmpty(userId) || ty21Object == null || StringUtils.isEmpty(ty21Object.getY_NSRSBH()) ||
+                StringUtils.isEmpty(ty21Object.getDJXH())) {
+            return null;
+        }
+        //更新用户绑定信息
+        UserDzsb userDzsb = new UserDzsb();
+        Date date = new Date();
+        userDzsb.setId(id);
+        userDzsb.setStatus(true);
+        userDzsb.setLastUpdate(date);
+        userDzsb.setUserId(userId);
+        userDzsb.setDjxh(ty21Object.getDJXH());
+        userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
+        userDzsb.setNsrmc(ty21Object.getNSRMC());
+        userDzsb.setShxydm(ty21Object.getSHXYDM());
+        userDzsb.setNsrlx(ty21Object.getNSRLX());
+        userDzsb.setSfgtjzh(ty21Object.getSFGTJZH());
+        if (ty21Object.getSHXYDM() == null || "".equals(ty21Object.getSHXYDM().trim())) {
+            userDzsb.setShxydm(ty21Object.getY_NSRSBH());
+        }
+        userDzsb.setSwjgMc(ty21Object.getSWJGMC());
+        userDzsb.setSwjgDm(ty21Object.getSWJGDM());
+        if (ty21Object.getRJDQR() != null && !"".equals(ty21Object.getRJDQR().trim())) {
+            userDzsb.setExpireTime(DateUtils.strToDate(ty21Object.getRJDQR()));
+        }
+        if (ty21Object.getYQDQR() != null && !"".equals(ty21Object.getYQDQR().trim())) {
+            userDzsb.setExpandExpireTime(DateUtils.strToDate(ty21Object.getYQDQR()));
+        }
+        userDzsb.setFrmc(ty21Object.getFRXM());
+        userDzsb.setFrzjh(ty21Object.getFRZJH());
+        userDzsb.setDjrq(ty21Object.getDJRQ());
+        userBindMapper.update(userDzsb);
+        return userDzsb;
     }
 
 }
