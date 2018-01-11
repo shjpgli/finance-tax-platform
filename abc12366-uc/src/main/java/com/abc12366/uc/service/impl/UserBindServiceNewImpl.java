@@ -726,4 +726,48 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
         return ty21Object;
 	}
 
+	@Override
+	public HngsNsrLoginResponse nsrLoginDzsj(UserHngsInsertBO login, HttpServletRequest request) {
+		HngsNsrLoginResponse loginResponse = cszjloginWsbsHngs(login, request);
+        //更新绑定关系
+        if (loginResponse != null) {
+
+            String userId = Utils.getUserId(request);
+            if (redisTemplate.hasKey(userId + "_HngsList")) {
+                redisTemplate.delete(userId + "_HngsList");
+            }
+
+            UserHngs userHngs = new UserHngs();
+            userHngs.setUserId(userId);
+            userHngs.setDjxh(loginResponse.getDjxh());
+            userHngs.setNsrsbh(loginResponse.getNsrsbh());
+            userHngs.setNsrmc(loginResponse.getNsrmc());
+            userHngs.setShxydm(loginResponse.getNsrsbh());
+            userHngs.setSwjgDm(loginResponse.getZgswjDm());
+            userHngs.setSwjgMc(loginResponse.getZgswjmc());
+            userHngs.setLastUpdate(new Date());
+            userHngs.setRoleId(loginResponse.getRoleId());
+            //办税员角色
+            String bsyjs;
+            switch (loginResponse.getRoleId().trim().toUpperCase()) {
+                case "R0001":
+                    bsyjs = "办税员01";
+                    break;
+                case "R0002":
+                    bsyjs = "办税员02";
+                    break;
+                case "R0003":
+                    bsyjs = "办税员03";
+                    break;
+                default:
+                    bsyjs = "办税员01";
+            }
+            userHngs.setBsy(bsyjs);
+            userHngs.setSmrzzt(StringUtils.isEmpty(loginResponse.getGxruuid()) ? "未认证" : "已认证");
+            userHngs.setStatus(true);
+            userBindMapper.updateHngs(userHngs);
+        }
+        return loginResponse;
+	}
+
 }

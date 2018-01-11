@@ -8,6 +8,7 @@ import com.abc12366.uc.model.bo.UserDzsbInsertBO;
 import com.abc12366.uc.model.bo.UserHngsBO;
 import com.abc12366.uc.model.bo.UserHngsInsertBO;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
+import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 
 public interface UserBindServiceNew {
 
@@ -22,5 +23,7 @@ public interface UserBindServiceNew {
 	UserHngsBO cszjhngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request);
 
 	TY21Xml2Object cszjnsrLoginShb(NsrLogin login, HttpServletRequest request) throws Exception;
+
+	HngsNsrLoginResponse nsrLoginDzsj(UserHngsInsertBO login, HttpServletRequest request);
 
 }

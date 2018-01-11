@@ -4,6 +4,8 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindServiceNew;
+import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +132,20 @@ public class UserBindControllerNew {
         LOGGER.info("{}", login);
         TY21Xml2Object loginResponse = userBindService.cszjnsrLoginShb(login, request);
         return ResponseEntity.ok(Utils.kv("data", loginResponse));
+    }
+    
+    /**
+     * 电子税局纳税人登录绑定
+     *
+     * @param login   登陆信息
+     * @param request HttpServletRequest
+     * @return 用户登陆信息
+     */
+    @PostMapping(path = "/nsrlogin/dzsj")
+    public ResponseEntity nsrLoginDzsj(@Valid @RequestBody UserHngsInsertBO login, HttpServletRequest request) {
+        LOGGER.info("{}", login);
+        HngsNsrLoginResponse loginResponse = userBindService.nsrLoginDzsj(login, request);
+        return ResponseEntity.ok(loginResponse);
     }
 
    
