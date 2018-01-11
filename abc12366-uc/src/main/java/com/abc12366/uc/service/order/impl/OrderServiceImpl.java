@@ -1204,8 +1204,8 @@ public class OrderServiceImpl implements OrderService {
                                         LOGGER.warn("订单信息查询失败：{}", orderBO.getOrderNo());
                                         throw new ServiceException(4102, "订单信息查询失败");
                                     }
-                                    //将订单状态改成已结束
-                                    orderBO.setOrderStatus("7");
+                                    //将订单状态改成已退单
+                                    orderBO.setOrderStatus("9");
                                     Order order = new Order();
                                     BeanUtils.copyProperties(orderBO,order);
                                     orderMapper.update(order);
