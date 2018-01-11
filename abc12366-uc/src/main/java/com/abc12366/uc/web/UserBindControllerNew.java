@@ -19,7 +19,7 @@ import javax.validation.Valid;
  * @date 2017-07-25
  */
 @RestController
-@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping("/v2")
 public class UserBindControllerNew {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserBindControllerNew.class);
 
@@ -35,7 +35,7 @@ public class UserBindControllerNew {
      * @throws Exception 访问网络、解包异常
      */
     @SuppressWarnings("rawtypes")
-	@PostMapping(path = "/bind/dzsbnew")
+	@PostMapping(path = "/bind/dzsb")
     public ResponseEntity userDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest
             request) throws Exception {
         LOGGER.info("{}:{}", userDzsbInsertBO, request);
@@ -55,7 +55,7 @@ public class UserBindControllerNew {
      * @throws Exception 网络异常
      */
     @SuppressWarnings("rawtypes")
-	@PostMapping(path = "/bind/hngsnew")
+	@PostMapping(path = "/bind/hngs")
     public ResponseEntity userHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest
             request) throws Exception {
         LOGGER.info("{}:{}", userHngsInsertBO, request);

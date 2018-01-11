@@ -28,7 +28,7 @@ import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.AuthServiceNew;
 
 @RestController
-@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping("/v2")
 public class AuthControllerNew {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthControllerNew.class);
@@ -47,7 +47,7 @@ public class AuthControllerNew {
      * @return 注册后生成的用户信息
      */
     @SuppressWarnings("rawtypes")
-	@PostMapping(path = "/registernew")
+	@PostMapping(path = "/register")
     public ResponseEntity register(@Valid @RequestBody RegisterBO registerBO, HttpServletRequest request) {
         LOGGER.info("{}", registerBO);
 
@@ -72,7 +72,7 @@ public class AuthControllerNew {
      * @return 用户基本信息、用户token、token有效时间
      */
     @SuppressWarnings("rawtypes")
-	@PostMapping(path = "/loginnew")
+	@PostMapping(path = "/login")
     public ResponseEntity login(@Valid @RequestBody LoginBO loginBO){
         LOGGER.info("{}", loginBO);
         Map token = authServiceNew.login(loginBO, "1");
@@ -87,7 +87,7 @@ public class AuthControllerNew {
      * @return 用户基本信息、用户token、token有效时间
      */
     @SuppressWarnings("rawtypes")
-	@PostMapping(path = "/login/jsnew")
+	@PostMapping(path = "/login/js")
     public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO) {
         LOGGER.info("{}", loginBO);
         Map token = authServiceNew.login(loginBO, "2");
@@ -103,7 +103,7 @@ public class AuthControllerNew {
      * @return 用户基本信息、用户token、token有效时间
      */
     @SuppressWarnings("rawtypes")
-	@PostMapping(path = "/verifyloginnew")
+	@PostMapping(path = "/verifylogin")
     public ResponseEntity verifylogin(@Valid @RequestBody VerifyingCodeBO loginBO, HttpServletRequest request) {
         LOGGER.info("{}", loginBO);
 
@@ -129,7 +129,7 @@ public class AuthControllerNew {
      * @throws Exception md5加密异常
      */
     @SuppressWarnings("rawtypes")
-	@PostMapping(path = "/resetpasswordnew")
+	@PostMapping(path = "/resetpassword")
     public ResponseEntity resetPasswordByPhone(@Valid @RequestBody ResetPasswordBO bo) throws Exception {
         LOGGER.info("{}", bo);
         boolean result = authServiceNew.resetPasswordByPhone(bo);
@@ -139,7 +139,7 @@ public class AuthControllerNew {
     
     //用户修改密码
     @SuppressWarnings("rawtypes")
-	@PutMapping(path = "/passwordnew")
+	@PutMapping(path = "/password")
     public ResponseEntity updatePassword(@Valid @RequestBody PasswordUpdateBO passwordUpdateBO, HttpServletRequest
             request) {
         LOGGER.info("用户修改密码：{}", passwordUpdateBO);
