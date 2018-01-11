@@ -25,17 +25,14 @@ import java.security.interfaces.RSAPublicKey;
  * Time: 19:44
  */
 @RestController
-@RequestMapping(path = "/rsa", headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
+@RequestMapping(headers = Constant.VERSION_HEAD + "=" + Constant.VERSION_1)
 public class RSAController {
-	
-	
-	
 	
     /**
      * 获取组装PublicKey对象（公钥）所需参数接口
      * @return
      */
-    @GetMapping(path = "/public")
+    @GetMapping(path = "/rsa/public")
     public ResponseEntity selectPublic() {
         RSAResponse rsaResponse = new RSAResponse();
         try {
@@ -63,7 +60,7 @@ public class RSAController {
      * 获取组装PrivateKey对象（私钥）所需参数接口
      * @return
      */
-    @GetMapping(path = "/private")
+    @GetMapping(path = "/rsa/private")
     public ResponseEntity selectPrivate() {
         RSAResponse rsaResponse = new RSAResponse();
         try {
@@ -85,7 +82,7 @@ public class RSAController {
         return ResponseEntity.ok(rsaResponse);
     }
 
-    @GetMapping(path = "/{str}")
+    @GetMapping(path = "/rsa/{str}")
     public ResponseEntity decode(@PathVariable String str) throws Exception {
         RSAPublicKey publicKey = RSA.getDefaultPublicKey();
         RSAPrivateKey privateKey = RSA.getDefaultPrivateKey();
@@ -103,7 +100,7 @@ public class RSAController {
      * 获取组装PublicKey对象（公钥）所需参数接口(新接口)
      * @return
      */
-    @GetMapping(path = "/publicnew")
+    @GetMapping(path = "/v2/rsa/public")
     public ResponseEntity<RSAResponse> selectPublicNew() {
         RSAResponse rsaResponse = new RSAResponse();
         try {
@@ -135,7 +132,7 @@ public class RSAController {
      * 获取组装PrivateKey对象（私钥）所需参数接口(新接口)
      * @return
      */
-    @GetMapping(path = "/privatenew")
+    @GetMapping(path = "/v2/rsa/private")
     public ResponseEntity<RSAResponse> selectPrivateNew() {
         RSAResponse rsaResponse = new RSAResponse();
         try {
