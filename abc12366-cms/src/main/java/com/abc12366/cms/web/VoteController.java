@@ -124,11 +124,11 @@ public class VoteController {
         return responseEntity;
     }
 
-    @DeleteMapping("/log/{id}")
-    public ResponseEntity deleteLog(@PathVariable("id") String id) {
-        LOGGER.info("{}", id);
+    @DeleteMapping("/log/{voteId}")
+    public ResponseEntity deleteLog(@PathVariable("voteId") String voteId) {
+        LOGGER.info("{}", voteId);
 
-        voteService.deleteLog(id);
+        voteService.deleteLog(voteId);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
 
         LOGGER.info("{}", responseEntity);
