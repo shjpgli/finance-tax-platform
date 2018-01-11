@@ -85,10 +85,6 @@ public class AuthController extends BaseController {
         LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
         CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
         CompletableFuture.allOf(cf);
-        // 清空不需要的内容
-        data.remove(Constant.USER_ID);
-        data.remove("user_phone");
-        data.remove(Constant.CLIENT_IP);
         return ResponseEntity.ok(Utils.kv("data", data));
     }
 
@@ -109,10 +105,6 @@ public class AuthController extends BaseController {
         LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
         CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
         CompletableFuture.allOf(cf);
-        // 清空不需要的内容
-        data.remove(Constant.USER_ID);
-        data.remove("user_phone");
-        data.remove(Constant.CLIENT_IP);
         return ResponseEntity.ok(Utils.kv("data", data));
     }
 
@@ -140,10 +132,6 @@ public class AuthController extends BaseController {
             LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
             CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
             CompletableFuture.allOf(cf);
-            // 清空不需要的内容
-            data.remove(Constant.USER_ID);
-            data.remove("user_phone");
-            data.remove(Constant.CLIENT_IP);
             return ResponseEntity.ok(Utils.kv("data", data));
         } else {
             authService.loginByVerifyFail(loginBO);
@@ -168,10 +156,6 @@ public class AuthController extends BaseController {
         LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
         CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
         CompletableFuture.allOf(cf);
-        // 清空不需要的内容
-        data.remove(Constant.USER_ID);
-        data.remove("user_phone");
-        data.remove(Constant.CLIENT_IP);
         return ResponseEntity.ok(Utils.kv("data", data));
     }
 
