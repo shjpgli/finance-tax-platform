@@ -44,6 +44,25 @@ public class UserBindControllerNew {
 
         return ResponseEntity.ok(Utils.kv("data", userDzsb));
     }
+    
+    /**
+     * 用户绑定纳税人（电子申报）
+     *
+     * @param userDzsbInsertBO 纳税人信息
+     * @param request          HttpServletRequest
+     * @return 纳税人信息
+     * @throws Exception 访问网络、解包异常
+     */
+    @SuppressWarnings("rawtypes")
+	@PostMapping(path = "/cszj/bind/dzsb")
+    public ResponseEntity cszjuserDzsbBind(@Valid @RequestBody UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest
+            request) throws Exception {
+        LOGGER.info("{}:{}", userDzsbInsertBO, request);
+        UserDzsbBO userDzsb = userBindService.cszjdzsbBind(userDzsbInsertBO, request);
+        LOGGER.info("{}", userDzsb);
+
+        return ResponseEntity.ok(Utils.kv("data", userDzsb));
+    }
 
    
     /**
@@ -64,6 +83,24 @@ public class UserBindControllerNew {
         return ResponseEntity.ok(Utils.kv("data", userHngs));
     }
     
+    /**
+     * 绑定湖南国税用户
+     *
+     * @param userHngsInsertBO 湖南国税用户信息
+     * @param request          HttpServletRequest
+     * @return 国税用户登陆信息
+     * @throws Exception 网络异常
+     */
+    @SuppressWarnings("rawtypes")
+	@PostMapping(path = "/cszj/bind/hngs")
+    public ResponseEntity cszjuserHngsBind(@Valid @RequestBody UserHngsInsertBO userHngsInsertBO, HttpServletRequest
+            request) throws Exception {
+        LOGGER.info("{}:{}", userHngsInsertBO, request);
+        UserHngsBO userHngs = userBindService.cszjhngsBind(userHngsInsertBO, request);
+
+        return ResponseEntity.ok(Utils.kv("data", userHngs));
+    }
+    
     
     /**
      * 电子申报纳税人登录绑定
@@ -77,6 +114,21 @@ public class UserBindControllerNew {
     public ResponseEntity nsrLoginShb(@Valid @RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
         LOGGER.info("{}", login);
         TY21Xml2Object loginResponse = userBindService.nsrLogin(login, request);
+        return ResponseEntity.ok(Utils.kv("data", loginResponse));
+    }
+    
+    /**
+     * 电子申报纳税人登录绑定
+     *
+     * @param login   登录信息
+     * @param request HttpServletRequest
+     * @return 纳税人信息
+     * @throws Exception 访问网络、解包异常
+     */
+    @PostMapping(path = "/cszj/nsrlogin/shb")
+    public ResponseEntity cszjnsrLoginShb(@Valid @RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", login);
+        TY21Xml2Object loginResponse = userBindService.cszjnsrLoginShb(login, request);
         return ResponseEntity.ok(Utils.kv("data", loginResponse));
     }
 

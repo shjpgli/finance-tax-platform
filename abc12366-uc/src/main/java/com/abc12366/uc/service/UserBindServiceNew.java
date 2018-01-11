@@ -17,4 +17,10 @@ public interface UserBindServiceNew {
 
 	TY21Xml2Object nsrLogin(NsrLogin login, HttpServletRequest request) throws Exception;
 
+	UserDzsbBO cszjdzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request)  throws Exception;
+
+	UserHngsBO cszjhngsBind(UserHngsInsertBO userHngsInsertBO, HttpServletRequest request);
+
+	TY21Xml2Object cszjnsrLoginShb(NsrLogin login, HttpServletRequest request) throws Exception;
+
 }
