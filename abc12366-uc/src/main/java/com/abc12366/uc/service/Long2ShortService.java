@@ -12,10 +12,18 @@ import com.abc12366.uc.model.weixin.ShortUrl;
 public interface Long2ShortService {
 
     /**
-     * 长链接转短链接
+     * 微信长链接转短链接
      *
-     * @param longUrl 长url地址
+     * @param url 长url地址
      * @return {"errcode":0,"errmsg":"ok","short_url":"http:\/\/w.url.cn\/s\/AvCo6Ih"}
      */
-    ShortUrl long2short(String longUrl);
+    ShortUrl long2short(String url);
+
+    /**
+     * tiny长链接转短链接
+     *
+     * @param url 长url地址
+     * @return 端地址
+     */
+    String tinyUrl(String url);
 }
