@@ -588,7 +588,7 @@ public class OrderController {
      * @return 订单信息
      */
     @PutMapping(path = "/return/{id}/{goodsId}")
-    public ResponseEntity cancelOrder(@PathVariable("id") String id,@PathVariable("goodsId") String goodsId,VipLogBO vipLogBO,HttpServletRequest httpServletRequest) {
+    public ResponseEntity cancelOrder(@PathVariable("id") String id,@PathVariable("goodsId") String goodsId,@Valid @RequestBody VipLogBO vipLogBO,HttpServletRequest httpServletRequest) {
         LOGGER.info("{}", id);
         Map<String,Object> map = new HashMap<>();
         map.put("orderNo",id);

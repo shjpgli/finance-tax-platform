@@ -112,6 +112,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     @Autowired
     private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
 
+    @Autowired
+    private TradeRoMapper tradeRoMapper;
+
     @Transactional("db1TxManager")
     @Override
     public OrderExchange insert(ExchangeApplicationBO ra) {
@@ -388,6 +391,12 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             if ("RMB".equals(order.getTradeMethod())) {
                 if ("ALIPAY".equals(order.getPayMethod())) {
                     // 查询交易日志中支付成功的订单
+                    Trade tr = tradeRoMapper.selectOrderNo(order.getOrderNo());
+                    if(tr == null){
+                        LOGGER.info("交易记录无法找到：{}", tr);
+                        throw new ServiceException(4102,"交易记录无法找到");
+                    }
+
                     TradeLog log = new TradeLog();
                     log.setTradeNo(oe.getOrderNo());
                     log.setTradeStatus("1");

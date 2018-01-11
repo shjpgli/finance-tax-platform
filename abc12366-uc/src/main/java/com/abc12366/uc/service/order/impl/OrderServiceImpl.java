@@ -8,7 +8,6 @@ import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.VipLog;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.model.bo.VipLogBO;
@@ -32,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
     private TradeMapper tradeMapper;
 
     @Autowired
-    private TradeRoMapper traderoMapper;
+    private TradeRoMapper tradeRoMapper;
 
     @Autowired
     private ExpressCompRoMapper expressCompRoMapper;
@@ -431,7 +429,7 @@ public class OrderServiceImpl implements OrderService {
             throw new ServiceException(4102);
         }
         //查询订单和交易记录对应关系
-        Trade trade = traderoMapper.selectOrderNo(bo.getOrderNo());
+        Trade trade = tradeRoMapper.selectOrderNo(bo.getOrderNo());
         if (trade != null) {
             TradeLog tradeLog = new TradeLog();
             tradeLog.setTradeNo(trade.getTradeNo());
@@ -1127,6 +1125,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderProductBO
      * @param httpServletRequest
      */
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     public void refund(OrderBO orderBO,OrderProductBO orderProductBO,VipLogBO vipLogBO, HttpServletRequest httpServletRequest) {
         //成交价格
         double dealPrice = orderProductBO.getDealPrice();
@@ -1134,10 +1133,16 @@ public class OrderServiceImpl implements OrderService {
         if ("RMB".equals(orderBO.getTradeMethod())) {
             if ("ALIPAY".equals(orderBO.getPayMethod())) {
                 // 查询交易日志中支付成功的订单
+                Trade tr = tradeRoMapper.selectOrderNo(orderBO.getOrderNo());
+                if(tr == null){
+                    LOGGER.info("交易记录无法找到：{}", tr);
+                    throw new ServiceException(4102,"交易记录无法找到");
+                }
                 TradeLog log = new TradeLog();
-                log.setTradeNo(orderBO.getOrderNo());
+                log.setTradeNo(tr.getTradeNo());
                 log.setTradeStatus("1");
                 log.setPayMethod("ALIPAY");
+
                 List<TradeLog> logList = tradeLogRoMapper.selectList(log);
 
                 if (logList.size() > 0) {
@@ -1199,8 +1204,8 @@ public class OrderServiceImpl implements OrderService {
                                         LOGGER.warn("订单信息查询失败：{}", orderBO.getOrderNo());
                                         throw new ServiceException(4102, "订单信息查询失败");
                                     }
-                                    //将订单状态改成已结束
-                                    orderBO.setOrderStatus("7");
+                                    //将订单状态改成已退单
+                                    orderBO.setOrderStatus("9");
                                     Order order = new Order();
                                     BeanUtils.copyProperties(orderBO,order);
                                     orderMapper.update(order);
