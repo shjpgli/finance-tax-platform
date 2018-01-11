@@ -442,9 +442,11 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         oe.setRefundRemark(data.getRefundRemark());
                                         oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                         orderExchangeMapper.update(oe);
-                                        // 插入订单日志-已退款
-                                        // insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), oe.getAdminRemark(),"1");
 
+                                        //扣除订单获得的积分
+                                        if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
+                                            insertPoints(order,0d,order.getGiftPoints());
+                                        }
 
                                         // 插入订单日志-已完成
                                         insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
@@ -533,7 +535,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 tradeLog.setPayMethod("POINTS");
                 tradeLogService.insertTradeLog(tradeLog);
                 //退积分
-                insertPoints(order, data.getAmount());
+                insertPoints(order, data.getAmount(),0);
 
             } else {
                 throw new ServiceException(4957);
@@ -543,11 +545,11 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     }
 
     /**
-     * 插入可获得的积分
+     * 插入积分日志
      *
      * @param orderBO
      */
-    private void insertPoints(Order orderBO,Double amount) {
+    private void insertPoints(Order orderBO,Double amount,int outgo) {
         //如果积分规则为空则返回
         PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_ORDER_RETURN_CODE);
         if (pointsRuleBO == null) {
@@ -559,6 +561,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         pointsLog.setId(Utils.uuid());
         //成交总积分 - 赠送积分
         pointsLog.setIncome(amount.intValue());
+        pointsLog.setOutgo(outgo);
         pointsLog.setRemark("用户退单- 订单号：" + orderBO.getOrderNo());
         pointsLog.setLogType("ORDER_EXCHANGE");
         pointsLogService.insertNoVip(pointsLog);

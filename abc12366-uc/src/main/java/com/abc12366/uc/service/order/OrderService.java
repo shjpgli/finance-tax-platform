@@ -260,4 +260,10 @@ public interface OrderService {
      * @return
      */
     List<OrderStatisBO> statisOrderByMonth(Map<String, Object> map);
+
+    /**
+     * 修改订单是否可退货
+     * @param map
+     */
+    void updateOrderReturn(Map<String, Object> map,HttpServletRequest httpServletRequest);
 }

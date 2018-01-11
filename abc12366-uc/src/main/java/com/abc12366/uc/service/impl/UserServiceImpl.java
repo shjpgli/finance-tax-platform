@@ -477,7 +477,7 @@ public class UserServiceImpl implements UserService {
 			uamountLog.setUserId(userId);
 			uamountLog.setCreateTime(new Date());
 			uamountLog.setRemark("充值会员，获得礼包金额");
-			//赠送积分
+			//赠送金额
 			double income = Double.parseDouble(findObj.getVal1());
 			double amount = 0;
 			if (temp.getAmount() != null) {
@@ -486,9 +486,9 @@ public class UserServiceImpl implements UserService {
             usable = amount + income;
 			uamountLog.setIncome(income);
 			uamountLog.setUsable(usable);
-			//插入礼包积分记录
+			//插入礼包金额记录
 			uamountLogMapper.insert(uamountLog);
-			//修改礼包积分
+			//修改礼包金额
 			/*User temp = new User();
 			temp.setId(user.getId());
 			temp.setAmount(usable);
