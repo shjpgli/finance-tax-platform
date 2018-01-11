@@ -425,4 +425,35 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         Collections.shuffle(listXXCY);//随机打乱
         return listXXCY.get(0);
     }
+
+    @Override
+    public void automaticResetTimeCount() {
+        List<LotteryActivityBO> lottteryList = selectList(null);
+        if (lottteryList != null && lottteryList.size() > 0) {
+            for (LotteryActivityBO lotteryBo : lottteryList) {
+                LotteryActivity lottery = new LotteryActivity();
+                lottery.setTimeCount(0);//派奖清零
+                lottery.setName(lotteryBo.getName());
+                lottery.setCount(lotteryBo.getCount());
+                lottery.setCreateTime(lotteryBo.getCreateTime());
+                lottery.setDescription(lotteryBo.getDescription());
+                lottery.setEndTime(lotteryBo.getEndTime());
+                lottery.setGetlotteyDay(lotteryBo.getGetlotteyDay());
+                lottery.setId(lotteryBo.getId());
+                lottery.setLabel(lotteryBo.getLabel());
+                lottery.setLuckTime(lotteryBo.getLuckTime());
+                lottery.setStatus(lotteryBo.getStatus());
+                lottery.setTimeStock(lotteryBo.getTimeStock());
+                lottery.setTypes(lotteryBo.getTypes());
+                lottery.setTemplateId(lotteryBo.getTemplateId());
+                lottery.setTimeDay(lotteryBo.getTimeDay());
+                lottery.setUrl(lotteryBo.getUrl());
+                lottery.setUserFreeCount(lotteryBo.getUserFreeCount());
+                lottery.setUserLevel(lotteryBo.getUserLevel());
+                lottery.setUserLotteryMax(lotteryBo.getUserLotteryMax());
+                lottery.setUserLotteryMaxDay(lotteryBo.getUserLotteryMaxDay());
+                lotteryActivityMapper.update(lottery);
+            }
+        }
+    }
 }

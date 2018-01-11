@@ -1,8 +1,8 @@
 package com.abc12366.uc.web;
 
-import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindServiceNew;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +62,22 @@ public class UserBindControllerNew {
         UserHngsBO userHngs = userBindService.hngsBind(userHngsInsertBO, request);
 
         return ResponseEntity.ok(Utils.kv("data", userHngs));
+    }
+    
+    
+    /**
+     * 电子申报纳税人登录绑定
+     *
+     * @param login   登录信息
+     * @param request HttpServletRequest
+     * @return 纳税人信息
+     * @throws Exception 访问网络、解包异常
+     */
+    @PostMapping(path = "/nsrlogin/shb")
+    public ResponseEntity nsrLoginShb(@Valid @RequestBody NsrLogin login, HttpServletRequest request) throws Exception {
+        LOGGER.info("{}", login);
+        TY21Xml2Object loginResponse = userBindService.nsrLogin(login, request);
+        return ResponseEntity.ok(Utils.kv("data", loginResponse));
     }
 
    

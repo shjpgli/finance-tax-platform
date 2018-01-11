@@ -100,6 +100,7 @@ public class UserStatisServiceImpl implements UserStatisService {
         }
         if(!StringUtils.isEmpty(end)){
             c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
+            c3.add(Calendar.MONTH, 1);
         }
         List<String> tagNameList = null;
         if(!StringUtils.isEmpty(tagName)&&tagName.split(",").length>0){

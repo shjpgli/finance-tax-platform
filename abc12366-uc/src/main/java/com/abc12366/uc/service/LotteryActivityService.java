@@ -19,4 +19,9 @@ public interface LotteryActivityService {
     LotteryActivityBO update(LotteryActivityBO lotteryActivityBO, String id);
     boolean delete(String id);
     LotteryLogBO luckDraw(String userId, String activityId, String ip);
+
+    /**
+     * 自动取消清零当天派奖数
+     */
+    void automaticResetTimeCount();
 }
