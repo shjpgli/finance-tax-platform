@@ -93,9 +93,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/test")
                         // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
                 .excludePathPatterns("/login", "/login/js", "/verifylogin", "/logout/**", "/refresh", "/register",
-                        "/user/token/**", "/user/u/**")
+                        "/user/token/**", "/user/u/**","/v2/login","/v2/login/js","/v2/verifylogin", "/v2/register")
                         // 用户通过手机号重置密码
-                .excludePathPatterns("/verifyphone", "/resetpassword")
+                .excludePathPatterns("/verifyphone", "/resetpassword","/v2/resetpassword")
                         // 根据用户ID查看用户简单信息：用户ID，用户昵称，用户头像，擅长领域
                 .excludePathPatterns("/user/notoken/simple/{userId}")
                         // 操作员登录、登出、token验证自动刷新
@@ -117,7 +117,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         "/user/wx/**", "/user/wx/openid/**", "/wx/redpack", "/wx/activity/redpack",
                         "/wxuser/getOneFromWx/**")
                         // rsa密码
-                .excludePathPatterns("/rsa/public", "/rsa/private", "/rsa/login")
+                .excludePathPatterns("/rsa/public", "/rsa/private","/v2/rsa/public", "/v2/rsa/private", "/rsa/login")
                         // 微信回调地址
                 .excludePathPatterns("/wechatserver/init/**")
                         // 好会计
@@ -129,7 +129,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 批量用户奖励积分接口
                 .excludePathPatterns("/points/batch/award")
                         // 长链接转短链接接口
-                .excludePathPatterns("/long2short")
+                .excludePathPatterns("/long2short", "/tinyurl")
                         // 办税日历查询
                 .excludePathPatterns("/user/bsrl");
     }

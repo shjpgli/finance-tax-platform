@@ -82,5 +82,5 @@ public interface AuthService {
     /**
      * 登陆之后需要处理的业务
      */
-    CompletableFuture<BodyStatus> todoAfterLogin(HttpServletRequest request);
+    CompletableFuture<BodyStatus> todoAfterLogin(Map map);
 }

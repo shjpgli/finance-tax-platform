@@ -3,6 +3,7 @@ package com.abc12366.message.service;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.message.model.UserBatchMessage;
 import com.abc12366.message.model.UserMessage;
+import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
 
@@ -97,4 +98,10 @@ public interface UserMsgService {
      * @return 未读消息列表
      */
     List<UserMessage> selectUnreadList(UserMessage um);
+
+    /**
+     * 批量更新用户消息为“已读”
+     * @param bo
+     */
+    void batchUpdateToRead(BatchUpdateMsgToReadBO bo);
 }

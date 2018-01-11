@@ -102,4 +102,8 @@ public interface UserMapper {
      * @return 用户基本表信息
      */
     User selectUserById(User user);
+
+    int updateExp(User user);
+
+    int updatePoints(User user);
 }

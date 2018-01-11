@@ -48,4 +48,6 @@ public interface VoteService {
 
     List<VoteResult> selectResultList(VoteResult voteResult, int page, int size);
 
+    void deleteLog(String id);
+
 }

@@ -1,10 +1,12 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.gateway.util.*;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.RemindConstant;
+import com.abc12366.gateway.util.TaskConstant;
+import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.TodoTaskFront;
 import com.abc12366.uc.model.User;
@@ -19,8 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 
@@ -50,21 +50,19 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFeedbackMsgServiceImpl.class);
 
     @Override
-    public void updatePasswordSuccessNotice() {
-        User user = getUser();
-
+    public void updatePasswordSuccessNotice(String userId) {
         //发信息
         //1.系统消息
         String sysMsg = RemindConstant.UPDATE_PWD_SUCCESS_SYS.replace("{#DATA.DATE}", DateUtils.dateToStr(new Date()));
         //2.微信消息
         Map<String, String> dataList = new HashMap<>();
         dataList.put("first", RemindConstant.UPDATE_PWD_SUCCESS_WX_1);
-        dataList.put("keyword1", user.getUsername());
+        dataList.put("keyword1", userMapper.selectOne(userId).getUsername());
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.UPDATE_PWD_SUCCESS_WX_4);
         //3.短信消息
         MessageSendBo sendBo = new MessageSendBo();
-        sendBo.setUserId(getUser().getId());
+        sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setTemplateid("AYi8h8g7_bKN8Yr9wVDh4ZQ_CIOwsoIzX1A6tx1E5WE");
         sendBo.setDataList(dataList);
@@ -73,11 +71,11 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
     }
 
     @Override
-    public void unrealname() {
-        if (!isFirstLoginToday()) {
+    public void unrealname(String userId) {
+        if (!isFirstLoginToday(userId)) {
             return;
         }
-        UserExtendBO userExtendBO = getUserExtend();
+        UserExtendBO userExtendBO = getUserExtend(userId);
         if (userExtendBO != null && !StringUtils.isEmpty(userExtendBO.getValidStatus()) &&
                 (userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_VALIDATED)||
                         userExtendBO.getValidStatus().equals(TaskConstant.USER_REALNAME_TO_VALIDATE))) {
@@ -92,25 +90,25 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //3.短信消息.后改为不做
 
         MessageSendBo sendBo = new MessageSendBo();
-        sendBo.setUserId(getUser().getId());
+        sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
         msgSendService.sendXtxx(sendBo);
     }
 
     @Override
-    public void undotask() {
-        if (!isFirstLoginToday()) {
+    public void undotask(String userId) {
+        if (!isFirstLoginToday(userId)) {
             return;
         }
         int undoTaskCount = 0;
         List<TodoTaskFront> taskList = new ArrayList<>();
-        taskList.addAll(todoTaskService.selectNormalTaskList(Utils.getUserId()));
-        taskList.addAll(todoTaskService.selectOnetimeTaskList(Utils.getUserId()));
-        taskList.addAll(todoTaskService.selectSpecialTaskList(Utils.getUserId()));
-        taskList.addAll(todoTaskService.selectBangbangTaskList(Utils.getUserId()));
+        taskList.addAll(todoTaskService.selectNormalTaskList(userId));
+        taskList.addAll(todoTaskService.selectOnetimeTaskList(userId));
+        taskList.addAll(todoTaskService.selectSpecialTaskList(userId));
+        taskList.addAll(todoTaskService.selectBangbangTaskList(userId));
         for (TodoTaskFront taskFront : taskList) {
-            if (taskFront != null && taskFront.getStatus() != null && !taskFront.getStatus().equals("1")) {
+            if (taskFront != null && taskFront.getStatus() != null && !"1".equals(taskFront.getStatus())) {
                 undoTaskCount++;
             }
         }
@@ -122,15 +120,15 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //2.微信消息,不做
         //3.短信消息，不做
         MessageSendBo sendBo = new MessageSendBo();
-        sendBo.setUserId(getUser().getId());
+        sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
         msgSendService.sendXtxx(sendBo);
     }
 
     @Override
-    public void check() {
-        if (!isFirstLoginToday()) {
+    public void check(String userId) {
+        if (!isFirstLoginToday(userId)) {
             return;
         }
 
@@ -141,14 +139,14 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //2.微信消息,不做
         //3.短信消息，不做
         MessageSendBo sendBo = new MessageSendBo();
-        sendBo.setUserId(getUser().getId());
+        sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
         msgSendService.sendXtxx(sendBo);
     }
 
     @Override
-    public void expLevelUp() {
+    public void expLevelUp(String userId) {
         //发信息
         //1.系统消息
         String sysMsg = RemindConstant.EXP_LEVEL_UP_SYS;
@@ -156,7 +154,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //2.微信消息,不做
         //3.短信消息，不做
         MessageSendBo sendBo = new MessageSendBo();
-        sendBo.setUserId(getUser().getId());
+        sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
         msgSendService.sendXtxx(sendBo);
@@ -196,16 +194,11 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         msgSendService.sendXtxx(sendBo);
     }
 
-    private User getUser() {
-        return userMapper.selectOne((String) ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest().getAttribute(Constant.USER_ID));
+    private UserExtendBO getUserExtend(String userId) {
+        return userExtendService.selectOne(userId);
     }
 
-    private UserExtendBO getUserExtend() {
-        return userExtendService.selectOne(Utils.getUserId());
-    }
-
-    private boolean isFirstLoginToday() {
+    private boolean isFirstLoginToday(String userId) {
         Map<String, Object> map = new HashMap<>();
         Calendar calendar1 = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
@@ -217,7 +210,7 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         calendar2.set(Calendar.HOUR_OF_DAY, 0);
         calendar2.set(Calendar.SECOND, 0);
         calendar2.set(Calendar.MINUTE, 0);
-        map.put("userId", Utils.getUserId());
+        map.put("userId", userId);
         map.put("startTime", calendar1.getTime());
         map.put("endTime", calendar2.getTime());
         List<UcUserLoginLog> logList = loginLogRoMapper.selectLoginLogList(map);

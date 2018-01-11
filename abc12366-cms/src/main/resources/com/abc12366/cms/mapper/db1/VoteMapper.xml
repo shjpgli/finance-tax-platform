@@ -78,6 +78,11 @@
         DELETE FROM cms_vote WHERE id = #{id}
     </delete>
 
+    <!--删除投票记录-->
+    <delete id="deleteLog" parameterType="java.lang.String">
+        DELETE FROM cms_vote_result WHERE voteId = #{id}
+    </delete>
+
     <insert id="insertResult" parameterType="com.abc12366.cms.model.VoteResult">
         INSERT INTO cms_vote_result (<include refid="Result_Column_List"/>)
         VALUES (#{id}, #{voteId}, #{subjectId}, #{itemId}, #{userId}, #{openId}, #{ip}, #{userAgent}, #{createTime})

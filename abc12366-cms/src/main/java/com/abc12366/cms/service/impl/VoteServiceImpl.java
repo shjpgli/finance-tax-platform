@@ -60,7 +60,13 @@ public class VoteServiceImpl implements VoteService {
         // 根据发票状态、IP查询参与人数
         if (voteList != null && voteList.size() > 0) {
             //0:停用，1：启用，3：草稿，4：结束
-            voteList.stream().filter(v -> v.getStatus()==1 || v.getStatus()==4).forEach(v -> {
+         /*   voteList.stream().filter(v -> v.getStatus()==1 || v.getStatus()==4).forEach(v -> {
+                VoteResult vr = new VoteResult.Builder().voteId(v.getId()).build();
+                v.setNop(voteRoMapper.selectResultCount(vr));
+                v.setNov(voteRoMapper.selectHistoryCount(v.getId()));
+            });*/
+
+            voteList.stream().forEach(v -> {
                 VoteResult vr = new VoteResult.Builder().voteId(v.getId()).build();
                 v.setNop(voteRoMapper.selectResultCount(vr));
                 v.setNov(voteRoMapper.selectHistoryCount(v.getId()));
@@ -295,6 +301,19 @@ public class VoteServiceImpl implements VoteService {
             throw new ServiceException(4012);
         }
     }
+
+    @Override
+    public void deleteLog(String id) {
+        VoteResult result = new VoteResult.Builder().voteId(id).build();
+        List<VoteResult>  results = selectResultList(result, 0, 0);
+        if(results != null){
+            // 删除投票信息
+            voteMapper.deleteLog(id);
+        }else{
+            throw new ServiceException(4012);
+        }
+    }
+
 
     @Override
     public List<VoteResult> vote(String voteId, List<VoteResult> resultList, HttpServletRequest request) {

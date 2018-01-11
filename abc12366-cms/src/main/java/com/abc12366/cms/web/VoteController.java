@@ -124,6 +124,17 @@ public class VoteController {
         return responseEntity;
     }
 
+    @DeleteMapping("/log/{voteId}")
+    public ResponseEntity deleteLog(@PathVariable("voteId") String voteId) {
+        LOGGER.info("{}", voteId);
+
+        voteService.deleteLog(voteId);
+        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
+
+        LOGGER.info("{}", responseEntity);
+        return responseEntity;
+    }
+
     /**
      * 单个题目投票
      *

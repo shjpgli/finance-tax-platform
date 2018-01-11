@@ -1,5 +1,6 @@
 package com.abc12366.message.service.impl;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
@@ -7,6 +8,7 @@ import com.abc12366.message.mapper.db1.BusinessMsgMapper;
 import com.abc12366.message.mapper.db2.BusinessMsgRoMapper;
 import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
+import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.BusinessMessageAdmin;
 import com.abc12366.message.service.BusinessMsgService;
 import com.alibaba.fastjson.JSON;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -189,5 +192,16 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
                     TimeUnit.DAYS);
         }
         return dataList;
+    }
+
+    @Override
+    public void batchUpdateToRead(BatchUpdateMsgToReadBO bo) {
+        if(bo==null||bo.getIds()==null||bo.getIds().size()<1){
+            return;
+        }
+        if(bo.getIds().size()>100){
+            throw new ServiceException(4206);
+        }
+        businessMsgMapper.updateBatch(bo);
     }
 }

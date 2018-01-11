@@ -210,14 +210,14 @@ public class AuthServiceImpl implements AuthService {
 
         // 根据用户名查看用户是否存在
         bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim().toLowerCase());
-        
+
         //修改登录，从主库查询
         User user = userMapper.selectByUsernameOrPhone(bo);
         if (user == null) {
             LOGGER.warn("登录失败，参数:{}:{}", bo, channel);
             throw new ServiceException(4018);
         }
-        
+
         // 无效用户不允许登录
         if (!user.getStatus()) {
             throw new ServiceException(4038);
@@ -301,6 +301,11 @@ public class AuthServiceImpl implements AuthService {
         map.put("token", userToken);
         map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
         map.put("user", userBO);
+
+        // 登录之后的任务需要
+        map.put(Constant.USER_ID, userBO.getId());
+        map.put("user_phone", userBO.getPhone());
+
         // 在request中设置userId，记录日志使用
         Utils.setUserId(userBO.getId());
 
@@ -495,47 +500,46 @@ public class AuthServiceImpl implements AuthService {
 
     @Async
     @Override
-    public CompletableFuture<BodyStatus> todoAfterLogin(HttpServletRequest request) {
-        // 记录用户IP归属
-        if (!StringUtils.isEmpty(request.getHeader(Constant.CLIENT_IP))) {
-            ipService.merge(request.getHeader(Constant.CLIENT_IP));
+    public CompletableFuture<BodyStatus> todoAfterLogin(Map map) {
+        LOGGER.info("记录用户IP归属");
+        if (!StringUtils.isEmpty(map.get(Constant.CLIENT_IP))) {
+            ipService.merge(String.valueOf(map.get(Constant.CLIENT_IP)));
         }
-        String userId = Utils.getUserId();
-        
-        //登录删除用户缓存，防止缓存不及时刷新
-        redisTemplate.delete(userId+"_Points");
-        redisTemplate.delete(userId+"_MyExperience");
+        String userId = String.valueOf(map.get(Constant.USER_ID));
 
-        //如果用户当天定时任务没有完成，就在登录的时候生成
+        LOGGER.info("登录删除用户缓存，防止缓存不及时刷新:{}", userId);
+        redisTemplate.delete(userId + "_Points");
+        redisTemplate.delete(userId + "_MyExperience");
+
+        LOGGER.info("如果用户当天定时任务没有完成，就在登录的时候生成:{}", userId);
         todoTaskService.generateAllTodoTaskList(userId);
 
-        //计算用户登录经验值变化
+        LOGGER.info("计算用户登录经验值变化:{}", userId);
         computeExp(userId);
 
-        //记用户登录日志
+        LOGGER.info("记用户登录日志:{}", userId);
         insertLoginLog(userId);
 
-        //登录任务日志
+        LOGGER.info("登录任务日志:{}", userId);
         todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
-        User user = userMapper.selectOne(userId);
-        //首次绑定手机任务埋点
-        if (!StringUtils.isEmpty(user.getPhone())) {
+        LOGGER.info("首次绑定手机任务埋点:{}", userId);
+        if (!StringUtils.isEmpty(map.get("user_phone"))) {
             todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_PHONE_VALIDATE_CODE);
         }
 
-        try{
-            //发消息
-            userFeedbackMsgService.unrealname();
-            userFeedbackMsgService.check();
-            userFeedbackMsgService.undotask();
-            //发送运营消息
+        try {
+            LOGGER.info("发消息:{}", userId);
+            userFeedbackMsgService.unrealname(userId);
+            userFeedbackMsgService.check(userId);
+            userFeedbackMsgService.undotask(userId);
+            LOGGER.info("发送运营消息:{}", userId);
             operateMessageService.send(userId);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("用户登录后发送消息提醒异常：{}", e);
         }
-        return CompletableFuture.completedFuture(null);
+        return CompletableFuture.completedFuture(Utils.bodyStatus(2000));
     }
 
     /**

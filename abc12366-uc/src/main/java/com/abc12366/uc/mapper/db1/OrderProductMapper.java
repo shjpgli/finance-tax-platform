@@ -26,4 +26,6 @@ public interface OrderProductMapper {
      **/
     int update(OrderProduct record);
 
+    int updateByOrderNo(OrderProduct orderProduct);
+
 }

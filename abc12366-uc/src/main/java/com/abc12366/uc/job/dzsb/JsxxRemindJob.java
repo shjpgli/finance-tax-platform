@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -89,7 +90,7 @@ public class JsxxRemindJob implements StatefulJob {
 									() + "，缴税结果：成功，此信息为财税专家电子报税业务提醒信息，不作为实际申报缴税结果凭证，如有疑议请及时查询申报缴税结果";
 
                             String dxmsg = "您的企业（" + dzsbXxInfo.getNsrmc() + "）于" + dzsbXxInfo.getWcrq() + "缴纳：" +
-									dzsbXxInfo.getSzmc() + "，税额：" + dzsbXxInfo.getKkje() + "元，缴税结果：成功，此信息不作为实际缴税结果凭证";
+									dzsbXxInfo.getSzmc() + "，税额：" + new DecimalFormat("#.00").format(dzsbXxInfo.getKkje()) + "元，缴税结果：成功，此信息不作为实际缴税结果凭证";
 
                             Map<String, String> dataList = new HashMap<String, String>();
                             dataList.put("first", "财税专家会员提醒，您的纳税企业（" + dzsbXxInfo.getNsrmc() + "）缴税结果信息如下：");
@@ -97,7 +98,7 @@ public class JsxxRemindJob implements StatefulJob {
                             dataList.put("keyword1", dzsbXxInfo.getNsrsbh().substring(0, 6) + "****** ");
                             dataList.put("keyword2", dzsbXxInfo.getSzmc());
                             dataList.put("keyword3", dzsbXxInfo.getSkssqq() + "至" + dzsbXxInfo.getSkssqz());
-                            dataList.put("keyword4", dzsbXxInfo.getKkje() + "元");
+                            dataList.put("keyword4", new DecimalFormat("#.00").format(dzsbXxInfo.getKkje()) + "元");
                             dataList.put("keyword5Color", "#00DB00");
                             dataList.put("keyword5", "成功");
 

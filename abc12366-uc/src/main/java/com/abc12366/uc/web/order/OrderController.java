@@ -4,6 +4,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.order.OrderService;
@@ -578,4 +579,22 @@ public class OrderController {
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
+
+
+    /**
+     * 会员订购订单直接退货
+     *
+     * @param id 订单ID
+     * @return 订单信息
+     */
+    @PutMapping(path = "/return/{id}/{goodsId}")
+    public ResponseEntity cancelOrder(@PathVariable("id") String id,@PathVariable("goodsId") String goodsId,@Valid @RequestBody VipLogBO vipLogBO,HttpServletRequest httpServletRequest) {
+        LOGGER.info("{}", id);
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderNo",id);
+        map.put("goodsId",goodsId);
+        map.put("vipLogBO",vipLogBO);
+        orderService.updateOrderReturn(map,httpServletRequest);
+        return ResponseEntity.ok(Utils.kv());
+    }
 }

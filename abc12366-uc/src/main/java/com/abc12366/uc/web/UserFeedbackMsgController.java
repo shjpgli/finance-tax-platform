@@ -31,7 +31,7 @@ public class UserFeedbackMsgController {
     @PostMapping(path = "/pwd")
     public ResponseEntity updatePasswordSuccessNotice(){
         LOGGER.info("用户修改密码成功回答soa发送消息提醒");
-        userFeedbackMsgService.updatePasswordSuccessNotice();
+        userFeedbackMsgService.updatePasswordSuccessNotice(Utils.getUserId());
         LOGGER.info("用户修改密码成功回答soa发送消息提醒成功");
         return ResponseEntity.ok(Utils.kv());
     }
@@ -43,7 +43,7 @@ public class UserFeedbackMsgController {
     @PostMapping(path = "/unrealname")
     public ResponseEntity unrealname(){
         LOGGER.info("用户每日首次登录未实名认证回调soa发送消息提醒");
-        userFeedbackMsgService.unrealname();
+        userFeedbackMsgService.unrealname(Utils.getUserId());
         LOGGER.info("用户每日首次登录未实名认证回调soa发送消息提醒成功");
         return ResponseEntity.ok(Utils.kv());
     }
@@ -55,7 +55,7 @@ public class UserFeedbackMsgController {
     @PostMapping(path = "/undotask")
     public ResponseEntity undotask(){
         LOGGER.info("用户每日首次登录有未完成的任务发送消息提醒");
-        userFeedbackMsgService.undotask();
+        userFeedbackMsgService.undotask(Utils.getUserId());
         LOGGER.info("用户每日首次登录有未完成的任务发送消息提醒成功");
         return ResponseEntity.ok(Utils.kv());
     }
@@ -67,7 +67,7 @@ public class UserFeedbackMsgController {
     @PostMapping(path = "/check")
     public ResponseEntity check(){
         LOGGER.info("用户每日首次登录有未完成的任务发送消息提醒用户去签到");
-        userFeedbackMsgService.check();
+        userFeedbackMsgService.check(Utils.getUserId());
         LOGGER.info("用户每日首次登录有未完成的任务发送消息提醒用户去签到成功");
         return ResponseEntity.ok(Utils.kv());
     }
@@ -79,7 +79,7 @@ public class UserFeedbackMsgController {
     @PostMapping(path = "/explevelup")
     public ResponseEntity expLevelUp(){
         LOGGER.info("用户经验值等级提升每发送消息提醒用户");
-        userFeedbackMsgService.expLevelUp();
+        userFeedbackMsgService.expLevelUp(Utils.getUserId());
         LOGGER.info("用户经验值等级提升每发送消息提醒用户成功");
         return ResponseEntity.ok(Utils.kv());
     }
