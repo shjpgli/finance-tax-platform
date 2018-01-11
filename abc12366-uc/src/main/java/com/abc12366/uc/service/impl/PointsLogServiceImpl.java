@@ -79,7 +79,7 @@ public class PointsLogServiceImpl implements PointsLogService {
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
         user.setLastUpdate(new Date());
-        int userUpdateResult = userMapper.update(user);
+        int userUpdateResult = userMapper.updatePoints(user);
         if (userUpdateResult != 1) {
             LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + pointsLogBO.getUserId());
             throw new ServiceException(4101);
@@ -131,7 +131,7 @@ public class PointsLogServiceImpl implements PointsLogService {
         //uc_user的points字段和uc_point_log的usablePoints字段都要更新
         user.setPoints(usablePoints);
         user.setLastUpdate(new Date());
-        int userUpdateResult = userMapper.update(user);
+        int userUpdateResult = userMapper.updatePoints(user);
         if (userUpdateResult != 1) {
             LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + pointsLogBO.getUserId());
             throw new ServiceException(4101);
