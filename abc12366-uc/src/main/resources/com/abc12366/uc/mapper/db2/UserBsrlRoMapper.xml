@@ -16,7 +16,7 @@
         WHERE calId = #{calId}
     </select>
     <!-- 查询列表 -->
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserBsrlBO" parameterType="java.util.Map">
+    <select id="selectList" resultType="com.abc12366.uc.model.UserBsrl" parameterType="java.util.Map">
         SELECT
         <include refid="Base_Column_List"/>
         FROM uc_user_bsrl
