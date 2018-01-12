@@ -60,4 +60,6 @@ public interface ContentService {
 
     String updateViewsDayjf(String contentId, HttpServletRequest request);
 
+    List<ContentListBo> selectListSearch(Map<String, Object> map);
+
 }

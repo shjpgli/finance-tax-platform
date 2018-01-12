@@ -488,6 +488,69 @@
 		WHERE UNIX_TIMESTAMP(b.releaseDate) &lt; #{releaseDate} AND a.channelId = #{channelId} ORDER BY UNIX_TIMESTAMP(b.releaseDate) DESC LIMIT 1
 	</select>
 
+	<!-- 查询（根据查询条件查询） -->
+	<select id="selectListSearch" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
+		SELECT
+		a.contentId contentId,
+		a.userid userid,
+		a.username username,
+		a.contentType,
+		b.title title,
+		b.titleColor titleColor,
+		a.channelId channelId,
+		c.channelName channelName,
+		a.topLevel topLevel,
+		a.typeId typeId,
+		b.author author,
+		a.viewsDay views,
+		b.releaseDate releaseDate,
+		a.status STATUS,
+		b.needRegenerate needRegenerate,
+		b.staticLink,
+		c.isDisplay,
+		s.siteId,
+		s.siteName,
+		s.sitePath,s.domain,
+		s.siteStatus,
+		a.recommendLevel recommendLevel
+		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
+		LEFT JOIN cms_content_txt t ON a.contentId = t.contentId
+		LEFT JOIN cms_channel c ON a.channelId = c.channelId
+		LEFT JOIN cms_site s ON a.siteId = s.siteId
+		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
+		WHERE 1=1
+		<if test="text != null and text != ''">
+			AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text} IN BOOLEAN MODE)
+			OR MATCH(txt) AGAINST(#{text} IN BOOLEAN MODE))
+		</if>
+		<if test="title != null and title != ''">
+			AND b.title like CONCAT('%',#{title},'%')
+		</if>
+		<if test="username != null and username != ''">
+			AND a.username like CONCAT('%',#{username},'%')
+		</if>
+		<if test="typeId != null and typeId != ''">
+			AND a.typeId = #{typeId}
+		</if>
+		<if test="topLevel != null and topLevel != ''">
+			AND a.topLevel = #{topLevel}
+		</if>
+		<if test="siteId != null and siteId != ''">
+			AND a.siteId = #{siteId}
+		</if>
+		<if test="status != null and status != ''">
+			AND a.status = #{status}
+		</if>
+		<if test="recommendLevel != null and recommendLevel != ''">
+			AND a.recommendLevel = #{recommendLevel}
+		</if>
+		<if test="channelId != null and channelId != ''">
+			AND a.channelId like CONCAT(#{channelId},'%')
+		</if>
+		ORDER BY b.releaseDate DESC
+
+	</select>
+
 
 
 </mapper>

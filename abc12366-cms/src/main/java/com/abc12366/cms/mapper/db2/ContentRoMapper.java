@@ -90,4 +90,9 @@ public interface ContentRoMapper {
      **/
     ContentudBo selectByReleaseDateDesc(Map<String, Object> map);
 
+    /**
+     * 查询(根据查询条件查询)
+     **/
+    List<ContentListBo> selectListSearch(Map<String, Object> map);
+
 }

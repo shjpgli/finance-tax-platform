@@ -26,6 +26,8 @@ public class ContentListBo implements Serializable {
      **/
     private String username;
 
+    private String contentType;
+
     /**
      * 标题
      **/
@@ -149,6 +151,14 @@ public class ContentListBo implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getTitle() {

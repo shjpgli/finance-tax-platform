@@ -776,5 +776,13 @@ public class ContentServiceImpl implements ContentService {
         return "";
     }
 
+    @Override
+    public List<ContentListBo> selectListSearch(Map<String, Object> map) {
+        //查询内容列表
+        List<ContentListBo> contents = contentRoMapper.selectListSearch(map);
+        LOGGER.info("{}", contents);
+        return contents;
+    }
+
 
 }
