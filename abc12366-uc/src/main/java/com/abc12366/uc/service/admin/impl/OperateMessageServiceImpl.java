@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.admin.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.DateUtils;
@@ -10,8 +11,6 @@ import com.abc12366.uc.mapper.db1.OperateMessageMapper;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.OperateMessageRoMapper;
-import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
@@ -21,6 +20,7 @@ import com.abc12366.uc.model.admin.bo.OperateMessageUpdateBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogListBO;
 import com.abc12366.uc.service.IWxTemplateService;
+import com.abc12366.uc.service.Long2ShortService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.admin.OperateMessageService;
 import com.github.pagehelper.PageHelper;
@@ -64,6 +64,9 @@ public class OperateMessageServiceImpl implements OperateMessageService {
     @Autowired
     private UserExtendMapper userExtendMapper;
 
+    @Autowired
+    private Long2ShortService long2ShortService;
+
     @Override
     public OperateMessageBO insert(OperateMessageBO operateMessageBO) {
         LOGGER.info("发送运营消息：{}", operateMessageBO);
@@ -95,7 +98,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
         }
         Date now = null;
         if (StringUtils.isEmpty(status)) {
-            List<OperateMessageBO> allList = operateMessageRoMapper.selectList(null, name, start, calendar == null ? null : calendar.getTime(), now);
+            List<OperateMessageBO> allList = operateMessageRoMapper.selectList(null, name, start, calendar == null ? null : calendar.getTime(), null);
             for (OperateMessageBO o : allList) {
                 long nowTimeMillis = System.currentTimeMillis();
                 if (o.getStatus().equals("1")&&(o.getEndTime() == null || o.getEndTime().getTime() < nowTimeMillis)) {
@@ -203,6 +206,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                 dataList.put("remark", RemindConstant.YYXX_WX_REMARK);
                 dataList.put("userId", user.getId());
                 dataList.put("openId", user.getWxopenid());
+                dataList.put("url", (StringUtils.isEmpty(o.getUrl())?"":long2ShortService.long2short(o.getUrl().substring(o.getUrl().indexOf("href='") + 6, o.getUrl().lastIndexOf("'>"))).getShort_url()));
                 templateService.templateSend("jfQJ8Oh_8KRs6t6KqFrOag5p89kgOUXKHo-Z6rmo3wM", dataList);
                 operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(), user.getId(), o.getId(), MessageConstant.YYXX_WECHAT, new Date()));
             }
@@ -211,7 +215,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             if ((o.getRate().equals("O") && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_MESSAGE, null, null)))
                     || ((o.getRate().equals("D")) && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_MESSAGE, DateUtils.getFirstHourOfDay(), DateUtils.getFirstHourOfLastDay())))) {
                 Map<String, String> maps = new HashMap<>();
-                maps.put("var", o.getContent());
+                maps.put("var", o.getContent()+(StringUtils.isEmpty(o.getUrl())?"":long2ShortService.long2short(o.getUrl().substring(o.getUrl().indexOf("href='") + 6, o.getUrl().lastIndexOf("'>"))).getShort_url()));
                 List<Map<String, String>> list = new ArrayList<>();
                 list.add(maps);
                 messageSendUtil.sendPhoneMessage(user.getPhone(), MessageConstant.MESSAGE_UPYUN_TEMPLATE_615,
