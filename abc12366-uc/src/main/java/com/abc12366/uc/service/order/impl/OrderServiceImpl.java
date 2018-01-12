@@ -1197,7 +1197,14 @@ public class OrderServiceImpl implements OrderService {
                                     }
 
                                     // 插入订单日志-已完成
-                                    insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1");
+                                    String remark;
+                                    if(vipLogBO.getSource() != null){
+                                        remark = "已完成退款。"+vipLogBO.getSource();
+                                    }else{
+                                        remark = "已完成退款。";
+                                    }
+                                    insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), remark, "0");
+
 
                                     //发送消息
                                     if (orderBO == null) {
@@ -1210,44 +1217,8 @@ public class OrderServiceImpl implements OrderService {
                                     BeanUtils.copyProperties(orderBO,order);
                                     orderMapper.update(order);
                                     User user = userMapper.selectOne(orderBO.getUserId());
+                                    updateVipInfo(vipLogBO, user);
 
-                                    //查询会员礼包业务
-                                    VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-                                    obj.setLevelId(user.getVipLevel().trim().toUpperCase());
-                                    obj.setPrivilegeId(MessageConstant.HYLB_CODE);
-
-                                    //礼包扣除金额
-                                    double usable = 0;
-                                    //查看会员礼包是否启用
-                                    VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-                                    if (findObj != null && findObj.getStatus()) {
-                                        UamountLog uamountLog = new UamountLog();
-                                        uamountLog.setId(Utils.uuid());
-                                        uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
-                                        uamountLog.setUserId(user.getId());
-                                        uamountLog.setCreateTime(new Date());
-                                        uamountLog.setRemark("会员退订，扣除礼包金额");
-                                        //赠送金额
-                                        double income = Double.parseDouble(findObj.getVal1());
-                                        double amount = 0;
-                                        if (user.getAmount() != null) {
-                                            amount = user.getAmount();
-                                        }
-                                        usable = amount - income;
-                                        uamountLog.setOutgo(income);
-                                        uamountLog.setUsable(usable);
-                                        //插入礼包金额记录
-                                        uamountLogMapper.insert(uamountLog);
-                                        user.setAmount(usable);
-                                    }
-                                    //更新会员日志
-                                    vipLogBO.setId(Utils.uuid());
-                                    vipLogBO.setCreateTime(new Date());
-                                    vipLogService.insert(vipLogBO);
-                                    //修改用户信息
-                                    user.setVipLevel(vipLogBO.getLevelId());
-                                    user.setVipExpireDate(vipLogBO.getVipExpireDate());
-                                    userMapper.update(user);
 
                                     sendReturnMessage(orderBO, httpServletRequest, refundRes, user);
                                 } else {
@@ -1269,13 +1240,23 @@ public class OrderServiceImpl implements OrderService {
         } else if("POINTS".equals(orderBO.getTradeMethod())){
 
             // 插入订单日志-已退款
-            insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), "已完成退款。退款金额为："+dealPrice, "1");
+            String remark;
+            if(vipLogBO.getSource() != null){
+                remark = "已完成退款。退款金额为："+dealPrice+","+vipLogBO.getSource();
+            }else{
+                remark = "已完成退款。退款金额为："+dealPrice;
+            }
+            insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), remark, "0");
 
             //将订单状态改成已结束
             orderBO.setOrderStatus("9");
             Order order = new Order();
             BeanUtils.copyProperties(orderBO,order);
             orderMapper.update(order);
+
+            //修改用户信息
+            User user = userMapper.selectOne(orderBO.getUserId());
+            updateVipInfo(vipLogBO, user);
 
             LOGGER.info("支付宝退款成功,插入退款流水记录");
             String tradeNo = DateUtils.getJYLSH();
@@ -1301,6 +1282,51 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw new ServiceException(4957);
         }
+    }
+
+    /**
+     * 设置会员礼包金额，修改用户信息
+     * @param vipLogBO
+     * @param user
+     */
+    public void updateVipInfo(VipLogBO vipLogBO, User user) {
+        //查询会员礼包业务
+        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+        obj.setLevelId(user.getVipLevel().trim().toUpperCase());
+        obj.setPrivilegeId(MessageConstant.HYLB_CODE);
+
+        //礼包扣除金额
+        double usable = 0;
+        //查看会员礼包是否启用
+        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
+        if (findObj != null && findObj.getStatus()) {
+            UamountLog uamountLog = new UamountLog();
+            uamountLog.setId(Utils.uuid());
+            uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
+            uamountLog.setUserId(user.getId());
+            uamountLog.setCreateTime(new Date());
+            uamountLog.setRemark("会员退订，扣除礼包金额");
+            //赠送金额
+            double income = Double.parseDouble(findObj.getVal1());
+            double amount = 0;
+            if (user.getAmount() != null) {
+                amount = user.getAmount();
+            }
+            usable = amount - income;
+            uamountLog.setOutgo(income);
+            uamountLog.setUsable(usable);
+            //插入礼包金额记录
+            uamountLogMapper.insert(uamountLog);
+            user.setAmount(usable);
+        }
+        //更新会员日志
+        vipLogBO.setId(Utils.uuid());
+        vipLogBO.setCreateTime(new Date());
+        vipLogService.insert(vipLogBO);
+        //修改用户信息
+        user.setVipLevel(vipLogBO.getLevelId());
+        user.setVipExpireDate(vipLogBO.getVipExpireDate());
+        userMapper.update(user);
     }
 
     public void sendReturnMessage(OrderBO orderBO, HttpServletRequest httpServletRequest, RefundRes refundRes, User user) {
