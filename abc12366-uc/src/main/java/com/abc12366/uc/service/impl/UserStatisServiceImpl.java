@@ -8,15 +8,13 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserStatisService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -151,59 +149,137 @@ public class UserStatisServiceImpl implements UserStatisService {
         return null;
     }
 
-    @Override
-    public Object bindCount(String type, String start, String end) {
-        if(StringUtils.isEmpty(type)){
-            return null;
-        }
-        Calendar c1 = Calendar.getInstance();
-        Calendar c3 = Calendar.getInstance();
-        if(!StringUtils.isEmpty(start)){
-            c1.setTime(DateUtils.strToDate(start, "yyyy-MM"));
-        }
-        if(!StringUtils.isEmpty(end)){
-            c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
-            c3.add(Calendar.MONTH, 1);
-        }
-        if(type.trim().equals("all")){
-            List<BindStatisAllBO> allBOList = new ArrayList<>();
-            allBOList.add(new BindStatisAllBO("dzsb",
-                    userStatisRoMapper.bindDzsb(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime()),
-                    DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
-            allBOList.add(new BindStatisAllBO("hngs",
-                    userStatisRoMapper.bindHngs(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime()),
-                    DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
-            allBOList.add(new BindStatisAllBO("hnds",
-                    userStatisRoMapper.bindHnds(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime()),
-                    DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
-            return allBOList;
-        } else if(type.trim().equals("dzsb")||type.trim().equals("hngs")||type.trim().equals("hnds")){
-            Calendar c2 = Calendar.getInstance();
-            c2.setTime(DateUtils.strToDate(start, "yyyy-MM"));
-            int minusYear = c3.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
-            int minus = c3.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYear;
-            c2.add(Calendar.MONTH, 1);
+//    @Override
+//    public Object bindCount(String type, String start, String end) {
+//        if(StringUtils.isEmpty(type)){
+//            return null;
+//        }
+//        Calendar c1 = Calendar.getInstance();
+//        Calendar c3 = Calendar.getInstance();
+//        if(!StringUtils.isEmpty(start)){
+//            c1.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
+//        }
+//        if(!StringUtils.isEmpty(end)){
+//            c3.setTime(DateUtils.strToDate(end, "yyyy-MM-dd"));
+//            c3.add(Calendar.DAY_OF_YEAR, 1);
+//        }
+//        if(type.trim().equals("all")){
+//            List<BindStatisAllBO> allBOList = new ArrayList<>();
+//            allBOList.add(new BindStatisAllBO("dzsb",
+//                    userStatisRoMapper.bindDzsb(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime()),
+//                    DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
+//            allBOList.add(new BindStatisAllBO("hngs",
+//                    userStatisRoMapper.bindHngs(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime()),
+//                    DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
+//            allBOList.add(new BindStatisAllBO("hnds",
+//                    userStatisRoMapper.bindHnds(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime()),
+//                    DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
+//            return allBOList;
+//        } else if(type.trim().equals("dzsb")||type.trim().equals("hngs")||type.trim().equals("hnds")){
+//            Calendar c2 = Calendar.getInstance();
+//            c2.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
+//            //int minusYear = c3.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+//            //int minus = c3.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYear;
+//            int minus = DateUtils.differentDaysByMillisecond(c1.getTime(), c3.getTime());
+//            c2.add(Calendar.DAY_OF_YEAR, 1);
+//            List<BindStatisSingleBO> bindStatisSingleBOList = new ArrayList<>();
+//            for (int i = 0; i < minus; i++) {
+//                BindStatisSingleBO bindStatisSingleBO = new BindStatisSingleBO();
+//                bindStatisSingleBO.setMonth(DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd"));
+//                bindStatisSingleBO.setTimeInterval(DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c2.getTime(), "yyyy-MM-dd HH:mm:ss"));
+//                bindStatisSingleBO.setType(type);
+//                if(type.trim().equals("dzsb")){
+//                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindDzsb(c1.getTime(), c2.getTime()));
+//                } else if(type.trim().equals("hngs")){
+//                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHngs(c1.getTime(), c2.getTime()));
+//                } else if(type.trim().equals("hnds")){
+//                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHnds(c1.getTime(), c2.getTime()));
+//                }
+//                bindStatisSingleBOList.add(bindStatisSingleBO);
+//                c1.add(Calendar.DAY_OF_YEAR, 1);
+//                c2.add(Calendar.DAY_OF_YEAR, 1);
+//            }
+//            return bindStatisSingleBOList;
+//        }
+//        return null;
+//    }
+@Override
+public Object bindCount(String type, String start, String end) {
+    if(StringUtils.isEmpty(type)){
+        return null;
+    }
+    Calendar c1 = Calendar.getInstance();
+    Calendar c3 = Calendar.getInstance();
+    if(!StringUtils.isEmpty(start)){
+        c1.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
+    }
+    if(!StringUtils.isEmpty(end)){
+        c3.setTime(DateUtils.strToDate(end, "yyyy-MM-dd"));
+        c3.add(Calendar.DAY_OF_YEAR, 1);
+    }
+    if(type.trim().equals("all")){
+        List<BindStatisAllBO> allBOList = new ArrayList<>();
+        allBOList.add(new BindStatisAllBO("dzsb",
+                userStatisRoMapper.bindDzsb(StringUtils.isEmpty(start)?null:c1.getTime(), StringUtils.isEmpty(end)?null:c3.getTime()),
+                DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
+        allBOList.add(new BindStatisAllBO("hngs",
+                userStatisRoMapper.bindHngs(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime()),
+                DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
+        allBOList.add(new BindStatisAllBO("hnds",
+                userStatisRoMapper.bindHnds(StringUtils.isEmpty(start) ? null : c1.getTime(), StringUtils.isEmpty(end) ? null : c3.getTime()),
+                DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c3.getTime(), "yyyy-MM-dd HH:mm:ss")));
+        return allBOList;
+    } else if(type.trim().equals("dzsb")||type.trim().equals("hngs")||type.trim().equals("hnds")){
+        int minus = DateUtils.differentDaysByMillisecond(c1.getTime(), c3.getTime());
+        if(minus>31){
+            int minusYearTmp = c3.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+            int minusTmp = c3.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYearTmp;
             List<BindStatisSingleBO> bindStatisSingleBOList = new ArrayList<>();
-            for (int i = 0; i < minus; i++) {
+            Date a = c1.getTime();
+            Date b = DateUtils.getNextMonthFirstByCertianDate(a);
+            for(int j=0;j<=minusTmp;j++){
                 BindStatisSingleBO bindStatisSingleBO = new BindStatisSingleBO();
-                bindStatisSingleBO.setMonth(DateUtils.dateToString(c1.getTime(), "yyyy-MM"));
-                bindStatisSingleBO.setTimeInterval(DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c2.getTime(), "yyyy-MM-dd HH:mm:ss"));
+                bindStatisSingleBO.setMonth(DateUtils.dateToString(a, "yyyy-MM"));
+                bindStatisSingleBO.setTimeInterval(DateUtils.dateToString(a, "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(b, "yyyy-MM-dd HH:mm:ss"));
                 bindStatisSingleBO.setType(type);
                 if(type.trim().equals("dzsb")){
-                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindDzsb(c1.getTime(), c2.getTime()));
+                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindDzsb(a, b));
                 } else if(type.trim().equals("hngs")){
-                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHngs(c1.getTime(), c2.getTime()));
+                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHngs(a, b));
                 } else if(type.trim().equals("hnds")){
-                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHnds(c1.getTime(), c2.getTime()));
+                    bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHnds(a, b));
                 }
                 bindStatisSingleBOList.add(bindStatisSingleBO);
-                c1.add(Calendar.MONTH, 1);
-                c2.add(Calendar.MONTH, 1);
+                a = b;
+                b = (j==(minusTmp-1))?c3.getTime():DateUtils.getNextMonthFirstByCertianDate(a);
             }
             return bindStatisSingleBOList;
         }
-        return null;
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
+        c2.add(Calendar.DAY_OF_YEAR, 1);
+        List<BindStatisSingleBO> bindStatisSingleBOList = new ArrayList<>();
+        for (int i = 0; i < minus; i++) {
+            BindStatisSingleBO bindStatisSingleBO = new BindStatisSingleBO();
+            bindStatisSingleBO.setMonth(DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd"));
+            bindStatisSingleBO.setTimeInterval(DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c2.getTime(), "yyyy-MM-dd HH:mm:ss"));
+            bindStatisSingleBO.setType(type);
+            if(type.trim().equals("dzsb")){
+                bindStatisSingleBO.setBindCount(userStatisRoMapper.bindDzsb(c1.getTime(), c2.getTime()));
+            } else if(type.trim().equals("hngs")){
+                bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHngs(c1.getTime(), c2.getTime()));
+            } else if(type.trim().equals("hnds")){
+                bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHnds(c1.getTime(), c2.getTime()));
+            }
+            bindStatisSingleBOList.add(bindStatisSingleBO);
+            c1.add(Calendar.DAY_OF_YEAR, 1);
+            c2.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        return bindStatisSingleBOList;
     }
+    return null;
+}
 
     @Override
     public List<BindCountInfo> bindCountInfo(String type, String timeInterval, int page, int size) {
@@ -246,11 +322,11 @@ public class UserStatisServiceImpl implements UserStatisService {
         Calendar c1 = Calendar.getInstance();
         Calendar c3 = Calendar.getInstance();
         if(!StringUtils.isEmpty(start)){
-            c1.setTime(DateUtils.strToDate(start, "yyyy-MM"));
+            c1.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
         }
         if(!StringUtils.isEmpty(end)){
-            c3.setTime(DateUtils.strToDate(end, "yyyy-MM"));
-            c3.add(Calendar.MONTH, 1);
+            c3.setTime(DateUtils.strToDate(end, "yyyy-MM-dd"));
+            c3.add(Calendar.DAY_OF_YEAR, 1);
         }
         if(type.trim().equals("all")){
             List<BindStatisAllBO> allBOList = new ArrayList<>();
@@ -266,14 +342,38 @@ public class UserStatisServiceImpl implements UserStatisService {
             return allBOList;
         } else if(type.trim().equals("dzsb")||type.trim().equals("hngs")||type.trim().equals("hnds")){
             Calendar c2 = Calendar.getInstance();
-            c2.setTime(DateUtils.strToDate(start, "yyyy-MM"));
-            int minusYear = c3.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
-            int minus = c3.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYear;
-            c2.add(Calendar.MONTH, 1);
+            c2.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
+            int minus = DateUtils.differentDaysByMillisecond(c1.getTime(),c3.getTime());
+            if(minus>31){
+                int minusYearTmp = c3.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+                int minusTmp = c3.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYearTmp;
+                List<BindStatisSingleBO> bindStatisSingleBOList = new ArrayList<>();
+                Date a = c1.getTime();
+                Date b = DateUtils.getNextMonthFirstByCertianDate(a);
+                for(int j=0;j<=minusTmp;j++){
+                    BindStatisSingleBO bindStatisSingleBO = new BindStatisSingleBO();
+                    bindStatisSingleBO.setMonth(DateUtils.dateToString(a, "yyyy-MM"));
+                    bindStatisSingleBO.setTimeInterval(DateUtils.dateToString(a, "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(b, "yyyy-MM-dd HH:mm:ss"));
+                    bindStatisSingleBO.setType(type);
+                    if(type.trim().equals("dzsb")){
+                        bindStatisSingleBO.setBindCount(userStatisRoMapper.bindDzsbLogin(a, b));
+                    } else if(type.trim().equals("hngs")){
+                        bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHngsLogin(a, b));
+                    } else if(type.trim().equals("hnds")){
+                        bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHndsLogin(a, b));
+                    }
+                    bindStatisSingleBOList.add(bindStatisSingleBO);
+                    a = b;
+                    b = (j==(minusTmp-1))?c3.getTime():DateUtils.getNextMonthFirstByCertianDate(a);
+                }
+                return bindStatisSingleBOList;
+            }
+
+            c2.add(Calendar.DAY_OF_YEAR, 1);
             List<BindStatisSingleBO> bindStatisSingleBOList = new ArrayList<>();
             for (int i = 0; i < minus; i++) {
                 BindStatisSingleBO bindStatisSingleBO = new BindStatisSingleBO();
-                bindStatisSingleBO.setMonth(DateUtils.dateToString(c1.getTime(), "yyyy-MM"));
+                bindStatisSingleBO.setMonth(DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd"));
                 bindStatisSingleBO.setTimeInterval(DateUtils.dateToString(c1.getTime(), "yyyy-MM-dd HH:mm:ss")+"～"+DateUtils.dateToString(c2.getTime(), "yyyy-MM-dd HH:mm:ss"));
                 bindStatisSingleBO.setType(type);
                 if(type.trim().equals("dzsb")){
@@ -284,8 +384,8 @@ public class UserStatisServiceImpl implements UserStatisService {
                     bindStatisSingleBO.setBindCount(userStatisRoMapper.bindHndsLogin(c1.getTime(), c2.getTime()));
                 }
                 bindStatisSingleBOList.add(bindStatisSingleBO);
-                c1.add(Calendar.MONTH, 1);
-                c2.add(Calendar.MONTH, 1);
+                c1.add(Calendar.DAY_OF_YEAR, 1);
+                c2.add(Calendar.DAY_OF_YEAR, 1);
             }
             return bindStatisSingleBOList;
         }
