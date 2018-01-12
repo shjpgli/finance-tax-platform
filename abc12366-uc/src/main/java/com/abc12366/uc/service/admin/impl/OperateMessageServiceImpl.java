@@ -206,7 +206,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
                 dataList.put("remark", RemindConstant.YYXX_WX_REMARK);
                 dataList.put("userId", user.getId());
                 dataList.put("openId", user.getWxopenid());
-                dataList.put("url", (StringUtils.isEmpty(o.getUrl())?"":long2ShortService.long2short(o.getUrl().substring(o.getUrl().indexOf("href='") + 6, o.getUrl().lastIndexOf("'>"))).getShort_url()));
+                //dataList.put("url", (StringUtils.isEmpty(o.getUrl())?"":long2ShortService.tinyUrl(o.getUrl().substring(o.getUrl().indexOf("href='") + 6, o.getUrl().lastIndexOf("'>")))));
                 templateService.templateSend("jfQJ8Oh_8KRs6t6KqFrOag5p89kgOUXKHo-Z6rmo3wM", dataList);
                 operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(), user.getId(), o.getId(), MessageConstant.YYXX_WECHAT, new Date()));
             }
@@ -215,7 +215,7 @@ public class OperateMessageServiceImpl implements OperateMessageService {
             if ((o.getRate().equals("O") && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_MESSAGE, null, null)))
                     || ((o.getRate().equals("D")) && (!sendAready(user.getId(), o.getId(), MessageConstant.YYXX_MESSAGE, DateUtils.getFirstHourOfDay(), DateUtils.getFirstHourOfLastDay())))) {
                 Map<String, String> maps = new HashMap<>();
-                maps.put("var", o.getContent()+(StringUtils.isEmpty(o.getUrl())?"":long2ShortService.long2short(o.getUrl().substring(o.getUrl().indexOf("href='") + 6, o.getUrl().lastIndexOf("'>"))).getShort_url()));
+                maps.put("var", o.getContent());//+(StringUtils.isEmpty(o.getUrl())?"":long2ShortService.tinyUrl(o.getUrl().substring(o.getUrl().indexOf("href='") + 6, o.getUrl().lastIndexOf("'>")))));
                 List<Map<String, String>> list = new ArrayList<>();
                 list.add(maps);
                 messageSendUtil.sendPhoneMessage(user.getPhone(), MessageConstant.MESSAGE_UPYUN_TEMPLATE_615,
