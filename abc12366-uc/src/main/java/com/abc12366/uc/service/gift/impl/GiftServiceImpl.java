@@ -215,7 +215,7 @@ public class GiftServiceImpl implements GiftService {
             }
             UCUserBO ucUserBO = Utils.getUserInfo();
             //加入礼包申请日志
-            insertUgiftLog(applyId,ucUserBO.getId(),ucUserBO.getNickname(),"礼物申请新增","1");
+            insertUgiftLog(applyId,ucUserBO.getId(),ucUserBO.getNickname(),ugiftApply.getRemark(),"1");
         }
     }
 
