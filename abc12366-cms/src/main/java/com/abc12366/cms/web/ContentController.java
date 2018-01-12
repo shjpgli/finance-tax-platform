@@ -95,25 +95,13 @@ public class ContentController {
     @GetMapping(path = "/selectListSearch")
     public ResponseEntity selectListSearch(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     @RequestParam(value = "title", required = false) String title,
                                      @RequestParam(value = "siteId", required = false) String siteId,
-                                     @RequestParam(value = "topLevel", required = false) String topLevel,
-                                     @RequestParam(value = "typeId", required = false) String typeId,
-                                     @RequestParam(value = "username", required = false) String username,
-                                     @RequestParam(value = "status", required = false) String status,
                                      @RequestParam(value = "channelId", required = false) String channelId,
-                                     @RequestParam(value = "text", required = false) String text,
-                                     @RequestParam(value = "recommendLevel", required = false) String recommendLevel) {
+                                     @RequestParam(value = "text", required = false) String text) {
         Map<String, Object> dataMap = new HashMap<>();
 
         dataMap.put("siteId", siteId);//站点ID
-        dataMap.put("title", title);//标题
-        dataMap.put("topLevel", topLevel);//置顶级别
-        dataMap.put("typeId", typeId);//内容类型
-        dataMap.put("username", username);//作者
-        dataMap.put("status", status);//状态
         dataMap.put("channelId", channelId);//栏目ID
-        dataMap.put("recommendLevel", recommendLevel);//推荐级别
         dataMap.put("text", text+"*");//搜索内容
 
         // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.

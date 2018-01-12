@@ -518,31 +518,13 @@
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
 		LEFT JOIN cms_site s ON a.siteId = s.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
-		WHERE 1=1
+		WHERE a.status = 2
 		<if test="text != null and text != ''">
 			AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text} IN BOOLEAN MODE)
 			OR MATCH(txt) AGAINST(#{text} IN BOOLEAN MODE))
 		</if>
-		<if test="title != null and title != ''">
-			AND b.title like CONCAT('%',#{title},'%')
-		</if>
-		<if test="username != null and username != ''">
-			AND a.username like CONCAT('%',#{username},'%')
-		</if>
-		<if test="typeId != null and typeId != ''">
-			AND a.typeId = #{typeId}
-		</if>
-		<if test="topLevel != null and topLevel != ''">
-			AND a.topLevel = #{topLevel}
-		</if>
 		<if test="siteId != null and siteId != ''">
 			AND a.siteId = #{siteId}
-		</if>
-		<if test="status != null and status != ''">
-			AND a.status = #{status}
-		</if>
-		<if test="recommendLevel != null and recommendLevel != ''">
-			AND a.recommendLevel = #{recommendLevel}
 		</if>
 		<if test="channelId != null and channelId != ''">
 			AND a.channelId like CONCAT(#{channelId},'%')
