@@ -1,6 +1,7 @@
 package com.abc12366.uc.web;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.LoginBO;
@@ -73,10 +75,16 @@ public class AuthControllerNew {
      */
     @SuppressWarnings("rawtypes")
 	@PostMapping(path = "/login")
-    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO){
+    public ResponseEntity login(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request){
         LOGGER.info("{}", loginBO);
         Map token = authServiceNew.login(loginBO, "1");
         LOGGER.info("{}", token);
+        
+        token.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+        LOGGER.info("登陆成功之后需要处理的业务:{}", token.get(Constant.USER_ID));
+        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(token);
+        CompletableFuture.allOf(cf);
+        
         return ResponseEntity.ok(Utils.kv("data", token));
     }
     
@@ -88,10 +96,16 @@ public class AuthControllerNew {
      */
     @SuppressWarnings("rawtypes")
 	@PostMapping(path = "/login/js")
-    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO) {
+    public ResponseEntity loginJs(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request) {
         LOGGER.info("{}", loginBO);
         Map token = authServiceNew.login(loginBO, "2");
         LOGGER.info("{}", token);
+        
+        token.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+        LOGGER.info("登陆成功之后需要处理的业务:{}", token.get(Constant.USER_ID));
+        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(token);
+        CompletableFuture.allOf(cf);
+        
         return ResponseEntity.ok(Utils.kv("data", token));
     }
 
@@ -114,6 +128,12 @@ public class AuthControllerNew {
             login.setUsernameOrPhone(loginBO.getPhone());
             Map token = authServiceNew.login(login, "3");
             LOGGER.info("{}", token);
+            
+            token.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+            LOGGER.info("登陆成功之后需要处理的业务:{}", token.get(Constant.USER_ID));
+            CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(token);
+            CompletableFuture.allOf(cf);
+            
             return ResponseEntity.ok(Utils.kv("data", token));
         } else {
             authService.loginByVerifyFail(loginBO);
