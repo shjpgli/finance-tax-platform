@@ -1197,7 +1197,14 @@ public class OrderServiceImpl implements OrderService {
                                     }
 
                                     // 插入订单日志-已完成
-                                    insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "0");
+                                    String remark;
+                                    if(vipLogBO.getSource() != null){
+                                        remark = "已完成退款。"+vipLogBO.getSource();
+                                    }else{
+                                        remark = "已完成退款。";
+                                    }
+                                    insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), remark, "0");
+
 
                                     //发送消息
                                     if (orderBO == null) {
@@ -1233,7 +1240,13 @@ public class OrderServiceImpl implements OrderService {
         } else if("POINTS".equals(orderBO.getTradeMethod())){
 
             // 插入订单日志-已退款
-            insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), "已完成退款。退款金额为："+dealPrice, "0");
+            String remark;
+            if(vipLogBO.getSource() != null){
+                remark = "已完成退款。退款金额为："+dealPrice+","+vipLogBO.getSource();
+            }else{
+                remark = "已完成退款。退款金额为："+dealPrice;
+            }
+            insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), remark, "0");
 
             //将订单状态改成已结束
             orderBO.setOrderStatus("9");
