@@ -1272,7 +1272,7 @@ public class OrderServiceImpl implements OrderService {
             insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), "已完成退款。退款金额为："+dealPrice, "1");
 
             //将订单状态改成已结束
-            orderBO.setOrderStatus("7");
+            orderBO.setOrderStatus("9");
             Order order = new Order();
             BeanUtils.copyProperties(orderBO,order);
             orderMapper.update(order);
