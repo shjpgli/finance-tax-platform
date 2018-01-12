@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.model.bo.VipLogOrderBO;
 import com.abc12366.uc.service.VipLogService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Admin: liuguiyao<435720953@qq.com.com>
@@ -45,6 +48,26 @@ public class VipLogController {
         LOGGER.info("{}:{}", page, size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<VipLogBO> logList = vipLogService.selectList(userId);
+        LOGGER.info("{}", logList);
+        return (logList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", (Page) logList, "total", ((Page) logList).getTotal()));
+    }
+
+    /**
+     * 会员日志列表
+     * @param userId 用户ID
+     * @param page 页数
+     * @param size 大小
+     * @return
+     */
+    @GetMapping(path = "/order")
+    public ResponseEntity selectListByOrder(@RequestParam String userId,
+                                     @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
+                                     @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}", page, size);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<VipLogOrderBO> logList = vipLogService.selectListByOrder(userId);
         LOGGER.info("{}", logList);
         return (logList == null) ?
                 ResponseEntity.ok(Utils.kv()) :

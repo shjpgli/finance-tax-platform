@@ -12,6 +12,19 @@
         ORDER BY createTime DESC
     </select>
 
+    <select id="selectListByOrder" resultType="com.abc12366.uc.model.bo.VipLogOrderBO" parameterType="java.lang.String">
+        SELECT uulo.id, uulo.userId, uulo.source, uulo.levelId,uule.level,uulo.createTime,
+         uulo.vipExpireDate,o.orderStatus
+        from uc_uvip_log uulo left join uc_uvip_level uule ON uulo.levelId = uule.levelCode
+        LEFT JOIN uc_order o ON o.orderNo = uulo.source
+        where
+          <![CDATA[
+            uulo.vipExpireDate >= now()
+          ]]>
+          and uulo.userId = #{userId}
+        ORDER BY createTime DESC
+    </select>
+
     <select id="selectCountByCode" resultType="com.abc12366.uc.model.bo.VipLevelStatisticTemp" parameterType="java.util.Map">
         SELECT
         (SELECT COUNT(1) allCount FROM uc_user WHERE vipLevel=#{levelCode}

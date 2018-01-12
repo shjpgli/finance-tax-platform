@@ -11,6 +11,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.VipLog;
 import com.abc12366.uc.model.bo.VipLevelStatisticTemp;
 import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.model.bo.VipLogOrderBO;
 import com.abc12366.uc.service.VipLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,5 +96,10 @@ public class VipLogServiceImpl implements VipLogService {
     @Override
     public int selectCountAll(String levelCode) {
         return vipLogRoMapper.selectCountAll(levelCode);
+    }
+
+    @Override
+    public List<VipLogOrderBO> selectListByOrder(String userId) {
+        return vipLogRoMapper.selectListByOrder(userId);
     }
 }

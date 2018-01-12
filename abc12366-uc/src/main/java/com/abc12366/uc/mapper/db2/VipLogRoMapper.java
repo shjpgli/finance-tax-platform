@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.bo.VipLevelStatisticTemp;
 import com.abc12366.uc.model.bo.VipLogBO;
+import com.abc12366.uc.model.bo.VipLogOrderBO;
 
 import java.util.List;
 import java.util.Map;
@@ -17,4 +18,11 @@ public interface VipLogRoMapper {
     VipLevelStatisticTemp selectCountByCode(Map map);
 
     int selectCountAll(String levelCode);
+
+    /**
+     * 会员日志列表
+     * @param userId
+     * @return
+     */
+    List<VipLogOrderBO> selectListByOrder(String userId);
 }
