@@ -1092,6 +1092,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.statisOrderByMonth(map);
     }
 
+    @Transactional("db1TxManager")
     @Override
     public void updateOrderReturn(Map<String, Object> map,HttpServletRequest httpServletRequest) {
         //OrderProduct orderProduct = orderProductRoMapper.selectByOrderNoAndGoodsId(map);
@@ -1125,7 +1126,7 @@ public class OrderServiceImpl implements OrderService {
      * @param orderProductBO
      * @param httpServletRequest
      */
-    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
+    @Transactional("db1TxManager")
     public void refund(OrderBO orderBO,OrderProductBO orderProductBO,VipLogBO vipLogBO, HttpServletRequest httpServletRequest) {
         //成交价格
         double dealPrice = orderProductBO.getDealPrice();
@@ -1133,13 +1134,17 @@ public class OrderServiceImpl implements OrderService {
         if ("RMB".equals(orderBO.getTradeMethod())) {
             if ("ALIPAY".equals(orderBO.getPayMethod())) {
                 // 查询交易日志中支付成功的订单
-                Trade tr = tradeRoMapper.selectOrderNo(orderBO.getOrderNo());
-                if(tr == null){
-                    LOGGER.info("交易记录无法找到：{}", tr);
+                List<Trade> tradeList = tradeRoMapper.selectList(orderBO.getOrderNo());
+                if(tradeList == null && tradeList.size() == 0){
+                    LOGGER.info("交易记录无法找到：{}", tradeList);
                     throw new ServiceException(4102,"交易记录无法找到");
                 }
+                if(tradeList.size() > 1){
+                    LOGGER.info("无法重复提交退单：{}", tradeList);
+                    throw new ServiceException(4102,"无法重复提交退单");
+                }
                 TradeLog log = new TradeLog();
-                log.setTradeNo(tr.getTradeNo());
+                log.setTradeNo(tradeList.get(0).getTradeNo());
                 log.setTradeStatus("1");
                 log.setPayMethod("ALIPAY");
 
@@ -1199,11 +1204,11 @@ public class OrderServiceImpl implements OrderService {
                                     // 插入订单日志-已完成
                                     String remark;
                                     if(vipLogBO.getSource() != null){
-                                        remark = "已完成退款。"+vipLogBO.getSource();
+                                        remark = "已完成退款。订单号："+vipLogBO.getSource();
                                     }else{
                                         remark = "已完成退款。";
                                     }
-                                    insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), remark, "0");
+                                    insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
 
 
                                     //发送消息
@@ -1226,6 +1231,9 @@ public class OrderServiceImpl implements OrderService {
                                     throw new ServiceException(9999,response.getSubMsg());
 
                                 }
+                            } catch (ServiceException e) {
+                                LOGGER.error("支付宝退款失败：", e);
+                                throw new ServiceException(9999,e.getBodyStatus().getMessage());
                             } catch (Exception e) {
                                 LOGGER.error("支付宝退款失败：", e);
                                 throw new ServiceException(9999,e.getMessage());
@@ -1242,11 +1250,11 @@ public class OrderServiceImpl implements OrderService {
             // 插入订单日志-已退款
             String remark;
             if(vipLogBO.getSource() != null){
-                remark = "已完成退款。退款金额为："+dealPrice+","+vipLogBO.getSource();
+                remark = "已完成退款。退款积分为："+dealPrice+"；订单号："+vipLogBO.getSource();
             }else{
-                remark = "已完成退款。退款金额为："+dealPrice;
+                remark = "已完成退款。退款积分为："+dealPrice;
             }
-            insertLog(orderBO.getOrderNo(), "8", Utils.getAdminId(), remark, "0");
+            insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
 
             //将订单状态改成已结束
             orderBO.setOrderStatus("9");
@@ -1313,6 +1321,9 @@ public class OrderServiceImpl implements OrderService {
                 amount = user.getAmount();
             }
             usable = amount - income;
+            if(usable < 0){
+                throw new ServiceException(4635,"该用户礼包金额不足，不能退单");
+            }
             uamountLog.setOutgo(income);
             uamountLog.setUsable(usable);
             //插入礼包金额记录
@@ -1357,7 +1368,7 @@ public class OrderServiceImpl implements OrderService {
         OrderLog ol = new OrderLog.Builder()
                 .id(Utils.uuid())
                 .orderNo(orderNo)
-                .action(selectFieldValue("exchange_status", status))
+                .action(selectFieldValue("orderStatus", status))
                 .createTime(new Timestamp(System.currentTimeMillis()))
                 .createUser(userId)
                 .remark(remark)
