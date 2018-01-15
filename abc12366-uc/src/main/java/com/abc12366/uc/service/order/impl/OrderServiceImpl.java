@@ -1165,7 +1165,7 @@ public class OrderServiceImpl implements OrderService {
             ein.setFP_DM(invoiceBO.getInvoiceCode());
             ein.setFP_HM(invoiceBO.getInvoiceNo());
             Einvocie invo = dzfpRoMapper.selectEinvoice(ein);
-            if(invo != null){
+            if(invo == null){
                 LOGGER.info("电子发票开票信息未找到或未同步：{}");
                 throw new ServiceException(4102,"电子发票开票信息未找到或未同步");
             }
