@@ -56,7 +56,7 @@ public class PointsLogServiceImpl implements PointsLogService {
 
     @Transactional("db1TxManager")
     @Override
-    public PointsLogBO insert(PointsLogBO pointsLogBO) {
+    public synchronized PointsLogBO insert(PointsLogBO pointsLogBO) {
         if (pointsLogBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
