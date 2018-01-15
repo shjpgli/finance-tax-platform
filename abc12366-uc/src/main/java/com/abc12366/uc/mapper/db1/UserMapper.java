@@ -4,6 +4,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.LoginBO;
 import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserJyxx;
 import com.abc12366.uc.model.bo.UserListBO;
 import com.abc12366.uc.model.bo.UserRetainedRateBO;
 import com.abc12366.uc.model.bo.UserSimpleInfoBO;
@@ -106,4 +107,6 @@ public interface UserMapper {
     int updateExp(User user);
 
     int updatePoints(User user);
+
+	UserJyxx selectByUnameOrPhone(String usernameOrPhone);
 }
