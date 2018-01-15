@@ -107,13 +107,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     private TradeMapper tradeMapper;
 
     @Autowired
-    private IWxTemplateService templateService;
-
-    @Autowired
-    private VipPrivilegeLevelRoMapper vipPrivilegeLevelRoMapper;
-
-    @Autowired
     private TradeRoMapper tradeRoMapper;
+
+    @Autowired
+    private DzfpRoMapper dzfpRoMapper;
 
     @Transactional("db1TxManager")
     @Override
@@ -307,9 +304,20 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             List<ExchangeOrderInvoiceBO> orderInvoiceBOList = orderExchangeRoMapper.selectInvoice(oe.getOrderNo());
 
             if (orderInvoiceBOList.size() > 0) {
+
                 DzfpGetReq req = new DzfpGetReq();
                 List<InvoiceXm> dataList = new ArrayList<>();
                 for (ExchangeOrderInvoiceBO eoi : orderInvoiceBOList) {
+                    Einvocie ein = new Einvocie();
+                    ein.setTBSTATUS("1");
+                    ein.setFP_DM(eoi.getInvoiceCode());
+                    ein.setFP_HM(eoi.getInvoiceNo());
+                    Einvocie invo = dzfpRoMapper.selectEinvoice(ein);
+                    if(invo != null){
+                        LOGGER.info("电子发票开票信息未找到或未同步：{}");
+                        throw new ServiceException(4102,"电子发票开票信息未找到或未同步");
+                    }
+
                     if ("1".equals(eoi.getProperty())) { // 纸质发票
                         InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNo(eoi.getInvoiceNo());
                         if (invoiceDetail != null) {

@@ -1161,7 +1161,7 @@ public class OrderServiceImpl implements OrderService {
         if(invoiceBO != null){
 
             Einvocie ein = new Einvocie();
-            ein.setTBSTATUS("0");
+            ein.setTBSTATUS("1");
             ein.setFP_DM(invoiceBO.getInvoiceCode());
             ein.setFP_HM(invoiceBO.getInvoiceNo());
             Einvocie invo = dzfpRoMapper.selectEinvoice(ein);
