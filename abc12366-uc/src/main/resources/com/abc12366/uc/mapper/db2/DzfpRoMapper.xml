@@ -24,7 +24,13 @@
     <select id="selectEinvoice" resultType="com.abc12366.uc.model.dzfp.Einvocie" parameterType="com.abc12366.uc.model.dzfp.Einvocie">
         select FPQQLSH,FP_DM,FP_HM,JYM,KPRQ,PDF_URL,SP_URL,TBSTATUS,sendStr,returnCode,returnMessage,KPLX
         from uc_einvocie
-        where FP_DM=#{FP_DM} and FP_HM=#{FP_HM}
+        <where>
+            1=1
+            <if test="FP_DM != null and FP_DM!=''"> and FP_DM = #{FP_DM} </if>
+            <if test="FP_HM != null and FP_HM!=''"> and FP_HM = #{FP_HM} </if>
+            <if test="TBSTATUS != null and TBSTATUS!=''"> and TBSTATUS = #{TBSTATUS} </if>
+        </where>
+
     </select>
 
 </mapper>
