@@ -1335,7 +1335,7 @@ public class OrderServiceImpl implements OrderService {
             LOGGER.info("积分退款成功,插入退款流水记录");
             insertTrade(orderBO, dealPrice);
             //退积分
-            insertReturnPoints(order, dealPrice,0);
+            insertReturnPointsLog(order, dealPrice,0);
         } else {
             throw new ServiceException(4957);
         }
@@ -1493,7 +1493,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 插入积分日志
+     * 插入积分日志-用户积分购买
+     *
+     * @param orderBO
+     */
+    private void insertReturnPointsLog(Order orderBO,Double amount,int outgo) {
+        //如果积分规则为空则返回
+        PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_ORDER_RETURN_CODE);
+        if (pointsRuleBO == null) {
+            return;
+        }
+        PointsLogBO pointsLog = new PointsLogBO();
+        pointsLog.setUserId(orderBO.getUserId());
+        pointsLog.setRuleId(pointsRuleBO.getId());
+        pointsLog.setId(Utils.uuid());
+        //成交总积分 - 赠送积分
+        pointsLog.setIncome(amount.intValue());
+        pointsLog.setOutgo(outgo);
+        pointsLog.setRemark("用户退单- 订单号：" + orderBO.getOrderNo());
+        pointsLog.setLogType("ORDER_EXCHANGE");
+        pointsLogService.insert(pointsLog);
+    }
+
+    /**
+     * 插入积分日志-用金钱购买
      *
      * @param orderBO
      */
