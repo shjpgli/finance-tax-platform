@@ -460,4 +460,17 @@ public Object bindCount(String type, String start, String end) {
         }
         return userStatisRoMapper.pointAnalysisRuleinfo(ruleId,StringUtils.isEmpty(timeInterval)?null:c1.getTime(), StringUtils.isEmpty(timeInterval) ? null:c3.getTime());
     }
+
+    @Override
+    public List<User> userVipAllInfo(String vipCode) {
+        return userStatisRoMapper.userVipAllInfo(vipCode);
+    }
+
+    @Override
+    public List<User> userVipIncreaseInfo(String year, String vipCode) {
+        Date start = DateUtils.strToDate(year, "yyyy");
+        Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
+        return userStatisRoMapper.userVipIncreaseInfo(vipCode, start, end);
+
+    }
 }

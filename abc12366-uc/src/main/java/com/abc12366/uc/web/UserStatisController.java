@@ -152,6 +152,42 @@ public class UserStatisController {
     }
 
     /**
+     * 查询用户会员统计新增会员的用户详情
+     * @param year 年份
+     * @param vipCode 会员编码
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/viplevel/increase/uinfo")
+    public ResponseEntity userVipIncreaseInfo(@RequestParam String year,
+                                         @RequestParam String vipCode,
+                                         @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                        @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("查询会员等级统计新增用户详情：{}：{}", year,vipCode);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<User> userList = userStatisService.userVipIncreaseInfo(year, vipCode);
+        LOGGER.info("查询会员等级统计新增用户详情：{}", userList);
+        PageInfo<User> pageInfo = new PageInfo<>(userList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 查询会员等级统计该等级全部用户详情
+     * @param vipCode 会员编码
+     * @return ResponseEntity
+     */
+    @GetMapping(path = "/viplevel/all/uinfo")
+    public ResponseEntity userVipAllInfo(@RequestParam String vipCode,
+                                         @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+                                         @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+        LOGGER.info("查询会员等级统计该等级全部用户详情：{}", vipCode);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<User> userList = userStatisService.userVipAllInfo(vipCode);
+        LOGGER.info("查询会员等级统计该等级全部用户详情：{}", userList);
+        PageInfo<User> pageInfo = new PageInfo<>(userList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
      * 用户流失率统计
      * @param yearTime 时间（年度）
      * @param months 流失间隔周期（1个月、2个月、3个月…12个月）
