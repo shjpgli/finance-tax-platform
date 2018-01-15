@@ -267,6 +267,12 @@ public class AuthServiceNewImpl implements AuthServiceNew {
         map.put("token", userToken);
         map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
         map.put("user", userBO);
+        
+        
+        // 登录之后的任务需要
+        map.put(Constant.USER_ID, userBO.getId());
+        map.put("user_phone", userBO.getPhone());
+        
         // 在request中设置userId，记录日志使用
         Utils.setUserId(userBO.getId());
 
