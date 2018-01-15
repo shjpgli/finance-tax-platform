@@ -139,6 +139,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private InvoiceDetailMapper invoiceDetailMapper;
 
+    @Autowired
+    private DzfpRoMapper dzfpRoMapper;
+
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -1157,6 +1160,15 @@ public class OrderServiceImpl implements OrderService {
         InvoiceBO invoiceBO = orderBO.getInvoiceBO();
         if(invoiceBO != null){
 
+            Einvocie ein = new Einvocie();
+            ein.setTBSTATUS("0");
+            ein.setFP_DM(invoiceBO.getInvoiceCode());
+            ein.setFP_HM(invoiceBO.getInvoiceNo());
+            Einvocie invo = dzfpRoMapper.selectEinvoice(ein);
+            if(invo != null){
+                LOGGER.info("电子发票开票信息未找到或未同步：{}");
+                throw new ServiceException(4102,"电子发票开票信息未找到或未同步");
+            }
             DzfpGetReq req = new DzfpGetReq();
             List<InvoiceXm> dataList = new ArrayList<>();
             if ("1".equals(invoiceBO.getProperty())) { // 纸质发票
@@ -1172,6 +1184,7 @@ public class OrderServiceImpl implements OrderService {
                     req.setGmf_yhzh(invoiceBO.getBank());
                     req.setGmf_sjh(invoiceBO.getPhone());
                 }
+                req.setFpqqlsh(invo.getFPQQLSH());
                 req.setKplx("1");
                 req.setZsfs("0");
                 req.setKpr(Utils.getAdminInfo().getNickname());
@@ -1467,7 +1480,7 @@ public class OrderServiceImpl implements OrderService {
         map.put("keyword3", DateUtils.dateToStr(new Date()));
         String templateId = "NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM";
 
-        messageSendUtil.sendMsg(httpServletRequest, user, message,map,templateId);
+        messageSendUtil.sendMsg(httpServletRequest, user, message, map, templateId);
     }
 
     private void insertLog(String orderNo, String status, String userId, String remark, String logType) {
