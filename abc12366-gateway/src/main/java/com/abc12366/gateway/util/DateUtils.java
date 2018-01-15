@@ -314,6 +314,18 @@ public class DateUtils {
      *
      * @return
      */
+    public static String getFPQQLSH() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(df.format(new Date()));
+        buffer.append(getRandom());
+        return buffer.toString();
+    }
+    /**
+     * yyyyMMddHHmmssSSS+三位随机数
+     *
+     * @return
+     */
     public static String getJYLSH() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         StringBuffer buffer = new StringBuffer();

@@ -1160,7 +1160,7 @@ public class OrderServiceImpl implements OrderService {
         InvoiceBO invoiceBO = orderBO.getInvoiceBO();
         if(invoiceBO != null){
 
-            Einvocie ein = new Einvocie();
+            /*Einvocie ein = new Einvocie();
             ein.setTBSTATUS("1");
             ein.setFP_DM(invoiceBO.getInvoiceCode());
             ein.setFP_HM(invoiceBO.getInvoiceNo());
@@ -1168,7 +1168,7 @@ public class OrderServiceImpl implements OrderService {
             if(invo == null){
                 LOGGER.info("电子发票开票信息未找到或未同步：{}");
                 throw new ServiceException(4102,"电子发票开票信息未找到或未同步");
-            }
+            }*/
             DzfpGetReq req = new DzfpGetReq();
             List<InvoiceXm> dataList = new ArrayList<>();
             if ("1".equals(invoiceBO.getProperty())) { // 纸质发票
@@ -1184,7 +1184,7 @@ public class OrderServiceImpl implements OrderService {
                     req.setGmf_yhzh(invoiceBO.getBank());
                     req.setGmf_sjh(invoiceBO.getPhone());
                 }
-                req.setFpqqlsh(invo.getFPQQLSH());
+                req.setFpqqlsh(DateUtils.getFPQQLSH());
                 req.setKplx("1");
                 req.setZsfs("0");
                 req.setKpr(Utils.getAdminInfo().getNickname());

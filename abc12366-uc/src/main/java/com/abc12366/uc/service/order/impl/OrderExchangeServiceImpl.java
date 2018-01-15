@@ -308,15 +308,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 DzfpGetReq req = new DzfpGetReq();
                 List<InvoiceXm> dataList = new ArrayList<>();
                 for (ExchangeOrderInvoiceBO eoi : orderInvoiceBOList) {
-                    Einvocie ein = new Einvocie();
-                    ein.setTBSTATUS("1");
-                    ein.setFP_DM(eoi.getInvoiceCode());
-                    ein.setFP_HM(eoi.getInvoiceNo());
-                    Einvocie invo = dzfpRoMapper.selectEinvoice(ein);
-                    if(invo != null){
-                        LOGGER.info("电子发票开票信息未找到或未同步：{}");
-                        throw new ServiceException(4102,"电子发票开票信息未找到或未同步");
-                    }
 
                     if ("1".equals(eoi.getProperty())) { // 纸质发票
                         InvoiceDetail invoiceDetail = invoiceDetailRoMapper.selectByInvoiceNo(eoi.getInvoiceNo());
@@ -336,6 +327,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                             req.setGmf_yhzh(eoi.getBank());
                             req.setGmf_sjh(eoi.getPhone());
                         }
+                        req.setFpqqlsh(DateUtils.getFPQQLSH());
                         req.setKplx("1");
                         req.setZsfs("0");
                         req.setKpr(Utils.getAdminInfo().getNickname());
