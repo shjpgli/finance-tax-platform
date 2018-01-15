@@ -1282,10 +1282,8 @@ public class OrderServiceImpl implements OrderService {
         tradeLog.setTradeType("2");
         tradeLog.setAmount(Double.parseDouble(refundRes.getRefund_fee()));
         tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        tradeLog.setTradeTime(now);
-        tradeLog.setCreateTime(now);
-        tradeLog.setLastUpdate(now);
+        tradeLog.setCreateTime(date);
+        tradeLog.setLastUpdate(date);
         tradeLog.setPayMethod("ALIPAY");
         tradeLogMapper.insertTradeLog(tradeLog);
     }
