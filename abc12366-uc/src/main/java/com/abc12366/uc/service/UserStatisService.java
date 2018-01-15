@@ -99,4 +99,19 @@ public interface UserStatisService {
     PointAnalysisBO pointAnalysis(String start, String end, int page, int size);
 
     List<PointRuleinfoBO> pointAnalysisRuleinfo(String ruleId, String timeInterval, int page, int size);
+
+    /**
+     * 查询用户会员统计新增会员的用户详情
+     * @param year 年份
+     * @param vipCode 会员等级编码
+     * @return List<User>
+     */
+    List<User> userVipIncreaseInfo(String year, String vipCode);
+
+    /**
+     * 查询会员等级统计该等级全部用户详情
+     * @param vipCode 会员等级编码
+     * @return List<User>
+     */
+    List<User> userVipAllInfo(String vipCode);
 }

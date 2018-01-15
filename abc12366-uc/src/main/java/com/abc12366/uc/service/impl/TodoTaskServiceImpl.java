@@ -49,7 +49,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     @Autowired
     private ExperienceLogService experienceLogService;
 
-    @Transactional("db1TxManager")
     @Override
     public void doTask(String userId, String taskCode) {
         try{
@@ -87,7 +86,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     }
 
-    @Transactional("db1TxManager")
     @Override
     public boolean doTaskWithouComputeAward(String userId, String taskCode) {
         try{
@@ -275,7 +273,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         todoTaskMapper.insert(todoTask);
     }
 
-    @Transactional("db1TxManager")
     @Override
     public void generateTodoTaskList(String userId, String type) {
         //如果用户的日常任务已生成则返回
@@ -340,7 +337,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     //做一次性任务
-    @Transactional("db1TxManager")
     public void doTaskOneTime(String userId, SysTaskBO sysTaskBO) {
         TodoTask todoTask = todoTaskMapper.selectOneTime(userId, sysTaskBO.getId());
 
@@ -348,7 +344,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     //做频率为一天的任务
-    @Transactional("db1TxManager")
     private void doTaskDay(String userId, SysTaskBO sysTaskBO) {
         TodoTask todoTask = todoTaskMapper.selectOneByDay(userId, sysTaskBO.getId());
 
@@ -357,7 +352,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     //做频率为一月的任务
-    @Transactional("db1TxManager")
     private void doTaskMonth(String userId, SysTaskBO sysTaskBO) {
         TodoTask todoTask = todoTaskMapper.selectOneByMonth(userId, sysTaskBO.getId());
 
@@ -365,7 +359,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     //做频率为一年的任务
-    @Transactional("db1TxManager")
     private void doTaskYear(String userId, SysTaskBO sysTaskBO) {
         TodoTask todoTask = todoTaskMapper.selectOneByYear(userId, sysTaskBO.getId());
 
@@ -373,7 +366,6 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     }
 
     //做特殊任务
-    @Transactional("db1TxManager")
     private void doTaskSpecial(String userId, SysTaskBO sysTaskBO) {
         //特殊任务如果未开始或过期，则不能完成
         long now = System.currentTimeMillis();
