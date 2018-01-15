@@ -1155,7 +1155,7 @@ public class OrderServiceImpl implements OrderService {
                 TradeLog tradeLog = tradeLogRoMapper.selectTradeLog(log);
                 if(tradeLog == null){
                     LOGGER.info("交易记录无法找到：{}", tradeList);
-                    throw new ServiceException(4102,"交易记录无法找到");
+                    throw new ServiceException(4102,"交易流水记录无法找到");
                 }
                 if (tradeLog.getAmount() >= dealPrice) {
                     AliRefund refund = new AliRefund();
