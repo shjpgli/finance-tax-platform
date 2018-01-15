@@ -201,7 +201,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderBO submitOrder(OrderSubmitBO orderSubmitBO) {
-        UCUserBO user = Utils.getUserInfo();
+        //UCUserBO user = Utils.getUserInfo();
+        User user = userMapper.selectOne(orderSubmitBO.getUserId());
         orderSubmitBO.setNowVipLevel(user.getVipLevel());
         Date date = new Date();
         //根据是否需要寄送来判断地址是否填写
