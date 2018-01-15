@@ -1188,7 +1188,7 @@ public class OrderServiceImpl implements OrderService {
                                     // 插入订单日志-已完成
                                     String remark;
                                     if(vipLogBO.getSource() != null){
-                                        remark = "已完成退款。订单号："+vipLogBO.getSource();
+                                        remark = "已完成退款。回退到该订单："+vipLogBO.getSource();
                                     }else{
                                         remark = "已完成退款。";
                                     }
@@ -1234,7 +1234,7 @@ public class OrderServiceImpl implements OrderService {
             // 插入订单日志-已退款
             String remark;
             if(vipLogBO.getSource() != null){
-                remark = "已完成退款。退款积分为："+dealPrice+"；订单号："+vipLogBO.getSource();
+                remark = "已完成退款。退款积分为："+dealPrice+"；回退到该订单："+vipLogBO.getSource();
             }else{
                 remark = "已完成退款。退款积分为："+dealPrice;
             }
