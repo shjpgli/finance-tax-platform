@@ -198,7 +198,7 @@
 
     <!-- 修 改 为已读-->
     <update id="updateIsRead" parameterType="java.lang.String">
-        UPDATE bb_question_answer SET isRead = 1 WHERE id = #{id}
+        UPDATE bb_question_answer SET isRead = 1 WHERE questionId = #{id}
     </update>
 
     <!-- 设置采纳-->
