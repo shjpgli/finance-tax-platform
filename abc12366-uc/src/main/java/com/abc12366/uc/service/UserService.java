@@ -277,4 +277,11 @@ public interface UserService {
      * @param resetPwdBO
      */
     void resetPassword(UserResetPwdBO resetPwdBO);
+
+    /**
+     * 用户建议信息查询
+     * @param usernameOrPhone
+     * @return
+     */
+	UserJyxx selectByUnameOrPhone(String usernameOrPhone);
 }
