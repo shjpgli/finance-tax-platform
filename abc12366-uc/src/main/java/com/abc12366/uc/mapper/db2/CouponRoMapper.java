@@ -47,4 +47,12 @@ public interface CouponRoMapper {
      * @return 优惠劵对象
      */
     Coupon selectOne(String id);
+
+    /**
+     * 根据ID查看优惠劵活动
+     *
+     * @param id 活动ID
+     * @return 优惠劵活动对象
+     */
+    CouponActivity selectOneActivity(String id);
 }

@@ -16,8 +16,7 @@
         </where>
     </select>
 
-    <select id="selectOne" parameterType="com.abc12366.uc.model.order.Coupon"
-            resultType="com.abc12366.uc.model.order.Coupon">
+    <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.Coupon">
         SELECT id, couponName, couponMode, couponType, param1,
         param2, amountType, validType, validStartTime, validEndTime,
         validDays, description, status, createTime, lastUpdate
@@ -36,8 +35,22 @@
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
-            <if test="activityName != null and activityName != ''">activityName LIKE CONCAT('%',#{activityName},'%')</if>
-            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="activityName != null and activityName != ''">ca.activityName LIKE CONCAT('%',#{activityName},'%')</if>
+            <if test="status != null and status != ''">AND ca.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectOneActivity" parameterType="java.lang.String"
+            resultType="com.abc12366.uc.model.order.CouponActivity">
+          SELECT id, activityName, activityLink, couponId, activityStartTime,
+              activityEndTime, couponNum, `limit`, limitNum, getType,
+              valid, validApi, target, areaOper, areaIds,
+              tagOper, tagIds, regTimeOper, regStartTime, regEndTime,
+              vips, userIds, description, imageUrl, status,
+              createTime, lastUpdate
+          FROM uc_coupon_activity
+        <where>
+            <if test="id != null and id != ''">id = #{id}</if>
         </where>
     </select>
 
@@ -49,10 +62,10 @@
         FROM uc_coupon_user cu LEFT JOIN uc_user u
         on cu.userId = u.id
         <where>
-            <if test="userId != null and userId != ''">userId = #{userId}</if>
-            <if test="activityId != null and activityId != ''">AND activityId = #{activityId}</if>
-            <if test="couponId != null and couponId != ''">AND couponId = #{couponId}</if>
-            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="userId != null and userId != ''">cu.userId = #{userId}</if>
+            <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
+            <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
+            <if test="status != null and status != ''">AND cu.status = #{status}</if>
         </where>
     </select>
 </mapper>

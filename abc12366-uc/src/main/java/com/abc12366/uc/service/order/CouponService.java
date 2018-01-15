@@ -81,6 +81,7 @@ public interface CouponService {
 
     /**
      * 新增优惠劵活动
+     *
      * @param bo 优惠劵活动BO
      * @return 是否成功
      */
@@ -88,6 +89,7 @@ public interface CouponService {
 
     /**
      * 修改优惠劵活动
+     *
      * @param bo 优惠劵活动BO
      * @return 是否成功
      */
@@ -95,15 +97,26 @@ public interface CouponService {
 
     /**
      * 查看优惠劵活动
+     *
      * @param id 活动ID
      * @return 优惠劵活动对象
      */
     CouponActivity selectOneActivity(String id);
 
     /**
-     * 逻辑删除优惠劵
+     * 逻辑删除优惠劵活动
+     *
      * @param id 优惠劵活动ID
      * @return 是否成功
      */
     boolean deleteActivity(String id);
+
+    /**
+     * 用户领取某一活动的优惠劵
+     *
+     * @param userId     用户ID
+     * @param activityId 活动ID
+     * @return 是否领取成功
+     */
+    boolean userCollectCoupon(String userId, String activityId);
 }

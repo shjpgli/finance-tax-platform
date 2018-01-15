@@ -8,6 +8,10 @@
 
 package com.abc12366.uc.util;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
+
 /**
  * ClassName:StringUtil
  * Date:     2017年6月7日 上午9:47:06
@@ -85,6 +89,7 @@ public class StringUtil {
 
     /**
      * 字符退换操作
+     *
      * @param operator 操作符
      * @return 操作符
      */
@@ -102,6 +107,16 @@ public class StringUtil {
         } else {
             return "=";
         }
+    }
+
+    /**
+     * List转为逗号分隔的字符串
+     *
+     * @param strs List<String>
+     * @return 字符串
+     */
+    public static String list2Str(List<String> strs) {
+        return strs != null && strs.size() > 0 ? StringUtils.join(strs.toArray(), ",") : null;
     }
 }
 

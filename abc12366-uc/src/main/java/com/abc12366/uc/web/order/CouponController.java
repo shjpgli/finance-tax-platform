@@ -5,12 +5,8 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
-import com.abc12366.uc.model.order.bo.CouponActivityListBO;
-import com.abc12366.uc.model.order.bo.CouponBO;
-import com.abc12366.uc.model.order.bo.CouponListBO;
-import com.abc12366.uc.model.order.bo.CouponUserListBO;
+import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.order.CouponService;
-import com.abc12366.uc.model.order.bo.CouponActivityBO;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -104,7 +100,7 @@ public class CouponController {
     }
 
     /**
-     * 查看优惠劵
+     * 运营系统-查看优惠劵
      *
      * @param id 优惠劵ID
      * @return 优惠劵对象
@@ -116,7 +112,7 @@ public class CouponController {
     }
 
     /**
-     * 逻辑删除优惠劵
+     * 运营系统-逻辑删除优惠劵
      *
      * @param id 优惠劵ID
      * @return 成功或失败
@@ -133,9 +129,9 @@ public class CouponController {
      * 运营系统-查询优惠劵活动列表
      *
      * @param activityName 活动名称
-     * @param status 活动状态
-     * @param pageNum 当前页
-     * @param pageSize   每页大小
+     * @param status       活动状态
+     * @param pageNum      当前页
+     * @param pageSize     每页大小
      * @return 优惠劵活动列表
      */
     @GetMapping("/activity")
@@ -159,12 +155,50 @@ public class CouponController {
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }
 
+    /**
+     * 前端-查询可用的优惠劵活动列表
+     *
+     * @param activityName 活动名称
+     * @param pageNum      当前页
+     * @param pageSize     每页大小
+     * @return 可用的优惠劵活动列表
+     */
+    @GetMapping("/activities")
+    public ResponseEntity selectUsableActivityList(
+            @RequestParam(value = "activityName", required = false) String activityName,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+        CouponActivity bo = new CouponActivity();
+        if (StringUtils.isNotEmpty(activityName)) {
+            bo.setActivityName(activityName);
+        }
+        bo.setStatus("2");
+        LOGGER.info("{},{},{}", bo, pageNum, pageSize);
+
+        List<CouponActivityListBO> dataList = couponService.selectActivityList(bo, pageNum, pageSize);
+        PageInfo<CouponActivityListBO> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 运营系统-新增优惠劵活动
+     *
+     * @param bo 优惠劵活动BO
+     * @return 是否成功新增
+     */
     @PostMapping("/activity")
     public ResponseEntity insertActivity(@Valid @RequestBody CouponActivityBO bo) {
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", couponService.insertActivity(bo)));
     }
 
+    /**
+     * 运营系统-修改优惠劵活动
+     *
+     * @param id 活动ID
+     * @param bo 优惠劵活动BO
+     * @return 是否成功更新
+     */
     @PutMapping("/activity/{id}")
     public ResponseEntity updateActivity(@PathVariable String id, @Valid @RequestBody CouponActivityBO bo) {
         bo.setId(id);
@@ -172,12 +206,24 @@ public class CouponController {
         return ResponseEntity.ok(Utils.kv("data", couponService.updateActivity(bo)));
     }
 
+    /**
+     * 通用-查看优惠劵活动
+     *
+     * @param id 活动ID
+     * @return 优惠劵活动对象
+     */
     @GetMapping("/activity/{id}")
     public ResponseEntity selectOneActivity(@PathVariable String id) {
         LOGGER.info("{}", id);
         return ResponseEntity.ok(Utils.kv("data", couponService.selectOneActivity(id)));
     }
 
+    /**
+     * 运营系统-逻辑删除优惠劵活动
+     *
+     * @param id 活动ID
+     * @return 是否成功删除
+     */
     @DeleteMapping("/activity/{id}")
     public ResponseEntity deleteActivity(@PathVariable String id) {
         LOGGER.info("{}", id);
@@ -185,9 +231,10 @@ public class CouponController {
     }
 
     /**
-     * 查询优惠劵活动用户优惠劵列表
-     * @param status 优惠劵状态
-     * @param pageNum 当前页
+     * 运营系统-查询优惠劵活动用户优惠劵列表
+     *
+     * @param status   优惠劵状态
+     * @param pageNum  当前页
      * @param pageSize 每页大小
      * @return 优惠劵活动用户优惠劵列表
      */
@@ -201,6 +248,50 @@ public class CouponController {
         if (StringUtils.isNotEmpty(status)) {
             bo.setStatus(status);
         }
+        LOGGER.info("{},{},{}", bo, pageNum, pageSize);
+
+        List<CouponUserListBO> dataList = couponService.selectUserList(bo, pageNum, pageSize);
+        PageInfo<CouponUserListBO> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 前端-用户领取某一活动的优惠劵
+     *
+     * @param userId     用户ID
+     * @param activityId 活动ID
+     * @return 是否领取成功
+     */
+    @GetMapping("/user/{userId}/{activityId}")
+    public ResponseEntity userCollectCoupon(@PathVariable String userId, @PathVariable String activityId) {
+        CouponUser cu = new CouponUser();
+        cu.setUserId(userId);
+        cu.setActivityId(activityId);
+        LOGGER.info("{}", cu);
+        return ResponseEntity.ok(Utils.kv("data", couponService.userCollectCoupon(userId, activityId)));
+    }
+
+    /**
+     * 前端-查询用户所有优惠劵列表
+     *
+     * @param userId   用户ID
+     * @param status   优惠劵状态:0-未领取 1-已领取 2-已使用 3-已冻结 4-已删除 5-已过期 6-已作废
+     * @param pageNum  当前页
+     * @param pageSize 没有大小
+     * @return 用户所有优惠劵列表
+     */
+    @GetMapping("/user/{userId}")
+    public ResponseEntity selectUserCouponList(
+            @PathVariable String userId,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+
+        CouponUser bo = new CouponUser();
+        if (StringUtils.isNotEmpty(status)) {
+            bo.setStatus(status);
+        }
+        bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
         List<CouponUserListBO> dataList = couponService.selectUserList(bo, pageNum, pageSize);

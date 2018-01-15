@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
+import com.abc12366.uc.model.order.CouponUser;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -26,5 +27,27 @@ public interface CouponMapper {
      */
     int update(Coupon coupon);
 
+    /**
+     * 更新优惠劵活动
+     *
+     * @param ca 优惠劵活动对象
+     * @return 影响行数
+     */
     int updateActivity(CouponActivity ca);
+
+    /**
+     * 新增优惠劵活动
+     *
+     * @param ca 优惠劵活动对象
+     * @return 影响行数
+     */
+    int insertActivity(CouponActivity ca);
+
+    /**
+     * 新增用户优惠劵
+     *
+     * @param cu 优惠劵对象
+     * @return 影响行数
+     */
+    int insertUserCoupon(CouponUser cu);
 }

@@ -9,6 +9,7 @@ import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.order.CouponService;
+import com.abc12366.uc.util.StringUtil;
 import com.abc12366.uc.web.order.CartController;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
@@ -155,19 +156,85 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public boolean insertActivity(@Valid CouponActivityBO bo) {
-        return false;
+        CouponActivity ca = new CouponActivity();
+        ca.setId(Utils.uuid());
+        ca.setActivityName(bo.getActivityName());
+        ca.setActivityLink(bo.getActivityLink());
+        ca.setCouponId(bo.getCouponId());
+        ca.setActivityStartTime(bo.getActivityStartTime());
+
+        ca.setActivityEndTime(bo.getActivityEndTime());
+        ca.setCouponNum(bo.getCouponNum());
+        ca.setLimit(bo.getLimit());
+        ca.setLimitNum(bo.getLimitNum());
+        ca.setGetType(bo.getGetType());
+
+        ca.setValid(bo.getValid());
+        ca.setValidApi(bo.getValidApi());
+        ca.setTarget(bo.getTarget());
+        ca.setAreaOper(bo.getAreaOper());
+        ca.setAreaIds(StringUtil.list2Str(bo.getAreaIds()));
+
+        ca.setTagOper(bo.getTagOper());
+        ca.setTagIds(StringUtil.list2Str(bo.getTagIds()));
+        ca.setRegTimeOper(bo.getRegTimeOper());
+        ca.setRegStartTime(bo.getRegStartTime());
+        ca.setRegEndTime(bo.getRegEndTime());
+
+        ca.setVips(StringUtil.list2Str(bo.getVips()));
+        ca.setUserIds(StringUtil.list2Str(bo.getUserIds()));
+        ca.setDescription(bo.getDescription());
+        ca.setImageUrl(bo.getImageUrl());
+        ca.setStatus(bo.getStatus());
+
+        Date now = new Date();
+        ca.setCreateTime(now);
+        ca.setLastUpdate(now);
+        return 1 == couponMapper.insertActivity(ca);
     }
 
     @Override
     public boolean updateActivity(@Valid CouponActivityBO bo) {
         Assert.notNull(bo.getId(), "id can not empty");
-        return false;
+
+        CouponActivity ca = selectOneActivity(bo.getId());
+        ca.setActivityName(bo.getActivityName());
+        ca.setActivityLink(bo.getActivityLink());
+        ca.setCouponId(bo.getCouponId());
+        ca.setActivityStartTime(bo.getActivityStartTime());
+
+        ca.setActivityEndTime(bo.getActivityEndTime());
+        ca.setCouponNum(bo.getCouponNum());
+        ca.setLimit(bo.getLimit());
+        ca.setLimitNum(bo.getLimitNum());
+        ca.setGetType(bo.getGetType());
+
+        ca.setValid(bo.getValid());
+        ca.setValidApi(bo.getValidApi());
+        ca.setTarget(bo.getTarget());
+        ca.setAreaOper(bo.getAreaOper());
+        ca.setAreaIds(StringUtil.list2Str(bo.getAreaIds()));
+
+        ca.setTagOper(bo.getTagOper());
+        ca.setTagIds(StringUtil.list2Str(bo.getTagIds()));
+        ca.setRegTimeOper(bo.getRegTimeOper());
+        ca.setRegStartTime(bo.getRegStartTime());
+        ca.setRegEndTime(bo.getRegEndTime());
+
+        ca.setVips(StringUtil.list2Str(bo.getVips()));
+        ca.setUserIds(StringUtil.list2Str(bo.getUserIds()));
+        ca.setDescription(bo.getDescription());
+        ca.setImageUrl(bo.getImageUrl());
+        ca.setStatus(bo.getStatus());
+
+        ca.setLastUpdate(new Date());
+        return 1 == couponMapper.updateActivity(ca);
     }
 
     @Override
     public CouponActivity selectOneActivity(String id) {
         Assert.notNull(id, "id can not empty");
-        return null;
+        return couponRoMapper.selectOneActivity(id);
     }
 
     @Override
@@ -177,6 +244,41 @@ public class CouponServiceImpl implements CouponService {
         ca.setStatus("0");
         ca.setLastUpdate(new Date());
         return 1 == couponMapper.updateActivity(ca);
+    }
+
+    @Override
+    public boolean userCollectCoupon(String userId, String activityId) {
+        Assert.notNull(userId, "userId can not empty");
+        Assert.notNull(activityId, "activityId can not empty");
+        CouponActivity ca = selectOneActivity(activityId);
+        if (ca != null) {
+            Coupon c = selectOne(ca.getCouponId());
+            if (c != null) {
+                CouponUser cu = new CouponUser();
+                Date now = new Date();
+                cu.setId(Utils.uuid());
+                cu.setUserId(userId);
+                cu.setActivityId(activityId);
+                cu.setCouponId(ca.getCouponId());
+                cu.setCouponName(c.getCouponName());
+
+                cu.setCouponMode(c.getCouponMode());
+                cu.setCouponType(c.getCouponType());
+                cu.setParam1(c.getParam1());
+                cu.setParam2(c.getParam2());
+                cu.setAmountType(c.getAmountType());
+
+                cu.setValidStartTime(null);
+                cu.setValidEndTime(null);
+                cu.setDescription(c.getDescription());
+                cu.setStatus("1");
+                cu.setCreateTime(now);
+
+                cu.setLastUpdate(now);
+                return 1 == couponMapper.insertUserCoupon(cu);
+            }
+        }
+        return false;
     }
 
     /**
