@@ -1143,6 +1143,11 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public OrderBO selectOrderDetail(String orderNo) {
+        return orderRoMapper.selectOrderDetail(orderNo);
+    }
+
     /**
      * 发票作废
      * @param orderBO

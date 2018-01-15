@@ -108,4 +108,11 @@ public interface OrderRoMapper {
      * @return
      */
     List<OrderStatisBO> statisOrderByMonth(Map<String, Object> map);
+
+    /**
+     * 订单详情信息
+     * @param orderNo
+     * @return
+     */
+    OrderBO selectOrderDetail(String orderNo);
 }

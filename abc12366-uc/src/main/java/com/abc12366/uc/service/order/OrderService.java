@@ -266,4 +266,11 @@ public interface OrderService {
      * @param map
      */
     void updateOrderReturn(Map<String, Object> map,HttpServletRequest httpServletRequest);
+
+    /**
+     * 查看订单详情信息
+     * @param orderNo
+     * @return
+     */
+    OrderBO selectOrderDetail(String orderNo);
 }

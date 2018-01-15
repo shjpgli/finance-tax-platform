@@ -306,6 +306,20 @@ public class OrderController {
         return ResponseEntity.ok(Utils.kv("data", orderBO));
     }
 
+    /**
+     * 查询订单详情信息
+     *
+     * @param orderNo 订单号
+     * @return 订单详情
+     */
+    @GetMapping(path = "/detail/{orderNo}")
+    public ResponseEntity selectOrderDetail(@PathVariable("orderNo") String orderNo) {
+        LOGGER.info("{}", orderNo);
+        OrderBO orderBO = orderService.selectOrderDetail(orderNo);
+        LOGGER.info("{}", orderBO);
+        return ResponseEntity.ok(Utils.kv("data", orderBO));
+    }
+
 
     /**
      * 根据交易流水号查询订单合并内容
