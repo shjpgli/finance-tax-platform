@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db2.CouponRoMapper">
+
+    <select id="selectList" parameterType="com.abc12366.uc.model.order.Coupon"
+            resultType="com.abc12366.uc.model.order.bo.CouponListBO">
+        SELECT id, couponName, couponMode, couponType, amountType,
+        validType, validStartTime, validEndTime, validDays, status,
+        createTime, lastUpdate
+        FROM uc_coupon
+        <where>
+            <if test="couponMode != null and couponMode != ''">couponMode = #{couponMode}</if>
+            <if test="couponType != null and couponType != ''">AND couponType = #{couponType}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectOne" parameterType="com.abc12366.uc.model.order.Coupon"
+            resultType="com.abc12366.uc.model.order.Coupon">
+        SELECT id, couponName, couponMode, couponType, param1,
+        param2, amountType, validType, validStartTime, validEndTime,
+        validDays, description, status, createTime, lastUpdate
+        FROM uc_coupon
+        <where>
+            <if test="id != null and id != ''">id = #{id}</if>
+        </where>
+    </select>
+
+    <select id="selectActivityList" parameterType="com.abc12366.uc.model.order.CouponActivity"
+            resultType="com.abc12366.uc.model.order.bo.CouponActivityListBO">
+        SELECT ca.id, ca.activityName, ca.couponId, c.couponName, ca.couponNum,
+          (SELECT count(*) FROM uc_coupon_user WHERE status = '1') as collectNum,
+          (SELECT count(*) FROM uc_coupon_user WHERE status = '2') as usedNum,
+        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate
+        FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
+        ON ca.couponId = c.id
+        <where>
+            <if test="activityName != null and activityName != ''">activityName LIKE CONCAT('%',#{activityName},'%')</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectUserList" parameterType="com.abc12366.uc.model.order.CouponUser"
+            resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
+        SELECT cu.id, cu.userId, u.username, cu.couponMode, cu.couponType,
+          cu.param1, cu.param2, cu.amountType, cu.status, cu.createTime,
+          cu.lastUpdate, cu.orderNo
+        FROM uc_coupon_user cu LEFT JOIN uc_user u
+        on cu.userId = u.id
+        <where>
+            <if test="userId != null and userId != ''">userId = #{userId}</if>
+            <if test="activityId != null and activityId != ''">AND activityId = #{activityId}</if>
+            <if test="couponId != null and couponId != ''">AND couponId = #{couponId}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+    </select>
+</mapper>

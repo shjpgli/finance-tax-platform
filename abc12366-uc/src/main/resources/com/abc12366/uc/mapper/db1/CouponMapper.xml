@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.uc.mapper.db1.CouponMapper">
+
+    <insert id="insert" parameterType="com.abc12366.uc.model.order.Coupon">
+        INSERT INTO uc_coupon (id, couponName, couponMode, couponType, param1,
+        param2, amountType, validType, validStartTime, validEndTime,
+        validDays, description, status, createTime, lastUpdate)
+        VALUES (#{id}, #{couponName}, #{couponMode}, #{couponType}, #{param1},
+        #{param2}, #{amountType}, #{validType}, #{validStartTime}, #{validEndTime},
+        #{validDays}, #{description}, #{status}, #{createTime}, #{lastUpdate})
+    </insert>
+
+    <update id="update" parameterType="com.abc12366.uc.model.order.Coupon">
+        update uc_coupon
+        <set>
+            <if test="couponName != null">couponName = #{couponName},</if>
+            <if test="couponMode != null">couponMode = #{couponMode},</if>
+            <if test="couponType != null">couponType = #{couponType},</if>
+            <if test="param1 != null">param1 = #{param1},</if>
+
+            <if test="param2 != null">param2 = #{param2},</if>
+            <if test="amountType != null">amountType = #{amountType},</if>
+            <if test="validType != null">validType = #{validType},</if>
+            <if test="validStartTime != null">validStartTime = #{validStartTime},</if>
+            <if test="validStartTime != null">validStartTime = #{validStartTime},</if>
+
+            <if test="validDays != null">validDays = #{validDays},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>
