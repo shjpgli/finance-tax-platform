@@ -249,6 +249,8 @@ public class OrderServiceImpl implements OrderService {
                 }
 
                 orderProductBO.setOrderNo(order.getOrderNo());
+                orderProductBO.setCreateTime(date);
+                orderProductBO.setLastUpdate(date);
                 OrderProduct orderProduct = new OrderProduct();
                 BeanUtils.copyProperties(orderProductBO, orderProduct);
                 int opInsert = orderProductMapper.insert(orderProduct);
@@ -1204,7 +1206,7 @@ public class OrderServiceImpl implements OrderService {
                                     BeanUtils.copyProperties(orderBO,order);
                                     orderMapper.update(order);
                                     User user = userMapper.selectOne(orderBO.getUserId());
-                                    updateVipInfo(vipLogBO, user,orderBO.getOrderNo());
+                                    updateVipInfo(vipLogBO, user,orderBO.getOrderNo(),orderProductBO.getSpecInfo());
 
 
                                     sendReturnMessage(orderBO, httpServletRequest, refundRes, user);
@@ -1246,7 +1248,7 @@ public class OrderServiceImpl implements OrderService {
 
             //修改用户信息
             User user = userMapper.selectOne(orderBO.getUserId());
-            updateVipInfo(vipLogBO, user,orderBO.getOrderNo());
+            updateVipInfo(vipLogBO, user,orderBO.getOrderNo(),orderProductBO.getSpecInfo());
 
             LOGGER.info("积分退款成功,插入退款流水记录");
             insertTrade(orderBO, dealPrice);
@@ -1321,10 +1323,10 @@ public class OrderServiceImpl implements OrderService {
      * @param vipLogBO
      * @param user
      */
-    public void updateVipInfo(VipLogBO vipLogBO, User user,String orderNo) {
+    public void updateVipInfo(VipLogBO vipLogBO, User user,String orderNo,String vipLevel) {
         //查询会员礼包业务
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-        obj.setLevelId(user.getVipLevel().trim().toUpperCase());
+        obj.setLevelId(vipLevel.trim().toUpperCase());
         obj.setPrivilegeId(MessageConstant.HYLB_CODE);
 
         //礼包扣除金额
