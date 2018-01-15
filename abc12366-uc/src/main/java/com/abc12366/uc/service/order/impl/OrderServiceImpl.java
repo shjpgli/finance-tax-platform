@@ -763,7 +763,7 @@ public class OrderServiceImpl implements OrderService {
             pointsLog.setIncome(orderBO.getGiftPoints());
             pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
             pointsLog.setLogType("ORDER_INCOME");
-            pointsLogService.insertByConsume(pointsLog);
+            pointsLogService.insertByConsume(pointsLog,orderBO.getNowVipLevel());
         }
     }
 
@@ -1429,6 +1429,6 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setOutgo(outgo);
         pointsLog.setRemark("用户退单- 订单号：" + orderBO.getOrderNo());
         pointsLog.setLogType("ORDER_EXCHANGE");
-        pointsLogService.insertNoVip(pointsLog);
+        pointsLogService.insertByConsume(pointsLog,orderBO.getNowVipLevel());
     }
 }
