@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -1173,26 +1174,7 @@ public class OrderServiceImpl implements OrderService {
                                     RefundRes refundRes = JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
 
                                     LOGGER.info("支付宝退款成功,插入退款流水记录");
-                                    String tradeNo = DateUtils.getJYLSH();
-                                    Trade trade = new Trade();
-                                    trade.setOrderNo(orderBO.getOrderNo());
-                                    trade.setTradeNo(tradeNo);
-                                    Date date = new Date();
-                                    trade.setCreateTime(date);
-                                    tradeMapper.insert(trade);
-
-                                    TradeLog tradeLog = new TradeLog();
-                                    tradeLog.setTradeNo(tradeNo);
-                                    tradeLog.setAliTrandeNo(refundRes.getTrade_no());
-                                    tradeLog.setTradeStatus("1");
-                                    tradeLog.setTradeType("2");
-                                    tradeLog.setAmount(Double.parseDouble(refundRes.getRefund_fee()));
-                                    tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
-                                    Timestamp now = new Timestamp(System.currentTimeMillis());
-                                    tradeLog.setCreateTime(now);
-                                    tradeLog.setLastUpdate(now);
-                                    tradeLog.setPayMethod("ALIPAY");
-                                    tradeLogMapper.insertTradeLog(tradeLog);
+                                    insertTrade(orderBO, refundRes);
 
                                     //扣除订单获得的积分
                                     if(orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0){
@@ -1266,30 +1248,70 @@ public class OrderServiceImpl implements OrderService {
             User user = userMapper.selectOne(orderBO.getUserId());
             updateVipInfo(vipLogBO, user);
 
-            LOGGER.info("支付宝退款成功,插入退款流水记录");
-            String tradeNo = DateUtils.getJYLSH();
-            Trade trade = new Trade();
-            trade.setOrderNo(orderBO.getOrderNo());
-            trade.setTradeNo(tradeNo);
-            Date date = new Date();
-            trade.setCreateTime(date);
-            tradeMapper.insert(trade);
-
-            TradeLog tradeLog = new TradeLog();
-            tradeLog.setTradeNo(tradeNo);
-            tradeLog.setAliTrandeNo(orderBO.getOrderNo());
-            tradeLog.setTradeStatus("1");
-            tradeLog.setTradeType("2");
-            tradeLog.setAmount(dealPrice);
-            tradeLog.setCreateTime(date);
-            tradeLog.setLastUpdate(date);
-            tradeLog.setPayMethod("POINTS");
-            tradeLogMapper.insertTradeLog(tradeLog);
+            LOGGER.info("积分退款成功,插入退款流水记录");
+            insertTrade(orderBO, dealPrice);
             //退积分
             insertReturnPoints(order, dealPrice,0);
         } else {
             throw new ServiceException(4957);
         }
+    }
+
+    /**
+     * 插入支付宝交易记录
+     * @param orderBO
+     * @param refundRes
+     * @throws ParseException
+     */
+    public void insertTrade(OrderBO orderBO, RefundRes refundRes) throws ParseException {
+        String tradeNo = DateUtils.getJYLSH();
+        Trade trade = new Trade();
+        trade.setOrderNo(orderBO.getOrderNo());
+        trade.setTradeNo(tradeNo);
+        Date date = new Date();
+        trade.setCreateTime(date);
+        trade.setLastUpdate(date);
+        tradeMapper.insert(trade);
+
+        TradeLog tradeLog = new TradeLog();
+        tradeLog.setTradeNo(tradeNo);
+        tradeLog.setAliTrandeNo(refundRes.getTrade_no());
+        tradeLog.setTradeStatus("1");
+        tradeLog.setTradeType("2");
+        tradeLog.setAmount(Double.parseDouble(refundRes.getRefund_fee()));
+        tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        tradeLog.setCreateTime(now);
+        tradeLog.setLastUpdate(now);
+        tradeLog.setPayMethod("ALIPAY");
+        tradeLogMapper.insertTradeLog(tradeLog);
+    }
+
+    /**
+     * 插入积分交易记录
+     * @param orderBO
+     * @param dealPrice
+     */
+    public void insertTrade(OrderBO orderBO, double dealPrice) {
+        String tradeNo = DateUtils.getJYLSH();
+        Trade trade = new Trade();
+        trade.setOrderNo(orderBO.getOrderNo());
+        trade.setTradeNo(tradeNo);
+        Date date = new Date();
+        trade.setCreateTime(date);
+        trade.setLastUpdate(date);
+        tradeMapper.insert(trade);
+
+        TradeLog tradeLog = new TradeLog();
+        tradeLog.setTradeNo(tradeNo);
+        tradeLog.setAliTrandeNo(orderBO.getOrderNo());
+        tradeLog.setTradeStatus("1");
+        tradeLog.setTradeType("2");
+        tradeLog.setAmount(dealPrice);
+        tradeLog.setCreateTime(date);
+        tradeLog.setLastUpdate(date);
+        tradeLog.setPayMethod("POINTS");
+        tradeLogMapper.insertTradeLog(tradeLog);
     }
 
     /**
