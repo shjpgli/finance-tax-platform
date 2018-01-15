@@ -126,6 +126,6 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         // 5.访问计数
         // 6.后置日志和日志表
         LOGGER.info("{}", log);
-        apiLogService.insert(log);
+//        apiLogService.insert(log);
     }
 }
