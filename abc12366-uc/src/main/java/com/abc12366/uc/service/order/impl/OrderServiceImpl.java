@@ -1200,7 +1200,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
-                InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(invoiceBO.getInvoiceCode());
+                InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(invoiceBO.getInvoiceNo());
                 if(id == null){
                     throw new ServiceException(4102,"查找发票详情错误");
                 }

@@ -348,7 +348,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 Einvocie einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", req.tosendXml(), Einvocie.class);
 
                 if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
-                    InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(einvocie.getFP_HM());
+                    InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(orderInvoiceBOList.get(0).getInvoiceNo());
                     if(id == null){
                         throw new ServiceException(4102,"查找发票详情错误");
                     }
