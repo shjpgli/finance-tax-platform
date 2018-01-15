@@ -1152,7 +1152,6 @@ public class OrderServiceImpl implements OrderService {
                 TradeLog log = new TradeLog();
                 log.setTradeNo(tradeList.get(0).getTradeNo());
                 log.setTradeType("1");
-                log.setTradeStatus("2");
                 log.setPayMethod("ALIPAY");
 
                 TradeLog tradeLog = tradeLogRoMapper.selectTradeLog(log);
@@ -1281,7 +1280,7 @@ public class OrderServiceImpl implements OrderService {
         TradeLog tradeLog = new TradeLog();
         tradeLog.setTradeNo(tradeNo);
         tradeLog.setAliTrandeNo(refundRes.getTrade_no());
-        tradeLog.setTradeStatus("1");
+        tradeLog.setTradeStatus("2");
         tradeLog.setTradeType("2");
         tradeLog.setAmount(Double.parseDouble(refundRes.getRefund_fee()));
         tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
@@ -1309,7 +1308,7 @@ public class OrderServiceImpl implements OrderService {
         TradeLog tradeLog = new TradeLog();
         tradeLog.setTradeNo(tradeNo);
         tradeLog.setAliTrandeNo(orderBO.getOrderNo());
-        tradeLog.setTradeStatus("1");
+        tradeLog.setTradeStatus("2");
         tradeLog.setTradeType("2");
         tradeLog.setAmount(dealPrice);
         tradeLog.setCreateTime(date);
