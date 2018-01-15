@@ -1201,6 +1201,9 @@ public class OrderServiceImpl implements OrderService {
 
             if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
                 InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(invoiceBO.getInvoiceCode());
+                if(id == null){
+                    throw new ServiceException(4102,"查找发票详情错误");
+                }
                 id.setStatus("3");
                 id.setLastUpdate(new Date());
                 id.setSpUrl(einvocie.getSP_URL());
