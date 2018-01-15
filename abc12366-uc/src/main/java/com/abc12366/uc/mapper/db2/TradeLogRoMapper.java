@@ -38,4 +38,6 @@ public interface TradeLogRoMapper {
      * @return
      */
     List<TradeLogBO> selectBOList(TradeLog tradeLog);
+
+    TradeLog selectTradeLog(TradeLog log);
 }

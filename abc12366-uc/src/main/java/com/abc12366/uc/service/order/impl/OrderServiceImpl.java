@@ -1148,81 +1148,81 @@ public class OrderServiceImpl implements OrderService {
                 }
                 TradeLog log = new TradeLog();
                 log.setTradeNo(tradeList.get(0).getTradeNo());
-                log.setTradeStatus("1");
+                log.setTradeType("1");
+                log.setTradeStatus("2");
                 log.setPayMethod("ALIPAY");
 
-                List<TradeLog> logList = tradeLogRoMapper.selectList(log);
+                TradeLog tradeLog = tradeLogRoMapper.selectTradeLog(log);
+                if(tradeLog == null){
+                    LOGGER.info("交易记录无法找到：{}", tradeList);
+                    throw new ServiceException(4102,"交易记录无法找到");
+                }
+                if (tradeLog.getAmount() >= dealPrice) {
+                    AliRefund refund = new AliRefund();
+                    refund.setOut_trade_no(tradeLog.getTradeNo());
+                    refund.setTrade_no(tradeLog.getAliTrandeNo());
+                    refund.setRefund_amount(String.valueOf(dealPrice));
+                    refund.setRefund_reason("会员充值退款");
+                    String out_request_no = log.getTradeNo();
+                    refund.setOut_request_no(out_request_no);
 
-                if (logList.size() > 0) {
-                    for (int i = 0; i < logList.size(); i++) {
-                        if (logList.get(i).getAmount() >= dealPrice) {
-                            AliRefund refund = new AliRefund();
-                            refund.setOut_trade_no(logList.get(i).getTradeNo());
-                            refund.setTrade_no(logList.get(i).getAliTrandeNo());
-                            refund.setRefund_amount(String.valueOf(dealPrice));
-                            refund.setRefund_reason("会员充值退款");
-                            String out_request_no = log.getTradeNo() + "_" + logList.size();
-                            refund.setOut_request_no(out_request_no);
+                    try {
+                        AlipayClient alipayClient = AliPayConfig.getInstance();
+                        AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+                        request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
+                        AlipayTradeRefundResponse response = alipayClient.execute(request);
+                        LOGGER.info("支付宝退款支付宝返回信息{}", JSON.toJSONString(response));
+                        if (response.isSuccess()) {
 
-                            try {
-                                AlipayClient alipayClient = AliPayConfig.getInstance();
-                                AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
-                                request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
-                                AlipayTradeRefundResponse response = alipayClient.execute(request);
-                                LOGGER.info("支付宝退款支付宝返回信息{}", JSON.toJSONString(response));
-                                if (response.isSuccess()) {
+                            JSONObject object = JSON.parseObject(response.getBody());
+                            RefundRes refundRes = JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
 
-                                    JSONObject object = JSON.parseObject(response.getBody());
-                                    RefundRes refundRes = JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
+                            LOGGER.info("支付宝退款成功,插入退款流水记录");
+                            insertTrade(orderBO, refundRes);
 
-                                    LOGGER.info("支付宝退款成功,插入退款流水记录");
-                                    insertTrade(orderBO, refundRes);
-
-                                    //扣除订单获得的积分
-                                    if(orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0){
-                                        Order order = new Order();
-                                        BeanUtils.copyProperties(orderBO,order);
-                                        insertReturnPoints(order, 0d, order.getGiftPoints());
-                                    }
-
-                                    // 插入订单日志-已完成
-                                    String remark;
-                                    if(vipLogBO.getSource() != null){
-                                        remark = "已完成退款。回退到该订单："+vipLogBO.getSource();
-                                    }else{
-                                        remark = "已完成退款。";
-                                    }
-                                    insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
-
-
-                                    //发送消息
-                                    if (orderBO == null) {
-                                        LOGGER.warn("订单信息查询失败：{}", orderBO.getOrderNo());
-                                        throw new ServiceException(4102, "订单信息查询失败");
-                                    }
-                                    //将订单状态改成已退单
-                                    orderBO.setOrderStatus("9");
-                                    Order order = new Order();
-                                    BeanUtils.copyProperties(orderBO,order);
-                                    orderMapper.update(order);
-                                    User user = userMapper.selectOne(orderBO.getUserId());
-                                    updateVipInfo(vipLogBO, user,orderBO.getOrderNo(),orderProductBO.getSpecInfo());
-
-
-                                    sendReturnMessage(orderBO, httpServletRequest, refundRes, user);
-                                } else {
-                                    LOGGER.error("支付宝退款失败：");
-                                    throw new ServiceException(9999,response.getSubMsg());
-
-                                }
-                            } catch (ServiceException e) {
-                                LOGGER.error("支付宝退款失败：", e);
-                                throw new ServiceException(9999,e.getBodyStatus().getMessage());
-                            } catch (Exception e) {
-                                LOGGER.error("支付宝退款失败：", e);
-                                throw new ServiceException(9999,e.getMessage());
+                            //扣除订单获得的积分
+                            if(orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0){
+                                Order order = new Order();
+                                BeanUtils.copyProperties(orderBO,order);
+                                insertReturnPoints(order, 0d, order.getGiftPoints());
                             }
+
+                            // 插入订单日志-已完成
+                            String remark;
+                            if(vipLogBO.getSource() != null){
+                                remark = "已完成退款。回退到该订单："+vipLogBO.getSource();
+                            }else{
+                                remark = "已完成退款。";
+                            }
+                            insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
+
+
+                            //发送消息
+                            if (orderBO == null) {
+                                LOGGER.warn("订单信息查询失败：{}", orderBO.getOrderNo());
+                                throw new ServiceException(4102, "订单信息查询失败");
+                            }
+                            //将订单状态改成已退单
+                            orderBO.setOrderStatus("9");
+                            Order order = new Order();
+                            BeanUtils.copyProperties(orderBO,order);
+                            orderMapper.update(order);
+                            User user = userMapper.selectOne(orderBO.getUserId());
+                            updateVipInfo(vipLogBO, user,orderBO.getOrderNo(),orderProductBO.getSpecInfo());
+
+
+                            sendReturnMessage(orderBO, httpServletRequest, refundRes, user);
+                        } else {
+                            LOGGER.error("支付宝退款失败：");
+                            throw new ServiceException(9999,response.getSubMsg());
+
                         }
+                    } catch (ServiceException e) {
+                        LOGGER.error("支付宝退款失败：", e);
+                        throw new ServiceException(9999,e.getBodyStatus().getMessage());
+                    } catch (Exception e) {
+                        LOGGER.error("支付宝退款失败：", e);
+                        throw new ServiceException(9999,e.getMessage());
                     }
                 }
 
