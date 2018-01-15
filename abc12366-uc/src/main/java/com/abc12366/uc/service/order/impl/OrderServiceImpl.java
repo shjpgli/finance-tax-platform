@@ -2,6 +2,7 @@ package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
@@ -200,6 +201,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderBO submitOrder(OrderSubmitBO orderSubmitBO) {
+        UCUserBO user = Utils.getUserInfo();
+        orderSubmitBO.setNowVipLevel(user.getVipLevel());
         Date date = new Date();
         //根据是否需要寄送来判断地址是否填写
         if (orderSubmitBO.getIsShipping() != null && orderSubmitBO.getIsShipping() == 1) {
