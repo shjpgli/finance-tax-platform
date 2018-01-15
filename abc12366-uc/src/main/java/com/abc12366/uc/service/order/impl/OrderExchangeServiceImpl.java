@@ -328,6 +328,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                             req.setGmf_sjh(eoi.getPhone());
                         }
                         req.setFpqqlsh(DateUtils.getFPQQLSH());
+                        req.setYfp_dm(eoi.getInvoiceCode());
+                        req.setYfp_hm(eoi.getInvoiceNo());
                         req.setKplx("1");
                         req.setZsfs("0");
                         req.setKpr(Utils.getAdminInfo().getNickname());
