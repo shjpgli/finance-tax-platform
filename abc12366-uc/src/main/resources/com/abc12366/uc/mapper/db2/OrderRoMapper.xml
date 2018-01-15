@@ -555,7 +555,7 @@
     </select>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectById" resultMap="orderBODetailMap" parameterType="java.lang.String">
+    <select id="selectById" resultMap="orderBOResultMap" parameterType="java.lang.String">
         SELECT
         o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
         o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
