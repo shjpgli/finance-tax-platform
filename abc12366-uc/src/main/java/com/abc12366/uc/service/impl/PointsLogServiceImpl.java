@@ -155,20 +155,20 @@ public class PointsLogServiceImpl implements PointsLogService {
     }
 
     @Override
-    public PointsLogBO insertByConsume(PointsLogBO pointsLogBO) {
+    public PointsLogBO insertByConsume(PointsLogBO pointsLogBO,String vipLevel) {
         if (pointsLogBO == null || StringUtils.isEmpty(pointsLogBO.getUserId())) {
             LOGGER.error("积分日志参数不正确：{}",pointsLogBO);
             return null;
         }
-        User user = userMapper.selectOne(pointsLogBO.getUserId());
+        /*User user = userMapper.selectOne(pointsLogBO.getUserId());
         if (user == null || StringUtils.isEmpty(user.getVipLevel())) {
             LOGGER.error("不存在这个用户：{}", pointsLogBO.getUserId());
             return null;
-        }
+        }*/
         //会员权限埋点（产品消费获得积分加成）
-        if (!StringUtils.isEmpty(user.getVipLevel()) && (pointsLogBO.getIncome() - pointsLogBO.getOutgo() > 0)) {
+        if (!StringUtils.isEmpty(vipLevel) && (pointsLogBO.getIncome() - pointsLogBO.getOutgo() > 0)) {
             VipPrivilegeLevelBO vipPrivilegeLevelBOPar = new VipPrivilegeLevelBO();
-            vipPrivilegeLevelBOPar.setLevelId(user.getVipLevel());
+            vipPrivilegeLevelBOPar.setLevelId(vipLevel);
             vipPrivilegeLevelBOPar.setPrivilegeId("A_XFJFJC");
             VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectLevelIdPrivilegeId(vipPrivilegeLevelBOPar);
             if (vipPrivilegeLevelBO != null && vipPrivilegeLevelBO.getStatus()) {
