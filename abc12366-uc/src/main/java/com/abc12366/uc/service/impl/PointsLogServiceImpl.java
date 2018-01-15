@@ -166,7 +166,7 @@ public class PointsLogServiceImpl implements PointsLogService {
             return null;
         }*/
         //会员权限埋点（产品消费获得积分加成）
-        if (!StringUtils.isEmpty(vipLevel) && (pointsLogBO.getIncome() - pointsLogBO.getOutgo() > 0)) {
+        if (!StringUtils.isEmpty(vipLevel)) {
             VipPrivilegeLevelBO vipPrivilegeLevelBOPar = new VipPrivilegeLevelBO();
             vipPrivilegeLevelBOPar.setLevelId(vipLevel);
             vipPrivilegeLevelBOPar.setPrivilegeId("A_XFJFJC");
