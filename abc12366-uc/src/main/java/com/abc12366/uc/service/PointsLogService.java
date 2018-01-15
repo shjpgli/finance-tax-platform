@@ -20,7 +20,7 @@ public interface PointsLogService {
 
     PointsLogBO insertNoVip(PointsLogBO pointsLogBO);
 
-    PointsLogBO insertByConsume(PointsLogBO pointsLogBO);
+    PointsLogBO insertByConsume(PointsLogBO pointsLogBO,String vipLevel);
     /**
      * 查询本月装让次数
      * @param map
