@@ -1204,7 +1204,7 @@ public class OrderServiceImpl implements OrderService {
                                     BeanUtils.copyProperties(orderBO,order);
                                     orderMapper.update(order);
                                     User user = userMapper.selectOne(orderBO.getUserId());
-                                    updateVipInfo(vipLogBO, user);
+                                    updateVipInfo(vipLogBO, user,orderBO.getOrderNo());
 
 
                                     sendReturnMessage(orderBO, httpServletRequest, refundRes, user);
@@ -1246,7 +1246,7 @@ public class OrderServiceImpl implements OrderService {
 
             //修改用户信息
             User user = userMapper.selectOne(orderBO.getUserId());
-            updateVipInfo(vipLogBO, user);
+            updateVipInfo(vipLogBO, user,orderBO.getOrderNo());
 
             LOGGER.info("积分退款成功,插入退款流水记录");
             insertTrade(orderBO, dealPrice);
@@ -1319,7 +1319,7 @@ public class OrderServiceImpl implements OrderService {
      * @param vipLogBO
      * @param user
      */
-    public void updateVipInfo(VipLogBO vipLogBO, User user) {
+    public void updateVipInfo(VipLogBO vipLogBO, User user,String orderNo) {
         //查询会员礼包业务
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
         obj.setLevelId(user.getVipLevel().trim().toUpperCase());
@@ -1335,7 +1335,7 @@ public class OrderServiceImpl implements OrderService {
             uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
             uamountLog.setUserId(user.getId());
             uamountLog.setCreateTime(new Date());
-            uamountLog.setRemark("会员退订，扣除礼包金额");
+            uamountLog.setRemark("会员退订，扣除礼包金额；会员商品订单号："+orderNo);
             //赠送金额
             double income = Double.parseDouble(findObj.getVal1());
             double amount = 0;
