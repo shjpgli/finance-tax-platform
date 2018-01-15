@@ -266,7 +266,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     message.setContent(content);
                     message.setUserId(order.getUserId());
 
-                    Map<String, String> map = new HashMap<String, String>();
+                    Map<String, String> map = new HashMap<>();
                     map.put("userId", user.getId());
                     map.put("openId", user.getWxopenid());
                     map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
@@ -393,7 +393,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     // 查询交易日志中支付成功的订单
                     Trade tr = tradeRoMapper.selectOrderNo(order.getOrderNo());
                     if(tr == null){
-                        LOGGER.info("交易记录无法找到：{}", tr);
+                        LOGGER.info("交易记录无法找到：{}",order.getOrderNo());
                         throw new ServiceException(4102,"交易记录无法找到");
                     }
 
@@ -460,21 +460,16 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         // 插入订单日志-已完成
                                         insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
 
-                                        //发送消息
-                                        if (order == null) {
-                                            LOGGER.warn("订单信息查询失败：{}", oe.getOrderNo());
-                                            throw new ServiceException(4102, "订单信息查询失败");
-                                        }
                                         //将订单状态改成已结束
                                         order.setOrderStatus("7");
                                         orderMapper.update(order);
                                         User user = userMapper.selectOne(order.getUserId());
                                         //查询会员特权-业务提醒
-                                        VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
+                                        /*VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
                                         obj.setLevelId(user.getVipLevel());
                                         obj.setPrivilegeId(MessageConstant.YWTX_CODE);
                                         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-
+*/
                                         Message message = new Message();
                                         message.setBusinessId(oe.getOrderNo());
                                         message.setBusiType(MessageConstant.SPDD);
@@ -484,7 +479,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                                         message.setUserId(order.getUserId());
 
-                                        Map<String, String> map = new HashMap<String, String>();
+                                        Map<String, String> map = new HashMap<>();
                                         map.put("userId", user.getId());
                                         map.put("openId", user.getWxopenid());
                                         map.put("first", "您好，欢迎使用财税平台");
@@ -706,7 +701,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             //发送消息
             Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
             if (order == null) {
-                LOGGER.warn("订单信息查询失败：{}", order.getExpressCompId());
+                LOGGER.warn("订单信息查询失败：{}");
                 throw new ServiceException(4102, "订单信息查询失败");
             }
             User user = userMapper.selectOne(order.getUserId());
@@ -749,7 +744,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
      */
     private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
         //发送短信
-        Map<String, String> maps = new HashMap<String, String>();
+        Map<String, String> maps = new HashMap<>();
         maps.put("var", content);
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         list.add(maps);

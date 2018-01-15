@@ -13,7 +13,13 @@ import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
+import com.abc12366.uc.model.dzfp.DzfpGetReq;
+import com.abc12366.uc.model.dzfp.Einvocie;
+import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.gift.UamountLog;
+import com.abc12366.uc.model.invoice.Invoice;
+import com.abc12366.uc.model.invoice.InvoiceDetail;
+import com.abc12366.uc.model.invoice.bo.InvoiceBO;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.pay.RefundRes;
@@ -22,6 +28,7 @@ import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.CharUtil;
+import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayClient;
@@ -125,6 +132,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private UamountLogMapper uamountLogMapper;
+
+    @Autowired
+    private InvoiceDetailRoMapper invoiceDetailRoMapper;
+
+    @Autowired
+    private InvoiceDetailMapper invoiceDetailMapper;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -1108,6 +1121,8 @@ public class OrderServiceImpl implements OrderService {
         VipLogBO vipLogBO = (VipLogBO)map.get("vipLogBO");
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
         if(orderBO != null){
+            //发票作废
+            invoiceCancel(orderBO);
 
             List<OrderProductBO> list = orderBO.getOrderProductBOList();
             for(OrderProductBO orderProductBO:list){
@@ -1121,8 +1136,67 @@ public class OrderServiceImpl implements OrderService {
                         LOGGER.info("修改异常：{}", orderProductBO);
                         throw new ServiceException(4102);
                     }
+
                     refund(orderBO,orderProductBO,vipLogBO,httpServletRequest);
                 }
+            }
+        }
+    }
+
+    /**
+     * 发票作废
+     * @param orderBO
+     */
+    public void invoiceCancel(OrderBO orderBO) {
+        // 发票作废
+        InvoiceBO invoiceBO = orderBO.getInvoiceBO();
+        if(invoiceBO != null){
+
+            DzfpGetReq req = new DzfpGetReq();
+            List<InvoiceXm> dataList = new ArrayList<>();
+            if ("1".equals(invoiceBO.getProperty())) { // 纸质发票
+                LOGGER.info("该会员订购已开具纸质发票，不能退订：{}");
+                throw new ServiceException(4102,"该会员订购已开具纸质发票，不能退订");
+            } else if ("2".equals(invoiceBO.getProperty())) { // 电子发票
+                if ("1".equals(invoiceBO.getName())) { // 个人发票
+                    req.setGmf_mc(invoiceBO.getNsrmc());
+                } else {
+                    req.setGmf_mc(invoiceBO.getNsrmc());
+                    req.setGmf_nsrsbh(invoiceBO.getNsrsbh());
+                    req.setGmf_dzdh(invoiceBO.getAddress());
+                    req.setGmf_yhzh(invoiceBO.getBank());
+                    req.setGmf_sjh(invoiceBO.getPhone());
+                }
+                req.setKplx("1");
+                req.setZsfs("0");
+                req.setKpr(Utils.getAdminInfo().getNickname());
+                req.setHylx("0");
+
+                InvoiceXm xm = new InvoiceXm();
+                xm.setFphxz("0");
+                xm.setXmmc(selectFieldValue("invoicecontent", invoiceBO.getContent()));
+                xm.setXmsl(-1.00);
+                xm.setTotalAmt(-invoiceBO.getAmount());
+                dataList.add(xm);
+
+                req.setInvoiceXms(dataList);
+            }
+            Einvocie einvocie = null;
+            try {
+                einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", req.tosendXml(), Einvocie.class);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
+                InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(einvocie.getFP_HM());
+                id.setStatus("3");
+                id.setLastUpdate(new Date());
+                id.setSpUrl(einvocie.getSP_URL());
+                id.setPdfUrl(einvocie.getPDF_URL());
+                invoiceDetailMapper.update(id);
+            } else {
+                throw new ServiceException(einvocie.getReturnCode(), einvocie.getReturnMessage());
             }
         }
     }
@@ -1360,6 +1434,7 @@ public class OrderServiceImpl implements OrderService {
         //更新会员日志
         vipLogBO.setId(Utils.uuid());
         vipLogBO.setCreateTime(new Date());
+        vipLogBO.setSource("会员退订");
         vipLogService.insert(vipLogBO);
         //修改用户信息
         user.setVipLevel(vipLogBO.getLevelId());
