@@ -50,4 +50,12 @@ public interface CouponMapper {
      * @return 影响行数
      */
     int insertUserCoupon(CouponUser cu);
+
+    /**
+     * 修改用户优惠劵
+     *
+     * @param cu 优惠劵对象
+     * @return 影响行数
+     */
+    int updateUserCoupon(CouponUser cu);
 }

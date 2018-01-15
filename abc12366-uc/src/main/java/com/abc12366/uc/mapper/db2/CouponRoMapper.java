@@ -19,7 +19,7 @@ public interface CouponRoMapper {
     /**
      * 查询优惠劵列表
      *
-     * @param bo 查询条件：couponMode、couponType、status
+     * @param bo 查询条件：couponMode,couponType,status
      * @return 优惠劵列表
      */
     List<CouponListBO> selectList(Coupon bo);
@@ -27,7 +27,7 @@ public interface CouponRoMapper {
     /**
      * 查询优惠劵活动列表
      *
-     * @param bo 查询条件：activityName、status
+     * @param bo 查询条件：activityName,couponId,status
      * @return 优惠劵列表
      */
     List<CouponActivityListBO> selectActivityList(CouponActivity bo);
@@ -35,10 +35,18 @@ public interface CouponRoMapper {
     /**
      * 查询用户优惠劵活动列表
      *
-     * @param bo activityId, couponId, status
+     * @param bo userId,activityId,couponId,status
      * @return 用户优惠劵活动列表
      */
     List<CouponUserListBO> selectUserList(CouponUser bo);
+
+    /**
+     * 查询用户优惠劵活动数量
+     *
+     * @param bo userId,activityId,status
+     * @return 记录数量
+     */
+    int selectUserCouponCount(CouponUser bo);
 
     /**
      * 根据ID查看优惠劵
@@ -55,4 +63,12 @@ public interface CouponRoMapper {
      * @return 优惠劵活动对象
      */
     CouponActivity selectOneActivity(String id);
+
+    /**
+     * 根据ID查询用户优惠劵对象
+     *
+     * @param id 用户优惠劵主键ID
+     * @return 用户优惠劵对象
+     */
+    CouponUser selectUserCoupon(String id);
 }

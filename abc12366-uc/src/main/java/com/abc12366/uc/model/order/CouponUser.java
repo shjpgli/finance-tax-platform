@@ -97,6 +97,16 @@ public class CouponUser {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
+    /**
+     * 订单号
+     */
+    private String orderNo;
+
+    /**
+     * 商品品类ID，逗号分隔
+     */
+    private String categoryIds;
+
     public String getId() {
         return id;
     }
@@ -225,6 +235,22 @@ public class CouponUser {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(String categoryIds) {
+        this.categoryIds = categoryIds;
+    }
+
     @Override
     public String toString() {
         return "CouponUser{" +
@@ -244,6 +270,8 @@ public class CouponUser {
                 ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
+                ", orderNo='" + orderNo + '\'' +
+                ", categoryIds='" + categoryIds + '\'' +
                 '}';
     }
 }

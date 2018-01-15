@@ -7,6 +7,7 @@ import com.abc12366.uc.model.order.bo.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 优惠劵服务
@@ -119,4 +120,23 @@ public interface CouponService {
      * @return 是否领取成功
      */
     boolean userCollectCoupon(String userId, String activityId);
+
+    /**
+     * 用户下单、支付、取消下单操作优惠劵
+     *
+     * @param map couponId 优惠劵ID,
+     *            userId 用户ID,
+     *            orderNo 订单号,
+     *            categoryId 商品品目
+     *            status 优惠劵状态：0-未领取 1-已领取 2-已使用 3-已冻结 4-已删除 5-已过期 6-已作废,
+     */
+    boolean userUseCoupon(Map<String, String> map);
+
+    /**
+     * 用户删除优惠劵
+     *
+     * @param bo 要删除的优惠劵对象
+     * @return 成功或失败
+     */
+    boolean userDeleteCoupon(CouponUser bo);
 }

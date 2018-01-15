@@ -369,4 +369,37 @@ public class CouponActivity {
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+    @Override
+    public String toString() {
+        return "CouponActivity{" +
+                "id='" + id + '\'' +
+                ", activityName='" + activityName + '\'' +
+                ", activityLink='" + activityLink + '\'' +
+                ", couponId='" + couponId + '\'' +
+                ", activityStartTime=" + activityStartTime +
+                ", activityEndTime=" + activityEndTime +
+                ", couponNum=" + couponNum +
+                ", limit=" + limit +
+                ", limitNum=" + limitNum +
+                ", getType='" + getType + '\'' +
+                ", validApi='" + validApi + '\'' +
+                ", valid=" + valid +
+                ", target='" + target + '\'' +
+                ", areaOper='" + areaOper + '\'' +
+                ", areaIds='" + areaIds + '\'' +
+                ", tagOper='" + tagOper + '\'' +
+                ", tagIds='" + tagIds + '\'' +
+                ", regTimeOper='" + regTimeOper + '\'' +
+                ", regStartTime=" + regStartTime +
+                ", regEndTime=" + regEndTime +
+                ", vips='" + vips + '\'' +
+                ", userIds='" + userIds + '\'' +
+                ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                '}';
+    }
 }

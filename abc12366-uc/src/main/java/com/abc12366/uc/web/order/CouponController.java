@@ -230,6 +230,8 @@ public class CouponController {
         return ResponseEntity.ok(Utils.kv("data", couponService.deleteActivity(id)));
     }
 
+    /******************************* 用户优惠劵 ******************************/
+
     /**
      * 运营系统-查询优惠劵活动用户优惠劵列表
      *
@@ -297,5 +299,21 @@ public class CouponController {
         List<CouponUserListBO> dataList = couponService.selectUserList(bo, pageNum, pageSize);
         PageInfo<CouponUserListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 前端-用户删除优惠劵
+     *
+     * @param userId   用户ID
+     * @param couponId 优惠劵ID
+     * @return 成功或失败
+     */
+    @PutMapping("/user/{userId}/{couponId}")
+    public ResponseEntity userDeleteCoupon(@PathVariable String userId, @PathVariable String couponId) {
+        CouponUser bo = new CouponUser();
+        bo.setUserId(userId);
+        bo.setId(couponId);
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", couponService.userDeleteCoupon(bo)));
     }
 }

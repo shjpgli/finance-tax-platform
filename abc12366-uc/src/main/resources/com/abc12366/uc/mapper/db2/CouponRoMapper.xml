@@ -19,7 +19,8 @@
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.Coupon">
         SELECT id, couponName, couponMode, couponType, param1,
         param2, amountType, validType, validStartTime, validEndTime,
-        validDays, description, status, createTime, lastUpdate
+        validDays, description, status, createTime, lastUpdate,
+        categoryIds
         FROM uc_coupon
         <where>
             <if test="id != null and id != ''">id = #{id}</if>
@@ -29,13 +30,12 @@
     <select id="selectActivityList" parameterType="com.abc12366.uc.model.order.CouponActivity"
             resultType="com.abc12366.uc.model.order.bo.CouponActivityListBO">
         SELECT ca.id, ca.activityName, ca.couponId, c.couponName, ca.couponNum,
-          (SELECT count(*) FROM uc_coupon_user WHERE status = '1') as collectNum,
-          (SELECT count(*) FROM uc_coupon_user WHERE status = '2') as usedNum,
         ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
             <if test="activityName != null and activityName != ''">ca.activityName LIKE CONCAT('%',#{activityName},'%')</if>
+            <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
             <if test="status != null and status != ''">AND ca.status = #{status}</if>
         </where>
     </select>
@@ -54,6 +54,18 @@
         </where>
     </select>
 
+    <select id="selectUserCoupon" parameterType="java.lang.String"
+            resultType="com.abc12366.uc.model.order.CouponUser">
+        SELECT id, userId, activityId, couponId, couponName,
+        couponMode, couponType, param1, param2, amountType,
+        validStartTime, validEndTime, description, status, createTime,
+        lastUpdate, orderNo, categoryIds
+        FROM uc_coupon_user
+        <where>
+            <if test="id != null and id != ''">id = #{id}</if>
+        </where>
+    </select>
+
     <select id="selectUserList" parameterType="com.abc12366.uc.model.order.CouponUser"
             resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
         SELECT cu.id, cu.userId, u.username, cu.couponMode, cu.couponType,
@@ -66,6 +78,16 @@
             <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
             <if test="status != null and status != ''">AND cu.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectUserCouponCount" parameterType="com.abc12366.uc.model.order.CouponUser"
+            resultType="java.lang.Integer">
+        SELECT count(*) FROM uc_coupon_user
+        <where>
+            <if test="userId != null and userId != ''">userId = #{userId}</if>
+            <if test="activityId != null and activityId != ''">AND activityId = #{activityId}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
         </where>
     </select>
 </mapper>

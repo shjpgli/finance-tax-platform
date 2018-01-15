@@ -3,7 +3,9 @@ package com.abc12366.uc.model.order.bo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 优惠劵新增、修改对象
@@ -91,6 +93,13 @@ public class CouponBO {
      */
     @Length(max = 1)
     private String status;
+
+    /**
+     * 商品品类ID，逗号分隔
+     */
+    @NotEmpty
+    @Size(max = 10)
+    private List<String> categoryIds;
 
     public String getId() {
         return id;
@@ -196,6 +205,14 @@ public class CouponBO {
         this.status = status;
     }
 
+    public List<String> getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(List<String> categoryIds) {
+        this.categoryIds = categoryIds;
+    }
+
     @Override
     public String toString() {
         return "CouponBO{" +
@@ -212,6 +229,7 @@ public class CouponBO {
                 ", validDays=" + validDays +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
+                ", categoryIds=" + categoryIds +
                 '}';
     }
 }
