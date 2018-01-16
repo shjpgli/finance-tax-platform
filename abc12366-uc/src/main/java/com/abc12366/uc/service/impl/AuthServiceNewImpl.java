@@ -195,11 +195,12 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 //            password = Utils.md5(Utils.md5(bo.getPassword()) + user.getSalt());
             // 现在的加密版本
             if ("1".equals(channel)) {
-                //password = rsaService.decode(bo.getPassword());
-            	password = rsaService.decodenNew(bo.getPassword());
+                //新加密后台MD5
+            	password = Utils.md5(rsaService.decodenNew(bo.getPassword())+user.getSalt());
             } else if ("2".equals(channel)) {
-            	password = rsaService.decodeStringFromJsNew(bo.getPassword());
-                //password = rsaService.decodeStringFromJs(bo.getPassword());
+            	//新加密后台MD5
+            	password = Utils.md5(rsaService.decodeStringFromJsNew(bo.getPassword())+user.getSalt());
+                
             } else {
                 password = user.getPassword();
             }
