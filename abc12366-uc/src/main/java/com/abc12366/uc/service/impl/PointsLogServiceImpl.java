@@ -62,7 +62,7 @@ public class PointsLogServiceImpl implements PointsLogService {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-        User user = userMapper.selectOne(pointsLogBO.getUserId());
+        User user = userMapper.selectPointsAndExp(pointsLogBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }
