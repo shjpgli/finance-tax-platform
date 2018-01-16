@@ -57,51 +57,52 @@ public class PointsLogServiceImpl implements PointsLogService {
     @Transactional("db1TxManager")
     @Override
     public synchronized PointsLogBO insert(PointsLogBO pointsLogBO) {
-        LOGGER.info("-------------------start    thread name:"+ Thread.currentThread().getName());
+
         if (pointsLogBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-        User user = userRoMapper.selectPointsAndExp(pointsLogBO.getUserId());
-        if (user == null) {
-            throw new ServiceException(4018);
-        }
-
-        //可用积分=上一次的可用积分+|-本次收入|支出
-        int priPoints = 0;
-        if (user.getPoints() != null) {
-            priPoints = user.getPoints();
-        }
-        LOGGER.info("用户当前可用积分：{}",priPoints);
-        int usablePoints = priPoints + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
-        if (usablePoints < 0) {
-            throw new ServiceException(4635);
-        }
-        LOGGER.info("用户积分计算后可用积分：{}",usablePoints);
-        //uc_user的points字段和uc_point_log的usablePoints字段都要更新
-        user.setPoints(usablePoints);
-        user.setLastUpdate(new Date());
-        int userUpdateResult = userMapper.updatePoints(user);
-        if (userUpdateResult != 1) {
-            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + pointsLogBO.getUserId());
-            throw new ServiceException(4101);
-        }
-
-        PointsLog pointsLog = new PointsLog();
-        BeanUtils.copyProperties(pointsLogBO, pointsLog);
-        pointsLog.setId(Utils.uuid());
-        pointsLog.setCreateTime(new Date());
-        pointsLog.setUsablePoints(usablePoints);
-        int result = pointsLogMapper.insert(pointsLog);
-        if (result < 1) {
-            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
-            throw new ServiceException(4101);
-        }
-
-        PointsLogBO pointsLogBOReturn = new PointsLogBO();
-        BeanUtils.copyProperties(pointsLog, pointsLogBOReturn);
-        LOGGER.info("-------------------end    thread name:"+ Thread.currentThread().getName());
-        return pointsLogBOReturn;
+//        User user = userRoMapper.selectPointsAndExp(pointsLogBO.getUserId());
+//        if (user == null) {
+//            throw new ServiceException(4018);
+//        }
+//
+//        //可用积分=上一次的可用积分+|-本次收入|支出
+//        int priPoints = 0;
+//        if (user.getPoints() != null) {
+//            priPoints = user.getPoints();
+//        }
+//        LOGGER.info("用户当前可用积分：{}",priPoints);
+//        int usablePoints = priPoints + pointsLogBO.getIncome() - pointsLogBO.getOutgo();
+//        if (usablePoints < 0) {
+//            throw new ServiceException(4635);
+//        }
+//        LOGGER.info("用户积分计算后可用积分：{}",usablePoints);
+//        //uc_user的points字段和uc_point_log的usablePoints字段都要更新
+//        user.setPoints(usablePoints);
+//        user.setLastUpdate(new Date());
+//        int userUpdateResult = userMapper.updatePoints(user);
+//        if (userUpdateResult != 1) {
+//            LOGGER.warn("新增失败,更新用户表积分失败,参数为：userId=" + pointsLogBO.getUserId());
+//            throw new ServiceException(4101);
+//        }
+//
+//        PointsLog pointsLog = new PointsLog();
+//        BeanUtils.copyProperties(pointsLogBO, pointsLog);
+//        pointsLog.setId(Utils.uuid());
+//        pointsLog.setCreateTime(new Date());
+//        pointsLog.setUsablePoints(usablePoints);
+//        int result = pointsLogMapper.insert(pointsLog);
+//        if (result < 1) {
+//            LOGGER.warn("新增失败，参数：{}", pointsLog.toString());
+//            throw new ServiceException(4101);
+//        }
+//
+//        PointsLogBO pointsLogBOReturn = new PointsLogBO();
+//        BeanUtils.copyProperties(pointsLog, pointsLogBOReturn);
+//        LOGGER.info("-------------------end    thread name:"+ Thread.currentThread().getName());
+//        return pointsLogBOReturn;
+        return pointsLogMapper.updatePointAndLog(pointsLogBO.getUserId(),pointsLogBO.getIncome()+pointsLogBO.getOutgo(),pointsLogBO.getRuleId());
     }
 
     @Override
