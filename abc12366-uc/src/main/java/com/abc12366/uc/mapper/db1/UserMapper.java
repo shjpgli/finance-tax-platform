@@ -110,5 +110,4 @@ public interface UserMapper {
 
 	UserJyxx selectByUnameOrPhone(String usernameOrPhone);
 
-    User selectPointsAndExp(String userId);
 }

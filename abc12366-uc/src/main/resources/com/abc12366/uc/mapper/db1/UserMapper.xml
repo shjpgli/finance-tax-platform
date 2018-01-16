@@ -359,9 +359,5 @@
         select id, username, phone, salt from uc_user 
         where username = #{usernameOrPhone} OR phone = #{usernameOrPhone} 
     </select>
-    <select id="selectPointsAndExp" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">
-        select uu.id,uu.points, uu.exp
-        from uc_user uu
-        where uu.id = #{id}
-    </select>
+
 </mapper>
