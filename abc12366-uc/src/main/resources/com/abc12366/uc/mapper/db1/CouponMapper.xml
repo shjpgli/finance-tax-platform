@@ -38,7 +38,7 @@
     </update>
 
     <insert id="insertActivity" parameterType="com.abc12366.uc.model.order.CouponActivity">
-        INTO INTO uc_coupon_activity
+        INSERT INTO uc_coupon_activity
         (id, activityName, activityLink, couponId, activityStartTime,
               activityEndTime, couponNum, `limit`, limitNum, getType,
               valid, validApi, target, areaOper, areaIds,
@@ -84,13 +84,13 @@
             <if test="description != null">description = #{description},</if>
             <if test="imageUrl != null">imageUrl = #{imageUrl},</if>
             <if test="status != null">status = #{status},</if>
-            <if test="lastUpdate != null"> = #{lastUpdate},</if>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
         </set>
         where id=#{id}
     </update>
 
     <insert id="insertUserCoupon" parameterType="com.abc12366.uc.model.order.CouponUser">
-        INSERT INTO (id, userId, activityId, couponId, couponName,
+        INSERT INTO uc_coupon_user (id, userId, activityId, couponId, couponName,
         couponMode, couponType, param1, param2, amountType,
         validStartTime, validEndTime, description, status, createTime,
         lastUpdate, orderNo, categoryIds)
@@ -100,13 +100,13 @@
         #{lastUpdate}, #{orderNo}, #{categoryIds})
     </insert>
 
-    <insert id="updateUserCoupon" parameterType="com.abc12366.uc.model.order.CouponUser">
-        update uc_coupon_activity
+    <update id="updateUserCoupon" parameterType="com.abc12366.uc.model.order.CouponUser">
+        update uc_coupon_user
         <set>
           <if test="status != null">status = #{status},</if>
           <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
           <if test="orderNo != null">orderNo = #{orderNo},</if>
         </set>
         where id=#{id}
-    </insert>
+    </update>
 </mapper>

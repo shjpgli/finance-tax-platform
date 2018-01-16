@@ -52,6 +52,18 @@ public class CouponUserListBO {
     private String amountType;
 
     /**
+     * 有效期起
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private Date validStartTime;
+
+    /**
+     * 有效期止
+     */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    private Date validEndTime;
+
+    /**
      * 状态: 0-未领取 1-已领取 2-已使用 3-已冻结 4-已删除 5-已过期 6-已作废
      */
     private String status;
@@ -137,6 +149,22 @@ public class CouponUserListBO {
         this.amountType = amountType;
     }
 
+    public Date getValidStartTime() {
+        return validStartTime;
+    }
+
+    public void setValidStartTime(Date validStartTime) {
+        this.validStartTime = validStartTime;
+    }
+
+    public Date getValidEndTime() {
+        return validEndTime;
+    }
+
+    public void setValidEndTime(Date validEndTime) {
+        this.validEndTime = validEndTime;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -180,6 +208,8 @@ public class CouponUserListBO {
                 ", param1=" + param1 +
                 ", param2=" + param2 +
                 ", amountType='" + amountType + '\'' +
+                ", validStartTime=" + validStartTime +
+                ", validEndTime=" + validEndTime +
                 ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +

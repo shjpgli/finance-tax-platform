@@ -124,13 +124,10 @@ public interface CouponService {
     /**
      * 用户下单、支付、取消下单操作优惠劵
      *
-     * @param map couponId 优惠劵ID,
-     *            userId 用户ID,
-     *            orderNo 订单号,
-     *            categoryId 商品品目
-     *            status 优惠劵状态：0-未领取 1-已领取 2-已使用 3-已冻结 4-已删除 5-已过期 6-已作废,
+     * @param bo 订单使用优惠劵对象
+     * @return allow:是否允许使用优惠劵，amount:使用优惠劵之后的金额
      */
-    boolean userUseCoupon(Map<String, String> map);
+    Map<String, Object> userUseCoupon(CouponOrderBO bo);
 
     /**
      * 用户删除优惠劵

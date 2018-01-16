@@ -83,6 +83,11 @@ public class CouponServiceImpl implements CouponService {
     public static final String COUPON_STATUS_DEL = "4";
 
     /**
+     * 优惠劵活动状态-已过期
+     */
+    public static final String COUPON_STATUS_OUTDATED = "5";
+
+    /**
      * 领取方式-系统
      */
     public static final String COUPON_GETTYPE_SYSTEM = "SYSTEM";
@@ -116,6 +121,41 @@ public class CouponServiceImpl implements CouponService {
      * 优惠劵模式-浮动金额
      */
     public static final String COUPON_MODE_FLOAT = "FLOAT";
+
+    /**
+     * 优惠劵计算金额类型-订单
+     */
+    public static final String COUPON_AMOUNT_ORDER = "ORDER";
+
+    /**
+     * 优惠劵计算金额类型-邮费
+     */
+    public static final String COUPON_AMOUNT_POSTAGE = "POSTAGE";
+
+    /**
+     * 等于
+     */
+    public static final String OPER_EQUALS = "equals";
+
+    /**
+     * 不等于
+     */
+    public static final String OPER_NE = "ne";
+
+    /**
+     * 小于等于
+     */
+    public static final String OPER_LTE = "lte";
+
+    /**
+     * 大于等于
+     */
+    public static final String OPER_GTE = "gte";
+
+    /**
+     * 在...之间
+     */
+    public static final String OPER_BETWEEN = "between";
 
     /**
      * 优惠劵CRUD操作
@@ -152,7 +192,23 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponUserListBO> selectUserList(CouponUser bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return couponRoMapper.selectUserList(bo);
+        // 处理status=5的查询
+        if (StringUtils.isNotEmpty(bo.getStatus()) && COUPON_STATUS_OUTDATED.equals(bo.getStatus())) {
+            bo.setValidEndTime(new Date());
+            bo.setStatus(null);
+        }
+        List<CouponUserListBO> dataList = couponRoMapper.selectUserList(bo);
+
+        // 处理过期的status显示
+        for(CouponUserListBO data : dataList) {
+            Date now = new Date();
+            boolean outdated = (data.getValidStartTime() != null && now.before(data.getValidStartTime())) ||
+                    (data.getValidEndTime() != null && now.after(data.getValidEndTime()));
+            if (outdated) {
+                data.setStatus(COUPON_STATUS_OUTDATED);
+            }
+        }
+        return dataList;
     }
 
     @Override
@@ -353,29 +409,60 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public boolean userUseCoupon(Map<String, String> map) {
-        Assert.notNull(map, "map can not empty");
-        CouponUser cu = couponRoMapper.selectUserCoupon(map.get("couponId"));
-        if (cu != null) {
-            if (!cu.getUserId().equals(map.get("userId"))) {
-                throw new ServiceException(7118);
+    public Map<String, Object> userUseCoupon(CouponOrderBO bo) {
+        Double amount = bo.getAmount();
+        Double amountAfter = amount;
+        for (String couponId : bo.getCouponIds()) {
+            Assert.notNull(couponId, "couponId can not empty");
+            CouponUser cu = couponRoMapper.selectUserCoupon(couponId);
+            if (cu != null) {
+                if (!cu.getUserId().equals(bo.getUserId())) {
+                    throw new ServiceException(7118);
+                }
+                if (!COUPON_AMOUNT_ORDER.equalsIgnoreCase(cu.getAmountType())) {
+                    throw new ServiceException(7131);
+                }
+                if (!cu.getCategoryIds().contains(bo.getCategoryId())) {
+                    throw new ServiceException(7119);
+                }
+                Date now = new Date();
+                if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
+                    throw new ServiceException(7120);
+                }
+                if (!COUPON_STATUS_GET.equals(cu.getStatus()) ||
+                        !COUPON_STATUS_ON.equals(cu.getStatus()) ||
+                        !COUPON_STATUS_FREEZEN.equals(cu.getStatus())) {
+                    throw new ServiceException(7121);
+                }
+
+                switch (cu.getCouponType()) {
+                    case COUPONTYPE_MANJIAN:
+                        if (amount >= cu.getParam1()) {
+                            amount = amount - cu.getParam1();
+                            amountAfter = amountAfter - cu.getParam2();
+                        }
+                        break;
+                    case COUPONTYPE_ZHEKOU:
+                        if (amount >= cu.getParam1()) {
+                            amount = amount - cu.getParam1();
+                            amountAfter = amountAfter - cu.getParam1() * (1 - cu.getParam2());
+                        }
+                        break;
+                    case COUPONTYPE_LIJIAN:
+                        if (amount >= cu.getParam2()) {
+                            amount = amount - cu.getParam2();
+                            amountAfter = amountAfter - cu.getParam1() * (1 - cu.getParam2());
+                        }
+                        break;
+                }
+
+                cu.setOrderNo(COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
+                cu.setStatus(bo.getStatus());
+                cu.setLastUpdate(new Date());
+                couponMapper.updateUserCoupon(cu);
             }
-            if (!cu.getCategoryIds().contains(map.get("categoryId"))) {
-                throw new ServiceException(7119);
-            }
-            Date now = new Date();
-            if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
-                throw new ServiceException(7120);
-            }
-            if (!COUPON_STATUS_ON.equals(cu.getStatus()) || !COUPON_STATUS_FREEZEN.equals(cu.getStatus())) {
-                throw new ServiceException(7121);
-            }
-            cu.setOrderNo(map.get("orderNo"));
-            cu.setStatus(map.get("status"));
-            cu.setLastUpdate(new Date());
-            return 1 == couponMapper.updateUserCoupon(cu);
         }
-        return false;
+        return null;
     }
 
     @Override
@@ -386,7 +473,7 @@ public class CouponServiceImpl implements CouponService {
             if (!cu.getUserId().equals(bo.getUserId())) {
                 throw new ServiceException(7118);
             }
-            if (!COUPON_STATUS_GET.equals(cu.getStatus()) || !COUPON_STATUS_FREEZEN.equals(cu.getStatus())) {
+            if (COUPON_STATUS_ON.equals(cu.getStatus()) || COUPON_STATUS_FREEZEN.equals(cu.getStatus())) {
                 throw new ServiceException(7121);
             }
             cu.setStatus(COUPON_STATUS_DEL);
@@ -397,7 +484,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     /**
-     * 是否允许用户领取
+     * 是否允许用户领取优惠劵
      *
      * @param userId 用户ID
      * @param ca     优惠劵活动对象
@@ -417,7 +504,7 @@ public class CouponServiceImpl implements CouponService {
         cu.setActivityId(ca.getId());
         int i = couponRoMapper.selectUserCouponCount(cu);
         LOGGER.info("活动优惠劵数量限制:{}", i);
-        if (i > ca.getCouponNum()) {
+        if (i >= ca.getCouponNum()) {
             throw new ServiceException(7110);
         }
 
@@ -425,7 +512,7 @@ public class CouponServiceImpl implements CouponService {
             cu.setUserId(userId);
             i = couponRoMapper.selectUserCouponCount(cu);
             LOGGER.info("用户领取限制:{}", i);
-            if (i > ca.getLimitNum()) {
+            if (i >= ca.getLimitNum()) {
                 throw new ServiceException(7111);
             }
         }
@@ -440,15 +527,15 @@ public class CouponServiceImpl implements CouponService {
         // 优惠劵模式校验
         if (!COUPON_MODE_FIXED.equalsIgnoreCase(bo.getCouponMode()) &&
                 !COUPON_MODE_FLOAT.equalsIgnoreCase(bo.getCouponMode())) {
-            throw new ServiceException();
+            throw new ServiceException(7122);
         }
 
-        // 优惠劵类型合法
+        // 优惠劵类型校验
         boolean couponType = StringUtils.isNotEmpty(bo.getCouponType()) &&
                 (COUPONTYPE_MANJIAN.equalsIgnoreCase(bo.getCouponType()) ||
                         COUPONTYPE_ZHEKOU.equalsIgnoreCase(bo.getCouponType()) ||
                         COUPONTYPE_LIJIAN.equalsIgnoreCase(bo.getCouponType()));
-        // 校验参数不为空
+        // 优惠劵类型校验
         if (couponType) {
             if (COUPONTYPE_MANJIAN.equalsIgnoreCase(bo.getCouponType()) ||
                     COUPONTYPE_ZHEKOU.equalsIgnoreCase(bo.getCouponType())) {
@@ -465,18 +552,28 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7102);
         }
 
-        // 有效期类型合法
+        // 计算金额类型校验
+        if (!COUPON_AMOUNT_ORDER.equalsIgnoreCase(bo.getAmountType()) &&
+                !COUPON_AMOUNT_POSTAGE.equalsIgnoreCase(bo.getAmountType())) {
+            throw new ServiceException(7123);
+        }
+
+        // 有效期类型校验
         boolean validType = StringUtils.isNotEmpty(bo.getValidType()) &&
                 (VALIDTYPE_PERIOD.equalsIgnoreCase(bo.getValidType())
                         || VALIDTYPE_DAYS.equalsIgnoreCase(bo.getValidType()));
         if (validType) {
-            // 校验有效期起止
+            // 有效期起止校验
             if (VALIDTYPE_PERIOD.equalsIgnoreCase(bo.getValidType())) {
                 if (bo.getValidStartTime() == null || bo.getValidEndTime() == null) {
                     throw new ServiceException(7104);
                 }
+                if (bo.getValidStartTime().after(bo.getValidEndTime()) ||
+                        bo.getValidStartTime().before(new Date())) {
+                    throw new ServiceException(7130);
+                }
             }
-            // 校验有效期天数
+            // 有效期天数校验
             if (VALIDTYPE_DAYS.equalsIgnoreCase(bo.getValidType())) {
                 if (bo.getValidDays() == null) {
                     throw new ServiceException(7105);
@@ -493,28 +590,52 @@ public class CouponServiceImpl implements CouponService {
      * @param bo 优惠劵活动对象
      */
     private void checkInput(CouponActivityBO bo) {
-        // 领取限制
+        // 领取限制校验
         if (bo.getLimit()) {
             if (bo.getLimitNum() == null) {
                 throw new ServiceException(7112);
             }
         }
-        // 领取方式
-        if (!COUPON_GETTYPE_SYSTEM.equalsIgnoreCase(bo.getGetType()) ||
+        // 领取方式校验
+        if (!COUPON_GETTYPE_SYSTEM.equalsIgnoreCase(bo.getGetType()) &&
                 !COUPON_GETTYPE_USER.equalsIgnoreCase(bo.getGetType())) {
             throw new ServiceException(7113);
         }
-        // 外部接口
+        // 外部接口校验
         if (bo.getValid() && StringUtils.isEmpty(bo.getValidApi())) {
             throw new ServiceException(7114);
         }
-        // 发放目标
+        // 发放目标校验
         if (TARGET_1.equals(bo.getTarget()) || TARGET_2.equals(bo.getTarget()) || TARGET_3.equals(bo.getTarget())) {
             if (TARGET_2.equals(bo.getTarget())) {
-                if (bo.getAreaIds() == null && bo.getTagIds() == null &&
-                        bo.getRegStartTime().after(bo.getRegEndTime()) &&
-                        bo.getVips() == null) {
+                if (bo.getAreaIds().size() == 0 &&
+                        bo.getTagIds().size() == 0 &&
+                        bo.getRegStartTime() == null &&
+                        bo.getRegEndTime() == null &&
+                        bo.getVips().size() == 0) {
                     throw new ServiceException(7116);
+                }
+                // 操作符校验
+                if (StringUtils.isNotEmpty(bo.getAreaOper()) &&
+                        !OPER_EQUALS.equalsIgnoreCase(bo.getAreaOper()) &&
+                        !OPER_NE.equalsIgnoreCase(bo.getAreaOper())) {
+                    throw new ServiceException(7126);
+                }
+                if (StringUtils.isNotEmpty(bo.getTagOper()) &&
+                        !OPER_EQUALS.equalsIgnoreCase(bo.getTagOper()) &&
+                        !OPER_NE.equalsIgnoreCase(bo.getTagOper())) {
+                    throw new ServiceException(7127);
+                }
+                if (StringUtils.isNotEmpty(bo.getRegTimeOper()) &&
+                        !OPER_LTE.equalsIgnoreCase(bo.getRegTimeOper()) &&
+                        !OPER_GTE.equalsIgnoreCase(bo.getRegTimeOper()) &&
+                        !OPER_BETWEEN.equalsIgnoreCase(bo.getRegTimeOper())) {
+                    throw new ServiceException(7128);
+                }
+                // 注册时间校验
+                if (bo.getRegStartTime() != null && bo.getRegEndTime() != null &&
+                        bo.getRegEndTime().before(bo.getRegStartTime())) {
+                    throw new ServiceException(7129);
                 }
             }
             if (TARGET_3.equals(bo.getTarget())) {
@@ -522,19 +643,23 @@ public class CouponServiceImpl implements CouponService {
                     throw new ServiceException(7115);
                 }
             }
-        }
-        // 如果活动启用，请确保优惠劵已启用
-        Coupon c = selectOne(bo.getId());
-        if (COUPON_STATUS_ON.equals(bo.getStatus())) {
-            if (c == null || !COUPON_STATUS_ON.equals(c.getStatus())) {
-                throw new ServiceException(7107);
-            }
+        } else {
+            throw new ServiceException(7124);
         }
 
-        // 活动有效期限制
+        Coupon c = selectOne(bo.getCouponId());
+        if (c == null) {
+            throw new ServiceException(7125);
+        }
+        // 如果活动启用，请确保优惠劵已启用
+        if (COUPON_STATUS_ON.equals(bo.getStatus()) && !COUPON_STATUS_ON.equals(c.getStatus())) {
+            throw new ServiceException(7107);
+        }
+        // 活动有效期限制校验
         if (bo.getActivityStartTime().after(c.getValidStartTime()) ||
                 bo.getActivityEndTime().before(c.getValidEndTime()) ||
-                bo.getActivityEndTime().before(bo.getActivityEndTime()))  {
+                bo.getActivityEndTime().before(bo.getActivityEndTime()) ||
+                bo.getActivityStartTime().before(new Date())) {
             throw new ServiceException(7117);
         }
     }

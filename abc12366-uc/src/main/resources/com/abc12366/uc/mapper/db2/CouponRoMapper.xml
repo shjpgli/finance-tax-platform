@@ -12,7 +12,10 @@
         <where>
             <if test="couponMode != null and couponMode != ''">couponMode = #{couponMode}</if>
             <if test="couponType != null and couponType != ''">AND couponType = #{couponType}</if>
-            <if test="status != null and status != ''">AND status = #{status}</if>
+            <choose>
+                <when test="status != null and status != ''">AND status = #{status}</when>
+                <when test="status == null or status == ''">AND status != '0'</when>
+            </choose>
         </where>
     </select>
 
@@ -32,9 +35,14 @@
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
-            <if test="activityName != null and activityName != ''">ca.activityName LIKE CONCAT('%',#{activityName},'%')</if>
+            <if test="activityName != null and activityName != ''">ca.activityName LIKE
+                CONCAT('%',#{activityName},'%')
+            </if>
             <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
-            <if test="status != null and status != ''">AND ca.status = #{status}</if>
+            <choose>
+                <when test="status != null and status != ''">AND ca.status = #{status}</when>
+                <when test="status == null or status == ''">AND ca.status != '0'</when>
+            </choose>
         </where>
     </select>
 
@@ -47,9 +55,7 @@
               vips, userIds, description, imageUrl, status,
               createTime, lastUpdate
           FROM uc_coupon_activity
-        <where>
-            <if test="id != null and id != ''">id = #{id}</if>
-        </where>
+          WHERE id = #{id}
     </select>
 
     <select id="selectUserCoupon" parameterType="java.lang.String"
@@ -59,23 +65,29 @@
         validStartTime, validEndTime, description, status, createTime,
         lastUpdate, orderNo, categoryIds
         FROM uc_coupon_user
-        <where>
-            <if test="id != null and id != ''">id = #{id}</if>
-        </where>
+        WHERE id = #{id}
     </select>
 
     <select id="selectUserList" parameterType="com.abc12366.uc.model.order.CouponUser"
             resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
         SELECT cu.id, cu.userId, u.username, cu.couponMode, cu.couponType,
-          cu.param1, cu.param2, cu.amountType, cu.status, cu.createTime,
-          cu.lastUpdate, cu.orderNo
+        cu.param1, cu.param2, cu.amountType, cu.status, cu.createTime,
+        cu.lastUpdate, cu.orderNo, cu.validStartTime, cu.validEndTime
         FROM uc_coupon_user cu LEFT JOIN uc_user u
         on cu.userId = u.id
         <where>
             <if test="userId != null and userId != ''">cu.userId = #{userId}</if>
             <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
-            <if test="status != null and status != ''">AND cu.status = #{status}</if>
+            <if test="validEndTime != null">AND cu.validEndTime <![CDATA[<]]> #{validEndTime}</if>
+            <choose>
+                <when test="status != null and status != ''">
+                    AND cu.status = #{status}
+                </when>
+                <when test="status == null or status == ''">
+                    AND cu.status != '4'
+                </when>
+            </choose>
         </where>
     </select>
 
