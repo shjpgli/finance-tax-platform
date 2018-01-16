@@ -3,16 +3,16 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.TodoTaskMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.TodoTaskRoMapper;
 import com.abc12366.uc.model.TodoTask;
 import com.abc12366.uc.model.TodoTaskFront;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.ExperienceLogBO;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.SysTaskBO;
-import com.abc12366.uc.service.ExperienceLogService;
-import com.abc12366.uc.service.PointsLogService;
-import com.abc12366.uc.service.SysTaskService;
-import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
+import com.abc12366.uc.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +48,12 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Autowired
     private ExperienceLogService experienceLogService;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private VipPrivilegeLevelService vipPrivilegeLevelService;
 
     @Override
     public void doTask(String userId, String taskCode) {
@@ -189,6 +195,24 @@ public class TodoTaskServiceImpl implements TodoTaskService {
             pointsLog.setRuleId(todoTask.getRuleId());
             pointsLog.setIncome(todoTask.getAward());
             pointsLog.setOutgo(0);
+            //会员权限埋点（产品消费获得积分加成）
+            User user = userMapper.selectOne(userId);
+            if(user == null){
+                return;
+            }
+            if (!StringUtils.isEmpty(user.getVipLevel()) && (pointsLog.getIncome() - pointsLog.getOutgo() > 0)) {
+                VipPrivilegeLevelBO vipPrivilegeLevelBOPar = new VipPrivilegeLevelBO();
+                vipPrivilegeLevelBOPar.setLevelId(user.getVipLevel());
+                vipPrivilegeLevelBOPar.setPrivilegeId("A_XFJFJC");
+                VipPrivilegeLevelBO vipPrivilegeLevelBO = vipPrivilegeLevelService.selectLevelIdPrivilegeId(vipPrivilegeLevelBOPar);
+                if (vipPrivilegeLevelBO != null && vipPrivilegeLevelBO.getStatus()) {
+                    if (!StringUtils.isEmpty(vipPrivilegeLevelBO.getVal1())) {
+                        LOGGER.info("会员产品消费获得积分加成：{}", vipPrivilegeLevelBO.getVal1()+"倍");
+                        pointsLog.setIncome((int) ((pointsLog.getIncome()) * Float.parseFloat(vipPrivilegeLevelBO.getVal1())));
+                        pointsLog.setOutgo((int) ((pointsLog.getOutgo()) * Float.parseFloat(vipPrivilegeLevelBO.getVal1())));
+                    }
+                }
+            }
             pointsLogService.insert(pointsLog);
         }
 
