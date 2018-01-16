@@ -22,9 +22,7 @@
         validDays, description, status, createTime, lastUpdate,
         categoryIds
         FROM uc_coupon
-        <where>
-            <if test="id != null and id != ''">id = #{id}</if>
-        </where>
+        where id = #{id}
     </select>
 
     <select id="selectActivityList" parameterType="com.abc12366.uc.model.order.CouponActivity"

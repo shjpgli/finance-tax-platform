@@ -108,6 +108,16 @@ public class CouponServiceImpl implements CouponService {
     public static final String TARGET_3 = "3";
 
     /**
+     * 优惠劵模式-固定金额
+     */
+    public static final String COUPON_MODE_FIXED = "FIXED";
+
+    /**
+     * 优惠劵模式-浮动金额
+     */
+    public static final String COUPON_MODE_FLOAT = "FLOAT";
+
+    /**
      * 优惠劵CRUD操作
      */
     @Autowired
@@ -427,6 +437,12 @@ public class CouponServiceImpl implements CouponService {
      * @param bo 优惠劵对象
      */
     private void checkInput(CouponBO bo) {
+        // 优惠劵模式校验
+        if (!COUPON_MODE_FIXED.equalsIgnoreCase(bo.getCouponMode()) &&
+                !COUPON_MODE_FLOAT.equalsIgnoreCase(bo.getCouponMode())) {
+            throw new ServiceException();
+        }
+
         // 优惠劵类型合法
         boolean couponType = StringUtils.isNotEmpty(bo.getCouponType()) &&
                 (COUPONTYPE_MANJIAN.equalsIgnoreCase(bo.getCouponType()) ||

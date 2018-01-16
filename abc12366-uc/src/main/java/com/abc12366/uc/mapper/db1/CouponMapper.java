@@ -28,20 +28,20 @@ public interface CouponMapper {
     int update(Coupon coupon);
 
     /**
-     * 更新优惠劵活动
-     *
-     * @param ca 优惠劵活动对象
-     * @return 影响行数
-     */
-    int updateActivity(CouponActivity ca);
-
-    /**
      * 新增优惠劵活动
      *
      * @param ca 优惠劵活动对象
      * @return 影响行数
      */
     int insertActivity(CouponActivity ca);
+
+    /**
+     * 更新优惠劵活动
+     *
+     * @param ca 优惠劵活动对象
+     * @return 影响行数
+     */
+    int updateActivity(CouponActivity ca);
 
     /**
      * 新增用户优惠劵

@@ -36,4 +36,77 @@
         </set>
         where id=#{id}
     </update>
+
+    <insert id="insertActivity" parameterType="com.abc12366.uc.model.order.CouponActivity">
+        INTO INTO uc_coupon_activity
+        (id, activityName, activityLink, couponId, activityStartTime,
+              activityEndTime, couponNum, `limit`, limitNum, getType,
+              valid, validApi, target, areaOper, areaIds,
+              tagOper, tagIds, regTimeOper, regStartTime, regEndTime,
+              vips, userIds, description, imageUrl, status,
+              createTime, lastUpdate)
+        VALUES (#{id}, #{activityName}, #{activityLink}, #{couponId}, #{activityStartTime},
+              #{activityEndTime}, #{couponNum}, #{limit}, #{limitNum}, #{getType},
+              #{valid}, #{validApi}, #{target}, #{areaOper}, #{areaIds},
+              #{tagOper}, #{tagIds}, #{regTimeOper}, #{regStartTime}, #{regEndTime},
+              #{vips}, #{userIds}, #{description}, #{imageUrl}, #{status},
+              #{createTime}, #{lastUpdate})
+    </insert>
+
+    <update id="updateActivity" parameterType="com.abc12366.uc.model.order.CouponActivity">
+        update uc_coupon_activity
+        <set>
+            <if test="activityName != null">activityName = #{activityName},</if>
+            <if test="activityLink != null">activityLink = #{activityLink},</if>
+            <if test="couponId != null">couponId = #{couponId},</if>
+            <if test="activityStartTime != null">activityStartTime = #{activityStartTime},</if>
+
+            <if test="activityEndTime != null">activityEndTime = #{activityEndTime},</if>
+            <if test="couponNum != null">couponNum = #{couponNum},</if>
+            <if test="limit != null">`limit` = #{limit},</if>
+            <if test="limitNum != null">limitNum = #{limitNum},</if>
+            <if test="getType != null">getType = #{getType},</if>
+
+            <if test="valid != null">valid = #{valid},</if>
+            <if test="validApi != null">validApi = #{validApi},</if>
+            <if test="target != null">target = #{target},</if>
+            <if test="areaOper != null">areaOper = #{areaOper},</if>
+            <if test="areaIds != null">areaIds = #{areaIds},</if>
+
+            <if test="tagOper != null">tagOper = #{tagOper},</if>
+            <if test="tagIds != null">tagIds = #{tagIds},</if>
+            <if test="regTimeOper != null">regTimeOper = #{regTimeOper},</if>
+            <if test="regStartTime != null">regStartTime = #{regStartTime},</if>
+            <if test="regEndTime != null">regEndTime = #{regEndTime},</if>
+
+            <if test="vips != null">vips = #{vips},</if>
+            <if test="userIds != null">userIds = #{userIds},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="imageUrl != null">imageUrl = #{imageUrl},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="lastUpdate != null"> = #{lastUpdate},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <insert id="insertUserCoupon" parameterType="com.abc12366.uc.model.order.CouponUser">
+        INSERT INTO (id, userId, activityId, couponId, couponName,
+        couponMode, couponType, param1, param2, amountType,
+        validStartTime, validEndTime, description, status, createTime,
+        lastUpdate, orderNo, categoryIds)
+        VALUES (#{id}, #{userId}, #{activityId}, #{couponId}, #{couponName},
+        #{couponMode}, #{couponType}, #{param1}, #{param2}, #{amountType},
+        #{validStartTime}, #{validEndTime}, #{description}, #{status}, #{createTime},
+        #{lastUpdate}, #{orderNo}, #{categoryIds})
+    </insert>
+
+    <insert id="updateUserCoupon" parameterType="com.abc12366.uc.model.order.CouponUser">
+        update uc_coupon_activity
+        <set>
+          <if test="status != null">status = #{status},</if>
+          <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+          <if test="orderNo != null">orderNo = #{orderNo},</if>
+        </set>
+        where id=#{id}
+    </insert>
 </mapper>

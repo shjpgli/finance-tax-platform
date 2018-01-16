@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.order.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -70,11 +71,13 @@ public class CouponBO {
     /**
      * 有效期起
      */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date validStartTime;
 
     /**
      * 有效期止
      */
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date validEndTime;
 
     /**

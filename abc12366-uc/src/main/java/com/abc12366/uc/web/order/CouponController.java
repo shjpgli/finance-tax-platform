@@ -302,13 +302,13 @@ public class CouponController {
     }
 
     /**
-     * 前端-用户删除优惠劵
+     * 前端-用户逻辑删除优惠劵
      *
      * @param userId   用户ID
      * @param couponId 优惠劵ID
      * @return 成功或失败
      */
-    @PutMapping("/user/{userId}/{couponId}")
+    @DeleteMapping("/user/{userId}/{couponId}")
     public ResponseEntity userDeleteCoupon(@PathVariable String userId, @PathVariable String couponId) {
         CouponUser bo = new CouponUser();
         bo.setUserId(userId);
