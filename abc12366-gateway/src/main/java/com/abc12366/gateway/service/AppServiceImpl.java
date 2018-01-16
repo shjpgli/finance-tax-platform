@@ -181,40 +181,40 @@ public class AppServiceImpl implements AppService {
             throw new ServiceException(4029);
         }
         //查询每分钟访问的次数
-        ApiLog apiLog = new ApiLog();
-        currentTime = System.currentTimeMillis();
-        apiLog.setUri(bestMatchingPattern);
-        apiLog.setStartTime(currentTime - (60 * 1000));
-        apiLog.setEndTime(currentTime);
-        apiLog.setYyyyMMdd(DateUtils.getDataString());
-        apiLog.setAppId(appId);
-        apiLog.setMethod(method);
+//        ApiLog apiLog = new ApiLog();
+//        currentTime = System.currentTimeMillis();
+//        apiLog.setUri(bestMatchingPattern);
+//        apiLog.setStartTime(currentTime - (60 * 1000));
+//        apiLog.setEndTime(currentTime);
+//        apiLog.setYyyyMMdd(DateUtils.getDataString());
+//        apiLog.setAppId(appId);
+//        apiLog.setMethod(method);
         //查询每分钟访问的次数
-        if (bo.getTimesPerMinute() != 0) {
-            int minuteCount = apiLogService.selectApiLogCount(apiLog);
-            if (minuteCount > bo.getTimesPerMinute()) {
-                LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
-                throw new ServiceException(4031);
-            }
-        }
+//        if (bo.getTimesPerMinute() != 0) {
+//            int minuteCount = apiLogService.selectApiLogCount(apiLog);
+//            if (minuteCount > bo.getTimesPerMinute()) {
+//                LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
+//                throw new ServiceException(4031);
+//            }
+//        }
         //查询每小时访问的次数
-        apiLog.setStartTime(currentTime - (60 * 1000 * 60));
-        if (bo.getTimesPerHour() != 0) {
-            int hourCount = apiLogService.selectApiLogCount(apiLog);
-            if (hourCount > bo.getTimesPerHour()) {
-                LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
-                throw new ServiceException(4032);
-            }
-        }
+//        apiLog.setStartTime(currentTime - (60 * 1000 * 60));
+//        if (bo.getTimesPerHour() != 0) {
+//            int hourCount = apiLogService.selectApiLogCount(apiLog);
+//            if (hourCount > bo.getTimesPerHour()) {
+//                LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
+//                throw new ServiceException(4032);
+//            }
+//        }
         //查询每天访问的次数
-        apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
-        if (bo.getTimesPerDay() != 0) {
-            int dayCount = apiLogService.selectApiLogCount(apiLog);
-            if (dayCount > bo.getTimesPerDay()) {
-                LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
-                throw new ServiceException(4033);
-            }
-        }
+//        apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
+//        if (bo.getTimesPerDay() != 0) {
+//            int dayCount = apiLogService.selectApiLogCount(apiLog);
+//            if (dayCount > bo.getTimesPerDay()) {
+//                LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
+//                throw new ServiceException(4033);
+//            }
+//        }
         return true;
     }
 

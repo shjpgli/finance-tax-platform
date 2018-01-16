@@ -52,4 +52,8 @@ public interface UserStatisRoMapper {
     List<PointRuleAnalysisBO> pointRuleAnalysis(@Param("start")Date start, @Param("end")Date end);
 
     List<PointRuleinfoBO> pointAnalysisRuleinfo(@Param("ruleId")String ruleId, @Param("start")Date start, @Param("end")Date end);
+
+    List<User> userVipAllInfo(String vipCode);
+
+    List<User> userVipIncreaseInfo(@Param("vipCode")String vipCode, @Param("start")Date start, @Param("end")Date end);
 }

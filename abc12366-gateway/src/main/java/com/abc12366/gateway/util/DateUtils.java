@@ -314,6 +314,18 @@ public class DateUtils {
      *
      * @return
      */
+    public static String getFPQQLSH() {
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(df.format(new Date()));
+        buffer.append(getRandom());
+        return buffer.toString();
+    }
+    /**
+     * yyyyMMddHHmmssSSS+三位随机数
+     *
+     * @return
+     */
     public static String getJYLSH() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         StringBuffer buffer = new StringBuffer();
@@ -651,5 +663,24 @@ public class DateUtils {
             lDate.add(calBegin.getTime());
         }
         return lDate;
+    }
+
+    /**
+     * 获取具体时间的下个月最早时间
+     * @param date 具体时间
+     * @return Date
+     */
+    public static Date getNextMonthFirstByCertianDate(Date date){
+        if(date==null){
+            return getNextMonthFirstByCertianDate(new Date());
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH,1);
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.HOUR,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        return calendar.getTime();
     }
 }

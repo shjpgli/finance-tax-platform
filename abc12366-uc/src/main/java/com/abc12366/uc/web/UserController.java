@@ -178,6 +178,20 @@ public class UserController {
         LOGGER.info("{}", user);
         return ResponseEntity.ok(Utils.kv("data", user));
     }
+    
+    //根据用户名或者电话查询用户简单信息
+    @GetMapping(path = "/u/jyxx/{usernameOrPhone}")
+    public ResponseEntity selectByUnameOrPhone(@PathVariable String usernameOrPhone) {
+        LOGGER.info("{}", usernameOrPhone);
+        UserJyxx jyxx = userService.selectByUnameOrPhone(usernameOrPhone);
+        if (jyxx == null) {
+            throw new ServiceException(4018);
+        }
+        LOGGER.info("{}", jyxx);
+        return ResponseEntity.ok(Utils.kv("data", jyxx));
+    }
+    
+    
 
     //用户更换手机号码
     @PutMapping(path = "/phone/{id}")

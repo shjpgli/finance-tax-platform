@@ -353,4 +353,10 @@
         </set>
         where id=#{id}
     </update>
+    
+    <select id="selectByUnameOrPhone" resultType="com.abc12366.uc.model.bo.UserJyxx"
+            parameterType="java.lang.String">
+        select id, username, phone, salt from uc_user 
+        where username = #{usernameOrPhone} OR phone = #{usernameOrPhone} 
+    </select>
 </mapper>

@@ -10,4 +10,5 @@ public interface DzfpRoMapper {
 
 	List<Einvocie> selectList(Einvocie einvocie);
 
+	Einvocie selectEinvoice(Einvocie einvocie);
 }

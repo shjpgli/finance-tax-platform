@@ -131,6 +131,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 长链接转短链接接口
                 .excludePathPatterns("/long2short", "/tinyurl")
                         // 办税日历查询
-                .excludePathPatterns("/user/bsrl");
+                .excludePathPatterns("/user/bsrl","/user/u/jyxx/{usernameOrPhone}");
     }
 }

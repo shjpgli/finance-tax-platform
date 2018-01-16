@@ -29,11 +29,11 @@
         SELECT
         (SELECT COUNT(1) allCount FROM uc_user WHERE vipLevel=#{levelCode}
         ) allCount,
-        (SELECT COUNT(1) increase FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &gt;=#{start} AND createTime &lt; #{end}
+        (SELECT COUNT(uulo.id) increase FROM uc_uvip_log uulo join uc_user a on uulo.userId=a.id WHERE uulo.levelId =#{levelCode} AND uulo.createTime &gt;=#{start} AND uulo.createTime &lt; #{end}
         ) increase,
-        (SELECT COUNT(1) lastIncrease FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &gt;=#{lastStart} AND createTime &lt;#{lastEnd}
+        (SELECT COUNT(uulo.id) lastIncrease FROM uc_uvip_log uulo join uc_user a on uulo.userId=a.id  WHERE uulo.levelId =#{levelCode} AND uulo.createTime &gt;=#{lastStart} AND uulo.createTime &lt;#{lastEnd}
         ) lastIncrease,
-        (SELECT COUNT(1) lastYearAll FROM uc_uvip_log uulo WHERE uulo.levelId =#{levelCode} AND createTime &lt;#{start}
+        (SELECT COUNT(uulo.id) lastYearAll FROM uc_uvip_log uulo join uc_user a on uulo.userId=a.id  WHERE uulo.levelId =#{levelCode} AND uulo.createTime &lt;#{start}
         ) lastYearAll
         FROM DUAL
     </select>

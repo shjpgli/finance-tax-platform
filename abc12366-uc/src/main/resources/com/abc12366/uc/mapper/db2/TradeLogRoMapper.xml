@@ -52,6 +52,22 @@
             payMethod is not null 
             <if test="tradeNo != null and tradeNo != ''">AND tradeNo like CONCAT('%',#{tradeNo},'%')</if>
             <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
+            <if test="tradeType != null and tradeType != ''">AND tradeType = #{tradeType}</if>
+            <if test="payMethod != null and payMethod != ''">AND payMethod = #{payMethod}</if>
+        </where>
+        ORDER BY tradeTime DESC
+    </select>
+
+    <!-- 查询（根据主键tradeNo查询） -->
+    <select id="selectTradeLog" resultType="com.abc12366.uc.model.order.TradeLog" parameterType="com.abc12366.uc.model.order.TradeLog">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_trade_log
+        <where>
+            payMethod is not null
+            <if test="tradeNo != null and tradeNo != ''">AND tradeNo = #{tradeNo}</if>
+            <if test="tradeStatus != null and tradeStatus != ''">AND tradeStatus = #{tradeStatus}</if>
+            <if test="tradeType != null and tradeType != ''">AND tradeType = #{tradeType}</if>
             <if test="payMethod != null and payMethod != ''">AND payMethod = #{payMethod}</if>
         </where>
         ORDER BY tradeTime DESC

@@ -1364,4 +1364,9 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public UserJyxx selectByUnameOrPhone(String usernameOrPhone) {
+		return userMapper.selectByUnameOrPhone(usernameOrPhone);
+	}
 }

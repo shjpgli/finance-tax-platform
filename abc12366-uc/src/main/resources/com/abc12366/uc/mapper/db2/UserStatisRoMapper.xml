@@ -219,5 +219,27 @@
             <if test="end != null">and a.createTime &lt;#{end} </if>
         </where>
     </select>
-
+    <select id="userVipAllInfo" resultType="com.abc12366.uc.model.User">
+        select c.id, c.username, c.phone, c.regMail, c.regIP, c.salt, c.nickname,
+        c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
+        c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
+        c.wxheadimg,c.wxnickname
+        FROM uc_user c
+        <where>
+            c.vipLevel =#{vipCode}
+        </where>
+    </select>
+    <select id="userVipIncreaseInfo" parameterType="java.lang.Object" resultType="com.abc12366.uc.model.User">
+        select c.id, c.username, c.phone, c.regMail, c.regIP, c.salt, c.nickname,
+        c.status,c.createTime, c.lastUpdate,c.userPicturePath, c.maxUserPicturePath, c.midUserPicturePath,
+        c.minUserPicturePath, c.points, c.exp,c.vipLevel,c.usernameModifiedTimes,c.vipExpireDate,c.wxopenid,
+        c.wxheadimg,c.wxnickname
+        FROM uc_uvip_log a JOIN uc_user c ON c.id=a.userId
+        <where>
+            1=1
+            <if test="start != null">and a.createTime &gt;=#{start}</if>
+            <if test="end != null">and a.createTime &lt;#{end} </if>
+            <if test="vipCode != null">and a.levelId =#{vipCode} </if>
+        </where>
+    </select>
 </mapper>
