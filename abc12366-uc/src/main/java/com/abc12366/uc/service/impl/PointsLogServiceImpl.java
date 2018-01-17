@@ -56,8 +56,9 @@ public class PointsLogServiceImpl implements PointsLogService {
 
     @Transactional("db1TxManager")
     @Override
-    public synchronized PointsLogBO insert(PointsLogBO pointsLogBO) {
+    public PointsLogBO insert(PointsLogBO pointsLogBO) {
 
+        LOGGER.info("计算用户积分：{}",pointsLogBO);
         if (pointsLogBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
@@ -102,7 +103,9 @@ public class PointsLogServiceImpl implements PointsLogService {
 //        BeanUtils.copyProperties(pointsLog, pointsLogBOReturn);
 //        LOGGER.info("-------------------end    thread name:"+ Thread.currentThread().getName());
 //        return pointsLogBOReturn;
-        return pointsLogMapper.updatePointAndLog(pointsLogBO.getUserId(),pointsLogBO.getIncome()+pointsLogBO.getOutgo(),pointsLogBO.getRuleId());
+        PointsLogBO pointsLogBO1 = pointsLogMapper.updatePointAndLog(pointsLogBO.getUserId(),pointsLogBO.getIncome()+pointsLogBO.getOutgo(),pointsLogBO.getRuleId());
+        LOGGER.info("计算用户积分结果：{}",pointsLogBO1);
+        return pointsLogBO1;
     }
 
     @Override
