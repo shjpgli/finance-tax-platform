@@ -514,14 +514,14 @@ public class AuthServiceImpl implements AuthService {
         LOGGER.info("如果用户当天定时任务没有完成，就在登录的时候生成:{}", userId);
         todoTaskService.generateAllTodoTaskList(userId);
 
+        LOGGER.info("登录任务日志:{}", userId);
+        boolean loginTask = todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
+
         LOGGER.info("计算用户登录经验值变化:{}", userId);
-        computeExp(userId);
+        if(loginTask) computeExp(userId);
 
         LOGGER.info("记用户登录日志:{}", userId);
         insertLoginLog(userId);
-
-        LOGGER.info("登录任务日志:{}", userId);
-        todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
         LOGGER.info("首次绑定手机任务埋点:{}", userId);
         if (!StringUtils.isEmpty(map.get("user_phone"))) {
