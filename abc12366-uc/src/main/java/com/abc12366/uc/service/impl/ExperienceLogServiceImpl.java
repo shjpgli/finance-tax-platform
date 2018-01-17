@@ -55,7 +55,7 @@ public class ExperienceLogServiceImpl implements ExperienceLogService {
     @Autowired
     private VipPrivilegeLevelService vipPrivilegeLevelService;
 
-    @Transactional("db1TxManager")
+    //@Transactional("db1TxManager")
     @Override
     public ExperienceLogQueryBO insert(ExperienceLogBO experienceLogBO) {
         if (experienceLogBO == null) {
