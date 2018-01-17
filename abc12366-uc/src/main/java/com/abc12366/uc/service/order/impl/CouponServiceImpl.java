@@ -606,8 +606,7 @@ public class CouponServiceImpl implements CouponService {
                 if (bo.getValidStartTime() == null || bo.getValidEndTime() == null) {
                     throw new ServiceException(7104);
                 }
-                if (bo.getValidStartTime().after(bo.getValidEndTime()) ||
-                        bo.getValidStartTime().before(new Date())) {
+                if (bo.getValidStartTime().after(bo.getValidEndTime())) {
                     throw new ServiceException(7130);
                 }
             }

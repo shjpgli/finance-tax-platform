@@ -25,6 +25,7 @@ import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.*;
+import com.abc12366.uc.service.order.CouponService;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.CharUtil;
@@ -140,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
     private InvoiceDetailMapper invoiceDetailMapper;
 
     @Autowired
-    private DzfpRoMapper dzfpRoMapper;
+    private CouponService couponService;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -263,12 +264,6 @@ public class OrderServiceImpl implements OrderService {
                 order.setLastUpdate(date);
                 order.setIsInvoice(false);
 
-                int insert = orderMapper.insert(order);
-                if (insert != 1) {
-                    LOGGER.info("提交产品订单失败：{}", orderSubmitBO);
-                    throw new ServiceException(4139);
-                }
-
                 //判断是否使用优惠卷
                 if(orderSubmitBO.getCouponIds() != null && orderSubmitBO.getCouponIds().size() > 0){
                     CouponOrderBO couponOrderBO = new CouponOrderBO();
@@ -277,6 +272,13 @@ public class OrderServiceImpl implements OrderService {
                     couponOrderBO.setOrderNo(orderNo);
                     couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
+                    order.setTotalPrice(couponService.userUseCoupon(couponOrderBO));
+                }
+
+                int insert = orderMapper.insert(order);
+                if (insert != 1) {
+                    LOGGER.info("提交产品订单失败：{}", orderSubmitBO);
+                    throw new ServiceException(4139);
                 }
 
                 orderProductBO.setOrderNo(order.getOrderNo());
