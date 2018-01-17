@@ -54,7 +54,7 @@ public class PointsLogServiceImpl implements PointsLogService {
         return pointsLogRoMapper.selectList(map);
     }
 
-    @Transactional("db1TxManager")
+    //@Transactional("db1TxManager")
     @Override
     public PointsLogBO insert(PointsLogBO pointsLogBO) {
 
