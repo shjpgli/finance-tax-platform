@@ -110,6 +110,11 @@ public class OrderSubmitBO implements Serializable {
     @NotNull
     private Integer isFreeShipping;
 
+    /**
+     * 优惠卷ID
+     */
+    @Size(min = 1, max = 5)
+    private List<String> couponIds;
 
     //订单和商品对应关系
     private List<OrderProductBO> orderProductBOList;
@@ -240,5 +245,13 @@ public class OrderSubmitBO implements Serializable {
 
     public void setOrderProductBOList(List<OrderProductBO> orderProductBOList) {
         this.orderProductBOList = orderProductBOList;
+    }
+
+    public List<String> getCouponIds() {
+        return couponIds;
+    }
+
+    public void setCouponIds(List<String> couponIds) {
+        this.couponIds = couponIds;
     }
 }

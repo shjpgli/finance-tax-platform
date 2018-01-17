@@ -253,6 +253,7 @@ public class OrderServiceImpl implements OrderService {
                     }
 
                 }
+
                 BeanUtils.copyProperties(orderSubmitBO, order);
                 order.setOrderStatus("2");
                 String orderNo = DateUtils.getDateToString();
@@ -266,6 +267,16 @@ public class OrderServiceImpl implements OrderService {
                 if (insert != 1) {
                     LOGGER.info("提交产品订单失败：{}", orderSubmitBO);
                     throw new ServiceException(4139);
+                }
+
+                //判断是否使用优惠卷
+                if(orderSubmitBO.getCouponIds() != null && orderSubmitBO.getCouponIds().size() > 0){
+                    CouponOrderBO couponOrderBO = new CouponOrderBO();
+                    couponOrderBO.setCouponIds(orderSubmitBO.getCouponIds());
+                    couponOrderBO.setUserId(orderSubmitBO.getUserId());
+                    couponOrderBO.setOrderNo(orderNo);
+                    couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
+                    couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
                 }
 
                 orderProductBO.setOrderNo(order.getOrderNo());

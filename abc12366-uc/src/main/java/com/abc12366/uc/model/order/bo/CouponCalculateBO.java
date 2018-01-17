@@ -7,13 +7,13 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
- * 订单使用优惠劵对象
+ * 使用优惠劵计算金额对象
  *
  * @author lijun <ljun51@outlook.com>
  * @date 2018-01-16 5:53 PM
  * @since 1.0.0
  */
-public class CouponOrderBO {
+public class CouponCalculateBO {
 
     /**
      * 优惠劵ID
@@ -30,13 +30,6 @@ public class CouponOrderBO {
     private String userId;
 
     /**
-     * 订单号
-     */
-    @NotEmpty
-    @Length(max = 64)
-    private String orderNo;
-
-    /**
      * 商品品目
      */
     @NotEmpty
@@ -48,13 +41,6 @@ public class CouponOrderBO {
      */
     @NotEmpty
     private Double amount;
-
-    /**
-     * 优惠劵状态：0-未领取 1-已领取 2-已使用 3-已冻结 4-已删除 5-已过期 6-已作废
-     */
-    @NotEmpty
-    @Length(max = 1)
-    private String status;
 
     public List<String> getCouponIds() {
         return couponIds;
@@ -70,14 +56,6 @@ public class CouponOrderBO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
     public String getCategoryId() {
@@ -96,23 +74,13 @@ public class CouponOrderBO {
         this.amount = amount;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     @Override
     public String toString() {
         return "CouponOrderBO{" +
                 "couponIds=" + couponIds +
                 ", userId='" + userId + '\'' +
-                ", orderNo='" + orderNo + '\'' +
                 ", categoryId='" + categoryId + '\'' +
                 ", amount=" + amount +
-                ", status='" + status + '\'' +
                 '}';
     }
 }

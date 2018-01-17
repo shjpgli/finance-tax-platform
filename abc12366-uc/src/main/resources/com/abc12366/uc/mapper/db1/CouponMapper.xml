@@ -5,11 +5,11 @@
 
     <insert id="insert" parameterType="com.abc12366.uc.model.order.Coupon">
         INSERT INTO uc_coupon (id, couponName, couponMode, couponType, param1,
-        param2, amountType, validType, validStartTime, validEndTime,
+        param2,param3, amountType, validType, validStartTime, validEndTime,
         validDays, description, status, createTime, lastUpdate,
         categoryIds)
         VALUES (#{id}, #{couponName}, #{couponMode}, #{couponType}, #{param1},
-        #{param2}, #{amountType}, #{validType}, #{validStartTime}, #{validEndTime},
+        #{param2},#{param3}, #{amountType}, #{validType}, #{validStartTime}, #{validEndTime},
         #{validDays}, #{description}, #{status}, #{createTime}, #{lastUpdate},
         #{categoryIds})
     </insert>
@@ -23,6 +23,7 @@
             <if test="param1 != null">param1 = #{param1},</if>
 
             <if test="param2 != null">param2 = #{param2},</if>
+            <if test="param3 != null">param3 = #{param3},</if>
             <if test="amountType != null">amountType = #{amountType},</if>
             <if test="validType != null">validType = #{validType},</if>
             <if test="validStartTime != null">validStartTime = #{validStartTime},</if>
@@ -108,5 +109,18 @@
           <if test="orderNo != null">orderNo = #{orderNo},</if>
         </set>
         where id=#{id}
+    </update>
+
+    <update id="batchUpdateUserCoupon" parameterType="java.util.Map">
+        update uc_coupon_user
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+            <if test="orderNo != null">orderNo = #{orderNo},</if>
+        </set>
+        where id IN
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </update>
 </mapper>
