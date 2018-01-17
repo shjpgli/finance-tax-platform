@@ -7,7 +7,6 @@ import com.abc12366.uc.model.order.bo.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 优惠劵服务
@@ -125,9 +124,17 @@ public interface CouponService {
      * 用户下单、支付、取消下单操作优惠劵
      *
      * @param bo 订单使用优惠劵对象
-     * @return allow:是否允许使用优惠劵，amount:使用优惠劵之后的金额
+     * @return 优惠后的金额
      */
-    Map<String, Object> userUseCoupon(CouponOrderBO bo);
+    double userUseCoupon(@Valid CouponOrderBO bo);
+
+    /**
+     * 计算订单金额
+     *
+     * @param bo 业务对象
+     * @return 使用优惠劵之后的金额
+     */
+    double calculateOrderAmount(@Valid CouponCalculateBO bo);
 
     /**
      * 用户删除优惠劵

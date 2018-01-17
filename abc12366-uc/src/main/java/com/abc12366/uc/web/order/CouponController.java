@@ -235,6 +235,7 @@ public class CouponController {
     /**
      * 运营系统-查询优惠劵活动用户优惠劵列表
      *
+     * @param orderNo  订单号
      * @param status   优惠劵状态
      * @param pageNum  当前页
      * @param pageSize 每页大小
@@ -242,6 +243,7 @@ public class CouponController {
      */
     @GetMapping("/user")
     public ResponseEntity selectUserList(
+            @RequestParam(value = "orderNo", required = false) String orderNo,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -249,6 +251,9 @@ public class CouponController {
         CouponUser bo = new CouponUser();
         if (StringUtils.isNotEmpty(status)) {
             bo.setStatus(status);
+        }
+        if (StringUtils.isNotEmpty(orderNo)) {
+            bo.setOrderNo(orderNo);
         }
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
@@ -315,5 +320,17 @@ public class CouponController {
         bo.setId(couponId);
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", couponService.userDeleteCoupon(bo)));
+    }
+
+    /**
+     * 前端-计算使用优惠劵之后的金额
+     *
+     * @param bo 计算对象
+     * @return 计算后的金额
+     */
+    @PostMapping("/order")
+    public ResponseEntity calculateOrderAmount(@Valid @RequestBody CouponCalculateBO bo) {
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", couponService.calculateOrderAmount(bo)));
     }
 }
