@@ -39,9 +39,14 @@ public class Coupon {
     private Double param1;
 
     /**
-     * 减多少金额、折扣
+     * 减多少金额、折扣，开始金额
      */
     private Double param2;
+
+    /**
+     * 减多少金额、折扣，结束金额
+     */
+    private Double param3;
 
     /**
      * 计算金额类型：订单金额-ORDER, 邮费金额-POSTAGE
@@ -245,5 +250,13 @@ public class Coupon {
                 ", lastUpdate=" + lastUpdate +
                 ", categoryIds='" + categoryIds + '\'' +
                 '}';
+    }
+
+    public Double getParam3() {
+        return param3;
+    }
+
+    public void setParam3(Double param3) {
+        this.param3 = param3;
     }
 }

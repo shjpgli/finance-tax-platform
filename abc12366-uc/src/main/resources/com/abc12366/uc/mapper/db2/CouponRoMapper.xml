@@ -21,7 +21,7 @@
 
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.Coupon">
         SELECT id, couponName, couponMode, couponType, param1,
-        param2, amountType, validType, validStartTime, validEndTime,
+        param2,param3, amountType, validType, validStartTime, validEndTime,
         validDays, description, status, createTime, lastUpdate,
         categoryIds
         FROM uc_coupon
