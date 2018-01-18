@@ -210,12 +210,14 @@ public Object bindCount(String type, String start, String end) {
     }
     Calendar c1 = Calendar.getInstance();
     Calendar c3 = Calendar.getInstance();
+    Calendar c4 = Calendar.getInstance();
     if(!StringUtils.isEmpty(start)){
         c1.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
     }
     if(!StringUtils.isEmpty(end)){
         c3.setTime(DateUtils.strToDate(end, "yyyy-MM-dd"));
         c3.add(Calendar.DAY_OF_YEAR, 1);
+        c4.setTime(DateUtils.strToDate(end, "yyyy-MM-dd"));
     }
     if(type.trim().equals("all")){
         List<BindStatisAllBO> allBOList = new ArrayList<>();
@@ -232,8 +234,8 @@ public Object bindCount(String type, String start, String end) {
     } else if(type.trim().equals("dzsb")||type.trim().equals("hngs")||type.trim().equals("hnds")){
         int minus = DateUtils.differentDaysByMillisecond(c1.getTime(), c3.getTime());
         if(minus>31){
-            int minusYearTmp = c3.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
-            int minusTmp = c3.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYearTmp;
+            int minusYearTmp = c4.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+            int minusTmp = c4.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYearTmp;
             List<BindStatisSingleBO> bindStatisSingleBOList = new ArrayList<>();
             Date a = c1.getTime();
             Date b = DateUtils.getNextMonthFirstByCertianDate(a);
@@ -321,12 +323,14 @@ public Object bindCount(String type, String start, String end) {
         }
         Calendar c1 = Calendar.getInstance();
         Calendar c3 = Calendar.getInstance();
+        Calendar c4 = Calendar.getInstance();
         if(!StringUtils.isEmpty(start)){
             c1.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
         }
         if(!StringUtils.isEmpty(end)){
             c3.setTime(DateUtils.strToDate(end, "yyyy-MM-dd"));
             c3.add(Calendar.DAY_OF_YEAR, 1);
+            c4.setTime(DateUtils.strToDate(end, "yyyy-MM-dd"));
         }
         if(type.trim().equals("all")){
             List<BindStatisAllBO> allBOList = new ArrayList<>();
@@ -345,8 +349,8 @@ public Object bindCount(String type, String start, String end) {
             c2.setTime(DateUtils.strToDate(start, "yyyy-MM-dd"));
             int minus = DateUtils.differentDaysByMillisecond(c1.getTime(),c3.getTime());
             if(minus>31){
-                int minusYearTmp = c3.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
-                int minusTmp = c3.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYearTmp;
+                int minusYearTmp = c4.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+                int minusTmp = c4.get(Calendar.MONTH) - c1.get(Calendar.MONTH) + 12 * minusYearTmp;
                 List<BindStatisSingleBO> bindStatisSingleBOList = new ArrayList<>();
                 Date a = c1.getTime();
                 Date b = DateUtils.getNextMonthFirstByCertianDate(a);

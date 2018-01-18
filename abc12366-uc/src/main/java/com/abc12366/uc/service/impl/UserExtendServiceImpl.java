@@ -65,12 +65,12 @@ public class UserExtendServiceImpl implements UserExtendService {
             return null;
         }
 
-        if (userExtend.getValidStatus().equals(
-                TaskConstant.USER_REALNAME_VALIDATED)) {
-            // 首次实名认证任务埋点
-            todoTaskService.doTask(userId,
-                    TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
-        }
+//        if (userExtend.getValidStatus().equals(
+//                TaskConstant.USER_REALNAME_VALIDATED)) {
+//            // 首次实名认证任务埋点
+//            todoTaskService.doTask(userId,
+//                    TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
+//        }
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);
         LOGGER.info("{}", userExtendBO);
@@ -116,7 +116,9 @@ public class UserExtendServiceImpl implements UserExtendService {
                     LOGGER.warn("新增失败，参数：{}" + userExtend.toString());
                     throw new ServiceException(4112);
                 }
-
+                // 首次实名认证任务埋点
+                todoTaskService.doTask(userExtendBO.getUserId(),
+                        TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
                 userFeedbackMsgService.realNameValidate(userExtendBO.getUserId(), "2");
 
                 // 实名认证 跟新生日和性别
@@ -231,6 +233,10 @@ public class UserExtendServiceImpl implements UserExtendService {
                     LOGGER.warn("新增失败，参数：{}" + userExtend.toString());
                     throw new ServiceException(4112);
                 }
+
+                // 首次实名认证任务埋点
+                todoTaskService.doTask(userExtendUpdateBO.getUserId(),
+                        TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
                 userFeedbackMsgService.realNameValidate(
                         userExtendUpdateBO.getUserId(), "2");
 
