@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.VipLevelMapper;
 import com.abc12366.uc.mapper.db2.VipLevelRoMapper;
@@ -11,18 +10,15 @@ import com.abc12366.uc.model.bo.VipLevelBO;
 import com.abc12366.uc.model.bo.VipLevelInsertBO;
 import com.abc12366.uc.model.bo.VipLevelUpdateBO;
 import com.abc12366.uc.service.VipLevelService;
-import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Admin: liuguiyao<435720953@qq.com.com>
@@ -39,11 +35,6 @@ public class VipLevelServiceImpl implements VipLevelService {
     @Autowired
     private VipLevelRoMapper vipLevelRoMapper;
     
-    @Autowired
-	private RedisTemplate<String, String> redisTemplate;
-
-    //    @Autowired
-//    private VipPrivilegeLevelService vipPrivilegeLevelService;
     @Override
     public List<VipLevelBO> selectList(Map map) {
         return vipLevelRoMapper.selectList(map);
@@ -134,7 +125,6 @@ public class VipLevelServiceImpl implements VipLevelService {
         VipLevelBO vipLevelBOReturn = new VipLevelBO();
         BeanUtils.copyProperties(vipLevel, vipLevelBOReturn);
         
-        redisTemplate.delete(vipLevelUpdateBO.getLevelCode() + "_VipLevel");
         return vipLevelBOReturn;
     }
 
@@ -147,29 +137,21 @@ public class VipLevelServiceImpl implements VipLevelService {
             throw new ServiceException(4636);
         }
 
-        VipLevelBO levelBO=selectOne(id);
-        
         int result = vipLevelMapper.delete(id);
         if (result != 1) {
             LOGGER.warn("删除失败，参数为：id=" + id);
             throw new ServiceException(4103);
         }
-        if(levelBO!=null){
-        	redisTemplate.delete(levelBO.getLevelCode() + "_VipLevel");
-        }
-        //这里把对应的会员权益删除
-//   暂时不做     int tmpi = vipPrivilegeLevelService.deleteByLevel(id);
-//        LOGGER.info("deleteByPrivilege:{}", tmpi);
         return 1;
     }
 
     @Override
     public void enableOrDisable(String id, String status) {
         LOGGER.info("{}:{}", id, status);
-        if ((!status.equals("true")) && (!status.equals("false"))) {
+        if ((!"true".equals(status)) && (!"false".equals(status))) {
             throw new ServiceException(4614);
         }
-        boolean modifyStatus = status.equals("true");
+        boolean modifyStatus = "true".equals(status);
         VipLevel vipLevel = new VipLevel();
         vipLevel.setId(id);
         vipLevel.setStatus(modifyStatus);
@@ -181,23 +163,10 @@ public class VipLevelServiceImpl implements VipLevelService {
             }
             throw new ServiceException(4618);
         }
-        VipLevelBO levelBO=selectOne(id);
-        if(levelBO!=null){
-        	redisTemplate.delete(levelBO.getLevelCode() + "_VipLevel");
-        }
     }
 
     @Override
     public VipLevelBO selectByLevelCode(String levelCode) {
-    	VipLevelBO levelBO=null;
-    	if (redisTemplate.hasKey(levelCode + "_VipLevel")) {
-    		levelBO=JSONObject.parseObject(redisTemplate.opsForValue().get(levelCode + "_VipLevel"),VipLevelBO.class);
-    	}else{
-    		levelBO=vipLevelRoMapper.selectByLevelCode(levelCode);
-    		if(levelBO!=null){
-    			redisTemplate.opsForValue().set(levelCode + "_VipLevel",JSONObject.toJSONString(levelBO),RedisConstant.DICT_TIME_ODFAY,TimeUnit.DAYS);
-    		}
-    	}
-        return levelBO;
+    	return vipLevelRoMapper.selectByLevelCode(levelCode);
     }
 }
