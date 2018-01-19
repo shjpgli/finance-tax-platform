@@ -113,8 +113,7 @@ public class OrderSubmitBO implements Serializable {
     /**
      * 优惠卷ID
      */
-    @Size(min = 1, max = 5)
-    private List<String> couponIds;
+    private String couponId;
 
     //订单和商品对应关系
     private List<OrderProductBO> orderProductBOList;
@@ -247,11 +246,34 @@ public class OrderSubmitBO implements Serializable {
         this.orderProductBOList = orderProductBOList;
     }
 
-    public List<String> getCouponIds() {
-        return couponIds;
+    public String getCouponId() {
+        return couponId;
     }
 
-    public void setCouponIds(List<String> couponIds) {
-        this.couponIds = couponIds;
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderSubmitBO{" +
+                "userId='" + userId + '\'' +
+                ", deliveryMethod='" + deliveryMethod + '\'' +
+                ", nowVipLevel='" + nowVipLevel + '\'' +
+                ", username='" + username + '\'' +
+                ", deliveryFee=" + deliveryFee +
+                ", totalPrice=" + totalPrice +
+                ", remark='" + remark + '\'' +
+                ", giftPoints=" + giftPoints +
+                ", tradeMethod='" + tradeMethod + '\'' +
+                ", recommendUser='" + recommendUser + '\'' +
+                ", consignee='" + consignee + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", shippingAddress='" + shippingAddress + '\'' +
+                ", isShipping=" + isShipping +
+                ", isFreeShipping=" + isFreeShipping +
+                ", couponId='" + couponId + '\'' +
+                ", orderProductBOList=" + orderProductBOList +
+                '}';
     }
 }

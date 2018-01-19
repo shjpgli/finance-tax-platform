@@ -3,11 +3,13 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
+import com.abc12366.uc.model.order.bo.CouponActivityBO;
 import com.abc12366.uc.model.order.bo.CouponActivityListBO;
 import com.abc12366.uc.model.order.bo.CouponListBO;
 import com.abc12366.uc.model.order.bo.CouponUserListBO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -79,4 +81,11 @@ public interface CouponRoMapper {
      * @return 用户优惠劵列表
      */
     List<CouponUser> selectUserCouponByIds(String ids);
+
+    /**
+     * 获取活动列表
+     * @param map
+     * @return
+     */
+    List<CouponActivityBO> selectCouponActivityList(Map<String,Object> map);
 }

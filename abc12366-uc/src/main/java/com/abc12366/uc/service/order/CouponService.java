@@ -5,8 +5,10 @@ import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 优惠劵服务
@@ -118,7 +120,7 @@ public interface CouponService {
      * @param activityId 活动ID
      * @return 是否领取成功
      */
-    boolean userCollectCoupon(String userId, String activityId);
+    boolean userCollectCoupon(String userId, String activityId,HttpServletRequest request);
 
     /**
      * 用户下单、支付、取消下单操作优惠劵
@@ -143,4 +145,11 @@ public interface CouponService {
      * @return 成功或失败
      */
     boolean userDeleteCoupon(CouponUser bo);
+
+    /**
+     * 根据订单号查询用户使用的优惠卷
+     * @param map
+     * @return
+     */
+    CouponUser selectCouponUser(Map<String, Object> map);
 }

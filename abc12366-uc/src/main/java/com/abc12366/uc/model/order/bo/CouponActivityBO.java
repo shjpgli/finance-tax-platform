@@ -1,8 +1,8 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -47,14 +47,14 @@ public class CouponActivityBO {
      * 活动开始时间
      */
     @NotNull
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date activityStartTime;
 
     /**
      * 活动截止时间
      */
     @NotNull
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date activityEndTime;
 
     /**
@@ -133,13 +133,13 @@ public class CouponActivityBO {
     /**
      * 注册开始时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date regStartTime;
 
     /**
      * 注册结束时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date regEndTime;
 
     /**

@@ -1,10 +1,9 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -76,13 +75,13 @@ public class CouponBO {
     /**
      * 有效期起
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date validStartTime;
 
     /**
      * 有效期止
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date validEndTime;
 
     /**
@@ -106,8 +105,8 @@ public class CouponBO {
      * 商品品类ID，逗号分隔
      */
     @NotEmpty
-    @Size(max = 10)
-    private List<String> categoryIds;
+//    @Size(max = 10)
+    private String categoryIds;
 
     public String getId() {
         return id;
@@ -213,11 +212,11 @@ public class CouponBO {
         this.status = status;
     }
 
-    public List<String> getCategoryIds() {
+    public String getCategoryIds() {
         return categoryIds;
     }
 
-    public void setCategoryIds(List<String> categoryIds) {
+    public void setCategoryIds(String categoryIds) {
         this.categoryIds = categoryIds;
     }
 

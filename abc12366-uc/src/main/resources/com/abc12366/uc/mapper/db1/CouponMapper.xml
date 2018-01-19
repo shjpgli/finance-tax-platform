@@ -94,11 +94,11 @@
         INSERT INTO uc_coupon_user (id, userId, activityId, couponId, couponName,
         couponMode, couponType, param1, param2, amountType,
         validStartTime, validEndTime, description, status, createTime,
-        lastUpdate, orderNo, categoryIds)
+        lastUpdate, orderNo, categoryIds,amountAfter)
         VALUES (#{id}, #{userId}, #{activityId}, #{couponId}, #{couponName},
         #{couponMode}, #{couponType}, #{param1}, #{param2}, #{amountType},
         #{validStartTime}, #{validEndTime}, #{description}, #{status}, #{createTime},
-        #{lastUpdate}, #{orderNo}, #{categoryIds})
+        #{lastUpdate}, #{orderNo}, #{categoryIds},#{amountAfter})
     </insert>
 
     <update id="updateUserCoupon" parameterType="com.abc12366.uc.model.order.CouponUser">
@@ -107,6 +107,7 @@
           <if test="status != null">status = #{status},</if>
           <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
           <if test="orderNo != null">orderNo = #{orderNo},</if>
+          <if test="amountAfter != null">amountAfter = #{amountAfter},</if>
         </set>
         where id=#{id}
     </update>
@@ -117,6 +118,7 @@
             <if test="status != null">status = #{status},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
             <if test="orderNo != null">orderNo = #{orderNo},</if>
+            <if test="amountAfter != null">amountAfter = #{amountAfter},</if>
         </set>
         where id IN
         <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
