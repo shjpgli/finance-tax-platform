@@ -26,7 +26,7 @@ public class OperateMessageBO {
     @NotEmpty(message = "消息内容不能为空")
     @Size(max = 800 ,message = "运营消息内容长度不能超过800")
     private String content;
-    @Size(max = 100 ,message = "消息链接长度不能超过100")
+    @Size(max = 300 ,message = "消息链接长度不能超过300")
     private String url;
     @NotEmpty(message = "目标人群不能为空")
     @Size(max = 1 ,message = "目标人群长度不能超过1")
