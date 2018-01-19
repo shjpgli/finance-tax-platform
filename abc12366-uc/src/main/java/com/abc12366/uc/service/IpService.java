@@ -8,5 +8,12 @@ package com.abc12366.uc.service;
  * @since 1.0.0
  */
 public interface IpService {
-    void merge(String ip);
+
+    /**
+     * 更新IP地址库和用户地址信息
+     *
+     * @param ip     IP地址
+     * @param userId 用户ID
+     */
+    void merge(String ip, String userId);
 }

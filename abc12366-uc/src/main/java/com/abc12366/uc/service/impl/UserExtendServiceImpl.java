@@ -4,7 +4,6 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
-import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.model.bo.UserExtendUpdateBO;
@@ -12,11 +11,11 @@ import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,9 +40,6 @@ public class UserExtendServiceImpl implements UserExtendService {
     private UserExtendMapper userExtendMapper;
 
     @Autowired
-    private UserExtendRoMapper userExtendRoMapper;
-
-    @Autowired
     private UserBindService userBindService;
 
     @Autowired
@@ -52,25 +48,14 @@ public class UserExtendServiceImpl implements UserExtendService {
     @Autowired
     private UserFeedbackMsgService userFeedbackMsgService;
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
     @Override
     public UserExtendBO selectOne(String userId) {
         LOGGER.info("{}", userId);
         UserExtend userExtend = userExtendMapper.selectOne(userId);
 
-
         if (userExtend == null) {
             return null;
         }
-
-//        if (userExtend.getValidStatus().equals(
-//                TaskConstant.USER_REALNAME_VALIDATED)) {
-//            // 首次实名认证任务埋点
-//            todoTaskService.doTask(userId,
-//                    TaskConstant.SYS_TASK_FIRST_REALNAME_VALIDATE_CODE);
-//        }
         UserExtendBO userExtendBO = new UserExtendBO();
         BeanUtils.copyProperties(userExtend, userExtendBO);
         LOGGER.info("{}", userExtendBO);
@@ -292,6 +277,22 @@ public class UserExtendServiceImpl implements UserExtendService {
             return userExtendBO;
         }
         return null;
+    }
+
+    @Override
+    public boolean updateUserAddress(String userId, String provinceId, String cityId) {
+        UserExtend ue = userExtendMapper.selectOne(userId);
+        if (ue != null) {
+            if (StringUtils.isEmpty(ue.getProvince())) {
+                ue.setProvince(provinceId);
+            }
+            if (StringUtils.isEmpty(ue.getCity())) {
+                ue.setCity(cityId);
+            }
+            ue.setLastUpdate(new Date());
+            return 1 == userExtendMapper.update(ue);
+        }
+        return false;
     }
 
 }

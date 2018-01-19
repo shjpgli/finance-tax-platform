@@ -502,10 +502,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CompletableFuture<BodyStatus> todoAfterLogin(Map map) {
         LOGGER.info("记录用户IP归属");
-        if (!StringUtils.isEmpty(map.get(Constant.CLIENT_IP))) {
-            ipService.merge(String.valueOf(map.get(Constant.CLIENT_IP)));
-        }
         String userId = String.valueOf(map.get(Constant.USER_ID));
+        if (!StringUtils.isEmpty(map.get(Constant.CLIENT_IP))
+                && !StringUtils.isEmpty(userId)) {
+            ipService.merge(String.valueOf(map.get(Constant.CLIENT_IP)), userId);
+        }
 
         LOGGER.info("登录删除用户缓存，防止缓存不及时刷新:{}", userId);
         redisTemplate.delete(userId + "_Points");

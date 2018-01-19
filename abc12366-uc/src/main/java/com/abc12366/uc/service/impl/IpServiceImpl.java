@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db2.IpRoMapper;
 import com.abc12366.uc.model.Ip;
 import com.abc12366.uc.model.bo.IpQueryResult;
 import com.abc12366.uc.service.IpService;
+import com.abc12366.uc.service.UserExtendService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import org.apache.commons.lang3.time.DateUtils;
@@ -22,7 +23,7 @@ import java.util.Date;
 
 /**
  * @author lijun <ljun51@outlook.com>
- * @create 2017-06-22 11:08 AM
+ * @date 2017-06-22 11:08 AM
  * @since 1.0.0
  */
 @Service
@@ -30,7 +31,9 @@ public class IpServiceImpl implements IpService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IpServiceImpl.class);
 
-    // IP地址更新周期为7天
+    /**
+     * IP地址更新周期为7天
+     */
     private final static int UPDATE_CYCLE = 7;
 
     @Autowired
@@ -40,11 +43,14 @@ public class IpServiceImpl implements IpService {
     private IpRoMapper ipRoMapper;
 
     @Autowired
+    private UserExtendService userExtendService;
+
+    @Autowired
     private RestTemplate restTemplate;
 
     @Override
-    public void merge(String ip) {
-        Timestamp now = new Timestamp(new Date().getTime());
+    public void merge(String ip, String userId) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         Ip o = ipRoMapper.selectOne(ip);
 
         if (o != null) {
@@ -55,16 +61,22 @@ public class IpServiceImpl implements IpService {
                     BeanUtils.copyProperties(updateObj, o, "id");
                     o.setUpdateTime(now);
                     ipMapper.update(o);
+
+                    // 更新用户省市地址信息
+                    userExtendService.updateUserAddress(userId, o.getRegionId(), o.getCityId());
                 }
             }
         } else {
-            Ip insertObj = getIpObj(ip);
+            Ip bo = getIpObj(ip);
 
-            if (insertObj != null) {
-                insertObj.setId(Utils.uuid());
-                insertObj.setCreateTime(now);
-                insertObj.setUpdateTime(now);
-                ipMapper.insert(insertObj);
+            if (bo != null) {
+                bo.setId(Utils.uuid());
+                bo.setCreateTime(now);
+                bo.setUpdateTime(now);
+                ipMapper.insert(bo);
+
+                // 更新用户省市地址信息
+                userExtendService.updateUserAddress(userId, bo.getRegionId(), bo.getCityId());
             }
         }
     }
