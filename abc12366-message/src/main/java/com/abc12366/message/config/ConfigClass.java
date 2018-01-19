@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
  * @author husl on 2017-08-04.
  */
 @Configuration
-@ImportResource(locations={"classpath:application-bean.xml"})
 public class ConfigClass {
 
 	    @Bean
