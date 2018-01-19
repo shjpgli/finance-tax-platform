@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -270,12 +271,12 @@ public class CouponController {
      * @return 是否领取成功
      */
     @GetMapping("/user/{userId}/{activityId}")
-    public ResponseEntity userCollectCoupon(@PathVariable String userId, @PathVariable String activityId) {
+    public ResponseEntity userCollectCoupon(@PathVariable String userId, @PathVariable String activityId,HttpServletRequest request) {
         CouponUser cu = new CouponUser();
         cu.setUserId(userId);
         cu.setActivityId(activityId);
         LOGGER.info("{}", cu);
-        return ResponseEntity.ok(Utils.kv("data", couponService.userCollectCoupon(userId, activityId)));
+        return ResponseEntity.ok(Utils.kv("data", couponService.userCollectCoupon(userId, activityId,request)));
     }
 
     /**

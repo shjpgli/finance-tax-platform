@@ -3,9 +3,6 @@ package com.abc12366.uc.model.order.bo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Size;
-import java.util.List;
-
 /**
  * 使用优惠劵计算金额对象
  *
@@ -19,8 +16,7 @@ public class CouponCalculateBO {
      * 优惠劵ID
      */
     @NotEmpty
-    @Size(min = 1, max = 5)
-    private List<String> couponIds;
+    private String couponId;
 
     /**
      * 用户ID
@@ -42,12 +38,12 @@ public class CouponCalculateBO {
     @NotEmpty
     private Double amount;
 
-    public List<String> getCouponIds() {
-        return couponIds;
+    public String getCouponId() {
+        return couponId;
     }
 
-    public void setCouponIds(List<String> couponIds) {
-        this.couponIds = couponIds;
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
     }
 
     public String getUserId() {
@@ -77,7 +73,7 @@ public class CouponCalculateBO {
     @Override
     public String toString() {
         return "CouponOrderBO{" +
-                "couponIds=" + couponIds +
+                "couponId=" + couponId +
                 ", userId='" + userId + '\'' +
                 ", categoryId='" + categoryId + '\'' +
                 ", amount=" + amount +
