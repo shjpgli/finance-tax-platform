@@ -5,7 +5,6 @@ import com.abc12366.gateway.component.LogInterceptor;
 import com.abc12366.gateway.component.TokenInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -29,11 +28,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
         System.out.println("Locale: " + Locale.getDefault());
         return slr;
-    }
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
     }
 
     @Bean
