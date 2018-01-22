@@ -97,9 +97,9 @@ public class DzfpClient {
     	EndpointReference targetEPR = new EndpointReference(endpoint);
     	
     	options.setProperty(HTTPConstants.CUSTOM_PROTOCOL_HANDLER, protocol);
-    	options.setTimeOutInMilliSeconds(60000);
-    	options.setProperty(org.apache.axis2.transport.http.HTTPConstants.SO_TIMEOUT,60000);
-    	options.setProperty(org.apache.axis2.transport.http.HTTPConstants.CONNECTION_TIMEOUT,60000);
+    	options.setTimeOutInMilliSeconds(30000);
+    	options.setProperty(org.apache.axis2.transport.http.HTTPConstants.SO_TIMEOUT,30000);
+    	options.setProperty(org.apache.axis2.transport.http.HTTPConstants.CONNECTION_TIMEOUT,30000);
     	
     	options.setTo(targetEPR);
     	

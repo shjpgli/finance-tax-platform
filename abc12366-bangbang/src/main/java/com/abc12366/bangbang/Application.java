@@ -28,8 +28,6 @@ public class Application {
     public Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
-        executor.setMaxPoolSize(1000);
-        executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("bb-");
         executor.initialize();
         return executor;
