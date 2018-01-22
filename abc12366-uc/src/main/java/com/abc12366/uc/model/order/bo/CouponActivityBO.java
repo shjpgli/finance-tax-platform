@@ -33,7 +33,7 @@ public class CouponActivityBO {
     /**
      * 活动链接
      */
-    @Length(max = 100)
+    @Length(max = 150)
     private String activityLink;
 
     /**
@@ -84,7 +84,7 @@ public class CouponActivityBO {
     /**
      * 校验接口
      */
-    @Length(max = 100)
+    @Length(max = 150)
     private String validApi;
 
     /**
@@ -109,8 +109,9 @@ public class CouponActivityBO {
     /**
      * 区域ID，逗号分隔
      */
-    @Size(max = 20)
-    private List<String> areaIds;
+//    @Size(max = 20)
+    @Length(max = 200)
+    private String areaIds;
 
     /**
      * 标签操作符：等于(equals), 不等于(ne)
@@ -121,8 +122,9 @@ public class CouponActivityBO {
     /**
      * 标签ID，逗号分隔
      */
-    @Size(max = 10)
-    private List<String> tagIds;
+//    @Size(max = 10)
+    @Length(max = 400)
+    private String tagIds;
 
     /**
      * 注册时间操作符：小于等于(lte)，大于等于(gte)，时间段(between)
@@ -145,14 +147,16 @@ public class CouponActivityBO {
     /**
      * 会员类型，逗号分隔
      */
-    @Size(max = 5)
-    private List<String> vips;
+//    @Size(max = 5)
+    @Length(max = 30)
+    private String vips;
 
     /**
      * 特定用户：用户ID，逗号分隔
      */
-    @Size(max = 1000)
-    private List<String> userIds;
+//    @Size(max = 1000)
+    @Length(max = 4000)
+    private String userIds;
 
     /**
      * 活动描述
@@ -163,7 +167,7 @@ public class CouponActivityBO {
     /**
      * 活动图片
      */
-    @Length(max = 100)
+    @Length(max = 150)
     private String imageUrl;
 
     /**
@@ -285,11 +289,11 @@ public class CouponActivityBO {
         this.areaOper = areaOper;
     }
 
-    public List<String> getAreaIds() {
+    public String getAreaIds() {
         return areaIds;
     }
 
-    public void setAreaIds(List<String> areaIds) {
+    public void setAreaIds(String areaIds) {
         this.areaIds = areaIds;
     }
 
@@ -301,11 +305,11 @@ public class CouponActivityBO {
         this.tagOper = tagOper;
     }
 
-    public List<String> getTagIds() {
+    public String getTagIds() {
         return tagIds;
     }
 
-    public void setTagIds(List<String> tagIds) {
+    public void setTagIds(String tagIds) {
         this.tagIds = tagIds;
     }
 
@@ -333,19 +337,19 @@ public class CouponActivityBO {
         this.regEndTime = regEndTime;
     }
 
-    public List<String> getVips() {
+    public String getVips() {
         return vips;
     }
 
-    public void setVips(List<String> vips) {
+    public void setVips(String vips) {
         this.vips = vips;
     }
 
-    public List<String> getUserIds() {
+    public String getUserIds() {
         return userIds;
     }
 
-    public void setUserIds(List<String> userIds) {
+    public void setUserIds(String userIds) {
         this.userIds = userIds;
     }
 

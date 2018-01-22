@@ -94,7 +94,7 @@
 
     <select id="selectUserList" parameterType="com.abc12366.uc.model.order.CouponUser"
             resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
-        SELECT cu.id, cu.userId, u.username, cu.couponMode, cu.couponType,
+        SELECT cu.id,cu.couponId,cu.couponName, cu.userId, u.username, cu.couponMode, cu.couponType,
         cu.param1, cu.param2, cu.amountType, cu.status, cu.createTime,
         cu.lastUpdate, cu.orderNo, cu.validStartTime, cu.validEndTime
         FROM uc_coupon_user cu LEFT JOIN uc_user u

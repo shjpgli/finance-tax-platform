@@ -350,16 +350,16 @@ public class CouponServiceImpl implements CouponService {
         ca.setValidApi(bo.getValidApi());
         ca.setTarget(bo.getTarget());
         ca.setAreaOper(bo.getAreaOper());
-        ca.setAreaIds(StringUtil.list2Str(bo.getAreaIds()));
+        ca.setAreaIds(bo.getAreaIds());
 
         ca.setTagOper(bo.getTagOper());
-        ca.setTagIds(StringUtil.list2Str(bo.getTagIds()));
+        ca.setTagIds(bo.getTagIds());
         ca.setRegTimeOper(bo.getRegTimeOper());
         ca.setRegStartTime(bo.getRegStartTime());
         ca.setRegEndTime(bo.getRegEndTime());
 
-        ca.setVips(StringUtil.list2Str(bo.getVips()));
-        ca.setUserIds(StringUtil.list2Str(bo.getUserIds()));
+        ca.setVips(bo.getVips());
+        ca.setUserIds(bo.getUserIds());
         ca.setDescription(bo.getDescription());
         ca.setImageUrl(bo.getImageUrl());
         ca.setStatus(bo.getStatus());
@@ -391,16 +391,16 @@ public class CouponServiceImpl implements CouponService {
         ca.setValidApi(bo.getValidApi());
         ca.setTarget(bo.getTarget());
         ca.setAreaOper(bo.getAreaOper());
-        ca.setAreaIds(StringUtil.list2Str(bo.getAreaIds()));
+        ca.setAreaIds(bo.getAreaIds());
 
         ca.setTagOper(bo.getTagOper());
-        ca.setTagIds(StringUtil.list2Str(bo.getTagIds()));
+        ca.setTagIds(bo.getTagIds());
         ca.setRegTimeOper(bo.getRegTimeOper());
         ca.setRegStartTime(bo.getRegStartTime());
         ca.setRegEndTime(bo.getRegEndTime());
 
-        ca.setVips(StringUtil.list2Str(bo.getVips()));
-        ca.setUserIds(StringUtil.list2Str(bo.getUserIds()));
+        ca.setVips(bo.getVips());
+        ca.setUserIds(bo.getUserIds());
         ca.setDescription(bo.getDescription());
         ca.setImageUrl(bo.getImageUrl());
         ca.setStatus(bo.getStatus());
@@ -408,6 +408,7 @@ public class CouponServiceImpl implements CouponService {
         ca.setLastUpdate(new Date());
         return 1 == couponMapper.updateActivity(ca);
     }
+
 
     @Override
     public CouponActivity selectOneActivity(String id) {
@@ -722,11 +723,11 @@ public class CouponServiceImpl implements CouponService {
         // 发放目标校验
         if (TARGET_1.equals(bo.getTarget()) || TARGET_2.equals(bo.getTarget()) || TARGET_3.equals(bo.getTarget())) {
             if (TARGET_2.equals(bo.getTarget())) {
-                if (bo.getAreaIds().size() == 0 &&
-                        bo.getTagIds().size() == 0 &&
+                if (bo.getAreaIds() == null &&
+                        bo.getTagIds() == null &&
                         bo.getRegStartTime() == null &&
                         bo.getRegEndTime() == null &&
-                        bo.getVips().size() == 0) {
+                        bo.getVips() == null) {
                     throw new ServiceException(7116);
                 }
                 // 操作符校验
@@ -753,7 +754,7 @@ public class CouponServiceImpl implements CouponService {
                 }
             }
             if (TARGET_3.equals(bo.getTarget())) {
-                if (bo.getUserIds() == null || bo.getUserIds().size() < 0) {
+                if (bo.getUserIds() == null || "".equals(bo.getUserIds())) {
                     throw new ServiceException(7115);
                 }
             }
@@ -775,7 +776,7 @@ public class CouponServiceImpl implements CouponService {
                 bo.getActivityEndTime().before(bo.getActivityEndTime())) {
             throw new ServiceException(7117);
         }*/
-        if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().before(bo.getActivityEndTime())) {
+        if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().after(bo.getActivityEndTime())) {
             LOGGER.info("优惠卷的开始时间，必须在活动时间之间");
             throw new ServiceException(7136);
         }
@@ -866,17 +867,18 @@ public class CouponServiceImpl implements CouponService {
         return (yyxxLogBOList != null && yyxxLogBOList.size() > 0);
     }
 
-    public boolean tagIdContains(List<String> tagIdList, List<String> tagIds) {
-        if (tagIds == null || tagIds.size() < 1) {
+    public boolean tagIdContains(List<String> tagIdList, String tagIds) {
+        if (tagIds == null || tagIds.split(",").length < 1) {
             return true;
         }
         if (tagIdList == null || tagIdList.size() < 1) {
             return false;
 
         }
+        String[] tagArrays = tagIds.split(",");
         for (int i = 0; i < tagIdList.size(); i++) {
-            for (int j = 0; j < tagIds.size(); j++) {
-                if (tagIdList.get(i).trim().equals(tagIds.get(i).trim())) {
+            for (int j = 0; j < tagArrays.length; j++) {
+                if (tagIdList.get(i).trim().equals(tagArrays[j].trim())) {
                     return true;
                 }
             }
