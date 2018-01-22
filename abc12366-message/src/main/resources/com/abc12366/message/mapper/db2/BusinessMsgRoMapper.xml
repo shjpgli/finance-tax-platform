@@ -32,8 +32,9 @@
             resultType="com.abc12366.message.model.bo.BusinessMessageAdmin">
         SELECT
         mbm.id, mbm.userId, mbm.businessId, mbm.content, mbm.status, mbm.type, mbm.createTime,
-        mbm.lastUpdate, mbm.url,mbm.busiType,muu.username,muu.userPicturePath
-        FROM msg_business_message mbm join msg_uc_user muu on mbm.userId=muu.id
+        mbm.lastUpdate, mbm.url,mbm.busiType
+        FROM msg_business_message mbm
+        <if test="username!=null and username!='' ">join msg_uc_user muu on mbm.userId=muu.id</if>
         WHERE 1=1
         <if test="username!=null and username!='' ">and muu.username = #{username}</if>
         <if test="type!=null and type!='' ">AND mbm.type = #{type}</if>
@@ -54,5 +55,9 @@
         <if test="busiType != null and busiType != ''">AND busiType = #{busiType}</if>
         AND status = '1'
         AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
+    </select>
+
+    <select id="selectUserById" parameterType="java.lang.String" resultType="com.abc12366.message.model.bo.UserSimple">
+        SELECT id,username,userPicturePath FROM msg_uc_user WHERE id=#{id}
     </select>
 </mapper>

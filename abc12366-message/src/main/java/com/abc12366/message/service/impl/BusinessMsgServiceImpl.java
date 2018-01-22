@@ -10,6 +10,7 @@ import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.BusinessMessageAdmin;
+import com.abc12366.message.model.bo.UserSimple;
 import com.abc12366.message.service.BusinessMsgService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -169,7 +170,13 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     @Override
     public List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return businessMsgRoMapper.selectListByUsername(map);
+        List<BusinessMessageAdmin> list = businessMsgRoMapper.selectListByUsername(map);
+        for(BusinessMessageAdmin messageAdmin:list){
+            UserSimple userSimple = businessMsgRoMapper.selectUserById(messageAdmin.getUserId());
+            messageAdmin.setUsername(userSimple.getUsername());
+            messageAdmin.setUserPicturePath(userSimple.getUserPicturePath());
+        }
+        return list;
     }
 
     @Override

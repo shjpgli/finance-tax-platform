@@ -2,6 +2,7 @@ package com.abc12366.message.mapper.db2;
 
 import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.model.bo.BusinessMessageAdmin;
+import com.abc12366.message.model.bo.UserSimple;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,11 @@ public interface BusinessMsgRoMapper {
      * @return 消息未读总数
      */
     int unreadCount(BusinessMessage bm);
+
+    /**
+     * 根据用户id从用户视图查询用户简要信息
+     * @param userId 用户id
+     * @return UserSimple
+     */
+    UserSimple selectUserById(String userId);
 }
