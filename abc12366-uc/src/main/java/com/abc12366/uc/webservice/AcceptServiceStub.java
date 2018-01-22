@@ -154,9 +154,10 @@ public class AcceptServiceStub extends org.apache.axis2.client.Stub {
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
             
             //AXIS2超时时间设置
-            _operationClient.getOptions().setTimeOutInMilliSeconds(60000);
-            _operationClient.getOptions().setProperty(org.apache.axis2.transport.http.HTTPConstants.SO_TIMEOUT,60000);
-            _operationClient.getOptions().setProperty(org.apache.axis2.transport.http.HTTPConstants.CONNECTION_TIMEOUT,60000);
+            _operationClient.getOptions().setTimeOutInMilliSeconds(30000);
+            _operationClient.getOptions().setProperty(org.apache.axis2.transport.http.HTTPConstants.SO_TIMEOUT,30000);
+            _operationClient.getOptions().setProperty(org.apache.axis2.transport.http.HTTPConstants
+                    .CONNECTION_TIMEOUT,30000);
             
             addPropertyToOperationClient(_operationClient, org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR, "&");
 
