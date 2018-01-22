@@ -1,6 +1,7 @@
 package com.abc12366.uc.model.order.bo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -29,15 +30,20 @@ public class CouponActivityListBO {
     private String couponId;
 
     /**
+     * 优惠劵名称
+     */
+    private String couponName;
+
+    /**
      * 活动开始时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date activityStartTime;
 
     /**
      * 活动截止时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date activityEndTime;
 
     /**
@@ -53,13 +59,13 @@ public class CouponActivityListBO {
     /**
      * 创建时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
     /**
@@ -180,12 +186,21 @@ public class CouponActivityListBO {
         return now.before(activityEndTime) && now.after(activityStartTime);
     }
 
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
+    }
+
     @Override
     public String toString() {
         return "CouponActivityListBO{" +
                 "id='" + id + '\'' +
                 ", activityName='" + activityName + '\'' +
                 ", couponId='" + couponId + '\'' +
+                ", couponName='" + couponName + '\'' +
                 ", activityStartTime=" + activityStartTime +
                 ", activityEndTime=" + activityEndTime +
                 ", couponNum=" + couponNum +
@@ -195,6 +210,7 @@ public class CouponActivityListBO {
                 ", collectNum=" + collectNum +
                 ", usedNum=" + usedNum +
                 ", usedAmount=" + usedAmount +
+                ", valid=" + valid +
                 '}';
     }
 }

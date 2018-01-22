@@ -4,6 +4,8 @@ import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
 
+import java.util.Map;
+
 /**
  * @author lijun <ljun51@outlook.com>
  * @date 2018-01-13 3:06 PM
@@ -58,4 +60,12 @@ public interface CouponMapper {
      * @return 影响行数
      */
     int updateUserCoupon(CouponUser cu);
+
+    /**
+     * 批量修改用户优惠劵
+     *
+     * @param map orderNo,status,lastUpdate,ids
+     * @return 影响行数
+     */
+    int batchUpdateUserCoupon(Map<String, Object> map);
 }

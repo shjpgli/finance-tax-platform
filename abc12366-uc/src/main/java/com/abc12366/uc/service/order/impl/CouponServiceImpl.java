@@ -1,14 +1,30 @@
 package com.abc12366.uc.service.order.impl;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.AppBO;
+import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.MessageConstant;
+import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.CouponMapper;
+import com.abc12366.uc.mapper.db1.OperateMessageMapper;
+import com.abc12366.uc.mapper.db1.UserExtendMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.CouponRoMapper;
+import com.abc12366.uc.mapper.db2.OperateMessageRoMapper;
+import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserExtend;
+import com.abc12366.uc.model.admin.bo.OperateMessageBO;
+import com.abc12366.uc.model.admin.bo.YyxxLogBO;
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
+import com.abc12366.uc.service.IWxTemplateService;
+import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.order.CouponService;
 import com.abc12366.uc.util.StringUtil;
 import com.abc12366.uc.web.order.CartController;
@@ -19,12 +35,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * 优惠劵服务实现类
@@ -169,6 +186,48 @@ public class CouponServiceImpl implements CouponService {
     @Autowired
     private CouponRoMapper couponRoMapper;
 
+    /**
+     * 消息操作
+     */
+    @Autowired
+    private OperateMessageMapper operateMessageMapper;
+
+    /**
+     * 消息操作
+     */
+    @Autowired
+    private OperateMessageRoMapper operateMessageRoMapper;
+
+    /**
+     * 用户Mapper
+     */
+    @Autowired
+    private UserMapper userMapper;
+
+    /**
+     * 消息发送工具类
+     */
+    @Autowired
+    private MessageSendUtil messageSendUtil;
+
+    /**
+     * 微信消息模版Service
+     */
+    @Autowired
+    private IWxTemplateService templateService;
+
+    /**
+     * 用户扩展信息Mapper
+     */
+    @Autowired
+    private UserExtendMapper userExtendMapper;
+
+    /**
+     * APP应用Service
+     */
+    @Autowired
+    private AppService appService;
+
     @Override
     public List<CouponListBO> selectList(Coupon bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -200,7 +259,7 @@ public class CouponServiceImpl implements CouponService {
         List<CouponUserListBO> dataList = couponRoMapper.selectUserList(bo);
 
         // 处理过期的status显示
-        for(CouponUserListBO data : dataList) {
+        for (CouponUserListBO data : dataList) {
             Date now = new Date();
             boolean outdated = (data.getValidStartTime() != null && now.before(data.getValidStartTime())) ||
                     (data.getValidEndTime() != null && now.after(data.getValidEndTime()));
@@ -219,7 +278,7 @@ public class CouponServiceImpl implements CouponService {
 
         BeanUtils.copyProperties(bo, coupon);
         coupon.setId(Utils.uuid());
-        coupon.setCategoryIds(StringUtil.list2Str(bo.getCategoryIds()));
+        coupon.setCategoryIds(bo.getCategoryIds());
         coupon.setCreateTime(now);
         coupon.setLastUpdate(now);
         return 1 == couponMapper.insert(coupon);
@@ -248,7 +307,7 @@ public class CouponServiceImpl implements CouponService {
         coupon.setDescription(bo.getDescription());
         coupon.setStatus(bo.getStatus());
         coupon.setLastUpdate(new Date());
-        coupon.setCategoryIds(StringUtil.list2Str(bo.getCategoryIds()));
+        coupon.setCategoryIds(bo.getCategoryIds());
         return 1 == couponMapper.update(coupon);
     }
 
@@ -365,8 +424,13 @@ public class CouponServiceImpl implements CouponService {
         return 1 == couponMapper.updateActivity(ca);
     }
 
+    //生成min->max之间的数,最小生成的随机数为min，最大生成的随机数为max
+    public static double getRandomNum(double min, double max) {
+        return Math.round(Math.random() * (max - min)) + min;
+    }
+
     @Override
-    public boolean userCollectCoupon(String userId, String activityId) {
+    public boolean userCollectCoupon(String userId, String activityId,HttpServletRequest request) {
         Assert.notNull(userId, "userId can not empty");
         Assert.notNull(activityId, "activityId can not empty");
         CouponActivity ca = selectOneActivity(activityId);
@@ -386,7 +450,12 @@ public class CouponServiceImpl implements CouponService {
                 cu.setCouponMode(c.getCouponMode());
                 cu.setCouponType(c.getCouponType());
                 cu.setParam1(c.getParam1());
-                cu.setParam2(c.getParam2());
+                LOGGER.info("判断优惠劵模式-固定金额或浮动金额");
+                if (StringUtils.isNotEmpty(c.getCouponMode()) && COUPON_MODE_FIXED.equals(c.getCouponMode())) {
+                    cu.setParam2(c.getParam2());
+                } else if (StringUtils.isNotEmpty(c.getCouponMode()) && COUPON_MODE_FLOAT.equals(c.getCouponMode())) {
+                    cu.setParam2(getRandomNum(c.getParam2(), c.getParam3()));
+                }
                 cu.setAmountType(c.getAmountType());
 
                 if (VALIDTYPE_PERIOD.equalsIgnoreCase(c.getValidType())) {
@@ -402,39 +471,74 @@ public class CouponServiceImpl implements CouponService {
 
                 cu.setLastUpdate(now);
                 cu.setCategoryIds(c.getCategoryIds());
+
+                LOGGER.info("给用户推送站内消息");
+                send(userId, ca.getCouponId(), request);
                 return 1 == couponMapper.insertUserCoupon(cu);
             }
         }
         return false;
     }
 
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
-    public Map<String, Object> userUseCoupon(CouponOrderBO bo) {
-        Double amount = bo.getAmount();
-        Double amountAfter = amount;
-        for (String couponId : bo.getCouponIds()) {
-            Assert.notNull(couponId, "couponId can not empty");
-            CouponUser cu = couponRoMapper.selectUserCoupon(couponId);
-            if (cu != null) {
+    public double userUseCoupon(@Valid CouponOrderBO bo) {
+        CouponCalculateBO cc = new CouponCalculateBO();
+        cc.setUserId(bo.getUserId());
+        cc.setAmount(bo.getAmount());
+        cc.setCategoryId(bo.getCategoryId());
+        cc.setCouponId(bo.getCouponId());
+        double amountAfter = calculateOrderAmount(cc);
+
+        if (amountAfter < bo.getAmount()) {
+            Map<String, Object> map = new HashMap<>(16);
+            map.put("orderNo", COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
+            map.put("status", bo.getStatus());
+            map.put("lastUpdate", new Date());
+            map.put("ids", bo.getCouponId());
+            map.put("amountAfter", amountAfter);
+            couponMapper.batchUpdateUserCoupon(map);
+        }
+        return amountAfter;
+    }
+
+    @Override
+    public double calculateOrderAmount(@Valid CouponCalculateBO bo) {
+        LOGGER.info("{}", bo);
+        // 优惠前的金额
+        double amount = bo.getAmount();
+        // 优惠后的金额
+        double amountAfter = amount;
+
+        String couponIds = bo.getCouponId();
+        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(couponIds);
+        if (dataList.size() > 0) {
+            String ids = "";
+            for (CouponUser cu : dataList) {
+                // 校验用户
                 if (!cu.getUserId().equals(bo.getUserId())) {
                     throw new ServiceException(7118);
                 }
+                // 校验计算类型
                 if (!COUPON_AMOUNT_ORDER.equalsIgnoreCase(cu.getAmountType())) {
                     throw new ServiceException(7131);
                 }
+                // 校验商品品目
                 if (!cu.getCategoryIds().contains(bo.getCategoryId())) {
                     throw new ServiceException(7119);
                 }
+                // 校验优惠劵有效期
                 Date now = new Date();
                 if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
                     throw new ServiceException(7120);
                 }
+                // 校验优惠劵状态
                 if (!COUPON_STATUS_GET.equals(cu.getStatus()) ||
                         !COUPON_STATUS_ON.equals(cu.getStatus()) ||
                         !COUPON_STATUS_FREEZEN.equals(cu.getStatus())) {
                     throw new ServiceException(7121);
                 }
-
+                // 计算优惠后的金额
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
                         if (amount >= cu.getParam1()) {
@@ -450,19 +554,20 @@ public class CouponServiceImpl implements CouponService {
                         break;
                     case COUPONTYPE_LIJIAN:
                         if (amount >= cu.getParam2()) {
-                            amount = amount - cu.getParam2();
-                            amountAfter = amountAfter - cu.getParam1() * (1 - cu.getParam2());
+                            amountAfter = amountAfter - cu.getParam2();
+                        } else {
+                            throw new ServiceException(7133);
                         }
                         break;
+                    default:
+                        throw new ServiceException(7102);
                 }
-
-                cu.setOrderNo(COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
-                cu.setStatus(bo.getStatus());
-                cu.setLastUpdate(new Date());
-                couponMapper.updateUserCoupon(cu);
+                ids += cu.getId();
             }
+            amountAfter = couponIds.length() == ids.length() ? amountAfter : amount;
         }
-        return null;
+        LOGGER.info("{}", amountAfter);
+        return amountAfter;
     }
 
     @Override
@@ -481,6 +586,11 @@ public class CouponServiceImpl implements CouponService {
             return 1 == couponMapper.updateUserCoupon(cu);
         }
         return false;
+    }
+
+    @Override
+    public CouponUser selectCouponUser(Map<String, Object> map) {
+        return null;
     }
 
     /**
@@ -543,6 +653,11 @@ public class CouponServiceImpl implements CouponService {
                     throw new ServiceException(7100);
                 }
             }
+            if (COUPONTYPE_ZHEKOU.equalsIgnoreCase(bo.getCouponType())) {
+                if (0 >= bo.getParam2() || bo.getParam2() >= 1) {
+                    throw new ServiceException(7132);
+                }
+            }
             if (COUPONTYPE_LIJIAN.equalsIgnoreCase(bo.getCouponType())) {
                 if (bo.getParam2() == null) {
                     throw new ServiceException(7101);
@@ -568,8 +683,7 @@ public class CouponServiceImpl implements CouponService {
                 if (bo.getValidStartTime() == null || bo.getValidEndTime() == null) {
                     throw new ServiceException(7104);
                 }
-                if (bo.getValidStartTime().after(bo.getValidEndTime()) ||
-                        bo.getValidStartTime().before(new Date())) {
+                if (bo.getValidStartTime().after(bo.getValidEndTime())) {
                     throw new ServiceException(7130);
                 }
             }
@@ -656,11 +770,14 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7107);
         }
         // 活动有效期限制校验
-        if (bo.getActivityStartTime().after(c.getValidStartTime()) ||
+        /*if (bo.getActivityStartTime().after(c.getValidStartTime()) ||
                 bo.getActivityEndTime().before(c.getValidEndTime()) ||
-                bo.getActivityEndTime().before(bo.getActivityEndTime()) ||
-                bo.getActivityStartTime().before(new Date())) {
+                bo.getActivityEndTime().before(bo.getActivityEndTime())) {
             throw new ServiceException(7117);
+        }*/
+        if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().before(bo.getActivityEndTime())) {
+            LOGGER.info("优惠卷的开始时间，必须在活动时间之间");
+            throw new ServiceException(7136);
         }
     }
 
@@ -677,4 +794,155 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7106);
         }
     }
+
+    public void send(String userId,String couponId,HttpServletRequest request) {
+        User user = userMapper.selectOne(userId);
+        UserExtend userExtend = userExtendMapper.selectOne(userId);
+        List<String> tagIdList = operateMessageRoMapper.selectTagIdList(userId);
+        if (user == null) {
+            return;
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("couponId",couponId);
+        map.put("status",COUPON_STATUS_ON);
+        List<CouponActivityBO> operateMessageBOList = couponRoMapper.selectCouponActivityList(map);
+        for (CouponActivityBO o : operateMessageBOList) {
+            //判断运营消息任务的有效性
+            if (org.springframework.util.StringUtils.isEmpty(o.getStatus()) || !o.getStatus().equals("1") ||
+                    o.getActivityStartTime() == null || o.getActivityEndTime() == null ||
+                    o.getActivityStartTime().after(new Date()) || o.getActivityEndTime().before(new Date())) {
+                continue;
+            }
+            //判断用户是否在消息发送范围内
+            //目标人群：1-全部用户，2-部分用户，3-特定用户
+            if (!org.springframework.util.StringUtils.isEmpty(o.getTarget())) {
+                switch (o.getTarget()) {
+                    case "1":
+                        //根据运营消息频率查看是否已发送
+                        sendYyxx(o, user,request);
+                        break;
+                    case "2":
+                        sendPart(o, user, userExtend, tagIdList,request);
+                        break;
+                    case "3":
+                        if (org.springframework.util.StringUtils.isEmpty(o.getUserIds())) {
+                            break;
+                        }
+                        if (o.getUserIds().contains(userId)) {
+                            sendYyxx(o, user,request);
+                            break;
+                        }
+                }
+            }
+        }
+    }
+
+    public void sendYyxx(CouponActivityBO o, User user,HttpServletRequest request) {
+        //获取运营管理系统accessToken
+        AppBO appBO = appService.selectByName("abc12366-admin");
+        Date lastRest = appBO.getLastResetTokenTime();
+        if (lastRest.before(new Date())) {
+            appBO.setLastResetTokenTime(org.apache.commons.lang3.time.DateUtils.addHours(new Date(), 2));
+            appService.update(appBO);
+        }
+        String accessToken = appBO.getAccessToken();
+        //系统消息
+        //系统消息日志
+        Message message = new Message();
+        message.setBusinessId(o.getId());
+        message.setBusiType(MessageConstant.YYXX_BUSITYPE);
+        message.setType(MessageConstant.SYS_MESSAGE);
+        message.setContent(RemindConstant.COUPON_YYXX.replaceAll("\\{#DATA.COUPON\\}", o.getActivityName()));
+        message.setUserId(user.getId());
+        //message.setUrl(o.getUrl());
+        //TODO 待前台给链接地址
+        //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        messageSendUtil.sendMessage(message, request);
+        operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(), user.getId(), o.getId(), MessageConstant.YYXX_WEB, new Date()));
+    }
+
+    private boolean sendAready(String userId, String messageId, String type, Date start, Date end) {
+        List<YyxxLogBO> yyxxLogBOList = operateMessageRoMapper.selectWebLogList(userId, messageId, type, start, end);
+        return (yyxxLogBOList != null && yyxxLogBOList.size() > 0);
+    }
+
+    public boolean tagIdContains(List<String> tagIdList, List<String> tagIds) {
+        if (tagIds == null || tagIds.size() < 1) {
+            return true;
+        }
+        if (tagIdList == null || tagIdList.size() < 1) {
+            return false;
+
+        }
+        for (int i = 0; i < tagIdList.size(); i++) {
+            for (int j = 0; j < tagIds.size(); j++) {
+                if (tagIdList.get(i).trim().equals(tagIds.get(i).trim())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void sendPart(CouponActivityBO o, User user, UserExtend userExtend, List<String> tagIdList,HttpServletRequest request) {
+        boolean sendArea = false;
+        boolean sendTag = false;
+        boolean sendRegTime = false;
+        //地域
+        if (!org.springframework.util.StringUtils.isEmpty(o.getAreaOper()) && !org.springframework.util.StringUtils.isEmpty(o.getAreaIds())) {
+            //地域限制
+            if (o.getAreaOper().trim().equals("equals") && userExtend != null) {
+                if ((!org.springframework.util.StringUtils.isEmpty(userExtend.getProvince()) && o.getAreaIds().contains(userExtend.getProvince()))
+                        || (!org.springframework.util.StringUtils.isEmpty(userExtend.getCity()) && o.getAreaIds().contains(userExtend.getCity()))
+                        || (!org.springframework.util.StringUtils.isEmpty(userExtend.getArea()) && o.getAreaIds().contains(userExtend.getArea()))) {
+                    sendArea = true;
+                }
+                //地域排除
+            } else if (o.getAreaOper().trim().equals("ne")) {
+                if (userExtend == null || (((org.springframework.util.StringUtils.isEmpty(userExtend.getProvince())) || (!o.getAreaIds().contains(userExtend.getProvince()))) &&
+                        ((org.springframework.util.StringUtils.isEmpty(userExtend.getCity())) || (!o.getAreaIds().contains(userExtend.getCity()))) &&
+                        ((org.springframework.util.StringUtils.isEmpty(userExtend.getArea())) || (!o.getAreaIds().contains(userExtend.getArea()))))) {
+                    sendArea = true;
+                }
+            }
+        } else {
+            sendArea = true;
+        }
+        //标签
+        if (!org.springframework.util.StringUtils.isEmpty(o.getTagOper()) && !org.springframework.util.StringUtils.isEmpty(o.getTagIds())) {
+            //标签限制
+            if (o.getTagOper().trim().equals("equals")) {
+                if (tagIdContains(tagIdList, o.getTagIds())) {
+                    sendTag = true;
+                }
+                //标签排除
+            } else if (o.getTagOper().trim().equals("ne")) {
+                if (!tagIdContains(tagIdList, o.getTagIds())) {
+                    sendTag = true;
+                }
+            }
+        } else {
+            sendTag = true;
+        }
+        //注册时间
+        if (!org.springframework.util.StringUtils.isEmpty(o.getRegTimeOper())) {
+            if (o.getRegTimeOper().trim().equals("lte") && o.getRegEndTime() != null) {
+                if (user.getCreateTime() != null && user.getCreateTime().getTime() <= o.getRegEndTime().getTime()) {
+                    sendRegTime = true;
+                }
+            }
+            if (o.getRegTimeOper().trim().equals("gte") && o.getRegStartTime() != null) {
+                if (user.getCreateTime() != null && user.getCreateTime().getTime() >= o.getRegStartTime().getTime()) {
+                    sendRegTime = true;
+                }
+            }
+        } else {
+            sendRegTime = true;
+        }
+
+        if (sendArea && sendTag && sendRegTime) {
+            sendYyxx(o, user,request);
+        }
+    }
+
 }
