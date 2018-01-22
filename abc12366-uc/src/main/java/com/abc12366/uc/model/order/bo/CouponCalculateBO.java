@@ -3,6 +3,8 @@ package com.abc12366.uc.model.order.bo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 使用优惠劵计算金额对象
  *
@@ -35,7 +37,7 @@ public class CouponCalculateBO {
     /**
      * 使用优惠劵之前的金额
      */
-    @NotEmpty
+    @NotNull
     private Double amount;
 
     public String getCouponId() {

@@ -180,7 +180,10 @@ public class CouponListBO {
 
     public Boolean getValid() {
         Date now = new Date();
-        return now.after(validStartTime) && now.before(validEndTime);
+        if(validStartTime != null && validEndTime != null){
+            return now.after(validStartTime) && now.before(validEndTime);
+        }
+        return true;
     }
 
     @Override
@@ -201,4 +204,5 @@ public class CouponListBO {
                 ", valid=" + valid +
                 '}';
     }
+
 }

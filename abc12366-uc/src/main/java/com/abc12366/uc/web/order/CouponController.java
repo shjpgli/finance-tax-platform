@@ -70,7 +70,7 @@ public class CouponController {
 
         List<CouponListBO> dataList = couponService.selectList(bo, pageNum, pageSize);
         PageInfo<CouponListBO> pageInfo = new PageInfo<>(dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -245,6 +245,7 @@ public class CouponController {
     @GetMapping("/user")
     public ResponseEntity selectUserList(
             @RequestParam(value = "orderNo", required = false) String orderNo,
+            @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -256,6 +257,10 @@ public class CouponController {
         if (StringUtils.isNotEmpty(orderNo)) {
             bo.setOrderNo(orderNo);
         }
+        if (StringUtils.isNotEmpty(categoryIds)) {
+            bo.setCategoryIds(categoryIds);
+        }
+
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
         List<CouponUserListBO> dataList = couponService.selectUserList(bo, pageNum, pageSize);
