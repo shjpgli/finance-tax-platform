@@ -537,9 +537,7 @@ public class CouponServiceImpl implements CouponService {
                     throw new ServiceException(7120);
                 }
                 // 校验优惠劵状态
-                if (!COUPON_STATUS_GET.equals(cu.getStatus()) ||
-                        !COUPON_STATUS_ON.equals(cu.getStatus()) ||
-                        !COUPON_STATUS_FREEZEN.equals(cu.getStatus())) {
+                if (!COUPON_STATUS_GET.equals(cu.getStatus())) {
                     throw new ServiceException(7121);
                 }
                 // 计算优惠后的金额
