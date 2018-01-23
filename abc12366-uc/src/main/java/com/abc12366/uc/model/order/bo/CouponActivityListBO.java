@@ -1,12 +1,11 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 /**
- * 优惠卷活动列表对象
+ * 优惠券活动列表对象
  *
  * @author lijun <ljun51@outlook.com>
  * @date 2018-01-13 4:07 PM

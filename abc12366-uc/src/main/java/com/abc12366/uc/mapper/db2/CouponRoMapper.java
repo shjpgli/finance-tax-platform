@@ -88,4 +88,11 @@ public interface CouponRoMapper {
      * @return
      */
     List<CouponActivityBO> selectCouponActivityList(Map<String,Object> map);
+
+    /**
+     * 根据订单获取优惠卷
+     * @param map
+     * @return
+     */
+    CouponUser selectCouponUser(Map<String, Object> map);
 }

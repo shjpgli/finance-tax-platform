@@ -111,7 +111,7 @@ public class OrderSubmitBO implements Serializable {
     private Integer isFreeShipping;
 
     /**
-     * 优惠卷ID
+     * 优惠劵ID
      */
     private String couponId;
 
