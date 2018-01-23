@@ -512,7 +512,10 @@ public class CouponServiceImpl implements CouponService {
         double amountAfter = amount;
 
         String couponIds = bo.getCouponId();
-        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(couponIds);
+        Map<String,Object> map = new HashMap<>();
+        map.put("couponIds",couponIds);
+        map.put("userId",bo.getUserId());
+        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
         if (dataList.size() > 0) {
             String ids = "";
             for (CouponUser cu : dataList) {
