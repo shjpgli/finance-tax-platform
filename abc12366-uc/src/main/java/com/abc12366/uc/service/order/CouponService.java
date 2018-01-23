@@ -5,6 +5,7 @@ import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
@@ -119,15 +120,23 @@ public interface CouponService {
      * @param activityId 活动ID
      * @return 是否领取成功
      */
-    boolean userCollectCoupon(String userId, String activityId);
+    boolean userCollectCoupon(String userId, String activityId,HttpServletRequest request);
 
     /**
      * 用户下单、支付、取消下单操作优惠劵
      *
      * @param bo 订单使用优惠劵对象
-     * @return allow:是否允许使用优惠劵，amount:使用优惠劵之后的金额
+     * @return 优惠后的金额
      */
-    Map<String, Object> userUseCoupon(CouponOrderBO bo);
+    double userUseCoupon(@Valid CouponOrderBO bo);
+
+    /**
+     * 计算订单金额
+     *
+     * @param bo 业务对象
+     * @return 使用优惠劵之后的金额
+     */
+    double calculateOrderAmount(@Valid CouponCalculateBO bo);
 
     /**
      * 用户删除优惠劵
@@ -136,4 +145,18 @@ public interface CouponService {
      * @return 成功或失败
      */
     boolean userDeleteCoupon(CouponUser bo);
+
+    /**
+     * 根据订单号查询用户使用的优惠劵
+     * @param map
+     * @return
+     */
+    CouponUser selectCouponUser(Map<String, Object> map);
+
+    /**
+     * 查找用户领用的优惠劵ID
+     * @param bo
+     * @return
+     */
+    String selectCouponId(CouponIdBO bo);
 }

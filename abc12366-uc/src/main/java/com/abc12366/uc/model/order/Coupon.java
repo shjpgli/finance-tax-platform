@@ -1,6 +1,6 @@
 package com.abc12366.uc.model.order;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -39,9 +39,14 @@ public class Coupon {
     private Double param1;
 
     /**
-     * 减多少金额、折扣
+     * 减多少金额、折扣，开始金额
      */
     private Double param2;
+
+    /**
+     * 减多少金额、折扣，结束金额
+     */
+    private Double param3;
 
     /**
      * 计算金额类型：订单金额-ORDER, 邮费金额-POSTAGE
@@ -56,13 +61,13 @@ public class Coupon {
     /**
      * 有效期起
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date validStartTime;
 
     /**
      * 有效期止
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date validEndTime;
 
     /**
@@ -83,13 +88,13 @@ public class Coupon {
     /**
      * 创建时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
     /**
@@ -245,5 +250,13 @@ public class Coupon {
                 ", lastUpdate=" + lastUpdate +
                 ", categoryIds='" + categoryIds + '\'' +
                 '}';
+    }
+
+    public Double getParam3() {
+        return param3;
+    }
+
+    public void setParam3(Double param3) {
+        this.param3 = param3;
     }
 }

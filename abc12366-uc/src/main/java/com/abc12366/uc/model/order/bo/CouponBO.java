@@ -1,10 +1,9 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -50,9 +49,14 @@ public class CouponBO {
     private Double param1;
 
     /**
-     * 减多少金额、折扣
+     * 减多少金额、折扣，开始金额
      */
     private Double param2;
+
+    /**
+     * 减多少金额、折扣，结束金额
+     */
+    private Double param3;
 
     /**
      * 计算金额类型：订单金额-ORDER, 邮费金额-POSTAGE
@@ -71,13 +75,13 @@ public class CouponBO {
     /**
      * 有效期起
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date validStartTime;
 
     /**
      * 有效期止
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date validEndTime;
 
     /**
@@ -101,8 +105,8 @@ public class CouponBO {
      * 商品品类ID，逗号分隔
      */
     @NotEmpty
-    @Size(max = 10)
-    private List<String> categoryIds;
+//    @Size(max = 10)
+    private String categoryIds;
 
     public String getId() {
         return id;
@@ -208,11 +212,11 @@ public class CouponBO {
         this.status = status;
     }
 
-    public List<String> getCategoryIds() {
+    public String getCategoryIds() {
         return categoryIds;
     }
 
-    public void setCategoryIds(List<String> categoryIds) {
+    public void setCategoryIds(String categoryIds) {
         this.categoryIds = categoryIds;
     }
 
@@ -234,5 +238,13 @@ public class CouponBO {
                 ", status='" + status + '\'' +
                 ", categoryIds=" + categoryIds +
                 '}';
+    }
+
+    public Double getParam3() {
+        return param3;
+    }
+
+    public void setParam3(Double param3) {
+        this.param3 = param3;
     }
 }

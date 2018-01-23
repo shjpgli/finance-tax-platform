@@ -2,7 +2,6 @@ package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
@@ -17,7 +16,6 @@ import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
 import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.gift.UamountLog;
-import com.abc12366.uc.model.invoice.Invoice;
 import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.invoice.bo.InvoiceBO;
 import com.abc12366.uc.model.order.*;
@@ -25,6 +23,7 @@ import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.*;
+import com.abc12366.uc.service.order.CouponService;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.CharUtil;
@@ -86,9 +85,6 @@ public class OrderServiceImpl implements OrderService {
     private UserService userService;
 
     @Autowired
-    private UserRoMapper userRoMapper;
-
-    @Autowired
     private PointsLogService pointsLogService;
 
     @Autowired
@@ -139,8 +135,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private InvoiceDetailMapper invoiceDetailMapper;
 
+    /**
+     * 优惠劵查询操作
+     */
     @Autowired
-    private DzfpRoMapper dzfpRoMapper;
+    private CouponService couponService;
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -253,6 +252,7 @@ public class OrderServiceImpl implements OrderService {
                     }
 
                 }
+
                 BeanUtils.copyProperties(orderSubmitBO, order);
                 order.setOrderStatus("2");
                 String orderNo = DateUtils.getDateToString();
@@ -261,6 +261,19 @@ public class OrderServiceImpl implements OrderService {
                 order.setCreateTime(date);
                 order.setLastUpdate(date);
                 order.setIsInvoice(false);
+
+                //判断是否使用优惠劵
+                if(orderSubmitBO.getCouponId() != null && !"".equals(orderSubmitBO.getCouponId())){
+                    CouponOrderBO couponOrderBO = new CouponOrderBO();
+                    couponOrderBO.setCouponId(orderSubmitBO.getCouponId());
+                    couponOrderBO.setUserId(orderSubmitBO.getUserId());
+                    couponOrderBO.setOrderNo(orderNo);
+                    couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
+                    couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
+                    //优惠劵设置已冻结
+                    couponOrderBO.setStatus("3");
+                    order.setTotalPrice(couponService.userUseCoupon(couponOrderBO));
+                }
 
                 int insert = orderMapper.insert(order);
                 if (insert != 1) {
@@ -460,7 +473,28 @@ public class OrderServiceImpl implements OrderService {
             //更新交易记录信息
             tradeLogMapper.update(tradeLog);
         }
-
+        LOGGER.info("获取优惠劵信息");
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderNo",orderCancelBO.getOrderNo());
+        map.put("userId",orderCancelBO.getUserId());
+        CouponUser couponUser = couponService.selectCouponUser(map);
+        if(couponUser == null){
+            LOGGER.info("获取优惠劵信息异常");
+            throw new ServiceException(7135);
+        }
+        LOGGER.info("优惠劵取消");
+        List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
+        for(OrderProductBO orderProductBO:orderProductBOs){
+            CouponOrderBO couponOrderBO = new CouponOrderBO();
+            couponOrderBO.setCouponId(couponUser.getCouponId());
+            couponOrderBO.setUserId(orderCancelBO.getUserId());
+            couponOrderBO.setOrderNo(orderCancelBO.getOrderNo());
+            couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
+            couponOrderBO.setAmount(order.getTotalPrice());
+            //优惠劵设置已领取
+            couponOrderBO.setStatus("1");
+            couponService.userUseCoupon(couponOrderBO);
+        }
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单", "0");
         return bo;
     }
@@ -822,7 +856,7 @@ public class OrderServiceImpl implements OrderService {
             orderListBO.setPhone(phone);
             orderListBO.setFullName(bo.getConsignee());
             boolean isAlike = false;
-            StringBuilder goodsName = new StringBuilder();
+            StringBuffer goodsName = new StringBuffer();
             int num = 0;
             if (address != null && !"".equals(address) && phone != null && !"".equals(phone)) {
                 for (OrderBO data : orderDataList) {
@@ -851,7 +885,7 @@ public class OrderServiceImpl implements OrderService {
                     List<OrderProductBO> orderProductBOList = bo.getOrderProductBOList();
                     for (OrderProductBO orderProductBO : orderProductBOList) {
                         goodsName.append(orderProductBO.getName());
-                        goodsName.append(" " + orderProductBO.getSpecInfo());
+                        goodsName.append(" ").append(orderProductBO.getSpecInfo());
                     }
                     goodsName.append(";");
                 }
@@ -912,7 +946,7 @@ public class OrderServiceImpl implements OrderService {
             message.setUserId(data.getUserId());
 
             //发送微信消息
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             map.put("userId", user.getId());
             map.put("openId", user.getWxopenid());
             map.put("first", "你有新的订单提醒：");
@@ -1273,6 +1307,7 @@ public class OrderServiceImpl implements OrderService {
 
                             //扣除订单获得的积分
                             if(orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0){
+                                LOGGER.info("扣除订单获得的积分");
                                 Order order = new Order();
                                 BeanUtils.copyProperties(orderBO,order);
                                 insertReturnPoints(order, 0d, order.getGiftPoints());
@@ -1413,6 +1448,7 @@ public class OrderServiceImpl implements OrderService {
      * @param user
      */
     public void updateVipInfo(VipLogBO vipLogBO, User user,String orderNo,String vipLevel) {
+        LOGGER.info("OrderServiceImpl.updateVipInfo------Start");
         //查询会员礼包业务
         VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
         obj.setLevelId(vipLevel.trim().toUpperCase());
@@ -1446,14 +1482,13 @@ public class OrderServiceImpl implements OrderService {
             user.setAmount(usable);
         }
         //更新会员日志
-        vipLogBO.setId(Utils.uuid());
-        vipLogBO.setCreateTime(new Date());
         vipLogBO.setSource("会员退订");
         vipLogService.insert(vipLogBO);
         //修改用户信息
         user.setVipLevel(vipLogBO.getLevelId());
         user.setVipExpireDate(vipLogBO.getVipExpireDate());
         userMapper.update(user);
+        LOGGER.info("OrderServiceImpl.updateVipInfo------End");
     }
 
     public void sendReturnMessage(OrderBO orderBO, HttpServletRequest httpServletRequest, RefundRes refundRes, User user) {

@@ -98,4 +98,7 @@ public class RemindConstant {
     public static final String YYXX_WX_KEY1 = "业务提醒";
     //运营消息微信消息remark
     public static final String YYXX_WX_REMARK = "详情请登录软件查询，咨询4008873133";
+
+    //活动消息
+    public static final String COUPON_YYXX = "您好，你已经领用《{#DATA.COUPON}》活动的优惠卷，请及时使用；";
 }

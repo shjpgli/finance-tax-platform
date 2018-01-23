@@ -1,6 +1,6 @@
 package com.abc12366.uc.model.order;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -66,13 +66,13 @@ public class CouponUser {
     /**
      * 有效期起
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date validStartTime;
 
     /**
      * 有效期止
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date validEndTime;
 
     /**
@@ -88,13 +88,13 @@ public class CouponUser {
     /**
      * 创建时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastUpdate;
 
     /**
@@ -106,6 +106,11 @@ public class CouponUser {
      * 商品品类ID，逗号分隔
      */
     private String categoryIds;
+
+    /**
+     * 使用后的优惠金额
+     */
+    private Double amountAfter;
 
     public String getId() {
         return id;
@@ -273,5 +278,13 @@ public class CouponUser {
                 ", orderNo='" + orderNo + '\'' +
                 ", categoryIds='" + categoryIds + '\'' +
                 '}';
+    }
+
+    public Double getAmountAfter() {
+        return amountAfter;
+    }
+
+    public void setAmountAfter(Double amountAfter) {
+        this.amountAfter = amountAfter;
     }
 }
