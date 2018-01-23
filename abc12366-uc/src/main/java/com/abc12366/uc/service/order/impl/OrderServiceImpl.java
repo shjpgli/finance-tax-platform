@@ -262,7 +262,7 @@ public class OrderServiceImpl implements OrderService {
                 order.setLastUpdate(date);
                 order.setIsInvoice(false);
 
-                //判断是否使用优惠卷
+                //判断是否使用优惠劵
                 if(orderSubmitBO.getCouponId() != null && !"".equals(orderSubmitBO.getCouponId())){
                     CouponOrderBO couponOrderBO = new CouponOrderBO();
                     couponOrderBO.setCouponId(orderSubmitBO.getCouponId());
@@ -270,7 +270,7 @@ public class OrderServiceImpl implements OrderService {
                     couponOrderBO.setOrderNo(orderNo);
                     couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
-                    //优惠卷设置已冻结
+                    //优惠劵设置已冻结
                     couponOrderBO.setStatus("3");
                     order.setTotalPrice(couponService.userUseCoupon(couponOrderBO));
                 }
@@ -473,16 +473,16 @@ public class OrderServiceImpl implements OrderService {
             //更新交易记录信息
             tradeLogMapper.update(tradeLog);
         }
-        LOGGER.info("获取优惠卷信息");
+        LOGGER.info("获取优惠劵信息");
         Map<String,Object> map = new HashMap<>();
         map.put("orderNo",orderCancelBO.getOrderNo());
         map.put("userId",orderCancelBO.getUserId());
         CouponUser couponUser = couponService.selectCouponUser(map);
         if(couponUser == null){
-            LOGGER.info("获取优惠卷信息异常");
+            LOGGER.info("获取优惠劵信息异常");
             throw new ServiceException(7135);
         }
-        LOGGER.info("优惠卷取消");
+        LOGGER.info("优惠劵取消");
         List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
         for(OrderProductBO orderProductBO:orderProductBOs){
             CouponOrderBO couponOrderBO = new CouponOrderBO();
@@ -491,7 +491,7 @@ public class OrderServiceImpl implements OrderService {
             couponOrderBO.setOrderNo(orderCancelBO.getOrderNo());
             couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
             couponOrderBO.setAmount(order.getTotalPrice());
-            //优惠卷设置已领取
+            //优惠劵设置已领取
             couponOrderBO.setStatus("1");
             couponService.userUseCoupon(couponOrderBO);
         }

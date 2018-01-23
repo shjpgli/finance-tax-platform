@@ -147,9 +147,16 @@ public interface CouponService {
     boolean userDeleteCoupon(CouponUser bo);
 
     /**
-     * 根据订单号查询用户使用的优惠卷
+     * 根据订单号查询用户使用的优惠劵
      * @param map
      * @return
      */
     CouponUser selectCouponUser(Map<String, Object> map);
+
+    /**
+     * 查找用户领用的优惠劵ID
+     * @param bo
+     * @return
+     */
+    String selectCouponId(CouponIdBO bo);
 }

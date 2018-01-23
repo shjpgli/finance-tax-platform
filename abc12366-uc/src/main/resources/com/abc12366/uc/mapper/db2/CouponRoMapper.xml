@@ -135,4 +135,18 @@
             <if test="status != null and status != ''">AND status = #{status}</if>
         </where>
     </select>
+
+    <!-- CouponUser通用查询结果列-->
+    <sql id="CouponUser_Column_List">
+        id,	userId,	activityId,	couponId,	couponName,	couponMode,	couponType,	param1,	param2,	amountType,	validStartTime,	validEndTime,	description,	status,	createTime,	lastUpdate,	orderNo,	categoryIds,	amountAfter
+    </sql>
+
+    <select id="selectCouponUser" parameterType="com.abc12366.uc.model.order.CouponUser"
+            resultType="java.util.Map">
+        SELECT <include refid="CouponUser_Column_List" /> FROM uc_coupon_user
+        <where>
+            <if test="userId != null and userId != ''">userId = #{userId}</if>
+            <if test="orderNo != null and orderNo != ''">AND orderNo = #{orderNo}</if>
+        </where>
+    </select>
 </mapper>

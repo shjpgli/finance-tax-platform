@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 优惠劵控制器
@@ -338,5 +340,17 @@ public class CouponController {
     public ResponseEntity calculateOrderAmount(@Valid @RequestBody CouponCalculateBO bo) {
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", couponService.calculateOrderAmount(bo)));
+    }
+
+    /**
+     * 前端-返回用户使用最优惠的优惠劵ID
+     *
+     * @param bo 计算对象
+     * @return 计算后的金额
+     */
+    @PostMapping("/id")
+    public ResponseEntity selectCouponId(@Valid @RequestBody CouponIdBO bo) {
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", couponService.selectCouponId(bo)));
     }
 }
