@@ -266,13 +266,13 @@ public class Utils {
     public static ServletRegistrationBean getServletRegistrationBean() throws IOException {
         ServletRegistrationBean reg = new ServletRegistrationBean();
         reg.setServlet(new StatViewServlet());
-        String mapperings = PropertiesUtil.getValue("druid.url.mappings");
+        String mappings = PropertiesUtil.getValue("druid.url.mappings");
         String allow = PropertiesUtil.getValue("druid.ip.allow");
         String deny = PropertiesUtil.getValue("druid.ip.deny");
         String username = PropertiesUtil.getValue("druid.login.username");
         String password = PropertiesUtil.getValue("druid.login.password");
-        if (!StringUtils.isEmpty(mapperings)) {
-            reg.addUrlMappings(mapperings);
+        if (!StringUtils.isEmpty(mappings)) {
+            reg.addUrlMappings(mappings);
         }
         if (!StringUtils.isEmpty(allow)) {
             reg.addInitParameter("allow", allow);
