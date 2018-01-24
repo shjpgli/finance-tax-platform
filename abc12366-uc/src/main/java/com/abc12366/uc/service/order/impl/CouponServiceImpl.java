@@ -234,14 +234,14 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponActivityListBO> selectActivityList(CouponActivity bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<CouponActivityListBO> dataList = couponRoMapper.selectActivityList(bo);
-        // todo 统计数量
-        dataList.stream().filter(data -> COUPON_STATUS_ON.equals(data.getStatus())).forEach(data -> {
+        List<CouponActivityListBO> dataList = couponRoMapper.selectAdminActivityList(bo);
+        /*dataList.stream().filter(data -> COUPON_STATUS_ON.equals(data.getStatus())).forEach(data -> {
             CouponUser cu = new CouponUser();
             cu.setActivityId(bo.getId());
             cu.setCouponId(bo.getCouponId());
-            couponRoMapper.selectUserList(cu);
-        });
+            couponRoMapper.selectUserList(cu).size();
+
+        });*/
         return dataList;
     }
 
@@ -427,6 +427,7 @@ public class CouponServiceImpl implements CouponService {
         return Math.round(Math.random() * (max - min)) + min;
     }
 
+    @Transactional(value = "db1TxManager")
     @Override
     public boolean userCollectCoupon(String userId, String activityId,HttpServletRequest request) {
         Assert.notNull(userId, "userId can not empty");
@@ -470,9 +471,15 @@ public class CouponServiceImpl implements CouponService {
                 cu.setLastUpdate(now);
                 cu.setCategoryIds(c.getCategoryIds());
 
+                int cInsert = couponMapper.insertUserCoupon(cu);
+                if(cInsert != 1){
+                    LOGGER.info("用户领用优惠卷失败");
+                    throw new ServiceException(7137);
+                }
+
                 LOGGER.info("给用户推送站内消息");
                 send(userId, ca.getCouponId(), request);
-                return 1 == couponMapper.insertUserCoupon(cu);
+                return true;
             }
         }
         return false;

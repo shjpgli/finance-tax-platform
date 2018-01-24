@@ -247,6 +247,7 @@ public class CouponController {
     @GetMapping("/user")
     public ResponseEntity selectUserList(
             @RequestParam(value = "orderNo", required = false) String orderNo,
+            @RequestParam(value = "activityId", required = false) String activityId,
             @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -261,6 +262,9 @@ public class CouponController {
         }
         if (StringUtils.isNotEmpty(categoryIds)) {
             bo.setCategoryIds(categoryIds);
+        }
+        if (StringUtils.isNotEmpty(activityId)) {
+            bo.setActivityId(activityId);
         }
 
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
