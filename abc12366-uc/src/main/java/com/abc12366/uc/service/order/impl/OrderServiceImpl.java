@@ -141,6 +141,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CouponService couponService;
 
+    /**
+     * 优惠劵查询操作
+     */
+    @Autowired
+    private CouponRoMapper couponRoMapper;
+
+
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
@@ -264,6 +271,7 @@ public class OrderServiceImpl implements OrderService {
 
                 //判断是否使用优惠劵
                 if(orderSubmitBO.getCouponId() != null && !"".equals(orderSubmitBO.getCouponId())){
+                    //判断优惠卷类型是否可以用
                     CouponOrderBO couponOrderBO = new CouponOrderBO();
                     couponOrderBO.setCouponId(orderSubmitBO.getCouponId());
                     couponOrderBO.setUserId(orderSubmitBO.getUserId());
@@ -271,6 +279,21 @@ public class OrderServiceImpl implements OrderService {
                     couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
                     //优惠劵设置已冻结
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("couponId",orderSubmitBO.getCouponId());
+                    map.put("userId",orderSubmitBO.getUserId());
+                    List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
+                    if(dataList != null && dataList.size() > 0){
+                        for(CouponUser couponUser:dataList){
+                            if (orderProductBO.getTradingChannels() != null
+                                    && !orderProductBO.getTradingChannels().equals(couponUser.getCategoryIds())
+                                    && !CouponServiceImpl.ALL.equals(orderProductBO.getTradingChannels())) {
+                                LOGGER.info("商品类目与优惠卷商品类目不一致，优惠卷无法使用");
+                                throw new ServiceException(7138);
+                            }
+                        }
+                    }
+
                     couponOrderBO.setStatus("3");
                     order.setTotalPrice(couponService.userUseCoupon(couponOrderBO));
                 }
