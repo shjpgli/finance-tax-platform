@@ -834,11 +834,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findByHngsNsrsbh(String nsrsbh) {
-		return userMapper.findByHngsNsrsbh(nsrsbh);
-	}
-
-	@Override
 	public List<User> findByDzsbNsrsbh(String nsrsbh) {
 		return userRoMapper.findByDzsbNsrsbh(nsrsbh);
 	}

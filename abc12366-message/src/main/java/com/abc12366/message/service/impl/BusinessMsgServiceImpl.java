@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -195,7 +194,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             dataList = businessMsgRoMapper.selectList(bm);
             redisTemplate.opsForValue().set(key,
                     JSONObject.toJSONString(dataList),
-                    RedisConstant.USER_INFO_TIME_ODFAY,
+                    RedisConstant.DAY_1,
                     TimeUnit.DAYS);
         }
         return dataList;

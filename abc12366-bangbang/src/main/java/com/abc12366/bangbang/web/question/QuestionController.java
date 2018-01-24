@@ -270,7 +270,7 @@ public class QuestionController {
             PageHelper.startPage(1, 9, true).pageSizeZero(true).reasonable(true);
             List<QuestionryBo> dataList = questionService.selectListry(dataMap);
             redisTemplate.opsForValue().set("CMS_SelectListryForqt", JSONArray.toJSONString(dataList), RedisConstant
-                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    .DAY_1, TimeUnit.DAYS);
             return (dataList == null) ?
                     ResponseEntity.ok(Utils.kv()) :
                     ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal

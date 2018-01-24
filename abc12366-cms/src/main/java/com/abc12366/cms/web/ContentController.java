@@ -299,7 +299,7 @@ public class ContentController {
 	        PageHelper.startPage(1, 7, true).pageSizeZero(true).reasonable(true);
 	        //查询内容列表
 	        List<ContentsListBo> dataList = contentService.selectListcszxw(dataMap);
-	        redisTemplate.opsForValue().set("CMS_SelectListcszxwFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+	        redisTemplate.opsForValue().set("CMS_SelectListcszxwFqt",JSONArray.toJSONString(dataList),RedisConstant.DAY_1, TimeUnit.DAYS);
 	        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     	}
     }

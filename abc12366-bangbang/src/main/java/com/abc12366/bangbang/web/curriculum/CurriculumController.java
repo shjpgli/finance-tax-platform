@@ -160,7 +160,7 @@ public class CurriculumController {
         	Map<String, Object> dataMap = new HashMap<>();
         	PageHelper.startPage(1, 10, true).pageSizeZero(true).reasonable(true);
         	list= curriculumService.selectRecommend(dataMap);
-        	redisTemplate.opsForValue().set("Bangb_RecommendForqt",JSONArray.toJSONString(list),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+        	redisTemplate.opsForValue().set("Bangb_RecommendForqt",JSONArray.toJSONString(list),RedisConstant.DAY_1, TimeUnit.DAYS);
         	return ResponseEntity.ok(Utils.kv("dataList", (Page) list, "total", ((Page) list).getTotal()));
         }
     }
