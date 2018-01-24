@@ -44,4 +44,9 @@ public interface ContentMapper {
      **/
     int updateViewsDay(@Param("contentId") String contentId);
 
+    /**
+     * 文章发布(根据主键ID)
+     **/
+    int updateStatus2(@Param("contentId") String contentId);
+
 }

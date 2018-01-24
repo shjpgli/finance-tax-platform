@@ -299,7 +299,7 @@ public class ContentController {
 	        PageHelper.startPage(1, 7, true).pageSizeZero(true).reasonable(true);
 	        //查询内容列表
 	        List<ContentsListBo> dataList = contentService.selectListcszxw(dataMap);
-	        redisTemplate.opsForValue().set("CMS_SelectListcszxwFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+	        redisTemplate.opsForValue().set("CMS_SelectListcszxwFqt",JSONArray.toJSONString(dataList),RedisConstant.DAY_1, TimeUnit.DAYS);
 	        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
     	}
     }
@@ -588,6 +588,18 @@ public class ContentController {
         LOGGER.info("{}", contentId);
         //更新浏览量信息
         String rtn = contentService.updateViewsDayjf(contentId,request);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
+    /**
+     * 文章发布
+     */
+    @PutMapping(path = "/updateStatus2/{contentId}")
+    public ResponseEntity updateStatus2(@PathVariable String contentId) {
+        LOGGER.info("{}", contentId);
+        //文章发布
+        String rtn = contentService.updateStatus2(contentId);
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }

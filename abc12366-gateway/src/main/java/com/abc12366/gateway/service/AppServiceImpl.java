@@ -10,23 +10,27 @@ import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.model.bo.AppSettingBO;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lijun <ljun51@outlook.com>
- * @create 2017-04-05 1:12 PM
+ * @date 2017-04-05 1:12 PM
  * @since 1.0.0
  */
 @Service("appService")
@@ -46,7 +50,12 @@ public class AppServiceImpl implements AppService {
     @Autowired
     private AppSettingRoMapper appSettingRoMapper;
 
-    @Transactional(value = "db1TxManager", rollbackFor = SQLException.class)
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
+
     @Override
     public AppBO register(AppBO bo) throws Exception {
         LOGGER.info("{}", bo);
@@ -79,35 +88,35 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         app.setName(bo.getName());
         app.setStatus(true);
-        app = appRoMapper.selectByName(bo.getName());
+        if (redisTemplate.hasKey(bo.getName())) {
+            app = JSON.parseObject(valueOperations.get(bo.getName()), App.class);
+        } else {
+            app = appRoMapper.selectByName(bo.getName());
+        }
         if (app == null) {
             LOGGER.warn("APP用户名不存在：{}", bo.getName());
             throw new ServiceException(4094);
         }
-        if (Utils.md5(app.getPassword()).equals(bo.getPassword())) {
-            if (!StringUtils.isEmpty(app.getAccessToken()) && !StringUtils.isEmpty(app.getLastResetTokenTime())) {
-                //判断app登录是否已过期
-                if (new Date().after(app.getLastResetTokenTime())) {
-                    LOGGER.warn("APP登录已过期，返回新的token：{}", app);
-                    app.setAccessToken(Utils.token());
-                }
-            } else { // 第一次登录
-                app.setAccessToken(Utils.token());
-            }
-            //更新有效时间
-            app.setLastResetTokenTime(getLongToDate(System.currentTimeMillis() + Constant.ADMIN_USER_TOKEN_VALID_SECONDS));
-            app.setLastUpdate(new Date());
-            int upd = appMapper.update(app);
-            if (upd != 1) {
-                LOGGER.warn("APP修改异常：{}", app);
-                throw new ServiceException(4102);
-            }
-            LOGGER.info("{}", app.getAccessToken());
-            return app.getAccessToken();
-        } else {
+        if (!Utils.md5(app.getPassword()).equals(bo.getPassword())) {
             LOGGER.warn("APP密码错误：{}", app);
             throw new ServiceException(4093);
         }
+        valueOperations.set(app.getName(), JSON.toJSONString(app), RedisConstant.DAY_1, TimeUnit.DAYS);
+        // 第一次登录或token过期，需要设置token
+        boolean token = StringUtils.isEmpty(app.getAccessToken()) ||
+                StringUtils.isEmpty(app.getLastResetTokenTime()) ||
+                new Date().after(app.getLastResetTokenTime());
+        if (token) {
+            app.setAccessToken(Utils.token());
+            Long lastResetTokenTime = System.currentTimeMillis() + Constant.APP_TOKEN_VALID_SECONDS * 1000;
+            app.setLastResetTokenTime(DateUtils.getLongToDate(lastResetTokenTime));
+            app.setLastUpdate(new Date());
+            appMapper.update(app);
+            if (redisTemplate.hasKey(app.getName())) {
+                redisTemplate.delete(app.getName());
+            }
+        }
+        return app.getAccessToken();
     }
 
     @Override
@@ -129,8 +138,8 @@ public class AppServiceImpl implements AppService {
     public boolean isAuthentization(HttpServletRequest request) {
         // 1.获取最佳匹配地址
         // path: /uc
-        String bestMatchingPattern = (String) request.getAttribute("org.springframework.web.servlet.HandlerMapping" +
-                ".bestMatchingPattern");
+        String bestMatchingPattern = (String) request.
+                getAttribute("org.springframework.web.servlet.HandlerMapping.bestMatchingPattern");
 
         // 2.查询接口表中是否存在对应的接口
         String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
@@ -157,8 +166,10 @@ public class AppServiceImpl implements AppService {
             throw new ServiceException(4026);
         }
         String appId = app.getId();
-
+        String appName = app.getName();
         request.setAttribute(Constant.APP_ID, appId);
+        request.setAttribute(Constant.APP_NAME, appName);
+
         String method = request.getMethod().toUpperCase();
         LOGGER.info("API METHOD:" + method);
         String version = request.getHeader(Constant.VERSION_HEAD);
@@ -180,41 +191,44 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("API版本不正确：{}", version);
             throw new ServiceException(4029);
         }
-        //查询每分钟访问的次数
-//        ApiLog apiLog = new ApiLog();
-//        currentTime = System.currentTimeMillis();
-//        apiLog.setUri(bestMatchingPattern);
-//        apiLog.setStartTime(currentTime - (60 * 1000));
-//        apiLog.setEndTime(currentTime);
-//        apiLog.setYyyyMMdd(DateUtils.getDataString());
-//        apiLog.setAppId(appId);
-//        apiLog.setMethod(method);
-        //查询每分钟访问的次数
-//        if (bo.getTimesPerMinute() != 0) {
-//            int minuteCount = apiLogService.selectApiLogCount(apiLog);
-//            if (minuteCount > bo.getTimesPerMinute()) {
-//                LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
-//                throw new ServiceException(4031);
-//            }
-//        }
-        //查询每小时访问的次数
-//        apiLog.setStartTime(currentTime - (60 * 1000 * 60));
-//        if (bo.getTimesPerHour() != 0) {
-//            int hourCount = apiLogService.selectApiLogCount(apiLog);
-//            if (hourCount > bo.getTimesPerHour()) {
-//                LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
-//                throw new ServiceException(4032);
-//            }
-//        }
-        //查询每天访问的次数
-//        apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
-//        if (bo.getTimesPerDay() != 0) {
-//            int dayCount = apiLogService.selectApiLogCount(apiLog);
-//            if (dayCount > bo.getTimesPerDay()) {
-//                LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
-//                throw new ServiceException(4033);
-//            }
-//        }
+        // 非公司应用查询访问次数
+        if (!app.getName().contains(Constant.ABC)) {
+            //查询每分钟访问的次数
+            ApiLog apiLog = new ApiLog();
+            currentTime = System.currentTimeMillis();
+            apiLog.setUri(bestMatchingPattern);
+            apiLog.setStartTime(currentTime - (60 * 1000));
+            apiLog.setEndTime(currentTime);
+            apiLog.setYyyyMMdd(DateUtils.getDataString());
+            apiLog.setAppId(appId);
+            apiLog.setMethod(method);
+            //查询每分钟访问的次数
+            if (bo.getTimesPerMinute() != 0) {
+                int minuteCount = apiLogService.selectApiLogCount(apiLog);
+                if (minuteCount > bo.getTimesPerMinute()) {
+                    LOGGER.warn("API接口每分钟访问次数已超出，请稍后访问：{}", app);
+                    throw new ServiceException(4031);
+                }
+            }
+            //查询每小时访问的次数
+            apiLog.setStartTime(currentTime - (60 * 1000 * 60));
+            if (bo.getTimesPerHour() != 0) {
+                int hourCount = apiLogService.selectApiLogCount(apiLog);
+                if (hourCount > bo.getTimesPerHour()) {
+                    LOGGER.warn("API接口每小时访问次数已超出，请稍后访问：{}", app);
+                    throw new ServiceException(4032);
+                }
+            }
+            //查询每天访问的次数
+            apiLog.setStartTime(currentTime - (60 * 1000 * 60 * 24));
+            if (bo.getTimesPerDay() != 0) {
+                int dayCount = apiLogService.selectApiLogCount(apiLog);
+                if (dayCount > bo.getTimesPerDay()) {
+                    LOGGER.warn("API接口每天访问次数已超出，请稍后访问：{}", app);
+                    throw new ServiceException(4033);
+                }
+            }
+        }
         return true;
     }
 
@@ -225,7 +239,6 @@ public class AppServiceImpl implements AppService {
         return apps;
     }
 
-    @Transactional(value = "gw1TxManager", rollbackFor = SQLException.class)
     @Override
     public AppBO update(AppBO appBO) {
         LOGGER.info("{}", appBO);
@@ -250,6 +263,9 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("修改异常：{}", app);
             throw new ServiceException(4102);
         }
+        if (redisTemplate.hasKey(app.getName())) {
+            redisTemplate.delete(app.getName());
+        }
         return appBO;
     }
 
@@ -266,20 +282,11 @@ public class AppServiceImpl implements AppService {
         return appBO;
     }
 
-    /**
-     * 将时间戳转换为时间
-     * @param lt 时间戳
-     * @return Date
-     */
-    private static Date getLongToDate(long lt) {
-        return new Date(lt);
-    }
-
-	@Override
-	public AppBO selectByName(String name) {
-		App app= appRoMapper.selectByName(name);
-		AppBO appBO = new AppBO();
+    @Override
+    public AppBO selectByName(String name) {
+        App app = appRoMapper.selectByName(name);
+        AppBO appBO = new AppBO();
         BeanUtils.copyProperties(app, appBO);
         return appBO;
-	}
+    }
 }

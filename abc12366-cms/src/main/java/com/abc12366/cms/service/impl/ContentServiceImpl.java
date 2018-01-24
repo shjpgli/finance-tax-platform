@@ -784,5 +784,13 @@ public class ContentServiceImpl implements ContentService {
         return contents;
     }
 
+    @Transactional("db1TxManager")
+    @Override
+    public String updateStatus2(String contentId) {
+        contentExtMapper.updateReleaseDate2(contentId);
+        contentMapper.updateStatus2(contentId);
+        return "";
+    }
+
 
 }

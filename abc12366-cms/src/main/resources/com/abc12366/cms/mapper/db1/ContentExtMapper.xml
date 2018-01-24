@@ -278,4 +278,10 @@
         </foreach>
     </update>
 
+    <!--更新：根据主键ID批量更新-->
+    <update id="updateReleaseDate2" parameterType="java.lang.String">
+        update cms_content_ext SET releaseDate = now()
+        WHERE contentId = #{contentId}
+    </update>
+
 </mapper>

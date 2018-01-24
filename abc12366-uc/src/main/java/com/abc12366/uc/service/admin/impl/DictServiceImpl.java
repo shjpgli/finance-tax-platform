@@ -150,7 +150,7 @@ public class DictServiceImpl implements DictService {
             dictBOs = dictRoMapper.selectDictList(dict);
             redisTemplate.opsForValue().set(dict.getDictId() + DICT_KEY,
                     JSONArray.toJSONString(dictBOs),
-                    RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
+                    RedisConstant.DAY_30, TimeUnit.DAYS);
         }
         return dictBOs;
     }

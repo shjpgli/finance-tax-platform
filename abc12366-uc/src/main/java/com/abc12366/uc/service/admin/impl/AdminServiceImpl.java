@@ -225,7 +225,7 @@ public class AdminServiceImpl implements AdminService {
         String password;
         try {
             password = Utils.md5(adminBO.getPassword());
-            String defaultPwd = Utils.md5(Utils.md5(Constant.defaultPwd));
+            String defaultPwd = Utils.md5(Utils.md5(Constant.DEFAULT_PASSWORD));
             if(password.equals(defaultPwd)){
                 adminBO.setIsInitPassword(true);
             }
@@ -245,7 +245,7 @@ public class AdminServiceImpl implements AdminService {
             LoginInfo loginInfo = new LoginInfo();
             loginInfo.setUserId(user.getId());
             loginInfo.setAppId(appId);
-            long lastLong = DateUtils.getDateStringToLong(new Date()) + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+            long lastLong = DateUtils.getDateStringToLong(new Date()) + Constant.ADMIN_TOKEN_VALID_SECONDS;
             loginInfo.setLastResetTokenTime(DateUtils.getLongToDate(lastLong));
             List<LoginInfo> info = loginInfoRoMapper.selectByAppList(loginInfo);
 
@@ -406,7 +406,7 @@ public class AdminServiceImpl implements AdminService {
     public int resetUserPwd(String id) {
         String newPassword;
         try {
-            newPassword = Utils.md5(Utils.md5(Constant.defaultPwd));
+            newPassword = Utils.md5(Utils.md5(Constant.DEFAULT_PASSWORD));
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException(4106);
@@ -466,7 +466,7 @@ public class AdminServiceImpl implements AdminService {
             LOGGER.warn("Admin-Token不存在{}", token);
             throw new ServiceException(4128);
         }
-        long datelong = System.currentTimeMillis() + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+        long datelong = System.currentTimeMillis() + Constant.ADMIN_TOKEN_VALID_SECONDS;
         info.setLastResetTokenTime(DateUtils.getLongToDate(datelong));
         int upd = loginInfoMapper.update(info);
         if (upd != 1) {
@@ -494,7 +494,7 @@ public class AdminServiceImpl implements AdminService {
             throw new ServiceException(4127);
         }
 
-        long refLong = dateLong + Constant.ADMIN_USER_TOKEN_VALID_SECONDS;
+        long refLong = dateLong + Constant.ADMIN_TOKEN_VALID_SECONDS;
         info.setLastResetTokenTime(DateUtils.getLongToDate(refLong));
         int upd = loginInfoMapper.update(info);
         if (upd != 1) {

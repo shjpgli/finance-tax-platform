@@ -172,7 +172,7 @@ public class QuestionAcceptedController {
             param.setUserId(userId);
             List<QuestionAcceptedBO> list = questionAcceptedService.selectStatisList(param);
             redisTemplate.opsForValue().set("Bangb_Accepted", JSONArray.toJSONString(list), RedisConstant
-                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    .DAY_1, TimeUnit.DAYS);
 
             PageInfo<QuestionAcceptedBO> pageInfo = new PageInfo<>(list);
 

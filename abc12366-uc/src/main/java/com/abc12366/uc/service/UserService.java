@@ -137,14 +137,6 @@ public interface UserService {
     int changeWxBdxx(UserUpdateBO userUpdateDTO);
 
     /**
-     * 通过绑定的国税纳税人识别号查询用户信息
-     *
-     * @param nsrsbh
-     * @return
-     */
-    List<User> findByHngsNsrsbh(String nsrsbh);
-
-    /**
      * 通过绑定的电子申报纳税人识别号查询用户信息
      *
      * @param nsrsbh
