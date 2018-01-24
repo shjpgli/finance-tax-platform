@@ -592,5 +592,17 @@ public class ContentController {
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
 
+    /**
+     * 文章发布
+     */
+    @PutMapping(path = "/updateStatus2/{contentId}")
+    public ResponseEntity updateStatus2(@PathVariable String contentId) {
+        LOGGER.info("{}", contentId);
+        //文章发布
+        String rtn = contentService.updateStatus2(contentId);
+        LOGGER.info("{}", rtn);
+        return ResponseEntity.ok(Utils.kv("data", rtn));
+    }
+
 
 }
