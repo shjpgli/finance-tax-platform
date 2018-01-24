@@ -163,7 +163,7 @@ public class UserTaskServiceImpl implements UserTaskService {
                 }
             }
             redisTemplate.opsForValue().set(userId + "_Tasks", JSONObject.toJSONString(myTaskSurvey), RedisConstant
-                            .USER_INFO_TIME_ODFAY,
+                            .DAY_1,
                     TimeUnit.DAYS);
         }
         return myTaskSurvey;

@@ -8,7 +8,6 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.CheckMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.CheckRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Check;
 import com.abc12366.uc.model.CheckRank;
 import com.abc12366.uc.model.ReCheck;
@@ -380,7 +379,7 @@ public class CheckServiceImpl implements CheckService {
         } else {
             total = checkRoMapper.checkTotal(userId);
             redisTemplate.opsForValue().set(userId + "_Check",
-                    String.valueOf(total), RedisConstant.USER_INFO_TIME_ODFAY,
+                    String.valueOf(total), RedisConstant.DAY_1,
                     TimeUnit.DAYS);
         }
         return total;

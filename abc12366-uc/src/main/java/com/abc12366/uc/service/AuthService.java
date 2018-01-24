@@ -37,8 +37,6 @@ public interface AuthService {
 
     boolean isAuthentication(String userToken, HttpServletRequest request);
 
-    boolean refreshToken(String token);
-
     /**
      * 校验短信验证码是否正确
      *

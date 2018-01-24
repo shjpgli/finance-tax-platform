@@ -5,7 +5,6 @@ import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.PointMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.PointsRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
@@ -72,7 +71,7 @@ public class PointsServiceImpl implements PointsService {
             pointsBO = pointsRoMapper.selectOne(userId);
             if (pointsBO != null) {
                 redisTemplate.opsForValue().set(userId + "_Points", JSONObject.toJSONString(pointsBO), RedisConstant
-                        .USER_EXP_TIME_ODFAY, TimeUnit.DAYS);
+                        .DAY_1, TimeUnit.DAYS);
             }
         }
         return pointsBO;

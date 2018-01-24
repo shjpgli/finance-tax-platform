@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
         BodyStatus bodyStatus;
         if (e instanceof ServiceException) {
             bodyStatus = ((ServiceException) e).getBodyStatus();
-            LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
+            LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage());
             bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
                     "【财税平台】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);

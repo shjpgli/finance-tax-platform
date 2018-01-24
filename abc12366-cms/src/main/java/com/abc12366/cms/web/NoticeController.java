@@ -81,7 +81,7 @@ public class NoticeController {
         }else{
         	 NoticeForqtBO notice = new NoticeForqtBO();
              List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, 1, 9);
-             redisTemplate.opsForValue().set("CMS_NoticeListFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+             redisTemplate.opsForValue().set("CMS_NoticeListFqt",JSONArray.toJSONString(dataList),RedisConstant.DAY_1, TimeUnit.DAYS);
              PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
              ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
                      "total", pageInfo.getTotal()));

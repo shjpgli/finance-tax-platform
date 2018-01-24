@@ -97,7 +97,7 @@ public class UserBindController {
         } else {
             userDzsbBOList = userBindService.getUserDzsbBind(map);
             redisTemplate.opsForValue().set(userId + "_DzsbList", JSONArray.toJSONString(userDzsbBOList),
-                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    RedisConstant.DAY_1, TimeUnit.DAYS);
         }
         LOGGER.info("{}", userDzsbBOList);
         return (userDzsbBOList == null) ?
@@ -122,7 +122,7 @@ public class UserBindController {
         } else {
             userHngsListBO = userBindService.getUserhngsBind(map);
             redisTemplate.opsForValue().set(userId + "_HngsList", JSONArray.toJSONString(userHngsListBO),
-                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    RedisConstant.DAY_1, TimeUnit.DAYS);
         }
         LOGGER.info("{}", userHngsListBO);
         return (userHngsListBO == null) ?
@@ -146,7 +146,7 @@ public class UserBindController {
         } else {
             uerHndsBO = userBindService.getUserhndsBind(map);
             redisTemplate.opsForValue().set(userId + "_HndsList", JSONArray.toJSONString(uerHndsBO), RedisConstant
-                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    .DAY_1, TimeUnit.DAYS);
         }
         LOGGER.info("{}", uerHndsBO);
         return (uerHndsBO == null) ?

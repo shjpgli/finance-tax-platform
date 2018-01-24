@@ -144,7 +144,7 @@ public class ActivityService implements IActivityService {
                     throw new ServiceException(6012);
                 } else {
                     redEnvelop.setBusinessId(businessId);
-                    redEnvelop.setUrl(Constant.WEIXIn_LOTTERY
+                    redEnvelop.setUrl(Constant.WEIXIN_LOTTERY
                                     .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
                                     .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
                                     .replace("STATE", state(redEnvelop.getSecret(), redEnvelop.getActivityId()))
