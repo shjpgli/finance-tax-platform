@@ -109,4 +109,5 @@ public interface UserMapper {
     int updatePoints(User user);
 
 	UserJyxx selectByUnameOrPhone(String usernameOrPhone);
+
 }

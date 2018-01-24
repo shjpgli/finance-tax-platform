@@ -122,7 +122,7 @@ public class InvoiceController {
             PageHelper.startPage(0, 0, true).pageSizeZero(true).reasonable(true);
             List<InvoiceBO> invoiceList = invoiceService.selectList(invoice);
             LOGGER.info("{}", invoiceList);
-            redisTemplate.opsForValue().set(userId+"_historyForqt", JSONArray.toJSONString(invoiceList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(userId+"_historyForqt", JSONArray.toJSONString(invoiceList),RedisConstant.DAY_1, TimeUnit.DAYS);
             return (invoiceList == null) ?
                     new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                     ResponseEntity.ok(Utils.kv("dataList", (Page) invoiceList, "total", ((Page) invoiceList).getTotal()));

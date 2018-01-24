@@ -24,8 +24,6 @@
             <if test="maxUserPicturePath != null">maxUserPicturePath = #{maxUserPicturePath},</if>
             <if test="midUserPicturePath != null">midUserPicturePath = #{midUserPicturePath},</if>
             <if test="minUserPicturePath != null">minUserPicturePath = #{minUserPicturePath},</if>
-            <if test="points != null">points = #{points},</if>
-            <if test="exp != null">exp = #{exp},</if>
             <if test="vipLevel != null">vipLevel = #{vipLevel},</if>
             <if test="usernameModifiedTimes != null">usernameModifiedTimes = #{usernameModifiedTimes},</if>
             <if test="vipExpireDate != null">vipExpireDate = #{vipExpireDate},</if>
@@ -359,4 +357,5 @@
         select id, username, phone, salt from uc_user 
         where username = #{usernameOrPhone} OR phone = #{usernameOrPhone} 
     </select>
+
 </mapper>

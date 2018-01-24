@@ -19,4 +19,14 @@ public interface UserExtendService {
     UserExtendBO delete(String userId);
 
     UserExtendBO update(UserExtendUpdateBO userExtendUpdateBO, HttpServletRequest request) throws IOException;
+
+    /**
+     * 更新用户地址的省市信息
+     *
+     * @param userId     被更新用户ID
+     * @param provinceId 省编码
+     * @param cityId     市编码
+     * @return 是否更新成功
+     */
+    boolean updateUserAddress(String userId, String provinceId, String cityId);
 }

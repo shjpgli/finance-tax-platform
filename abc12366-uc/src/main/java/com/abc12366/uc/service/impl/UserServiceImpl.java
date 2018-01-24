@@ -710,7 +710,7 @@ public class UserServiceImpl implements UserService {
 			throw new ServiceException(4824);
 		}
 		// 判断用户会员是否有效
-		if (user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
+		if (user.getVipExpireDate()==null||user.getVipExpireDate().getTime() < System.currentTimeMillis()) {
 			throw new ServiceException(4825);
 		}
 
@@ -831,11 +831,6 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 
-	}
-
-	@Override
-	public List<User> findByHngsNsrsbh(String nsrsbh) {
-		return userMapper.findByHngsNsrsbh(nsrsbh);
 	}
 
 	@Override

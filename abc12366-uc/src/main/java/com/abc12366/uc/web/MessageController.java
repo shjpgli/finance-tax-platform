@@ -103,7 +103,7 @@ public class MessageController {
         	if (!StringUtils.isEmpty(userId)) {
                 MessageListBO data = messageService.selectList("1",null,null, 0, 0, request);
                 responseEntity = ResponseEntity.ok(data);
-                redisTemplate.opsForValue().set(userId+"_MessageForqt", JSONObject.toJSONString(data),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                redisTemplate.opsForValue().set(userId+"_MessageForqt", JSONObject.toJSONString(data),RedisConstant.DAY_1, TimeUnit.DAYS);
             }
         }
 

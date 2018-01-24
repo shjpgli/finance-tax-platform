@@ -329,29 +329,7 @@ public class AuthServiceImpl implements AuthService {
         }
         //把用户Id设置到request
         if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
-            request.removeAttribute(Constant.USER_ID);
             request.setAttribute(Constant.USER_ID, token.getUserId());
-        } else {
-            request.setAttribute(Constant.USER_ID, token.getUserId());
-        }
-        //刷新token
-        refreshToken(userToken);
-        return true;
-    }
-
-    @Override
-    public boolean refreshToken(String oldToken) {
-        if (StringUtils.isEmpty(oldToken)) {
-            return false;
-        }
-        Token token = tokenRoMapper.isAuthentication(oldToken);
-        if (token == null) {
-            return false;
-        }
-        token.setLastTokenResetTime(new Date());
-        int result = tokenMapper.update(token);
-        if (result < 1) {
-            throw new ServiceException(4017);
         }
         return true;
     }
@@ -502,10 +480,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CompletableFuture<BodyStatus> todoAfterLogin(Map map) {
         LOGGER.info("记录用户IP归属");
-        if (!StringUtils.isEmpty(map.get(Constant.CLIENT_IP))) {
-            ipService.merge(String.valueOf(map.get(Constant.CLIENT_IP)));
-        }
         String userId = String.valueOf(map.get(Constant.USER_ID));
+        if (!StringUtils.isEmpty(map.get(Constant.CLIENT_IP))
+                && !StringUtils.isEmpty(userId)) {
+            ipService.merge(String.valueOf(map.get(Constant.CLIENT_IP)), userId);
+        }
 
         LOGGER.info("登录删除用户缓存，防止缓存不及时刷新:{}", userId);
         redisTemplate.delete(userId + "_Points");
@@ -514,14 +493,16 @@ public class AuthServiceImpl implements AuthService {
         LOGGER.info("如果用户当天定时任务没有完成，就在登录的时候生成:{}", userId);
         todoTaskService.generateAllTodoTaskList(userId);
 
+        LOGGER.info("登录任务日志:{}", userId);
+        boolean loginTask = todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
+
         LOGGER.info("计算用户登录经验值变化:{}", userId);
-        computeExp(userId);
+        if (loginTask) {
+            computeExp(userId);
+        }
 
         LOGGER.info("记用户登录日志:{}", userId);
         insertLoginLog(userId);
-
-        LOGGER.info("登录任务日志:{}", userId);
-        todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
         LOGGER.info("首次绑定手机任务埋点:{}", userId);
         if (!StringUtils.isEmpty(map.get("user_phone"))) {

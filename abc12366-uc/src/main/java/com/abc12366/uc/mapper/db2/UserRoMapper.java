@@ -144,4 +144,6 @@ public interface UserRoMapper {
      * @return
      */
     List<UserBO> statisUserSexList(Map<String, Object> map);
+
+    User selectPointsAndExp(String userId);
 }

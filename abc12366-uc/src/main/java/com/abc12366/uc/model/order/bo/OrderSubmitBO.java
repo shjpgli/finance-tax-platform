@@ -110,6 +110,10 @@ public class OrderSubmitBO implements Serializable {
     @NotNull
     private Integer isFreeShipping;
 
+    /**
+     * 优惠劵ID
+     */
+    private String couponId;
 
     //订单和商品对应关系
     private List<OrderProductBO> orderProductBOList;
@@ -240,5 +244,36 @@ public class OrderSubmitBO implements Serializable {
 
     public void setOrderProductBOList(List<OrderProductBO> orderProductBOList) {
         this.orderProductBOList = orderProductBOList;
+    }
+
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderSubmitBO{" +
+                "userId='" + userId + '\'' +
+                ", deliveryMethod='" + deliveryMethod + '\'' +
+                ", nowVipLevel='" + nowVipLevel + '\'' +
+                ", username='" + username + '\'' +
+                ", deliveryFee=" + deliveryFee +
+                ", totalPrice=" + totalPrice +
+                ", remark='" + remark + '\'' +
+                ", giftPoints=" + giftPoints +
+                ", tradeMethod='" + tradeMethod + '\'' +
+                ", recommendUser='" + recommendUser + '\'' +
+                ", consignee='" + consignee + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", shippingAddress='" + shippingAddress + '\'' +
+                ", isShipping=" + isShipping +
+                ", isFreeShipping=" + isFreeShipping +
+                ", couponId='" + couponId + '\'' +
+                ", orderProductBOList=" + orderProductBOList +
+                '}';
     }
 }

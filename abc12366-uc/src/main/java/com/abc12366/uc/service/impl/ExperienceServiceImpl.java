@@ -8,7 +8,6 @@ import com.abc12366.uc.mapper.db1.ExperienceMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.ExperienceRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.ExperienceLogService;
@@ -70,7 +69,7 @@ public class ExperienceServiceImpl implements ExperienceService {
             experienceBO = experienceRoMapper.getMyExperience(userId);
             if (experienceBO != null) {
                 redisTemplate.opsForValue().set(userId + "_MyExperience", JSONObject.toJSONString(experienceBO),
-                        RedisConstant.USER_EXP_TIME_ODFAY, TimeUnit.DAYS);
+                        RedisConstant.DAY_1, TimeUnit.DAYS);
             }
         }
         return experienceBO;

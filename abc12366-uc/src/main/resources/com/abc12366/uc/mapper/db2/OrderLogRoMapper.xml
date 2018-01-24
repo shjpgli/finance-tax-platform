@@ -18,16 +18,31 @@
 
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.uc.model.order.bo.GoodsLogBO" parameterType="com.abc12366.uc.model.order.OrderLog">
+        select a.id, a.orderNo, a.action, a.createTime, a.createUser, a.remark,a.createUserName,a.logType,a.exchangeId from(
         SELECT
-        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as createUserName,o.logType,o.exchangeId
-        FROM uc_order_log o
-        LEFT JOIN uc_user_admin u ON u.id = o.createUser
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as
+        createUserName,o.logType,o.exchangeId
+        FROM uc_user u
+        LEFT JOIN  uc_order_log o ON u.id = o.createUser
         <where>
             1=1
             <if test="orderNo != null and orderNo != '' ">and o.orderNo = #{orderNo}</if>
             <if test="logType != null and logType != '' ">AND o.logType = #{logType}</if>
             <if test="exchangeId != null and exchangeId != '' ">AND o.exchangeId = #{exchangeId}</if>
         </where>
-        ORDER BY o.createTime desc
+        UNION ALL
+        SELECT
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as
+        createUserName,o.logType,o.exchangeId
+        FROM uc_admin u
+        LEFT JOIN uc_order_log o ON u.id = o.createUser
+        <where>
+            1=1
+            <if test="orderNo != null and orderNo != '' ">and o.orderNo = #{orderNo}</if>
+            <if test="logType != null and logType != '' ">AND o.logType = #{logType}</if>
+            <if test="exchangeId != null and exchangeId != '' ">AND o.exchangeId = #{exchangeId}</if>
+        </where>
+        ) a
+        ORDER BY a.createTime desc
     </select>
 </mapper>

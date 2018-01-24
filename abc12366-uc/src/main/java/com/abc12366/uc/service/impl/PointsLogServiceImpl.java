@@ -54,18 +54,20 @@ public class PointsLogServiceImpl implements PointsLogService {
         return pointsLogRoMapper.selectList(map);
     }
 
-    @Transactional("db1TxManager")
+    //@Transactional("db1TxManager")
     @Override
     public PointsLogBO insert(PointsLogBO pointsLogBO) {
+
+        LOGGER.info("计算用户积分：{}",pointsLogBO);
         if (pointsLogBO == null) {
             LOGGER.warn("新增失败，参数：{}" + null);
             throw new ServiceException(4101);
         }
-        User user = userMapper.selectOne(pointsLogBO.getUserId());
+        User user = userRoMapper.selectPointsAndExp(pointsLogBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
         }
-
+        LOGGER.info("当前用户信息：{}",user);
         //可用积分=上一次的可用积分+|-本次收入|支出
         int priPoints = 0;
         if (user.getPoints() != null) {
@@ -100,6 +102,10 @@ public class PointsLogServiceImpl implements PointsLogService {
         PointsLogBO pointsLogBOReturn = new PointsLogBO();
         BeanUtils.copyProperties(pointsLog, pointsLogBOReturn);
         return pointsLogBOReturn;
+        //执行存储过程做计算
+//        PointsLogBO pointsLogBO1 = pointsLogMapper.updatePointAndLog(pointsLogBO.getUserId(),pointsLogBO.getIncome()-pointsLogBO.getOutgo(),pointsLogBO.getRuleId());
+//        LOGGER.info("计算用户积分结果：{}",pointsLogBO1);
+//        return pointsLogBO1;
     }
 
     @Override

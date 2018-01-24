@@ -62,4 +62,6 @@ public interface ContentService {
 
     List<ContentListBo> selectListSearch(Map<String, Object> map);
 
+    String updateStatus2(String contentId);
+
 }

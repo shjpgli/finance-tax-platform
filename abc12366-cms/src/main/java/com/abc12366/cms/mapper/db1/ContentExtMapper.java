@@ -49,4 +49,9 @@ public interface ContentExtMapper {
      **/
     int updateReleaseDate(@Param("contentIds") String[] contentIds);
 
+    /**
+     * 更新发布日期(根据主键ID修改)
+     **/
+    int updateReleaseDate2(@Param("contentId") String contentId);
+
 }

@@ -220,6 +220,13 @@
         WHERE contentId = #{contentId}
     </update>
 
+    <!-- 内容发布 -->
+    <update id="updateStatus2" parameterType="java.lang.String">
+        UPDATE cms_content
+        SET
+        status = 2
+        WHERE contentId = #{contentId}
+    </update>
 
     <!--更新：根据主键ID批量更新-->
     <update id="updateStatusList">
