@@ -44,7 +44,7 @@ public class ContentTypeController {
         } else {
             dataList = contentTypeService.selectList();
             redisTemplate.opsForValue().set("Cms_ContentTypeList", JSONArray.toJSONString(dataList), RedisConstant
-                    .DICT_TIME_ODFAY, TimeUnit.DAYS);
+                    .DAY_30, TimeUnit.DAYS);
         }
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(dataList);

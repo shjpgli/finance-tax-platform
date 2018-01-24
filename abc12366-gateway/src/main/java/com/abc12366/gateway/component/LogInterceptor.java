@@ -23,7 +23,7 @@ import java.util.Date;
  * IO拦截器
  *
  * @author lizhongwei
- * @create 2017-07-18
+ * @date 2017-07-18
  * @since 2.0.0
  */
 public class LogInterceptor extends HandlerInterceptorAdapter {
@@ -104,6 +104,8 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         long outTime = System.currentTimeMillis();
         String appId = (String) request.getAttribute(Constant.APP_ID);
         request.removeAttribute(Constant.APP_ID);
+        String appName = (String) request.getAttribute(Constant.APP_NAME);
+        request.removeAttribute(Constant.APP_NAME);
         String userId = (String) request.getAttribute(Constant.USER_ID);
         request.removeAttribute(Constant.USER_ID);
         String version = request.getHeader(Constant.VERSION_HEAD);
@@ -124,8 +126,10 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
         log.setYyyyMMdd(DateUtils.getDateFormat(new Date(), "yyyyMMdd"));
 
         // 5.访问计数
-        // 6.后置日志和日志表
+        // 6.非公司应用记录后置日志和日志表
         LOGGER.info("{}", log);
-//        apiLogService.insert(log);
+        if (!StringUtils.isEmpty(appName) && !appName.contains(Constant.ABC)) {
+            apiLogService.insert(log);
+        }
     }
 }

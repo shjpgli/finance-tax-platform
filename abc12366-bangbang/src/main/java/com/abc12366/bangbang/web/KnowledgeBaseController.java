@@ -71,7 +71,7 @@ public class KnowledgeBaseController {
             KnowledgeBaseHotParamBO param = new KnowledgeBaseHotParamBO(knowledgepagesize, knowledgetype, null);
             List<KnowledgeBase> list = knowledgeBaseService.selectNearestList(param);
             redisTemplate.opsForValue().set("Bangb_NearestLists", JSONArray.toJSONString(list), RedisConstant
-                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    .DAY_1, TimeUnit.DAYS);
             return ResponseEntity.ok(Utils.kv("dataList", list));
         }
 
@@ -95,7 +95,7 @@ public class KnowledgeBaseController {
                     knowledgerecommend);
             list = knowledgeBaseService.hotUnClassifyMap(param);
             redisTemplate.opsForValue().set("Bangb_HotUnClassifyList", JSONArray.toJSONString(list), RedisConstant
-                    .USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    .DAY_1, TimeUnit.DAYS);
         }
 
         return ResponseEntity.ok(Utils.kv("dataList", list));
