@@ -170,6 +170,10 @@ public class CouponServiceImpl implements CouponService {
      * 在...之间
      */
     public static final String OPER_BETWEEN = "between";
+    /**
+     * 所有金额
+     */
+    public static final String ALL = "ALL";
 
     /**
      * 优惠劵CRUD操作
@@ -529,13 +533,13 @@ public class CouponServiceImpl implements CouponService {
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
                         if (amount >= cu.getParam1()) {
-                            amount = amount - cu.getParam1();
+//                            amount = amount - cu.getParam1();
                             amountAfter = amountAfter - cu.getParam2();
                         }
                         break;
                     case COUPONTYPE_ZHEKOU:
                         if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
-                            amount = amount - cu.getParam1();
+//                            amount = amount - cu.getParam1();
                             amountAfter = amountAfter *   cu.getParam2();
                         }
                         break;
@@ -567,7 +571,7 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7131);
         }
         // 校验商品品目
-        if (!cu.getCategoryIds().contains(categoryId)) {
+        if (!cu.getCategoryIds().contains(categoryId) && !ALL.equals(categoryId)) {
             throw new ServiceException(7119);
         }
         // 校验优惠劵有效期
@@ -606,12 +610,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public String selectCouponId(CouponIdBO bo) {
-
-
-        //String couponId = bo.getCouponId();
         String userId = bo.getUserId();
         Map<String,Object> map = new HashMap<>();
-        //map.put("couponId",couponId);
         map.put("userId",bo.getUserId());
         List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
         // 优惠前的金额
