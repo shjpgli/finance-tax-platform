@@ -292,7 +292,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4167);
                 }
 
-                insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户新增订单", "0");
+                insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", orderSubmitBO.getRemark(), "0");
             }
         }
         //新增交易流水号

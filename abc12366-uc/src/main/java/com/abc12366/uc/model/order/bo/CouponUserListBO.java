@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.order.bo;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -94,6 +95,11 @@ public class CouponUserListBO {
      * 订单号
      */
     private String orderNo;
+
+    /**
+     * 商品品类ID，逗号分隔
+     */
+    private String categoryIds;
 
     public String getId() {
         return id;
@@ -241,5 +247,13 @@ public class CouponUserListBO {
 
     public void setCouponId(String couponId) {
         this.couponId = couponId;
+    }
+
+    public String getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(String categoryIds) {
+        this.categoryIds = categoryIds;
     }
 }
