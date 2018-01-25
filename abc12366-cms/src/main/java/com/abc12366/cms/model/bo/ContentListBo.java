@@ -128,6 +128,11 @@ public class ContentListBo implements Serializable {
      **/
     private String siteStatus;
 
+    //标题图
+    private String titleImg;
+    //摘要
+    private String shortTitle;
+
 
     public String getContentId() {
         return contentId;
@@ -319,5 +324,21 @@ public class ContentListBo implements Serializable {
 
     public void setSiteStatus(String siteStatus) {
         this.siteStatus = siteStatus;
+    }
+
+    public String getTitleImg() {
+        return titleImg;
+    }
+
+    public void setTitleImg(String titleImg) {
+        this.titleImg = titleImg;
+    }
+
+    public String getShortTitle() {
+        return shortTitle;
+    }
+
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
     }
 }
