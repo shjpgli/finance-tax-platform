@@ -315,6 +315,115 @@ public class AuthServiceImpl implements AuthService {
         return map;
     }
 
+    /**
+     * 用户登陆,不做RSA加密
+     *
+     * @param bo      LoginBO
+     * @param channel 登陆方式：1-用户名/手机号+密码，2-js用户名/手机号+密码，3-手机号+短信验证码，4-openId登陆
+     * @return Map:token,expires_in,用户信息
+     */
+    @Override
+    public Map testLogin(LoginBO bo, String channel) {
+        LOGGER.info("loginBO:{}, channel:{}", bo, channel);
+
+        // 根据用户名查看用户是否存在
+        bo.setUsernameOrPhone(bo.getUsernameOrPhone().trim().toLowerCase());
+
+        //修改登录，从主库查询
+        User user = userMapper.selectByUsernameOrPhone(bo);
+        if (user == null) {
+            LOGGER.warn("登录失败，参数:{}:{}", bo, channel);
+            throw new ServiceException(4018);
+        }
+
+        // 无效用户不允许登录
+        if (!user.getStatus()) {
+            throw new ServiceException(4038);
+        }
+        // 用户账号是否被锁定
+        isUserLocked(user.getId());
+        // 登录密码进行处理，与表中的加密密码进行比对
+        String password;
+        try {
+            // 先前的加密版本
+            password = Utils.md5(Utils.md5(bo.getPassword()) + user.getSalt());
+            LOGGER.info("password:{}", password);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage() + e);
+            throw new ServiceException(4106);
+        }
+
+        // 密码是否输入正确
+        if (!user.getPassword().equals(password)) {
+            LOGGER.warn("登录失败，参数:{}", bo);
+            // 记录用户连续输错密码次数
+            continuePasswordWrong(user.getId());
+        }
+
+        user.setLastUpdate(new Date());
+        int result = userMapper.update(user);
+        if (result != 1) {
+            LOGGER.warn("登录失败，参数:{}", bo);
+            throw new ServiceException(4102);
+        }
+
+        Token queryToken = tokenMapper.selectOne(user.getId(), Utils.getAppId());
+        // 假如uc_token表有记录（根据userId和appId），则更新，没有则新增
+        String userToken = Utils.uuid();
+        int result02;
+        if (queryToken != null) {
+            // 如果token失效则生成新的token
+            if ((queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System
+                    .currentTimeMillis()) {
+                userToken = queryToken.getToken();
+            } else {
+                queryToken.setToken(userToken);
+            }
+            queryToken.setLastTokenResetTime(new Date());
+            result02 = tokenMapper.update(queryToken);
+        } else {
+            Token token = new Token();
+            token.setId(Utils.uuid());
+            token.setAppId(Utils.getAppId());
+            token.setUserId(user.getId());
+            token.setToken(userToken);
+            token.setLastTokenResetTime(new Date());
+            result02 = tokenMapper.insert(token);
+        }
+        if (result02 != 1) {
+            LOGGER.warn("登录失败，参数:{}", bo);
+            throw new ServiceException(4021);
+        }
+
+        // 重置用户连续输错密码记录
+        resetContinuePasswordWrong(user.getId());
+
+        UserBO userBO = new UserBO();
+        BeanUtils.copyProperties(user, userBO);
+        userBO.setPassword(null);
+        //用户重要信息模糊化处理:电话号码
+        String phone = userBO.getPhone();
+        if (!StringUtils.isEmpty(phone) && phone.length() >= 8) {
+            userBO.setPhone(new StringBuilder(phone).replace(3, phone.length() - 4, "****").toString());
+        }
+
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("token", userToken);
+        map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
+        map.put("user", userBO);
+
+        // 登录之后的任务需要
+        map.put(Constant.USER_ID, userBO.getId());
+        map.put("user_phone", userBO.getPhone());
+
+        // 在request中设置userId，记录日志使用
+        Utils.setUserId(userBO.getId());
+
+        // 用户信息写入redis
+        valueOperations.set(userToken, JSON.toJSONString(userBO), Constant.USER_TOKEN_VALID_SECONDS / 2,
+                TimeUnit.SECONDS);
+        return map;
+    }
 
     @Override
     public boolean isAuthentication(String userToken, HttpServletRequest request) {
