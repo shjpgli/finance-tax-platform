@@ -303,12 +303,16 @@ public class CouponController {
     public ResponseEntity selectUserCouponList(
             @PathVariable String userId,
             @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
 
         CouponUser bo = new CouponUser();
         if (StringUtils.isNotEmpty(status)) {
             bo.setStatus(status);
+        }
+        if (StringUtils.isNotEmpty(categoryIds)) {
+            bo.setCategoryIds(categoryIds);
         }
         bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);

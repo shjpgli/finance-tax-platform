@@ -838,9 +838,11 @@ public class CouponServiceImpl implements CouponService {
                 bo.getActivityEndTime().before(bo.getActivityEndTime())) {
             throw new ServiceException(7117);
         }*/
-        if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().after(bo.getActivityEndTime())) {
-            LOGGER.info("优惠劵的开始时间，必须在活动时间之间");
-            throw new ServiceException(7136);
+        if(!VALIDTYPE_DAYS.equals(c.getValidType())){
+            if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().after(bo.getActivityEndTime())) {
+                LOGGER.info("优惠劵的开始时间，必须在活动时间之间");
+                throw new ServiceException(7136);
+            }
         }
     }
 
