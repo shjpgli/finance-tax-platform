@@ -77,10 +77,10 @@ public interface CouponRoMapper {
     /**
      * 根据优惠劵Ids查询用户优惠劵列表
      *
-     * @param ids 优惠劵IDs
+     * @param map 优惠劵Map
      * @return 用户优惠劵列表
      */
-    List<CouponUser> selectUserCouponByIds(String ids);
+    List<CouponUser> selectUserCouponByIds(Map<String, Object> map);
 
     /**
      * 获取活动列表
@@ -88,4 +88,11 @@ public interface CouponRoMapper {
      * @return
      */
     List<CouponActivityBO> selectCouponActivityList(Map<String,Object> map);
+
+    /**
+     * 根据订单获取优惠卷
+     * @param map
+     * @return
+     */
+    CouponUser selectCouponUser(Map<String, Object> map);
 }

@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 优惠劵控制器
@@ -70,7 +72,7 @@ public class CouponController {
 
         List<CouponListBO> dataList = couponService.selectList(bo, pageNum, pageSize);
         PageInfo<CouponListBO> pageInfo = new PageInfo<>(dataList);
-        return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -245,6 +247,7 @@ public class CouponController {
     @GetMapping("/user")
     public ResponseEntity selectUserList(
             @RequestParam(value = "orderNo", required = false) String orderNo,
+            @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -256,6 +259,10 @@ public class CouponController {
         if (StringUtils.isNotEmpty(orderNo)) {
             bo.setOrderNo(orderNo);
         }
+        if (StringUtils.isNotEmpty(categoryIds)) {
+            bo.setCategoryIds(categoryIds);
+        }
+
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
         List<CouponUserListBO> dataList = couponService.selectUserList(bo, pageNum, pageSize);
@@ -333,5 +340,17 @@ public class CouponController {
     public ResponseEntity calculateOrderAmount(@Valid @RequestBody CouponCalculateBO bo) {
         LOGGER.info("{}", bo);
         return ResponseEntity.ok(Utils.kv("data", couponService.calculateOrderAmount(bo)));
+    }
+
+    /**
+     * 前端-返回用户使用最优惠的优惠劵ID
+     *
+     * @param bo 计算对象
+     * @return 计算后的金额
+     */
+    @PostMapping("/id")
+    public ResponseEntity selectCouponId(@Valid @RequestBody CouponIdBO bo) {
+        LOGGER.info("{}", bo);
+        return ResponseEntity.ok(Utils.kv("data", couponService.selectCouponId(bo)));
     }
 }

@@ -53,7 +53,7 @@ public class KnowledgeCategoryServiceImpl implements KnowledgeCategoryService {
         } else {
             List<KnowledgeCategory> list = knowledgeCategoryMapper.selectAll();
             redisTemplate.opsForValue().set("Bangb_KnowledgeCategoryList", JSONArray.toJSONString(list),
-                    RedisConstant.DICT_TIME_ODFAY, TimeUnit.DAYS);
+                    RedisConstant.DAY_30, TimeUnit.DAYS);
             return list;
         }
     }

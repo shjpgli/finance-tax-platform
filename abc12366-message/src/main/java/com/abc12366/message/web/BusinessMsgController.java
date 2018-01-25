@@ -240,7 +240,6 @@ public class BusinessMsgController {
      * @param status   状态
      * @param page     当前页
      * @param size     每页大小
-     * @param request  HttpServletRequest
      * @return ResponseEntity
      */
     @GetMapping(path = "/username")
@@ -252,14 +251,13 @@ public class BusinessMsgController {
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-            HttpServletRequest request) {
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("根据用户名查询业务消息列表：username：{}，{},{}", username, page, size);
         Map<String, Object> map = new HashMap<>();
-        map.put("username", username.trim());
-        map.put("type", type == null ? null : type.trim());
-        map.put("busiType", busiType == null ? null : busiType.trim());
-        map.put("status", status == null ? null : status.trim());
+        map.put("username", StringUtils.isEmpty(username) ? null : username.trim());
+        map.put("type", StringUtils.isEmpty(type)?null:type.trim());
+        map.put("busiType", StringUtils.isEmpty(busiType)?null:busiType.trim());
+        map.put("status", StringUtils.isEmpty(status)?null:status.trim());
         if (!StringUtils.isEmpty(startDate)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.strToDate(startDate));

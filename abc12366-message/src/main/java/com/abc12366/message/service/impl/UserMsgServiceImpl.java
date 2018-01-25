@@ -193,7 +193,7 @@ public class UserMsgServiceImpl implements UserMsgService {
             dataList = userMsgRoMapper.selectList(um);
             redisTemplate.opsForValue().set(key,
                     JSONObject.toJSONString(dataList),
-                    RedisConstant.USER_INFO_TIME_ODFAY,
+                    RedisConstant.DAY_1,
                     TimeUnit.DAYS);
         }
         return dataList;

@@ -77,7 +77,7 @@ public class AdPageController {
     		AdPageBO adPage = new AdPageBO();
 	        adPage.setName(name);
 	        List<AdPageBO> dataList = adPageService.selectListForqt(adPage, 0, 0);
-	        redisTemplate.opsForValue().set("CMS_AdpageListFqt",JSONArray.toJSONString(dataList),RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+	        redisTemplate.opsForValue().set("CMS_AdpageListFqt",JSONArray.toJSONString(dataList),RedisConstant.DAY_1, TimeUnit.DAYS);
 	        PageInfo<AdPageBO> pageInfo = new PageInfo<AdPageBO>(dataList);
 	        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
 	                "total", pageInfo.getTotal()));

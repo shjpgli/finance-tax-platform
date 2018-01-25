@@ -329,29 +329,7 @@ public class AuthServiceImpl implements AuthService {
         }
         //把用户Id设置到request
         if (!StringUtils.isEmpty(request.getAttribute(Constant.USER_ID))) {
-            request.removeAttribute(Constant.USER_ID);
             request.setAttribute(Constant.USER_ID, token.getUserId());
-        } else {
-            request.setAttribute(Constant.USER_ID, token.getUserId());
-        }
-        //刷新token
-        refreshToken(userToken);
-        return true;
-    }
-
-    @Override
-    public boolean refreshToken(String oldToken) {
-        if (StringUtils.isEmpty(oldToken)) {
-            return false;
-        }
-        Token token = tokenRoMapper.isAuthentication(oldToken);
-        if (token == null) {
-            return false;
-        }
-        token.setLastTokenResetTime(new Date());
-        int result = tokenMapper.update(token);
-        if (result < 1) {
-            throw new ServiceException(4017);
         }
         return true;
     }
@@ -519,7 +497,9 @@ public class AuthServiceImpl implements AuthService {
         boolean loginTask = todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
         LOGGER.info("计算用户登录经验值变化:{}", userId);
-        if(loginTask) computeExp(userId);
+        if (loginTask) {
+            computeExp(userId);
+        }
 
         LOGGER.info("记用户登录日志:{}", userId);
         insertLoginLog(userId);

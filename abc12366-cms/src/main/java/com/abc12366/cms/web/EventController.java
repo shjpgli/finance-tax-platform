@@ -124,7 +124,7 @@ public class EventController {
         } else {
             eventSaveBo = eventService.selecttopone(category);
             redisTemplate.opsForValue().set(category + "_ToponeForqt", JSONObject.toJSONString(eventSaveBo),
-                    RedisConstant.USER_INFO_TIME_ODFAY, TimeUnit.DAYS);
+                    RedisConstant.DAY_1, TimeUnit.DAYS);
         }
         LOGGER.info("{}", eventSaveBo);
         return ResponseEntity.ok(Utils.kv("data", eventSaveBo));

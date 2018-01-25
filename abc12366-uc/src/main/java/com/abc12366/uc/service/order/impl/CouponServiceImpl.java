@@ -1,6 +1,5 @@
 package com.abc12366.uc.service.order.impl;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
@@ -17,7 +16,6 @@ import com.abc12366.uc.mapper.db2.OperateMessageRoMapper;
 import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.admin.bo.OperateMessageBO;
 import com.abc12366.uc.model.admin.bo.YyxxLogBO;
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
@@ -26,7 +24,6 @@ import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.order.CouponService;
-import com.abc12366.uc.util.StringUtil;
 import com.abc12366.uc.web.order.CartController;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
@@ -511,34 +508,16 @@ public class CouponServiceImpl implements CouponService {
         // 优惠后的金额
         double amountAfter = amount;
 
-        String couponIds = bo.getCouponId();
-        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(couponIds);
+        String couponId = bo.getCouponId();
+        Map<String,Object> map = new HashMap<>();
+        map.put("couponId",couponId);
+        map.put("userId",bo.getUserId());
+        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
         if (dataList.size() > 0) {
             String ids = "";
             for (CouponUser cu : dataList) {
-                // 校验用户
-                if (!cu.getUserId().equals(bo.getUserId())) {
-                    throw new ServiceException(7118);
-                }
-                // 校验计算类型
-                if (!COUPON_AMOUNT_ORDER.equalsIgnoreCase(cu.getAmountType())) {
-                    throw new ServiceException(7131);
-                }
-                // 校验商品品目
-                if (!cu.getCategoryIds().contains(bo.getCategoryId())) {
-                    throw new ServiceException(7119);
-                }
-                // 校验优惠劵有效期
-                Date now = new Date();
-                if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
-                    throw new ServiceException(7120);
-                }
-                // 校验优惠劵状态
-                if (!COUPON_STATUS_GET.equals(cu.getStatus()) ||
-                        !COUPON_STATUS_ON.equals(cu.getStatus()) ||
-                        !COUPON_STATUS_FREEZEN.equals(cu.getStatus())) {
-                    throw new ServiceException(7121);
-                }
+
+                checkCouponUser(bo.getUserId(),bo.getCategoryId(), cu);
                 // 计算优惠后的金额
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
@@ -548,9 +527,9 @@ public class CouponServiceImpl implements CouponService {
                         }
                         break;
                     case COUPONTYPE_ZHEKOU:
-                        if (amount >= cu.getParam1()) {
+                        if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
                             amount = amount - cu.getParam1();
-                            amountAfter = amountAfter - cu.getParam1() * (1 - cu.getParam2());
+                            amountAfter = amountAfter *   cu.getParam2();
                         }
                         break;
                     case COUPONTYPE_LIJIAN:
@@ -565,10 +544,34 @@ public class CouponServiceImpl implements CouponService {
                 }
                 ids += cu.getId();
             }
-            amountAfter = couponIds.length() == ids.length() ? amountAfter : amount;
+            amountAfter = couponId.length() == ids.length() ? amountAfter : amount;
         }
         LOGGER.info("{}", amountAfter);
         return amountAfter;
+    }
+
+    public void checkCouponUser(String userId,String categoryId, CouponUser cu) {
+        // 校验用户
+        if (!cu.getUserId().equals(userId)) {
+            throw new ServiceException(7118);
+        }
+        // 校验计算类型
+        if (!COUPON_AMOUNT_ORDER.equalsIgnoreCase(cu.getAmountType())) {
+            throw new ServiceException(7131);
+        }
+        // 校验商品品目
+        if (!cu.getCategoryIds().contains(categoryId)) {
+            throw new ServiceException(7119);
+        }
+        // 校验优惠劵有效期
+        Date now = new Date();
+        if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
+            throw new ServiceException(7120);
+        }
+        // 校验优惠劵状态
+        if (!COUPON_STATUS_GET.equals(cu.getStatus())) {
+            throw new ServiceException(7121);
+        }
     }
 
     @Override
@@ -591,7 +594,59 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public CouponUser selectCouponUser(Map<String, Object> map) {
-        return null;
+        return couponRoMapper.selectCouponUser(map);
+    }
+
+    @Override
+    public String selectCouponId(CouponIdBO bo) {
+
+
+        //String couponId = bo.getCouponId();
+        String userId = bo.getUserId();
+        Map<String,Object> map = new HashMap<>();
+        //map.put("couponId",couponId);
+        map.put("userId",bo.getUserId());
+        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
+        // 优惠前的金额
+        double maxAmount = bo.getAmount();
+        String id = "";
+        if (dataList.size() > 0) {
+            for (CouponUser cu : dataList) {
+                // 优惠前的金额
+                double amount = bo.getAmount();
+                // 优惠后的金额
+                double amountAfter = amount;
+                checkCouponUser(bo.getUserId(),bo.getCategoryId(), cu);
+                // 计算优惠后的金额
+                switch (cu.getCouponType()) {
+                    case COUPONTYPE_MANJIAN:
+                        if (amount >= cu.getParam1()) {
+                            amountAfter = amountAfter - cu.getParam2();
+                        }
+                        break;
+                    case COUPONTYPE_ZHEKOU:
+                        if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
+                            amountAfter = amountAfter * cu.getParam2();
+                        }
+                        break;
+                    case COUPONTYPE_LIJIAN:
+                        if (amount >= cu.getParam2()) {
+                            amountAfter = amountAfter - cu.getParam2();
+                        } else {
+                            throw new ServiceException(7133);
+                        }
+                        break;
+                    default:
+                        throw new ServiceException(7102);
+                }
+                if(amountAfter < maxAmount) {
+                    id = cu.getCouponId();
+                    maxAmount = amountAfter;
+                }
+            }
+        }
+
+        return id;
     }
 
     /**
@@ -777,7 +832,7 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7117);
         }*/
         if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().after(bo.getActivityEndTime())) {
-            LOGGER.info("优惠卷的开始时间，必须在活动时间之间");
+            LOGGER.info("优惠劵的开始时间，必须在活动时间之间");
             throw new ServiceException(7136);
         }
     }

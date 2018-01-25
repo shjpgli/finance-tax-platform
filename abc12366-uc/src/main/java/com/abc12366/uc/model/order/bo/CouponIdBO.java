@@ -6,19 +6,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * 使用优惠劵计算金额对象
+ * 使用优惠劵计算最大优惠对象
  *
  * @author lijun <ljun51@outlook.com>
  * @date 2018-01-16 5:53 PM
  * @since 1.0.0
  */
-public class CouponCalculateBO {
+public class CouponIdBO {
 
-    /**
-     * 优惠劵ID
-     */
-    @NotEmpty
-    private String couponId;
 
     /**
      * 用户ID
@@ -39,14 +34,6 @@ public class CouponCalculateBO {
      */
     @NotNull
     private Double amount;
-
-    public String getCouponId() {
-        return couponId;
-    }
-
-    public void setCouponId(String couponId) {
-        this.couponId = couponId;
-    }
 
     public String getUserId() {
         return userId;
@@ -75,7 +62,6 @@ public class CouponCalculateBO {
     @Override
     public String toString() {
         return "CouponOrderBO{" +
-                "couponId=" + couponId +
                 ", userId='" + userId + '\'' +
                 ", categoryId='" + categoryId + '\'' +
                 ", amount=" + amount +

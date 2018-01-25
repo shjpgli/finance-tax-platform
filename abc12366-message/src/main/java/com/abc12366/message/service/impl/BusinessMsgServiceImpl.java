@@ -10,6 +10,7 @@ import com.abc12366.message.model.BusinessBatchMessage;
 import com.abc12366.message.model.BusinessMessage;
 import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.BusinessMessageAdmin;
+import com.abc12366.message.model.bo.UserSimple;
 import com.abc12366.message.service.BusinessMsgService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -24,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -169,7 +169,13 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     @Override
     public List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return businessMsgRoMapper.selectListByUsername(map);
+        List<BusinessMessageAdmin> list = businessMsgRoMapper.selectListByUsername(map);
+        for(BusinessMessageAdmin messageAdmin:list){
+            UserSimple userSimple = businessMsgRoMapper.selectUserById(messageAdmin.getUserId());
+            messageAdmin.setUsername(userSimple.getUsername());
+            messageAdmin.setUserPicturePath(userSimple.getUserPicturePath());
+        }
+        return list;
     }
 
     @Override
@@ -188,7 +194,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             dataList = businessMsgRoMapper.selectList(bm);
             redisTemplate.opsForValue().set(key,
                     JSONObject.toJSONString(dataList),
-                    RedisConstant.USER_INFO_TIME_ODFAY,
+                    RedisConstant.DAY_1,
                     TimeUnit.DAYS);
         }
         return dataList;

@@ -17,6 +17,7 @@
                 <when test="status == null or status == ''">AND status != '0'</when>
             </choose>
         </where>
+        order by lastUpdate DESC
     </select>
 
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.Coupon">
@@ -44,6 +45,7 @@
                 <when test="status == null or status == ''">AND ca.status != '0'</when>
             </choose>
         </where>
+        order by ca.lastUpdate DESC
     </select>
 
     <select id="selectOneActivity" parameterType="java.lang.String"
@@ -63,12 +65,14 @@
     </sql>
     <select id="selectCouponActivityList" parameterType="java.util.Map"
             resultType="com.abc12366.uc.model.order.CouponActivity">
-          SELECT <include refid="Activity_Column_List" />
-          FROM uc_coupon_activity
-            <where>
-                <if test="activityId != null and activityId != ''">AND activityId = #{activityId}</if>
-                <if test="status != null and status != ''">AND status = #{status}</if>
-            </where>
+        SELECT
+        <include refid="Activity_Column_List"/>
+        FROM uc_coupon_activity
+        <where>
+            <if test="activityId != null and activityId != ''">AND activityId = #{activityId}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+        order by lastUpdate DESC
     </select>
 
     <select id="selectUserCoupon" parameterType="java.lang.String"
@@ -81,14 +85,17 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectUserCouponByIds" parameterType="java.lang.String"
+    <select id="selectUserCouponByIds" parameterType="java.util.Map"
             resultType="com.abc12366.uc.model.order.CouponUser">
         SELECT id, userId, activityId, couponId, couponName,
         couponMode, couponType, param1, param2, amountType,
         validStartTime, validEndTime, description, status, createTime,
         lastUpdate, orderNo, categoryIds
         FROM uc_coupon_user
-        WHERE id in (#{ids})
+        <where>
+            <if test="userId != null and userId != ''">userId = #{userId}</if>
+            <if test="couponId != null and couponId != ''">AND couponId = #{couponId}</if>
+        </where>
         ORDER BY couponType DESC
     </select>
 
@@ -105,6 +112,8 @@
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
             <if test="validEndTime != null">AND cu.validEndTime <![CDATA[<]]> #{validEndTime}</if>
             <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
+            <if test="categoryIds != null  and categoryIds!=''">AND cu.categoryIds LIKE CONCAT('%',#{categoryIds},'%')
+            </if>
             <choose>
                 <when test="status != null and status != ''">
                     AND cu.status = #{status}
@@ -114,15 +123,30 @@
                 </when>
             </choose>
         </where>
+        order by cu.lastUpdate DESC
     </select>
 
     <select id="selectUserCouponCount" parameterType="com.abc12366.uc.model.order.CouponUser"
             resultType="java.lang.Integer">
-        SELECT count(*) FROM uc_coupon_user
+        SELECT count(userId) FROM uc_coupon_user
         <where>
             <if test="userId != null and userId != ''">userId = #{userId}</if>
             <if test="activityId != null and activityId != ''">AND activityId = #{activityId}</if>
             <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+    </select>
+
+    <!-- CouponUser通用查询结果列-->
+    <sql id="CouponUser_Column_List">
+        id,	userId,	activityId,	couponId,	couponName,	couponMode,	couponType,	param1,	param2,	amountType,	validStartTime,	validEndTime,	description,	status,	createTime,	lastUpdate,	orderNo,	categoryIds,	amountAfter
+    </sql>
+
+    <select id="selectCouponUser" parameterType="com.abc12366.uc.model.order.CouponUser"
+            resultType="java.util.Map">
+        SELECT <include refid="CouponUser_Column_List" /> FROM uc_coupon_user
+        <where>
+            <if test="userId != null and userId != ''">userId = #{userId}</if>
+            <if test="orderNo != null and orderNo != ''">AND orderNo = #{orderNo}</if>
         </where>
     </select>
 </mapper>
