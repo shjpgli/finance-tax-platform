@@ -128,6 +128,11 @@ public class ContentListBo implements Serializable {
      **/
     private String siteStatus;
 
+    //标题图
+    private String titleImg;
+    //摘要
+    private String shortTitle;
+
 
     public String getContentId() {
         return contentId;

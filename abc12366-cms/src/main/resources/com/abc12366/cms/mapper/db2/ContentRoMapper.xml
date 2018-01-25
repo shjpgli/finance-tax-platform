@@ -512,7 +512,10 @@
 		s.siteName,
 		s.sitePath,s.domain,
 		s.siteStatus,
-		a.recommendLevel recommendLevel
+		a.recommendLevel recommendLevel,
+		b.shortTitle,
+		b.titleImg
+
 		FROM cms_content a LEFT JOIN cms_content_ext b ON a.contentId = b.contentId
 		LEFT JOIN cms_content_txt t ON a.contentId = t.contentId
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
