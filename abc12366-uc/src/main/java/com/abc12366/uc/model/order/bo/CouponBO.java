@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * 优惠劵新增、修改对象

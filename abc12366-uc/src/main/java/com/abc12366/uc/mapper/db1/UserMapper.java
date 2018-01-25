@@ -2,18 +2,12 @@ package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.model.bo.UserJyxx;
-import com.abc12366.uc.model.bo.UserListBO;
-import com.abc12366.uc.model.bo.UserRetainedRateBO;
-import com.abc12366.uc.model.bo.UserSimpleInfoBO;
+import com.abc12366.uc.model.bo.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @author lijun <ljun51@outlook.com>

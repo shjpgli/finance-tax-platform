@@ -5,7 +5,6 @@ import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UserExtendRoMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendBO;

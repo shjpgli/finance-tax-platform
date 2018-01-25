@@ -1,7 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.UserLoginPasswordWrongCount;
 import com.abc12366.uc.model.bo.*;
 import org.apache.ibatis.annotations.Param;
 

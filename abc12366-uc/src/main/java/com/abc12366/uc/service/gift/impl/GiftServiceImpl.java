@@ -13,7 +13,6 @@ import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.gift.*;
 import com.abc12366.uc.model.gift.bo.*;
-import com.abc12366.uc.model.order.Order;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.gift.GiftService;
 import org.slf4j.Logger;

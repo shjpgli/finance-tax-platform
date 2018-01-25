@@ -1,14 +1,9 @@
 package com.abc12366.uc.service;
 
-import java.util.Map;
+import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
-
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.ResetPasswordBO;
-import com.abc12366.uc.model.bo.UserReturnBO;
+import java.util.Map;
 
 public interface AuthServiceNew {
 

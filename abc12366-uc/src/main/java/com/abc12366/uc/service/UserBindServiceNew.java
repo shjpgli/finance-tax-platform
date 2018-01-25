@@ -1,14 +1,10 @@
 package com.abc12366.uc.service;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.abc12366.uc.model.bo.NsrLogin;
-import com.abc12366.uc.model.bo.UserDzsbBO;
-import com.abc12366.uc.model.bo.UserDzsbInsertBO;
-import com.abc12366.uc.model.bo.UserHngsBO;
-import com.abc12366.uc.model.bo.UserHngsInsertBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
+
+import javax.servlet.http.HttpServletRequest;
 
 public interface UserBindServiceNew {
 
