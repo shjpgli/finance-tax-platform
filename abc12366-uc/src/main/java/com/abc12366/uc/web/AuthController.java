@@ -69,6 +69,26 @@ public class AuthController extends BaseController {
     }
 
     /**
+     * 测试用户登录方法：用于java做接口调用进行登录，不做rsa加密
+     *
+     * @param loginBO LoginBO
+     * @return 用户基本信息、用户token、token有效时间
+     */
+    @PostMapping(path = "/test/login")
+    public ResponseEntity testLogin(@Valid @RequestBody LoginBO loginBO, HttpServletRequest request){
+        LOGGER.info("{}", loginBO);
+        Map data = authService.testLogin(loginBO, "1");
+        LOGGER.info("{}", data);
+
+        // 设置CLIENT_IP地址
+        data.put(Constant.CLIENT_IP, request.getHeader(Constant.CLIENT_IP));
+        LOGGER.info("登陆成功之后需要处理的业务:{}", data.get(Constant.USER_ID));
+        CompletableFuture<BodyStatus> cf = authService.todoAfterLogin(data);
+        CompletableFuture.allOf(cf);
+        return ResponseEntity.ok(Utils.kv("data", data));
+    }
+
+    /**
      * 用户登录方法：用于java做接口调用进行登录
      *
      * @param loginBO LoginBO
