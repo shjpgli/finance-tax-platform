@@ -276,7 +276,7 @@ public class OrderServiceImpl implements OrderService {
                     couponOrderBO.setCouponId(orderSubmitBO.getCouponId());
                     couponOrderBO.setUserId(orderSubmitBO.getUserId());
                     couponOrderBO.setOrderNo(orderNo);
-                    couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
+                    couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
                     //优惠劵设置已冻结
                     Map<String,Object> map = new HashMap<>();
@@ -286,8 +286,8 @@ public class OrderServiceImpl implements OrderService {
                     if(dataList != null && dataList.size() > 0){
                         for(CouponUser couponUser:dataList){
                             if (orderProductBO.getTradingChannels() != null
-                                    && !orderProductBO.getTradingChannels().equals(couponUser.getCategoryIds())
-                                    && !CouponServiceImpl.ALL.equals(orderProductBO.getTradingChannels())) {
+                                    && !orderProductBO.getTradingChannels().contains(CouponServiceImpl.ALL)
+                                    && !couponUser.getCategoryIds().contains(orderProductBO.getTradingChannels())) {
                                 LOGGER.info("商品类目与优惠卷商品类目不一致，优惠卷无法使用");
                                 throw new ServiceException(7138);
                             }
