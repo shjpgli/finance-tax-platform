@@ -59,7 +59,7 @@ public class OrderSubmitBO implements Serializable {
     /**
      * 备注
      **/
-    @Size(min = 2, max = 100)
+    @Size(min = 0, max = 100)
     private String remark;
 
     /**

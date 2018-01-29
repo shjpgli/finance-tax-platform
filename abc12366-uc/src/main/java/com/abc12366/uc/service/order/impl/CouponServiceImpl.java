@@ -504,7 +504,7 @@ public class CouponServiceImpl implements CouponService {
             map.put("orderNo", COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
             map.put("status", bo.getStatus());
             map.put("lastUpdate", new Date());
-            map.put("ids", bo.getCouponId());
+            map.put("id", bo.getCouponId());
             map.put("amountAfter", amountAfter);
             couponMapper.batchUpdateUserCoupon(map);
         }
@@ -571,7 +571,7 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7131);
         }
         // 校验商品品目
-        if (!cu.getCategoryIds().contains(categoryId) && !ALL.equals(categoryId)) {
+        if (!cu.getCategoryIds().contains(categoryId) && !cu.getCategoryIds().contains(ALL)) {
             throw new ServiceException(7119);
         }
         // 校验优惠劵有效期
@@ -835,7 +835,10 @@ public class CouponServiceImpl implements CouponService {
         // 活动有效期限制校验
         /*if (bo.getActivityStartTime().after(c.getValidStartTime()) ||
                 bo.getActivityEndTime().before(c.getValidEndTime()) ||
-                bo.getActivityEndTime().before(bo.getActivityEndTime())) {
+                bo.getActivityEndTime().before(bo.getActivityEndTime())) {；
+
+
+
             throw new ServiceException(7117);
         }*/
         if(!VALIDTYPE_DAYS.equals(c.getValidType())){
