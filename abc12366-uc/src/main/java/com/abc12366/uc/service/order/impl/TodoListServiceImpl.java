@@ -1,6 +1,7 @@
 package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.uc.model.order.bo.OrderStatBO;
+import com.abc12366.uc.model.order.bo.RegsAndNsrloginStatBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.service.TodoListService;
 import com.abc12366.uc.service.invoice.InvoiceService;
@@ -77,13 +78,19 @@ public class TodoListServiceImpl implements TodoListService{
     @Override
     public Map<String, Integer> orderStat() {
         OrderStatBO orderStatBO = orderService.orderStat();
-        Map<String, Integer> map = new HashMap<>(6);
+        RegsAndNsrloginStatBO statBO = orderService.staRegsAndNsrlogins();
+        Map<String, Integer> map = new HashMap<>(10);
         map.put("orderStatus3", orderStatBO.getOrderStatus3());
         map.put("orderStatus4", orderStatBO.getOrderStatus4());
         map.put("orderStatus6", orderStatBO.getOrderStatus6());
         map.put("orderStatus7", orderStatBO.getOrderStatus7());
         map.put("orderStatus9", orderStatBO.getOrderStatus9());
         map.put("orderStatus", orderStatBO.getOrderStatus());
+
+        map.put("regsDay", statBO.getRegsDay());
+        map.put("regsMonth", statBO.getRegsMonth());
+        map.put("dzsbLoginsDay", statBO.getDzsbLoginsDay());
+        map.put("nsrLoginsMonth", statBO.getNsrLoginsMonth());
         return map;
     }
 }

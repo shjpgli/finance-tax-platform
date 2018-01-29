@@ -1581,4 +1581,9 @@ public class OrderServiceImpl implements OrderService {
         pointsLog.setLogType("ORDER_EXCHANGE");
         pointsLogService.insertByConsume(pointsLog,orderBO.getNowVipLevel());
     }
+
+    @Override
+    public RegsAndNsrloginStatBO staRegsAndNsrlogins() {
+        return orderRoMapper.staRegsAndNsrlogins();
+    }
 }
