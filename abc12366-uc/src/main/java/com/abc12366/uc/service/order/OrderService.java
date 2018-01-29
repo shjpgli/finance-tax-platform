@@ -273,4 +273,10 @@ public interface OrderService {
      * @return
      */
     OrderBO selectOrderDetail(String orderNo);
+
+    /**
+     * regsDay-今天用户注册数、regsMonth-本月注册数统计，dzsbLoginsDay-增加今天纳税人登录电子申报数、nsrLoginsMonth-本月纳税人登录数统计
+     * @return RegsAndNsrloginStatBO
+     */
+    RegsAndNsrloginStatBO staRegsAndNsrlogins();
 }
