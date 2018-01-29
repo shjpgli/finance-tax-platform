@@ -1,16 +1,25 @@
 package com.abc12366.uc.service.impl;
 
-import java.security.interfaces.RSAPublicKey;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.exception.DzsbServiceException;
+import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.*;
+import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
+import com.abc12366.uc.mapper.db1.UserBindMapper;
+import com.abc12366.uc.model.UserDzsb;
+import com.abc12366.uc.model.UserHngs;
+import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.tdps.TY21Xml2Object;
+import com.abc12366.uc.service.RSAService;
+import com.abc12366.uc.service.TodoTaskService;
+import com.abc12366.uc.service.UserBindServiceNew;
+import com.abc12366.uc.webservice.AcceptClient;
+import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
+import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
+import com.abc12366.uc.wsbssoa.service.MainService;
+import com.abc12366.uc.wsbssoa.utils.MD5;
+import com.abc12366.uc.wsbssoa.utils.RSAUtil;
+import com.alibaba.fastjson.JSON;
 import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,34 +34,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.gateway.exception.DzsbServiceException;
-import com.abc12366.gateway.exception.ServiceException;
-import com.abc12366.gateway.util.Constant;
-import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.RestTemplateUtil;
-import com.abc12366.gateway.util.TaskConstant;
-import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
-import com.abc12366.uc.mapper.db1.UserBindMapper;
-import com.abc12366.uc.model.UserDzsb;
-import com.abc12366.uc.model.UserHngs;
-import com.abc12366.uc.model.bo.NsrLogin;
-import com.abc12366.uc.model.bo.UserDzsbBO;
-import com.abc12366.uc.model.bo.UserDzsbInsertBO;
-import com.abc12366.uc.model.bo.UserHngsBO;
-import com.abc12366.uc.model.bo.UserHngsInsertBO;
-import com.abc12366.uc.model.tdps.TY21Xml2Object;
-import com.abc12366.uc.service.RSAService;
-import com.abc12366.uc.service.TodoTaskService;
-import com.abc12366.uc.service.UserBindServiceNew;
-import com.abc12366.uc.webservice.AcceptClient;
-import com.abc12366.uc.wsbssoa.dto.AuthorizationDto;
-import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
-import com.abc12366.uc.wsbssoa.service.MainService;
-import com.abc12366.uc.wsbssoa.utils.MD5;
-import com.abc12366.uc.wsbssoa.utils.RSAUtil;
-import com.alibaba.fastjson.JSON;
+import javax.servlet.http.HttpServletRequest;
+import java.security.interfaces.RSAPublicKey;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserBindServiceNewImpl implements UserBindServiceNew {

@@ -1,33 +1,22 @@
 package com.abc12366.uc.web;
 
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.model.bo.LoginBO;
-import com.abc12366.uc.model.bo.PasswordUpdateBO;
-import com.abc12366.uc.model.bo.RegisterBO;
-import com.abc12366.uc.model.bo.ResetPasswordBO;
-import com.abc12366.uc.model.bo.UserReturnBO;
-import com.abc12366.uc.model.bo.VerifyingCodeBO;
+import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.AuthServiceNew;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/v2")

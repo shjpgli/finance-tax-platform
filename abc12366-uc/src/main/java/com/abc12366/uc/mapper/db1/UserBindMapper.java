@@ -4,12 +4,7 @@ import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.abc4000.NSRXX;
-import com.abc12366.uc.model.abc4000.NSRXXBO;
-import com.abc12366.uc.model.bo.ShxydmBO;
-import com.abc12366.uc.model.bo.UserDzsbListBO;
-import com.abc12366.uc.model.bo.UserHndsBO;
-import com.abc12366.uc.model.bo.UserHngsInsertBO;
-import com.abc12366.uc.model.bo.UserHngsListBO;
+import com.abc12366.uc.model.bo.*;
 
 import java.util.Date;
 import java.util.List;
