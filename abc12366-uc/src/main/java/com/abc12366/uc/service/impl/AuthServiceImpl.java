@@ -701,7 +701,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void computeExp(String userId) {
         //今日第一次登录才能获取经验值
-        if (!isContinueLogin(userId, 0)) {
+//        if (!isContinueLogin(userId, 0)) {
             //判断用户连续登录情况
             int exp = 3;
             if (isContinueLogin(userId, 1)) {
@@ -730,7 +730,7 @@ public class AuthServiceImpl implements AuthService {
             logBO.setOutgo(0);
             logBO.setCreateTime(new Date());
             experienceLogService.insert(logBO);
-        }
+//        }
     }
 
     private boolean isContinueLogin(String userId, int i) {
