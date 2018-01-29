@@ -270,17 +270,17 @@ public class OrderServiceImpl implements OrderService {
                 order.setIsInvoice(false);
 
                 //判断是否使用优惠劵
-                if(orderSubmitBO.getCouponId() != null && !"".equals(orderSubmitBO.getCouponId())){
+                if(orderSubmitBO.getUseCouponId() != null && !"".equals(orderSubmitBO.getUseCouponId())){
                     //判断优惠卷类型是否可以用
                     CouponOrderBO couponOrderBO = new CouponOrderBO();
-                    couponOrderBO.setCouponId(orderSubmitBO.getCouponId());
+                    couponOrderBO.setUseCouponId(orderSubmitBO.getUseCouponId());
                     couponOrderBO.setUserId(orderSubmitBO.getUserId());
                     couponOrderBO.setOrderNo(orderNo);
                     couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
                     //优惠劵设置已冻结
                     Map<String,Object> map = new HashMap<>();
-                    map.put("couponId",orderSubmitBO.getCouponId());
+                    map.put("useCouponId",orderSubmitBO.getUseCouponId());
                     map.put("userId",orderSubmitBO.getUserId());
                     List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
                     if(dataList != null && dataList.size() > 0){
@@ -509,7 +509,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
         for(OrderProductBO orderProductBO:orderProductBOs){
             CouponOrderBO couponOrderBO = new CouponOrderBO();
-            couponOrderBO.setCouponId(couponUser.getCouponId());
+            couponOrderBO.setUseCouponId(couponUser.getCouponId());
             couponOrderBO.setUserId(orderCancelBO.getUserId());
             couponOrderBO.setOrderNo(orderCancelBO.getOrderNo());
             couponOrderBO.setCategoryId(orderProductBO.getCategoryId());

@@ -13,10 +13,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class CouponOrderBO {
 
     /**
-     * 优惠劵ID
+     * 领用优惠劵ID
      */
     @NotEmpty
-    private String couponId;
+    private String useCouponId;
 
     /**
      * 用户ID
@@ -51,14 +51,6 @@ public class CouponOrderBO {
     @NotEmpty
     @Length(max = 1)
     private String status;
-
-    public String getCouponId() {
-        return couponId;
-    }
-
-    public void setCouponId(String couponId) {
-        this.couponId = couponId;
-    }
 
     public String getUserId() {
         return userId;
@@ -103,12 +95,20 @@ public class CouponOrderBO {
     @Override
     public String toString() {
         return "CouponOrderBO{" +
-                "couponId=" + couponId +
+                "useCouponId=" + useCouponId +
                 ", userId='" + userId + '\'' +
                 ", orderNo='" + orderNo + '\'' +
                 ", categoryId='" + categoryId + '\'' +
                 ", amount=" + amount +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public String getUseCouponId() {
+        return useCouponId;
+    }
+
+    public void setUseCouponId(String useCouponId) {
+        this.useCouponId = useCouponId;
     }
 }

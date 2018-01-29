@@ -499,7 +499,7 @@ public class CouponServiceImpl implements CouponService {
         cc.setUserId(bo.getUserId());
         cc.setAmount(bo.getAmount());
         cc.setCategoryId(bo.getCategoryId());
-        cc.setCouponId(bo.getCouponId());
+        cc.setUseCouponId(bo.getUseCouponId());
         double amountAfter = calculateOrderAmount(cc);
 
         if (amountAfter < bo.getAmount()) {
@@ -507,7 +507,7 @@ public class CouponServiceImpl implements CouponService {
             map.put("orderNo", COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
             map.put("status", bo.getStatus());
             map.put("lastUpdate", new Date());
-            map.put("id", bo.getCouponId());
+            map.put("id", bo.getUseCouponId());
             map.put("amountAfter", amountAfter);
             couponMapper.batchUpdateUserCoupon(map);
         }
@@ -522,9 +522,9 @@ public class CouponServiceImpl implements CouponService {
         // 优惠后的金额
         double amountAfter = amount;
 
-        String couponId = bo.getCouponId();
+        String id = bo.getUseCouponId();
         Map<String,Object> map = new HashMap<>();
-        map.put("couponId",couponId);
+        map.put("id",id);
         map.put("userId",bo.getUserId());
         List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
         if (dataList.size() > 0) {
@@ -536,13 +536,13 @@ public class CouponServiceImpl implements CouponService {
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
                         if (amount >= cu.getParam1()) {
-//                            amount = amount - cu.getParam1();
+                            amount = amount - cu.getParam1();
                             amountAfter = amountAfter - cu.getParam2();
                         }
                         break;
                     case COUPONTYPE_ZHEKOU:
                         if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
-//                            amount = amount - cu.getParam1();
+                            amount = amount - cu.getParam1();
                             amountAfter = amountAfter *   cu.getParam2();
                         }
                         break;
@@ -558,7 +558,7 @@ public class CouponServiceImpl implements CouponService {
                 }
                 ids += cu.getId();
             }
-            amountAfter = couponId.length() == ids.length() ? amountAfter : amount;
+            amountAfter = id.length() == ids.length() ? amountAfter : amount;
         }
         LOGGER.info("{}", amountAfter);
         return amountAfter;

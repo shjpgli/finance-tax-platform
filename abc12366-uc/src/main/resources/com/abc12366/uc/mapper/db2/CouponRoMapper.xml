@@ -142,7 +142,8 @@
         lastUpdate, orderNo, categoryIds
         FROM uc_coupon_user
         <where>
-            <if test="userId != null and userId != ''">userId = #{userId}</if>
+            <if test="id != null and id != ''">id = #{id}</if>
+            <if test="userId != null and userId != ''">and userId = #{userId}</if>
             <if test="couponId != null and couponId != ''">AND couponId = #{couponId}</if>
         </where>
         ORDER BY couponType DESC
