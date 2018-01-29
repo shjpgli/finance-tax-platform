@@ -526,9 +526,7 @@
 		<if test="text != null and text != ''">
 			AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text} IN BOOLEAN MODE)
 			OR MATCH(txt) AGAINST(#{text} IN BOOLEAN MODE))
-		</if>
-		<if test="text != null and text != ''">
-			AND tg.tagId in (select id from abc12366_bangbang.bb_knowledge_tag where name = #{text})
+			OR tg.tagId in (select id from abc12366_bangbang.bb_knowledge_tag where name = #{text})
 		</if>
 		<if test="siteId != null and siteId != ''">
 			AND a.siteId = #{siteId}
