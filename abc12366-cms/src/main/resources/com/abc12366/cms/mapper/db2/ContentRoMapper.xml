@@ -521,14 +521,12 @@
 		LEFT JOIN cms_channel c ON a.channelId = c.channelId
 		LEFT JOIN cms_site s ON a.siteId = s.siteId
 		LEFT JOIN cms_content_count e ON a.contentId = e.contentId
-		LEFT JOIN cms_contenttagid t ON t.contentId = a.contentId
+		LEFT JOIN cms_contenttagid tg ON tg.contentId = a.contentId
 		WHERE a.status = 2
 		<if test="text != null and text != ''">
 			AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text} IN BOOLEAN MODE)
 			OR MATCH(txt) AGAINST(#{text} IN BOOLEAN MODE))
-		</if>
-		<if test="text != null and text != ''">
-			AND t.tagId in (select id from abc12366_bangbang.bb_knowledge_tag where name = #{text})
+			OR tg.tagId in (select id from abc12366_bangbang.bb_knowledge_tag where name = #{text})
 		</if>
 		<if test="siteId != null and siteId != ''">
 			AND a.siteId = #{siteId}
