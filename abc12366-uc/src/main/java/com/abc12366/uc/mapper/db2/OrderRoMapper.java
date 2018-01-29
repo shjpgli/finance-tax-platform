@@ -1,10 +1,7 @@
 package com.abc12366.uc.mapper.db2;
 
 import com.abc12366.uc.model.order.Order;
-import com.abc12366.uc.model.order.bo.OrderBO;
-import com.abc12366.uc.model.order.bo.OrderStatBO;
-import com.abc12366.uc.model.order.bo.OrderStatisBO;
-import com.abc12366.uc.model.order.bo.OrderTradeBO;
+import com.abc12366.uc.model.order.bo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -115,4 +112,10 @@ public interface OrderRoMapper {
      * @return
      */
     OrderBO selectOrderDetail(String orderNo);
+
+    /**
+     * 运营看板增加今天用户注册数、本月注册数统计，增加今天纳税人登录电子申报数、本月纳税人登录数统计
+     * @return RegsAndNsrloginStatBO
+     */
+    RegsAndNsrloginStatBO staRegsAndNsrlogins();
 }
