@@ -12,3 +12,4 @@ abc12366-cms/abc12366-cms.iml
 abc12366-cms/target/
 finance-tax-platform.iml
 **/.DS_Store
+**/nohup.out
