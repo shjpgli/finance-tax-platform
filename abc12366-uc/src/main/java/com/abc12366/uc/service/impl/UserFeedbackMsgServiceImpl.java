@@ -4,7 +4,6 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.gateway.util.TaskConstant;
-import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UcUserLoginLogRoMapper;
 import com.abc12366.uc.model.MessageSendBo;

@@ -1,6 +1,5 @@
 package com.abc12366.uc.service.admin.impl;
 
-import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.DateUtils;

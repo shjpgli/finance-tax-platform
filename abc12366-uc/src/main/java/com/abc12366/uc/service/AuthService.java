@@ -35,6 +35,15 @@ public interface AuthService {
      */
     Map login(LoginBO loginBO, String channel);
 
+    /**
+     * 测试用户登陆,不做RSA加密
+     *
+     * @param loginBO LoginBO
+     * @param channel 登陆方式：1-用户名/手机号+密码，2-js用户名/手机号+密码，3-手机号+短信验证码，4-openId登陆
+     * @return Map:token,expires_in,用户信息
+     */
+    Map testLogin(LoginBO loginBO, String channel);
+
     boolean isAuthentication(String userToken, HttpServletRequest request);
 
     /**

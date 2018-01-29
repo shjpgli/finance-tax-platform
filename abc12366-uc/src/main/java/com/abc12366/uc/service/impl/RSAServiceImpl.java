@@ -3,7 +3,6 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.wsbssoa.utils.RSA;
 import com.google.code.springcryptoutils.core.cipher.asymmetric.Base64EncodedCipherer;
-
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -13,12 +12,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 
+import javax.crypto.Cipher;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.security.interfaces.RSAPrivateKey;
 import java.util.Base64;
-
-import javax.crypto.Cipher;
 
 /**
  * User: liuguiyao<435720953@qq.com>

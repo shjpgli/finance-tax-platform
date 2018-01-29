@@ -8,7 +8,6 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.UserStatisService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

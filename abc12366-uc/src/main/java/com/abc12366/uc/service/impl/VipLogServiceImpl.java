@@ -5,7 +5,6 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db1.VipLogMapper;
-import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.mapper.db2.VipLogRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.VipLog;
