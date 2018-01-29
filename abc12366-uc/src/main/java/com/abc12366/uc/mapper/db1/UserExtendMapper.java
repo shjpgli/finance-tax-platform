@@ -1,10 +1,10 @@
 package com.abc12366.uc.mapper.db1;
 
-import java.util.List;
-import java.util.Map;
-
 import com.abc12366.uc.model.UserExtend;
 import com.abc12366.uc.model.bo.UserExtendListBO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lgy on 2017-05-05.

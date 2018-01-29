@@ -1,8 +1,8 @@
 package com.abc12366.uc.model.bo;
 
-import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 
 /**
  * Admin: liuguiyao<435720953@qq.com> Date: 2017-07-26 Time: 16:58
