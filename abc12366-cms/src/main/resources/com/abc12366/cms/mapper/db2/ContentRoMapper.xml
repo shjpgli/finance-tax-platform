@@ -491,7 +491,7 @@
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListSearch" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
 		SELECT
-		a.contentId contentId,
+		DISTINCT a.contentId contentId,
 		a.userid userid,
 		a.username username,
 		a.contentType,
