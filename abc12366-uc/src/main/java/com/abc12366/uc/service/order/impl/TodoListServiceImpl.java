@@ -4,6 +4,7 @@ import com.abc12366.uc.model.order.bo.OrderStatBO;
 import com.abc12366.uc.model.order.bo.RegsAndNsrloginStatBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.service.TodoListService;
+import com.abc12366.uc.service.UserBindServiceNew;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
 import com.abc12366.uc.service.order.OrderExchangeService;
@@ -38,6 +39,9 @@ public class TodoListServiceImpl implements TodoListService{
     private final InvoiceUseApplyService invoiceUseApplyService;
 
     @Autowired
+    private UserBindServiceNew userBindServiceNew;
+
+    @Autowired
     public TodoListServiceImpl(RealNameValidationService realNameValidationService,
                                OrderService orderService,
                                OrderExchangeService orderExchangeService,
@@ -64,7 +68,7 @@ public class TodoListServiceImpl implements TodoListService{
         Integer num5 = orderExchangeService.selectTodoListCount("8");
         // 【待审核】发票领用数
         Integer num6 = invoiceUseApplyService.selectTodoListCount();
-        RegsAndNsrloginStatBO statBO = orderService.staRegsAndNsrlogins();
+        RegsAndNsrloginStatBO statBO = userBindServiceNew.staRegsAndNsrlogins();
 
 
         Map<String, Integer> map = new HashMap<>(6);
@@ -77,8 +81,8 @@ public class TodoListServiceImpl implements TodoListService{
 
         map.put("regsDay", statBO.getRegsDay());
         map.put("regsMonth", statBO.getRegsMonth());
-        map.put("dzsbLoginsDay", statBO.getDzsbLoginsDay());
-        map.put("nsrLoginsMonth", statBO.getNsrLoginsMonth());
+        map.put("dzsbLoginsDay", userBindServiceNew.getDzsbnsrLoginTimesDay());
+        map.put("nsrLoginsMonth", userBindServiceNew.getNnsrLoginTimesMonth());
         return map;
     }
 
