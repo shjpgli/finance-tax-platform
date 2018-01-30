@@ -491,7 +491,7 @@
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListSearch" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
 		SELECT
-		a.contentId contentId,
+		DISTINCT a.contentId contentId,
 		a.userid userid,
 		a.username username,
 		a.contentType,
@@ -524,8 +524,8 @@
 		LEFT JOIN cms_contenttagid tg ON tg.contentId = a.contentId
 		WHERE a.status = 2
 		<if test="text != null and text != ''">
-			AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text} IN BOOLEAN MODE)
-			OR MATCH(txt) AGAINST(#{text} IN BOOLEAN MODE)
+			 AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text1} IN BOOLEAN MODE)
+			OR MATCH(txt) AGAINST(#{text1} IN BOOLEAN MODE)
 			OR tg.tagId in (select id from abc12366_bangbang.bb_knowledge_tag where name = #{text}))
 		</if>
 		<if test="siteId != null and siteId != ''">

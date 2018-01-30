@@ -27,7 +27,7 @@ import java.util.Map;
  * 订单控制类
  *
  * @author lizhongwei
- * @create 2017-05-16
+ * @date 2017-05-16
  * @since 2.0.0
  */
 @RestController
@@ -235,6 +235,55 @@ public class OrderController {
                         .getTotal()));
     }
 
+
+    /**
+     * 用户所有订单查询,根据状态分类
+     *
+     * @param pageNum   页数
+     * @param pageSize  条数
+     * @param name      商品名称
+     * @param userId    用户ID
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 订单列表
+     */
+    @GetMapping(path = "/user/list")
+    public ResponseEntity selectUserOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                               pageNum,
+                                                   @RequestParam(value = "size", defaultValue = Constant.pageSize)
+                                                           int pageSize,
+                                                   @RequestParam(value = "name", required = false) String name,
+                                                   @RequestParam(value = "userId", required = true) String userId,
+                                                   @RequestParam(value = "status", required = true) String status,
+                                                   @RequestParam(value = "startTime", required = false) String
+                                                               startTime,
+                                                   @RequestParam(value = "endTime", required = false) String endTime) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        OrderBO order = new OrderBO();
+        UserBO user = new UserBO();
+        user.setId(userId);
+        order.setUser(user);
+
+        GoodsBO goodsBO = new GoodsBO();
+        goodsBO.setName(name);
+        if (startTime != null && !"".equals(startTime)) {
+            order.setStartTime(DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            order.setEndTime(DateUtils.strToDate(endTime));
+        }
+        order.setStatus(status.split(","));
+        List<OrderBO> orderBOs = orderService.selectOrderListByInvoice(order, pageNum, pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderBOs);
+        LOGGER.info("{}", orderBOs);
+        return (orderBOs == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", JSON.toJSONString(pageInfo.getList()), "total", pageInfo
+                        .getTotal()));
+    }
+
+
+
     /**
      * 课程订单查询
      *
@@ -285,7 +334,7 @@ public class OrderController {
      * @return 订单详情
      */
     @GetMapping(path = "/admin/select/{orderNo}")
-    public ResponseEntity selectByOrderNoAdmin(@PathVariable("orderNo") String orderNo) {
+    public ResponseEntity selectByOrderNoAdmin(@PathVariable String orderNo) {
         LOGGER.info("{}", orderNo);
         OrderBO orderBO = orderService.selectByOrderNoAdmin(orderNo);
         LOGGER.info("{}", orderBO);
@@ -299,7 +348,7 @@ public class OrderController {
      * @return 订单详情
      */
     @GetMapping(path = "/select/{orderNo}")
-    public ResponseEntity selectByOrderNo(@PathVariable("orderNo") String orderNo) {
+    public ResponseEntity selectByOrderNo(@PathVariable String orderNo) {
         LOGGER.info("{}", orderNo);
         OrderBO orderBO = orderService.selectByOrderNo(orderNo);
         LOGGER.info("{}", orderBO);
@@ -313,7 +362,7 @@ public class OrderController {
      * @return 订单详情
      */
     @GetMapping(path = "/detail/{orderNo}")
-    public ResponseEntity selectOrderDetail(@PathVariable("orderNo") String orderNo) {
+    public ResponseEntity selectOrderDetail(@PathVariable String orderNo) {
         LOGGER.info("{}", orderNo);
         OrderBO orderBO = orderService.selectOrderDetail(orderNo);
         LOGGER.info("{}", orderBO);
@@ -323,12 +372,11 @@ public class OrderController {
 
     /**
      * 根据交易流水号查询订单合并内容
-     *
      * @param tradeNo 订单号
      * @return 订单详情
      */
     @GetMapping(path = "/select/trade/{tradeNo}")
-    public ResponseEntity selectByTradeNo(@PathVariable("tradeNo") String tradeNo) {
+    public ResponseEntity selectByTradeNo(@PathVariable String tradeNo) {
         LOGGER.info("{}", tradeNo);
         OrderTradeBO orderTradeBO = orderService.selectOrderTrade(tradeNo);
         LOGGER.info("{}", orderTradeBO);
@@ -337,7 +385,6 @@ public class OrderController {
 
     /**
      * 导出订单信息
-     *
      * @return 订单列表
      */
     @GetMapping(path = "/export")
@@ -354,7 +401,7 @@ public class OrderController {
      */
     @PostMapping(path = "/import/{expressCompId}")
     public ResponseEntity importOrder(@Valid @RequestBody List<OrderBO> orderBOList,
-                                      @PathVariable("expressCompId") String expressCompId,
+                                      @PathVariable String expressCompId,
                                       HttpServletRequest request) {
         LOGGER.info("{}", orderBOList);
         orderService.selectImportOrder(orderBOList, expressCompId, request);
@@ -364,13 +411,12 @@ public class OrderController {
 
     /**
      * 用户下单
-     *
      * @param orderSubmitBO 订单信息
      * @param userId        用户 ID
      * @return 订单信息
      */
     @PostMapping(path = "/submit/{userId}")
-    public ResponseEntity submitOrder(@Valid @RequestBody OrderSubmitBO orderSubmitBO, @PathVariable("userId") String
+    public ResponseEntity submitOrder(@Valid @RequestBody OrderSubmitBO orderSubmitBO, @PathVariable String
             userId) {
         LOGGER.info("{}", orderSubmitBO);
         orderSubmitBO.setUserId(userId);
@@ -381,13 +427,12 @@ public class OrderController {
 
     /**
      * 用户修改订单
-     *
      * @param orderUpdateBO 订单信息
      * @param userId        用户ID
      * @return 订单信息
      */
     @PostMapping(path = "/update/{userId}")
-    public ResponseEntity updateOrder(@Valid @RequestBody OrderUpdateBO orderUpdateBO, @PathVariable("userId") String
+    public ResponseEntity updateOrder(@Valid @RequestBody OrderUpdateBO orderUpdateBO, @PathVariable String
             userId) {
         LOGGER.info("{}", orderUpdateBO);
         orderUpdateBO.setUserId(userId);
@@ -398,9 +443,7 @@ public class OrderController {
 
     /**
      * 用户将订单改为支付中
-     *
      * @param orderPayBO 支付信息
-     * @param request
      * @return 订单信息
      */
     @PostMapping(path = "/payment")
@@ -413,9 +456,7 @@ public class OrderController {
 
     /**
      * 用户交易积分订单
-     *
      * @param orderPayBO 支付信息
-     * @param request
      * @return 订单信息
      */
     @PostMapping(path = "/paypoints")
@@ -430,12 +471,11 @@ public class OrderController {
 
     /**
      * 用户确认收货
-     *
      * @param orderNo 订单号
      * @param userId  用户ID
      */
     @PostMapping(path = "/confirm/{orderNo}/{userId}")
-    public ResponseEntity confirmOrder(@PathVariable("orderNo") String orderNo, @PathVariable("userId") String userId) {
+    public ResponseEntity confirmOrder(@PathVariable String orderNo, @PathVariable String userId) {
         LOGGER.info("{}{}", orderNo, userId);
         Order order = new Order();
         order.setOrderNo(orderNo);
@@ -448,7 +488,6 @@ public class OrderController {
      * 订单发货
      *
      * @param orderOperationBO 订单操作信息
-     * @param request
      */
     @PostMapping(path = "/send")
     public ResponseEntity sendOrder(@Valid @RequestBody OrderOperationBO orderOperationBO, HttpServletRequest request) {
@@ -459,7 +498,6 @@ public class OrderController {
 
     /**
      * 订单作废
-     *
      * @param orderOperationBO 订单操作信息
      */
     @PostMapping(path = "/invalid")
@@ -471,7 +509,6 @@ public class OrderController {
 
     /**
      * 用户取消订单
-     *
      * @param orderCancelBO 订单取消信息
      * @return 订单信息
      */
@@ -486,12 +523,11 @@ public class OrderController {
     /**
      * 删除订单-前台用户
      *
-     * @param userId
-     * @param id
-     * @return
+     * @param userId 用户ID
+     * @param id    ID
      */
     @DeleteMapping(path = "/delete/{userId}/{id}")
-    public ResponseEntity deleteOrder(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+    public ResponseEntity deleteOrder(@PathVariable String userId, @PathVariable String id) {
         OrderBO orderBO = new OrderBO();
         orderBO.setOrderNo(id);
         orderBO.setUserId(userId);
@@ -501,12 +537,10 @@ public class OrderController {
 
     /**
      * 删除订单-后台管理员
-     *
-     * @param id
-     * @return
+     * @param id id
      */
     @DeleteMapping(path = "/admin/delete/{userId}/{id}")
-    public ResponseEntity adminDeleteOrder(@PathVariable("id") String id) {
+    public ResponseEntity adminDeleteOrder(@PathVariable String id) {
         OrderBO orderBO = new OrderBO();
         orderBO.setOrderNo(id);
         orderService.adminDeleteOrder(orderBO);
@@ -519,7 +553,6 @@ public class OrderController {
      *
      * @param goodsId 商品 ID
      * @param userId  用户ID
-     * @return
      */
     @GetMapping(path = "/goods")
     public ResponseEntity selectOrderByGoodsIdAndUserId(@RequestParam(value = "goodsId", required = true) String
@@ -541,7 +574,6 @@ public class OrderController {
      * @param tradeMethod 交易方式
      * @param startTime   开始时间
      * @param endTime     结束时间
-     * @return
      */
     @GetMapping(path = "/status/statis")
     public ResponseEntity statisOrderByStatus(@RequestParam(value = "tradeMethod", required = true) String tradeMethod,
@@ -570,7 +602,6 @@ public class OrderController {
      * @param tradeMethod 交易方式
      * @param startTime   开始时间
      * @param endTime     结束时间
-     * @return
      */
     @GetMapping(path = "/month/statis")
     public ResponseEntity statisOrder(@RequestParam(value = "tradeMethod", required = true) String tradeMethod,
@@ -602,7 +633,7 @@ public class OrderController {
      * @return 订单信息
      */
     @PutMapping(path = "/return/{id}/{goodsId}")
-    public ResponseEntity cancelOrder(@PathVariable("id") String id,@PathVariable("goodsId") String goodsId,@Valid @RequestBody VipLogBO vipLogBO,HttpServletRequest httpServletRequest) {
+    public ResponseEntity cancelOrder(@PathVariable String id,@PathVariable String goodsId,@Valid @RequestBody VipLogBO vipLogBO,HttpServletRequest httpServletRequest) {
         LOGGER.info("{}", id);
         Map<String,Object> map = new HashMap<>();
         map.put("orderNo",id);

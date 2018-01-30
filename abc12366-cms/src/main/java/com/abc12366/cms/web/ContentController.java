@@ -102,7 +102,8 @@ public class ContentController {
 
         dataMap.put("siteId", siteId);//站点ID
         dataMap.put("channelId", channelId);//栏目ID
-        dataMap.put("text", text+"*");//搜索内容
+        dataMap.put("text", text);//搜索内容
+        dataMap.put("text1", text+"*");//搜索内容
 
         // 分页插件的用法：加入下面一行代码之后，插件会将最近的select语句分页；下面的代码可以放在Controller或Service中.
         // 当Service中有多条select语句时，建议放在Service中，这时需要将Page对象传递到Service实现方法，返回对象也是Page对象。
@@ -335,7 +336,7 @@ public class ContentController {
         //新增内容信息
         contentSaveBo = contentService.save(contentSaveBo);
         LOGGER.info("{}", contentSaveBo);
-        
+
         redisTemplate.delete("CMS_SelectListcszxwFqt");
         return ResponseEntity.ok(Utils.kv("data", contentSaveBo));
     }
