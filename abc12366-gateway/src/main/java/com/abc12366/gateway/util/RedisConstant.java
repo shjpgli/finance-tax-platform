@@ -16,4 +16,13 @@ public class RedisConstant {
      * redis失效时间：30天
      */
     public static final long DAY_30 = 30;
+
+    /**
+     * 电子申报纳税人一天内登录次数统计
+     */
+    public static final String DZSBNSR_LOGIN_TIMES_DAY= "dzsbnsr_login_times_day";
+    /**
+     * 纳税人一个月内登录次数统计
+     */
+    public static final String NSR_LOGIN_TIMES_MONTH= "nsr_login_times_month";
 }
