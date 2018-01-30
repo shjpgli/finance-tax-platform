@@ -8,6 +8,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
 import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.service.QuestionHeadmanService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         BeanUtils.copyProperties(headmanBo, headman);
         headman.setId(Utils.uuid());
         headman.setUserId(Utils.getUserId());
+        UCUserBO ucUserBO = Utils.getUserInfo();
+        headman.setName(ucUserBO.getUsername());
+        headman.setPhone(ucUserBO.getPhone());
         headman.setStatus("apply");
         headman.setCreateTime(new Date());
         int cnt = questionHeadmanRoMapper.selectExist(headman.getUserId());
