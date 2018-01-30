@@ -78,6 +78,13 @@ public class FeedbackController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-
+    /*
+    * 查询未回复的总数
+    */
+    @GetMapping(path = "/selectCntUnanswered")
+    public ResponseEntity selectCntByStatus() {
+        Long cnt = feedbackService.selectCntUnanswered();
+        return ResponseEntity.ok(Utils.kv("data", cnt));
+    }
 
 }
