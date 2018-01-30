@@ -294,6 +294,7 @@ public class CouponServiceImpl implements CouponService {
         coupon.setParam1(bo.getParam1());
 
         coupon.setParam2(bo.getParam2());
+        coupon.setParam3(bo.getParam3());
         coupon.setAmountType(bo.getAmountType());
         coupon.setValidType(bo.getValidType());
         coupon.setValidStartTime(bo.getValidStartTime());
