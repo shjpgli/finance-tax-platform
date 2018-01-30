@@ -5,7 +5,6 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.RoleMapper;
 import com.abc12366.uc.mapper.db1.RoleMenuMapper;
 import com.abc12366.uc.mapper.db1.UserRoleMapper;
-import com.abc12366.uc.mapper.db2.RoleMenuRoMapper;
 import com.abc12366.uc.mapper.db2.RoleRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoleRoMapper;
 import com.abc12366.uc.model.admin.Role;
@@ -37,8 +36,6 @@ public class RoleServiceImpl implements RoleService {
     private RoleRoMapper roleRoMapper;
     @Autowired
     private RoleMenuMapper roleMenuMapper;
-    @Autowired
-    private RoleMenuRoMapper roleMenuRoMapper;
     @Autowired
     private UserRoleMapper userRoleMapper;
     @Autowired
@@ -119,11 +116,7 @@ public class RoleServiceImpl implements RoleService {
         String roleId = role.getId();
         List<String> roleMenuIdList = roleRoMapper.selectRoleMenuIdListByRoleId(roleId);
         if (roleMenuIdList != null && (!roleMenuIdList.isEmpty())) {
-            for (String roleMenuId : roleMenuIdList) {
-                if (roleMenuId != null) {
-                    roleMenuMapper.deleteById(roleMenuId);
-                }
-            }
+            roleMenuIdList.stream().filter(roleMenuId -> roleMenuId != null).forEach(roleMenuMapper::deleteById);
         }
         String[] resources = roleBO.getMenuIds().split(",");
         RoleMenu roleMenu = new RoleMenu();
@@ -149,11 +142,7 @@ public class RoleServiceImpl implements RoleService {
     public void updateRoleMenu(String id, String menuIds) {
         List<String> roleMenuIdList = roleRoMapper.selectRoleMenuIdListByRoleId(id);
         if (roleMenuIdList != null && (!roleMenuIdList.isEmpty())) {
-            for (String roleMenuId : roleMenuIdList) {
-                if (roleMenuId != null) {
-                    roleMenuMapper.deleteById(roleMenuId);
-                }
-            }
+            roleMenuIdList.stream().filter(roleMenuId -> roleMenuId != null).forEach(roleMenuMapper::deleteById);
         }
         String[] resources = menuIds.split(",");
         RoleMenu roleMenu = new RoleMenu();

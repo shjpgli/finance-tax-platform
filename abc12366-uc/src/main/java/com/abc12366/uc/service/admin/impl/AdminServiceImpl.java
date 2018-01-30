@@ -20,11 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -32,7 +30,7 @@ import java.util.*;
  * 操作员服务接口实现类
  *
  * @author lijun <ljun51@outlook.com>
- * @create 2017-06-07 4:02 PM
+ * @date  2017-06-07 4:02 PM
  * @since 1.0.0
  */
 @Service
@@ -68,9 +66,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-
-    @Resource(name = "redisTemplate")
-    private ValueOperations<String, String> valueOperations;
 
     @Override
     public Admin selectUserByLoginName(String username) {
@@ -272,13 +267,11 @@ public class AdminServiceImpl implements AdminService {
             //查询用户菜单信息
             Map<String, List<Menu>> menuMap = new HashMap<>();
             List<Role> roles = adminBO.getRolesList();
-            for (Role role : roles) {
-                if(Objects.equals(Boolean.TRUE, role.getStatus())){
-                    if(role.getId() != null && !"".equals(role.getId())){
-                        List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
-                        menuMap.put(role.getId(), menus);
-                    }
-                }
+            if(roles != null && roles.size()> 0){
+                roles.stream().filter(role -> Objects.equals(Boolean.TRUE, role.getStatus())).filter(role -> role.getId() != null && !"".equals(role.getId())).forEach(role -> {
+                    List<Menu> menus = menuRoMapper.selectMenuByRoleId(role.getId());
+                    menuMap.put(role.getId(), menus);
+                });
             }
             adminBO.setMenuMap(menuMap);
             return adminBO;

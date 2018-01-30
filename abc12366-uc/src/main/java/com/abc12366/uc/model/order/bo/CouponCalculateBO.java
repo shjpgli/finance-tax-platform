@@ -18,6 +18,7 @@ public class CouponCalculateBO {
     /**
      * 领用的优惠卷ID
      */
+    @NotEmpty
     private String useCouponId;
 
     /**
