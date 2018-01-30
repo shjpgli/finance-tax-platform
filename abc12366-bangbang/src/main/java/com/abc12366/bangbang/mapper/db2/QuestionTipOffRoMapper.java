@@ -39,4 +39,10 @@ public interface QuestionTipOffRoMapper {
 
     int selectTipoffCnt(@Param("sourceId") String sourceId);
 
+    /**
+     *
+     * 查询（根据状态查询数量）
+     *
+     **/
+    Long selectCntByStatus(@Param("status") String status);
 }

@@ -18,5 +18,6 @@ public interface QuestionSysBlockService {
     /* 审核 */
     void changeStatus(String id ,String status, HttpServletRequest request);
 
-
+    /* 统计个数 */
+    Long selectCntByStatus(String status);
 }

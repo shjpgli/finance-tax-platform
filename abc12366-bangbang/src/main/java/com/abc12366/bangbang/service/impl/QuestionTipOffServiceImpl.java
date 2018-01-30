@@ -200,4 +200,9 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
 
         return questionTipOffBo;
     }
+
+    @Override
+    public Long selectCntByStatus(String status) {
+        return questionTipOffRoMapper.selectCntByStatus(status);
+    }
 }
