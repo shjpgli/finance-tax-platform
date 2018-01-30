@@ -524,7 +524,7 @@
 		LEFT JOIN cms_contenttagid tg ON tg.contentId = a.contentId
 		WHERE a.status = 2
 		<if test="text != null and text != ''">
-			AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text1} IN BOOLEAN MODE)
+			 AND (MATCH(b.title, b.shortTitle, b.description) AGAINST(#{text1} IN BOOLEAN MODE)
 			OR MATCH(txt) AGAINST(#{text1} IN BOOLEAN MODE)
 			OR tg.tagId in (select id from abc12366_bangbang.bb_knowledge_tag where name = #{text}))
 		</if>
