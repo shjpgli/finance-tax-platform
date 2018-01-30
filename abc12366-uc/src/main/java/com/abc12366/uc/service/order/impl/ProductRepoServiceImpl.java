@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * @author lizhongwei
- * @create 2017-07-01
+ * @date 2017-07-01 11:25 AM
  * @since 1.0.0
  */
 @Service
@@ -52,7 +52,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     @Override
     public ProductRepoBO income(ProductRepoBO productRepoBO) {
         productRepoBO.setId(Utils.uuid());
-        int stock = 0;
+        int stock;
         ProductRepoBO temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
         if (temp == null) {
             stock = productRepoBO.getIncome();
@@ -82,7 +82,7 @@ public class ProductRepoServiceImpl implements ProductRepoService {
     @Override
     public ProductRepoBO outcome(ProductRepoBO productRepoBO) {
         productRepoBO.setId(Utils.uuid());
-        int stock = 0;
+        int stock;
         ProductRepoBO temp = productRepoRoMapper.selectByGoodsId(productRepoBO);
         if (temp == null) {
             stock = 0 - productRepoBO.getOutcome();

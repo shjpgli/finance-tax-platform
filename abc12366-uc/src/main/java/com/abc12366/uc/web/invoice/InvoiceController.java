@@ -84,7 +84,6 @@ public class InvoiceController {
 
     /**
      * 前台，历史发票列表管理
-     *
      */
     @GetMapping(path = "/history")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -104,9 +103,9 @@ public class InvoiceController {
     }
     
     /**
-     * 前段我的历史发票缓存查询
-     * @param userId
-     * @return
+     * 前端-我的历史发票缓存查询
+     * @param userId 用户ID
+     * @return 发票列表
      */
     @GetMapping(path = "/historyForqt")
     public ResponseEntity selectListForqt(@RequestParam(value = "userId", required = true) String userId) {
@@ -135,7 +134,7 @@ public class InvoiceController {
      * 前台，发票详情查看
      */
     @GetMapping(path = "/user/{invoiceId}/{userId}")
-    public ResponseEntity userInvoice(@PathVariable("invoiceId") String invoiceId, @PathVariable("userId") String
+    public ResponseEntity userInvoice(@PathVariable String invoiceId, @PathVariable String
             userId) {
         LOGGER.info("{}", invoiceId);
         Invoice invoice = new Invoice();
@@ -149,8 +148,8 @@ public class InvoiceController {
     /**
      * 发票详情查看
      *
-     * @param invoiceId
-     * @return
+     * @param invoiceId 发票ID
+     * @return 发票对象
      */
     @GetMapping(path = "/{invoiceId}")
     public ResponseEntity selectInvoice(@PathVariable("invoiceId") String invoiceId) {
@@ -163,11 +162,11 @@ public class InvoiceController {
     /**
      * 索要发票
      *
-     * @param userId
-     * @return
+     * @param userId 用户ID
+     * @return 发票对象
      */
     @PostMapping(path = "/{userId}")
-    public ResponseEntity addInvoice(@PathVariable("userId") String userId, @Valid @RequestBody InvoiceBO invoiceBO) {
+    public ResponseEntity addInvoice(@PathVariable String userId, @Valid @RequestBody InvoiceBO invoiceBO) {
         invoiceBO.setUserId(userId);
         InvoiceBO bo = invoiceService.addInvoice(invoiceBO);
 
@@ -179,8 +178,6 @@ public class InvoiceController {
 
     /**
      * 管理员开票、拒绝开票
-     *
-     * @return
      */
     @PostMapping(path = "/billing")
     public ResponseEntity billing(@Valid @RequestBody InvoiceCheckBO invoiceCheckBO,HttpServletRequest request) {
@@ -192,11 +189,10 @@ public class InvoiceController {
     /**
      * 发票信息修改
      *
-     * @param userId
-     * @return
+     * @param userId 用户ID
      */
     @PutMapping(path = "/{userId}/{id}")
-    public ResponseEntity updateInvoice(@PathVariable("userId") String userId, @PathVariable("id") String id,
+    public ResponseEntity updateInvoice(@PathVariable String userId, @PathVariable String id,
                                         @Valid @RequestBody InvoiceBO invoiceBO) {
         invoiceBO.setId(id);
         invoiceBO.setUserId(userId);
@@ -209,12 +205,11 @@ public class InvoiceController {
     /**
      * 发票信息删除
      *
-     * @param userId
-     * @param id
-     * @return
+     * @param userId 用户ID
+     * @param id ID
      */
     @DeleteMapping(path = "/{userId}/{id}")
-    public ResponseEntity delete(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+    public ResponseEntity delete(@PathVariable String userId, @PathVariable String id) {
         InvoiceBO invoiceBO = new InvoiceBO();
         invoiceBO.setId(id);
         invoiceBO.setUserId(userId);
@@ -228,7 +223,7 @@ public class InvoiceController {
      * 发票确认收货
      */
     @PostMapping(path = "/confirm/{userId}/{id}")
-    public ResponseEntity confirm(@PathVariable("userId") String userId, @PathVariable("id") String id) {
+    public ResponseEntity confirm(@PathVariable String userId, @PathVariable String id) {
         LOGGER.info("{}{}", userId,id);
         Invoice invoiceBO = new Invoice();
         invoiceBO.setId(id);
@@ -258,8 +253,6 @@ public class InvoiceController {
 
     /**
      * 发票导入打印收的信息
-     *
-     * @return
      */
     @PostMapping(path = "/import/print")
     public ResponseEntity insertInvoicePrintExcelList(@Valid @RequestBody List<InvoiceExcel> invoiceList) {
@@ -270,8 +263,6 @@ public class InvoiceController {
 
     /**
      * 发票导出寄送信息
-     *
-     * @return
      */
     @GetMapping(path = "/export/express")
     public ResponseEntity exportInvoice() {
@@ -287,7 +278,6 @@ public class InvoiceController {
     /**
      * 发票导入寄送信息
      *
-     * @return
      */
     @PostMapping(path = "/import/express/{expressCompId}")
     public ResponseEntity insertInvoiceExpressExcelList(@Valid @RequestBody List<InvoiceExpressExcel> expressExcelList,
@@ -301,7 +291,6 @@ public class InvoiceController {
     /**
      * 退票管理列表
      *
-     * @return
      */
     @GetMapping(path = "/back")
     public ResponseEntity selectBackList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,

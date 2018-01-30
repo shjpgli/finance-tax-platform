@@ -21,7 +21,6 @@ import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
-import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.order.CouponService;
 import com.abc12366.uc.web.order.CartController;
@@ -215,12 +214,6 @@ public class CouponServiceImpl implements CouponService {
     private MessageSendUtil messageSendUtil;
 
     /**
-     * 微信消息模版Service
-     */
-    @Autowired
-    private IWxTemplateService templateService;
-
-    /**
      * 用户扩展信息Mapper
      */
     @Autowired
@@ -241,15 +234,14 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponActivityListBO> selectActivityList(CouponActivity bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<CouponActivityListBO> dataList = couponRoMapper.selectAdminActivityList(bo);
+//        List<CouponActivityListBO> dataList = couponRoMapper.selectAdminActivityList(bo);
         /*dataList.stream().filter(data -> COUPON_STATUS_ON.equals(data.getStatus())).forEach(data -> {
             CouponUser cu = new CouponUser();
             cu.setActivityId(bo.getId());
             cu.setCouponId(bo.getCouponId());
             couponRoMapper.selectUserList(cu).size();
-
         });*/
-        return dataList;
+        return couponRoMapper.selectAdminActivityList(bo);
     }
 
     @Override
@@ -436,7 +428,7 @@ public class CouponServiceImpl implements CouponService {
 
     @Transactional(value = "db1TxManager")
     @Override
-    public boolean userCollectCoupon(String userId, String activityId,HttpServletRequest request) {
+    public boolean userCollectCoupon(String userId, String activityId, HttpServletRequest request) {
         Assert.notNull(userId, "userId can not empty");
         Assert.notNull(activityId, "activityId can not empty");
         CouponActivity ca = selectOneActivity(activityId);
@@ -479,7 +471,7 @@ public class CouponServiceImpl implements CouponService {
                 cu.setCategoryIds(c.getCategoryIds());
 
                 int cInsert = couponMapper.insertUserCoupon(cu);
-                if(cInsert != 1){
+                if (cInsert != 1) {
                     LOGGER.info("用户领用优惠卷失败");
                     throw new ServiceException(7137);
                 }
@@ -523,15 +515,15 @@ public class CouponServiceImpl implements CouponService {
         double amountAfter = amount;
 
         String id = bo.getUseCouponId();
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",id);
-        map.put("userId",bo.getUserId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("userId", bo.getUserId());
         List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
         if (dataList.size() > 0) {
             String ids = "";
             for (CouponUser cu : dataList) {
 
-                checkCouponUser(bo.getUserId(),bo.getCategoryId(), cu);
+                checkCouponUser(bo.getUserId(), bo.getCategoryId(), cu);
                 // 计算优惠后的金额
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
@@ -543,7 +535,7 @@ public class CouponServiceImpl implements CouponService {
                     case COUPONTYPE_ZHEKOU:
                         if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
                             amount = amount - cu.getParam1();
-                            amountAfter = amountAfter *   cu.getParam2();
+                            amountAfter = amountAfter * cu.getParam2();
                         }
                         break;
                     case COUPONTYPE_LIJIAN:
@@ -564,7 +556,7 @@ public class CouponServiceImpl implements CouponService {
         return amountAfter;
     }
 
-    public void checkCouponUser(String userId,String categoryId, CouponUser cu) {
+    public void checkCouponUser(String userId, String categoryId, CouponUser cu) {
         // 校验用户
         if (!cu.getUserId().equals(userId)) {
             throw new ServiceException(7118);
@@ -613,9 +605,8 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public String selectCouponId(CouponIdBO bo) {
-        String userId = bo.getUserId();
-        Map<String,Object> map = new HashMap<>();
-        map.put("userId",bo.getUserId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", bo.getUserId());
         List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
         // 优惠前的金额
         double maxAmount = bo.getAmount();
@@ -626,7 +617,7 @@ public class CouponServiceImpl implements CouponService {
                 double amount = bo.getAmount();
                 // 优惠后的金额
                 double amountAfter = amount;
-                checkCouponUser(bo.getUserId(),bo.getCategoryId(), cu);
+                checkCouponUser(bo.getUserId(), bo.getCategoryId(), cu);
                 // 计算优惠后的金额
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
@@ -649,7 +640,7 @@ public class CouponServiceImpl implements CouponService {
                     default:
                         throw new ServiceException(7102);
                 }
-                if(amountAfter < maxAmount) {
+                if (amountAfter < maxAmount) {
                     id = cu.getCouponId();
                     maxAmount = amountAfter;
                 }
@@ -844,7 +835,7 @@ public class CouponServiceImpl implements CouponService {
 
             throw new ServiceException(7117);
         }*/
-        if(!VALIDTYPE_DAYS.equals(c.getValidType())){
+        if (!VALIDTYPE_DAYS.equals(c.getValidType())) {
             if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().after(bo.getActivityEndTime())) {
                 LOGGER.info("优惠劵的开始时间，必须在活动时间之间");
                 throw new ServiceException(7136);
@@ -866,16 +857,16 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
-    public void send(String userId,String couponId,HttpServletRequest request) {
+    public void send(String userId, String couponId, HttpServletRequest request) {
         User user = userMapper.selectOne(userId);
         UserExtend userExtend = userExtendMapper.selectOne(userId);
         List<String> tagIdList = operateMessageRoMapper.selectTagIdList(userId);
         if (user == null) {
             return;
         }
-        Map<String,Object> map = new HashMap<>();
-        map.put("couponId",couponId);
-        map.put("status",COUPON_STATUS_ON);
+        Map<String, Object> map = new HashMap<>();
+        map.put("couponId", couponId);
+        map.put("status", COUPON_STATUS_ON);
         List<CouponActivityBO> operateMessageBOList = couponRoMapper.selectCouponActivityList(map);
         for (CouponActivityBO o : operateMessageBOList) {
             //判断运营消息任务的有效性
@@ -890,17 +881,17 @@ public class CouponServiceImpl implements CouponService {
                 switch (o.getTarget()) {
                     case "1":
                         //根据运营消息频率查看是否已发送
-                        sendYyxx(o, user,request);
+                        sendYyxx(o, user, request);
                         break;
                     case "2":
-                        sendPart(o, user, userExtend, tagIdList,request);
+                        sendPart(o, user, userExtend, tagIdList, request);
                         break;
                     case "3":
                         if (org.springframework.util.StringUtils.isEmpty(o.getUserIds())) {
                             break;
                         }
                         if (o.getUserIds().contains(userId)) {
-                            sendYyxx(o, user,request);
+                            sendYyxx(o, user, request);
                             break;
                         }
                 }
@@ -908,7 +899,7 @@ public class CouponServiceImpl implements CouponService {
         }
     }
 
-    public void sendYyxx(CouponActivityBO o, User user,HttpServletRequest request) {
+    public void sendYyxx(CouponActivityBO o, User user, HttpServletRequest request) {
         //获取运营管理系统accessToken
         AppBO appBO = appService.selectByName("abc12366-admin");
         Date lastRest = appBO.getLastResetTokenTime();
@@ -916,7 +907,6 @@ public class CouponServiceImpl implements CouponService {
             appBO.setLastResetTokenTime(org.apache.commons.lang3.time.DateUtils.addHours(new Date(), 2));
             appService.update(appBO);
         }
-        String accessToken = appBO.getAccessToken();
         //系统消息
         //系统消息日志
         Message message = new Message();
@@ -932,11 +922,6 @@ public class CouponServiceImpl implements CouponService {
         operateMessageMapper.yyxxLog(new YyxxLogBO(Utils.uuid(), user.getId(), o.getId(), MessageConstant.YYXX_WEB, new Date()));
     }
 
-    private boolean sendAready(String userId, String messageId, String type, Date start, Date end) {
-        List<YyxxLogBO> yyxxLogBOList = operateMessageRoMapper.selectWebLogList(userId, messageId, type, start, end);
-        return (yyxxLogBOList != null && yyxxLogBOList.size() > 0);
-    }
-
     public boolean tagIdContains(List<String> tagIdList, String tagIds) {
         if (tagIds == null || tagIds.split(",").length < 1) {
             return true;
@@ -947,8 +932,8 @@ public class CouponServiceImpl implements CouponService {
         }
         String[] tagArrays = tagIds.split(",");
         for (int i = 0; i < tagIdList.size(); i++) {
-            for (int j = 0; j < tagArrays.length; j++) {
-                if (tagIdList.get(i).trim().equals(tagArrays[j].trim())) {
+            for (String tagArray : tagArrays) {
+                if (tagIdList.get(i).trim().equals(tagArray.trim())) {
                     return true;
                 }
             }
@@ -956,7 +941,7 @@ public class CouponServiceImpl implements CouponService {
         return false;
     }
 
-    public void sendPart(CouponActivityBO o, User user, UserExtend userExtend, List<String> tagIdList,HttpServletRequest request) {
+    public void sendPart(CouponActivityBO o, User user, UserExtend userExtend, List<String> tagIdList, HttpServletRequest request) {
         boolean sendArea = false;
         boolean sendTag = false;
         boolean sendRegTime = false;
@@ -1013,7 +998,7 @@ public class CouponServiceImpl implements CouponService {
         }
 
         if (sendArea && sendTag && sendRegTime) {
-            sendYyxx(o, user,request);
+            sendYyxx(o, user, request);
         }
     }
 
