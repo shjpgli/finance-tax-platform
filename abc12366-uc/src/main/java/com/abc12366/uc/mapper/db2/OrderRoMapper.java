@@ -112,10 +112,4 @@ public interface OrderRoMapper {
      * @return
      */
     OrderBO selectOrderDetail(String orderNo);
-
-    /**
-     * 运营看板增加今天用户注册数、本月注册数统计，增加今天纳税人登录电子申报数、本月纳税人登录数统计
-     * @return RegsAndNsrloginStatBO
-     */
-    RegsAndNsrloginStatBO staRegsAndNsrlogins();
 }
