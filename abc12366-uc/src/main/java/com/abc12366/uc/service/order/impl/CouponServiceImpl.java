@@ -305,6 +305,7 @@ public class CouponServiceImpl implements CouponService {
         coupon.setStatus(bo.getStatus());
         coupon.setLastUpdate(new Date());
         coupon.setCategoryIds(bo.getCategoryIds());
+
         return 1 == couponMapper.update(coupon);
     }
 
@@ -317,6 +318,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public boolean delete(String id) {
         Assert.notNull(id, "id can not empty");
+
         // 当优惠劵在活动中被使用时，不允许操作优惠劵
         isAllowUpdateCoupon(id);
 
