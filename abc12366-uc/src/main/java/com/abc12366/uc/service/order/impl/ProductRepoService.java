@@ -9,7 +9,7 @@ import java.util.List;
  * 库存Service
  *
  * @author lizhongwei
- * @create 2017-07-01
+ * @date 2017-07-01
  * @since 1.0.0
  */
 public interface ProductRepoService {
@@ -17,32 +17,30 @@ public interface ProductRepoService {
     /**
      * 查询库存列表信息
      *
-     * @param productRepoBO
-     * @return
+     * @param productRepoBO 库存对象
+     * @return 库存列表
      */
     List<ProductRepoBO> selectList(ProductRepoBO productRepoBO);
 
     /**
      * 查询库存信息
-     *
-     * @param id
-     * @return
+     * @param id id
+     * @return  库存对象
      */
     ProductRepoBO selectById(String id);
 
     /**
      * 库存入库
-     *
-     * @param productRepoBO
-     * @return
+     * @param productRepoBO 库存对象
+     * @return 库存对象
      */
     ProductRepoBO income(ProductRepoBO productRepoBO);
 
     /**
      * 库存出库
      *
-     * @param productRepoBO
-     * @return
+     * @param productRepoBO 库存对象
+     * @return  库存对象
      */
     ProductRepoBO outcome(ProductRepoBO productRepoBO);
 

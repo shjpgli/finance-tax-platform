@@ -52,4 +52,9 @@
         WHERE sourceId = #{sourceId}
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCntByStatus" resultType="java.lang.Long" parameterType="java.lang.String">
+        SELECT count(1) FROM bb_question_tip_off WHERE status = #{status}
+    </select>
+
 </mapper>

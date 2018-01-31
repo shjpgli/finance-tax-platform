@@ -59,7 +59,7 @@ public class OrderSubmitBO implements Serializable {
     /**
      * 备注
      **/
-    @Size(min = 2, max = 500)
+    @Size(min = 0, max = 100)
     private String remark;
 
     /**
@@ -113,7 +113,7 @@ public class OrderSubmitBO implements Serializable {
     /**
      * 优惠劵ID
      */
-    private String couponId;
+    private String useCouponId;
 
     //订单和商品对应关系
     private List<OrderProductBO> orderProductBOList;
@@ -246,14 +246,6 @@ public class OrderSubmitBO implements Serializable {
         this.orderProductBOList = orderProductBOList;
     }
 
-    public String getCouponId() {
-        return couponId;
-    }
-
-    public void setCouponId(String couponId) {
-        this.couponId = couponId;
-    }
-
     @Override
     public String toString() {
         return "OrderSubmitBO{" +
@@ -272,8 +264,16 @@ public class OrderSubmitBO implements Serializable {
                 ", shippingAddress='" + shippingAddress + '\'' +
                 ", isShipping=" + isShipping +
                 ", isFreeShipping=" + isFreeShipping +
-                ", couponId='" + couponId + '\'' +
+                ", useCouponId='" + useCouponId + '\'' +
                 ", orderProductBOList=" + orderProductBOList +
                 '}';
+    }
+
+    public String getUseCouponId() {
+        return useCouponId;
+    }
+
+    public void setUseCouponId(String useCouponId) {
+        this.useCouponId = useCouponId;
     }
 }

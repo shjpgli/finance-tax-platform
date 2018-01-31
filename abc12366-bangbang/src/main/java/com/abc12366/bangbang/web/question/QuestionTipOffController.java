@@ -75,6 +75,10 @@ public class QuestionTipOffController {
         return ResponseEntity.ok(Utils.kv("data", questionTipOffBo));
     }
 
-
-
+    /* 根据状态查询总数 */
+    @GetMapping(path = "/selectCntByStatus/{status}")
+    public ResponseEntity selectCntByStatus(@PathVariable String status){
+        Long cnt = questionTipOffService.selectCntByStatus(status);
+        return ResponseEntity.ok(Utils.kv("data", cnt));
+    }
 }

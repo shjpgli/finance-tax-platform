@@ -114,4 +114,9 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
         }
 
     }
+
+    @Override
+    public Long selectCntByStatus(String status) {
+        return questionSysBlockRoMapper.selectCntByStatus(status);
+    }
 }

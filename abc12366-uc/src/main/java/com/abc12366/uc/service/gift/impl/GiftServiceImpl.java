@@ -32,7 +32,7 @@ import java.util.Map;
  * 礼品服务
  *
  * @author lizhongwei
- * @create 2017-12-18 3:09 PM
+ * @date  2017-12-18 3:09 PM
  * @since 1.0.0
  */
 @Service
@@ -48,9 +48,6 @@ public class GiftServiceImpl implements GiftService {
 
     @Autowired
     private UamountLogMapper uamountLogMapper;
-
-    @Autowired
-    private UserRoMapper userRoMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -156,7 +153,7 @@ public class GiftServiceImpl implements GiftService {
         for(GiftApplyBO giftApply : giftApplyList){
             Gift gift = giftRoMapper.selectByPrimaryKey(giftApply.getGiftId());
             if(gift == null){
-                LOGGER.info("查询礼物异常：{}", gift);
+                LOGGER.info("查询礼物异常：{}");
                 throw new ServiceException(4104);
             }
 
@@ -258,7 +255,7 @@ public class GiftServiceImpl implements GiftService {
             for(GiftApplyBO giftApplyBO:giftApplyBOList){
                 Gift gift = giftRoMapper.selectByPrimaryKey(giftApplyBO.getGiftId());
                 if(gift == null){
-                    LOGGER.info("礼物信息查询异常：{}", gift);
+                    LOGGER.info("礼物信息查询异常：{}");
                     throw new ServiceException(7004);
                 }
                 gift.setStock(gift.getStock()+giftApplyBO.getGiftNum());

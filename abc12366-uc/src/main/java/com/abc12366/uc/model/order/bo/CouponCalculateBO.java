@@ -14,10 +14,16 @@ import javax.validation.constraints.NotNull;
  */
 public class CouponCalculateBO {
 
+
+    /**
+     * 领用的优惠卷ID
+     */
+    @NotEmpty
+    private String useCouponId;
+
     /**
      * 优惠劵ID
      */
-    @NotEmpty
     private String couponId;
 
     /**
@@ -80,5 +86,13 @@ public class CouponCalculateBO {
                 ", categoryId='" + categoryId + '\'' +
                 ", amount=" + amount +
                 '}';
+    }
+
+    public String getUseCouponId() {
+        return useCouponId;
+    }
+
+    public void setUseCouponId(String useCouponId) {
+        this.useCouponId = useCouponId;
     }
 }

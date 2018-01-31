@@ -120,9 +120,9 @@
             <if test="orderNo != null">orderNo = #{orderNo},</if>
             <if test="amountAfter != null">amountAfter = #{amountAfter},</if>
         </set>
-        where id IN
-        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        where id = #{id}
+        <!--<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">-->
+            <!--#{item}-->
+        <!--</foreach>-->
     </update>
 </mapper>
