@@ -232,6 +232,12 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    public List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        return couponRoMapper.selectAdminActivityList(bo);
+    }
+
+    @Override
     public List<CouponActivityListBO> selectActivityList(CouponActivity bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 //        List<CouponActivityListBO> dataList = couponRoMapper.selectAdminActivityList(bo);
@@ -241,7 +247,7 @@ public class CouponServiceImpl implements CouponService {
             cu.setCouponId(bo.getCouponId());
             couponRoMapper.selectUserList(cu).size();
         });*/
-        return couponRoMapper.selectAdminActivityList(bo);
+        return couponRoMapper.selectActivityList(bo);
     }
 
     @Override
@@ -656,6 +662,11 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public CouponActivityBO selectActivity(String id) {
         return couponRoMapper.selectActivity(id);
+    }
+
+    @Override
+    public CouponBO selectCoupon(String id) {
+        return couponRoMapper.selectCoupon(id);
     }
 
     /**

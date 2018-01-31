@@ -30,7 +30,17 @@ public interface CouponService {
     List<CouponListBO> selectList(Coupon bo, int pageNum, int pageSize);
 
     /**
-     * 查询优惠劵活动列表
+     * 后台-查询优惠劵活动列表
+     *
+     * @param bo       查询活动对象
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @return 优惠劵列表
+     */
+    List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo, int pageNum, int pageSize);
+
+    /**
+     * 前台-查询优惠劵活动列表
      *
      * @param bo       查询活动对象
      * @param pageNum  当前页
@@ -163,4 +173,11 @@ public interface CouponService {
      * @param id id
      */
     CouponActivityBO selectActivity(String id);
+
+    /**
+     * 前端-查看优惠劵
+     * @param id id
+     * @return 优惠卷对象
+     */
+    CouponBO selectCoupon(String id);
 }

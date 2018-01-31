@@ -107,6 +107,11 @@ public class CouponBO {
 //    @Size(max = 10)
     private String categoryIds;
 
+    /**
+     * 优惠卷活动图片
+     */
+    private String imageUrl;
+
     public String getId() {
         return id;
     }
@@ -245,5 +250,13 @@ public class CouponBO {
 
     public void setParam3(Double param3) {
         this.param3 = param3;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

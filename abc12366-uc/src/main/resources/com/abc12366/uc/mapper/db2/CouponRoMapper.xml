@@ -20,6 +20,17 @@
         order by lastUpdate DESC
     </select>
 
+    <select id="selectCoupon" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.bo.CouponBO">
+        SELECT
+        c.id, c.couponName, c.couponMode, c.couponType, c.param1,
+        c.param2,c.param3, c.amountType, c.validType, c.validStartTime, c.validEndTime,
+        c.validDays, c.description, c.status, c.createTime, c.lastUpdate,
+        c.categoryIds,ca.imageUrl
+        FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
+        ON ca.couponId = c.id
+        where ca.id = #{id}
+    </select>
+
     <select id="selectOne" parameterType="java.lang.String" resultType="com.abc12366.uc.model.order.Coupon">
         SELECT id, couponName, couponMode, couponType, param1,
         param2,param3, amountType, validType, validStartTime, validEndTime,
@@ -36,16 +47,13 @@
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
-            <if test="activityName != null and activityName != ''">ca.activityName LIKE
-                CONCAT('%',#{activityName},'%')
+            ca.status = '2'
+            <if test="activityName != null and activityName != ''">
+                and ca.activityName LIKE CONCAT('%',#{activityName},'%')
             </if>
             <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
-            <choose>
-                <when test="status != null and status != ''">AND ca.status = #{status}</when>
-                <when test="status == null or status == ''">AND ca.status != '0'</when>
-            </choose>
         </where>
-        order by ca.lastUpdate DESC
+        order by ca.activityEndTime DESC
     </select>
 
     <!--活动列表对象-->

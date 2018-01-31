@@ -170,6 +170,7 @@ public class CouponActivityBO {
     /**
      * 活动图片
      */
+    @NotEmpty
     @Length(max = 150)
     private String imageUrl;
 
