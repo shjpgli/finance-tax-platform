@@ -40,4 +40,9 @@ public class SendMsgLogServiceImpl implements SendMsgLogService {
     public List<MessageSendLog> selectList(Map<String, Object> map) {
         return sendLogRoMapper.selectList(map);
     }
+
+    @Override
+    public int update(MessageSendLog sendLog) {
+        return sendLogMapper.update(sendLog);
+    }
 }

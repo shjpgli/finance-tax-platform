@@ -23,4 +23,11 @@ public interface SendMsgLogService {
      *
      */
     List<MessageSendLog> selectList(Map<String, Object> map);
+
+    /**
+     * 更新日志记录
+     * @param sendLog 日志实体
+     * @return 更新数据行数
+     */
+    int update(MessageSendLog sendLog);
 }
