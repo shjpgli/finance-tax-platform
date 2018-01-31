@@ -2,6 +2,7 @@ package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTipOffParamBo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 public interface QuestionTipOffService {
 
     /* 列表查询 */
-    List<QuestionTipOffBo> selectList();
+    List<QuestionTipOffBo> selectList(QuestionTipOffParamBo paramBo);
 
     /* 举报详情 */
     QuestionTipOffBo selectOne(String id);
