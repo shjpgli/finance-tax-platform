@@ -9,12 +9,16 @@
     </sql>
 
     <!-- 查询（根据主键ID查询） -->
-    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionTipOffBo">
+    <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionTipOffBo"
+            parameterType = "com.abc12366.bangbang.model.question.bo.QuestionTipOffParamBo">
         SELECT t.*,IF(t1.title IS NULL, t2.answer, CONCAT(t1.title,t1.detail)) content,t3.nickname as createUsername
         FROM bb_question_tip_off t
         LEFT JOIN bb_question t1 ON (t.sourceId=t1.id AND t.sourceType = 'question')
         LEFT JOIN bb_question_answer t2 ON (t.sourceId=t2.id  AND (t.sourceType = 'answer' OR t.sourceType='comment'))
         LEFT JOIN abc12366_uc.uc_user t3 ON t.createUser = t3.id
+        <if test="status!=null and status!=''">
+            WHERE t.status = #{status}
+        </if>
     </select>
 
     <!-- 查询（根据主键ID查询） -->
@@ -50,6 +54,11 @@
         count(id)
         FROM bb_question_tip_off
         WHERE sourceId = #{sourceId}
+    </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCntByStatus" resultType="java.lang.Long" parameterType="java.lang.String">
+        SELECT count(1) FROM bb_question_tip_off WHERE status = #{status}
     </select>
 
 </mapper>

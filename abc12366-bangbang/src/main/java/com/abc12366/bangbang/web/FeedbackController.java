@@ -39,10 +39,11 @@ public class FeedbackController {
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "sourceType", required = false) String sourceType,
-                                     @RequestParam(value = "feedbackType", required = false) String feedbackType) {
+                                     @RequestParam(value = "feedbackType", required = false) String feedbackType,
+                                     @RequestParam(value = "isReply", required = false) Boolean isReply) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 
-        FeedbackParamBO param = new FeedbackParamBO(sourceType, feedbackType);
+        FeedbackParamBO param = new FeedbackParamBO(sourceType, feedbackType, isReply);
         List<Feedback> list = feedbackService.selectList(param);
 
         return (list == null) ?
@@ -78,6 +79,13 @@ public class FeedbackController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-
+    /*
+    * 查询未回复的总数
+    */
+    @GetMapping(path = "/selectCntUnanswered")
+    public ResponseEntity selectCntByStatus() {
+        Long cnt = feedbackService.selectCntUnanswered();
+        return ResponseEntity.ok(Utils.kv("data", cnt));
+    }
 
 }

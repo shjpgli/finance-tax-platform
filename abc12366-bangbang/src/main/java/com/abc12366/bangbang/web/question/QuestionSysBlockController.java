@@ -54,6 +54,13 @@ public class QuestionSysBlockController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-
+    /*
+    * 根据状态查询总数
+    */
+    @GetMapping(path = "/selectCntByStatus/{status}")
+    public ResponseEntity selectCntByStatus(@PathVariable String status) {
+        Long cnt = questionSysBlockService.selectCntByStatus(status);
+        return ResponseEntity.ok(Utils.kv("data", cnt));
+    }
 
 }
