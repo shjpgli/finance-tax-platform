@@ -187,7 +187,7 @@ public class CouponController {
      * @param id 活动ID
      * @return 优惠劵对象
      */
-    @GetMapping("/activities/{id}")
+    @GetMapping("/activities/coupon/{id}")
     public ResponseEntity selectCoupon(@PathVariable String id) {
         LOGGER.info("{}", id);
         return ResponseEntity.ok(Utils.kv("data", couponService.selectCoupon(id)));
