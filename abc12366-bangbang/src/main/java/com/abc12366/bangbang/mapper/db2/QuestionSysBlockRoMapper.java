@@ -27,4 +27,11 @@ public interface QuestionSysBlockRoMapper {
      *
      **/
     QuestionSysBlock selectByPrimaryKey(@Param("id") String id);
+
+    /**
+     *
+     * 根据状态查询总数
+     *
+     **/
+    Long selectCntByStatus(@Param("status")String status);
 }

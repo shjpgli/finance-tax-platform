@@ -1,8 +1,10 @@
 package com.abc12366.uc.service.order.impl;
 
 import com.abc12366.uc.model.order.bo.OrderStatBO;
+import com.abc12366.uc.model.order.bo.RegsAndNsrloginStatBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.service.TodoListService;
+import com.abc12366.uc.service.UserBindServiceNew;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
 import com.abc12366.uc.service.order.OrderExchangeService;
@@ -37,6 +39,9 @@ public class TodoListServiceImpl implements TodoListService{
     private final InvoiceUseApplyService invoiceUseApplyService;
 
     @Autowired
+    private UserBindServiceNew userBindServiceNew;
+
+    @Autowired
     public TodoListServiceImpl(RealNameValidationService realNameValidationService,
                                OrderService orderService,
                                OrderExchangeService orderExchangeService,
@@ -63,6 +68,8 @@ public class TodoListServiceImpl implements TodoListService{
         Integer num5 = orderExchangeService.selectTodoListCount("8");
         // 【待审核】发票领用数
         Integer num6 = invoiceUseApplyService.selectTodoListCount();
+        RegsAndNsrloginStatBO statBO = userBindServiceNew.staRegsAndNsrlogins();
+
 
         Map<String, Integer> map = new HashMap<>(6);
         map.put("num1", num1);
@@ -71,19 +78,25 @@ public class TodoListServiceImpl implements TodoListService{
         map.put("num4", num4);
         map.put("num5", num5);
         map.put("num6", num6);
+
+        map.put("regsDay", statBO.getRegsDay());
+        map.put("regsMonth", statBO.getRegsMonth());
+        map.put("dzsbLoginsDay", userBindServiceNew.getDzsbnsrLoginTimesDay());
+        map.put("nsrLoginsMonth", userBindServiceNew.getNnsrLoginTimesMonth());
         return map;
     }
 
     @Override
     public Map<String, Integer> orderStat() {
         OrderStatBO orderStatBO = orderService.orderStat();
-        Map<String, Integer> map = new HashMap<>(6);
+        Map<String, Integer> map = new HashMap<>(10);
         map.put("orderStatus3", orderStatBO.getOrderStatus3());
         map.put("orderStatus4", orderStatBO.getOrderStatus4());
         map.put("orderStatus6", orderStatBO.getOrderStatus6());
         map.put("orderStatus7", orderStatBO.getOrderStatus7());
         map.put("orderStatus9", orderStatBO.getOrderStatus9());
         map.put("orderStatus", orderStatBO.getOrderStatus());
+
         return map;
     }
 }

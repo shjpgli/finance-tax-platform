@@ -16,6 +16,8 @@ public interface FeedbackService {
 
     List<Feedback> selectList(FeedbackParamBO param);
 
+    Long selectCntUnanswered();
+
     void delete(List<String> ids);
 
     void delete(String id);

@@ -6,9 +6,11 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
+import com.abc12366.uc.mapper.db2.UserBindRoMapper;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
+import com.abc12366.uc.model.order.bo.RegsAndNsrloginStatBO;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.service.TodoTaskService;
@@ -26,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -34,10 +37,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.interfaces.RSAPublicKey;
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,6 +69,12 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> valueOperations;
+
+    @Autowired
+    private UserBindRoMapper userBindRoMapper;
     
     
     public String fwmmEncode(String code) throws Exception {
@@ -407,6 +418,8 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
                 userBindMapper.deleteDzsb(ud.getId());
             }
         }
+        //统计纳税人登录次数
+        recordNsrLoginTimes();
         return ty21Object;
 	}
 	
@@ -709,6 +722,8 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
                 userBindMapper.deleteDzsb(ud.getId());
             }
         }
+        //统计纳税人登录次数
+        recordNsrLoginTimes();
         return ty21Object;
 	}
 
@@ -756,4 +771,54 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
         return loginResponse;
 	}
 
+    @Override
+    public RegsAndNsrloginStatBO staRegsAndNsrlogins() {
+        return userBindRoMapper.staRegsAndNsrlogins();
+    }
+
+    @Override
+    public void dzsbnsrLoginTimesDay() {
+        String dayKey = RedisConstant.DZSBNSR_LOGIN_TIMES_DAY;
+        if (redisTemplate.hasKey(dayKey)) {
+            valueOperations.increment(dayKey, 1L);
+        } else {
+            redisTemplate.delete(dayKey);
+            redisTemplate.opsForValue().set(dayKey, "1", DateUtils.milliSecondsBetween(new Date(), DateUtils.getFirstHourOfLastDay()), TimeUnit.MILLISECONDS);
+        }
+    }
+
+    @Override
+    public void nsrLoginTimesMonth() {
+        String monthKey = RedisConstant.NSR_LOGIN_TIMES_MONTH;
+        if (redisTemplate.hasKey(monthKey)) {
+            valueOperations.increment(monthKey, 1L);
+        } else {
+            redisTemplate.delete(monthKey);
+            redisTemplate.opsForValue().set(monthKey, "1", DateUtils.milliSecondsBetween(new Date(), DateUtils.getFirstDayOfLastMonth()), TimeUnit.MILLISECONDS);
+        }
+    }
+
+    @Override
+    public int getDzsbnsrLoginTimesDay() {
+        String dayKey = RedisConstant.DZSBNSR_LOGIN_TIMES_DAY;
+        return redisTemplate.hasKey(dayKey) ? Integer.parseInt(valueOperations.get(dayKey)) : 0;
+    }
+
+    @Override
+    public int getNnsrLoginTimesMonth() {
+        String monthKey = RedisConstant.NSR_LOGIN_TIMES_MONTH;
+        return redisTemplate.hasKey(monthKey) ? Integer.parseInt(valueOperations.get(monthKey)) : 0;
+    }
+
+    @Override
+    public void recordNsrLoginTimes(){
+        try{
+            //redis加入电子申报纳税人一天内登录次数统计
+            dzsbnsrLoginTimesDay();
+            //redis加入纳税人一个月内登录次数统计
+            nsrLoginTimesMonth();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

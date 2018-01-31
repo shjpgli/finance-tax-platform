@@ -683,4 +683,16 @@ public class DateUtils {
         calendar.set(Calendar.SECOND,0);
         return calendar.getTime();
     }
+
+    /**
+     * 计算两个时间的毫秒差
+     * @param date1
+     * @param date2
+     * @return long
+     */
+    public static long milliSecondsBetween(Date date1,Date date2)
+    {
+        return date2.getTime() - date1.getTime();
+    }
+
 }

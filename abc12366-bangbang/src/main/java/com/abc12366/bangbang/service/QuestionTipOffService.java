@@ -29,4 +29,6 @@ public interface QuestionTipOffService {
 
     QuestionTipOffBo savepb(QuestionTipOffBo questionTipOffBo);
 
+    /* 根据状态查询数量 */
+    Long selectCntByStatus(String status);
 }

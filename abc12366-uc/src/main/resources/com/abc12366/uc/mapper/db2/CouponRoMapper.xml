@@ -48,6 +48,55 @@
         order by ca.lastUpdate DESC
     </select>
 
+    <!--订单对象-->
+    <resultMap id="activityResultMap" type="com.abc12366.uc.model.order.bo.CouponActivityListBO">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="activityName" property="activityName" jdbcType="VARCHAR"/>
+        <result column="couponId" property="couponId" jdbcType="VARCHAR"/>
+        <result column="couponName" property="couponName" jdbcType="VARCHAR"/>
+        <result column="couponNum" property="couponNum" jdbcType="INTEGER"/>
+        <result column="activityStartTime" property="activityStartTime" jdbcType="TIMESTAMP"/>
+        <result column="activityEndTime" property="activityEndTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="collectNum" column="id" jdbcType="INTEGER" select="getCollectNum"/>
+        <association property="usedNum" column="id" jdbcType="INTEGER" select="getUsedNum"/>
+        <association property="usedAmount" column="id" jdbcType="DOUBLE" select="getUsedAmount"/>
+    </resultMap>
+
+    <select id="getCollectNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(n.id) from uc_coupon_activity n JOIN uc_coupon_user m on n.id = m.activityId
+        where n.id = #{id}
+    </select>
+    <select id="getUsedNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(n.id) from uc_coupon_activity n JOIN uc_coupon_user m on n.id = m.activityId
+        where m.status = '2' and n.id = #{id}
+    </select>
+    <select id="getUsedAmount" parameterType="java.lang.String" resultType="java.lang.Double">
+        select sum(m.amountAfter) from uc_coupon_activity n JOIN uc_coupon_user m on n.id = m.activityId
+        where m.status = '2' and n.id = #{id}
+    </select>
+
+    <select id="selectAdminActivityList" parameterType="com.abc12366.uc.model.order.CouponActivity"
+            resultMap="activityResultMap">
+        SELECT ca.id, ca.activityName, ca.couponId, c.couponName, ca.couponNum,
+        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate
+        FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
+        ON ca.couponId = c.id
+        <where>
+            <if test="activityName != null and activityName != ''">ca.activityName LIKE
+                CONCAT('%',#{activityName},'%')
+            </if>
+            <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
+            <choose>
+                <when test="status != null and status != ''">AND ca.status = #{status}</when>
+                <when test="status == null or status == ''">AND ca.status != '0'</when>
+            </choose>
+        </where>
+        order by ca.lastUpdate DESC
+    </select>
+
     <select id="selectOneActivity" parameterType="java.lang.String"
             resultType="com.abc12366.uc.model.order.CouponActivity">
           SELECT id, activityName, activityLink, couponId, activityStartTime,
@@ -93,7 +142,8 @@
         lastUpdate, orderNo, categoryIds
         FROM uc_coupon_user
         <where>
-            <if test="userId != null and userId != ''">userId = #{userId}</if>
+            <if test="id != null and id != ''">id = #{id}</if>
+            <if test="userId != null and userId != ''">and userId = #{userId}</if>
             <if test="couponId != null and couponId != ''">AND couponId = #{couponId}</if>
         </where>
         ORDER BY couponType DESC
@@ -103,7 +153,7 @@
             resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
         SELECT cu.id,cu.couponId,cu.couponName, cu.userId, u.username, cu.couponMode, cu.couponType,
         cu.param1, cu.param2, cu.amountType, cu.status, cu.createTime,
-        cu.lastUpdate, cu.orderNo, cu.validStartTime, cu.validEndTime
+        cu.lastUpdate, cu.orderNo, cu.validStartTime, cu.validEndTime,cu.categoryIds
         FROM uc_coupon_user cu LEFT JOIN uc_user u
         on cu.userId = u.id
         <where>
@@ -112,7 +162,7 @@
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
             <if test="validEndTime != null">AND cu.validEndTime <![CDATA[<]]> #{validEndTime}</if>
             <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
-            <if test="categoryIds != null  and categoryIds!=''">AND cu.categoryIds LIKE CONCAT('%',#{categoryIds},'%')
+            <if test="categoryIds != null  and categoryIds!='' and categoryIds!='ALL'">AND cu.categoryIds LIKE CONCAT('%',#{categoryIds},'%')
             </if>
             <choose>
                 <when test="status != null and status != ''">
@@ -143,7 +193,9 @@
 
     <select id="selectCouponUser" parameterType="com.abc12366.uc.model.order.CouponUser"
             resultType="java.util.Map">
-        SELECT <include refid="CouponUser_Column_List" /> FROM uc_coupon_user
+        SELECT
+        <include refid="CouponUser_Column_List"/>
+        FROM uc_coupon_user
         <where>
             <if test="userId != null and userId != ''">userId = #{userId}</if>
             <if test="orderNo != null and orderNo != ''">AND orderNo = #{orderNo}</if>

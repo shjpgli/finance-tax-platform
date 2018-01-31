@@ -14,7 +14,7 @@
 		t1.*,t2.classifyName as classifyName
 		FROM bb_question_headman t1
 		JOIN bb_question_classify  t2 ON t1.classifyCode = t2.classifyCode
-		JOIN bb_question_faction  t3 ON t1.factionId = t3.factionId
+		LEFT JOIN bb_question_faction  t3 ON t1.factionId = t3.factionId
 		ORDER BY t1.createTime DESC
 	</select>
 

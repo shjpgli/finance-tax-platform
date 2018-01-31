@@ -48,6 +48,9 @@ public class CjxxRemindJob implements StatefulJob {
     public void execute(JobExecutionContext arg0) {
         LOGGER.info("--------开始执行[催缴信息提醒]定时任务----------");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        
+        //存放缴税期限
+        Map<String, String> sbqxm = new HashMap<>();
 
         //查询申报期限
         Map<String, String> mapA = new HashMap<>();
@@ -57,18 +60,27 @@ public class CjxxRemindJob implements StatefulJob {
         if ("00000000".equals(jobA.getRescode())) {
             List<DzsbXxInfo> dzsbXxInfosA = jobA.getDataList();
             if (dzsbXxInfosA != null && dzsbXxInfosA.size() > 0) {
-                String sbxq = dzsbXxInfosA.get(0).getSbqx();
+            	String sbxq = "";
+            	//新增缴税期限判断
+            	for(DzsbXxInfo xxInfo:dzsbXxInfosA){
+            		sbqxm.put(xxInfo.getSbzldm(), xxInfo.getSbqx());
+            		if("10104".equals(xxInfo.getSbzldm())){
+            			sbxq = xxInfo.getSbqx();
+            			LOGGER.info("最后缴款日期:" + sbxq);
+            		}
+            	}
+            	LOGGER.info("最后缴款期限列表:" +JSONObject.toJSONString(sbqxm));
+            	
                 if (isTwoDayBefore(sbxq)) {
-                    DzsbTime dzsbTime = dzsbTimeService.select(YWLX);
-                    boolean isFirst = false;
+                    DzsbTime dzsbTime = new DzsbTime();
+                    boolean isFirst = true;
                     while (true) {
-                        if (dzsbTime == null) {//查询不到数据默认设置当月第一天
-                            dzsbTime = new DzsbTime();
+                        if (isFirst) {//第一次时间默认设置当月第一天 
                             Calendar c = Calendar.getInstance();
                             c.set(Calendar.DAY_OF_MONTH, 1);
                             dzsbTime.setYwlx(YWLX);
                             dzsbTime.setLasttime(format.format(c.getTime()) + " 00:00:00");
-                            isFirst = true;
+                            isFirst = false;
                         }
 
                         LOGGER.info("当前录入日期:" + dzsbTime.getLasttime());
@@ -90,6 +102,12 @@ public class CjxxRemindJob implements StatefulJob {
                                 for (int i = 0; i < dzsbXxInfos.size(); i++) {
 
                                     DzsbXxInfo dzsbXxInfo = dzsbXxInfos.get(i);
+                                    
+                                    //判断最后缴税日期
+                                    if(!sbxq.equals(sbqxm.get(dzsbXxInfo.getSbzldm()))){
+                                    	LOGGER.info("当前["+dzsbXxInfo.getNsrsbh()+"]最后缴款日期:" + sbqxm.get(dzsbXxInfo.getSbzldm())+"与最后缴款期限:"+sbxq+"不匹配,忽略");
+                                    	continue;
+                                    }
 
                                     List<User> users = userService.findByDzsbNsrsbh(dzsbXxInfo.getNsrsbh());
 
@@ -139,11 +157,11 @@ public class CjxxRemindJob implements StatefulJob {
                             break;
                         }
                     }
-                    if (isFirst) {//第一次插入数据
+                    /*if (isFirst) {//第一次插入数据
                         dzsbTimeService.insert(dzsbTime);
                     } else {//非第一次更新数据
                         dzsbTimeService.update(dzsbTime);
-                    }
+                    }*/
                 }
             }
         } else {

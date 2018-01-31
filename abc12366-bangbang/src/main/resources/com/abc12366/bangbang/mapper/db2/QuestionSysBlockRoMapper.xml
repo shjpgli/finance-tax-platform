@@ -58,4 +58,9 @@
         FROM bb_question_sys_block
         WHERE id = #{id}
     </select>
+
+
+    <select id="selectCntByStatus" resultType="java.lang.Long" parameterType="java.lang.String">
+        SELECT COUNT(1) FROM bb_question_sys_block WHERE status = #{status}
+    </select>
 </mapper>
