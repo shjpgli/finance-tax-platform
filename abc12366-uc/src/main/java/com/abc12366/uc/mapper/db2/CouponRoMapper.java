@@ -90,11 +90,23 @@ public interface CouponRoMapper {
     List<CouponActivityBO> selectCouponActivityList(Map<String,Object> map);
 
     /**
-     * 根据订单获取优惠卷
-     * @param map
-     * @return
+     * 根据订单获取元优惠券
+     * @param map map
+     * @return 领取的优惠券对象
      */
     CouponUser selectCouponUser(Map<String, Object> map);
 
+    /**
+     * 后台查询优惠券活动
+     * @param bo 活动对象
+     * @return 对象列表
+     */
     List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo);
+
+    /**
+     * 前端-查看优惠劵活动
+     * @param id id
+     * @return 活动对象
+     */
+    CouponActivityBO selectActivity(String id);
 }

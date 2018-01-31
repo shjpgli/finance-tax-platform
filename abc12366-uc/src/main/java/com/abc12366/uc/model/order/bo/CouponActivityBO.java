@@ -42,6 +42,11 @@ public class CouponActivityBO {
     private String couponId;
 
     /**
+     * 优惠卷名称
+     */
+    private String couponName;
+
+    /**
      * 活动开始时间
      */
     @NotNull
@@ -174,6 +179,23 @@ public class CouponActivityBO {
     @NotEmpty
     @Length(max = 1)
     private String status;
+
+    /**
+     * 创建时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date lastUpdate;
+
+    /**
+     * 已领取数量
+     */
+    private Integer collectNum;
 
     public String getId() {
         return id;
@@ -404,5 +426,37 @@ public class CouponActivityBO {
                 ", imageUrl='" + imageUrl + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
     }
 }
