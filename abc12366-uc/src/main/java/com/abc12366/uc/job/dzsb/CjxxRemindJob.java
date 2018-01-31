@@ -112,13 +112,16 @@ public class CjxxRemindJob implements StatefulJob {
                                     List<User> users = userService.findByDzsbNsrsbh(dzsbXxInfo.getNsrsbh());
 
                                     if (users != null && users.size() > 0) {
-
+                                    	
+                                    	//转换一下税种信息字段
+                                    	String szxx = dzsbXxInfo.getSzmc();
+                                    	szxx = szxx.replaceAll("", ".");
+                                    	szxx = szxx.substring(1, szxx.length()-1);
+                                    	
                                         String sysMsg = "财税专家用户提醒，您的企业（" + dzsbXxInfo.getNsrsbh().substring(0, 6) +
-												"****** " + dzsbXxInfo.getNsrmc() + "）本月还有未缴税的税种：" + dzsbXxInfo
-												.getSzmc() + "，缴税期限：" + sbxq + "，实际缴税情况以税务局信息为准，如已缴税请忽略！";
+												"****** " + dzsbXxInfo.getNsrmc() + "）本月还有未缴税的税种：" + szxx + "，缴税期限：" + sbxq + "，实际缴税情况以税务局信息为准，如已缴税请忽略！";
 
-                                        String dxmsg = "您的企业（" + dzsbXxInfo.getNsrmc() + "）本月您还有未缴税的税种：" + dzsbXxInfo
-												.getSzmc() + "，缴税期限：" + sbxq + "，实际缴税情况以税务局信息为准，如已缴税请忽略";
+                                        String dxmsg = "您的企业（" + dzsbXxInfo.getNsrmc() + "）本月您还有未缴税的税种：" + szxx + "，缴税期限：" + sbxq + "，实际缴税情况以税务局信息为准，如已缴税请忽略";
 
                                         Map<String, String> dataList = new HashMap<String, String>();
                                         dataList.put("first", "财税专家会员提醒，您的企业（" + dzsbXxInfo.getNsrsbh().substring(0,
