@@ -84,13 +84,16 @@ public class JsxxRemindJob implements StatefulJob {
                         DzsbXxInfo dzsbXxInfo = dzsbXxInfos.get(i);
                         List<User> users = userService.findByDzsbNsrsbh(dzsbXxInfo.getNsrsbh());
                         if (users != null && users.size() > 0) {
+                        	
+                        	//转换一下税种信息字段
+                        	String szxx = dzsbXxInfo.getSzmc();
+                        	szxx = szxx.replaceAll("", ".");
+                        	szxx = szxx.substring(1, szxx.length()-1);
 
                             String sysMsg = "您的纳税企业（" + dzsbXxInfo.getNsrsbh().substring(0, 6) + "****** " +
-									dzsbXxInfo.getNsrmc() + "）于" + dzsbXxInfo.getWcrq() + "缴税税种：" + dzsbXxInfo.getSzmc
-									() + "，缴税结果：成功，此信息为财税专家电子报税业务提醒信息，不作为实际申报缴税结果凭证，如有疑议请及时查询申报缴税结果";
+									dzsbXxInfo.getNsrmc() + "）于" + dzsbXxInfo.getWcrq() + "缴税税种：" + szxx + "，缴税结果：成功，此信息为财税专家电子报税业务提醒信息，不作为实际申报缴税结果凭证，如有疑议请及时查询申报缴税结果";
 
-                            String dxmsg = "您的企业（" + dzsbXxInfo.getNsrmc() + "）于" + dzsbXxInfo.getWcrq() + "缴纳：" +
-									dzsbXxInfo.getSzmc() + "，税额：" + new DecimalFormat("#.00").format(dzsbXxInfo.getKkje()) + "元，缴税结果：成功，此信息不作为实际缴税结果凭证";
+                            String dxmsg = "您的企业（" + dzsbXxInfo.getNsrmc() + "）于" + dzsbXxInfo.getWcrq() + "缴纳：" + szxx + "，税额：" + new DecimalFormat("#.00").format(dzsbXxInfo.getKkje()) + "元，缴税结果：成功，此信息不作为实际缴税结果凭证";
 
                             Map<String, String> dataList = new HashMap<String, String>();
                             dataList.put("first", "财税专家会员提醒，您的纳税企业（" + dzsbXxInfo.getNsrmc() + "）缴税结果信息如下：");
