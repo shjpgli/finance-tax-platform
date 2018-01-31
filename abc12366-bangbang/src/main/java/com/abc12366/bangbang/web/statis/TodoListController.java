@@ -46,11 +46,21 @@ public class TodoListController {
         Long feedbackUnansweredCnt = feedbackService.selectCntUnanswered();
 
         CurriculumBrowserWatch todayNum = curriculumBrowserWatchService.selectTodayNum();
-        Integer todayBrowserCnt = todayNum.getBrowseNum();
-        Integer todayWatchCnt = todayNum.getWatchNum();
+        Integer todayBrowserCnt = 0;
+        Integer todayWatchCnt = 0;
+        if(todayNum != null){
+            todayBrowserCnt = todayNum.getBrowseNum();
+            todayWatchCnt = todayNum.getWatchNum();
+        }
+
         CurriculumBrowserWatch currentMonthNum = curriculumBrowserWatchService.selectCurrentMonthNum();
-        Integer currentMonthBrowserCnt = currentMonthNum.getBrowseNum();
-        Integer currentMonthWatchCnt = currentMonthNum.getWatchNum();
+        Integer currentMonthBrowserCnt = 0;
+        Integer currentMonthWatchCnt = 0;
+        if(currentMonthNum != null){
+            currentMonthBrowserCnt = currentMonthNum.getBrowseNum();
+            currentMonthWatchCnt = currentMonthNum.getWatchNum();
+        }
+
         map.put("num1", sysBlockCnt.intValue());
         map.put("num2", tipOffCnt.intValue());
         map.put("num3", feedbackUnansweredCnt.intValue());

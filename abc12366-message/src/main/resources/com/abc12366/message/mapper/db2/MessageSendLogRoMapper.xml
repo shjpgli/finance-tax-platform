@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.message.mapper.db2.MessageSendLogRoMapper">
 
     <sql id="Base_Column">
-        id, sendchanel,phone, biztype, sendinfo, sendtime, sendstatus, failcode, failcause, logtime
+        id, sendchanel,phone, biztype, sendinfo, sendtime, sendstatus, failcode, failcause, logtime, bizId
     </sql>
 
     <select id="selectLast" resultType="com.abc12366.message.model.MessageSendLog">
