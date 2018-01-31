@@ -112,6 +112,11 @@ public class CouponBO {
      */
     private String imageUrl;
 
+    /**
+     * 已领取数量
+     */
+    private Integer collectNum;
+
     public String getId() {
         return id;
     }
@@ -258,5 +263,13 @@ public class CouponBO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Integer getCollectNum() {
+        return collectNum;
+    }
+
+    public void setCollectNum(Integer collectNum) {
+        this.collectNum = collectNum;
     }
 }
