@@ -8,6 +8,7 @@ import com.abc12366.bangbang.model.question.bo.QuestionHeadmanBo;
 import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.service.QuestionHeadmanService;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,23 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
         if(cnt >0){
             //已申请过掌门人，请勿重复申请
             throw new ServiceException(6192);
+        }
+
+        UCUserBO userBo = Utils.getUserInfo();
+        String userLevel = "";
+        if(userBo != null){
+            userLevel = userBo.getLevel();
+        }
+
+        if(userLevel != null && userLevel.length() > 2){
+            String userLevel1 = userLevel.substring(2);
+            int userLevel2 = Integer.parseInt(userLevel1);
+            if(userLevel2 < 20){
+                //用户等级大于等于20级才能申请掌门人
+                throw new ServiceException(6129);
+            }
+        }else{
+            throw new ServiceException(6129);
         }
 
         questionHeadmanMapper.insert(headman);
