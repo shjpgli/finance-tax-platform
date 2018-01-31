@@ -605,8 +605,9 @@ public class AuthServiceImpl implements AuthService {
         LOGGER.info("登录任务日志:{}", userId);
         boolean loginTask = todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
-        LOGGER.info("计算用户登录经验值变化:{}", userId);
+        LOGGER.info("用户完成登录任务结果：",loginTask);
         if (loginTask) {
+            LOGGER.info("计算用户登录经验值变化:{}", userId);
             computeExp(userId);
         }
 
