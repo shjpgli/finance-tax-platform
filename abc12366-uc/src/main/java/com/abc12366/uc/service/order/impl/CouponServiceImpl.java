@@ -232,6 +232,12 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    public List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        return couponRoMapper.selectAdminActivityList(bo);
+    }
+
+    @Override
     public List<CouponActivityListBO> selectActivityList(CouponActivity bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 //        List<CouponActivityListBO> dataList = couponRoMapper.selectAdminActivityList(bo);
@@ -241,7 +247,7 @@ public class CouponServiceImpl implements CouponService {
             cu.setCouponId(bo.getCouponId());
             couponRoMapper.selectUserList(cu).size();
         });*/
-        return couponRoMapper.selectAdminActivityList(bo);
+        return couponRoMapper.selectActivityList(bo);
     }
 
     @Override
@@ -305,6 +311,7 @@ public class CouponServiceImpl implements CouponService {
         coupon.setStatus(bo.getStatus());
         coupon.setLastUpdate(new Date());
         coupon.setCategoryIds(bo.getCategoryIds());
+
         return 1 == couponMapper.update(coupon);
     }
 
@@ -317,6 +324,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public boolean delete(String id) {
         Assert.notNull(id, "id can not empty");
+
         // 当优惠劵在活动中被使用时，不允许操作优惠劵
         isAllowUpdateCoupon(id);
 
@@ -649,6 +657,16 @@ public class CouponServiceImpl implements CouponService {
         }
 
         return id;
+    }
+
+    @Override
+    public CouponActivityBO selectActivity(String id) {
+        return couponRoMapper.selectActivity(id);
+    }
+
+    @Override
+    public CouponBO selectCoupon(String id) {
+        return couponRoMapper.selectCoupon(id);
     }
 
     /**

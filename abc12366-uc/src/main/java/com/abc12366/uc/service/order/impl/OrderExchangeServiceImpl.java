@@ -413,6 +413,20 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                 refund.setOut_request_no(out_request_no);
 
                                 try {
+
+                                    //扣除订单获得的积分
+                                    if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
+                                        insertPoints(order,0d,order.getGiftPoints());
+                                    }
+
+                                    // 插入订单日志-已完成
+                                    insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+
+                                    //将订单状态改成已结束
+                                    order.setOrderStatus("7");
+                                    orderMapper.update(order);
+
+                                    //支付宝退款
                                     AlipayClient alipayClient = AliPayConfig.getInstance();
                                     AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
                                     request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
@@ -450,17 +464,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                         orderExchangeMapper.update(oe);
 
-                                        //扣除订单获得的积分
-                                        if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
-                                            insertPoints(order,0d,order.getGiftPoints());
-                                        }
-
-                                        // 插入订单日志-已完成
-                                        insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
-
-                                        //将订单状态改成已结束
-                                        order.setOrderStatus("7");
-                                        orderMapper.update(order);
                                         User user = userMapper.selectOne(order.getUserId());
                                         //查询会员特权-业务提醒
                                         /*VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
