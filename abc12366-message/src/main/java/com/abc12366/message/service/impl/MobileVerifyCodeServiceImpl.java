@@ -22,6 +22,8 @@ import com.abc12366.message.util.WeightFactorProduceStrategy;
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
+import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsRequest;
+import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
@@ -190,15 +192,16 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
             request.setTemplateParam(sendMsg);
 
             SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+            String bizId = sendSmsResponse.getBizId();
             // 请求成功
             if (sendSmsResponse.getCode() != null && "OK".equals(sendSmsResponse.getCode())) {
                 messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, msg, MessageConstant
                         .SEND_MSG_STATUS_SUCCESS, MessageConstant.SEND_MSG_SUCCESS_CODE, MessageConstant
-                        .SEND_MSG_SUCCESS_CONTENT);
+                        .SEND_MSG_SUCCESS_CONTENT,bizId);
                 return true;
             } else {
                 messageLog(MessageConstant.MSG_CHANNEL_ALI, phone, type, msg, MessageConstant
-                        .SEND_MSG_STATUS_FAIL, sendSmsResponse.getCode(), sendSmsResponse.getMessage());
+                        .SEND_MSG_STATUS_FAIL, sendSmsResponse.getCode(), sendSmsResponse.getMessage(),bizId);
                 return false;
             }
         } catch (ClientException e) {
@@ -415,5 +418,92 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
         sendLog.setLogtime(time);
         sendLog.setPhone(phone);
         sendLogMapper.insert(sendLog);
+    }
+    /**
+     * 发送短信消息日志
+     *
+     * @param sendchanel 通道类型
+     * @param biztype    短信类型
+     * @param sendinfo   内容
+     * @param sendstatus 发送状态
+     * @param failcode   失败code
+     * @param failcause  失败原因
+     * @param bizId  发送流水
+     */
+    private void messageLog(String sendchanel, String phone, String biztype, String sendinfo, String sendstatus,
+                            String failcode, String failcause,String bizId) {
+        MessageSendLog sendLog = new MessageSendLog();
+        Date time = new Date();
+        sendLog.setId(Utils.uuid());
+        sendLog.setSendchanel(sendchanel);
+        sendLog.setBiztype(biztype);
+        sendLog.setSendinfo(sendinfo);
+        sendLog.setSendtime(time);
+        sendLog.setSendstatus(sendstatus);
+        sendLog.setFailcode(failcode);
+        sendLog.setFailcause(failcause);
+        sendLog.setLogtime(time);
+        sendLog.setPhone(phone);
+        sendLog.setBizId(bizId);
+        sendLogMapper.insert(sendLog);
+    }
+
+    @Override
+    public QuerySendDetailsResponse.SmsSendDetailDTO querySendDetails(String phone,String bizId, String logId, String sendDate) {
+        try {
+            System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+            System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+
+            // 短信API产品名称（短信产品名固定，无需修改）
+            final String product = "Dysmsapi";
+            // 短信API产品域名（接口地址固定，无需修改）
+            final String domain = "dysmsapi.aliyuncs.com";
+            // 你的accessKeyId "LTAItz4dVk9FX02a"
+            final String accessKeyId = SpringCtxHolder.getProperty("message.aliyun.accessid");
+            // 你的accessKeySecret "m9FiMcm2nmh7gj9uXQIx0mzNcZQzN5"
+            final String accessKeySecret = SpringCtxHolder.getProperty("message.aliyun.accesskey");
+            // 初始化ascClient,暂时不支持多region（请勿修改）
+            IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId,
+                    accessKeySecret);
+
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+            IAcsClient acsClient = new DefaultAcsClient(profile);
+
+            //组装请求对象
+            QuerySendDetailsRequest request = new QuerySendDetailsRequest();
+            //必填-号码
+            request.setPhoneNumber(phone);
+            //可选-调用发送短信接口时返回的BizId
+            request.setBizId(bizId);
+            //必填-短信发送的日期 支持30天内记录查询（可查其中一天的发送数据），格式yyyyMMdd
+            request.setSendDate(sendDate);
+            //必填-页大小
+            request.setPageSize(10L);
+            //必填-当前页码从1开始计数
+            request.setCurrentPage(1L);
+            //hint 此处可能会抛出异常，注意catch
+            QuerySendDetailsResponse querySendDetailsResponse = acsClient.getAcsResponse(request);
+            //获取返回结果
+            if(querySendDetailsResponse.getCode() != null && querySendDetailsResponse.getCode().equals("OK")
+                    && querySendDetailsResponse.getSmsSendDetailDTOs() != null && querySendDetailsResponse.getSmsSendDetailDTOs().size() > 0) {
+                //代表请求成功
+                QuerySendDetailsResponse.SmsSendDetailDTO detailDTO = querySendDetailsResponse.getSmsSendDetailDTOs().get(0);
+                MessageSendLog sendLog = new MessageSendLog();
+                sendLog.setId(logId);
+                switch (detailDTO.getSendStatus().intValue()){
+                    case 1:sendLog.setSendstatus("0");
+                        break;
+                    case 2:sendLog.setSendstatus("4");
+                        break;
+                    case 3:sendLog.setSendstatus("1");
+                        break;
+                }
+                sendMsgLogService.update(sendLog);
+                return detailDTO;
+            }
+        } catch (ClientException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

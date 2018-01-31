@@ -1,6 +1,7 @@
 package com.abc12366.message.service;
 
 import com.abc12366.message.model.bo.VerifyParam;
+import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 
 import java.io.IOException;
 
@@ -45,4 +46,13 @@ public interface MobileVerifyCodeService {
      * @param phone 手机号
      */
     void getRegisCode(String type, String phone);
+
+    /**
+     * 调用阿里短信发送情况查询
+     * @param phone 发送电话
+     * @param bizId 发送流水号,从调用发送接口返回值中获取
+     * @param logId 短信发送日志id
+     * @return QuerySendDetailsResponse.SmsSendDetailDTO
+     */
+    QuerySendDetailsResponse.SmsSendDetailDTO querySendDetails(String phone,String bizId, String logId, String sendDate);
 }
