@@ -176,9 +176,21 @@ public class CouponController {
         bo.setStatus("2");
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
-        List<CouponActivityListBO> dataList = couponService.selectActivityList(bo, pageNum, pageSize);
+        List<CouponActivityListBO> dataList = couponService.selectAdminActivityList(bo, pageNum, pageSize);
         PageInfo<CouponActivityListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 前端-查看优惠劵
+     *
+     * @param id 活动ID
+     * @return 优惠劵对象
+     */
+    @GetMapping("/activities/{id}")
+    public ResponseEntity selectCoupon(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        return ResponseEntity.ok(Utils.kv("data", couponService.selectCoupon(id)));
     }
 
     /**
