@@ -9,4 +9,6 @@ import com.abc12366.message.model.MessageSendLog;
  */
 public interface MessageSendLogMapper {
     int insert(MessageSendLog sendLog);
+
+    int update(MessageSendLog sendLog);
 }
