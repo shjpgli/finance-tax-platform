@@ -16,6 +16,12 @@
 		)  t3
 		ON t1.id = t3.businessId
 		WHERE 1=1
+		<if test="isReply == true">
+			AND t3.content IS NULL
+		</if>
+		<if test="isReply == false">
+			AND t3.content IS NOT NULL
+		</if>
 		<if test="sourceType != null and sourceType!=''">
 			AND t1.sourceType = #{sourceType}
 		</if>

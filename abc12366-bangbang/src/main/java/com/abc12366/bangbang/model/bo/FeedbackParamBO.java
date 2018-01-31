@@ -12,10 +12,14 @@ public class FeedbackParamBO {
     /* 反馈类型 */
     private String feedbackType;
 
+    /* 是否回复 */
+    private Boolean isReply;
 
-    public FeedbackParamBO(String sourceType, String feedbackType) {
+
+    public FeedbackParamBO(String sourceType, String feedbackType, Boolean isReply) {
         this.sourceType = sourceType;
         this.feedbackType = feedbackType;
+        this.isReply = isReply;
     }
 
     public String getSourceType() {
@@ -32,5 +36,14 @@ public class FeedbackParamBO {
 
     public void setFeedbackType(String feedbackType) {
         this.feedbackType = feedbackType;
+    }
+
+    public Boolean getIsReply() {
+        return isReply;
+    }
+
+    public FeedbackParamBO setIsReply(Boolean isReply) {
+        this.isReply = isReply;
+        return this;
     }
 }
