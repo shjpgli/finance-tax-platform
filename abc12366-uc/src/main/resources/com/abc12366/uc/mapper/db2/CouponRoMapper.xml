@@ -165,10 +165,10 @@
     </select>
 
     <sql id="Activity_Column_List">
-        id,	activityName,	activityLink,	couponId,	activityStartTime,	activityEndTime,	couponNum,	limit,	limitNum,	getType,	validApi,	valid,	target,	areaOper,	areaIds,	tagOper,	tagIds,	regTimeOper,	regStartTime,	regEndTime,	vips,	userIds,	description,	imageUrl,	status,	createTime,	lastUpdate
+        id,	activityName,	activityLink,	couponId,	activityStartTime,	activityEndTime,	couponNum,	`limit`,	limitNum,	getType,	validApi,	valid,	target,	areaOper,	areaIds,	tagOper,	tagIds,	regTimeOper,	regStartTime,	regEndTime,	vips,	userIds,	description,	imageUrl,	status,	createTime,	lastUpdate
     </sql>
     <select id="selectCouponActivityList" parameterType="java.util.Map"
-            resultType="com.abc12366.uc.model.order.CouponActivity">
+            resultType="com.abc12366.uc.model.order.bo.CouponActivityBO">
         SELECT
         <include refid="Activity_Column_List"/>
         FROM uc_coupon_activity
