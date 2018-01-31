@@ -7,6 +7,7 @@ import com.abc12366.bangbang.model.Message;
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.AllocationPointAwardBO;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTipOffParamBo;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffStatus;
 import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.service.QuestionTipOffService;
@@ -63,8 +64,8 @@ public class QuestionTipOffServiceImpl implements QuestionTipOffService{
     private MessageSendUtil messageSendUtil;
 
     @Override
-    public List<QuestionTipOffBo> selectList() {
-        return questionTipOffRoMapper.selectList();
+    public List<QuestionTipOffBo> selectList(QuestionTipOffParamBo paramBo) {
+        return questionTipOffRoMapper.selectList(paramBo);
     }
 
     @Override

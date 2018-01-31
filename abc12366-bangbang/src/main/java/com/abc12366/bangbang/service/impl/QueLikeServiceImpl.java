@@ -173,7 +173,7 @@ public class QueLikeServiceImpl implements QueLikeService {
             throw new ServiceException(6115);
         }
 
-        int trampleNum = likeRoMapper.selectLikeCnt(id)+1;
+        int trampleNum = likeRoMapper.selectTrampleCnt(id)+1;
 
         if(likeTarget == 1){
             QuestionAnswer answer1 = new QuestionAnswer();

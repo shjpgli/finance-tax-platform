@@ -42,7 +42,7 @@
         (select count(*) from bb_question_answer where userId = t.userId and isAccept = '1') acccptNum
         FROM bb_question_expert t
         JOIN abc12366_uc.uc_user t1 ON t1.id = t.userId
-        JOIN abc12366_uc.uc_user_extend t2 ON t2.userId = t.userId
+		LEFT JOIN abc12366_uc.uc_user_extend t2 ON t2.userId = t.userId
         WHERE t.status = '1'
         <if test="type != null  and type !=''">
             AND t.type = #{type}
@@ -55,7 +55,7 @@
 		SELECT t.*,t1.username, t1.userPicturePath AS userImage, t1.nickname, t1.phone, t2.realName
 		FROM bb_question_expert t
 		JOIN abc12366_uc.uc_user t1 ON t1.id = t.userId
-		JOIN abc12366_uc.uc_user_extend t2 ON t2.userId = t.userId
+		LEFT JOIN abc12366_uc.uc_user_extend t2 ON t2.userId = t.userId
 		WHERE t.id = #{id}
 	</select>
 
