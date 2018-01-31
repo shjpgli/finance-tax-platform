@@ -653,6 +653,11 @@ public class CouponServiceImpl implements CouponService {
         return id;
     }
 
+    @Override
+    public CouponActivityBO selectActivity(String id) {
+        return couponRoMapper.selectActivity(id);
+    }
+
     /**
      * 是否允许用户领取优惠劵
      *

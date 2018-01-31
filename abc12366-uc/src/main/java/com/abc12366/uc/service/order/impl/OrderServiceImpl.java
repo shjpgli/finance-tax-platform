@@ -49,7 +49,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * @create 2017-10-19
+ * @author lizhongwei
+ * @date  2017-10-19
  * @since 1.0.0
  */
 @Service("orderService")
@@ -1060,6 +1061,30 @@ public class OrderServiceImpl implements OrderService {
         for (Order order : orderList) {
             order.setOrderStatus("7");
             orderMapper.update(order);
+            LOGGER.info("获取优惠劵信息");
+            Map<String, Object> map = new HashMap<>();
+            map.put("orderNo", order.getOrderNo());
+            map.put("userId", order.getUserId());
+            CouponUser couponUser = couponService.selectCouponUser(map);
+            if (couponUser == null) {
+                LOGGER.info("获取优惠劵信息异常");
+                throw new ServiceException(7135);
+            }
+            OrderProductBO pBO = new OrderProductBO();
+            pBO.setOrderNo(order.getOrderNo());
+            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+            for (OrderProductBO orderProductBO : orderProductBOs) {
+                CouponOrderBO couponOrderBO = new CouponOrderBO();
+                couponOrderBO.setUseCouponId(couponUser.getCouponId());
+                couponOrderBO.setUserId(order.getUserId());
+                couponOrderBO.setOrderNo(order.getOrderNo());
+                couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
+                couponOrderBO.setAmount(order.getTotalPrice());
+                //优惠劵设置已领取
+                couponOrderBO.setStatus("1");
+                LOGGER.info("优惠劵取消");
+                couponService.userUseCoupon(couponOrderBO);
+            }
             insertOrderLog("", order.getOrderNo(), "7", "系统自动取消订单", "0");
         }
     }
@@ -1316,6 +1341,31 @@ public class OrderServiceImpl implements OrderService {
                     refund.setOut_request_no(out_request_no);
 
                     try {
+                        //扣除订单获得的积分
+                        if (orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0) {
+                            LOGGER.info("扣除订单获得的积分");
+                            Order order = new Order();
+                            BeanUtils.copyProperties(orderBO, order);
+                            insertReturnPoints(order, 0d, order.getGiftPoints());
+                        }
+
+                        // 插入订单日志-已完成
+                        String remark;
+                        if (vipLogBO.getSource() != null) {
+                            remark = "已完成退款。回退到该订单：" + vipLogBO.getSource();
+                        } else {
+                            remark = "已完成退款。";
+                        }
+                        insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
+
+                        //将订单状态改成已退单
+                        orderBO.setOrderStatus("9");
+                        Order order = new Order();
+                        BeanUtils.copyProperties(orderBO, order);
+                        orderMapper.update(order);
+                        User user = userMapper.selectOne(orderBO.getUserId());
+                        updateVipInfo(vipLogBO, user, orderBO.getOrderNo(), orderProductBO.getSpecInfo());
+
                         AlipayClient alipayClient = AliPayConfig.getInstance();
                         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
                         request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
@@ -1328,32 +1378,6 @@ public class OrderServiceImpl implements OrderService {
 
                             LOGGER.info("支付宝退款成功,插入退款流水记录");
                             insertTrade(orderBO, refundRes);
-
-                            //扣除订单获得的积分
-                            if (orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0) {
-                                LOGGER.info("扣除订单获得的积分");
-                                Order order = new Order();
-                                BeanUtils.copyProperties(orderBO, order);
-                                insertReturnPoints(order, 0d, order.getGiftPoints());
-                            }
-
-                            // 插入订单日志-已完成
-                            String remark;
-                            if (vipLogBO.getSource() != null) {
-                                remark = "已完成退款。回退到该订单：" + vipLogBO.getSource();
-                            } else {
-                                remark = "已完成退款。";
-                            }
-                            insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
-
-                            //将订单状态改成已退单
-                            orderBO.setOrderStatus("9");
-                            Order order = new Order();
-                            BeanUtils.copyProperties(orderBO, order);
-                            orderMapper.update(order);
-                            User user = userMapper.selectOne(orderBO.getUserId());
-                            updateVipInfo(vipLogBO, user, orderBO.getOrderNo(), orderProductBO.getSpecInfo());
-
 
                             sendReturnMessage(orderBO, httpServletRequest, refundRes, user);
                         } else {

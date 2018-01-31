@@ -48,8 +48,8 @@
         order by ca.lastUpdate DESC
     </select>
 
-    <!--订单对象-->
-    <resultMap id="activityResultMap" type="com.abc12366.uc.model.order.bo.CouponActivityListBO">
+    <!--活动列表对象-->
+    <resultMap id="activityListMap" type="com.abc12366.uc.model.order.bo.CouponActivityListBO">
         <result column="id" property="id" jdbcType="VARCHAR"/>
         <result column="activityName" property="activityName" jdbcType="VARCHAR"/>
         <result column="couponId" property="couponId" jdbcType="VARCHAR"/>
@@ -58,6 +58,7 @@
         <result column="activityStartTime" property="activityStartTime" jdbcType="TIMESTAMP"/>
         <result column="activityEndTime" property="activityEndTime" jdbcType="TIMESTAMP"/>
         <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
         <association property="collectNum" column="id" jdbcType="INTEGER" select="getCollectNum"/>
@@ -79,9 +80,9 @@
     </select>
 
     <select id="selectAdminActivityList" parameterType="com.abc12366.uc.model.order.CouponActivity"
-            resultMap="activityResultMap">
+            resultMap="activityListMap">
         SELECT ca.id, ca.activityName, ca.couponId, c.couponName, ca.couponNum,
-        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate
+        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate,ca.imageUrl
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
@@ -95,6 +96,52 @@
             </choose>
         </where>
         order by ca.lastUpdate DESC
+    </select>
+
+    <!--活动列表对象-->
+    <resultMap id="activityMap" type="com.abc12366.uc.model.order.bo.CouponActivityBO">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="activityName" property="activityName" jdbcType="VARCHAR"/>
+        <result column="activityLink" property="activityLink" jdbcType="VARCHAR"/>
+        <result column="couponId" property="couponId" jdbcType="VARCHAR"/>
+        <result column="couponName" property="couponName" jdbcType="VARCHAR"/>
+        <result column="couponNum" property="couponNum" jdbcType="INTEGER"/>
+        <result column="activityStartTime" property="activityStartTime" jdbcType="TIMESTAMP"/>
+        <result column="activityEndTime" property="activityEndTime" jdbcType="TIMESTAMP"/>
+        <result column="limit" property="limit" jdbcType="BOOLEAN"/>
+        <result column="limitNum" property="limitNum" jdbcType="INTEGER"/>
+        <result column="getType" property="getType" jdbcType="VARCHAR"/>
+        <result column="validApi" property="validApi" jdbcType="VARCHAR"/>
+        <result column="valid" property="valid" jdbcType="BOOLEAN"/>
+        <result column="target" property="target" jdbcType="VARCHAR"/>
+        <result column="areaOper" property="areaOper" jdbcType="VARCHAR"/>
+        <result column="areaIds" property="areaIds" jdbcType="VARCHAR"/>
+        <result column="tagOper" property="tagOper" jdbcType="VARCHAR"/>
+        <result column="tagIds" property="tagIds" jdbcType="VARCHAR"/>
+        <result column="regTimeOper" property="regTimeOper" jdbcType="VARCHAR"/>
+        <result column="regStartTime" property="regStartTime" jdbcType="TIMESTAMP"/>
+        <result column="regEndTime" property="regEndTime" jdbcType="TIMESTAMP"/>
+        <result column="vips" property="vips" jdbcType="VARCHAR"/>
+        <result column="userIds" property="userIds" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="collectNum" column="id" jdbcType="INTEGER" select="getCollectNum"/>
+    </resultMap>
+
+    <select id="selectActivity" parameterType="java.lang.String"
+            resultMap="activityMap">
+        SELECT
+        ca.id,	ca.activityName,	ca.activityLink,	ca.couponId,	c.couponName,ca.activityStartTime,
+        ca.activityEndTime,	ca.couponNum, ca.limit,	ca.limitNum,	ca.getType,	ca.validApi,
+        ca.valid,	ca.target,	ca.areaOper,	ca.areaIds,	ca.tagOper,	ca.tagIds,  ca.regTimeOper,
+        ca.regStartTime,	ca.regEndTime,	ca.vips,	ca.userIds,	ca.description,	ca.imageUrl,
+        ca.status,	ca.createTime,	ca.lastUpdate
+        FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
+        ON ca.couponId = c.id
+        WHERE ca.id = #{id}
     </select>
 
     <select id="selectOneActivity" parameterType="java.lang.String"
@@ -162,7 +209,8 @@
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
             <if test="validEndTime != null">AND cu.validEndTime <![CDATA[<]]> #{validEndTime}</if>
             <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
-            <if test="categoryIds != null  and categoryIds!='' and categoryIds!='ALL'">AND cu.categoryIds LIKE CONCAT('%',#{categoryIds},'%')
+            <if test="categoryIds != null  and categoryIds!='' and categoryIds!='ALL'">AND cu.categoryIds LIKE
+                CONCAT('%',#{categoryIds},'%')
             </if>
             <choose>
                 <when test="status != null and status != ''">

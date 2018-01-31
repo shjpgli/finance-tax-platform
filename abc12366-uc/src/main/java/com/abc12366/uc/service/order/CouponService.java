@@ -149,14 +149,18 @@ public interface CouponService {
     /**
      * 根据订单号查询用户使用的优惠劵
      * @param map
-     * @return
      */
     CouponUser selectCouponUser(Map<String, Object> map);
 
     /**
      * 查找用户领用的优惠劵ID
-     * @param bo
-     * @return
+     * @param bo 对象
      */
     String selectCouponId(CouponIdBO bo);
+
+    /**
+     *  前端-查看优惠劵活动
+     * @param id id
+     */
+    CouponActivityBO selectActivity(String id);
 }

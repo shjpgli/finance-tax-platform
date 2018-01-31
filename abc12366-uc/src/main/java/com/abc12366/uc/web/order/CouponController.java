@@ -220,6 +220,18 @@ public class CouponController {
     }
 
     /**
+     * 前端-查看优惠劵活动
+     *
+     * @param id 活动ID
+     * @return 优惠劵活动对象
+     */
+    @GetMapping("/activities/{id}")
+    public ResponseEntity selectActivity(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        return ResponseEntity.ok(Utils.kv("data", couponService.selectActivity(id)));
+    }
+
+    /**
      * 运营系统-逻辑删除优惠劵活动
      *
      * @param id 活动ID
