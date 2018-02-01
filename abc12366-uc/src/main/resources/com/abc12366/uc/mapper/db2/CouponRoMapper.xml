@@ -45,7 +45,7 @@
     <select id="selectActivityList" parameterType="com.abc12366.uc.model.order.CouponActivity"
             resultType="com.abc12366.uc.model.order.bo.CouponActivityListBO">
         SELECT ca.id, ca.activityName, ca.couponId, c.couponName, ca.couponNum,
-        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate
+        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate,ca.imageUrl
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
