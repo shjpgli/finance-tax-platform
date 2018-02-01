@@ -326,7 +326,7 @@ public class CouponController {
     public ResponseEntity selectUserCouponList(
             @PathVariable String userId,
             @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "validEndTime", required = false) String validEndTime,
+            @RequestParam(value = "validEndTime", required = false) Long validEndTime,
             @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -339,7 +339,7 @@ public class CouponController {
             bo.setCategoryIds(categoryIds);
         }
         if (validEndTime != null && !"".equals(validEndTime)) {
-            bo.setValidEndTime(DateUtils.strToDateHHMMSS(validEndTime));
+            bo.setValidEndTime(DateUtils.transferLongToDate(validEndTime));
         }
         bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);

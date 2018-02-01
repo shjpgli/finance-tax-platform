@@ -104,6 +104,17 @@ public class DateUtils {
     }
 
     /**
+     * 时间戳转时间
+     * @param millSec
+     * @return
+     */
+    public static Date transferLongToDate(Long millSec) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(millSec);
+        return date;
+    }
+
+    /**
      * 字符串转换成日期
      *
      * @param str
