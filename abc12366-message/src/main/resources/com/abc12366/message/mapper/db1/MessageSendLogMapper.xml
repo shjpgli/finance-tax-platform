@@ -12,7 +12,11 @@
         (#{id}, #{sendchanel}, #{phone}, #{biztype}, #{sendinfo}, #{sendtime}, #{sendstatus}, #{failcode}, #{failcause}, #{logtime}, #{bizId})
     </insert>
     <update id="update" parameterType="com.abc12366.message.model.MessageSendLog">
-        update msg_message_send_log set sendstatus=#{sendstatus} where id=#{id}
+        update msg_message_send_log
+        set sendstatus=#{sendstatus},
+            failcode=#{failcode},
+             logtime=#{logtime}
+        where id=#{id}
     </update>
 
 </mapper>

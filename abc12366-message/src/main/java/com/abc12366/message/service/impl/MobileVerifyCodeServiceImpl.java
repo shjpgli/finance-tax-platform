@@ -490,6 +490,8 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
                 QuerySendDetailsResponse.SmsSendDetailDTO detailDTO = querySendDetailsResponse.getSmsSendDetailDTOs().get(0);
                 MessageSendLog sendLog = new MessageSendLog();
                 sendLog.setId(logId);
+                sendLog.setFailcode(detailDTO.getErrCode());
+                sendLog.setLogtime(new Date());
                 switch (detailDTO.getSendStatus().intValue()){
                     case 1:sendLog.setSendstatus("0");
                         break;
