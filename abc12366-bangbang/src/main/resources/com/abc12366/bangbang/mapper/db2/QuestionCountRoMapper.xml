@@ -19,7 +19,7 @@
         SELECT attentionUserId as id,count(*) as count
         ,(select userPicturePath from bb_user bu where bu.id=attentionUserId) userPicturePath
         ,(select username from bb_user bu where bu.id=attentionUserId) username
-        ,(select nickname from bb_user bu where bu.id=userId) nickname
+        ,(select nickname from bb_user bu where bu.id=attentionUserId) nickname
         FROM bb_question_attention  z
         group by attentionUserId
         order by count(*) desc
