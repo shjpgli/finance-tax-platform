@@ -151,7 +151,7 @@ public class CouponController {
         }
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
-        List<CouponActivityListBO> dataList = couponService.selectActivityList(bo, pageNum, pageSize);
+        List<CouponActivityListBO> dataList = couponService.selectAdminActivityList(bo, pageNum, pageSize);
         PageInfo<CouponActivityListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }
@@ -176,7 +176,7 @@ public class CouponController {
         bo.setStatus("2");
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
-        List<CouponActivityListBO> dataList = couponService.selectAdminActivityList(bo, pageNum, pageSize);
+        List<CouponActivityListBO> dataList = couponService.selectActivityList(bo, pageNum, pageSize);
         PageInfo<CouponActivityListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }
