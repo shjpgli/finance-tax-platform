@@ -82,7 +82,7 @@ public class CurrStudyServiceImpl implements CurrStudyService {
 //            System.out.println(responseStr);
 
             curriculumMapper.updateWatchsDay(studyBo.getCurriculumId());
-            curriculumBrowserWatchServiceImpl.updateWatchNum();
+            curriculumBrowserWatchServiceImpl.updateWatchNum(studyBo.getCurriculumId());
         } catch (Exception e) {
             LOGGER.error("新增课程学习信息异常：{}", e);
             throw new ServiceException(4362);

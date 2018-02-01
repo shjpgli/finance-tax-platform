@@ -708,7 +708,7 @@ public class CurriculumServiceImpl implements CurriculumService {
         try {
             LOGGER.info("课程浏览信息:{}", curriculumId);
             curriculumMapper.updateBrowsesDay(curriculumId);
-            curriculumBrowserWatchServiceImpl.updateBrowserNum();
+            curriculumBrowserWatchServiceImpl.updateBrowserNum(curriculumId);
         } catch (Exception e) {
             LOGGER.error("更新课程浏览量异常：{}", e);
             throw new ServiceException(4324);

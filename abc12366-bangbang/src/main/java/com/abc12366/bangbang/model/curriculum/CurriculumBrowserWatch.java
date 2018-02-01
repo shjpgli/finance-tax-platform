@@ -13,6 +13,9 @@ public class CurriculumBrowserWatch implements Serializable {
     /**ID**varchar(64)**/
     private String id;
 
+    /**课程id**varchar(64)**/
+    private String curriculumId;
+
     /**浏览量**tinyint(11)**/
     private Integer browseNum;
 
@@ -55,6 +58,15 @@ public class CurriculumBrowserWatch implements Serializable {
 
     public CurriculumBrowserWatch setDate(Date date) {
         this.date = date;
+        return this;
+    }
+
+    public String getCurriculumId() {
+        return curriculumId;
+    }
+
+    public CurriculumBrowserWatch setCurriculumId(String curriculumId) {
+        this.curriculumId = curriculumId;
         return this;
     }
 }
