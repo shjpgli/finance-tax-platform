@@ -15,7 +15,8 @@
         update msg_message_send_log
         set sendstatus=#{sendstatus},
             failcode=#{failcode},
-             logtime=#{logtime}
+            logtime=#{logtime},
+            sendinfo=#{sendinfo}
         where id=#{id}
     </update>
 
