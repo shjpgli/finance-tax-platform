@@ -44,14 +44,6 @@ public interface BusinessMsgService {
     List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size);
 
     /**
-     * 查询业务消息未读数量
-     *
-     * @param bm type,busiType
-     * @return 消息未读总数
-     */
-    int unreadCount(BusinessMessage bm);
-
-    /**
      * 查询未读消息列表
      *
      * @param bm 业务消息条件

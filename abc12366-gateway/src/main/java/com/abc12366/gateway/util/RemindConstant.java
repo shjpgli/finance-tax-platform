@@ -57,9 +57,9 @@ public class RemindConstant {
     //会员到期消息
     public static final String HYDQMSG="您的财税专家会员（{#DATA.LEVEL}）即将过期，过期时间:{#DATA.DATE}，为不影响您正常使用，请您及时续费";
     
-    public static final String SBQXXTMSG="财税专家用户提醒，本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税！";
+    public static final String SBQXXTMSG="财税专家用户提醒，本月纳税申报可申报的报表种类：增.值.税、消.费.税、所.得.税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税！";
     
-    public static final String SBQXSJMSG="本月纳税申报可申报的报表种类：增值税、消费税、所得税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税";
+    public static final String SBQXSJMSG="本月纳税申报可申报的报表种类：增.值.税、消.费.税、所.得.税、财务报表，申报期限：{#DATA.DATE}，实际申报种类以税务局核定信息为准，请您及时进行申报缴税";
 
     //修改密码成功消息
     public static final String UPDATE_PWD_SUCCESS_SYS = "您的密码于{#DATA.DATE}被修改，请确认为本人操作，如有疑问请联系客服咨询4008873133。";

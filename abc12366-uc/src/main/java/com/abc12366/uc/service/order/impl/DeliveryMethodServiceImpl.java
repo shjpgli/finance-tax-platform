@@ -104,13 +104,12 @@ public class DeliveryMethodServiceImpl implements DeliveryMethodService {
     @Override
     public void enable(DeliveryMethodUpdateBO deliveryMethodUpdateBO) {
         String ids[] = deliveryMethodUpdateBO.getId().split(",");
-        int upd = 0;
-        DeliveryMethod deliveryMethod = null;
+        DeliveryMethod deliveryMethod;
         for (String id : ids) {
             deliveryMethod = new DeliveryMethod();
             deliveryMethod.setId(id);
             deliveryMethod.setStatus(deliveryMethodUpdateBO.getStatus());
-            upd = deliveryMethodMapper.update(deliveryMethod);
+            int upd = deliveryMethodMapper.update(deliveryMethod);
             if (upd != 1) {
                 LOGGER.info("{启用或禁用配送方式失败}", deliveryMethod);
                 throw new ServiceException(4102);

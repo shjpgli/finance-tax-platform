@@ -95,4 +95,6 @@ public interface CouponRoMapper {
      * @return
      */
     CouponUser selectCouponUser(Map<String, Object> map);
+
+    List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo);
 }

@@ -14,6 +14,7 @@ import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.RSAService;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserBindService;
+import com.abc12366.uc.service.UserBindServiceNew;
 import com.abc12366.uc.tdps.vo.CrmnsrmmGxResponse.NSRMMGX;
 import com.abc12366.uc.tdps.vo.nsraqxxSzResponse.XGJGS;
 import com.abc12366.uc.webservice.AcceptClient;
@@ -73,6 +74,9 @@ public class UserBindServiceImpl implements UserBindService {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private UserBindServiceNew userBindServiceNew;
 
     @Override
     public UserDzsbBO dzsbBind(UserDzsbInsertBO userDzsbInsertBO, HttpServletRequest request) throws Exception {
@@ -496,6 +500,7 @@ public class UserBindServiceImpl implements UserBindService {
                 userBindMapper.deleteDzsb(ud.getId());
             }
         }
+        userBindServiceNew.recordNsrLoginTimes();
         return ty21Object;
     }
 

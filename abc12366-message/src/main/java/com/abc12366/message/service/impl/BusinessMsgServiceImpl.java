@@ -179,11 +179,6 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     }
 
     @Override
-    public int unreadCount(BusinessMessage bm) {
-        return businessMsgRoMapper.unreadCount(bm);
-    }
-
-    @Override
     public List<BusinessMessage> selectUnreadList(BusinessMessage bm) {
         String key = Utils.getUserId() + BUSINESS_MSG_KEY;
         List<BusinessMessage> dataList;

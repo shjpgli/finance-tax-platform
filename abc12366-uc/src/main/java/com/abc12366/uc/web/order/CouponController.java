@@ -245,6 +245,7 @@ public class CouponController {
     @GetMapping("/user")
     public ResponseEntity selectUserList(
             @RequestParam(value = "orderNo", required = false) String orderNo,
+            @RequestParam(value = "activityId", required = false) String activityId,
             @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
@@ -259,6 +260,9 @@ public class CouponController {
         }
         if (StringUtils.isNotEmpty(categoryIds)) {
             bo.setCategoryIds(categoryIds);
+        }
+        if (StringUtils.isNotEmpty(activityId)) {
+            bo.setActivityId(activityId);
         }
 
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
@@ -297,12 +301,16 @@ public class CouponController {
     public ResponseEntity selectUserCouponList(
             @PathVariable String userId,
             @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
 
         CouponUser bo = new CouponUser();
         if (StringUtils.isNotEmpty(status)) {
             bo.setStatus(status);
+        }
+        if (StringUtils.isNotEmpty(categoryIds)) {
+            bo.setCategoryIds(categoryIds);
         }
         bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);

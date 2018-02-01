@@ -17,13 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * @author lizhongwei
- * @create 2017-06-01
+ * @date  2017-06-01
  * @since 1.0.0
  */
 @Service
@@ -59,7 +58,7 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     /**
      * 递归算法解析成树形结构
      *
-     * @param id
+     * @param id id
      */
     public GoodsCategoryBO recursiveTree(String id) {
         GoodsCategoryBO node = goodsCategoryRoMapper.selectById(id);
@@ -146,11 +145,10 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
     /**
      * 递归算法删除树节点
      *
-     * @param id
+     * @param id id
      */
     public void deleteTree(String id) {
-        List<GoodsCategoryBO> treeNodes = new ArrayList<GoodsCategoryBO>();
-        treeNodes = goodsCategoryRoMapper.selectByParentId(id);
+        List<GoodsCategoryBO> treeNodes = goodsCategoryRoMapper.selectByParentId(id);
         //遍历子节点
         for (GoodsCategoryBO child : treeNodes) {
             deleteTree(child.getId()); //递归

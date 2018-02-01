@@ -113,8 +113,12 @@ public class BusinessMsgController {
         String userId = Utils.getUserId();
 
         if (!StringUtils.isEmpty(userId)) {
-            BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).build();
-            int count = businessMsgService.unreadCount(bm);
+            BusinessMessage bm = new BusinessMessage.Builder()
+                    .userId(userId).type(type)
+                    .busiType(busiType)
+                    .status("1")
+                    .build();
+            int count = businessMsgService.selectUnreadList(bm).size();
             responseEntity = ResponseEntity.ok(Utils.kv("data", count));
         }
 

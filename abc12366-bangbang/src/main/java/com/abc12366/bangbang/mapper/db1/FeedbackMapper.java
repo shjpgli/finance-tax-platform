@@ -30,6 +30,13 @@ public interface FeedbackMapper {
 	Feedback  selectByPrimaryKey(@Param("id") String id);
 
 	/**
+	 *
+	 * 查询（未回复）
+	 *
+	 **/
+	Long  selectCntUnanswered();
+
+	/**
 	 * 
 	 * 删除（根据主键ID删除）
 	 * 
