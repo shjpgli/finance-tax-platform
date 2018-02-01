@@ -261,14 +261,14 @@ public class CouponServiceImpl implements CouponService {
         List<CouponUserListBO> dataList = couponRoMapper.selectUserList(bo);
 
         // 处理过期的status显示
-        for (CouponUserListBO data : dataList) {
-            Date now = new Date();
-            boolean outdated = (data.getValidStartTime() != null && now.before(data.getValidStartTime())) ||
-                    (data.getValidEndTime() != null && now.after(data.getValidEndTime()));
-            if (outdated) {
-                data.setStatus(COUPON_STATUS_OUTDATED);
-            }
-        }
+//        for (CouponUserListBO data : dataList) {
+//            Date now = new Date();
+//            boolean outdated = (data.getValidStartTime() != null && now.before(data.getValidStartTime())) ||
+//                    (data.getValidEndTime() != null && now.after(data.getValidEndTime()));
+//            if (outdated) {
+//                data.setStatus(COUPON_STATUS_OUTDATED);
+//            }
+//        }
         return dataList;
     }
 
