@@ -492,6 +492,7 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
                 sendLog.setId(logId);
                 sendLog.setFailcode(detailDTO.getErrCode());
                 sendLog.setLogtime(new Date());
+                sendLog.setSendinfo(detailDTO.getContent());
                 switch (detailDTO.getSendStatus().intValue()){
                     case 1:sendLog.setSendstatus("0");
                         break;

@@ -21,9 +21,9 @@
         <include refid="Base_Column"/>
         FROM msg_business_message
         WHERE userId = #{userId}
-        <if test="type!=null">AND type = #{type}</if>
-        <if test="busiType!=null">AND busiType = #{busiType}</if>
-        <if test="status!=null">AND status = #{status}</if>
+        <if test="type != null and type != ''">AND type = #{type}</if>
+        <if test="busiType != null and busiType != ''">AND busiType = #{busiType}</if>
+        <if test="status != null and status != ''">AND status = #{status}</if>
         AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
         ORDER BY createTime DESC
     </select>
@@ -43,18 +43,6 @@
         <if test="startDate!=null">and <![CDATA[  mbm.createTime >= #{startDate}]]></if>
         <if test="endDate!=null">and <![CDATA[  mbm.createTime < #{endDate}]]></if>
         ORDER BY mbm.createTime DESC
-    </select>
-
-    <!-- 只查询半年内的记录 -->
-    <select id="unreadCount" parameterType="com.abc12366.message.model.BusinessMessage"
-            resultType="java.lang.Integer">
-        SELECT count(*)
-        FROM msg_business_message
-        WHERE userId = #{userId}
-        <if test="type != null and type != ''">AND type = #{type}</if>
-        <if test="busiType != null and busiType != ''">AND busiType = #{busiType}</if>
-        AND status = '1'
-        AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
     </select>
 
     <select id="selectUserById" parameterType="java.lang.String" resultType="com.abc12366.message.model.bo.UserSimple">
