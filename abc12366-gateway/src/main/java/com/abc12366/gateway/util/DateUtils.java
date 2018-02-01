@@ -104,6 +104,25 @@ public class DateUtils {
     }
 
     /**
+     * 字符串转换成日期
+     *
+     * @param str
+     * @return date
+     */
+    public static Date strToDateHHMMSS(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new ServiceException(4805);
+        }
+        return date;
+    }
+
+    /**
      * 字符串转换成日期，yyyy-MM
      *
      * @param str
