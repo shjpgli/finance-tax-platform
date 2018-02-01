@@ -217,7 +217,7 @@
             <if test="userId != null and userId != ''">cu.userId = #{userId}</if>
             <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
-            <if test="validEndTime != null">AND cu.validEndTime <![CDATA[<]]> #{validEndTime}</if>
+            <if test="validEndTime != null">AND cu.validEndTime <![CDATA[>]]> #{validEndTime}</if>
             <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
             <if test="categoryIds != null  and categoryIds!='' and categoryIds!='ALL'">AND cu.categoryIds LIKE
                 CONCAT('%',#{categoryIds},'%')

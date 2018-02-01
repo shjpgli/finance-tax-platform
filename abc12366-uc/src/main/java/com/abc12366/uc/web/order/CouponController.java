@@ -1,6 +1,7 @@
 package com.abc12366.uc.web.order;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
@@ -325,6 +326,7 @@ public class CouponController {
     public ResponseEntity selectUserCouponList(
             @PathVariable String userId,
             @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "validEndTime", required = false) String validEndTime,
             @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -335,6 +337,9 @@ public class CouponController {
         }
         if (StringUtils.isNotEmpty(categoryIds)) {
             bo.setCategoryIds(categoryIds);
+        }
+        if (validEndTime != null && !"".equals(validEndTime)) {
+            bo.setValidEndTime(DateUtils.strToDateHHMMSS(validEndTime));
         }
         bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
