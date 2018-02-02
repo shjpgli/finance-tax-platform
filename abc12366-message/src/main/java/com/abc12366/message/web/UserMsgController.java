@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,33 +44,41 @@ public class UserMsgController {
     /**
      * 获取当前用户消息列表
      *
-     * @param page 当前页
-     * @param size 每页大小
+     * @param fromNickname 发送用户昵称
+     * @param fromUserId   发送用户ID
+     * @param toNickname   接收用户昵称
+     * @param toUserId     接收用户ID
+     * @param type         类型
+     * @param status       状态
+     * @param page         当前页
+     * @param size         每页大小
      * @return ResponseEntity
      */
     @GetMapping()
-    public ResponseEntity selectList(@RequestParam(required = false) String type,
+    public ResponseEntity selectList(@RequestParam(required = false) String fromNickname,
+                                     @RequestParam(required = false) String fromUserId,
+                                     @RequestParam(required = false) String toNickname,
+                                     @RequestParam(required = false) String toUserId,
+                                     @RequestParam(required = false) String type,
                                      @RequestParam(required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     HttpServletRequest request) {
-        LOGGER.info("{},{},{},{}", type, status, page, size);
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{},{},{},{},{},{},{},{}", fromNickname, fromUserId, toNickname, toUserId, type, status, page,
+                size);
 
-        // request USER_ID为空
-        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
-        String userId = (String) request.getAttribute(Constant.USER_ID);
+        UserMessage um = new UserMessage.Builder()
+                .fromNickname(fromNickname)
+                .fromUserId(fromUserId)
+                .toNickname(toNickname)
+                .toUserId(toUserId)
+                .type(type)
+                .status(status)
+                .createTime(new Timestamp(System.currentTimeMillis())).build();
+        List<UserMessage> dataList = userMsgService.selectList(um, page, size);
 
-        if (!StringUtils.isEmpty(userId)) {
-            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).status(status).build();
-            List<UserMessage> dataList = userMsgService.selectList(um, page, size);
-
-            PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
-            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
-                    "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
-        }
-
-        LOGGER.info("{}", responseEntity);
-        return responseEntity;
+        PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
+                "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
     }
 
     /**
@@ -252,10 +261,12 @@ public class UserMsgController {
      */
     @GetMapping(path = "/conversation")
     public ResponseEntity selectConversationList(@RequestParam String fromUserId,
-                                               @RequestParam String toUserId,
-                                               @RequestParam(required = false) String type,
-                                               @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
+                                                 @RequestParam String toUserId,
+                                                 @RequestParam(required = false) String type,
+                                                 @RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                         page,
+                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                         size
     ) {
         Map<String, Object> map = new HashMap<>();
         map.put("fromUserId", fromUserId);
