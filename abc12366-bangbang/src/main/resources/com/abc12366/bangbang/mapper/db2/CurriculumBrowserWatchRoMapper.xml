@@ -29,7 +29,7 @@
         <if test="date != null and date != ''">
             WHERE t.date = #{date}
         </if>
-        ORDER BY t.date
+        ORDER BY t.date DESC
     </select>
 
 
