@@ -36,6 +36,7 @@ import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -469,7 +470,7 @@ public class CouponServiceImpl implements CouponService {
                     cu.setValidStartTime(c.getValidStartTime());
                     cu.setValidEndTime(c.getValidEndTime());
                 } else {
-                    cu.setValidEndTime(now);
+                    cu.setValidStartTime(now);
                     cu.setValidEndTime(DateUtils.addDays(now, c.getValidDays()));
                 }
                 cu.setDescription(c.getDescription());
@@ -544,7 +545,9 @@ public class CouponServiceImpl implements CouponService {
                 break;
             case COUPONTYPE_ZHEKOU:
                 if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
-                    amountAfter = amountAfter * cu.getParam2();
+                    //四舍五入保留两位小数
+                    BigDecimal bg = new BigDecimal(amountAfter * cu.getParam2());
+                    amountAfter = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 }else {
                     throw new ServiceException(7141);
                 }
