@@ -186,7 +186,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             LOGGER.info("From redis read: " + key);
             dataList = JSONArray.parseArray(redisTemplate.opsForValue().get(key), BusinessMessage.class);
         } else {
-            dataList = businessMsgRoMapper.selectList(bm);
+            dataList = businessMsgRoMapper.selectUnreadList(bm);
             redisTemplate.opsForValue().set(key,
                     JSONObject.toJSONString(dataList),
                     RedisConstant.DAY_1,
