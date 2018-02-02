@@ -113,4 +113,11 @@ public interface CouponRoMapper {
      * @return 优惠券
      */
     CouponBO selectCoupon(String id);
+
+    /**
+     * 查找领用的优惠券
+     * @param useCouponId 领用的ID
+     * @return 领用的优惠券对象
+     */
+    CouponUser selectUserCouponById(String useCouponId);
 }

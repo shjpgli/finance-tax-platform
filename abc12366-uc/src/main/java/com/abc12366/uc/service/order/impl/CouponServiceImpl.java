@@ -523,43 +523,41 @@ public class CouponServiceImpl implements CouponService {
         // 优惠后的金额
         double amountAfter = amount;
 
-        String id = bo.getUseCouponId();
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", id);
-        map.put("userId", bo.getUserId());
-        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
-        if (dataList.size() > 0) {
-            String ids = "";
-            for (CouponUser cu : dataList) {
-
-                checkCouponUser(bo.getUserId(), bo.getCategoryId(), cu);
-                // 计算优惠后的金额
-                switch (cu.getCouponType()) {
-                    case COUPONTYPE_MANJIAN:
-                        if (amount >= cu.getParam1()) {
-                            amount = amount - cu.getParam1();
-                            amountAfter = amountAfter - cu.getParam2();
-                        }
-                        break;
-                    case COUPONTYPE_ZHEKOU:
-                        if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
-                            amount = amount - cu.getParam1();
-                            amountAfter = amountAfter * cu.getParam2();
-                        }
-                        break;
-                    case COUPONTYPE_LIJIAN:
-                        if (amount >= cu.getParam2()) {
-                            amountAfter = amountAfter - cu.getParam2();
-                        } else {
-                            throw new ServiceException(7133);
-                        }
-                        break;
-                    default:
-                        throw new ServiceException(7102);
+//        String id = bo.getUseCouponId();
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("id", id);
+//        map.put("userId", bo.getUserId());
+        CouponUser cu = couponRoMapper.selectUserCouponById(bo.getUseCouponId());
+        if(cu == null){
+            LOGGER.info("查询已经领用的优惠券失败");
+            throw new ServiceException(7139);
+        }
+        checkCouponUser(bo.getUserId(), bo.getCategoryId(), cu);
+        // 计算优惠后的金额
+        switch (cu.getCouponType()) {
+            case COUPONTYPE_MANJIAN:
+                if (amount >= cu.getParam1()) {
+                    amountAfter = amountAfter - cu.getParam2();
+                }else {
+                    throw new ServiceException(7140);
                 }
-                ids += cu.getId();
-            }
-            amountAfter = id.length() == ids.length() ? amountAfter : amount;
+                break;
+            case COUPONTYPE_ZHEKOU:
+                if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
+                    amountAfter = amountAfter * cu.getParam2();
+                }else {
+                    throw new ServiceException(7141);
+                }
+                break;
+            case COUPONTYPE_LIJIAN:
+                if (amount >= cu.getParam2()) {
+                    amountAfter = amountAfter - cu.getParam2();
+                } else {
+                    throw new ServiceException(7133);
+                }
+                break;
+            default:
+                throw new ServiceException(7102);
         }
         LOGGER.info("{}", amountAfter);
         return amountAfter;
