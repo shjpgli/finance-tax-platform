@@ -19,12 +19,24 @@
             resultType="com.abc12366.message.model.UserMessage">
         SELECT
         <include refid="Base_Column"/>,
-        (select muu.nickname from msg_uc_user muu where muu.id=mu.fromUserId) nickname
+        (select muu.nickname from msg_uc_user muu where muu.id=mu.fromUserId) fromNickname,
+        (select muu.nickname from msg_uc_user muu where muu.id=mu.toUserId) toNickname
         FROM msg_user_message mu
-        WHERE toUserId = #{toUserId}
-        <if test="status != null and status != ''"> AND status = #{status}</if>
-        <if test="type != null and type != ''"> AND type = #{type}</if>
-        AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
+        <where>
+            <if test="toNickname != null and toNickname != ''">
+                toUserId in (select id from msg_uc_user where nickname = #{toNickname})
+            </if>
+            <if test="fromNickname != null and fromNickname != ''">
+                and fromUserId in (select id from msg_uc_user where nickname = #{fromNickname})
+            </if>
+            <if test="fromUserId != null and fromUserId != ''">AND fromUserId = #{fromUserId}</if>
+            <if test="toUserId != null and toUserId != ''">AND toUserId = #{toUserId}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="type != null and type != ''">AND type = #{type}</if>
+            <if test="createTime != null">
+                AND createTime > date_sub(now(), interval '181 0:0:0' day_second)
+            </if>
+        </where>
         ORDER BY createTime DESC
     </select>
 
@@ -64,8 +76,8 @@
         (select muu.nickname from msg_uc_user muu where muu.id=mu.fromUserId) nickname
         FROM msg_user_message mu
         WHERE toUserId = #{toUserId}
-        <if test="status != null and status != ''"> AND status = #{status}</if>
-        <if test="type != null and type != ''"> AND type = #{type}</if>
+        <if test="status != null and status != ''">AND status = #{status}</if>
+        <if test="type != null and type != ''">AND type = #{type}</if>
         AND createTime > date_sub(now(), interval '30 0:0:0' day_second)
         ORDER BY createTime DESC
     </select>

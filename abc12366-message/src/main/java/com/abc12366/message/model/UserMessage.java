@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 用户消息对象
  *
  * @author lijun <ljun51@outlook.com>
- * @create 2017-07-27 11:21 AM
+ * @date 2017-07-27 11:21 AM
  * @since 1.0.0
  */
 public class UserMessage {
@@ -41,14 +41,15 @@ public class UserMessage {
     @Length(min = 1, max = 1)
     private String type;
 
-    //用户名
-    private String nickname;
+    private String fromNickname;
+    private String toNickname;
+
 
     public UserMessage() {
     }
 
     public UserMessage(String id, String fromUserId, String toUserId, String content, String status, Timestamp
-            createTime, Timestamp lastUpdate, String type, String nickname) {
+            createTime, Timestamp lastUpdate, String type, String fromNickname, String toNickname) {
         this.id = id;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
@@ -57,7 +58,8 @@ public class UserMessage {
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
         this.type = type;
-        this.nickname = nickname;
+        this.fromNickname = fromNickname;
+        this.toNickname = toNickname;
     }
 
     private UserMessage(Builder builder) {
@@ -69,7 +71,8 @@ public class UserMessage {
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
         setType(builder.type);
-        setNickname(builder.nickname);
+        setFromNickname(builder.fromNickname);
+        setToNickname(builder.toNickname);
     }
 
     public String getId() {
@@ -136,12 +139,20 @@ public class UserMessage {
         this.type = type;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getFromNickname() {
+        return fromNickname;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setFromNickname(String fromNickname) {
+        this.fromNickname = fromNickname;
+    }
+
+    public String getToNickname() {
+        return toNickname;
+    }
+
+    public void setToNickname(String toNickname) {
+        this.toNickname = toNickname;
     }
 
     @Override
@@ -155,7 +166,8 @@ public class UserMessage {
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", type='" + type + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", fromNickname='" + fromNickname + '\'' +
+                ", toNickname='" + toNickname + '\'' +
                 '}';
     }
 
@@ -168,6 +180,8 @@ public class UserMessage {
         private Timestamp createTime;
         private Timestamp lastUpdate;
         private String type;
+        private String fromNickname;
+        private String toNickname;
         private String nickname;
 
         public Builder() {
@@ -210,6 +224,16 @@ public class UserMessage {
 
         public Builder type(String val) {
             type = val;
+            return this;
+        }
+
+        public Builder fromNickname(String val) {
+            fromNickname = val;
+            return this;
+        }
+
+        public Builder toNickname(String val) {
+            toNickname = val;
             return this;
         }
 
