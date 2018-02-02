@@ -28,6 +28,20 @@
         ORDER BY createTime DESC
     </select>
 
+    <!-- 只查询最近30天内的记录 -->
+    <select id="selectUnreadList" parameterType="com.abc12366.message.model.BusinessMessage"
+            resultType="com.abc12366.message.model.BusinessMessage">
+        SELECT
+        <include refid="Base_Column"/>
+        FROM msg_business_message
+        WHERE userId = #{userId}
+        <if test="type != null and type != ''">AND type = #{type}</if>
+        <if test="busiType != null and busiType != ''">AND busiType = #{busiType}</if>
+        <if test="status != null and status != ''">AND status = #{status}</if>
+        AND createTime > date_sub(now(), interval '30 0:0:0' day_second)
+        ORDER BY createTime DESC
+    </select>
+
     <select id="selectListByUsername" parameterType="java.util.Map"
             resultType="com.abc12366.message.model.bo.BusinessMessageAdmin">
         SELECT

@@ -3,6 +3,7 @@ package com.abc12366.message.mapper.db2;
 import com.abc12366.message.model.UserMessage;
 import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
+import com.abc12366.message.model.bo.UserSimple;
 
 import java.util.List;
 import java.util.Map;
@@ -19,15 +20,21 @@ public interface UserMsgRoMapper {
 
     List<UserMessageForBangbang> UserMessageForBangbang(String userId);
 
-    List<UserMessageAdmin> selectListByUsername(Map<String, Object> map);
-
-    List<UserMessageForBangbang> selectListByUser(Map<String, String> map);
+    /**
+     * 用户会话
+     */
+    List<UserMessageAdmin> selectConversationList(Map<String, Object> map);
 
     /**
-     * 查询用户消息未读总数
+     * 最近30天未读列表
      *
-     * @param data 用户消息对象，userId,type
-     * @return 未读消息数
+     * @param data 过滤条件
+     * @return 未读列表
      */
-    int unreadCount(UserMessage data);
+    List<UserMessage> selectUnreadList(UserMessage data);
+
+    /**
+     * 根据ID查询用户图片、昵称
+     */
+    UserSimple selectUserById(String id);
 }
