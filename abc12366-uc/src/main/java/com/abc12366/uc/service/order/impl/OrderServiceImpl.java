@@ -280,19 +280,15 @@ public class OrderServiceImpl implements OrderService {
                     couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
                     //优惠劵设置已冻结
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("useCouponId", orderSubmitBO.getUseCouponId());
-                    map.put("userId", orderSubmitBO.getUserId());
-                    List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
-                    if (dataList != null && dataList.size() > 0) {
-                        for (CouponUser couponUser : dataList) {
-                            if (orderProductBO.getTradingChannels() != null
-                                    && !orderProductBO.getTradingChannels().contains(CouponServiceImpl.ALL)
-                                    && !couponUser.getCategoryIds().contains(orderProductBO.getTradingChannels())) {
-                                LOGGER.info("商品类目与优惠卷商品类目不一致，优惠卷无法使用");
-                                throw new ServiceException(7138);
-                            }
-                        }
+//                    Map<String, Object> map = new HashMap<>();
+//                    map.put("useCouponId", orderSubmitBO.getUseCouponId());
+//                    map.put("userId", orderSubmitBO.getUserId());
+                    CouponUser couponUser = couponRoMapper.selectUserCouponById(orderSubmitBO.getUseCouponId());
+                    if (orderProductBO.getTradingChannels() != null
+                            && !orderProductBO.getTradingChannels().contains(CouponServiceImpl.ALL)
+                            && !couponUser.getCategoryIds().contains(orderProductBO.getTradingChannels())) {
+                        LOGGER.info("商品类目与优惠卷商品类目不一致，优惠卷无法使用");
+                        throw new ServiceException(7138);
                     }
 
                     couponOrderBO.setStatus("3");

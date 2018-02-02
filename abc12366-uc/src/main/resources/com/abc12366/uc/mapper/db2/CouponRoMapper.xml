@@ -199,11 +199,22 @@
         lastUpdate, orderNo, categoryIds
         FROM uc_coupon_user
         <where>
-            <if test="id != null and id != ''">id = #{id}</if>
+            status = '1' and validEndTime <![CDATA[>]]> now()
+            <if test="id != null and id != ''">and id = #{id}</if>
             <if test="userId != null and userId != ''">and userId = #{userId}</if>
             <if test="couponId != null and couponId != ''">AND couponId = #{couponId}</if>
         </where>
         ORDER BY couponType DESC
+    </select>
+
+    <select id="selectUserCouponById" parameterType="java.util.Map"
+            resultType="com.abc12366.uc.model.order.CouponUser">
+        SELECT id, userId, activityId, couponId, couponName,
+        couponMode, couponType, param1, param2, amountType,
+        validStartTime, validEndTime, description, status, createTime,
+        lastUpdate, orderNo, categoryIds
+        FROM uc_coupon_user
+        where id = #{id}
     </select>
 
     <select id="selectUserList" parameterType="com.abc12366.uc.model.order.CouponUser"
