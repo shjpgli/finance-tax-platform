@@ -272,7 +272,7 @@ public class OrderServiceImpl implements OrderService {
 
                 //判断是否使用优惠劵
                 if (orderSubmitBO.getUseCouponId() != null && !"".equals(orderSubmitBO.getUseCouponId())) {
-                    //判断优惠卷类型是否可以用
+                    //判断优惠券类型是否可以用
                     CouponOrderBO couponOrderBO = new CouponOrderBO();
                     couponOrderBO.setUseCouponId(orderSubmitBO.getUseCouponId());
                     couponOrderBO.setUserId(orderSubmitBO.getUserId());
@@ -287,8 +287,8 @@ public class OrderServiceImpl implements OrderService {
                     if (orderProductBO.getTradingChannels() != null
                             && !orderProductBO.getTradingChannels().contains(CouponServiceImpl.ALL)
                             && !couponUser.getCategoryIds().contains(orderProductBO.getTradingChannels())) {
-                        LOGGER.info("商品类目与优惠卷商品类目不一致，优惠卷无法使用");
-                        throw new ServiceException(7138);
+                        LOGGER.info("商品类目与优惠券商品类目不一致，优惠券无法使用");
+                        throw new ServiceException(7142);
                     }
 
                     couponOrderBO.setStatus("3");
@@ -498,22 +498,22 @@ public class OrderServiceImpl implements OrderService {
         map.put("orderNo", orderCancelBO.getOrderNo());
         map.put("userId", orderCancelBO.getUserId());
         CouponUser couponUser = couponService.selectCouponUser(map);
-        if (couponUser == null) {
-            LOGGER.info("获取优惠劵信息异常");
-            throw new ServiceException(7135);
-        }
-        LOGGER.info("优惠劵取消");
-        List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
-        for (OrderProductBO orderProductBO : orderProductBOs) {
-            CouponOrderBO couponOrderBO = new CouponOrderBO();
-            couponOrderBO.setUseCouponId(couponUser.getCouponId());
-            couponOrderBO.setUserId(orderCancelBO.getUserId());
-            couponOrderBO.setOrderNo(orderCancelBO.getOrderNo());
-            couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
-            couponOrderBO.setAmount(order.getTotalPrice());
-            //优惠劵设置已领取
-            couponOrderBO.setStatus("1");
-            couponService.userUseCoupon(couponOrderBO);
+        if (couponUser != null) {
+//            LOGGER.info("获取优惠劵信息异常");
+//            throw new ServiceException(7135);
+            LOGGER.info("优惠劵取消");
+            List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
+            for (OrderProductBO orderProductBO : orderProductBOs) {
+                CouponOrderBO couponOrderBO = new CouponOrderBO();
+                couponOrderBO.setUseCouponId(couponUser.getCouponId());
+                couponOrderBO.setUserId(orderCancelBO.getUserId());
+                couponOrderBO.setOrderNo(orderCancelBO.getOrderNo());
+                couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
+                couponOrderBO.setAmount(order.getTotalPrice());
+                //优惠劵设置已领取
+                couponOrderBO.setStatus("1");
+                couponService.userUseCoupon(couponOrderBO);
+            }
         }
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单", "0");
         return bo;

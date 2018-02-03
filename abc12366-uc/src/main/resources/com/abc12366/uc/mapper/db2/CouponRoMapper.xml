@@ -49,7 +49,7 @@
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
-            ca.status = '2'
+            ca.status = '2' and target != '3'
             <if test="activityName != null and activityName != ''">
                 and ca.activityName LIKE CONCAT('%',#{activityName},'%')
             </if>
@@ -237,9 +237,9 @@
                 <when test="status != null and status != ''">
                     AND cu.status = #{status}
                 </when>
-                <when test="status == null or status == ''">
-                    AND cu.status != '4'
-                </when>
+                <!--<when test="status == null or status == ''">-->
+                    <!--AND cu.status != '4'-->
+                <!--</when>-->
             </choose>
         </where>
         order by cu.lastUpdate DESC

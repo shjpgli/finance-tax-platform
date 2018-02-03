@@ -33,6 +33,7 @@
         LEFT JOIN uc_city c on c.cityId = a.city
         LEFT JOIN uc_area e on e.areaId = a.area
         WHERE a.userId = #{userId}
+        order by a.isDefault desc
     </select>
 
     <select id="selectById" resultType="com.abc12366.uc.model.order.bo.UserAddressBO" parameterType="java.lang.String">
