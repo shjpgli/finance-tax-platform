@@ -3,10 +3,7 @@ package com.abc12366.uc.mapper.db2;
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
 import com.abc12366.uc.model.order.CouponUser;
-import com.abc12366.uc.model.order.bo.CouponActivityBO;
-import com.abc12366.uc.model.order.bo.CouponActivityListBO;
-import com.abc12366.uc.model.order.bo.CouponListBO;
-import com.abc12366.uc.model.order.bo.CouponUserListBO;
+import com.abc12366.uc.model.order.bo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -90,11 +87,37 @@ public interface CouponRoMapper {
     List<CouponActivityBO> selectCouponActivityList(Map<String,Object> map);
 
     /**
-     * 根据订单获取优惠卷
-     * @param map
-     * @return
+     * 根据订单获取元优惠券
+     * @param map map
+     * @return 领取的优惠券对象
      */
     CouponUser selectCouponUser(Map<String, Object> map);
 
+    /**
+     * 后台查询优惠券活动
+     * @param bo 活动对象
+     * @return 对象列表
+     */
     List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo);
+
+    /**
+     * 前端-查看优惠劵活动
+     * @param id id
+     * @return 活动对象
+     */
+    CouponActivityBO selectActivity(String id);
+
+    /**
+     * 前端-查看优惠劵
+     * @param id id
+     * @return 优惠券
+     */
+    CouponBO selectCoupon(String id);
+
+    /**
+     * 查找领用的优惠券
+     * @param useCouponId 领用的ID
+     * @return 领用的优惠券对象
+     */
+    CouponUser selectUserCouponById(String useCouponId);
 }
