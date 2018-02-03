@@ -1,6 +1,7 @@
 package com.abc12366.uc.web.order;
 
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.order.Coupon;
 import com.abc12366.uc.model.order.CouponActivity;
@@ -151,7 +152,7 @@ public class CouponController {
         }
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
-        List<CouponActivityListBO> dataList = couponService.selectActivityList(bo, pageNum, pageSize);
+        List<CouponActivityListBO> dataList = couponService.selectAdminActivityList(bo, pageNum, pageSize);
         PageInfo<CouponActivityListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }
@@ -179,6 +180,18 @@ public class CouponController {
         List<CouponActivityListBO> dataList = couponService.selectActivityList(bo, pageNum, pageSize);
         PageInfo<CouponActivityListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 前端-查看优惠劵
+     *
+     * @param id 活动ID
+     * @return 优惠劵对象
+     */
+    @GetMapping("/activities/coupon/{id}")
+    public ResponseEntity selectCoupon(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        return ResponseEntity.ok(Utils.kv("data", couponService.selectCoupon(id)));
     }
 
     /**
@@ -217,6 +230,18 @@ public class CouponController {
     public ResponseEntity selectOneActivity(@PathVariable String id) {
         LOGGER.info("{}", id);
         return ResponseEntity.ok(Utils.kv("data", couponService.selectOneActivity(id)));
+    }
+
+    /**
+     * 前端-查看优惠劵活动
+     *
+     * @param id 活动ID
+     * @return 优惠劵活动对象
+     */
+    @GetMapping("/activities/{id}")
+    public ResponseEntity selectActivity(@PathVariable String id) {
+        LOGGER.info("{}", id);
+        return ResponseEntity.ok(Utils.kv("data", couponService.selectActivity(id)));
     }
 
     /**
@@ -301,6 +326,7 @@ public class CouponController {
     public ResponseEntity selectUserCouponList(
             @PathVariable String userId,
             @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "validEndTime", required = false) Long validEndTime,
             @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -311,6 +337,9 @@ public class CouponController {
         }
         if (StringUtils.isNotEmpty(categoryIds)) {
             bo.setCategoryIds(categoryIds);
+        }
+        if (validEndTime != null && !"".equals(validEndTime)) {
+            bo.setValidEndTime(DateUtils.transferLongToDate(validEndTime));
         }
         bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);

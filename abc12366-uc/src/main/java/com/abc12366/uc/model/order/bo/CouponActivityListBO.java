@@ -84,6 +84,11 @@ public class CouponActivityListBO {
 
     private Boolean valid;
 
+    /**
+     * 活动图片
+     */
+    private String imageUrl;
+
     public String getId() {
         return id;
     }
@@ -211,5 +216,13 @@ public class CouponActivityListBO {
                 ", usedAmount=" + usedAmount +
                 ", valid=" + valid +
                 '}';
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

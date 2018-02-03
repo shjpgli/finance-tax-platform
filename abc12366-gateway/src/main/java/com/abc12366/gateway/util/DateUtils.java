@@ -104,6 +104,36 @@ public class DateUtils {
     }
 
     /**
+     * 时间戳转时间
+     * @param millSec
+     * @return
+     */
+    public static Date transferLongToDate(Long millSec) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(millSec);
+        return date;
+    }
+
+    /**
+     * 字符串转换成日期
+     *
+     * @param str
+     * @return date
+     */
+    public static Date strToDateHHMMSS(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new ServiceException(4805);
+        }
+        return date;
+    }
+
+    /**
      * 字符串转换成日期，yyyy-MM
      *
      * @param str
