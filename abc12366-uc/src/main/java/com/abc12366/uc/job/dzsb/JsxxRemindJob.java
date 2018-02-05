@@ -1,5 +1,6 @@
 package com.abc12366.uc.job.dzsb;
 
+import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.job.DzsbJob;
@@ -104,6 +105,7 @@ public class JsxxRemindJob implements StatefulJob {
                             dataList.put("keyword4", new DecimalFormat("#.00").format(dzsbXxInfo.getKkje()) + "元");
                             dataList.put("keyword5Color", "#00DB00");
                             dataList.put("keyword5", "成功");
+                            dataList.put("url", SpringCtxHolder.getProperty("mbxx.cszj.url"));
 
                             for (int j = 0; j < users.size(); j++) {
                                 msgSendService.sendMsg(users.get(j), sysMsg, "",
