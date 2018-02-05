@@ -95,6 +95,7 @@ public class DzsjWsxxJob implements StatefulJob {
                                 dataList.put("keyword1", wsxxInfo.getWszlmc() + "  " + wsxxInfo.getWsztmc());
                                 dataList.put("keyword1Color", "#00DB00");
                                 dataList.put("keyword2", wsxxInfo.getLrrq());
+                                dataList.put("url", SpringCtxHolder.getProperty("mbxx.cszj.url"));
 
                                 msgSendService.sendMsg(user, sysMsg, "", "x0BXoANGCPnCb4GoA_Lm2hEPTJrdmW0QCUUvtjK5QRQ", dataList, dxmsg);
                             }
