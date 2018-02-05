@@ -513,7 +513,8 @@ public class CouponServiceImpl implements CouponService {
             map.put("amountAfter", amountAfter);
             couponMapper.batchUpdateUserCoupon(map);
         }
-        return amountAfter;
+        BigDecimal b = new BigDecimal(amountAfter);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     @Override
@@ -537,7 +538,7 @@ public class CouponServiceImpl implements CouponService {
         // 计算优惠后的金额
         switch (cu.getCouponType()) {
             case COUPONTYPE_MANJIAN:
-                if (amount > cu.getParam1()) {
+                if (amount >= cu.getParam1()) {
                     amountAfter = amountAfter - cu.getParam2();
                 }else {
                     throw new ServiceException(7140);
@@ -553,7 +554,7 @@ public class CouponServiceImpl implements CouponService {
                 }
                 break;
             case COUPONTYPE_LIJIAN:
-                if (amount > cu.getParam2()) {
+                if (amount >= cu.getParam2()) {
                     amountAfter = amountAfter - cu.getParam2();
                 } else {
                     throw new ServiceException(7133);
@@ -563,7 +564,8 @@ public class CouponServiceImpl implements CouponService {
                 throw new ServiceException(7102);
         }
         LOGGER.info("{}", amountAfter);
-        return amountAfter;
+        BigDecimal b = new BigDecimal(amountAfter);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     public void checkCouponUser(String userId, String categoryId, CouponUser cu) {
