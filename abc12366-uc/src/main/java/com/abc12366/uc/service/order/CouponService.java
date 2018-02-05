@@ -177,7 +177,7 @@ public interface CouponService {
     /**
      * 前端-查看优惠劵
      * @param id id
-     * @return 优惠卷对象
+     * @return 优惠券对象
      */
     CouponBO selectCoupon(String id);
 }
