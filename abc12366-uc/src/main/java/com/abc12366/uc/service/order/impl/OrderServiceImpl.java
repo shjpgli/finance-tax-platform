@@ -285,10 +285,10 @@ public class OrderServiceImpl implements OrderService {
 //                    map.put("userId", orderSubmitBO.getUserId());
                     CouponUser couponUser = couponRoMapper.selectUserCouponById(orderSubmitBO.getUseCouponId());
                     if (orderProductBO.getTradingChannels() != null
-                            && !orderProductBO.getTradingChannels().contains(CouponServiceImpl.ALL)
+                            && !couponUser.getCategoryIds().contains(CouponServiceImpl.ALL)
                             && !couponUser.getCategoryIds().contains(orderProductBO.getTradingChannels())) {
                         LOGGER.info("商品类目与优惠券商品类目不一致，优惠券无法使用");
-                        throw new ServiceException(7142);
+                        throw new ServiceException(7138);
                     }
 
                     couponOrderBO.setStatus("3");
@@ -1229,6 +1229,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderBO selectOrderDetail(String orderNo) {
         return orderRoMapper.selectOrderDetail(orderNo);
+    }
+
+    @Override
+    public OrderBO selectWebByOrderNo(String orderNo) {
+        return orderRoMapper.selectWebByOrderNo(orderNo);
+    }
+
+    @Override
+    public OrderBO selectWeChatByOrderNo(String orderNo) {
+        return orderRoMapper.selectWeChatByOrderNo(orderNo);
     }
 
     /**

@@ -356,6 +356,34 @@ public class OrderController {
     }
 
     /**
+     * 前台-查询订单详情
+     *
+     * @param orderNo 订单号
+     * @return 订单详情
+     */
+    @GetMapping(path = "/web/{orderNo}")
+    public ResponseEntity selectWebByOrderNo(@PathVariable String orderNo) {
+        LOGGER.info("{}", orderNo);
+        OrderBO orderBO = orderService.selectWebByOrderNo(orderNo);
+        LOGGER.info("{}", orderBO);
+        return ResponseEntity.ok(Utils.kv("data", orderBO));
+    }
+
+    /**
+     * 微信端-查询订单详情
+     *
+     * @param orderNo 订单号
+     * @return 订单详情
+     */
+    @GetMapping(path = "/wechat/{orderNo}")
+    public ResponseEntity selectWeChatByOrderNo(@PathVariable String orderNo) {
+        LOGGER.info("{}", orderNo);
+        OrderBO orderBO = orderService.selectWeChatByOrderNo(orderNo);
+        LOGGER.info("{}", orderBO);
+        return ResponseEntity.ok(Utils.kv("data", orderBO));
+    }
+
+    /**
      * 查询订单详情信息
      *
      * @param orderNo 订单号

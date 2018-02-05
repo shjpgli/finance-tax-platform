@@ -112,4 +112,14 @@ public interface OrderRoMapper {
      * @return
      */
     OrderBO selectOrderDetail(String orderNo);
+
+    /**
+     * 前台-查询订单详情
+     */
+    OrderBO selectWebByOrderNo(String orderNo);
+
+    /**
+     * 微信端-查询订单详情
+     */
+    OrderBO selectWeChatByOrderNo(String orderNo);
 }

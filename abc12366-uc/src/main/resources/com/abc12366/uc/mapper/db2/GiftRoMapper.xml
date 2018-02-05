@@ -28,7 +28,7 @@
             <if test="status != null and status!=''">AND status = #{status}</if>
             <if test="category != null  and category!=''">AND category = #{category}</if>
         </where>
-        order BY sort ASC
+        order BY createTime desc
     </select>
 
     <!-- 查询（根据giftID查询） -->
@@ -43,7 +43,7 @@
             <if test="status != null">AND status = #{status}</if>
             <if test="category != null  and category!=''">AND category = #{category}</if>
         </where>
-        order BY sort ASC
+        order BY createTime desc
     </select>
     <!-- 查询（根据giftID查询） -->
     <select id="selectReceiptGiftByDate" resultType="com.abc12366.uc.model.gift.Gift" parameterType="java.util.Date">
@@ -54,7 +54,7 @@
         <![CDATA[
                 and date_format(lastUpdate, '%Y-%m-%d %H:%i:%s') <= date_format(#{date}, '%Y-%m-%d %H:%i:%s')
                 ]]>
-        order BY sort ASC
+        order BY createTime desc
     </select>
 
 

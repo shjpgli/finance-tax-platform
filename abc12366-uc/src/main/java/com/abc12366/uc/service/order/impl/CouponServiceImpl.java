@@ -554,7 +554,7 @@ public class CouponServiceImpl implements CouponService {
                 }
                 break;
             case COUPONTYPE_LIJIAN:
-                if (amount >= cu.getParam2()) {
+                if (amount > cu.getParam2()) {
                     amountAfter = amountAfter - cu.getParam2();
                 } else {
                     throw new ServiceException(7133);
@@ -633,7 +633,7 @@ public class CouponServiceImpl implements CouponService {
                 // 计算优惠后的金额
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
-                        if (amount > cu.getParam1()) {
+                        if (amount >= cu.getParam1()) {
                             amountAfter = amountAfter - cu.getParam2();
                         }
                         break;
