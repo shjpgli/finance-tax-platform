@@ -601,8 +601,8 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7119);
         }
         // 校验优惠劵有效期
-        Date now = new Date();
-        if (!cu.getValidStartTime().after(now) || now.after(cu.getValidEndTime())) {
+        Date now = DateUtils.getToday();
+        if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
             throw new ServiceException(7120);
         }
         // 校验优惠劵状态
@@ -893,6 +893,10 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7117);
         }*/
         if (!VALIDTYPE_DAYS.equals(c.getValidType())) {
+//            if (c.getValidStartTime().after(c.getValidEndTime())) {
+//                LOGGER.info("优惠卷的开始时间不能大于结束时间");
+//                throw new ServiceException(7145);
+//            }
             if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().after(bo.getActivityEndTime())) {
                 LOGGER.info("优惠劵的开始时间，必须在活动时间之间");
                 throw new ServiceException(7136);

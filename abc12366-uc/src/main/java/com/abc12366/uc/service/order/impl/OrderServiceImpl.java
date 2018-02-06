@@ -585,11 +585,12 @@ public class OrderServiceImpl implements OrderService {
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                                userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                                 LOGGER.info("插入会员日志: {}", orderNo);
                                 insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
+
+                                LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                                userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
@@ -633,11 +634,12 @@ public class OrderServiceImpl implements OrderService {
                             //修改订单状态
                             updOrder(order);
                             insertDeductPoints(orderBO);
-                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                            userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                             LOGGER.info("插入会员日志: {}", orderNo);
                             insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
+
+                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                            userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                             insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
                             sendMemberMsg(orderProductBO, order, request);

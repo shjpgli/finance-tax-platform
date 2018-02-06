@@ -550,6 +550,23 @@ public class DateUtils {
     }
 
     /**
+     * 获得当前时间yyyy-MM-dd
+     *
+     * @return String
+     */
+    public static Date getToday() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String s = sdf.format(new Date());
+        Date date = null;
+        try {
+            date = sdf.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    /**
      * 获取当前系统当天日期
      *
      * @param date Date
