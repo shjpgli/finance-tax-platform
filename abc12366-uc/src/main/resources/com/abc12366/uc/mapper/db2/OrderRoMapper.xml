@@ -55,7 +55,7 @@
                     select="getTradeLogBO"></collection>-->
     </resultMap>
 
-    <!--订单列表对象-->
+    <!--订单详情对象-->
     <resultMap id="orderBODetailMap" type="com.abc12366.uc.model.order.bo.OrderBO">
         <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
@@ -139,6 +139,75 @@
                     select="getOrderProduct"></collection>
     </resultMap>
 
+    <!--订单对象-->
+    <resultMap id="orderWebMap" type="com.abc12366.uc.model.order.bo.OrderBO">
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="nowVipLevel" property="nowVipLevel" jdbcType="VARCHAR"/>
+        <result column="nowVipLevelName" property="nowVipLevelName" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
+        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
+        <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
+        <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
+        <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+
+        <collection property="tradeBOList" ofType="com.abc12366.uc.model.order.bo.TradeBO" column="orderNo"
+                    select="getTradeBO"></collection>
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
+                    select="getOrderProduct"></collection>
+    </resultMap>
+
+    <!--微信订单对象-->
+    <resultMap id="orderWeChatMap" type="com.abc12366.uc.model.order.bo.OrderBO">
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="nowVipLevel" property="nowVipLevel" jdbcType="VARCHAR"/>
+        <result column="nowVipLevelName" property="nowVipLevelName" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
+        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
+        <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
+        <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
+        <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="orderNo"
+                    select="getOrderProduct"></collection>
+        <collection property="orderLogBOList" ofType="com.abc12366.uc.model.order.bo.OrderLogBO" column="orderNo"
+                    select="getOrderLog"></collection>
+    </resultMap>
 
     <!--前台订单列表查询对象-->
     <resultMap id="orderBOMap" type="com.abc12366.uc.model.order.bo.OrderBO">
@@ -324,10 +393,21 @@
     <!--获取订单日志-->
     <select id="getOrderLogBO" resultMap="orderLogMap" parameterType="java.lang.String">
         SELECT
-        l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark,l.logType,a.username as createUserName
-        FROM uc_order_log l
-        LEFT JOIN uc_admin a on a.id = l.createUser
-        WHERE l.orderNo = #{orderNo}
+        l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark,l.logType,l.createUserName from(
+        SELECT
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as
+        createUserName,o.logType,o.exchangeId
+        FROM uc_user u
+        LEFT JOIN  uc_order_log o ON u.id = o.createUser
+        where o.orderNo = #{orderNo}
+        UNION ALL
+        SELECT
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as
+        createUserName,o.logType,o.exchangeId
+        FROM uc_admin u
+        LEFT JOIN uc_order_log o ON u.id = o.createUser
+        where o.orderNo= #{orderNo}
+        ) l
         ORDER BY l.createTime DESC
     </select>
 
@@ -479,11 +559,22 @@
     <!--获取订单操作日志信息-->
     <select id="getOrderLog" resultMap="orderLogBOMap" parameterType="java.lang.String">
         SELECT
-        l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark,a.nickname as createUserName
-        FROM uc_order_log l
-        LEFT JOIN uc_user_admin a on a.id = l.createUser
-        WHERE l.orderNo = #{orderNo}
-        ORDER BY l.createTime asc
+        l.id as orderLogId, l.orderNo, l.action, l.createTime, l.createUser, l.remark,l.logType,l.createUserName from(
+        SELECT
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as
+        createUserName,o.logType,o.exchangeId
+        FROM uc_user u
+        LEFT JOIN  uc_order_log o ON u.id = o.createUser
+        where o.orderNo = #{orderNo}
+        UNION ALL
+        SELECT
+        o.id, o.orderNo, o.action, o.createTime, o.createUser, o.remark,u.nickname as
+        createUserName,o.logType,o.exchangeId
+        FROM uc_admin u
+        LEFT JOIN uc_order_log o ON u.id = o.createUser
+        where o.orderNo= #{orderNo}
+        ) l
+        ORDER BY l.createTime DESC
     </select>
 
     <!--获取用户信息-->
@@ -579,6 +670,24 @@
         LEFT JOIN uc_user u ON u.id = o.userId
 		left join uc_user_extend e on u.id = e.userId
         left join uc_uvip_level v on v.levelCode = o.nowVipLevel
+        WHERE o.orderNo = #{orderNo}
+    </select>
+
+    <!-- 查询订单详情 -->
+    <select id="selectWebByOrderNo" resultMap="orderWebMap" parameterType="java.lang.String">
+        SELECT
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping
+        FROM uc_order o
+        WHERE o.orderNo = #{orderNo}
+    </select>
+
+    <!-- 查询订单详情 -->
+    <select id="selectWeChatByOrderNo" resultMap="orderWeChatMap" parameterType="java.lang.String">
+        SELECT
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping
+        FROM uc_order o
         WHERE o.orderNo = #{orderNo}
     </select>
 

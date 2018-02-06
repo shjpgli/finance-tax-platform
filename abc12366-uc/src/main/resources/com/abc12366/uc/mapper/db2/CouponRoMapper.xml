@@ -260,8 +260,8 @@
         id,	userId,	activityId,	couponId,	couponName,	couponMode,	couponType,	param1,	param2,	amountType,	validStartTime,	validEndTime,	description,	status,	createTime,	lastUpdate,	orderNo,	categoryIds,	amountAfter
     </sql>
 
-    <select id="selectCouponUser" parameterType="com.abc12366.uc.model.order.CouponUser"
-            resultType="java.util.Map">
+    <select id="selectCouponUser" parameterType="java.util.Map"
+            resultType="com.abc12366.uc.model.order.CouponUser">
         SELECT
         <include refid="CouponUser_Column_List"/>
         FROM uc_coupon_user
