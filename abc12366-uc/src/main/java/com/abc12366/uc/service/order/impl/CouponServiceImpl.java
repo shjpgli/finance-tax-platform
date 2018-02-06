@@ -434,7 +434,7 @@ public class CouponServiceImpl implements CouponService {
     //生成min->max之间的数,最小生成的随机数为min，最大生成的随机数不能超过max
     public static double getRandomNum(double min, double max) {
         //return Math.round(Math.random() * (max - min)) + min;
-        return max - Math.random() * (max - min);
+        return getTwoDouble(max - Math.random() * (max - min));
     }
 
     @Transactional(value = "db1TxManager")
@@ -512,7 +512,7 @@ public class CouponServiceImpl implements CouponService {
                 map.put("status", bo.getStatus());
                 map.put("lastUpdate", new Date());
                 map.put("id", bo.getUseCouponId());
-                map.put("amountAfter", amountAfter);
+                map.put("amountAfter", getTwoDouble(bo.getAmount()-amountAfter));
                 couponMapper.batchUpdateUserCoupon(map);
             }
             BigDecimal b = new BigDecimal(amountAfter);
@@ -523,7 +523,6 @@ public class CouponServiceImpl implements CouponService {
             map.put("status", bo.getStatus());
             map.put("lastUpdate", new Date());
             map.put("id", bo.getUseCouponId());
-//                map.put("amountAfter", amountAfter);
             couponMapper.batchUpdateUserCoupon(map);
             return 0;
         }
@@ -551,9 +550,7 @@ public class CouponServiceImpl implements CouponService {
         switch (cu.getCouponType()) {
             case COUPONTYPE_MANJIAN:
                 if (amount >= cu.getParam1()) {
-                    BigDecimal bg = new BigDecimal(amountAfter);
-                    BigDecimal bg1 = new BigDecimal(cu.getParam2());
-                    amountAfter = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() - bg1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    amountAfter = getTwoDouble(amountAfter) - getTwoDouble(cu.getParam2());
                 }else {
                     throw new ServiceException(7140);
                 }
@@ -561,8 +558,7 @@ public class CouponServiceImpl implements CouponService {
             case COUPONTYPE_ZHEKOU:
                 if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
                     //四舍五入保留两位小数
-                    BigDecimal bg = new BigDecimal(amountAfter * cu.getParam2());
-                    amountAfter = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    getTwoDouble(amountAfter * cu.getParam2());
                 }else {
                     throw new ServiceException(7141);
                 }
@@ -582,7 +578,12 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7144);
         }
         LOGGER.info("{}", amountAfter);
-        BigDecimal b = new BigDecimal(amountAfter);
+        return getTwoDouble(amountAfter);
+    }
+
+    //获取两位随机数
+    public static double getTwoDouble(double value){
+        BigDecimal b = new BigDecimal(value);
         return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
