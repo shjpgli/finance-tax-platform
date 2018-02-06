@@ -558,7 +558,7 @@ public class CouponServiceImpl implements CouponService {
             case COUPONTYPE_ZHEKOU:
                 if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
                     //四舍五入保留两位小数
-                    getTwoDouble(amountAfter * cu.getParam2());
+                    amountAfter = getTwoDouble(amountAfter * cu.getParam2());
                 }else {
                     throw new ServiceException(7141);
                 }
@@ -602,7 +602,7 @@ public class CouponServiceImpl implements CouponService {
         }
         // 校验优惠劵有效期
         Date now = new Date();
-        if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
+        if (!cu.getValidStartTime().after(now) || now.after(cu.getValidEndTime())) {
             throw new ServiceException(7120);
         }
         // 校验优惠劵状态
