@@ -541,6 +541,13 @@ public class OrderServiceImpl implements OrderService {
                 String userId = orderBO.getUserId();
                 pBO.setOrderNo(orderNo);
                 List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+
+                LOGGER.info("获取优惠劵信息");
+                Map<String, Object> map = new HashMap<>();
+                map.put("orderNo", orderBO.getOrderNo());
+                map.put("userId", orderBO.getUserId());
+                CouponUser couponUser = couponService.selectCouponUser(map);
+
                 for (OrderProductBO orderProductBO : orderProductBOs) {
                     int isPay = orderPayBO.getIsPay();
                     Order order = new Order();
@@ -642,6 +649,19 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
                         }
                         insertTradeLog(order, tradeNo);
+                    }
+                    if(couponUser != null){
+                        LOGGER.info("使用过优惠券，对优惠券状态进行修改");
+                        CouponOrderBO couponOrderBO = new CouponOrderBO();
+                        couponOrderBO.setUseCouponId(couponUser.getId());
+                        couponOrderBO.setUserId(orderBO.getUserId());
+                        couponOrderBO.setOrderNo(orderBO.getOrderNo());
+                        couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
+                        couponOrderBO.setAmount(orderBO.getTotalPrice());
+                        couponOrderBO.setOperation("0");
+                        //优惠劵设置已领取
+                        couponOrderBO.setStatus("2");
+                        couponService.userUseCoupon(couponOrderBO);
                     }
                 }
             }
