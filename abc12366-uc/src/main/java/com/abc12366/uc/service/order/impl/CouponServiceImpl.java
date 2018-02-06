@@ -431,9 +431,10 @@ public class CouponServiceImpl implements CouponService {
         return 1 == couponMapper.updateActivity(ca);
     }
 
-    //生成min->max之间的数,最小生成的随机数为min，最大生成的随机数为max
+    //生成min->max之间的数,最小生成的随机数为min，最大生成的随机数不能超过max
     public static double getRandomNum(double min, double max) {
-        return Math.round(Math.random() * (max - min)) + min;
+        //return Math.round(Math.random() * (max - min)) + min;
+        return max - Math.random() * (max - min);
     }
 
     @Transactional(value = "db1TxManager")
@@ -550,7 +551,9 @@ public class CouponServiceImpl implements CouponService {
         switch (cu.getCouponType()) {
             case COUPONTYPE_MANJIAN:
                 if (amount >= cu.getParam1()) {
-                    amountAfter = amountAfter - cu.getParam2();
+                    BigDecimal bg = new BigDecimal(amountAfter);
+                    BigDecimal bg1 = new BigDecimal(cu.getParam2());
+                    amountAfter = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() - bg1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 }else {
                     throw new ServiceException(7140);
                 }

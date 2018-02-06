@@ -279,7 +279,7 @@ public class OrderServiceImpl implements OrderService {
                     couponOrderBO.setOrderNo(orderNo);
                     couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
-                    couponOrderBO.setOperation("0");
+                    couponOrderBO.setOperation("1");
                     //优惠劵设置已冻结
 //                    Map<String, Object> map = new HashMap<>();
 //                    map.put("useCouponId", orderSubmitBO.getUseCouponId());
