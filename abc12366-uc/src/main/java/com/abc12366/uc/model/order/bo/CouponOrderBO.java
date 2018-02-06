@@ -52,6 +52,11 @@ public class CouponOrderBO {
     @Length(max = 1)
     private String status;
 
+    /**
+     * 操作，1：提交订单，0：取消订单
+     */
+    private String operation;
+
     public String getUserId() {
         return userId;
     }
@@ -110,5 +115,13 @@ public class CouponOrderBO {
 
     public void setUseCouponId(String useCouponId) {
         this.useCouponId = useCouponId;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 }

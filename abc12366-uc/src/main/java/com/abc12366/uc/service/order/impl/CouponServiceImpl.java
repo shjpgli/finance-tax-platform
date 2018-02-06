@@ -502,19 +502,30 @@ public class CouponServiceImpl implements CouponService {
         cc.setAmount(bo.getAmount());
         cc.setCategoryId(bo.getCategoryId());
         cc.setUseCouponId(bo.getUseCouponId());
-        double amountAfter = calculateOrderAmount(cc);
-
-        if (amountAfter < bo.getAmount()) {
+        //1：提交订单，0：取消订单
+        if("1".equals(bo.getOperation())){
+            double amountAfter = calculateOrderAmount(cc);
+            if (amountAfter < bo.getAmount()) {
+                Map<String, Object> map = new HashMap<>(16);
+                map.put("orderNo", COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
+                map.put("status", bo.getStatus());
+                map.put("lastUpdate", new Date());
+                map.put("id", bo.getUseCouponId());
+                map.put("amountAfter", amountAfter);
+                couponMapper.batchUpdateUserCoupon(map);
+            }
+            BigDecimal b = new BigDecimal(amountAfter);
+            return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        }else{
             Map<String, Object> map = new HashMap<>(16);
             map.put("orderNo", COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
             map.put("status", bo.getStatus());
             map.put("lastUpdate", new Date());
             map.put("id", bo.getUseCouponId());
-            map.put("amountAfter", amountAfter);
+//                map.put("amountAfter", amountAfter);
             couponMapper.batchUpdateUserCoupon(map);
+            return 0;
         }
-        BigDecimal b = new BigDecimal(amountAfter);
-        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     @Override
@@ -562,6 +573,10 @@ public class CouponServiceImpl implements CouponService {
                 break;
             default:
                 throw new ServiceException(7102);
+        }
+        if(amountAfter <= 0){
+            LOGGER.info("惠后的金额必须大于0元");
+            throw new ServiceException(7144);
         }
         LOGGER.info("{}", amountAfter);
         BigDecimal b = new BigDecimal(amountAfter);
