@@ -513,7 +513,8 @@ public class CouponServiceImpl implements CouponService {
             map.put("amountAfter", amountAfter);
             couponMapper.batchUpdateUserCoupon(map);
         }
-        return amountAfter;
+        BigDecimal b = new BigDecimal(amountAfter);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     @Override
@@ -563,7 +564,8 @@ public class CouponServiceImpl implements CouponService {
                 throw new ServiceException(7102);
         }
         LOGGER.info("{}", amountAfter);
-        return amountAfter;
+        BigDecimal b = new BigDecimal(amountAfter);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     public void checkCouponUser(String userId, String categoryId, CouponUser cu) {
@@ -631,7 +633,7 @@ public class CouponServiceImpl implements CouponService {
                 // 计算优惠后的金额
                 switch (cu.getCouponType()) {
                     case COUPONTYPE_MANJIAN:
-                        if (amount >= cu.getParam1()) {
+                        if (amount > cu.getParam1()) {
                             amountAfter = amountAfter - cu.getParam2();
                         }
                         break;
@@ -641,7 +643,7 @@ public class CouponServiceImpl implements CouponService {
                         }
                         break;
                     case COUPONTYPE_LIJIAN:
-                        if (amount >= cu.getParam2()) {
+                        if (amount > cu.getParam2()) {
                             amountAfter = amountAfter - cu.getParam2();
                         } else {
                             throw new ServiceException(7133);
@@ -686,7 +688,23 @@ public class CouponServiceImpl implements CouponService {
         if (now.before(ca.getActivityStartTime()) || now.after(ca.getActivityEndTime())) {
             throw new ServiceException(7109);
         }
-
+        // 目标人群：1-全部用户，2-部分用户，3-特定用户
+        if("2".equals(ca.getTarget())){
+            CouponActivityBO bo = new CouponActivityBO();
+            BeanUtils.copyProperties(ca,bo);
+            User user = userMapper.selectOne(userId);
+            UserExtend userExtend = userExtendMapper.selectOne(userId);
+            List<String> tagIdList = operateMessageRoMapper.selectTagIdList(userId);
+            if(!isPartUser(bo, user, userExtend, tagIdList)){
+                LOGGER.info("不满足部分用户的限定");
+                throw new ServiceException(7142);
+            }
+        }else if("3".equals(ca.getTarget())){
+            if(ca.getUserIds().contains(userId)){
+                LOGGER.info("不满足特定用户的限定");
+                throw new ServiceException(7143);
+            }
+        }
         CouponUser cu = new CouponUser();
         cu.setActivityId(ca.getId());
         int i = couponRoMapper.selectUserCouponCount(cu);
@@ -962,6 +980,16 @@ public class CouponServiceImpl implements CouponService {
     }
 
     public void sendPart(CouponActivityBO o, User user, UserExtend userExtend, List<String> tagIdList, HttpServletRequest request) {
+
+        if (isPartUser(o, user, userExtend, tagIdList)) {
+            sendYyxx(o, user, request);
+        }
+    }
+
+    /**
+     * 判断是否满足部分用户
+     */
+    public boolean isPartUser(CouponActivityBO o, User user, UserExtend userExtend, List<String> tagIdList) {
         boolean sendArea = false;
         boolean sendTag = false;
         boolean sendRegTime = false;
@@ -1016,10 +1044,10 @@ public class CouponServiceImpl implements CouponService {
         } else {
             sendRegTime = true;
         }
-
         if (sendArea && sendTag && sendRegTime) {
-            sendYyxx(o, user, request);
+            return true;
         }
+        return false;
     }
 
 }
