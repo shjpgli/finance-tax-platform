@@ -23,6 +23,7 @@ import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.order.CouponService;
+import com.abc12366.uc.util.StringUtil;
 import com.abc12366.uc.web.order.CartController;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
@@ -241,14 +242,15 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponActivityListBO> selectActivityList(CouponActivity bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-//        List<CouponActivityListBO> dataList = couponRoMapper.selectAdminActivityList(bo);
-        /*dataList.stream().filter(data -> COUPON_STATUS_ON.equals(data.getStatus())).forEach(data -> {
-            CouponUser cu = new CouponUser();
-            cu.setActivityId(bo.getId());
-            cu.setCouponId(bo.getCouponId());
-            couponRoMapper.selectUserList(cu).size();
-        });*/
-        return couponRoMapper.selectActivityList(bo);
+        List<CouponActivityListBO> dataList = couponRoMapper.selectActivityList(bo);
+//        dataList.stream().filter(data -> COUPON_STATUS_ON.equals(data.getStatus())).forEach(data -> {
+//            CouponUser cu = new CouponUser();
+//            cu.setActivityId(bo.getId());
+//            cu.setCouponId(bo.getCouponId());
+//            couponRoMapper.selectUserList(cu).size();
+//        });
+//        return couponRoMapper.selectActivityList(bo);
+        return dataList;
     }
 
     @Override
@@ -703,9 +705,9 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7108);
         }
         LOGGER.info("活动有效期判断");
-        Date now = new Date();
+        Date now = DateUtils.getToday();
         if (now.before(ca.getActivityStartTime()) || now.after(ca.getActivityEndTime())) {
-            throw new ServiceException(7109);
+            throw new ServiceException(7120);
         }
         // 目标人群：1-全部用户，2-部分用户，3-特定用户
         if("2".equals(ca.getTarget())){
@@ -1016,6 +1018,7 @@ public class CouponServiceImpl implements CouponService {
         boolean sendArea = false;
         boolean sendTag = false;
         boolean sendRegTime = false;
+        boolean vip = false;
         //地域
         if (!org.springframework.util.StringUtils.isEmpty(o.getAreaOper()) && !org.springframework.util.StringUtils.isEmpty(o.getAreaIds())) {
             //地域限制
@@ -1067,7 +1070,11 @@ public class CouponServiceImpl implements CouponService {
         } else {
             sendRegTime = true;
         }
-        if (sendArea && sendTag && sendRegTime) {
+        //用户类型
+        if (StringUtils.isNotEmpty(o.getVips()) && o.getVips().contains(user.getVipLevel())) {
+            vip = true;
+        }
+        if (sendArea && sendTag && sendRegTime && vip) {
             return true;
         }
         return false;

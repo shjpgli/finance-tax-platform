@@ -168,6 +168,7 @@ public class CouponController {
     @GetMapping("/activities")
     public ResponseEntity selectUsableActivityList(
             @RequestParam(value = "activityName", required = false) String activityName,
+            @RequestParam(value = "userId", required = false) String userId,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
         CouponActivity bo = new CouponActivity();
@@ -175,6 +176,10 @@ public class CouponController {
             bo.setActivityName(activityName);
         }
         bo.setStatus("2");
+        //传UserId表示查特定用户活动列表，不传表示查全部用户和部分用户列表
+//        if (StringUtils.isNotEmpty(userId)) {
+//        }
+        bo.setUserIds(Utils.getUserId());
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
         List<CouponActivityListBO> dataList = couponService.selectActivityList(bo, pageNum, pageSize);
@@ -338,8 +343,9 @@ public class CouponController {
         if (StringUtils.isNotEmpty(categoryIds)) {
             bo.setCategoryIds(categoryIds);
         }
+        //有值：表示查询非过期的
         if (validEndTime != null && !"".equals(validEndTime)) {
-            bo.setValidEndTime(DateUtils.transferLongToDate(validEndTime));
+            bo.setValidEndTime(DateUtils.transferLongToDate(System.currentTimeMillis()));
         }
         bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
@@ -348,6 +354,7 @@ public class CouponController {
         PageInfo<CouponUserListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }
+
 
     /**
      * 前端-用户逻辑删除优惠劵

@@ -44,18 +44,43 @@
 
     <select id="selectActivityList" parameterType="com.abc12366.uc.model.order.CouponActivity"
             resultType="com.abc12366.uc.model.order.bo.CouponActivityListBO">
+        select t.id, t.activityName, t.couponId, t.couponName, t.couponNum,
+        t.activityStartTime, t.activityEndTime, t.status, t.createTime, t.lastUpdate,t.imageUrl,t.target
+        from (
         SELECT ca.id, ca.activityName, ca.couponId, c.couponName, ca.couponNum,
-        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate,ca.imageUrl
+        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate,ca.imageUrl,ca.target
         FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
         ON ca.couponId = c.id
         <where>
-            ca.status = '2' and target != '3'
+            ca.target != 3
+            <if test="status != null and status != ''">
+                and ca.status = #{status}
+            </if>
             <if test="activityName != null and activityName != ''">
                 and ca.activityName LIKE CONCAT('%',#{activityName},'%')
             </if>
             <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
         </where>
-        order by ca.activityEndTime DESC
+        UNION ALL
+        SELECT ca.id, ca.activityName, ca.couponId, c.couponName, ca.couponNum,
+        ca.activityStartTime, ca.activityEndTime, ca.status, ca.createTime, ca.lastUpdate,ca.imageUrl,ca.target
+        FROM uc_coupon_activity ca LEFT JOIN uc_coupon c
+        ON ca.couponId = c.id
+        <where>
+            ca.target = 3
+            <if test="status != null and status != ''">
+                and ca.status = #{status}
+            </if>
+            <if test="userIds != null and userIds != ''">
+                and ca.userIds LIKE CONCAT('%',#{userIds},'%')
+            </if>
+            <if test="activityName != null and activityName != ''">
+                and ca.activityName LIKE CONCAT('%',#{activityName},'%')
+            </if>
+            <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
+        </where>
+        ) t
+       order by t.activityEndTime DESC
     </select>
 
     <!--活动列表对象-->
@@ -228,7 +253,11 @@
             <if test="userId != null and userId != ''">cu.userId = #{userId}</if>
             <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
-            <if test="validEndTime != null">AND cu.validEndTime <![CDATA[>]]> #{validEndTime}</if>
+            <if test="validEndTime != null">
+                <![CDATA[
+                  and date_format(cu.validEndTime, '%Y-%m-%d') >= date_format(#{validEndTime}, '%Y-%m-%d')
+                ]]>
+            </if>
             <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
             <if test="categoryIds != null  and categoryIds!='' ">
                 AND (cu.categoryIds LIKE CONCAT('%',#{categoryIds},'%') or cu.categoryIds = 'ALL')
@@ -237,9 +266,9 @@
                 <when test="status != null and status != ''">
                     AND cu.status = #{status}
                 </when>
-                <!--<when test="status == null or status == ''">-->
-                    <!--AND cu.status != '4'-->
-                <!--</when>-->
+                <when test="status == null or status == ''">
+                    AND cu.status != '4'
+                </when>
             </choose>
         </where>
         order by cu.lastUpdate DESC
