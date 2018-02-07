@@ -313,7 +313,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4167);
                 }
 
-                insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", orderSubmitBO.getRemark(), "0");
+                insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户下单；"+orderSubmitBO.getRemark(), "0");
             }
         }
         //新增交易流水号
@@ -1338,7 +1338,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     public void refund(OrderBO orderBO, OrderProductBO orderProductBO, VipLogBO vipLogBO, HttpServletRequest httpServletRequest) {
         //成交价格
-        double dealPrice = orderProductBO.getDealPrice();
+        double dealPrice = orderBO.getTotalPrice();
         //判断是RMB、积分
         if ("RMB".equals(orderBO.getTradeMethod())) {
             if ("ALIPAY".equals(orderBO.getPayMethod())) {
@@ -1423,6 +1423,8 @@ public class OrderServiceImpl implements OrderService {
                         LOGGER.error("支付宝退款失败：", e);
                         throw new ServiceException(9999, e.getMessage());
                     }
+                }else {
+                    throw new ServiceException(7146);
                 }
 
             } else {
