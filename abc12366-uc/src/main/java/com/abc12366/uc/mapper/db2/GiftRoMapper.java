@@ -51,4 +51,9 @@ public interface GiftRoMapper {
      * @return
      */
     List<Gift> selectReceiptGiftByDate(@Param("date")Date date);
+
+    /**
+     * 后台-礼物列表查询
+     */
+    List<Gift> selectAdminList(Gift gift);
 }
