@@ -28,7 +28,22 @@
             <if test="status != null and status!=''">AND status = #{status}</if>
             <if test="category != null  and category!=''">AND category = #{category}</if>
         </where>
-        order BY createTime desc
+        order BY sort desc
+    </select>
+
+    <!-- 查询（根据条件查询） -->
+    <select id="selectAdminList" resultType="com.abc12366.uc.model.gift.Gift"
+            parameterType="com.abc12366.uc.model.gift.Gift">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_gift
+        <where>
+            1=1
+            <if test="name != null  and name!=''">AND name LIKE CONCAT('%',#{name},'%')</if>
+            <if test="status != null and status!=''">AND status = #{status}</if>
+            <if test="category != null  and category!=''">AND category = #{category}</if>
+        </where>
+        order BY lastUpdate desc
     </select>
 
     <!-- 查询（根据giftID查询） -->
