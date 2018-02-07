@@ -717,12 +717,12 @@ public class CouponServiceImpl implements CouponService {
             UserExtend userExtend = userExtendMapper.selectOne(userId);
             List<String> tagIdList = operateMessageRoMapper.selectTagIdList(userId);
             if(!isPartUser(bo, user, userExtend, tagIdList)){
-                LOGGER.info("不满足部分用户的限定");
+                LOGGER.info("抱歉，您还不满足领券条件");
                 throw new ServiceException(7142);
             }
         }else if("3".equals(ca.getTarget())){
-            if(ca.getUserIds().contains(userId)){
-                LOGGER.info("不满足特定用户的限定");
+            if(!ca.getUserIds().contains(userId)){
+                LOGGER.info("抱歉，您还不满足领券条件");
                 throw new ServiceException(7143);
             }
         }
