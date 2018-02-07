@@ -23,6 +23,7 @@ import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.order.CouponService;
+import com.abc12366.uc.util.StringUtil;
 import com.abc12366.uc.web.order.CartController;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +37,7 @@ import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -240,35 +242,36 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<CouponActivityListBO> selectActivityList(CouponActivity bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-//        List<CouponActivityListBO> dataList = couponRoMapper.selectAdminActivityList(bo);
-        /*dataList.stream().filter(data -> COUPON_STATUS_ON.equals(data.getStatus())).forEach(data -> {
-            CouponUser cu = new CouponUser();
-            cu.setActivityId(bo.getId());
-            cu.setCouponId(bo.getCouponId());
-            couponRoMapper.selectUserList(cu).size();
-        });*/
-        return couponRoMapper.selectActivityList(bo);
+        List<CouponActivityListBO> dataList = couponRoMapper.selectActivityList(bo);
+//        dataList.stream().filter(data -> COUPON_STATUS_ON.equals(data.getStatus())).forEach(data -> {
+//            CouponUser cu = new CouponUser();
+//            cu.setActivityId(bo.getId());
+//            cu.setCouponId(bo.getCouponId());
+//            couponRoMapper.selectUserList(cu).size();
+//        });
+//        return couponRoMapper.selectActivityList(bo);
+        return dataList;
     }
 
     @Override
     public List<CouponUserListBO> selectUserList(CouponUser bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         // 处理status=5的查询
-        if (StringUtils.isNotEmpty(bo.getStatus()) && COUPON_STATUS_OUTDATED.equals(bo.getStatus())) {
-            bo.setValidEndTime(new Date());
-            bo.setStatus(null);
-        }
+//        if (StringUtils.isNotEmpty(bo.getStatus()) && COUPON_STATUS_OUTDATED.equals(bo.getStatus())) {
+//            bo.setValidEndTime(new Date());
+//            bo.setStatus(null);
+//        }
         List<CouponUserListBO> dataList = couponRoMapper.selectUserList(bo);
 
         // 处理过期的status显示
-        for (CouponUserListBO data : dataList) {
-            Date now = new Date();
-            boolean outdated = (data.getValidStartTime() != null && now.before(data.getValidStartTime())) ||
-                    (data.getValidEndTime() != null && now.after(data.getValidEndTime()));
-            if (outdated) {
-                data.setStatus(COUPON_STATUS_OUTDATED);
-            }
-        }
+//        for (CouponUserListBO data : dataList) {
+//            Date now = new Date();
+//            boolean outdated = (data.getValidStartTime() != null && now.before(data.getValidStartTime())) ||
+//                    (data.getValidEndTime() != null && now.after(data.getValidEndTime()));
+//            if (outdated) {
+//                data.setStatus(COUPON_STATUS_OUTDATED);
+//            }
+//        }
         return dataList;
     }
 
@@ -430,9 +433,10 @@ public class CouponServiceImpl implements CouponService {
         return 1 == couponMapper.updateActivity(ca);
     }
 
-    //生成min->max之间的数,最小生成的随机数为min，最大生成的随机数为max
+    //生成min->max之间的数,最小生成的随机数为min，最大生成的随机数不能超过max
     public static double getRandomNum(double min, double max) {
-        return Math.round(Math.random() * (max - min)) + min;
+        //return Math.round(Math.random() * (max - min)) + min;
+        return getTwoDouble(max - Math.random() * (max - min));
     }
 
     @Transactional(value = "db1TxManager")
@@ -469,7 +473,7 @@ public class CouponServiceImpl implements CouponService {
                     cu.setValidStartTime(c.getValidStartTime());
                     cu.setValidEndTime(c.getValidEndTime());
                 } else {
-                    cu.setValidEndTime(now);
+                    cu.setValidStartTime(now);
                     cu.setValidEndTime(DateUtils.addDays(now, c.getValidDays()));
                 }
                 cu.setDescription(c.getDescription());
@@ -501,18 +505,29 @@ public class CouponServiceImpl implements CouponService {
         cc.setAmount(bo.getAmount());
         cc.setCategoryId(bo.getCategoryId());
         cc.setUseCouponId(bo.getUseCouponId());
-        double amountAfter = calculateOrderAmount(cc);
-
-        if (amountAfter < bo.getAmount()) {
+        //1：提交订单，0：取消订单
+        if("1".equals(bo.getOperation())){
+            double amountAfter = calculateOrderAmount(cc);
+            if (amountAfter < bo.getAmount()) {
+                Map<String, Object> map = new HashMap<>(16);
+                map.put("orderNo", COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
+                map.put("status", bo.getStatus());
+                map.put("lastUpdate", new Date());
+                map.put("id", bo.getUseCouponId());
+                map.put("amountAfter", getTwoDouble(bo.getAmount()-amountAfter));
+                couponMapper.batchUpdateUserCoupon(map);
+            }
+            BigDecimal b = new BigDecimal(amountAfter);
+            return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        }else{
             Map<String, Object> map = new HashMap<>(16);
             map.put("orderNo", COUPON_STATUS_GET.equals(bo.getStatus()) ? "" : bo.getOrderNo());
             map.put("status", bo.getStatus());
             map.put("lastUpdate", new Date());
             map.put("id", bo.getUseCouponId());
-            map.put("amountAfter", amountAfter);
             couponMapper.batchUpdateUserCoupon(map);
+            return 0;
         }
-        return amountAfter;
     }
 
     @Override
@@ -523,46 +538,55 @@ public class CouponServiceImpl implements CouponService {
         // 优惠后的金额
         double amountAfter = amount;
 
-        String id = bo.getUseCouponId();
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", id);
-        map.put("userId", bo.getUserId());
-        List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
-        if (dataList.size() > 0) {
-            String ids = "";
-            for (CouponUser cu : dataList) {
-
-                checkCouponUser(bo.getUserId(), bo.getCategoryId(), cu);
-                // 计算优惠后的金额
-                switch (cu.getCouponType()) {
-                    case COUPONTYPE_MANJIAN:
-                        if (amount >= cu.getParam1()) {
-                            amount = amount - cu.getParam1();
-                            amountAfter = amountAfter - cu.getParam2();
-                        }
-                        break;
-                    case COUPONTYPE_ZHEKOU:
-                        if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
-                            amount = amount - cu.getParam1();
-                            amountAfter = amountAfter * cu.getParam2();
-                        }
-                        break;
-                    case COUPONTYPE_LIJIAN:
-                        if (amount >= cu.getParam2()) {
-                            amountAfter = amountAfter - cu.getParam2();
-                        } else {
-                            throw new ServiceException(7133);
-                        }
-                        break;
-                    default:
-                        throw new ServiceException(7102);
+//        String id = bo.getUseCouponId();
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("id", id);
+//        map.put("userId", bo.getUserId());
+        CouponUser cu = couponRoMapper.selectUserCouponById(bo.getUseCouponId());
+        if(cu == null){
+            LOGGER.info("查询已经领用的优惠券失败");
+            throw new ServiceException(7139);
+        }
+        checkCouponUser(bo.getUserId(), bo.getCategoryId(), cu);
+        // 计算优惠后的金额
+        switch (cu.getCouponType()) {
+            case COUPONTYPE_MANJIAN:
+                if (amount >= cu.getParam1()) {
+                    amountAfter = getTwoDouble(amountAfter) - getTwoDouble(cu.getParam2());
+                }else {
+                    throw new ServiceException(7140);
                 }
-                ids += cu.getId();
-            }
-            amountAfter = id.length() == ids.length() ? amountAfter : amount;
+                break;
+            case COUPONTYPE_ZHEKOU:
+                if (amount >= cu.getParam1() || cu.getParam1() == 0) {//满0元就打折
+                    //四舍五入保留两位小数
+                    amountAfter = getTwoDouble(amountAfter * cu.getParam2());
+                }else {
+                    throw new ServiceException(7141);
+                }
+                break;
+            case COUPONTYPE_LIJIAN:
+                if (amount > cu.getParam2()) {
+                    amountAfter = amountAfter - cu.getParam2();
+                } else {
+                    throw new ServiceException(7133);
+                }
+                break;
+            default:
+                throw new ServiceException(7102);
+        }
+        if(amountAfter <= 0){
+            LOGGER.info("惠后的金额必须大于0元");
+            throw new ServiceException(7144);
         }
         LOGGER.info("{}", amountAfter);
-        return amountAfter;
+        return getTwoDouble(amountAfter);
+    }
+
+    //获取两位随机数
+    public static double getTwoDouble(double value){
+        BigDecimal b = new BigDecimal(value);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     public void checkCouponUser(String userId, String categoryId, CouponUser cu) {
@@ -579,7 +603,7 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7119);
         }
         // 校验优惠劵有效期
-        Date now = new Date();
+        Date now = DateUtils.getToday();
         if (now.before(cu.getValidStartTime()) || now.after(cu.getValidEndTime())) {
             throw new ServiceException(7120);
         }
@@ -640,7 +664,7 @@ public class CouponServiceImpl implements CouponService {
                         }
                         break;
                     case COUPONTYPE_LIJIAN:
-                        if (amount >= cu.getParam2()) {
+                        if (amount > cu.getParam2()) {
                             amountAfter = amountAfter - cu.getParam2();
                         } else {
                             throw new ServiceException(7133);
@@ -681,11 +705,27 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7108);
         }
         LOGGER.info("活动有效期判断");
-        Date now = new Date();
+        Date now = DateUtils.getToday();
         if (now.before(ca.getActivityStartTime()) || now.after(ca.getActivityEndTime())) {
-            throw new ServiceException(7109);
+            throw new ServiceException(7120);
         }
-
+        // 目标人群：1-全部用户，2-部分用户，3-特定用户
+        if("2".equals(ca.getTarget())){
+            CouponActivityBO bo = new CouponActivityBO();
+            BeanUtils.copyProperties(ca,bo);
+            User user = userMapper.selectOne(userId);
+            UserExtend userExtend = userExtendMapper.selectOne(userId);
+            List<String> tagIdList = operateMessageRoMapper.selectTagIdList(userId);
+            if(!isPartUser(bo, user, userExtend, tagIdList)){
+                LOGGER.info("不满足部分用户的限定");
+                throw new ServiceException(7142);
+            }
+        }else if("3".equals(ca.getTarget())){
+            if(ca.getUserIds().contains(userId)){
+                LOGGER.info("不满足特定用户的限定");
+                throw new ServiceException(7143);
+            }
+        }
         CouponUser cu = new CouponUser();
         cu.setActivityId(ca.getId());
         int i = couponRoMapper.selectUserCouponCount(cu);
@@ -855,6 +895,10 @@ public class CouponServiceImpl implements CouponService {
             throw new ServiceException(7117);
         }*/
         if (!VALIDTYPE_DAYS.equals(c.getValidType())) {
+//            if (c.getValidStartTime().after(c.getValidEndTime())) {
+//                LOGGER.info("优惠卷的开始时间不能大于结束时间");
+//                throw new ServiceException(7145);
+//            }
             if (bo.getActivityStartTime().after(c.getValidStartTime()) || c.getValidStartTime().after(bo.getActivityEndTime())) {
                 LOGGER.info("优惠劵的开始时间，必须在活动时间之间");
                 throw new ServiceException(7136);
@@ -961,9 +1005,20 @@ public class CouponServiceImpl implements CouponService {
     }
 
     public void sendPart(CouponActivityBO o, User user, UserExtend userExtend, List<String> tagIdList, HttpServletRequest request) {
+
+        if (isPartUser(o, user, userExtend, tagIdList)) {
+            sendYyxx(o, user, request);
+        }
+    }
+
+    /**
+     * 判断是否满足部分用户
+     */
+    public boolean isPartUser(CouponActivityBO o, User user, UserExtend userExtend, List<String> tagIdList) {
         boolean sendArea = false;
         boolean sendTag = false;
         boolean sendRegTime = false;
+        boolean vip = false;
         //地域
         if (!org.springframework.util.StringUtils.isEmpty(o.getAreaOper()) && !org.springframework.util.StringUtils.isEmpty(o.getAreaIds())) {
             //地域限制
@@ -1015,10 +1070,14 @@ public class CouponServiceImpl implements CouponService {
         } else {
             sendRegTime = true;
         }
-
-        if (sendArea && sendTag && sendRegTime) {
-            sendYyxx(o, user, request);
+        //用户类型
+        if (StringUtils.isNotEmpty(o.getVips()) && o.getVips().contains(user.getVipLevel())) {
+            vip = true;
         }
+        if (sendArea && sendTag && sendRegTime && vip) {
+            return true;
+        }
+        return false;
     }
 
 }

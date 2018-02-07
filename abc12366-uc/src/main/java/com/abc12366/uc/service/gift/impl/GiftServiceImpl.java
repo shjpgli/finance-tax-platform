@@ -367,6 +367,11 @@ public class GiftServiceImpl implements GiftService {
         }
     }
 
+    @Override
+    public List<Gift> selectAdminList(Gift gift) {
+        return giftRoMapper.selectAdminList(gift);
+    }
+
     /**
      * 获取礼物订单号
      *

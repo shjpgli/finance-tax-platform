@@ -179,11 +179,6 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
     }
 
     @Override
-    public int unreadCount(BusinessMessage bm) {
-        return businessMsgRoMapper.unreadCount(bm);
-    }
-
-    @Override
     public List<BusinessMessage> selectUnreadList(BusinessMessage bm) {
         String key = Utils.getUserId() + BUSINESS_MSG_KEY;
         List<BusinessMessage> dataList;
@@ -191,7 +186,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
             LOGGER.info("From redis read: " + key);
             dataList = JSONArray.parseArray(redisTemplate.opsForValue().get(key), BusinessMessage.class);
         } else {
-            dataList = businessMsgRoMapper.selectList(bm);
+            dataList = businessMsgRoMapper.selectUnreadList(bm);
             redisTemplate.opsForValue().set(key,
                     JSONObject.toJSONString(dataList),
                     RedisConstant.DAY_1,

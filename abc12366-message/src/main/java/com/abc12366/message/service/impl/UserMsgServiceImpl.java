@@ -11,6 +11,7 @@ import com.abc12366.message.model.UserMessage;
 import com.abc12366.message.model.bo.BatchUpdateMsgToReadBO;
 import com.abc12366.message.model.bo.UserMessageAdmin;
 import com.abc12366.message.model.bo.UserMessageForBangbang;
+import com.abc12366.message.model.bo.UserSimple;
 import com.abc12366.message.service.UserMsgService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * 用户消息服务
  *
  * @author lijun <ljun51@outlook.com>
- * @create 2017-07-27 2:36 PM
+ * @date 2017-07-27 2:36 PM
  * @since 1.0.0
  */
 @Service
@@ -172,14 +174,22 @@ public class UserMsgServiceImpl implements UserMsgService {
     }
 
     @Override
-    public List<UserMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
+    public List<UserMessageAdmin> selectConversationList(Map<String, Object> map, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        return userMsgRoMapper.selectListByUsername(map);
-    }
-
-    @Override
-    public int unreadCount(UserMessage data) {
-        return userMsgRoMapper.unreadCount(data);
+        List<UserMessageAdmin> dataList = userMsgRoMapper.selectConversationList(map);
+        for(UserMessageAdmin data: dataList) {
+            if (!StringUtils.isEmpty(data.getFromUserId())) {
+                UserSimple user = userMsgRoMapper.selectUserById(data.getFromUserId());
+                data.setFromuser(user.getUsername());
+                data.setFromUserPic(user.getUserPicturePath());
+            }
+            if (!StringUtils.isEmpty(data.getToUserId())) {
+                UserSimple user = userMsgRoMapper.selectUserById(data.getToUserId());
+                data.setTouser(user.getUsername());
+                data.setToUserPic(user.getUserPicturePath());
+            }
+        }
+        return dataList;
     }
 
     @Override
@@ -190,7 +200,7 @@ public class UserMsgServiceImpl implements UserMsgService {
             LOGGER.info("From redis read: " + key);
             dataList = JSONArray.parseArray(redisTemplate.opsForValue().get(key), UserMessage.class);
         } else {
-            dataList = userMsgRoMapper.selectList(um);
+            dataList = userMsgRoMapper.selectUnreadList(um);
             redisTemplate.opsForValue().set(key,
                     JSONObject.toJSONString(dataList),
                     RedisConstant.DAY_1,

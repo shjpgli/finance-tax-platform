@@ -272,27 +272,24 @@ public class OrderServiceImpl implements OrderService {
 
                 //判断是否使用优惠劵
                 if (orderSubmitBO.getUseCouponId() != null && !"".equals(orderSubmitBO.getUseCouponId())) {
-                    //判断优惠卷类型是否可以用
+                    //判断优惠券类型是否可以用
                     CouponOrderBO couponOrderBO = new CouponOrderBO();
                     couponOrderBO.setUseCouponId(orderSubmitBO.getUseCouponId());
                     couponOrderBO.setUserId(orderSubmitBO.getUserId());
                     couponOrderBO.setOrderNo(orderNo);
                     couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
                     couponOrderBO.setAmount(orderSubmitBO.getTotalPrice());
+                    couponOrderBO.setOperation("1");
                     //优惠劵设置已冻结
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("useCouponId", orderSubmitBO.getUseCouponId());
-                    map.put("userId", orderSubmitBO.getUserId());
-                    List<CouponUser> dataList = couponRoMapper.selectUserCouponByIds(map);
-                    if (dataList != null && dataList.size() > 0) {
-                        for (CouponUser couponUser : dataList) {
-                            if (orderProductBO.getTradingChannels() != null
-                                    && !orderProductBO.getTradingChannels().contains(CouponServiceImpl.ALL)
-                                    && !couponUser.getCategoryIds().contains(orderProductBO.getTradingChannels())) {
-                                LOGGER.info("商品类目与优惠卷商品类目不一致，优惠卷无法使用");
-                                throw new ServiceException(7138);
-                            }
-                        }
+//                    Map<String, Object> map = new HashMap<>();
+//                    map.put("useCouponId", orderSubmitBO.getUseCouponId());
+//                    map.put("userId", orderSubmitBO.getUserId());
+                    CouponUser couponUser = couponRoMapper.selectUserCouponById(orderSubmitBO.getUseCouponId());
+                    if (orderProductBO.getTradingChannels() != null
+                            && !couponUser.getCategoryIds().contains(CouponServiceImpl.ALL)
+                            && !couponUser.getCategoryIds().contains(orderProductBO.getTradingChannels())) {
+                        LOGGER.info("商品类目与优惠券商品类目不一致，优惠券无法使用");
+                        throw new ServiceException(7138);
                     }
 
                     couponOrderBO.setStatus("3");
@@ -316,7 +313,7 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(4167);
                 }
 
-                insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", orderSubmitBO.getRemark(), "0");
+                insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户下单；"+orderSubmitBO.getRemark(), "0");
             }
         }
         //新增交易流水号
@@ -471,7 +468,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public OrderBO cancelOrder(OrderCancelBO orderCancelBO) {
-        OrderBO bo = orderRoMapper.selectById(orderCancelBO.getOrderNo());
+        OrderBO bo = orderRoMapper.selectWebByOrderNo(orderCancelBO.getOrderNo());
         if (bo == null) {
             LOGGER.info("订单信息不存在：{}", orderCancelBO);
             throw new ServiceException(4134);
@@ -502,22 +499,23 @@ public class OrderServiceImpl implements OrderService {
         map.put("orderNo", orderCancelBO.getOrderNo());
         map.put("userId", orderCancelBO.getUserId());
         CouponUser couponUser = couponService.selectCouponUser(map);
-        if (couponUser == null) {
-            LOGGER.info("获取优惠劵信息异常");
-            throw new ServiceException(7135);
-        }
-        LOGGER.info("优惠劵取消");
-        List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
-        for (OrderProductBO orderProductBO : orderProductBOs) {
-            CouponOrderBO couponOrderBO = new CouponOrderBO();
-            couponOrderBO.setUseCouponId(couponUser.getCouponId());
-            couponOrderBO.setUserId(orderCancelBO.getUserId());
-            couponOrderBO.setOrderNo(orderCancelBO.getOrderNo());
-            couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
-            couponOrderBO.setAmount(order.getTotalPrice());
-            //优惠劵设置已领取
-            couponOrderBO.setStatus("1");
-            couponService.userUseCoupon(couponOrderBO);
+        if (couponUser != null) {
+//            LOGGER.info("获取优惠劵信息异常");
+//            throw new ServiceException(7135);
+            LOGGER.info("优惠劵取消");
+            List<OrderProductBO> orderProductBOs = bo.getOrderProductBOList();
+            for (OrderProductBO orderProductBO : orderProductBOs) {
+                CouponOrderBO couponOrderBO = new CouponOrderBO();
+                couponOrderBO.setUseCouponId(couponUser.getId());
+                couponOrderBO.setUserId(orderCancelBO.getUserId());
+                couponOrderBO.setOrderNo(orderCancelBO.getOrderNo());
+                couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
+                couponOrderBO.setAmount(bo.getTotalPrice());
+                couponOrderBO.setOperation("0");
+                //优惠劵设置已领取
+                couponOrderBO.setStatus("1");
+                couponService.userUseCoupon(couponOrderBO);
+            }
         }
         insertOrderLog(bo.getUserId(), bo.getOrderNo(), "7", "用户取消订单", "0");
         return bo;
@@ -543,6 +541,13 @@ public class OrderServiceImpl implements OrderService {
                 String userId = orderBO.getUserId();
                 pBO.setOrderNo(orderNo);
                 List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+
+                LOGGER.info("获取优惠劵信息");
+                Map<String, Object> map = new HashMap<>();
+                map.put("orderNo", orderBO.getOrderNo());
+                map.put("userId", orderBO.getUserId());
+                CouponUser couponUser = couponService.selectCouponUser(map);
+
                 for (OrderProductBO orderProductBO : orderProductBOs) {
                     int isPay = orderPayBO.getIsPay();
                     Order order = new Order();
@@ -580,11 +585,12 @@ public class OrderServiceImpl implements OrderService {
                                 updOrder(order);
 
                                 insertPoints(orderBO);
-                                LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                                userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                                 LOGGER.info("插入会员日志: {}", orderNo);
                                 insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
+
+                                LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                                userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
@@ -628,11 +634,12 @@ public class OrderServiceImpl implements OrderService {
                             //修改订单状态
                             updOrder(order);
                             insertDeductPoints(orderBO);
-                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                            userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                             LOGGER.info("插入会员日志: {}", orderNo);
                             insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
+
+                            LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
+                            userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
 
                             insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
                             sendMemberMsg(orderProductBO, order, request);
@@ -644,6 +651,19 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
                         }
                         insertTradeLog(order, tradeNo);
+                    }
+                    if(couponUser != null){
+                        LOGGER.info("使用过优惠券，对优惠券状态进行修改");
+                        CouponOrderBO couponOrderBO = new CouponOrderBO();
+                        couponOrderBO.setUseCouponId(couponUser.getId());
+                        couponOrderBO.setUserId(orderBO.getUserId());
+                        couponOrderBO.setOrderNo(orderBO.getOrderNo());
+                        couponOrderBO.setCategoryId(orderProductBO.getTradingChannels());
+                        couponOrderBO.setAmount(orderBO.getTotalPrice());
+                        couponOrderBO.setOperation("0");
+                        //优惠劵设置已领取
+                        couponOrderBO.setStatus("2");
+                        couponService.userUseCoupon(couponOrderBO);
                     }
                 }
             }
@@ -1080,6 +1100,7 @@ public class OrderServiceImpl implements OrderService {
                 couponOrderBO.setOrderNo(order.getOrderNo());
                 couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
                 couponOrderBO.setAmount(order.getTotalPrice());
+                couponOrderBO.setOperation("0");
                 //优惠劵设置已领取
                 couponOrderBO.setStatus("1");
                 LOGGER.info("优惠劵取消");
@@ -1235,6 +1256,16 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectOrderDetail(orderNo);
     }
 
+    @Override
+    public OrderBO selectWebByOrderNo(String orderNo) {
+        return orderRoMapper.selectWebByOrderNo(orderNo);
+    }
+
+    @Override
+    public OrderBO selectWeChatByOrderNo(String orderNo) {
+        return orderRoMapper.selectWeChatByOrderNo(orderNo);
+    }
+
     /**
      * 发票作废
      */
@@ -1307,7 +1338,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional("db1TxManager")
     public void refund(OrderBO orderBO, OrderProductBO orderProductBO, VipLogBO vipLogBO, HttpServletRequest httpServletRequest) {
         //成交价格
-        double dealPrice = orderProductBO.getDealPrice();
+        double dealPrice = orderBO.getTotalPrice();
         //判断是RMB、积分
         if ("RMB".equals(orderBO.getTradeMethod())) {
             if ("ALIPAY".equals(orderBO.getPayMethod())) {
@@ -1392,6 +1423,8 @@ public class OrderServiceImpl implements OrderService {
                         LOGGER.error("支付宝退款失败：", e);
                         throw new ServiceException(9999, e.getMessage());
                     }
+                }else {
+                    throw new ServiceException(7146);
                 }
 
             } else {

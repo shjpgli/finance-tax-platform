@@ -89,6 +89,11 @@ public class CouponActivityListBO {
      */
     private String imageUrl;
 
+    /**
+     * 目标人群：1-全部用户，2-部分用户，3-特定用户
+     */
+    private String target;
+
     public String getId() {
         return id;
     }
@@ -224,5 +229,13 @@ public class CouponActivityListBO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 }

@@ -42,7 +42,7 @@ public class CouponActivityBO {
     private String couponId;
 
     /**
-     * 优惠卷名称
+     * 优惠券名称
      */
     private String couponName;
 

@@ -60,22 +60,21 @@ public class QuestionHeadmanServiceImpl implements QuestionHeadmanService {
             throw new ServiceException(6192);
         }
 
-        UCUserBO userBo = Utils.getUserInfo();
-        String userLevel = "";
-        if(userBo != null){
-            userLevel = userBo.getLevel();
-        }
-
-        if(userLevel != null && userLevel.length() > 2){
-            String userLevel1 = userLevel.substring(2);
-            int userLevel2 = Integer.parseInt(userLevel1);
-            if(userLevel2 < 20){
-                //用户等级大于等于20级才能申请掌门人
-                throw new ServiceException(6129);
-            }
-        }else{
-            throw new ServiceException(6129);
-        }
+        //UCUserBO userBo = Utils.getUserInfo();
+        //String userLevel = "";
+        //if(userBo != null){
+        //    userLevel = userBo.getLevel();
+        //}
+        //if(userLevel != null && userLevel.length() > 2){
+        //    String userLevel1 = userLevel.substring(2);
+        //    int userLevel2 = Integer.parseInt(userLevel1);
+        //    if(userLevel2 < 20){
+        //        //用户等级大于等于20级才能申请掌门人
+        //        throw new ServiceException(6129);
+        //    }
+        //}else{
+        //    throw new ServiceException(6129);
+        //}
 
         questionHeadmanMapper.insert(headman);
     }

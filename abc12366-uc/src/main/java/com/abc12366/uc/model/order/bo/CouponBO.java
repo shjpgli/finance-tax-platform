@@ -108,7 +108,7 @@ public class CouponBO {
     private String categoryIds;
 
     /**
-     * 优惠卷活动图片
+     * 优惠券活动图片
      */
     private String imageUrl;
 

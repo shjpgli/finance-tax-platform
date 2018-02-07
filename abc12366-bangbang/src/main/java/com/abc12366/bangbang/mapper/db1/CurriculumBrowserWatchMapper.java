@@ -1,6 +1,8 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.curriculum.CurriculumBrowserWatch;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.Date;
 
 /**
@@ -22,12 +24,12 @@ public interface CurriculumBrowserWatchMapper {
      * 修改
      *
      **/
-    int updateBrowseNum();
+    int updateBrowseNum(@Param("curriculumId") String curriculumId);
 
     /**
      *
      * 修改
      *
      **/
-    int updateWatchNum();
+    int updateWatchNum(@Param("curriculumId") String curriculumId);
 }

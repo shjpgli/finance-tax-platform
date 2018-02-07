@@ -18,6 +18,7 @@ public class MessageSendLog {
     private String failcode;
     private String failcause;
     private Date logtime;
+    private String bizId;
 
     public MessageSendLog() {
     }
@@ -30,6 +31,28 @@ public class MessageSendLog {
         this.sendstatus = sendstatus;
         this.failcode = failcode;
         this.failcause = failcause;
+    }
+
+    public MessageSendLog(String id, String sendchanel, String phone, String biztype, String sendinfo, Date sendtime, String sendstatus, String failcode, String failcause, Date logtime, String bizId) {
+        this.id = id;
+        this.sendchanel = sendchanel;
+        this.phone = phone;
+        this.biztype = biztype;
+        this.sendinfo = sendinfo;
+        this.sendtime = sendtime;
+        this.sendstatus = sendstatus;
+        this.failcode = failcode;
+        this.failcause = failcause;
+        this.logtime = logtime;
+        this.bizId = bizId;
+    }
+
+    public String getBizId() {
+        return bizId;
+    }
+
+    public void setBizId(String bizId) {
+        this.bizId = bizId;
     }
 
     public String getId() {
