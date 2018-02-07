@@ -25,8 +25,8 @@ public interface GiftService {
     /**
      * 礼物列表查询
      *
-     * @param gift {@linkplain Gift Gift}
-     * @return List<Gift>
+     * @param gift gift {@linkplain Gift Gift}
+     * @return List<Gift> 礼物列表
      */
     List<Gift> selectList(Gift gift);
 
@@ -42,16 +42,16 @@ public interface GiftService {
     /**
      * 新增礼物
      *
-     * @param gift
-     * @return
+     * @param gift 礼物对象
+     * @return 礼物对象
      */
     Gift insert(Gift gift);
 
     /**
      * 更新礼物
      *
-     * @param gift Gift
-     * @return GiftBO
+     * @param gift Gift 礼物对象
+     * @return GiftBO 礼物对象
      */
     GiftBO update(Gift gift);
 
@@ -67,39 +67,37 @@ public interface GiftService {
      * 根据ID查询礼物
      *
      * @param id 礼物主键
-     * @return Gift
-     * @see Gift
+     * @return Gift 礼物对象
+     * @see Gift  礼物对象
      */
     Gift selectById(String id);
 
     /**
      * 根据礼物名称查询礼物
      *
-     * @param map
-     * @return List<Gift>
-     * @see Gift
+     * @param map 礼物对象
+     * @return List<Gift> 礼物列表
+     * @see Gift 礼物对象
      */
     Gift selectGiftByGiftId(Map<String, Object> map);
 
     /**
      * 用户兑换礼物
      *
-     * @param map
-     * @return
+     * @param map 礼物对象
      */
     void buyGift(Map<String, Object> map);
 
     /**
      * 礼物审核
-     *
-     * @param giftCheckBO
+     * @param giftCheckBO 礼物对象
      */
     void checkGiftBuy(GiftCheckBO giftCheckBO, HttpServletRequest request);
 
     /**
      * 礼物发货
      *
-     * @param giftSendBO
+     * @param giftSendBO 礼物对象
      */
     void sendGift(GiftSendBO giftSendBO);
 
@@ -112,16 +110,15 @@ public interface GiftService {
     /**
      * 前台-用户的礼物申请列表
      *
-     * @param map
-     * @return
+     * @param map 礼物对象
      */
     List<UgiftApplyBO> selectUgiftApplyList(Map<String, Object> map);
 
     /**
      * 根据用户ID查找礼包金额记录
      *
-     * @param map
-     * @return
+     * @param map 礼物对象
+     * @return 礼物对象
      */
     List<UamountLog> selectUamountLogList(Map<String, Object> map);
 
@@ -135,8 +132,8 @@ public interface GiftService {
 
     /**
      *
-     * @param map
-     * @return
+     * @param map 礼物对象
+     * @return 礼物申请对象
      */
     UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map);
 
@@ -144,4 +141,11 @@ public interface GiftService {
      * 会员礼包自动收货
      */
     void automaticReceipt();
+
+    /**
+     * 后台-礼物列表查询
+     * @param gift 礼物对象
+     * @return  礼物列表
+     */
+    List<Gift> selectAdminList(Gift gift);
 }

@@ -64,7 +64,7 @@ public class GiftController {
         gift.setStatus(status);
         gift.setCategory(category);
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        List<Gift> dataList = giftService.selectList(gift);
+        List<Gift> dataList = giftService.selectAdminList(gift);
         PageInfo<Gift> pageInfo = new PageInfo<>(dataList);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
