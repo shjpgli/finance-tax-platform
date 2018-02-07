@@ -122,7 +122,7 @@
                 and u.applyId = #{applyId}
             </if>
         </where>
-        order  by u.lastUpdate DESC
+        order  by u.createTime DESC
     </select>
 
 </mapper>

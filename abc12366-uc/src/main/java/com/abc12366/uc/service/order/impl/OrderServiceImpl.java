@@ -312,8 +312,11 @@ public class OrderServiceImpl implements OrderService {
                     LOGGER.info("提交订单与产品关系信息失败：{}", orderProduct);
                     throw new ServiceException(4167);
                 }
-
-                insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户下单；"+orderSubmitBO.getRemark(), "0");
+                if(orderSubmitBO.getRemark() != null){
+                    insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户下单；"+orderSubmitBO.getRemark(), "0");
+                }else {
+                    insertOrderLog(orderSubmitBO.getUserId(), order.getOrderNo(), "2", "用户下单；", "0");
+                }
             }
         }
         //新增交易流水号
