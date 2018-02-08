@@ -258,6 +258,11 @@
                   and date_format(cu.validEndTime, '%Y-%m-%d') >= date_format(#{validEndTime}, '%Y-%m-%d')
                 ]]>
             </if>
+            <if test="validEndTime == null">
+                <![CDATA[
+                  and date_format(cu.validEndTime, '%Y-%m-%d') <= date_format(NOW(), '%Y-%m-%d')
+                ]]>
+            </if>
             <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
             <if test="categoryIds != null  and categoryIds!='' ">
                 AND (cu.categoryIds LIKE CONCAT('%',#{categoryIds},'%') or cu.categoryIds = 'ALL')
