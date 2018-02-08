@@ -279,6 +279,30 @@
         order by cu.lastUpdate DESC
     </select>
 
+    <select id="selectAdminList" parameterType="com.abc12366.uc.model.order.CouponUser"
+            resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
+        SELECT cu.id,cu.couponId,cu.couponName, cu.userId, u.username, cu.couponMode, cu.couponType,
+        cu.param1, cu.param2, cu.amountType, cu.status, cu.createTime,
+        cu.lastUpdate, cu.orderNo, cu.validStartTime, cu.validEndTime,cu.categoryIds,cu.amountAfter
+        FROM uc_coupon_user cu LEFT JOIN uc_user u
+        on cu.userId = u.id
+        <where>
+            <if test="userId != null and userId != ''">cu.userId = #{userId}</if>
+            <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
+            <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
+            <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
+            <if test="categoryIds != null  and categoryIds!='' ">
+                AND (cu.categoryIds LIKE CONCAT('%',#{categoryIds},'%') or cu.categoryIds = 'ALL')
+            </if>
+            <choose>
+                <when test="status != null and status != ''">
+                    AND cu.status = #{status}
+                </when>
+            </choose>
+        </where>
+        order by cu.lastUpdate DESC
+    </select>
+
     <select id="selectUserListByOrderNo" parameterType="java.util.Map"
             resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
         SELECT cu.id,cu.couponId,cu.couponName, cu.userId, u.username, cu.couponMode, cu.couponType,

@@ -125,4 +125,6 @@ public interface CouponRoMapper {
      * 查询订单使用的优惠卷
      */
     List<CouponUserListBO> selectUserListByOrderNo(Map<String, Object> map);
+
+    List<CouponUserListBO> selectAdminList(CouponUser bo);
 }
