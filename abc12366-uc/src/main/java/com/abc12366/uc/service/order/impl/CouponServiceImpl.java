@@ -257,19 +257,23 @@ public class CouponServiceImpl implements CouponService {
     public List<CouponUserListBO> selectUserList(CouponUser bo, int page, int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         // 处理status=5的查询
-//        if (StringUtils.isNotEmpty(bo.getStatus()) && COUPON_STATUS_OUTDATED.equals(bo.getStatus())) {
+        if (StringUtils.isNotEmpty(bo.getStatus()) && COUPON_STATUS_OUTDATED.equals(bo.getStatus())) {
 //            bo.setValidEndTime(new Date());
-//            bo.setStatus(null);
-//        }
+            bo.setStatus(null);
+        }
         List<CouponUserListBO> dataList = couponRoMapper.selectUserList(bo);
 
         // 处理过期的status显示
 //        for (CouponUserListBO data : dataList) {
-//            Date now = new Date();
+//            Date now = DateUtils.getToday();
 //            boolean outdated = (data.getValidStartTime() != null && now.before(data.getValidStartTime())) ||
 //                    (data.getValidEndTime() != null && now.after(data.getValidEndTime()));
 //            if (outdated) {
-//                data.setStatus(COUPON_STATUS_OUTDATED);
+//            data.setStatus(COUPON_STATUS_OUTDATED);
+//            CouponUser couponUser = new CouponUser();
+//            BeanUtils.copyProperties(data,couponUser);
+//            LOGGER.info("修改领用优惠券状态");
+//            couponMapper.updateUserCoupon(couponUser);
 //            }
 //        }
         return dataList;

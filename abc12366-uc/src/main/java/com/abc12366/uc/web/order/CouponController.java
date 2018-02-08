@@ -343,8 +343,8 @@ public class CouponController {
         if (StringUtils.isNotEmpty(categoryIds)) {
             bo.setCategoryIds(categoryIds);
         }
-        //有值：表示查询非过期的
-        if (validEndTime != null && !"".equals(validEndTime)) {
+        //有值：表示查询非过期的，反之
+        if (validEndTime != null) {
             bo.setValidEndTime(DateUtils.transferLongToDate(System.currentTimeMillis()));
         }
         bo.setUserId(userId);
