@@ -120,4 +120,9 @@ public interface CouponRoMapper {
      * @return 领用的优惠券对象
      */
     CouponUser selectUserCouponById(String useCouponId);
+
+    /**
+     * 查询订单使用的优惠卷
+     */
+    List<CouponUserListBO> selectUserListByOrderNo(Map<String, Object> map);
 }
