@@ -53,6 +53,9 @@
         ON ca.couponId = c.id
         <where>
             ca.target != 3
+            <![CDATA[
+                  and date_format(ca.activityEndTime, '%Y-%m-%d') >= date_format(NOW(), '%Y-%m-%d')
+            ]]>
             <if test="status != null and status != ''">
                 and ca.status = #{status}
             </if>
@@ -68,6 +71,9 @@
         ON ca.couponId = c.id
         <where>
             ca.target = 3
+            <![CDATA[
+                  and date_format(ca.activityEndTime, '%Y-%m-%d') >= date_format(NOW(), '%Y-%m-%d')
+            ]]>
             <if test="status != null and status != ''">
                 and ca.status = #{status}
             </if>
@@ -80,7 +86,7 @@
             <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
         </where>
         ) t
-       order by t.activityEndTime DESC
+       order by t.activityEndTime DESC,ca.createTime desc
     </select>
 
     <!--活动列表对象-->
@@ -253,12 +259,14 @@
             <if test="userId != null and userId != ''">cu.userId = #{userId}</if>
             <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
-            <if test="validEndTime != null">
-                <![CDATA[
-                  and date_format(cu.validEndTime, '%Y-%m-%d') >= date_format(#{validEndTime}, '%Y-%m-%d')
-                ]]>
+            <if test="isDate != null and isDate == '1'">
+                <if test="validEndTime != null">
+                    <![CDATA[
+                      and date_format(cu.validEndTime, '%Y-%m-%d') >= date_format(#{validEndTime}, '%Y-%m-%d')
+                    ]]>
+                </if>
             </if>
-            <if test="validEndTime == null">
+            <if test="isDate != null and isDate == '2'">
                 <![CDATA[
                   and date_format(cu.validEndTime, '%Y-%m-%d') <= date_format(NOW(), '%Y-%m-%d')
                 ]]>
