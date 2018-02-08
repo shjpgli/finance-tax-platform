@@ -41,20 +41,20 @@ public class GlobalExceptionHandler {
         if (e instanceof ServiceException) {
             bodyStatus = ((ServiceException) e).getBodyStatus();
             LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage());
-            bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    "【财税平台】");
+            bodyStatus.setMessage("提示:" + bodyStatus.getMessage() +
+                    "【财税平台" + bodyStatus.getCode() + "】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         } else if (e instanceof DzsbServiceException) {
             bodyStatus = ((DzsbServiceException) e).getBodyStatus();
             LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
-            bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    "【电子申报】");
+            bodyStatus.setMessage("提示:" + bodyStatus.getMessage() +
+                    "【电子申报" + bodyStatus.getCode() + "】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         } else if (e instanceof DzsjServiceException) {
             bodyStatus = ((DzsjServiceException) e).getBodyStatus();
             LOGGER.warn("主动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
-            bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    "【电子税局】");
+            bodyStatus.setMessage("提示:" + bodyStatus.getMessage() +
+                    "【电子税局" + bodyStatus.getCode() + "】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         }
 
@@ -97,8 +97,8 @@ public class GlobalExceptionHandler {
         } else {
             bodyStatus = Utils.bodyStatus(5000);
             LOGGER.error("被动抛出异常:访问{}时，出现[{}:{}]", uri, bodyStatus.getCode(), bodyStatus.getMessage(), e);
-            bodyStatus.setMessage("提示:" + bodyStatus.getCode() + bodyStatus.getMessage() +
-                    "【财税平台】");
+            bodyStatus.setMessage("提示:" + bodyStatus.getMessage() +
+                    "【财税平台" + bodyStatus.getCode() + "】");
             return new ResponseEntity<>(bodyStatus, HttpStatus.OK);
         }
     }
