@@ -279,6 +279,19 @@
         order by cu.lastUpdate DESC
     </select>
 
+    <select id="selectUserListByOrderNo" parameterType="java.util.Map"
+            resultType="com.abc12366.uc.model.order.bo.CouponUserListBO">
+        SELECT cu.id,cu.couponId,cu.couponName, cu.userId, u.username, cu.couponMode, cu.couponType,
+        cu.param1, cu.param2, cu.amountType, cu.status, cu.createTime,
+        cu.lastUpdate, cu.orderNo, cu.validStartTime, cu.validEndTime,cu.categoryIds,cu.amountAfter
+        FROM uc_coupon_user cu LEFT JOIN uc_user u
+        on cu.userId = u.id
+        <where>
+            <if test="orderNo != null and orderNo != ''">AND cu.orderNo = #{orderNo}</if>
+        </where>
+        order by cu.lastUpdate DESC
+    </select>
+
     <select id="selectUserCouponCount" parameterType="com.abc12366.uc.model.order.CouponUser"
             resultType="java.lang.Integer">
         SELECT count(userId) FROM uc_coupon_user

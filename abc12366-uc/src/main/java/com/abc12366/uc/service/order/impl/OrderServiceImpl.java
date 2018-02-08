@@ -706,6 +706,10 @@ public class OrderServiceImpl implements OrderService {
     private void updateStock(OrderBO orderBO, OrderProductBO orderProductBO) {
         //查询产品库存信息
         ProductBO prBO = productRoMapper.selectBOById(orderProductBO.getProductId());
+        if(prBO == null){
+            LOGGER.info("商品库存查询失败");
+            throw new ServiceException(4102,"商品库存查询失败");
+        }
         orderProductBO.setOrderNo(orderBO.getOrderNo());
         //减去Product库存数量
         int num = orderProductBO.getNum();

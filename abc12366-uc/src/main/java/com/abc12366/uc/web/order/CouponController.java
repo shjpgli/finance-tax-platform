@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 优惠劵控制器
@@ -298,6 +300,29 @@ public class CouponController {
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
         List<CouponUserListBO> dataList = couponService.selectUserList(bo, pageNum, pageSize);
+        PageInfo<CouponUserListBO> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 查询订单使用的优惠卷
+     *
+     * @param orderNo  订单号
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @return 优惠劵活动用户优惠劵列表
+     */
+    @GetMapping("/user/order")
+    public ResponseEntity selectUserListByOrderNo(
+            @RequestParam(value = "orderNo", required = true) String orderNo,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderNo",orderNo);
+        LOGGER.info("{},{},{}", map, pageNum, pageSize);
+
+        List<CouponUserListBO> dataList = couponService.selectUserListByOrderNo(map, pageNum, pageSize);
         PageInfo<CouponUserListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }
