@@ -697,6 +697,11 @@ public class CouponServiceImpl implements CouponService {
         return couponRoMapper.selectCoupon(id);
     }
 
+    @Override
+    public List<CouponUserListBO> selectUserListByOrderNo(Map<String, Object> map, int pageNum, int pageSize) {
+        return couponRoMapper.selectUserListByOrderNo(map);
+    }
+
     /**
      * 是否允许用户领取优惠劵
      *

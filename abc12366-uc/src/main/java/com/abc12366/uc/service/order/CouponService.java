@@ -180,4 +180,9 @@ public interface CouponService {
      * @return 优惠券对象
      */
     CouponBO selectCoupon(String id);
+
+    /**
+     * 查询订单使用的优惠卷
+     */
+    List<CouponUserListBO> selectUserListByOrderNo(Map<String, Object> map, int pageNum, int pageSize);
 }
