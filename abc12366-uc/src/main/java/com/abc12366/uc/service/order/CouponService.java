@@ -185,4 +185,6 @@ public interface CouponService {
      * 查询订单使用的优惠卷
      */
     List<CouponUserListBO> selectUserListByOrderNo(Map<String, Object> map, int pageNum, int pageSize);
+
+    List<CouponUserListBO> selectAdminList(CouponUser bo, int pageNum, int pageSize);
 }

@@ -275,7 +275,7 @@ public class CouponController {
      * @return 优惠劵活动用户优惠劵列表
      */
     @GetMapping("/user")
-    public ResponseEntity selectUserList(
+    public ResponseEntity selectAdminList(
             @RequestParam(value = "orderNo", required = false) String orderNo,
             @RequestParam(value = "activityId", required = false) String activityId,
             @RequestParam(value = "categoryIds", required = false) String categoryIds,
@@ -299,7 +299,7 @@ public class CouponController {
 
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
-        List<CouponUserListBO> dataList = couponService.selectUserList(bo, pageNum, pageSize);
+        List<CouponUserListBO> dataList = couponService.selectAdminList(bo, pageNum, pageSize);
         PageInfo<CouponUserListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }

@@ -699,7 +699,14 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public List<CouponUserListBO> selectUserListByOrderNo(Map<String, Object> map, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
         return couponRoMapper.selectUserListByOrderNo(map);
+    }
+
+    @Override
+    public List<CouponUserListBO> selectAdminList(CouponUser bo, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        return couponRoMapper.selectAdminList(bo);
     }
 
     /**
