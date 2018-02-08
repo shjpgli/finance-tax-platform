@@ -259,14 +259,14 @@
             <if test="userId != null and userId != ''">cu.userId = #{userId}</if>
             <if test="activityId != null and activityId != ''">AND cu.activityId = #{activityId}</if>
             <if test="couponId != null and couponId != ''">AND cu.couponId = #{couponId}</if>
-            <if test="isDate != null and isDate == '1'.toString()">
+            <if test="isDate != null and isDate == '2'.toString()">
                 <if test="validEndTime != null">
                     <![CDATA[
                       and date_format(cu.validEndTime, '%Y-%m-%d') >= date_format(#{validEndTime}, '%Y-%m-%d')
                     ]]>
                 </if>
             </if>
-            <if test="isDate != null and isDate == '2'.toString()">
+            <if test="isDate != null and isDate == '1'.toString()">
                 <![CDATA[
                   and date_format(cu.validEndTime, '%Y-%m-%d') <= date_format(NOW(), '%Y-%m-%d')
                 ]]>
