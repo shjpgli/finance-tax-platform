@@ -19,6 +19,7 @@ public class TY21Xml2Object {
     private String RJDQR;
     private String YQDQR;
     private String NSRLX;
+    private String NSRSZLX;
     private String SFGTJZH;
     private String DJRQ;
 
@@ -165,4 +166,12 @@ public class TY21Xml2Object {
                 ", DJRQ='" + DJRQ + '\'' +
                 '}';
     }
+
+	public String getNSRSZLX() {
+		return NSRSZLX;
+	}
+
+	public void setNSRSZLX(String nSRSZLX) {
+		NSRSZLX = nSRSZLX;
+	}
 }

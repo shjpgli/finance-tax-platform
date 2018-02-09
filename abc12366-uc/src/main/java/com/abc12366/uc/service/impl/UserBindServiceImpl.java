@@ -709,6 +709,9 @@ public class UserBindServiceImpl implements UserBindService {
                 if ("NSRLX".equals(mx.getCODE())) {
                     object.setNSRLX(mx.getVALUE());
                 }
+                if ("NSRSZLX".equals(mx.getCODE())) {
+                    object.setNSRSZLX(mx.getVALUE());
+                }
                 if ("SFGTJZH".equals(mx.getCODE())) {
                     object.setSFGTJZH(mx.getVALUE());
                 }
