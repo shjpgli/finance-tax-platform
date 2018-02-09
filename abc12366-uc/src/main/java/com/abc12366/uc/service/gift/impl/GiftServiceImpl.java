@@ -156,7 +156,10 @@ public class GiftServiceImpl implements GiftService {
                 LOGGER.info("查询礼物异常：{}");
                 throw new ServiceException(4104);
             }
-
+            if(gift.getStatus() != null && !"2".equals(gift.getStatus())){
+                LOGGER.info("礼包金额：{}");
+                throw new ServiceException(4104);
+            }
             int giftNum = giftApply.getGiftNum();
             if(giftNum <= 0){
                 LOGGER.info("申请数量错误：{}", gift);

@@ -348,6 +348,7 @@ public class CouponController {
      *
      * @param userId   用户ID
      * @param status   优惠劵状态:0-未领取 1-已领取 2-已使用 3-已冻结 4-已删除 5-已过期 6-已作废
+     * @param isDate  0：查全部，1：查过期，2：查未过期
      * @param pageNum  当前页
      * @param pageSize 没有大小
      * @return 用户所有优惠劵列表
@@ -356,7 +357,8 @@ public class CouponController {
     public ResponseEntity selectUserCouponList(
             @PathVariable String userId,
             @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "validEndTime", required = false) Long validEndTime,
+//            @RequestParam(value = "validEndTime", required = false) Long validEndTime,
+            @RequestParam(value = "isDate", required = false) String isDate,
             @RequestParam(value = "categoryIds", required = false) String categoryIds,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
@@ -368,10 +370,12 @@ public class CouponController {
         if (StringUtils.isNotEmpty(categoryIds)) {
             bo.setCategoryIds(categoryIds);
         }
-        //有值：表示查询非过期的，反之
-        if (validEndTime != null) {
-            bo.setValidEndTime(DateUtils.transferLongToDate(System.currentTimeMillis()));
+        if (StringUtils.isNotEmpty(isDate)) {
+            bo.setIsDate(isDate);
         }
+//        if (validEndTime != null) {
+            bo.setValidEndTime(DateUtils.getToday());
+//        }
         bo.setUserId(userId);
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
