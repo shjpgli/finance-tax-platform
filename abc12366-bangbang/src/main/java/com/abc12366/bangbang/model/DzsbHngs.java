@@ -20,12 +20,15 @@ public class DzsbHngs implements Serializable {
 	private String nsrmc;
 
 	/**税务机关代码**/
-	private String swjgDm;
+	private String swjgdm;
 
 	/**税务机关名称**/
-	private String swjgMc;
+	private String swjgmc;
 
-
+	/**
+	 * 访问次数
+	 */
+	private Integer amount;
 
 	public void setId(String id){
 		this.id = id;
@@ -51,20 +54,28 @@ public class DzsbHngs implements Serializable {
 		return this.nsrmc;
 	}
 
-	public void setSwjgDm(String swjgDm){
-		this.swjgDm = swjgDm;
+
+	public String getSwjgdm() {
+		return swjgdm;
 	}
 
-	public String getSwjgDm(){
-		return this.swjgDm;
+	public void setSwjgdm(String swjgdm) {
+		this.swjgdm = swjgdm;
 	}
 
-	public void setSwjgMc(String swjgMc){
-		this.swjgMc = swjgMc;
+	public String getSwjgmc() {
+		return swjgmc;
 	}
 
-	public String getSwjgMc(){
-		return this.swjgMc;
+	public void setSwjgmc(String swjgmc) {
+		this.swjgmc = swjgmc;
 	}
 
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
 }

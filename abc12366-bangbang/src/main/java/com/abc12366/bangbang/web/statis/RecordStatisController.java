@@ -154,11 +154,9 @@ public class RecordStatisController {
      * @return
      */
     @GetMapping(path = "/company/list")
-    public ResponseEntity statisCompanyList(@RequestParam(value = "startTime", required = true) String startTime,
+    public ResponseEntity statisRecordCompanyList(@RequestParam(value = "startTime", required = true) String startTime,
                                            @RequestParam(value = "endTime", required = true) String endTime,
-                                           @RequestParam(value = "menua", required = false) String menua,
-                                           @RequestParam(value = "menub", required = false) String menub,
-                                           @RequestParam(value = "menuc", required = false) String menuc,
+                                           @RequestParam(value = "menu", required = false) String menu,
                                            @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                            @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -169,9 +167,7 @@ public class RecordStatisController {
         if (endTime != null && !"".equals(endTime)) {
             map.put("endTime", DateUtils.strToDate(endTime));
         }
-        map.put("menua",menua);
-        map.put("menub",menub);
-        map.put("menuc",menuc);
+        map.put("menu",menu);
         List<DzsbHngs> data = systemRecordService.statisRecordCompanyList(map);
         PageInfo<DzsbHngs> pageInfo = new PageInfo<>(data);
 
