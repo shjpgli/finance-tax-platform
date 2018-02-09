@@ -47,7 +47,7 @@
 		group by r.nsrsbh
 		UNION
 		select d.nsrsbh,d.nsrmc,d.swjgDm,d.swjgMc,r.amount from bb_system_record_company r
-		LEFT JOIN abc12366_uc.uc_user_hngs d on r.nsrsbh = d.nsrsbh
+		LEFT JOIN abc12366_uc.uc_user_dzsb d on r.nsrsbh = d.nsrsbh
 		<where>
             d.nsrsbh is not null
             <if test="menu != null and menu != ''">
@@ -134,9 +134,10 @@
 	</select>
 
 	<select id="statisList" resultType="com.abc12366.bangbang.model.SystemRecordStatis" parameterType="java.util.Map">
-
+        select mm.total,mm.menu from (
 		<foreach collection="list" index="key"  item="name" separator="union all">
-			SELECT id,menu,sum(amount) as total, amount,nsrsbh,createTime FROM bb_system_record_company
+            select count(a.id) as total,a.menu from (
+            SELECT id,menu,amount,nsrsbh,createTime FROM bb_system_record_company
 			where menu = #{name}
 			<if test="startTime != null">
 				<![CDATA[
@@ -148,7 +149,9 @@
                     and date_format(createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
                 ]]>
 			</if>
-			group by menu
+			group by nsrsbh
+            ) a
 		</foreach>
+        ) mm where mm.menu is not null
 	</select>
 </mapper>
