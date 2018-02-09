@@ -86,7 +86,7 @@
             <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
         </where>
         ) t
-       order by t.activityEndTime DESC,ca.createTime desc
+       order by t.activityEndTime DESC,t.createTime desc
     </select>
 
     <!--活动列表对象-->
