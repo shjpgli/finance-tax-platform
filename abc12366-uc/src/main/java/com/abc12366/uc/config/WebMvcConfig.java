@@ -71,7 +71,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 操作员登录、登出、token验证自动刷新
                 .excludePathPatterns("/admin/token/**")
                         // 微信服务回调地址
-                .excludePathPatterns("/wechatserver/*");
+                .excludePathPatterns("/wechatserver/*")
+                
+                .excludePathPatterns("/hsqj/register");
 
 
         // 前台用户访问拦截器迁移到网关后的
@@ -126,6 +128,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 长链接转短链接接口
                 .excludePathPatterns("/long2short", "/tinyurl")
                         // 办税日历查询
-                .excludePathPatterns("/user/bsrl","/user/u/jyxx/{usernameOrPhone}");
+                .excludePathPatterns("/user/bsrl","/user/u/jyxx/{usernameOrPhone}")
+                        //汇算清缴注册
+                .excludePathPatterns("/hsqj/register");
     }
 }

@@ -51,7 +51,35 @@
 			GROUP BY r.nsrsbh
 		</foreach>
 		) a
-		LEFT JOIN bb_dzsb_hngs d on a.nsrsbh = d.nsrsbh
+		LEFT JOIN abc12366_uc.uc_user_hngs d on a.nsrsbh = d.nsrsbh
+		UNION ALL
+		select d.nsrsbh,d.nsrmc,d.swjgDm,d.swjgMc from
+		(
+		<foreach collection="list" index="key"  item="yyyyMMdd" separator="union">
+			select r.nsrsbh from bb_system_record_${yyyyMMdd} r where r.nsrsbh is not null
+			<if test="menua != null and menua != ''">
+				and r.menua = #{menua}
+			</if>
+			<if test="menub != null and menub != ''">
+				and r.menub = #{menub}
+			</if>
+			<if test="menuc != null and menuc != ''">
+				and r.menuc =  #{menuc}
+			</if>
+			<if test="startTime != null">
+				<![CDATA[
+                    and date_format(r.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+			</if>
+			<if test="endTime != null">
+				<![CDATA[
+                    and date_format(r.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+			</if>
+			GROUP BY r.nsrsbh
+		</foreach>
+		) a
+		LEFT JOIN abc12366_uc.uc_user_dzsb d on a.nsrsbh = d.nsrsbh
 	</select>
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectRecordCompanyList" resultType="com.abc12366.bangbang.model.SystemRecordCompany" parameterType="java.lang.String">
