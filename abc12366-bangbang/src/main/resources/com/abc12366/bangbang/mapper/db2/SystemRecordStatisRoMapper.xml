@@ -59,11 +59,11 @@
 
     <select id="selectRecordStatisList" resultType="com.abc12366.bangbang.model.SystemRecordStatis"
             parameterType="java.util.Map">
-		SELECT id,menua as menu,COUNT(menua) as amount,createTime FROM bb_system_record_${yyyyMMdd}  group by menua
+		SELECT id,menua as menu,COUNT(menua) as amount,createTime FROM bb_system_record_${yyyyMMdd} where menua is not null and menua !=''  group by menua
 		union all
-		SELECT id,menub as menu,COUNT(menub) as amount,createTime FROM bb_system_record_${yyyyMMdd} group by menub
+		SELECT id,menub as menu,COUNT(menub) as amount,createTime FROM bb_system_record_${yyyyMMdd} where menub is not null and menub !='' group by menub
 		union all
-		SELECT id,menuc as menu,COUNT(menuc) as amount,createTime FROM bb_system_record_${yyyyMMdd} group by menuc
+		SELECT id,menuc as menu,COUNT(menuc) as amount,createTime FROM bb_system_record_${yyyyMMdd} where menuc is not null and menuc !='' group by menuc
 	</select>
 
     <select id="statisList" resultType="com.abc12366.bangbang.model.SystemRecordStatis" parameterType="java.util.Map">

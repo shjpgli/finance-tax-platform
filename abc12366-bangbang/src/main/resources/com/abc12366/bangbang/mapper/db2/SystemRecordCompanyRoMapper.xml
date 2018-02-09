@@ -25,6 +25,49 @@
 	</select>
 
 	<select id="statisRecordCompanyList" resultType="com.abc12366.bangbang.model.DzsbHngs" parameterType="java.util.Map">
+		select x.nsrsbh,x.nsrmc,x.swjgDm,x.swjgMc,x.amount from (
+		select d.nsrsbh,d.nsrmc,d.swjgDm,d.swjgMc,r.amount from bb_system_record_company r
+		LEFT JOIN abc12366_uc.uc_user_hngs d on r.nsrsbh = d.nsrsbh
+		<where>
+            d.nsrsbh is not null
+            <if test="menu != null and menu != ''">
+                and r.menu = #{menu}
+            </if>
+			<if test="startTime != null">
+				<![CDATA[
+                    and date_format(r.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+			</if>
+			<if test="endTime != null">
+				<![CDATA[
+                    and date_format(r.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+			</if>
+		</where>
+		group by r.nsrsbh
+		UNION
+		select d.nsrsbh,d.nsrmc,d.swjgDm,d.swjgMc,r.amount from bb_system_record_company r
+		LEFT JOIN abc12366_uc.uc_user_hngs d on r.nsrsbh = d.nsrsbh
+		<where>
+            d.nsrsbh is not null
+            <if test="menu != null and menu != ''">
+				and r.menu = #{menu}
+			</if>
+			<if test="startTime != null">
+				<![CDATA[
+                    and date_format(r.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+                ]]>
+			</if>
+			<if test="endTime != null">
+				<![CDATA[
+                    and date_format(r.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+                ]]>
+			</if>
+		</where>
+		group by r.nsrsbh
+		) x GROUP BY x.nsrsbh
+	</select>
+	<!--<select id="statisRecordCompanyList" resultType="com.abc12366.bangbang.model.DzsbHngs" parameterType="java.util.Map">
 		select d.nsrsbh,d.nsrmc,d.swjgDm,d.swjgMc from
 		(
 		<foreach collection="list" index="key"  item="yyyyMMdd" separator="union">
@@ -80,20 +123,20 @@
 		</foreach>
 		) a
 		LEFT JOIN abc12366_uc.uc_user_dzsb d on a.nsrsbh = d.nsrsbh
-	</select>
+	</select>-->
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectRecordCompanyList" resultType="com.abc12366.bangbang.model.SystemRecordCompany" parameterType="java.lang.String">
-		 SELECT id,menua as menu,COUNT(menua) as amount,nsrsbh,createTime FROM bb_system_record_${yyyyMMdd} where nsrsbh is not null  group by menua
+		 SELECT id,menua as menu,COUNT(menua) as amount,nsrsbh,createTime FROM bb_system_record_${yyyyMMdd} where nsrsbh is not null and menua is not null and menua !='' group by nsrsbh
 		union all
-		SELECT id,menub as menu,COUNT(menub) as amount,nsrsbh,createTime FROM bb_system_record_${yyyyMMdd} where nsrsbh is not null  group by menub
+		SELECT id,menub as menu,COUNT(menub) as amount,nsrsbh,createTime FROM bb_system_record_${yyyyMMdd} where nsrsbh is not null and menub is not null and menub !='' group by nsrsbh
 		union all
-		SELECT id,menuc as menu,COUNT(menuc) as amount,nsrsbh,createTime FROM bb_system_record_${yyyyMMdd} where nsrsbh is not null group by menuc
+		SELECT id,menuc as menu,COUNT(menuc) as amount,nsrsbh,createTime FROM bb_system_record_${yyyyMMdd} where nsrsbh is not null  and menuc is not null and menuc !='' group by nsrsbh
 	</select>
 
 	<select id="statisList" resultType="com.abc12366.bangbang.model.SystemRecordStatis" parameterType="java.util.Map">
 
 		<foreach collection="list" index="key"  item="name" separator="union all">
-			SELECT id,menu,sum(amount) as amount,nsrsbh,createTime FROM bb_system_record_company
+			SELECT id,menu,sum(amount) as total, amount,nsrsbh,createTime FROM bb_system_record_company
 			where menu = #{name}
 			<if test="startTime != null">
 				<![CDATA[
