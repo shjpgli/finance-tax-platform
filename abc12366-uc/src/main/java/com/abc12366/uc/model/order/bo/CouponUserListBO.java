@@ -95,6 +95,15 @@ public class CouponUserListBO {
      */
     private String orderNo;
 
+    /**
+     * 商品品类ID，逗号分隔
+     */
+    private String categoryIds;
+
+    /**
+     * 使用后的优惠金额
+     */
+    private Double amountAfter;
     public String getId() {
         return id;
     }
@@ -241,5 +250,21 @@ public class CouponUserListBO {
 
     public void setCouponId(String couponId) {
         this.couponId = couponId;
+    }
+
+    public String getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(String categoryIds) {
+        this.categoryIds = categoryIds;
+    }
+
+    public Double getAmountAfter() {
+        return amountAfter;
+    }
+
+    public void setAmountAfter(Double amountAfter) {
+        this.amountAfter = amountAfter;
     }
 }

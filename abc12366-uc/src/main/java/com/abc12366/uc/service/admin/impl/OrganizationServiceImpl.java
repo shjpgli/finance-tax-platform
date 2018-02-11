@@ -61,7 +61,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     /**
      * 验证部门信息
      *
-     * @param organizationBO
+     * @param organizationBO 部门对象
      */
     private void validateOrg(OrganizationBO organizationBO) {
         if (isOrgName(organizationBO.getName())) {
@@ -77,30 +77,21 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * 验证部门是否被禁用
-     *
-     * @param parentId
-     * @return
+     * @param parentId 父节点ID
      */
     public boolean isOrgParentId(String parentId) {
         OrganizationBO bo = organizationRoMapper.selectOrganizationById(parentId);
-        if (bo != null && bo.getStatus() == false) {
-            return true;
-        }
-        return false;
+        return bo != null && bo.getStatus() != null && !bo.getStatus();
     }
 
     /**
      * 验证部门名称是否存在
      *
-     * @param orgName
-     * @return
+     * @param orgName 部门名称
      */
     public boolean isOrgName(String orgName) {
         OrganizationBO bo = organizationRoMapper.selectOrganizationByName(orgName);
-        if (bo == null) {
-            return false;
-        }
-        return true;
+        return bo != null;
     }
 
     @Override

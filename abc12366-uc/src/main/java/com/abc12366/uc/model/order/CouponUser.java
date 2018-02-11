@@ -112,6 +112,9 @@ public class CouponUser {
      */
     private Double amountAfter;
 
+    //条件判断，0：查全部，1：查过期，2：查未过期
+    private String isDate;
+
     public String getId() {
         return id;
     }
@@ -286,5 +289,13 @@ public class CouponUser {
 
     public void setAmountAfter(Double amountAfter) {
         this.amountAfter = amountAfter;
+    }
+
+    public String getIsDate() {
+        return isDate;
+    }
+
+    public void setIsDate(String isDate) {
+        this.isDate = isDate;
     }
 }

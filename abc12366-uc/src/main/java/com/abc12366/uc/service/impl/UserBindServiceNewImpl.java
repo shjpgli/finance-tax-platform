@@ -810,6 +810,7 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
         return redisTemplate.hasKey(monthKey) ? Integer.parseInt(valueOperations.get(monthKey)) : 0;
     }
 
+    @Override
     public void recordNsrLoginTimes(){
         try{
             //redis加入电子申报纳税人一天内登录次数统计

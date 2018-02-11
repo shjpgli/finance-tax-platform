@@ -82,14 +82,10 @@ public interface UserMsgService {
     /**
      * 根据用户名查询发给这个用户的消息
      *
-     * @param map
-     * @param page
-     * @param size
-     * @return
+     * @param map fromUserId,toUserId,type
+     * @return 会话列表
      */
-    List<UserMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size);
-
-    int unreadCount(UserMessage data);
+    List<UserMessageAdmin> selectConversationList(Map<String, Object> map, int page, int size);
 
     /**
      * 获取未读消息列表

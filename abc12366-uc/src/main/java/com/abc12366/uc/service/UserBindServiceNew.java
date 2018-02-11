@@ -49,4 +49,6 @@ public interface UserBindServiceNew {
 	 * @return int
 	 */
 	int getNnsrLoginTimesMonth();
+
+	public void recordNsrLoginTimes();
 }

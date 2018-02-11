@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author liuguiyao
- * @create 2017-04-27 10:08 AM
+ * @author lizhongwei
+ * @date  2017-04-27 10:08 AM
  * @since 1.0.0
  */
 @Service
@@ -34,20 +34,18 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public List<MenuBO> selectList(Menu menu) {
-        List<MenuBO> menus = menuRoMapper.selectList(menu);
-        return menus;
+        return menuRoMapper.selectList(menu);
     }
 
     @Override
     public MenuBO selectByParentId(String parentId) {
-        MenuBO menuBO = recursiveTree(parentId);
-        return menuBO;
+        return recursiveTree(parentId);
     }
 
     /**
      * 递归算法解析成树形结构
      *
-     * @param id
+     * @param id id
      */
     public MenuBO recursiveTree(String id) {
         MenuBO node = menuRoMapper.selectByMenuId(id);
@@ -85,7 +83,7 @@ public class MenuServiceImpl implements MenuService {
     /**
      * 递归算法删除树节点
      *
-     * @param id
+     * @param id id
      */
     public void deleteTree(String id) {
         List<MenuBO> treeNodes = menuRoMapper.selectByParentId(id);

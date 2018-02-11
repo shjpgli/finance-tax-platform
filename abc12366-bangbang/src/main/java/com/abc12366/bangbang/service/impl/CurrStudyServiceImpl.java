@@ -6,6 +6,7 @@ import com.abc12366.bangbang.mapper.db2.CurriculumStudyRoMapper;
 import com.abc12366.bangbang.model.curriculum.CurriculumStudy;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumStudyBo;
 import com.abc12366.bangbang.service.CurrStudyService;
+import com.abc12366.bangbang.service.CurriculumBrowserWatchService;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.RestTemplateUtil;
@@ -45,6 +46,9 @@ public class CurrStudyServiceImpl implements CurrStudyService {
     @Autowired
     private RestTemplateUtil restTemplateUtil;
 
+    @Autowired
+    private CurriculumBrowserWatchService curriculumBrowserWatchServiceImpl;
+
     @Override
     public List<CurriculumStudyBo> selectList(Map<String,Object> map) {
         List<CurriculumStudyBo> studyBoList;
@@ -78,6 +82,7 @@ public class CurrStudyServiceImpl implements CurrStudyService {
 //            System.out.println(responseStr);
 
             curriculumMapper.updateWatchsDay(studyBo.getCurriculumId());
+            curriculumBrowserWatchServiceImpl.updateWatchNum(studyBo.getCurriculumId());
         } catch (Exception e) {
             LOGGER.error("新增课程学习信息异常：{}", e);
             throw new ServiceException(4362);

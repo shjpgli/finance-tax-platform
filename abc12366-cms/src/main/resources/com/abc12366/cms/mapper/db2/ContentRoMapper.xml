@@ -81,6 +81,7 @@
 
     <!-- 查询（根据查询条件查询） -->
     <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentViewListBo" parameterType="java.util.Map">
+      <![CDATA[
         SELECT
         a.contentId contentId,
         a.userid userid,
@@ -111,7 +112,8 @@
         LEFT JOIN cms_site d ON a.siteId = d.siteId
         LEFT JOIN cms_content_count e ON a.contentId = e.contentId
         WHERE a.status = 2 AND b.needRegenerate = 1
-        and date_sub(curdate(), INTERVAL 7 DAY) &lt;= date(b.releaseDate)
+        and date_sub(curdate(), INTERVAL 7 DAY) >= date(b.releaseDate)
+      ]]>
         <if test="tagId != null and tagId != ''">
             AND a.contentType like CONCAT('%',#{channelId},'%')
         </if>

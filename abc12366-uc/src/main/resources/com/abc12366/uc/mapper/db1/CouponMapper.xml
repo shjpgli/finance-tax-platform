@@ -27,7 +27,7 @@
             <if test="amountType != null">amountType = #{amountType},</if>
             <if test="validType != null">validType = #{validType},</if>
             <if test="validStartTime != null">validStartTime = #{validStartTime},</if>
-            <if test="validStartTime != null">validStartTime = #{validStartTime},</if>
+            <if test="validEndTime != null">validEndTime = #{validEndTime},</if>
 
             <if test="validDays != null">validDays = #{validDays},</if>
             <if test="description != null">description = #{description},</if>
@@ -120,9 +120,9 @@
             <if test="orderNo != null">orderNo = #{orderNo},</if>
             <if test="amountAfter != null">amountAfter = #{amountAfter},</if>
         </set>
-        where id IN
-        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        where id = #{id}
+        <!--<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">-->
+            <!--#{item}-->
+        <!--</foreach>-->
     </update>
 </mapper>

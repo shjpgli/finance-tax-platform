@@ -48,7 +48,7 @@ import java.util.*;
 
 /**
  * @author lijun <ljun51@outlook.com>
- * @create 2017-08-10 10:27 AM
+ * @date 2017-08-10 10:27 AM
  * @since 1.0.0
  */
 @Service("orderExchangeService")
@@ -94,14 +94,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     private MessageSendUtil messageSendUtil;
 
     @Autowired
-    private UserAddressRoMapper userAddressRoMapper;
-
-    @Autowired
     private PointsRuleService pointsRuleService;
 
-    @Autowired
-    private UserRoMapper userRoMapper;
-    
     @Autowired
     private UserMapper userMapper;
 
@@ -110,9 +104,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private TradeRoMapper tradeRoMapper;
-
-    @Autowired
-    private DzfpRoMapper dzfpRoMapper;
 
     @Transactional("db1TxManager")
     @Override
@@ -142,7 +133,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         return data;
     }
 
-    private void changeOrderStatus(String orderNo) {
+    /*private void changeOrderStatus(String orderNo) {
         Order order = new Order();
         order.setOrderNo(orderNo);
         order.setOrderStatus("6");
@@ -154,7 +145,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
             //insertLog(order.getOrderNo(), "orderStatus", "10", Utils.getUserId(), "用户提交退换货申请","1");
         }
-    }
+    }*/
 
     private void exchangeCheck(ExchangeApplicationBO ra) {
         ExchangeCompletedOrderBO bo = orderExchangeRoMapper.selectCompletedOrder(ra.getOrderNo());
@@ -422,6 +413,20 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                 refund.setOut_request_no(out_request_no);
 
                                 try {
+
+                                    //扣除订单获得的积分
+                                    if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
+                                        insertPoints(order,0d,order.getGiftPoints());
+                                    }
+
+                                    // 插入订单日志-已完成
+                                    insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+
+                                    //将订单状态改成已结束
+                                    order.setOrderStatus("7");
+                                    orderMapper.update(order);
+
+                                    //支付宝退款
                                     AlipayClient alipayClient = AliPayConfig.getInstance();
                                     AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
                                     request.setBizContent(AliPayConfig.toCharsetJsonStr(refund));
@@ -459,17 +464,6 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                         orderExchangeMapper.update(oe);
 
-                                        //扣除订单获得的积分
-                                        if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
-                                            insertPoints(order,0d,order.getGiftPoints());
-                                        }
-
-                                        // 插入订单日志-已完成
-                                        insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
-
-                                        //将订单状态改成已结束
-                                        order.setOrderStatus("7");
-                                        orderMapper.update(order);
                                         User user = userMapper.selectOne(order.getUserId());
                                         //查询会员特权-业务提醒
                                         /*VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
@@ -558,7 +552,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
     /**
      * 插入积分日志
      *
-     * @param orderBO
+     * @param orderBO 订单对象
      */
     private void insertPoints(Order orderBO,Double amount,int outgo) {
         //如果积分规则为空则返回
@@ -663,7 +657,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             String content = "";
             if ("1".equals(oe.getType())) {
                 content = RemindConstant.EXCHANGE_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
-            } else if ("2".equals(oe.getType())) {
+            }
+            else if ("2".equals(oe.getType())) {
                 content = RemindConstant.RETREAT_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
             }
             message.setContent(content);
@@ -672,7 +667,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             message.setType(MessageConstant.SYS_MESSAGE);
             message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
             message.setUserId(order.getUserId());
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             map.put("userId", user.getId());
             map.put("openId", user.getWxopenid());
             map.put("first", "您好，审核结果如下");
@@ -730,7 +725,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             message.setUserId(order.getUserId());
             messageSendUtil.sendMessage(message, request);
 
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             map.put("userId", user.getId());
             map.put("openId", user.getWxopenid());
             map.put("first", "您好，审核结果如下");
@@ -743,22 +738,22 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         return oe;
     }
 
-    /**
-     * 发送短信公告方法
-     * @param request
-     * @param content
-     * @param user
-     */
-    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
-        //发送短信
-        Map<String, String> maps = new HashMap<>();
-        maps.put("var", content);
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        list.add(maps);
-
-        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
-        messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
-    }
+//    /**
+//     * 发送短信公告方法
+//     * @param request http
+//     * @param content 内容
+//     * @param user 用户
+//     */
+//    private void sendPhoneMessage(HttpServletRequest request, String content, User user) {
+//        //发送短信
+//        Map<String, String> maps = new HashMap<>();
+//        maps.put("var", content);
+//        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+//        list.add(maps);
+//
+//        String accessToken = request.getHeader(Constant.APP_TOKEN_HEAD);
+//        messageSendUtil.sendPhoneMessage(user.getPhone(),"625", list, accessToken);
+//    }
 
     @Transactional("db1TxManager")
     @Override

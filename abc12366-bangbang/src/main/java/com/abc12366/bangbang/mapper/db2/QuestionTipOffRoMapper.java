@@ -2,6 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTipOffParamBo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface QuestionTipOffRoMapper {
      * 列表查询
      *
      **/
-    List<QuestionTipOffBo> selectList();
+    List<QuestionTipOffBo> selectList(QuestionTipOffParamBo paramBo);
 
     /**
      *
@@ -39,4 +40,10 @@ public interface QuestionTipOffRoMapper {
 
     int selectTipoffCnt(@Param("sourceId") String sourceId);
 
+    /**
+     *
+     * 查询（根据状态查询数量）
+     *
+     **/
+    Long selectCntByStatus(@Param("status") String status);
 }

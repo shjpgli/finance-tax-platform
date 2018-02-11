@@ -16,6 +16,12 @@
 		)  t3
 		ON t1.id = t3.businessId
 		WHERE 1=1
+		<if test="isReply == true">
+			AND t3.content IS NOT NULL
+		</if>
+		<if test="isReply == false">
+			AND t3.content IS  NULL
+		</if>
 		<if test="sourceType != null and sourceType!=''">
 			AND t1.sourceType = #{sourceType}
 		</if>
@@ -33,6 +39,20 @@
 		 ON  t1.feedbackUserId = t2.id
 		 WHERE id = #{id}
 	</select>
+
+	<!-- 查询（未回复） -->
+	<select id="selectCntUnanswered" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM (
+			SELECT t3.content FROM bb_feedback t1
+			LEFT JOIN
+			(
+				SELECT a.* FROM abc12366_message.msg_business_message a WHERE busiType = 'FEEDBACK'
+			)  t3
+			ON t1.id = t3.businessId
+		) aa
+		WHERE content IS NULL
+	</select>
+
 
 	<!--删除：根据主键ID删除-->
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">

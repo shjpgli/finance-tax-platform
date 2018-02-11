@@ -30,7 +30,17 @@ public interface CouponService {
     List<CouponListBO> selectList(Coupon bo, int pageNum, int pageSize);
 
     /**
-     * 查询优惠劵活动列表
+     * 后台-查询优惠劵活动列表
+     *
+     * @param bo       查询活动对象
+     * @param pageNum  当前页
+     * @param pageSize 每页大小
+     * @return 优惠劵列表
+     */
+    List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo, int pageNum, int pageSize);
+
+    /**
+     * 前台-查询优惠劵活动列表
      *
      * @param bo       查询活动对象
      * @param pageNum  当前页
@@ -149,14 +159,32 @@ public interface CouponService {
     /**
      * 根据订单号查询用户使用的优惠劵
      * @param map
-     * @return
      */
     CouponUser selectCouponUser(Map<String, Object> map);
 
     /**
      * 查找用户领用的优惠劵ID
-     * @param bo
-     * @return
+     * @param bo 对象
      */
     String selectCouponId(CouponIdBO bo);
+
+    /**
+     *  前端-查看优惠劵活动
+     * @param id id
+     */
+    CouponActivityBO selectActivity(String id);
+
+    /**
+     * 前端-查看优惠劵
+     * @param id id
+     * @return 优惠券对象
+     */
+    CouponBO selectCoupon(String id);
+
+    /**
+     * 查询订单使用的优惠卷
+     */
+    List<CouponUserListBO> selectUserListByOrderNo(Map<String, Object> map, int pageNum, int pageSize);
+
+    List<CouponUserListBO> selectAdminList(CouponUser bo, int pageNum, int pageSize);
 }

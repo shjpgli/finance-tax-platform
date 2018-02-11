@@ -199,4 +199,13 @@ public interface UserBindService {
      * @return ResponseEntity
      */
     UserHnds hndsDetail(String id);
+    
+    /**
+     * TY11解析函数
+     * @param resMap
+     * @param nsrsbh
+     * @return
+     * @throws ValidationException
+     */
+    TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws ValidationException;
 }

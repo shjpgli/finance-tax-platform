@@ -4,6 +4,7 @@ import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.*;
 import com.abc12366.bangbang.model.curriculum.*;
 import com.abc12366.bangbang.model.curriculum.bo.*;
+import com.abc12366.bangbang.service.CurriculumBrowserWatchService;
 import com.abc12366.bangbang.service.CurriculumService;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
@@ -68,6 +69,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     @Autowired
     private CurriculumUvipPriceRoMapper uvipPriceRoMapper;
+
+    @Autowired
+    private CurriculumBrowserWatchService curriculumBrowserWatchServiceImpl;
 
     @Override
     public List<CurriculumListBo> selectList(Map<String,Object> map) {
@@ -698,11 +702,13 @@ public class CurriculumServiceImpl implements CurriculumService {
         return currMyStudyNumBo;
     }
 
+    @Transactional("db1TxManager")
     @Override
     public String updateBrowsesDay(String curriculumId) {
         try {
             LOGGER.info("课程浏览信息:{}", curriculumId);
             curriculumMapper.updateBrowsesDay(curriculumId);
+            curriculumBrowserWatchServiceImpl.updateBrowserNum(curriculumId);
         } catch (Exception e) {
             LOGGER.error("更新课程浏览量异常：{}", e);
             throw new ServiceException(4324);

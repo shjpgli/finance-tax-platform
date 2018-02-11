@@ -20,13 +20,17 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.*;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户消息服务
  *
  * @author lijun <ljun51@outlook.com>
- * @create 2017-07-27 11:20 AM
+ * @date 2017-07-27 11:20 AM
  * @since 1.0.0
  */
 @RestController
@@ -40,33 +44,41 @@ public class UserMsgController {
     /**
      * 获取当前用户消息列表
      *
-     * @param page 当前页
-     * @param size 每页大小
+     * @param fromNickname 发送用户昵称
+     * @param fromUserId   发送用户ID
+     * @param toNickname   接收用户昵称
+     * @param toUserId     接收用户ID
+     * @param type         类型
+     * @param status       状态
+     * @param page         当前页
+     * @param size         每页大小
      * @return ResponseEntity
      */
     @GetMapping()
-    public ResponseEntity selectList(@RequestParam(required = false) String type,
+    public ResponseEntity selectList(@RequestParam(required = false) String fromNickname,
+                                     @RequestParam(required = false) String fromUserId,
+                                     @RequestParam(required = false) String toNickname,
+                                     @RequestParam(required = false) String toUserId,
+                                     @RequestParam(required = false) String type,
                                      @RequestParam(required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
-                                     HttpServletRequest request) {
-        LOGGER.info("{},{},{},{}", type, status, page, size);
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{},{},{},{},{},{},{},{}", fromNickname, fromUserId, toNickname, toUserId, type, status, page,
+                size);
 
-        // request USER_ID为空
-        ResponseEntity responseEntity = ResponseEntity.ok(Utils.bodyStatus(4193));
-        String userId = (String) request.getAttribute(Constant.USER_ID);
+        UserMessage um = new UserMessage.Builder()
+                .fromNickname(fromNickname)
+                .fromUserId(fromUserId)
+                .toNickname(toNickname)
+                .toUserId(toUserId)
+                .type(type)
+                .status(status)
+                .createTime(new Timestamp(System.currentTimeMillis())).build();
+        List<UserMessage> dataList = userMsgService.selectList(um, page, size);
 
-        if (!StringUtils.isEmpty(userId)) {
-            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).status(status).build();
-            List<UserMessage> dataList = userMsgService.selectList(um, page, size);
-
-            PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
-            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
-                    "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
-        }
-
-        LOGGER.info("{}", responseEntity);
-        return responseEntity;
+        PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal(),
+                "time", DateUtils.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss")));
     }
 
     /**
@@ -106,8 +118,8 @@ public class UserMsgController {
         String userId = Utils.getUserId();
 
         if (!StringUtils.isEmpty(userId)) {
-            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).build();
-            int count = userMsgService.unreadCount(um);
+            UserMessage um = new UserMessage.Builder().toUserId(userId).type(type).status("1").build();
+            int count = userMsgService.selectUnreadList(um).size();
             responseEntity = ResponseEntity.ok(Utils.kv("data", count));
         }
 
@@ -238,52 +250,35 @@ public class UserMsgController {
     }
 
     /**
-     * 根据用户名c查询消息列表
+     * 查询用户会话消息列表
      *
-     * @param fromuser  发送者
-     * @param touser    接受者
-     * @param status    状态
-     * @param startDate 时间段下限
-     * @param endDate   时间段上限
-     * @param page      页码
-     * @param size      每页数据量
-     * @return ResponseEntity {@linkplain com.abc12366.message.model.bo.UserMessageForBangbang}
+     * @param fromUserId 发送者/接收者
+     * @param toUserId   接受者/发送者
+     * @param type       类型
+     * @param page       页码
+     * @param size       每页数据量
+     * @return ResponseEntity
      */
-    @GetMapping(path = "/username")
-    public ResponseEntity selectListByUsername(@RequestParam(required = false) String fromuser,
-                                               @RequestParam(required = false) String touser,
-                                               @RequestParam(required = false) String status,
-                                               @RequestParam(required = false) String startDate,
-                                               @RequestParam(required = false) String endDate,
-                                               @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                               @RequestParam(value = "size", defaultValue = Constant.pageSize) int size
+    @GetMapping(path = "/conversation")
+    public ResponseEntity selectConversationList(@RequestParam String fromUserId,
+                                                 @RequestParam String toUserId,
+                                                 @RequestParam(required = false) String type,
+                                                 @RequestParam(value = "page", defaultValue = Constant.pageNum) int
+                                                         page,
+                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int
+                                                         size
     ) {
-        LOGGER.info("根据用户名查询发给这个用户的消息，username:{},{},{}", fromuser, touser);
         Map<String, Object> map = new HashMap<>();
-        map.put("fromuser", fromuser == null ? null : fromuser.trim());
-        map.put("touser", touser == null ? null : touser.trim());
-        map.put("status", status == null ? null : status.trim());
-        if (!StringUtils.isEmpty(startDate)) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtils.strToDate(startDate));
-            map.put("startDate", calendar.getTime());
-        }
-        if (!StringUtils.isEmpty(endDate)) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtils.strToDate(endDate));
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            map.put("endDate", calendar.getTime());
-        }
-        ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv());
-        List<UserMessageAdmin> dataList = userMsgService.selectListByUsername(map, page, size);
-        if (!StringUtils.isEmpty(dataList) && dataList.size() > 0) {
-            PageInfo<UserMessageAdmin> pageInfo = new PageInfo<>(dataList);
-            responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
-        }
+        map.put("fromUserId", fromUserId);
+        map.put("toUserId", toUserId);
+        map.put("status", type);
+        LOGGER.info("{}", map.toString());
 
-        LOGGER.info("查询到的用户的消息有：{}", dataList);
-        return responseEntity;
+        List<UserMessageAdmin> dataList = userMsgService.selectConversationList(map, page, size);
+        PageInfo<UserMessageAdmin> pageInfo = new PageInfo<>(dataList);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
+
     /**
      * 批量将消息置为已读
      *

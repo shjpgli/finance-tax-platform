@@ -2,6 +2,7 @@ package com.abc12366.bangbang.web.question;
 
 import com.abc12366.bangbang.model.question.QuestionTipOff;
 import com.abc12366.bangbang.model.question.bo.QuestionTipOffBo;
+import com.abc12366.bangbang.model.question.bo.QuestionTipOffParamBo;
 import com.abc12366.bangbang.service.QuestionTipOffService;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
@@ -30,9 +31,12 @@ public class QuestionTipOffController {
     /* 列表查询 */
     @GetMapping(path = "/list")
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
-                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size){
+                                     @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "status", defaultValue = "") String status){
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<QuestionTipOffBo> list = questionTipOffService.selectList();
+        QuestionTipOffParamBo paramBo = new QuestionTipOffParamBo();
+        paramBo.setStatus(status);
+        List<QuestionTipOffBo> list = questionTipOffService.selectList(paramBo);
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :
@@ -75,6 +79,10 @@ public class QuestionTipOffController {
         return ResponseEntity.ok(Utils.kv("data", questionTipOffBo));
     }
 
-
-
+    /* 根据状态查询总数 */
+    @GetMapping(path = "/selectCntByStatus/{status}")
+    public ResponseEntity selectCntByStatus(@PathVariable String status){
+        Long cnt = questionTipOffService.selectCntByStatus(status);
+        return ResponseEntity.ok(Utils.kv("data", cnt));
+    }
 }

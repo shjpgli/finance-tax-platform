@@ -44,11 +44,15 @@ public class PkgUtil extends BaseObject{
         	map.remove("serviceid");
             result = makeTiripPackageByGY01tdps(JSONObject.toJSONString(map), serviceId, "ABC_4000");
         }
+        if(serviceId.equalsIgnoreCase("TY06")){
+        	map.remove("serviceid");
+            result = makeTiripPackageBytdpsTY11(makeTY06(map), serviceId, "CSZJ_NEW");
+        }
 
         return result;
     }
-    
-    /**
+
+	/**
      * 业务消息查询专用XML组装
      * @param contentStr
      * @param serviceId
@@ -612,6 +616,71 @@ public class PkgUtil extends BaseObject{
         }
         return null;
     }
+    
+    private String makeTY06(Map<String, String> map) {
+    	com.abc12366.uc.jrxt.model.TY11Request.REQUEST request = new com.abc12366.uc.jrxt.model.TY11Request.REQUEST();
+        request.setNSRSBH(map.get("nsrsbh"));
+        com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX nsrjbxx=new  com.abc12366.uc.jrxt.model.TY11Request.NSRJBXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx2=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx3=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx4=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx5=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx6=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx7=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx8=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        com.abc12366.uc.jrxt.model.TY11Request.MXXX  mxxx9=new com.abc12366.uc.jrxt.model.TY11Request.MXXX();
+        mxxx.setCODE("RJDQR");
+        mxxx.setVALUE(map.get("yqdqr"));
+        nsrjbxx.addMXXX(mxxx);
+        
+        mxxx2.setCODE("YQDQR");
+        mxxx2.setVALUE(map.get("yqdqr"));
+        nsrjbxx.addMXXX(mxxx2);
+        
+        mxxx3.setCODE("NSRLX");
+        mxxx3.setVALUE(map.get("nsrlx"));
+        nsrjbxx.addMXXX(mxxx3);
+        
+        mxxx4.setCODE("ZXBZ");
+        mxxx4.setVALUE("0");
+        nsrjbxx.addMXXX(mxxx4);
+        
+        mxxx5.setCODE("GTBZ");
+        mxxx5.setVALUE("0");
+        nsrjbxx.addMXXX(mxxx5);
+        
+        mxxx6.setCODE("RJBB");
+        mxxx6.setVALUE("20");
+        nsrjbxx.addMXXX(mxxx6);
+        
+        mxxx7.setCODE("KHSJ");
+        mxxx7.setVALUE(map.get("khsj"));
+        nsrjbxx.addMXXX(mxxx7);
+        
+        mxxx8.setCODE("SCBZ");
+        mxxx8.setVALUE("0");
+        nsrjbxx.addMXXX(mxxx8);
+        
+        mxxx9.setCODE("TSYHLX");
+        mxxx9.setVALUE("01");
+        nsrjbxx.addMXXX(mxxx9);
+        request.setNSRJBXX(nsrjbxx);
+        try {
+            String str = XmlJavaParser.parseObjectToXml(request);
+            return str;
+        } catch (IOException e) {
+            _log.error("IOException: " + e);
+            e.printStackTrace();
+        } catch (MarshalException e) {
+            _log.error("MarshalException: " + e);
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            _log.error("ValidationException: " + e);
+            e.printStackTrace();
+        }
+        return null;
+	}
 
 
 }

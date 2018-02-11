@@ -104,6 +104,36 @@ public class DateUtils {
     }
 
     /**
+     * 时间戳转时间
+     * @param millSec
+     * @return
+     */
+    public static Date transferLongToDate(Long millSec) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date(millSec);
+        return date;
+    }
+
+    /**
+     * 字符串转换成日期
+     *
+     * @param str
+     * @return date
+     */
+    public static Date strToDateHHMMSS(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new ServiceException(4805);
+        }
+        return date;
+    }
+
+    /**
      * 字符串转换成日期，yyyy-MM
      *
      * @param str
@@ -517,6 +547,23 @@ public class DateUtils {
         Date date = new Date();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
+    }
+
+    /**
+     * 获得当前时间yyyy-MM-dd
+     *
+     * @return String
+     */
+    public static Date getToday() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String s = sdf.format(new Date());
+        Date date = null;
+        try {
+            date = sdf.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     /**

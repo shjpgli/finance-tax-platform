@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -70,9 +73,13 @@ public class SearchController {
         LOGGER.info("参数值:"+text);
         List<CheatsSearchBo> listcheats=null;
         if(text!=null&&!"".equals(text)){
-
-            listcheats = searchService.queryCheatsSearch(text);
-
+            try {
+                text=URLDecoder.decode(text,"UTF-8");
+                listcheats = searchService.queryCheatsSearch(text);
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.info("系统异常  {}");
+                throw new ServiceException(5000);
+            }
         }else{
             LOGGER.info("搜索值缺少  {}");
             throw new ServiceException(5000);
@@ -91,9 +98,13 @@ public class SearchController {
         LOGGER.info("参数值:"+text);
         List<QuestionSearchBo> list=null;
         if(text!=null&&!"".equals(text)){
-
-            list = searchService.queryQuestionSearch(text);
-
+            try {
+                text=URLDecoder.decode(text,"UTF-8");
+                list = searchService.queryQuestionSearch(text);
+            } catch (UnsupportedEncodingException e) {
+                LOGGER.info("系统异常  {}");
+                throw new ServiceException(5000);
+            }
         }else{
             LOGGER.info("搜索值缺少  {}");
             throw new ServiceException(5000);

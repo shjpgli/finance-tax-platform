@@ -15,17 +15,14 @@ import java.util.Map;
 public interface BusinessMsgRoMapper {
     List<BusinessMessage> selectList(BusinessMessage data);
 
+    /**
+     * 最近30天未读列表
+     */
+    List<BusinessMessage> selectUnreadList(BusinessMessage data);
+
     BusinessMessage selectOne(String id);
 
     List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map);
-
-    /**
-     * 查询业务消息未读数量
-     *
-     * @param bm type,busiType
-     * @return 消息未读总数
-     */
-    int unreadCount(BusinessMessage bm);
 
     /**
      * 根据用户id从用户视图查询用户简要信息

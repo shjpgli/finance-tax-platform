@@ -56,6 +56,11 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public Long selectCntUnanswered() {
+        return feedbackMapper.selectCntUnanswered();
+    }
+
+    @Override
     public void delete(List<String> ids) {
         try {
             feedbackMapper.deleteByPrimaryKeys(ids);
