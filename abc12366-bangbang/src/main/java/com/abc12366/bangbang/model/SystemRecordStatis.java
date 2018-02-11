@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author lizhongwei
- * @create 2017-12-12 12:21 PM
+ * @date  2017-12-12 12:21 PM
  * 用户使用系统记录
  **/
 @SuppressWarnings("serial")
@@ -22,6 +22,8 @@ public class SystemRecordStatis implements Serializable {
 	/**统计时间**/
 	private java.util.Date createTime;
 
+	/**访问总次数**/
+	private Integer total;
 
 
 	public void setId(String id){
@@ -56,4 +58,11 @@ public class SystemRecordStatis implements Serializable {
 		return this.createTime;
 	}
 
+	public Integer getTotal() {
+		return total;
+	}
+
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
 }

@@ -234,6 +234,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
         //查询子节点
 //        List<String> list = GeneralTree.t.getChild((String) map.get("menu"));
 //        map.put("list",list);
+        LOGGER.info("查询企业用户");
         List<SystemRecordCompany> dataList = systemRecordCompanyRoMapper.statisList(map);
         return dataList;
     }
