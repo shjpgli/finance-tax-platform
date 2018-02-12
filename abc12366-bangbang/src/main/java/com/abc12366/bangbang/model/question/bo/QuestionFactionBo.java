@@ -41,6 +41,7 @@ public class QuestionFactionBo implements Serializable {
 	private String intro;
 
 	/**是否自动通过**tinyint(4)**/
+	@NotNull
 	private Integer auto;
 
 	/**邀请链接**varchar(300)**/
