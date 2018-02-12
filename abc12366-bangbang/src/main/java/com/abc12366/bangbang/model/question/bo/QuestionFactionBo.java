@@ -2,6 +2,7 @@ package com.abc12366.bangbang.model.question.bo;
 import com.abc12366.bangbang.model.question.QuestionFactionClassify;
 import com.abc12366.bangbang.model.question.QuestionFactionTag;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class QuestionFactionBo implements Serializable {
     private Integer awardPoint;
 
 	/**入邦最低等级**varchar(64)**/
+	@NotNull
 	private Integer minGrade;
 
 	/**简介**varchar(1000)**/

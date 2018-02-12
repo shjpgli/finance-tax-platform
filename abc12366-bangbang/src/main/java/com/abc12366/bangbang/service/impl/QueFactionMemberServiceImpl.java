@@ -74,8 +74,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
         JSONObject jsonStu = JSONObject.fromObject(factionMemberBo);
         LOGGER.info("新增邦派成员信息:{}", jsonStu.toString());
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("userId", factionMemberBo.getUserId());//
-        dataMap.put("factionId", factionMemberBo.getFactionId());//
+        dataMap.put("userId", factionMemberBo.getUserId());
+        dataMap.put("factionId", factionMemberBo.getFactionId());
         int cnt = memberRoMapper.selectMemberCnt(dataMap);
         if(cnt > 0){
             //已申请加入邦派，请勿重复申请
@@ -97,10 +97,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
             throw new ServiceException(6136);
         }
         UCUserBO userBo = Utils.getUserInfo();
-        String vipLevel = "";
         String userLevel = "";
         if(userBo != null){
-            vipLevel = userBo.getVipLevel();
             userLevel = userBo.getLevel();
         }
         int minGrad = faction.getMinGrade();
@@ -114,8 +112,8 @@ public class QueFactionMemberServiceImpl implements QueFactionMemberService {
         }else{
             throw new ServiceException(6132);
         }
-
-        int auto = faction.getAuto();//是否自动入帮，1为是，0为否
+        // 是否自动入帮，1为是，0为否
+        int auto = faction.getAuto();
         int status = 1;
         if(auto == 1){
             status = 2;
