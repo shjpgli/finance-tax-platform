@@ -7,6 +7,8 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.service.AuthService;
 import com.abc12366.uc.service.AuthServiceNew;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,4 +160,21 @@ public class AuthControllerNew {
         return ResponseEntity.ok(Utils.kv("data", message));
     }
     
+    /**
+     * 跨应用登录
+     * @param body A应用的用户userToken
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@PostMapping(path = "/dbappuserlogin")
+    public ResponseEntity dbAppUserLogin(@RequestBody Map<String, String> body, HttpServletRequest
+            request){
+    	String userToken = body.get("userToken");
+    	if(StringUtils.isEmpty(userToken)){
+    		return ResponseEntity.ok(Utils.bodyStatus(9999, "登录请求参数异常!"));
+    	}else{
+    		Map token = authServiceNew.dbAppUserLogin(userToken);
+    		return ResponseEntity.ok(Utils.kv("data", token));
+    	}
+    }
 }
