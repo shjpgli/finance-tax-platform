@@ -96,7 +96,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             throw new ServiceException(4911);
         }
 
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         for (int i = start; i <= end; i++) {
             list.add(i);
         }
@@ -113,7 +113,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         int endCount=0;
         int startCount=0;
         String invoiceTypeCode = invoiceRepoBO.getInvoiceTypeCode();
-        boolean isIndex = true;
+        boolean isIndex;
         for(int i = 1; i <= pageCount; i++) {
             List<Integer> subList = list.subList((i - 1) * pageSize, pageSize * (i));
             String repoId = invoiceTypeCode+autoGenericCode(startId,startIdLength);
@@ -146,6 +146,11 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
             invoiceRepoBO.setStatus("0");
             invoiceRepoBO.setBook(1);
             BeanUtils.copyProperties(invoiceRepoBO,invoiceRepo);
+            InvoiceRepo repo = invoiceRepoRoMapper.selectByPrimaryKey(invoiceRepo.getId());
+            if(repo != null){
+                LOGGER.warn("发票编号已存在");
+                throw new ServiceException(7147);
+            }
             int insert = invoiceRepoMapper.insert(invoiceRepo);
             if(insert != 1){
                 LOGGER.warn("新增失败，参数{}：" + invoiceRepoBO);
@@ -161,7 +166,6 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
      * 不够位数的在前面补0，保留num的长度位数字
      * @param code 内容
      * @param num  长度
-     * @return
      */
     private static String autoGenericCode(int code, int num) {
         return String.format("%0" + num + "d", code);
@@ -196,7 +200,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         int start = Integer.parseInt(invoiceRepoBO.getInvoiceNoStart());
         int end = Integer.parseInt(invoiceRepoBO.getInvoiceNoEnd());
 
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         for (int i = start; i <= end; i++) {
             list.add(i);
         }
@@ -221,7 +225,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Override
     public InvoiceRepo selectRepoId(String invoiceTypeCode) {
-        Map map = new HashMap();
+        Map<String,Object> map = new HashMap();
         map.put("codeLength",invoiceTypeCode.length());
         map.put("invoiceTypeCode",invoiceTypeCode);
         InvoiceRepo invoiceRepo = invoiceRepoRoMapper.selectRepoId(map);
@@ -266,8 +270,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
 
     @Override
     public InvoiceRepoBO selectInvoiceRepoNum(String code) {
-        InvoiceRepoBO invoiceRepoBO = invoiceRepoRoMapper.selectInvoiceRepoNum(code);
-        return invoiceRepoBO;
+        return invoiceRepoRoMapper.selectInvoiceRepoNum(code);
     }
 
     @Override
@@ -287,7 +290,7 @@ public class InvoiceRepoServiceImpl implements InvoiceRepoService {
         int start = Integer.parseInt(invoiceRepo.getInvoiceNoStart());
         int end = Integer.parseInt(invoiceRepo.getInvoiceNoEnd());
 
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         for (int i = start; i <= end; i++) {
             list.add(i);
         }
