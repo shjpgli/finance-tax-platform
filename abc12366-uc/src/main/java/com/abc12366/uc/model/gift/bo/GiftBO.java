@@ -50,6 +50,9 @@ public class GiftBO implements Serializable {
 	/**更新时间**/
 	private java.util.Date lastUpdate;
 
+	/**第三方产品详情URL**/
+	private String detailUrl;
+
 	public String getId() {
 		return id;
 	}
@@ -153,4 +156,32 @@ public class GiftBO implements Serializable {
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+
+    public String getDetailUrl() {
+        return detailUrl;
+    }
+
+    public void setDetailUrl(String detailUrl) {
+        this.detailUrl = detailUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "GiftBO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", details='" + details + '\'' +
+                ", status='" + status + '\'' +
+                ", sort=" + sort +
+                ", category='" + category + '\'' +
+                ", stock=" + stock +
+                ", sellingPrice=" + sellingPrice +
+                ", costPrice=" + costPrice +
+                ", createTime=" + createTime +
+                ", lastUpdate=" + lastUpdate +
+                ", detailUrl='" + detailUrl + '\'' +
+                '}';
+    }
 }

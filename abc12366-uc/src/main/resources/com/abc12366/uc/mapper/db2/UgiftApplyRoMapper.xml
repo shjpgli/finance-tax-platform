@@ -129,7 +129,7 @@
     <select id="getGiftStatusCount" resultType="java.lang.Integer">
         SELECT
         COUNT(u.applyId)
-        FROM uc_ugift_apply u where u.status = '2'
+        FROM uc_ugift_apply u where u.status = '1'
     </select>
 
 

@@ -49,7 +49,8 @@ public class Gift implements Serializable {
 	/**更新时间**/
 	private java.util.Date lastUpdate;
 
-
+	/**第三方产品详情URL**/
+	private String detailUrl;
 
 	public void setId(String id){
 		this.id = id;
@@ -155,4 +156,31 @@ public class Gift implements Serializable {
 		return this.lastUpdate;
 	}
 
+	public String getDetailUrl() {
+		return detailUrl;
+	}
+
+	public void setDetailUrl(String detailUrl) {
+		this.detailUrl = detailUrl;
+	}
+
+	@Override
+	public String toString() {
+		return "Gift{" +
+				"id='" + id + '\'' +
+				", name='" + name + '\'' +
+				", imageUrl='" + imageUrl + '\'' +
+				", introduction='" + introduction + '\'' +
+				", details='" + details + '\'' +
+				", status='" + status + '\'' +
+				", sort=" + sort +
+				", category='" + category + '\'' +
+				", stock=" + stock +
+				", sellingPrice=" + sellingPrice +
+				", costPrice=" + costPrice +
+				", createTime=" + createTime +
+				", lastUpdate=" + lastUpdate +
+				", detailUrl='" + detailUrl + '\'' +
+				'}';
+	}
 }
