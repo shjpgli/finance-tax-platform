@@ -148,4 +148,11 @@ public interface GiftService {
      * @return  礼物列表
      */
     List<Gift> selectAdminList(Gift gift);
+
+    /**
+     * 获取待审批礼包
+     * @return
+     */
+    Integer getGiftStatusCount();
+
 }
