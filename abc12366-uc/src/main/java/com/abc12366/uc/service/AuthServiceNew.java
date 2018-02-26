@@ -16,4 +16,6 @@ public interface AuthServiceNew {
 
 	Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request);
 
+	Map dbAppUserLogin(String userToken);
+
 }
