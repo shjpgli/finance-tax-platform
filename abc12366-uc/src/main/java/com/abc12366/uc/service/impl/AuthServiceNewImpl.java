@@ -456,7 +456,7 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 		Token queryToken = tokenMapper.selectOne(userBO.getId(), Utils.getAppId());
 		LOGGER.info("获取到用户token信息:{}", JSONObject.toJSONString(queryToken));
 		if (queryToken != null
-				&& (queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) <= System
+				&& (queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System
 						.currentTimeMillis()) {// 当B应用有对应的用户登录且在有效期内时，返回原有token
 			tokens = queryToken.getToken();
 		} else {// 当B应用没有对应的用户没有登录或已过期时，将A应用的用户token作为B应用的用户token，并更新有效期
