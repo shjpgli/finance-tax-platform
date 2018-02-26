@@ -375,6 +375,11 @@ public class GiftServiceImpl implements GiftService {
         return giftRoMapper.selectAdminList(gift);
     }
 
+    @Override
+    public Integer getGiftStatusCount() {
+        return ugiftApplyRoMapper.getGiftStatusCount();
+    }
+
     /**
      * 获取礼物订单号
      *
