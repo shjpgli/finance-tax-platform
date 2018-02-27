@@ -39,12 +39,14 @@ public class NoticeController {
 
     @GetMapping("/notice")
     public ResponseEntity selectList(@RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "status", required = false) String status,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{},{},{}", title, page, size);
 
         NoticeBO notice = new NoticeBO();
         notice.setTitle(title);
+        notice.setStatus(status);
         List<NoticeBO> dataList = noticeService.selectList(notice, page, size);
 
         PageInfo<NoticeBO> pageInfo = new PageInfo<NoticeBO>(dataList);

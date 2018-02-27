@@ -46,4 +46,7 @@ public interface UgiftApplyRoMapper {
      * @return
      */
     UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map);
+
+    Integer getGiftStatusCount();
+
 }
