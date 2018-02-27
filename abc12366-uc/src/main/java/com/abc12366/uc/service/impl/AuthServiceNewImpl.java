@@ -447,7 +447,8 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 	public Map dbAppUserLogin(String userToken) {
 		Map<String, Object> map = new HashMap<>(16);
 		UserBO userBO = userMapper.selectOneByToken(userToken);
-		String tokens = "";
+		String tokens = Utils.uuid();
+		int result02 = 0;
 		if (userBO == null) {
 			LOGGER.error("登录失败，参数:{}", userToken);
 			throw new ServiceException(4018);
@@ -455,23 +456,27 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 		LOGGER.info("获取到用户信息:{}", JSONObject.toJSONString(userBO));
 		Token queryToken = tokenMapper.selectOne(userBO.getId(), Utils.getAppId());
 		LOGGER.info("获取到用户token信息:{}", JSONObject.toJSONString(queryToken));
-		if (queryToken != null
-				&& (queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000) >= System
-						.currentTimeMillis()) {// 当B应用有对应的用户登录且在有效期内时，返回原有token
-			tokens = queryToken.getToken();
-		} else {// 当B应用没有对应的用户没有登录或已过期时，将A应用的用户token作为B应用的用户token，并更新有效期
-			tokens = Utils.uuid();
+		if (queryToken != null){
+			if(queryToken.getLastTokenResetTime().getTime() + Constant.USER_TOKEN_VALID_SECONDS * 1000 >= System
+					.currentTimeMillis()){// 当B应用有对应的用户登录且在有效期内时，返回原有token
+				tokens = queryToken.getToken();
+			}else{// 当B应用有对应的用户登录且在不在有效期内时，更新token
+				queryToken.setToken(tokens);
+			}
+			queryToken.setLastTokenResetTime(new Date());
+			result02 = tokenMapper.update(queryToken);
+		}else {// 当B应用没有对应的用户没有登录或已过期时，将A应用的用户token作为B应用的用户token，并更新有效期
 			Token token = new Token();
 			token.setId(Utils.uuid());
 			token.setAppId(Utils.getAppId());
 			token.setUserId(userBO.getId());
 			token.setToken(tokens);
 			token.setLastTokenResetTime(new Date());
-			int result02 = tokenMapper.insert(token);
-			if (result02 != 1) {
-				LOGGER.warn("登录失败，参数:{}", userToken);
-				throw new ServiceException(4021);
-			}
+			result02 = tokenMapper.insert(token);	
+		}
+		if (result02 != 1) {
+			LOGGER.warn("登录失败，参数:{}", userToken);
+			throw new ServiceException(4021);
 		}
 		map.put("token", tokens);
 		map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
