@@ -356,7 +356,10 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         update(todoTask);
 
         //计算做任务的奖励（主要是经验值和积分的变化）
-        computeAward(userId, todoTask);
+        if(TaskConstant.TASK_FINISHED.equals(todoTask.getStatus())){//任务完成后才给奖励
+        	 computeAward(userId, todoTask);
+        }
+       
     }
 
     //做一次性任务
