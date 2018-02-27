@@ -6,7 +6,7 @@
         select t2.*from (
         SELECT id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake,addressId,address,sendName,phone,activityStartTime,activityEndTime,activityName,lotteryLevel,lotterySend
         ,kuaidiGS , kuaididanhao, sendRemake ,sendRemake2,endlqDate
-        ,(select a.username from uc_user a where a.id=z.userId) as userName
+        ,(select a.nickname from uc_user a where a.id=z.userId) as userName
         from uc_lottery_log z
         ) t2
         <where>
@@ -39,7 +39,7 @@
     <select id="selectOne" resultType="com.abc12366.uc.model.bo.LotteryLogBO" parameterType="java.lang.String">
         SELECT id,activityId,lotteryId,createTime,lotteryName,isluck,state,userId,upoint,ip,remake,addressId,address,sendName,phone,activityStartTime,activityEndTime,activityName,lotteryLevel,lotterySend
         ,kuaidiGS , kuaididanhao, sendRemake ,sendRemake2,endlqDate
-        ,(select a.username from uc_user a where a.id=z.userId) as userName
+        ,(select a.nickname from uc_user a where a.id=z.userId) as userName
         from uc_lottery_log z
 where id=#{id}
 </select>
