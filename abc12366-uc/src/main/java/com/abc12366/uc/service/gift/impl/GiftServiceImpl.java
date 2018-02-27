@@ -157,13 +157,13 @@ public class GiftServiceImpl implements GiftService {
                 throw new ServiceException(4104);
             }
             if(gift.getStatus() != null && !"2".equals(gift.getStatus())){
-                LOGGER.info("礼包金额：{}");
-                throw new ServiceException(4104);
+                LOGGER.info("会员礼包已经下架：{}");
+                throw new ServiceException(7149);
             }
             int giftNum = giftApply.getGiftNum();
             if(giftNum <= 0){
                 LOGGER.info("申请数量错误：{}", gift);
-                throw new ServiceException(4104,"申请数量错误");
+                throw new ServiceException(7148,"申请数量错误");
             }
             int stock = gift.getStock();
             int finalStock = stock - giftNum;
