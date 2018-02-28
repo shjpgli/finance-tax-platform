@@ -182,6 +182,12 @@ prod为IDC机房环境，comp为公司机房环境。每次打包都需要确认
 通过下面的命令查看jar是否打包成功：
 > java -jar ./abc12366-uc/target/abc12366-uc-1.0.0-SNAPSHOT.jar
 
+通过下面的参数可以动态指定端口、环境、配置文件:
+> java -jar ./abc12366-uc/target/abc12366-uc-1.0.0-SNAPSHOT.jar --spring.profiles.active=prod1 --server.port=9000 --spring.config.location=./application-prod1.properties
+* --spring.profiles.active=prod1 指定环境为prod1，即后面spring.config.location指定的配置文件
+* --server.port=9000 指定端口为9000
+* --spring.config.location 指定配置文件路径，上面的示例为当前目录，如果在类路径下，可以使用classpath:/application.properties
+
 ### 接口测试
 
 推荐使用跨平台命令行方式的`curl`或图形化工具`postman`。
