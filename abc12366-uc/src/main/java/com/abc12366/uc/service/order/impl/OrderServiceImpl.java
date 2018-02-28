@@ -605,8 +605,6 @@ public class OrderServiceImpl implements OrderService {
 
                                 insertPoints(orderBO);
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
-                                //发送消息
-                                sendPointsMsg(orderProductBO, order, request);
                             } else if ("JFCZ".equals(trading)) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
@@ -614,6 +612,8 @@ public class OrderServiceImpl implements OrderService {
 
                                 insertPoints(orderBO);
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
+                                //发送消息
+                                sendPointsMsg(orderProductBO, order, request);
                             }
                         } else if (isPay == 3) {
                             order.setOrderStatus("2");
