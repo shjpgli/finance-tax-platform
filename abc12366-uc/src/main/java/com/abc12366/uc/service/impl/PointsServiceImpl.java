@@ -276,8 +276,7 @@ public class PointsServiceImpl implements PointsService {
         pointComputeLog.setRuleId(pointsRuleBO.getId());
         pointMapper.insertComputeLog(pointComputeLog);
 
-        //redis经验值删除
-        redisTemplate.delete(pointCalculateBO.getUserId() + "_Points");
+        
 
         return pointsRuleBO.getPoints();
     }
