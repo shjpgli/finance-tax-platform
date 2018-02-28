@@ -8,6 +8,7 @@ import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
+import com.abc12366.bangbang.model.question.bo.QuestionBo;
 import com.abc12366.bangbang.service.QueAnswerService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
@@ -353,6 +354,25 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             //不能采纳自己回答的
             throw new ServiceException(6193);
         }
+        
+        //2018-02-28
+        QuestionBo questionBo = questionRoMapper.selectQuestion(questionId);
+        QuestionAnswerBo bo = answerRoMapper.selectByPrimaryKey(id);
+        if(questionBo.getPoints() > 0){
+        	Map<String, Object> body =new HashMap<String, Object> ();
+        	body.put("userId", bo.getUserId());
+        	body.put("ruleCode", "P-jfxs");
+        	body.put("points", questionBo.getPoints());
+        	body.put("remark", "回答悬赏提问被提问者采纳");
+        	String urlA = SpringCtxHolder.getProperty("abc12366.uc.url") + "/points/calculate";
+        	String kcjf =restTemplateUtil.exchange(urlA, HttpMethod.POST, body ,request);
+        	com.alibaba.fastjson.JSONObject kcjfObj=com.alibaba.fastjson.JSONObject.parseObject(kcjf);
+        	if(kcjfObj.getInteger("code") != 2000){
+        		LOGGER.error("回答悬赏提问被提问者采纳："+ kcjfObj.toJSONString());
+        		throw new ServiceException(6113);
+        	}
+        }
+        
         //设置为采纳
         try {
             answerMapper.updateIsAccept(id);
