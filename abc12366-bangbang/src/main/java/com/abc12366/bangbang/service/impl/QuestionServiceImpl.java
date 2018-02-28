@@ -221,6 +221,8 @@ public class QuestionServiceImpl implements QuestionService {
             //该用户已被禁言
             throw new ServiceException(6373);
         }
+        
+        
 
         try {
             JSONObject jsonStu = JSONObject.fromObject(questionBo);
@@ -309,6 +311,30 @@ public class QuestionServiceImpl implements QuestionService {
                     inviteMapper.insert(invite);
                 }
             }
+            
+            //2018-02-28
+            //如果有悬赏积分，进行积分扣除
+            String userId = Utils.getUserId();
+            if(questionBo.getPoints() > 0){
+            	Map<String, Object> body =new HashMap<String, Object> ();
+            	body.put("userId", userId);
+            	body.put("ruleCode", "P-jfxs");
+            	body.put("points", -questionBo.getPoints());
+            	body.put("remark", "提问扣除悬赏积分");
+            	String urlA = SpringCtxHolder.getProperty("abc12366.uc.url") + "/points/calculate";
+            	String kcjf =restTemplateUtil.exchange(urlA, HttpMethod.POST, body ,request);
+            	com.alibaba.fastjson.JSONObject kcjfObj=com.alibaba.fastjson.JSONObject.parseObject(kcjf);
+            	if(kcjfObj.getInteger("code") != 2000){
+            		LOGGER.error("提问悬赏扣除积分："+ kcjfObj.toJSONString());
+            		if(kcjfObj.getInteger("code") == 4635){
+            			throw new ServiceException(4635);
+            		}else{
+            			throw new ServiceException(6102);
+            		}
+            		
+            	}
+            }
+            
 
             questionMapper.insert(question);
 
@@ -318,7 +344,7 @@ public class QuestionServiceImpl implements QuestionService {
 
 
             String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/todo/task/do/award/{userId}/{taskCode}";
-            String userId = Utils.getUserId();
+            
             String sysTaskId = TaskConstant.SYS_TASK_MRYNTW_CODE;
             restTemplateUtil.send(url, HttpMethod.POST, request, userId, sysTaskId);
 
