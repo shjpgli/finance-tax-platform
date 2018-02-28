@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -48,6 +49,9 @@ public class PointsLogServiceImpl implements PointsLogService {
 
     @Autowired
     private VipPrivilegeLevelService vipPrivilegeLevelService;
+    
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public List<PointsLogBO> selectList(Map map) {
@@ -57,12 +61,13 @@ public class PointsLogServiceImpl implements PointsLogService {
     //@Transactional("db1TxManager")
     @Override
     public PointsLogBO insert(PointsLogBO pointsLogBO) {
+    	
+    	//2018-02-28
+    	//redis经验值删除
+        redisTemplate.delete(pointsLogBO.getUserId() + "_Points");
 
         LOGGER.info("计算用户积分：{}",pointsLogBO);
-        if (pointsLogBO == null) {
-            LOGGER.warn("新增失败，参数：{}" + null);
-            throw new ServiceException(4101);
-        }
+        
         User user = userRoMapper.selectPointsAndExp(pointsLogBO.getUserId());
         if (user == null) {
             throw new ServiceException(4018);
