@@ -1,4 +1,5 @@
 package com.abc12366.bangbang.model.question.bo;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -29,6 +30,7 @@ public class QuestionCommentBo implements Serializable {
 	private String commentUserId;
 
 	/**评论内容**varchar(4000)**/
+	@Size(max = 2000)
 	private String commentTxt;
 
 	/**状态：0正常，1待审查，2拉黑**varchar(20)**/

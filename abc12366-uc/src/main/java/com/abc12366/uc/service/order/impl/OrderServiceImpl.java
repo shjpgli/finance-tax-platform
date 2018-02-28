@@ -605,8 +605,6 @@ public class OrderServiceImpl implements OrderService {
 
                                 insertPoints(orderBO);
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
-                                //发送消息
-                                sendPointsMsg(orderProductBO, order, request);
                             } else if ("JFCZ".equals(trading)) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
@@ -614,6 +612,8 @@ public class OrderServiceImpl implements OrderService {
 
                                 insertPoints(orderBO);
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
+                                //发送消息
+                                sendPointsMsg(orderProductBO, order, request);
                             }
                         } else if (isPay == 3) {
                             order.setOrderStatus("2");
@@ -685,15 +685,16 @@ public class OrderServiceImpl implements OrderService {
      * 加入消费赠送积分规则
      */
     private void setTodoTask(OrderBO order) {
+
+        double amount = order.getTotalPrice();
+        String userId = order.getUserId();
+        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_CONSUME_CODE);
         //时间暂停1s
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        double amount = order.getTotalPrice();
-        String userId = order.getUserId();
-        todoTaskService.doTask(userId, TaskConstant.SYS_TASK_FIRST_CONSUME_CODE);
         if (amount >= 1000 && amount < 3000) {
             todoTaskService.doTask(userId, TaskConstant.SYS_TASK_CONSUME_BEYOND_1000_CODE);
         }

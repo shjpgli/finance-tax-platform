@@ -13,6 +13,8 @@ import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.PointsService;
 import com.alibaba.fastjson.JSONObject;
+
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -239,7 +241,19 @@ public class PointsServiceImpl implements PointsService {
         if (user == null) {
             throw new ServiceException(4018);
         }
-
+        
+        
+        //2018-02-28
+        if(pointCalculateBO.getPoints()!=null && pointCalculateBO.getPoints()!= 0){
+        	pointsRuleBO.setPoints(pointCalculateBO.getPoints());
+        	if(pointCalculateBO.getPoints() < 0 && -pointCalculateBO.getPoints() > user.getPoints()){//扣除积分的时候积分不足情况
+        		throw new ServiceException(4635);
+        	}
+        }
+        if(StringUtils.isNotEmpty(pointCalculateBO.getRemark())){
+        	pointsRuleBO.setDescription(pointCalculateBO.getRemark());
+        }
+        
         PointsLogBO pointsLog = new PointsLogBO();
         pointsLog.setUserId(pointCalculateBO.getUserId());
         pointsLog.setRuleId(pointsRuleBO.getId());
@@ -262,8 +276,7 @@ public class PointsServiceImpl implements PointsService {
         pointComputeLog.setRuleId(pointsRuleBO.getId());
         pointMapper.insertComputeLog(pointComputeLog);
 
-        //redis经验值删除
-        redisTemplate.delete(pointCalculateBO.getUserId() + "_Points");
+        
 
         return pointsRuleBO.getPoints();
     }

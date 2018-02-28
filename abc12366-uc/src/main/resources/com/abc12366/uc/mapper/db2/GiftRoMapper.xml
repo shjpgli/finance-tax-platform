@@ -5,7 +5,7 @@
 
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
-		 id,	name,	imageUrl,	introduction,	details,	status,	sort,	category,	stock,	sellingPrice,	costPrice,	createTime,	lastUpdate
+		 id,	name,	imageUrl,	introduction,	details,	status,	sort,	category,	stock,	sellingPrice,	costPrice,	createTime,	lastUpdate,detailUrl
 	</sql>
 
     <!-- 查询（根据主键ID查询） -->
