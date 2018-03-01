@@ -63,13 +63,12 @@ public class EinvoiceController {
 	
 	/**
 	 * 电子发票开票/退票
-	 * @param dzfpGetReq
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@PostMapping("/get")
-	public ResponseEntity getEinvoice(@Valid @RequestBody DzfpGetReq dzfpGetReq){
-		Einvocie einvoice=iEinvoiceService.getEinvoice(dzfpGetReq);
+	@PostMapping("/{fpqqlsh}")
+	public ResponseEntity getEinvoice(@PathVariable String fpqqlsh){
+		Einvocie einvoice=iEinvoiceService.getEinvoice(fpqqlsh);
 		if(einvoice==null){
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "电子发票开票/退票异常"));
 		}else{
@@ -105,7 +104,6 @@ public class EinvoiceController {
 	
 	/**
 	 * 电子发票下载地址查询
-	 * @param dzfpGetReq
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
