@@ -1,5 +1,9 @@
 package com.abc12366.cms.model.bo;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -19,26 +23,32 @@ public class ContentExtBo implements Serializable {
     /**
      * 标题**varchar(150)
      **/
+    @NotBlank
+    @Size(max = 50)
     private String title;
 
     /**
      * 简短标题**varchar(150)
      **/
+    @Size(max = 50)
     private String shortTitle;
 
     /**
      * 作者**varchar(100)
      **/
+    @Size(max = 30)
     private String author;
 
     /**
      * 来源**varchar(100)
      **/
+    @Size(max = 30)
     private String origin;
 
     /**
      * 描述**varchar(255)
      **/
+    @Size(max = 85)
     private String description;
 
     /**
@@ -49,16 +59,19 @@ public class ContentExtBo implements Serializable {
     /**
      * 媒体路径**varchar(255)
      **/
+    @Size(max = 85)
     private String mediaPath;
 
     /**
      * 媒体类型**varchar(200)
      **/
+    @Size(max = 65)
     private String mediaType;
 
     /**
      * 标题颜色**varchar(10)
      **/
+    @Size(max = 10)
     private String titleColor;
 
     /**
@@ -74,6 +87,7 @@ public class ContentExtBo implements Serializable {
     /**
      * 外部链接**varchar(255)
      **/
+    @Size(max = 100)
     private String link;
 
     /**
