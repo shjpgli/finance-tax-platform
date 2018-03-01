@@ -357,4 +357,20 @@
     <select id="selectTodoListCount" resultType="java.lang.Integer">
         SELECT count(*) FROM uc_invoice WHERE status = '1'
     </select>
+
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectByInvoiceNo" resultMap="invoiceBOResultMap" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM uc_invoice
+        <where>
+            1 = 1
+            <if test=" invoiceNo != null and invoiceNo != '' ">
+                and invoiceNo = #{invoiceNo}
+            </if>
+            <if test=" invoiceCode != null and invoiceCode != '' ">
+                and invoiceCode = #{invoiceCode}
+            </if>
+        </where>
+    </select>
 </mapper>

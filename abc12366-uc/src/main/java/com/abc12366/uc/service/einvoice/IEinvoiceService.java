@@ -4,7 +4,7 @@ import com.abc12366.uc.model.dzfp.*;
 
 public interface IEinvoiceService {
 
-	Einvocie getEinvoice(DzfpGetReq dzfpGetReq);
+	Einvocie getEinvoice(String fpqqlsh);
 
 	Einvocie queryEinvoice(DzfqQueryReq dzfpGetReq);
 
