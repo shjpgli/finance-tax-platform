@@ -668,11 +668,13 @@ public class InvoiceServiceImpl implements InvoiceService {
 //                    if (id == null) {
 //                        throw new ServiceException(4102, "查找发票详情错误");
 //                    }
-                    id.setStatus("3");
-                    id.setLastUpdate(new Date());
-                    id.setSpUrl(einvocie.getSP_URL());
-                    id.setPdfUrl(einvocie.getPDF_URL());
-                    invoiceDetailMapper.update(id);
+                    if (id != null) {
+                        id.setStatus("3");
+                        id.setLastUpdate(new Date());
+                        id.setSpUrl(einvocie.getSP_URL());
+                        id.setPdfUrl(einvocie.getPDF_URL());
+                        invoiceDetailMapper.update(id);
+                    }
                 } else {
                     throw new ServiceException(einvocie.getReturnCode(), einvocie.getReturnMessage());
                 }
