@@ -838,7 +838,7 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 			LOGGER.warn("用户查询校验失败失败，参数:{}", batchBO);
 			throw new ServiceException(4018);
 		}
-		/*String password = "";
+		String password = "";
 		try {
 			password = Utils.md5(rsaService.decodenNew(batchBO.getPassword()) + user.getSalt());
 		} catch (Exception e) {
@@ -848,7 +848,7 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		if (!user.getPassword().equals(password)) {
 			LOGGER.warn("登录失败，参数:{}", batchBO);
 			throw new ServiceException(4021);
-		}*/
+		}
 		
 		//开始批量插入绑定关系
 		int times = 0;
