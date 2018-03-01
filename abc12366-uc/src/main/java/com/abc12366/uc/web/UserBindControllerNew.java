@@ -5,6 +5,8 @@ import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindServiceNew;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
+import com.alibaba.fastjson.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,6 +151,28 @@ public class UserBindControllerNew {
         LOGGER.info("{}", login);
         HngsNsrLoginResponse loginResponse = userBindService.nsrLoginDzsj(login, request);
         return ResponseEntity.ok(loginResponse);
+    }
+    
+    
+    /**
+     * 用户批量绑定纳税人（电子申报）
+     *
+     * @param userDzsbInsertBO 纳税人信息
+     * @param request          HttpServletRequest
+     * @return 纳税人信息
+     * @throws Exception 访问网络、解包异常
+     */
+    @SuppressWarnings("rawtypes")
+	@PostMapping(path = "/batch/bind/dzsb")
+    public ResponseEntity userBatchDzsbBind(@Valid @RequestBody UserDzsbBatchBO batchBO, HttpServletRequest
+            request) throws Exception {
+        LOGGER.info("{}:{}",JSONObject.toJSONString(batchBO) , request);
+        if(batchBO.getUserDzsbs() == null || batchBO.getUserDzsbs().size() == 0){
+        	return ResponseEntity.ok(Utils.bodyStatus(9999, "批量绑定纳税人列表为空!"));
+        }
+        int num=userBindService.userBatchDzsbBind(batchBO, request);
+
+        return ResponseEntity.ok(Utils.kv("data", num));
     }
 
    

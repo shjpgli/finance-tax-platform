@@ -130,6 +130,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 办税日历查询
                 .excludePathPatterns("/user/bsrl","/user/u/jyxx/{usernameOrPhone}")
                         //汇算清缴注册
-                .excludePathPatterns("/hsqj/register");
+                .excludePathPatterns("/hsqj/register","/v2/batch/bind/dzsb");
     }
 }

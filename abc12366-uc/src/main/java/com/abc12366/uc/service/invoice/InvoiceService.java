@@ -140,4 +140,8 @@ public interface InvoiceService {
      */
     void invoiceCheck();
 
+    /**
+     * 发票作废
+     */
+    void invalid(InvoiceInvalidBO invoiceInvalidBO, HttpServletRequest request);
 }

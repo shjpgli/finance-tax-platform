@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.message.mapper.db2.SubscriptionRoMapper">
+    
+    <sql id="Base_Column">
+        id, type, busiType, hasWeb, webForce, hasWechat, wechatForce, hasMessage, messageForce, createTime, lastUpdate
+    </sql>
+
+    <select id="selectList" parameterType="java.util.Map" resultType="com.abc12366.message.model.Subscriptions">
+        SELECT 
+        <include refid="Base_Column"/>
+        FROM msg_subscription_setting
+        where 1 = 1
+        <if test="type != null and type != ''">AND type = #{type}</if>
+        <if test="busiType != null and busiType != ''">AND busiType = #{busiType}</if>
+        ORDER BY createTime DESC
+    </select>
+    
+    <select id="selectOneSetting" parameterType="java.lang.String" resultType="com.abc12366.message.model.Subscriptions">
+        SELECT 
+        <include refid="Base_Column"/>
+        FROM msg_subscription_setting
+        where id = #{id}
+    </select>
+</mapper>

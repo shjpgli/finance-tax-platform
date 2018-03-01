@@ -51,4 +51,6 @@ public interface UserBindServiceNew {
 	int getNnsrLoginTimesMonth();
 
 	public void recordNsrLoginTimes();
+
+	int userBatchDzsbBind(UserDzsbBatchBO batchBO, HttpServletRequest request);
 }
