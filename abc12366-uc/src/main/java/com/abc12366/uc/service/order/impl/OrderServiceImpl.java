@@ -1295,7 +1295,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new ServiceException(4102, "该会员订购已开具纸质发票，不能退订");
             } else if ("2".equals(invoiceBO.getProperty())) { // 电子发票
                 if ("1".equals(invoiceBO.getName())) { // 个人发票
-                    req.setGmf_mc(invoiceBO.getNsrmc());
+                    req.setGmf_mc("个人");
                 } else {
                     req.setGmf_mc(invoiceBO.getNsrmc());
                     req.setGmf_nsrsbh(invoiceBO.getNsrsbh());
@@ -1312,12 +1312,28 @@ public class OrderServiceImpl implements OrderService {
                 req.setYfp_hm(invoiceBO.getInvoiceNo());
 
                 InvoiceXm xm = new InvoiceXm();
+                xm.setSpbm("3040201000000000000");
                 xm.setFphxz("0");
                 xm.setXmmc(selectFieldValue("invoicecontent", invoiceBO.getContent()));
                 xm.setXmsl(-1.00);
                 xm.setTotalAmt(-invoiceBO.getAmount());
                 dataList.add(xm);
 
+                StringBuilder buffer = new StringBuilder();
+                List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
+                if (productBOs != null && productBOs.size() > 0) {
+                    for (OrderProductBO pBO : productBOs) {
+                        if (pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())) {
+                            buffer.append("培训课程,");
+                        } else {
+                            buffer.append(pBO.getName());
+                            buffer.append(",");
+                        }
+                    }
+                }
+                if (buffer.length() > 0) {
+                    req.setBz(buffer.deleteCharAt(buffer.length() - 1).toString());
+                }
                 req.setInvoiceXms(dataList);
             }
             Einvocie einvocie = null;
@@ -1331,9 +1347,9 @@ public class OrderServiceImpl implements OrderService {
 
                 if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
                     InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(invoiceBO.getInvoiceNo());
-                    if (id == null) {
-                        throw new ServiceException(4102, "查找发票详情错误");
-                    }
+//                    if (id == null) {
+//                        throw new ServiceException(4102, "查找发票详情错误");
+//                    }
                     id.setStatus("3");
                     id.setLastUpdate(new Date());
                     id.setSpUrl(einvocie.getSP_URL());

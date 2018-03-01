@@ -187,6 +187,16 @@ public class InvoiceController {
     }
 
     /**
+     * 运营管理系统-发票作废
+     */
+    @PutMapping(path = "/invalid")
+    public ResponseEntity invalid(@Valid @RequestBody InvoiceInvalidBO invoiceInvalidBO,HttpServletRequest request) {
+        LOGGER.info("{}", invoiceInvalidBO);
+        invoiceService.invalid(invoiceInvalidBO,request);
+        return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
      * 发票信息修改
      *
      * @param userId 用户ID

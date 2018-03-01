@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * InvoiceMapper数据库操作接口类
@@ -40,4 +41,9 @@ public interface InvoiceRoMapper {
      * @return Integer
      */
     Integer selectTodoListCount();
+
+    /**
+     * 根据invoiceNo和invoiceCode查询
+     */
+    InvoiceBO selectByInvoiceNo(Map<String, Object> map);
 }
