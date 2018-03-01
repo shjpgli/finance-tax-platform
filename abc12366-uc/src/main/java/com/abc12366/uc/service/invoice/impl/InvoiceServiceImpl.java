@@ -643,7 +643,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 req.setHylx("0");
                 req.setYfp_dm(invoiceBO.getInvoiceCode());
                 req.setYfp_hm(invoiceBO.getInvoiceNo());
-
+                req.setGmf_dzyx(invoiceBO.getEmail());
 
                 InvoiceXm xm = new InvoiceXm();
                 xm.setFphxz("0");
