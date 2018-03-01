@@ -1,5 +1,6 @@
 package com.abc12366.bangbang.model.question;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
@@ -40,7 +41,8 @@ public class QuestionTipOff{
 
 	/**拒绝理由**/
 	@NotEmpty
-	@Size(min = 2, max = 250)
+	@NotBlank
+	@Size(min = 2, max = 150)
 	private String refuseReason;
 
 	/**奖励积分**/

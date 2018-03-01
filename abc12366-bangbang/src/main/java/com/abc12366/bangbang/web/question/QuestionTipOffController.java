@@ -54,7 +54,8 @@ public class QuestionTipOffController {
     * 后台审核修改状态 接口
     */
     @PutMapping(path = "/modifyStatus")
-    public ResponseEntity modifyStatus(@RequestBody QuestionTipOff questionTipOff, HttpServletRequest request) {
+    public ResponseEntity modifyStatus(@Valid @RequestBody QuestionTipOff questionTipOff, 
+                                       HttpServletRequest request) {
         questionTipOffService.changeStatusByAdmin(questionTipOff, request);
         return ResponseEntity.ok(Utils.kv());
     }
