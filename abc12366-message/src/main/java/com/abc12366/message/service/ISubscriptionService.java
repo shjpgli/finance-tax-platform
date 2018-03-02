@@ -67,5 +67,14 @@ public interface ISubscriptionService {
 	 * @return
 	 */
 	int userSetSave(String userId, List<UserSubscription> dataList);
+	
+	/**
+	 * 发送消息时查询单条订阅消息设置
+	 * @param userId
+	 * @param type
+	 * @param busiType
+	 * @return
+	 */
+	UserSubscriptionInfo getUserOne(String userId,String type,String busiType);
 
 }
