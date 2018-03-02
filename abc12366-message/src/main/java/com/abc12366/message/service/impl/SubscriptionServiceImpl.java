@@ -1,10 +1,13 @@
 package com.abc12366.message.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +17,15 @@ import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.SubscriptionMapper;
 import com.abc12366.message.mapper.db2.SubscriptionRoMapper;
 import com.abc12366.message.model.Subscriptions;
+import com.abc12366.message.model.UserSubscription;
+import com.abc12366.message.model.UserSubscriptionInfo;
 import com.abc12366.message.service.ISubscriptionService;
 import com.github.pagehelper.PageHelper;
 
 @Service
 public class SubscriptionServiceImpl implements ISubscriptionService{
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ISubscriptionService.class);
 
 	@Autowired
 	private SubscriptionMapper subscriptionMapper;
@@ -66,5 +73,69 @@ public class SubscriptionServiceImpl implements ISubscriptionService{
 		subscriptions.setId(Utils.uuid());
 		subscriptionMapper.addOneSetting(subscriptions);
 		return subscriptions;
+	}
+
+	@Transactional("db1TxManager")
+	public int initial(String userId) {
+		//清空订阅关系表
+		int n = subscriptionMapper.delAUserSetting(userId);
+		LOGGER.info("清空订阅关系条数:"+n);
+		
+		Date date =new Date();
+		List<Subscriptions>  subscriptions = subscriptionRoMapper.selectList(new HashMap<String,Object>());
+		List<UserSubscription> userSubscriptions =new ArrayList<UserSubscription>();
+		if(subscriptions !=null && subscriptions.size()>0){
+			for(Subscriptions subscription:subscriptions){
+				UserSubscription userSubscription = new UserSubscription();
+				userSubscription.setId(Utils.uuid());
+				userSubscription.setUserId(userId);
+				userSubscription.setSettingId(subscription.getId());
+				userSubscription.setCreateTime(date);
+				userSubscription.setLastUpdate(date);
+				if(subscription.getHasMessage()){//判断是否有手机信息
+					userSubscription.setMessage(true);
+				}else{
+					userSubscription.setMessage(false);
+				}
+				if(subscription.getHasWeb()){//判断是否有站内
+					userSubscription.setWeb(true);
+				}else{
+					userSubscription.setWeb(false);
+				}
+				if(subscription.getHasWechat()){//判断是否有微信
+					userSubscription.setWechat(true);
+				}else{
+					userSubscription.setWechat(false);
+				}
+				userSubscriptions.add(userSubscription);
+			}
+			
+			n = subscriptionMapper.insertBatch(userSubscriptions);
+			LOGGER.info("批量插入订阅关系条数:"+n);
+		}
+		
+		return n;
+	}
+
+	@Override
+	public List<UserSubscriptionInfo> selectUserSubscriptionList(Map<String, Object> param) {
+		return subscriptionRoMapper.selectUserSubscriptionList(param);
+	}
+
+	@Override
+	public int userSetSave(String userId, List<UserSubscription> dataList) {
+		//清空订阅关系表
+		int n = subscriptionMapper.delAUserSetting(userId);
+		LOGGER.info("清空订阅关系条数:"+n);
+		Date date =new Date();
+		if(dataList !=null && dataList.size()>0){
+			for(UserSubscription subscription:dataList){
+				subscription.setId(Utils.uuid());
+				subscription.setCreateTime(date);
+				subscription.setLastUpdate(date);
+			}
+			n = subscriptionMapper.insertBatch(dataList);
+		}
+		return n;
 	}
 }
