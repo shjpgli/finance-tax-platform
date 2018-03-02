@@ -463,9 +463,12 @@ public class UserServiceImpl implements UserService {
 			calendar.add(Calendar.YEAR, 1); // 年份加1
 		}
 
-        double usable = 0;
 		//查询会员礼包业务
 		User temp = userMapper.selectOne(userId);
+		double usable = 0;
+		if (temp.getAmount() != null) {
+			usable = temp.getAmount();
+		}
 		VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
 		obj.setLevelId(vipLevel.trim().toUpperCase());
 		obj.setPrivilegeId(MessageConstant.HYLB_CODE);
