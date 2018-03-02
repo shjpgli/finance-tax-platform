@@ -1,9 +1,8 @@
 package com.abc12366.message.mapper.db1;
 
 import com.abc12366.message.model.PhoneCode;
-import com.abc12366.message.model.bo.PhoneCodeBO;
 
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -13,7 +12,10 @@ import java.util.List;
 public interface PhoneCodeMapper {
     int insert(PhoneCode phoneCode);
 
-    int delete(PhoneCode phoneCodeDel);
+    int delete(@Param("phone") String phone);
 
-    List<PhoneCodeBO> selectList(PhoneCode phoneCode);
+    /**
+     * 根据手机号、验证码、过期时间查询未过期的验证码
+     */
+    PhoneCode selectOne(PhoneCode data);
 }

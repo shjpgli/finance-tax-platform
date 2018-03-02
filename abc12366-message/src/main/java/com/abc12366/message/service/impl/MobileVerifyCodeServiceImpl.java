@@ -1,5 +1,9 @@
 package com.abc12366.message.service.impl;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.Optional;
+
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.MessageConstant;
@@ -9,11 +13,13 @@ import com.abc12366.message.config.ApplicationConfig;
 import com.abc12366.message.mapper.db1.MessageSendLogMapper;
 import com.abc12366.message.mapper.db1.PhoneCodeMapper;
 import com.abc12366.message.mapper.db2.MsgUcUserRoMapper;
-import com.abc12366.message.mapper.db2.PhoneCodeRoMapper;
 import com.abc12366.message.model.MessageSendLog;
 import com.abc12366.message.model.PhoneCode;
 import com.abc12366.message.model.PhoneExist;
-import com.abc12366.message.model.bo.*;
+import com.abc12366.message.model.bo.NeteaseTemplateResponseBO;
+import com.abc12366.message.model.bo.UpyunErrorBO;
+import com.abc12366.message.model.bo.UpyunMessageResponse;
+import com.abc12366.message.model.bo.VerifyParam;
 import com.abc12366.message.service.MobileVerifyCodeService;
 import com.abc12366.message.service.SendMsgLogService;
 import com.abc12366.message.util.CheckSumBuilder;
@@ -30,6 +36,8 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +49,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
 
 /**
  * User: liuguiyao<435720953@qq.com>
@@ -65,9 +69,6 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     private PhoneCodeMapper phoneCodeMapper;
 
     @Autowired
-    private PhoneCodeRoMapper phoneCodeRoMapper;
-
-    @Autowired
     private MessageSendLogMapper sendLogMapper;
 
     @Autowired
@@ -78,67 +79,48 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
 
     @Override
     public void getCode(String type, String phone) throws IOException {
-        //五分钟之内重复获取验证码，就发送之前的那个
-        String code = getPriviousCode(type, phone);
-        if (code == null || "".equals(code.trim())) {
-            code = RandomNumber.getRandomNumber(MessageConstant.VERIFY_CODE_LENGTH);
-            //将验证码信息写入表
-            PhoneCode phoneCodeDel = new PhoneCode();
-            phoneCodeDel.setType(type);
-            phoneCodeDel.setPhone(phone);
-            phoneCodeMapper.delete(phoneCodeDel);
+        // 五分钟之内重复获取验证码，就发送之前的那个
+        Optional<String> code = getPriviousCode(phone);
+        if (!code.isPresent()){
+            // 删除无效的验证码记录
+            phoneCodeMapper.delete(phone);
 
+            // 生成新都验证码信息写入表
+            code = Optional.of(RandomNumber.getRandomNumber(MessageConstant.VERIFY_CODE_LENGTH));
             PhoneCode phoneCode = new PhoneCode();
             phoneCode.setId(Utils.uuid());
             phoneCode.setPhone(phone);
-            phoneCode.setCode(code);
+            phoneCode.setCode(code.get());
             phoneCode.setExpireDate(new Date(System.currentTimeMillis() + 1000 * MessageConstant
                     .VERIFY_CODE_VALID_SECONDS));
             phoneCode.setType(type);
             phoneCodeMapper.insert(phoneCode);
         }
 
-        //根据轮询发送短信消息
+        // 根据轮询发送短信消息
         String channel = WeightFactorProduceStrategy.getInstance().getPartitionIdForTopic();
         LOGGER.info("短信发送通道[" + channel + "],内容:" + (type + code));
         if (MessageConstant.MSG_CHANNEL_ALI.equals(channel)) {
-            sendAliYunMsg(phone, type, code, MessageConstant.ALIYUNTEMP_YZM);
+            sendAliYunMsg(phone, type, code.get(), MessageConstant.ALIYUNTEMP_YZM);
         } else if (MessageConstant.MSG_CHANNEL_YOUPAI.equals(channel)) {
-            sendYoupaiTemplate(phone, type, code);
+            sendYoupaiTemplate(phone, type, code.get());
         } else {
-            sendNeteaseTemplate(phone, type, code);
+            sendNeteaseTemplate(phone, type, code.get());
         }
-
     }
 
     @Override
     public void verify(VerifyParam verifyParam) {
-        PhoneCode phoneCodeParam = new PhoneCode();
-        phoneCodeParam.setType(verifyParam.getType().trim());
-        phoneCodeParam.setPhone(verifyParam.getPhone().trim());
-        phoneCodeParam.setCode(verifyParam.getCode().trim());
-        List<PhoneCodeBO> phoneCodeBOList = phoneCodeMapper.selectList(phoneCodeParam);
-        if (phoneCodeBOList == null) {
+        PhoneCode p = new PhoneCode();
+        p.setPhone(verifyParam.getPhone().trim());
+        p.setCode(verifyParam.getCode().trim());
+        p.setExpireDate(new Date());
+        p = phoneCodeMapper.selectOne(p);
+
+        if (p == null) {
             throw new ServiceException(4202);
         }
-
-        if (phoneCodeBOList.size() != 1) {
-            throw new ServiceException(4201);
-        }
-        PhoneCodeBO phoneCodeBO = phoneCodeBOList.get(0);
-
-        long now = System.currentTimeMillis();
-        long exp = phoneCodeBO.getExpireDate().getTime();
-        boolean isValid = exp > now;
-
-        if (!isValid) {
-            throw new ServiceException(4203);
-        }
-        PhoneCode del = new PhoneCode();
-        del.setPhone(phoneCodeBO.getPhone());
-        del.setType(phoneCodeBO.getType());
-        phoneCodeMapper.delete(del);
-
+        phoneCodeMapper.delete(p.getPhone());
     }
 
     /**
@@ -302,23 +284,15 @@ public class MobileVerifyCodeServiceImpl implements MobileVerifyCodeService {
     /**
      * 五分钟之内重复获取验证码，就发送之前的那个
      *
-     * @param type  类型
      * @param phone 手机号
      * @return 验证码
      */
-    private String getPriviousCode(String type, String phone) {
-        PhoneCode phoneCode = new PhoneCode();
-        phoneCode.setType(type);
-        phoneCode.setPhone(phone);
-        List<PhoneCodeBO> phoneCodeBOList = phoneCodeRoMapper.selectListByPhone(phoneCode);
-        String privCode = "";
-        if (phoneCodeBOList != null && phoneCodeBOList.size() > 0) {
-            PhoneCodeBO phoneCodeBO = phoneCodeBOList.get(0);
-            if (phoneCodeBO.getExpireDate().getTime() > System.currentTimeMillis()) {
-                privCode = phoneCodeBOList.get(0).getCode();
-            }
-        }
-        return privCode;
+    private Optional<String> getPriviousCode(String phone) {
+        PhoneCode p = new PhoneCode();
+        p.setPhone(phone);
+        p.setExpireDate(new Date());
+        p = phoneCodeMapper.selectOne(p);
+        return p != null && !StringUtils.isEmpty(p.getCode()) ? Optional.of(p.getCode()) : Optional.empty();
     }
 
 
