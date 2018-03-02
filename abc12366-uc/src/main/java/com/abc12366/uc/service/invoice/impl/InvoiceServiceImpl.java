@@ -645,6 +645,27 @@ public class InvoiceServiceImpl implements InvoiceService {
                 req.setYfp_hm(invoiceBO.getInvoiceNo());
                 req.setGmf_dzyx(invoiceBO.getEmail());
 
+                List<OrderBO> orderBOs = invoiceBO.getOrderBOList();
+                StringBuilder buffer = new StringBuilder();
+                if (orderBOs != null && orderBOs.size() > 0) {
+                    for (OrderBO orderBO : orderBOs) {
+                        List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
+                        if (productBOs != null && productBOs.size() > 0) {
+                            for (OrderProductBO pBO : productBOs) {
+                                if (pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())) {
+                                    buffer.append("培训课程,");
+                                } else {
+                                    buffer.append(pBO.getName());
+                                    buffer.append(",");
+                                }
+                            }
+                        }
+                    }
+                    if (buffer.length() > 0) {
+                        req.setBz(buffer.deleteCharAt(buffer.length() - 1).toString());
+                    }
+                }
+
                 InvoiceXm xm = new InvoiceXm();
                 xm.setFphxz("0");
                 xm.setXmmc(selectFieldValue("invoicecontent", invoiceBO.getContent()));
