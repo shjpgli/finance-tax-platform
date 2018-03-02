@@ -104,7 +104,7 @@ public class DzfpClient {
     	options.setTo(targetEPR);
     	
     	String xml = getCommonXml(interfaceCode, new BASE64Encoder().encodeBuffer(content.getBytes("UTF-8")));
-    	
+    	String kplx = org.apache.commons.lang3.StringUtils.substringBetween(content,"<KPLX>","</KPLX>");
     	LOGGER.info("调用电子发票WebService,请求信息:"+xml);
 		
     	Object[] opArgs = new Object[] {xml };
@@ -113,6 +113,7 @@ public class DzfpClient {
     	
     	if("DFXJ1001".equals(interfaceCode)){
     		Einvocie einvocie=(Einvocie) xmlToObject(ret[0].toString(),Einvocie.class);
+			einvocie.setKPLX(kplx);
     		if("0000".equals(einvocie.getReturnCode())){
     			einvocie.setSendStr(content);
     			einvocie.setTBSTATUS("0");

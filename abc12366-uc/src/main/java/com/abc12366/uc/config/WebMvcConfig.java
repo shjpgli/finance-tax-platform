@@ -89,7 +89,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/test")
                         // 用户登录、验证码登录、登出、token刷新、用户注册、测试、token验证自动刷新、验证码
                 .excludePathPatterns("/login", "/login/js", "/verifylogin", "/logout/**", "/refresh", "/register",
-                        "/user/token/**", "/user/u/**","/v2/login","/v2/login/js","/v2/verifylogin", "/v2/register",
+                        "/user/token/**", "/user/u/**","/v2/login","/v2/login/js","/v2/verifylogin", "/v2/register","/v2/dbappuserlogin",
                         "/test/login")
                         // 用户通过手机号重置密码
                 .excludePathPatterns("/verifyphone", "/resetpassword","/v2/resetpassword")
@@ -130,6 +130,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         // 办税日历查询
                 .excludePathPatterns("/user/bsrl","/user/u/jyxx/{usernameOrPhone}")
                         //汇算清缴注册
-                .excludePathPatterns("/hsqj/register");
+                .excludePathPatterns("/hsqj/register","/v2/batch/bind/dzsb");
     }
 }

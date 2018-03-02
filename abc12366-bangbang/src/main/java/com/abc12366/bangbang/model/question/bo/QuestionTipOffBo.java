@@ -1,5 +1,10 @@
 package com.abc12366.bangbang.model.question.bo;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
+
 /**
  * @Author liuQi
  * @Date 2017/9/19 11:50
@@ -13,6 +18,9 @@ public class QuestionTipOffBo {
     private String content;
 
     /**举报原因**/
+    @NotEmpty
+    @NotBlank
+    @Size(min = 2, max = 150)
     private String reason;
 
     /**举报人ip**/

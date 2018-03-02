@@ -6,7 +6,9 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
+import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
+import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHngs;
 import com.abc12366.uc.model.bo.*;
@@ -75,6 +77,9 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 
     @Autowired
     private UserBindRoMapper userBindRoMapper;
+    
+    @Autowired
+	private UserMapper userMapper;
     
     
     public String fwmmEncode(String code) throws Exception {
@@ -821,4 +826,60 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public int userBatchDzsbBind(UserDzsbBatchBO batchBO, HttpServletRequest request) {
+		
+		// 根据用户名查看用户是否存在,并且检测密码是否正确
+		LoginBO bo = new LoginBO();
+		bo.setUsernameOrPhone(batchBO.getUsername().trim().toLowerCase());
+		User user = userMapper.selectByUsernameOrPhone(bo);
+		if (user == null) {
+			LOGGER.warn("用户查询校验失败失败，参数:{}", batchBO);
+			throw new ServiceException(4018);
+		}
+		String password = "";
+		try {
+			password = Utils.md5(rsaService.decodenNew(batchBO.getPassword()) + user.getSalt());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage() + e);
+			throw new ServiceException(4106);
+		}
+		if (!user.getPassword().equals(password)) {
+			LOGGER.warn("登录失败，参数:{}", batchBO);
+			throw new ServiceException(9999,"密码错误!");
+		}
+		
+		//开始批量插入绑定关系
+		int times = 0;
+		String userId = user.getId();
+		Date date = new Date();
+		for(UserDzsb userDzsb:batchBO.getUserDzsbs()){
+			//查看是否重复绑定,是更新，否插入
+			userDzsb.setUserId(userId);
+            userDzsb.setLastUpdate(date);
+            userDzsb.setStatus(true);
+            userDzsb.setLastLoginTime(date);
+	        List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(userDzsb);
+	        
+	        if(nsrxxboList2==null||nsrxxboList2.size()==0){
+	        	userDzsb.setId(Utils.uuid());
+	        	userDzsb.setCreateTime(date);
+	        	times += userBindMapper.dzsbBind(userDzsb);
+	        } else if(nsrxxboList2.size()==1){
+	            userDzsb.setId(nsrxxboList2.get(0).getId());
+	            times += userBindMapper.update(userDzsb);
+	        } else{
+	            userDzsb.setId(nsrxxboList2.get(0).getId());
+	            times += userBindMapper.update(userDzsb);
+	            nsrxxboList2.remove(nsrxxboList2.get(0));
+	            for(UserDzsb ud : nsrxxboList2){
+	                userBindMapper.deleteDzsb(ud.getId());
+	            }
+	        }
+	        
+		}
+		LOGGER.warn("批量插入绑定关系完毕，绑定成功数量:{}", times);
+		return times;
+	}
 }

@@ -19,8 +19,29 @@ public class PointCalculateBO {
      */
     @NotEmpty
     private String ruleCode;
+    
+    //2018-02-28
+    private Integer points;//奖励/扣除积分值
+    
+    private String remark;//积分变换规则
+    
+    public Integer getPoints() {
+		return points;
+	}
 
-    public String getUserId() {
+	public void setPoints(Integer points) {
+		this.points = points;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getUserId() {
         return userId;
     }
 

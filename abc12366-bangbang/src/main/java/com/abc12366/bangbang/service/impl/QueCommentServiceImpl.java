@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -93,6 +94,7 @@ public class QueCommentServiceImpl implements QueCommentService {
         return commentBoList;
     }
 
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public QuestionCommentBo save(QuestionCommentBo commentBo, HttpServletRequest request) {
 

@@ -125,4 +125,12 @@
         order  by u.createTime DESC
     </select>
 
+    <!-- 查询（待审批礼包） -->
+    <select id="getGiftStatusCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(u.applyId)
+        FROM uc_ugift_apply u where u.status = '1'
+    </select>
+
+
 </mapper>

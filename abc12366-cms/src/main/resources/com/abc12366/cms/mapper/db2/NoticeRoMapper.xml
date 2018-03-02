@@ -14,7 +14,9 @@
         <include refid="Base_Column_List"/>
         FROM cms_notice
         <where>
-            <if test="title != null">title like CONCAT('%',#{title},'%')</if>
+            1 = 1
+            <if test="title != null">and title like CONCAT('%',#{title},'%')</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
         </where>
         ORDER BY lastUpdate DESC
     </select>

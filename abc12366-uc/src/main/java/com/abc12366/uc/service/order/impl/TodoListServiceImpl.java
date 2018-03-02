@@ -5,6 +5,7 @@ import com.abc12366.uc.model.order.bo.RegsAndNsrloginStatBO;
 import com.abc12366.uc.service.RealNameValidationService;
 import com.abc12366.uc.service.TodoListService;
 import com.abc12366.uc.service.UserBindServiceNew;
+import com.abc12366.uc.service.gift.GiftService;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.service.invoice.InvoiceUseApplyService;
 import com.abc12366.uc.service.order.OrderExchangeService;
@@ -38,6 +39,8 @@ public class TodoListServiceImpl implements TodoListService{
 
     private final InvoiceUseApplyService invoiceUseApplyService;
 
+    @Autowired
+    private GiftService giftService;
     @Autowired
     private UserBindServiceNew userBindServiceNew;
 
@@ -83,6 +86,7 @@ public class TodoListServiceImpl implements TodoListService{
         map.put("regsMonth", statBO.getRegsMonth());
         map.put("dzsbLoginsDay", userBindServiceNew.getDzsbnsrLoginTimesDay());
         map.put("nsrLoginsMonth", userBindServiceNew.getNnsrLoginTimesMonth());
+        map.put("giftCount", giftService.getGiftStatusCount());
         return map;
     }
 

@@ -51,6 +51,9 @@
 			<if test="lastUpdate != null">
 				 lastUpdate,
 			</if>
+			<if test="detailUrl != null">
+				detailUrl,
+			</if>
 
 		 </trim>
 		 <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -92,6 +95,9 @@
 			</if>
 			<if test="lastUpdate!=null">
 				 #{lastUpdate},
+			</if>
+			<if test="detailUrl!=null">
+				 #{detailUrl},
 			</if>
 		 </trim>
 	</insert>
@@ -135,6 +141,9 @@
 			</if>
 			<if test="lastUpdate != null">
 				 lastUpdate = #{lastUpdate},
+			</if>
+			<if test="detailUrl != null">
+				detailUrl = #{detailUrl},
 			</if>
 
  		 </set>
