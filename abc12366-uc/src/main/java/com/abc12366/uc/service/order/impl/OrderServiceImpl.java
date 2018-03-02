@@ -1244,7 +1244,7 @@ public class OrderServiceImpl implements OrderService {
         OrderBO orderBO = orderRoMapper.selectById(orderNo);
         if (orderBO != null) {
             //发票作废
-            invoiceCancel(orderBO);
+//            invoiceCancel(orderBO);
 
             List<OrderProductBO> list = orderBO.getOrderProductBOList();
             for (OrderProductBO orderProductBO : list) {
@@ -1283,87 +1283,91 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 发票作废
      */
-    public void invoiceCancel(OrderBO orderBO) {
-        // 发票作废
-        InvoiceBO invoiceBO = orderBO.getInvoiceBO();
-        if (invoiceBO != null) {
-
-            DzfpGetReq req = new DzfpGetReq();
-            List<InvoiceXm> dataList = new ArrayList<>();
-            if ("1".equals(invoiceBO.getProperty())) { // 纸质发票
-                LOGGER.info("该会员订购已开具纸质发票，不能退订：{}");
-                throw new ServiceException(4102, "该会员订购已开具纸质发票，不能退订");
-            } else if ("2".equals(invoiceBO.getProperty())) { // 电子发票
-                if ("1".equals(invoiceBO.getName())) { // 个人发票
-                    req.setGmf_mc("个人");
-                } else {
-                    req.setGmf_mc(invoiceBO.getNsrmc());
-                    req.setGmf_nsrsbh(invoiceBO.getNsrsbh());
-                    req.setGmf_dzdh(invoiceBO.getAddress());
-                    req.setGmf_yhzh(invoiceBO.getBank());
-                    req.setGmf_sjh(invoiceBO.getPhone());
-                }
-                req.setFpqqlsh(DateUtils.getFPQQLSH());
-                req.setKplx("1");
-                req.setZsfs("0");
-                req.setKpr(Utils.getAdminInfo().getNickname());
-                req.setHylx("0");
-                req.setYfp_dm(invoiceBO.getInvoiceCode());
-                req.setYfp_hm(invoiceBO.getInvoiceNo());
-                req.setGmf_dzyx(invoiceBO.getEmail());
-
-                InvoiceXm xm = new InvoiceXm();
-                xm.setSpbm("3040201000000000000");
-                xm.setFphxz("0");
-                xm.setXmmc(selectFieldValue("invoicecontent", invoiceBO.getContent()));
-                xm.setXmsl(-1.00);
-                xm.setTotalAmt(-invoiceBO.getAmount());
-                dataList.add(xm);
-
-                StringBuilder buffer = new StringBuilder();
-                List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
-                if (productBOs != null && productBOs.size() > 0) {
-                    for (OrderProductBO pBO : productBOs) {
-                        if (pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())) {
-                            buffer.append("培训课程,");
-                        } else {
-                            buffer.append(pBO.getName());
-                            buffer.append(",");
-                        }
-                    }
-                }
-                if (buffer.length() > 0) {
-                    req.setBz(buffer.deleteCharAt(buffer.length() - 1).toString());
-                }
-                req.setInvoiceXms(dataList);
-            }
-            Einvocie einvocie = null;
-            try {
-                einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", req.tosendXml(), Einvocie.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (einvocie != null) {
-
-                if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
-                    InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(invoiceBO.getInvoiceNo());
-//                    if (id == null) {
-//                        throw new ServiceException(4102, "查找发票详情错误");
+//    public void invoiceCancel(OrderBO orderBO) {
+//        // 发票作废
+//        InvoiceBO invoiceBO = orderBO.getInvoiceBO();
+//        if (invoiceBO != null) {
+//
+//            DzfpGetReq req = new DzfpGetReq();
+//            List<InvoiceXm> dataList = new ArrayList<>();
+//            if ("1".equals(invoiceBO.getProperty())) { // 纸质发票
+//                LOGGER.info("该会员订购已开具纸质发票，不能退订：{}");
+//                throw new ServiceException(4102, "该会员订购已开具纸质发票，不能退订");
+//            } else if ("2".equals(invoiceBO.getProperty())) { // 电子发票
+//                if("1".equals(invoiceBO.getStatus())){
+//                    LOGGER.info("发票申请还在待审批状态，不能进行退单");
+//                    throw new ServiceException(4102, "发票申请还在待审批状态，不能进行退单");
+//                }
+//                if ("1".equals(invoiceBO.getName())) { // 个人发票
+//                    req.setGmf_mc("个人");
+//                } else {
+//                    req.setGmf_mc(invoiceBO.getNsrmc());
+//                    req.setGmf_nsrsbh(invoiceBO.getNsrsbh());
+//                    req.setGmf_dzdh(invoiceBO.getAddress());
+//                    req.setGmf_yhzh(invoiceBO.getBank());
+//                    req.setGmf_sjh(invoiceBO.getPhone());
+//                }
+//                req.setFpqqlsh(DateUtils.getFPQQLSH());
+//                req.setKplx("1");
+//                req.setZsfs("0");
+//                req.setKpr(Utils.getAdminInfo().getNickname());
+//                req.setHylx("0");
+//                req.setYfp_dm(invoiceBO.getInvoiceCode());
+//                req.setYfp_hm(invoiceBO.getInvoiceNo());
+//                req.setGmf_dzyx(invoiceBO.getEmail());
+//
+//                InvoiceXm xm = new InvoiceXm();
+//                xm.setSpbm("3040201000000000000");
+//                xm.setFphxz("0");
+//                xm.setXmmc(selectFieldValue("invoicecontent", invoiceBO.getContent()));
+//                xm.setXmsl(-1.00);
+//                xm.setTotalAmt(-invoiceBO.getAmount());
+//                dataList.add(xm);
+//
+//                StringBuilder buffer = new StringBuilder();
+//                List<OrderProductBO> productBOs = orderBO.getOrderProductBOList();
+//                if (productBOs != null && productBOs.size() > 0) {
+//                    for (OrderProductBO pBO : productBOs) {
+//                        if (pBO.getTradingChannels() != null && "CSKT".equals(pBO.getTradingChannels())) {
+//                            buffer.append("培训课程,");
+//                        } else {
+//                            buffer.append(pBO.getName());
+//                            buffer.append(",");
+//                        }
 //                    }
-                    if (id != null) {
-                        id.setStatus("3");
-                        id.setLastUpdate(new Date());
-                        id.setSpUrl(einvocie.getSP_URL());
-                        id.setPdfUrl(einvocie.getPDF_URL());
-                        invoiceDetailMapper.update(id);
-                    }
-                } else {
-                    throw new ServiceException(einvocie.getReturnCode(), einvocie.getReturnMessage());
-                }
-            }
-        }
-    }
+//                }
+//                if (buffer.length() > 0) {
+//                    req.setBz(buffer.deleteCharAt(buffer.length() - 1).toString());
+//                }
+//                req.setInvoiceXms(dataList);
+//            }
+//            Einvocie einvocie = null;
+//            try {
+//                einvocie = (Einvocie) DzfpClient.doSender("DFXJ1001", req.tosendXml(), Einvocie.class);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            if (einvocie != null) {
+//
+//                if ("0000".equals(einvocie.getReturnCode())) { // 更新作废状态
+//                    InvoiceDetail id = invoiceDetailRoMapper.selectByInvoiceNo(invoiceBO.getInvoiceNo());
+////                    if (id == null) {
+////                        throw new ServiceException(4102, "查找发票详情错误");
+////                    }
+//                    if (id != null) {
+//                        id.setStatus("3");
+//                        id.setLastUpdate(new Date());
+//                        id.setSpUrl(einvocie.getSP_URL());
+//                        id.setPdfUrl(einvocie.getPDF_URL());
+//                        invoiceDetailMapper.update(id);
+//                    }
+//                } else {
+//                    throw new ServiceException(einvocie.getReturnCode(), einvocie.getReturnMessage());
+//                }
+//            }
+//        }
+//    }
 
     /**
      * 退积分退金额
