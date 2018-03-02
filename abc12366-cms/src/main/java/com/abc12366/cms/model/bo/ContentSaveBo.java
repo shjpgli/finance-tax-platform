@@ -15,6 +15,7 @@ public class ContentSaveBo implements Serializable {
     @Valid
     @NotNull
     private ContentBo content;//内容
+    @Valid
     private ContentExtBo contentExt;//内容扩展
     private ContentTxtBo contentTxt;//内容文本
     private List<ContentAttrBo> contentAttrList;//内容扩展属性
