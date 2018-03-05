@@ -2,6 +2,7 @@ package com.abc12366.uc.service;
 
 
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.UserSubscriptionInfo;
 import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -276,4 +277,13 @@ public interface UserService {
      * @return
      */
 	UserJyxx selectByUnameOrPhone(String usernameOrPhone);
+
+	/**
+	 * 发送消息时查询单条订阅消息设置
+	 * @param userId
+	 * @param type
+	 * @param busiType
+	 * @return
+	 */
+	List<UserSubscriptionInfo> selectUserSubscriptionList(Map<String, Object> param);
 }

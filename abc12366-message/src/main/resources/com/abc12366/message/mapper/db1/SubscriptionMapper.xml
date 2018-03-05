@@ -6,6 +6,10 @@
         id, type, busiType, hasWeb, webForce, hasWechat, wechatForce, hasMessage, messageForce, createTime, lastUpdate
     </sql>
     
+    <sql id="Base_user_Column">
+        id, userId, settingId, web, wechat, message, createTime, lastUpdate
+    </sql>
+    
     <insert id="addOneSetting" parameterType="com.abc12366.message.model.Subscriptions">
         INSERT INTO msg_subscription_setting 
         (<include refid="Base_Column"/>) 
@@ -32,7 +36,22 @@
     <delete id="delOneSetting" parameterType="java.lang.String">
         DELETE FROM msg_subscription_setting WHERE id = #{id}
     </delete>
+    
+    
     <delete id="delUserSetting" parameterType="java.lang.String">
         DELETE FROM msg_subscription_user WHERE settingId = #{id}
     </delete>
+    
+    <delete id="delAUserSetting" parameterType="java.lang.String">
+        DELETE FROM msg_subscription_user WHERE userId = #{userId}
+    </delete>
+    
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO msg_subscription_user 
+        (<include refid="Base_user_Column"/>) 
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.userId}, #{item.settingId}, #{item.web}, #{item.wechat}, #{item.message}, #{item.createTime}, #{item.lastUpdate})
+        </foreach>
+    </insert>
 </mapper>

@@ -847,7 +847,7 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		}
 		if (!user.getPassword().equals(password)) {
 			LOGGER.warn("登录失败，参数:{}", batchBO);
-			throw new ServiceException(4021);
+			throw new ServiceException(9999,"密码错误!");
 		}
 		
 		//开始批量插入绑定关系

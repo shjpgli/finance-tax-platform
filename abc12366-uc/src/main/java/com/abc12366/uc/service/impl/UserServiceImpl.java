@@ -15,6 +15,7 @@ import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
+import com.abc12366.uc.model.UserSubscriptionInfo;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.service.*;
@@ -463,9 +464,12 @@ public class UserServiceImpl implements UserService {
 			calendar.add(Calendar.YEAR, 1); // 年份加1
 		}
 
-        double usable = 0;
 		//查询会员礼包业务
 		User temp = userMapper.selectOne(userId);
+		double usable = 0;
+		if (temp.getAmount() != null) {
+			usable = temp.getAmount();
+		}
 		VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
 		obj.setLevelId(vipLevel.trim().toUpperCase());
 		obj.setPrivilegeId(MessageConstant.HYLB_CODE);
@@ -1366,5 +1370,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserJyxx selectByUnameOrPhone(String usernameOrPhone) {
 		return userMapper.selectByUnameOrPhone(usernameOrPhone);
+	}
+
+	@Override
+	public List<UserSubscriptionInfo> selectUserSubscriptionList(Map<String, Object> param) {
+		return userMapper.selectUserSubscriptionList(param);
 	}
 }

@@ -357,5 +357,18 @@
         select id, username, phone, salt from uc_user 
         where username = #{usernameOrPhone} OR phone = #{usernameOrPhone} 
     </select>
+    
+    <select id="selectUserSubscriptionList" parameterType="java.util.Map" resultType="com.abc12366.uc.model.UserSubscriptionInfo">
+        SELECT 
+        s.type, s.busiType, s.hasWeb, s.webForce, s.hasWechat, s.wechatForce, s.hasMessage, s.messageForce,
+        u.userId, s.id as settingId, IFNULL(u.web,if(s.hasWeb = 1,1,0)) as web, IFNULL(u.wechat,if(s.hasWechat = 1,1,0)) as wechat, IFNULL(u.message,if(s.hasMessage = 1,1,0)) as message 
+        FROM abc12366_message.msg_subscription_setting s LEFT JOIN 
+        ( select userId, settingId, web, wechat, message from abc12366_message.msg_subscription_user where userId= #{userId} ) u 
+        on u.settingId = s.id
+        where 1 = 1
+        <if test="type != null and type != ''">AND s.type = #{type}</if>
+        <if test="busiType != null and busiType != ''">AND s.busiType = #{busiType}</if>
+        ORDER BY s.createTime DESC
+    </select>
 
 </mapper>

@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.model.Subscriptions;
+import com.abc12366.message.model.UserSubscription;
+import com.abc12366.message.model.UserSubscriptionInfo;
 import com.abc12366.message.service.ISubscriptionService;
 import com.github.pagehelper.PageInfo;
 
@@ -127,4 +129,50 @@ public class SubscriptionController {
 		int num = subscriptionService.delOneSetting(id);
 		return ResponseEntity.ok(Utils.kv("data", num));
 	}
+	
+	
+	/*************************前端用户订阅***************************/
+	
+	/**
+	 * 初始化用户订阅设置
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/initial")
+	public ResponseEntity initialSubscriptions(HttpServletRequest request){
+		  String userId = Utils.getUserId(request);
+		  int num = subscriptionService.initial(userId);
+		  return ResponseEntity.ok(Utils.kv("data", num));
+	}
+	
+	/**
+	 * 个人的订阅设置
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/usersettings")
+	public ResponseEntity selectUserList(HttpServletRequest request) {
+		String userId = Utils.getUserId(request);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("userId", userId);
+		List<UserSubscriptionInfo> dataList = subscriptionService.selectUserSubscriptionList(param);
+		PageInfo<UserSubscriptionInfo> pageInfo = new PageInfo<>(dataList);
+		return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+	}
+	
+	/**
+	 * 个人订阅设置保存
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@PostMapping("/usersetsave")
+	public ResponseEntity userSetSave(@RequestBody List<UserSubscription> dataList,HttpServletRequest request) {
+		String userId = Utils.getUserId(request);
+		  int num = subscriptionService.userSetSave(userId,dataList);
+		  return ResponseEntity.ok(Utils.kv("data", num));
+	}
+	
 }
