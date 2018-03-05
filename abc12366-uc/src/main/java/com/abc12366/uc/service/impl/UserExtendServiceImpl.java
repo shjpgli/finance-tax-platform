@@ -73,7 +73,7 @@ public class UserExtendServiceImpl implements UserExtendService {
         LOGGER.info("{}", userExtendBO);
         if (userExtendBO.getUserId() != null
                 && !"".equals(userExtendBO.getUserId())) {
-            UserExtend userExtend = userExtendMapper.selectOne(userExtendBO.getUserId());
+            UserExtend userExtend = userExtendMapper.selectOneForAdmin(userExtendBO.getUserId());
             if (userExtend != null) {
                 UserExtendBO userExtendOld = new UserExtendBO();
                 BeanUtils.copyProperties(userExtend, userExtendOld);
@@ -192,7 +192,7 @@ public class UserExtendServiceImpl implements UserExtendService {
         }
         if (!userExtendUpdateBO.getUserId().equals("")) {
             UserExtend userExtend = userExtendMapper
-                    .selectOne(userExtendUpdateBO.getUserId());
+                    .selectOneForAdmin(userExtendUpdateBO.getUserId());
             if (userExtend == null) {
                 UserExtendBO userExtendBO = new UserExtendBO();
                 BeanUtils.copyProperties(userExtendUpdateBO, userExtendBO);
@@ -281,7 +281,7 @@ public class UserExtendServiceImpl implements UserExtendService {
 
     @Override
     public boolean updateUserAddress(String userId, String provinceId, String cityId) {
-        UserExtend ue = userExtendMapper.selectOne(userId);
+        UserExtend ue = userExtendMapper.selectOneForAdmin(userId);
         if (ue != null) {
             if (StringUtils.isEmpty(ue.getProvince())) {
                 ue.setProvince(provinceId);
