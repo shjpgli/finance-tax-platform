@@ -19,6 +19,8 @@ public class MessageSendBo implements Serializable{
 		
 	private List<String> userIds;//批量用户ID
 	
+	private String type;//消息类型
+	
 	private String busiType;//业务类型
 	
 	private String businessId;//来源ID
@@ -103,5 +105,13 @@ public class MessageSendBo implements Serializable{
 
 	public void setSkipUrl(String skipUrl) {
 		this.skipUrl = skipUrl;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

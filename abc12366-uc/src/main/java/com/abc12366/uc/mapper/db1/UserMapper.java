@@ -2,6 +2,7 @@ package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserLoginPasswordWrongCount;
+import com.abc12366.uc.model.UserSubscriptionInfo;
 import com.abc12366.uc.model.bo.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -103,5 +104,7 @@ public interface UserMapper {
     int updatePoints(User user);
 
 	UserJyxx selectByUnameOrPhone(String usernameOrPhone);
+
+	List<UserSubscriptionInfo> selectUserSubscriptionList(Map<String, Object> param);
 
 }
