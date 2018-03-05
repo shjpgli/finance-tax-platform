@@ -101,6 +101,10 @@ public class DzfpClient {
     	options.setProperty(org.apache.axis2.transport.http.HTTPConstants.SO_TIMEOUT,30000);
     	options.setProperty(org.apache.axis2.transport.http.HTTPConstants.CONNECTION_TIMEOUT,30000);
     	
+    	//axis2连接完毕释放资源 2018-03-05
+    	options.setManageSession(true);   
+    	options.setProperty(HTTPConstants.REUSE_HTTP_CLIENT,true); 
+    	
     	options.setTo(targetEPR);
     	
     	String xml = getCommonXml(interfaceCode, new BASE64Encoder().encodeBuffer(content.getBytes("UTF-8")));
@@ -120,6 +124,8 @@ public class DzfpClient {
     			dzfpService.insert(einvocie);
     		}
     	}
+    	//axis2连接完毕释放资源 2018-03-05
+    	serviceClient.cleanupTransport(); 
     	
     	return xmlToObject(ret[0].toString(),_class);
 	}
