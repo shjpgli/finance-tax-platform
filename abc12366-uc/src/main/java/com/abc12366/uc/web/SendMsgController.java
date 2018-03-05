@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.service.IMsgSendService;
+import com.abc12366.uc.service.IMsgSendV2service;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class SendMsgController {
 	
 	 @Autowired
 	 private IMsgSendService msgSendService;
+	 
+	 
+	 private IMsgSendV2service msgSendV2Service;
      
 	 @SuppressWarnings("rawtypes")
 	 @PostMapping("/byqd")
@@ -39,6 +43,13 @@ public class SendMsgController {
 	 public ResponseEntity sendByQdbatch(@RequestBody MessageSendBo sendBo){
 		  LOGGER.info("接收到前端消息:"+JSONObject.toJSONString(sendBo));
 		  return msgSendService.sendXtxxbatch(sendBo);
+	 }
+	 
+	 @SuppressWarnings("rawtypes")
+	 @PostMapping("/v2")
+	 public ResponseEntity sendMsgV2(@RequestBody MessageSendBo sendBo){
+		  LOGGER.info("接收到消息:"+JSONObject.toJSONString(sendBo));
+		  return msgSendV2Service.sendMsgV2(sendBo);
 	 }
 	 
 }

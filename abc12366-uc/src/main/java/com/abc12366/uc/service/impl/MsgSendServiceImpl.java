@@ -1,5 +1,6 @@
 package com.abc12366.uc.service.impl;
 
+import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.MessageConstant;
@@ -265,11 +266,15 @@ public class MsgSendServiceImpl implements IMsgSendService {
         //获取运营管理系统accessToken
         AppBO appBO=appService.selectByName("abc12366-admin");
         Date lastRest=appBO.getLastResetTokenTime();
-        if(lastRest.before(new Date())){
-        	appBO.setLastResetTokenTime(DateUtils.addHours(new Date(), 2));
-        	appService.update(appBO);
-        }       
         String accessToken = appBO.getAccessToken();
+        if(lastRest.before(new Date())){
+        	try {
+				accessToken = appService.login(appBO);
+			} catch (Exception e) {
+				throw new ServiceException(9999,"消息发送失败:刷新accessToken异常!");
+			}
+        }       
+        
         LOGGER.info("获取运营管理系统accessToken:" + accessToken);
         
         if (findObj != null && findObj.getStatus()) {

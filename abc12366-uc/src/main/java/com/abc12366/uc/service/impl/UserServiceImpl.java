@@ -15,6 +15,7 @@ import com.abc12366.uc.model.BaseObject;
 import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserExtend;
+import com.abc12366.uc.model.UserSubscriptionInfo;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.service.*;
@@ -1366,5 +1367,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserJyxx selectByUnameOrPhone(String usernameOrPhone) {
 		return userMapper.selectByUnameOrPhone(usernameOrPhone);
+	}
+
+	@Override
+	public List<UserSubscriptionInfo> selectUserSubscriptionList(Map<String, Object> param) {
+		return userMapper.selectUserSubscriptionList(param);
 	}
 }
