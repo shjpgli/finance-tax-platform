@@ -850,9 +850,15 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 			throw new ServiceException(9999,"密码错误!");
 		}
 		
+		
+		
 		//开始批量插入绑定关系
 		int times = 0;
 		String userId = user.getId();
+		
+		//删除redis 2018-03-05
+		redisTemplate.delete(userId + "_DzsbList");
+		
 		Date date = new Date();
 		for(UserDzsb userDzsb:batchBO.getUserDzsbs()){
 			//查看是否重复绑定,是更新，否插入
