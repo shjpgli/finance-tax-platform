@@ -84,6 +84,7 @@ public class MsgSendV2serviceImpl implements IMsgSendV2service{
         	Boolean doMsg = false, doWechat = false, doWeb = false;
         	User user = userService.selectUser(userId);
         	if (user != null) {
+        		LOGGER.info("接收消息用户信息：{}",JSONObject.toJSONString(user));
         		//查询个人消息订阅信息
         		UserSubscriptionInfo info = getUserOne(userId, messageSendBo.getType(), messageSendBo.getBusiType()); 
         		LOGGER.info("用户消息订阅情况信息：{}",JSONObject.toJSONString(info));

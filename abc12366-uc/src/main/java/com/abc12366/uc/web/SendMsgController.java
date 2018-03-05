@@ -28,7 +28,7 @@ public class SendMsgController {
 	 @Autowired
 	 private IMsgSendService msgSendService;
 	 
-	 
+	 @Autowired
 	 private IMsgSendV2service msgSendV2Service;
      
 	 @SuppressWarnings("rawtypes")
