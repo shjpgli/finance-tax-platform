@@ -20,16 +20,16 @@ public class ContentExtBo implements Serializable {
     private String contentId;
 
     /**
-     * 标题**varchar(150)
+     * 标题**varchar(600)
      **/
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 200)
     private String title;
 
     /**
-     * 简短标题**varchar(150)
+     * 简短标题**varchar(1000)
      **/
-    @Size(max = 50)
+    @Size(max = 330)
     private String shortTitle;
 
     /**
