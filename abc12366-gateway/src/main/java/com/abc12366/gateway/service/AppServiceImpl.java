@@ -92,6 +92,7 @@ public class AppServiceImpl implements AppService {
             app = JSON.parseObject(valueOperations.get(bo.getName()), App.class);
         } else {
             app = appRoMapper.selectByName(bo.getName());
+            valueOperations.set(app.getName(), JSON.toJSONString(app), RedisConstant.DAY_1, TimeUnit.DAYS);
         }
         if (app == null) {
             LOGGER.warn("APP用户名不存在：{}", bo.getName());
@@ -101,7 +102,6 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("APP密码错误：{}", app);
             throw new ServiceException(4093);
         }
-        valueOperations.set(app.getName(), JSON.toJSONString(app), RedisConstant.DAY_1, TimeUnit.DAYS);
         // 第一次登录或token过期，需要设置token
         boolean token = !StringUtils.isEmpty(app.getAccessToken()) &&
                 !StringUtils.isEmpty(app.getLastResetTokenTime()) &&
