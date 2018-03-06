@@ -1177,25 +1177,25 @@ public class OrderServiceImpl implements OrderService {
             map.put("orderNo", order.getOrderNo());
             map.put("userId", order.getUserId());
             CouponUser couponUser = couponService.selectCouponUser(map);
-            if (couponUser == null) {
-                LOGGER.info("获取优惠劵信息异常");
-                throw new ServiceException(7135);
-            }
-            OrderProductBO pBO = new OrderProductBO();
-            pBO.setOrderNo(order.getOrderNo());
-            List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
-            for (OrderProductBO orderProductBO : orderProductBOs) {
-                CouponOrderBO couponOrderBO = new CouponOrderBO();
-                couponOrderBO.setUseCouponId(couponUser.getCouponId());
-                couponOrderBO.setUserId(order.getUserId());
-                couponOrderBO.setOrderNo(order.getOrderNo());
-                couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
-                couponOrderBO.setAmount(order.getTotalPrice());
-                couponOrderBO.setOperation("0");
-                //优惠劵设置已领取
-                couponOrderBO.setStatus("1");
-                LOGGER.info("优惠劵取消");
-                couponService.userUseCoupon(couponOrderBO);
+            if (couponUser != null) {
+//                LOGGER.info("获取优惠劵信息异常");
+//                throw new ServiceException(7135,"获取优惠劵信息异常");
+                OrderProductBO pBO = new OrderProductBO();
+                pBO.setOrderNo(order.getOrderNo());
+                List<OrderProductBO> orderProductBOs = orderProductRoMapper.selectByOrderNo(pBO);
+                for (OrderProductBO orderProductBO : orderProductBOs) {
+                    CouponOrderBO couponOrderBO = new CouponOrderBO();
+                    couponOrderBO.setUseCouponId(couponUser.getCouponId());
+                    couponOrderBO.setUserId(order.getUserId());
+                    couponOrderBO.setOrderNo(order.getOrderNo());
+                    couponOrderBO.setCategoryId(orderProductBO.getCategoryId());
+                    couponOrderBO.setAmount(order.getTotalPrice());
+                    couponOrderBO.setOperation("0");
+                    //优惠劵设置已领取
+                    couponOrderBO.setStatus("1");
+                    LOGGER.info("优惠劵取消");
+                    couponService.userUseCoupon(couponOrderBO);
+                }
             }
             insertOrderLog("", order.getOrderNo(), "7", "系统自动取消订单", "0");
         }

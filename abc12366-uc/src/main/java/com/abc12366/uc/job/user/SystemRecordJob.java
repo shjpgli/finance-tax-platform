@@ -23,7 +23,7 @@ public class SystemRecordJob implements Job {
     private static final Logger LOGGER = LoggerFactory.getLogger(SystemRecordJob.class);
 
     @Autowired
-    private static AutoSendUtil autoSendUtil;
+    private AutoSendUtil autoSendUtil;
 
     @Override
     public void execute(JobExecutionContext context) {
