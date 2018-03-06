@@ -103,8 +103,8 @@ public class AppServiceImpl implements AppService {
         }
         valueOperations.set(app.getName(), JSON.toJSONString(app), RedisConstant.DAY_1, TimeUnit.DAYS);
         // 第一次登录或token过期，需要设置token
-        boolean token = StringUtils.isEmpty(app.getAccessToken()) ||
-                StringUtils.isEmpty(app.getLastResetTokenTime()) ||
+        boolean token = !StringUtils.isEmpty(app.getAccessToken()) &&
+                !StringUtils.isEmpty(app.getLastResetTokenTime()) &&
                 new Date().after(app.getLastResetTokenTime());
         if (token) {
             app.setAccessToken(Utils.token());
