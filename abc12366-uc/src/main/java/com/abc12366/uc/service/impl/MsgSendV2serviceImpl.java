@@ -117,6 +117,7 @@ public class MsgSendV2serviceImpl implements IMsgSendV2service {
 						message.setType(messageSendBo.getType());
 						message.setContent(messageSendBo.getWebMsg());
 						message.setUserId(user.getId());
+						message.setUrl(messageSendBo.getSkipUrl());
 						messageSendUtil.sendMessage(message, accessToken);
 					}
 
