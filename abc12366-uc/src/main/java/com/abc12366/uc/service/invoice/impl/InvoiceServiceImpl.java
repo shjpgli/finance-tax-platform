@@ -1094,12 +1094,12 @@ public class InvoiceServiceImpl implements InvoiceService {
                                     InvoiceBO invoiceBO) {
         updateInvoiceAndOrder(invoiceCheckBO.getId());
         invoice.setStatus("3");
-        User user = userMapper.selectOne(invoiceBO.getUserId());
+        //User user = userMapper.selectOne(invoiceBO.getUserId());
         //发送消息
-        Message message = new Message();
-        message.setBusinessId(invoiceBO.getId());
-        message.setBusiType(MessageConstant.DZFPDD);
-        message.setType(MessageConstant.SYS_MESSAGE);
+        //Message message = new Message();
+        //message.setBusinessId(invoiceBO.getId());
+        //message.setBusiType(MessageConstant.DZFPDD);
+        //message.setType(MessageConstant.SYS_MESSAGE);
 
         //1：纸质发票，2：电子发票；
         String content;
@@ -1111,20 +1111,37 @@ public class InvoiceServiceImpl implements InvoiceService {
                     .getId());
         }
 
-        message.setContent(content);
-        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-        message.setUserId(invoiceBO.getUserId());
+        //message.setContent(content);
+        //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+        //        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        //message.setUserId(invoiceBO.getUserId());
 
         Map<String, String> map = new HashMap<>();
-        map.put("userId", user.getId());
-        map.put("openId", user.getWxopenid());
+        //map.put("userId", user.getId());
+        //map.put("openId", user.getWxopenid());
         map.put("first", "您好，审核结果如下");
         map.put("remark", "感谢您的使用。");
         map.put("keyword1", invoiceBO.getId());
         map.put("keyword2", content);
         String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
-        messageSendUtil.sendMsg(request, user, message, map, templateId);
+        //messageSendUtil.sendMsg(request, user, message, map, templateId);
+        
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.DZFPDD);
+        messageSendBo.setBusinessId(invoiceBO.getId());
+        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        messageSendBo.setWebMsg(content);
+        messageSendBo.setPhoneMsg(content);
+        messageSendBo.setTemplateid(templateId);
+        messageSendBo.setDataList(map);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(invoiceBO.getUserId());
+        messageSendBo.setUserIds(userIds);
+        
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     /**
