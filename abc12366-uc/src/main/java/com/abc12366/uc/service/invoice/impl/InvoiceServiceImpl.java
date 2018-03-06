@@ -453,6 +453,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             messageSendBo.setPhoneMsg(content);
             messageSendBo.setTemplateid(templateId);
             messageSendBo.setDataList(map);
+            messageSendBo.setWxNoChargeVip(true);
+            messageSendBo.setMoblieNoChargeVip(true);
             
             List<String> userIds =new ArrayList<String>();
             userIds.add(invoiceTemp.getUserId());
@@ -1071,7 +1073,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         
         MessageSendBo messageSendBo =new MessageSendBo();
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.SPDD);
+        messageSendBo.setBusiType(MessageConstant.DZFPDD);
         messageSendBo.setBusinessId(invoiceBO.getId());
         messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
                         "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
@@ -1079,6 +1081,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         messageSendBo.setPhoneMsg(content);
         messageSendBo.setTemplateid(templateId);
         messageSendBo.setDataList(map);
+        messageSendBo.setWxNoChargeVip(true);
+        messageSendBo.setMoblieNoChargeVip(true);
         
         List<String> userIds =new ArrayList<String>();
         userIds.add(invoiceBO.getUserId());

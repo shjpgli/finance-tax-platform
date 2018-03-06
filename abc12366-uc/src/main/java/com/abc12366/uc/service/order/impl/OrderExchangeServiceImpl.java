@@ -283,6 +283,8 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     messageSendBo.setPhoneMsg(content);
                     messageSendBo.setTemplateid(templateId);
                     messageSendBo.setDataList(map);
+                    messageSendBo.setWxNoChargeVip(true);
+                    messageSendBo.setMoblieNoChargeVip(true);
                     
                     List<String> userIds =new ArrayList<String>();
                     userIds.add(order.getUserId());
