@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.dzfp.DzfpGetReq;
 import com.abc12366.uc.model.dzfp.Einvocie;
@@ -22,6 +23,7 @@ import com.abc12366.uc.model.order.bo.OrderProductBO;
 import com.abc12366.uc.model.order.bo.UserAddressBO;
 import com.abc12366.uc.model.weixin.bo.redpack.WxRedEnvelopBO;
 import com.abc12366.uc.service.IActivityService;
+import com.abc12366.uc.service.IMsgSendV2service;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.invoice.InvoiceService;
 import com.abc12366.uc.util.CharUtil;
@@ -105,6 +107,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
     private DzfpRoMapper dzfpRoMapper;
+    
+    @Autowired
+	private IMsgSendV2service msgSendV2Service;
 
     @Override
     public List<InvoiceBO> selectList(InvoiceBO invoice) {
@@ -405,7 +410,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 throw new ServiceException(4102);
             }
 
-            User user = userMapper.selectOne(invoiceTemp.getUserId());
+            //User user = userMapper.selectOne(invoiceTemp.getUserId());
 
             //发送消息
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
@@ -413,21 +418,21 @@ public class InvoiceServiceImpl implements InvoiceService {
                 LOGGER.warn("物流公司查询失败：{}", invoiceTemp.getExpressCompId());
                 throw new ServiceException(4102, "物流公司查询失败");
             }
-            Message message = new Message();
-            message.setBusinessId(invoiceTemp.getId());
-            message.setBusiType(MessageConstant.ZZFPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
+            //Message message = new Message();
+            //message.setBusinessId(invoiceTemp.getId());
+            //message.setBusiType(MessageConstant.ZZFPDD);
+            //message.setType(MessageConstant.SYS_MESSAGE);
             String content = RemindConstant.IMPORT_COURIER_INFO.replaceAll("\\{#DATA.INVOICE\\}",
                     invoiceTemp.getId()).replaceAll("\\{#DATA.COMP\\}",
                     expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", expressExcel.getWaybillNum());
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                    "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setContent(content);
-            message.setUserId(invoiceTemp.getUserId());
+            //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+            //       "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            //message.setContent(content);
+            //message.setUserId(invoiceTemp.getUserId());
 
             Map<String, String> map = new HashMap<>();
-            map.put("userId", user.getId());
-            map.put("openId", user.getWxopenid());
+            //map.put("userId", user.getId());
+            //map.put("openId", user.getWxopenid());
             map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
             map.put("remark", "感谢您的使用。");
             map.put("keyword1", invoiceTemp.getConsignee());
@@ -436,7 +441,24 @@ public class InvoiceServiceImpl implements InvoiceService {
             map.put("keyword4", expressExcel.getWaybillNum());
             map.put("keyword5", invoiceTemp.getInvoiceNo());
             String templateId = "lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas";
-            messageSendUtil.sendMsg(request, user, message, map, templateId);
+            //messageSendUtil.sendMsg(request, user, message, map, templateId);
+            
+            MessageSendBo messageSendBo =new MessageSendBo();
+            messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+            messageSendBo.setBusiType(MessageConstant.ZZFPDD);
+            messageSendBo.setBusinessId(invoiceTemp.getId());
+            messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                           "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            messageSendBo.setWebMsg(content);
+            messageSendBo.setPhoneMsg(content);
+            messageSendBo.setTemplateid(templateId);
+            messageSendBo.setDataList(map);
+            
+            List<String> userIds =new ArrayList<String>();
+            userIds.add(invoiceTemp.getUserId());
+            messageSendBo.setUserIds(userIds);
+            
+            msgSendV2Service.sendMsgV2(messageSendBo);
 
         }
     }
@@ -970,33 +992,48 @@ public class InvoiceServiceImpl implements InvoiceService {
      * 纸质发票开具发送消息
      */
     private void sendZzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
-        User user = userMapper.selectOne(invoiceBO.getUserId());
+        //User user = userMapper.selectOne(invoiceBO.getUserId());
         //发送消息
-        Message message = new Message();
-        message.setBusinessId(invoiceBO.getId());
-        message.setBusiType(MessageConstant.ZZFPDD);
-        message.setType(MessageConstant.SYS_MESSAGE);
+        //Message message = new Message();
+        //message.setBusinessId(invoiceBO.getId());
+        //message.setBusiType(MessageConstant.ZZFPDD);
+        //message.setType(MessageConstant.SYS_MESSAGE);
         String content = RemindConstant.INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}", invoiceBO
                 .getId());
-        message.setContent(content);
-        message.setUserId(invoiceBO.getUserId());
+        //message.setContent(content);
+        //message.setUserId(invoiceBO.getUserId());
 
         Map<String, String> map = new HashMap<>();
-        map.put("userId", user.getId());
-        map.put("openId", user.getWxopenid());
+        //map.put("userId", user.getId());
+        //map.put("openId", user.getWxopenid());
         map.put("first", "您好，审核结果如下");
         map.put("remark", "感谢您的使用。");
         map.put("keyword1", invoiceBO.getId());
         map.put("keyword2", content);
         String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
-        messageSendUtil.sendMsg(request, user, message, map, templateId);
+        //messageSendUtil.sendMsg(request, user, message, map, templateId);
+        
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.ZZFPDD);
+        messageSendBo.setBusinessId(invoiceBO.getId());
+        messageSendBo.setWebMsg(content);
+        messageSendBo.setPhoneMsg(content);
+        messageSendBo.setTemplateid(templateId);
+        messageSendBo.setDataList(map);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(invoiceBO.getUserId());
+        messageSendBo.setUserIds(userIds);
+        
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     /**
      * 电子发票开具发送消息
      */
     private void sendDzfpMessage(HttpServletRequest request, InvoiceBO invoiceBO) {
-        User user = userMapper.selectOne(invoiceBO.getUserId());
+        //User user = userMapper.selectOne(invoiceBO.getUserId());
         //查询是否发红包
         String isRedPackage = selectFieldValue();
         String redPackage = "";
@@ -1007,22 +1044,22 @@ public class InvoiceServiceImpl implements InvoiceService {
         }
 
         //发送消息
-        Message message = new Message();
-        message.setBusinessId(invoiceBO.getId());
-        message.setBusiType(MessageConstant.ZZFPDD);
-        message.setType(MessageConstant.SYS_MESSAGE);
+        //Message message = new Message();
+        //message.setBusinessId(invoiceBO.getId());
+        //message.setBusiType(MessageConstant.ZZFPDD);
+        //message.setType(MessageConstant.SYS_MESSAGE);
 
         String content = RemindConstant.ELECTRON_INVOICE_CHECK_ADOPT.replaceAll("\\{#DATA.INVOICE\\}",
                 invoiceBO.getId()) + redPackage;
-        message.setContent(content);
-        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-        message.setUserId(invoiceBO.getUserId());
+        //message.setContent(content);
+        //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+        //        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        //message.setUserId(invoiceBO.getUserId());
 
         //发送微信消息
         Map<String, String> map = new HashMap<>();
-        map.put("userId", user.getId());
-        map.put("openId", user.getWxopenid());
+        //map.put("userId", user.getId());
+        //map.put("openId", user.getWxopenid());
         map.put("first", "您申请的电子发票已开具");
         map.put("remark", "请注意查收！" + redPackage);
         map.put("keyword1", invoiceBO.getInvoiceCode());
@@ -1030,7 +1067,24 @@ public class InvoiceServiceImpl implements InvoiceService {
         map.put("keyword3", String.valueOf(invoiceBO.getAmount()));
         map.put("keyword4", DateUtils.dateToStr(new Date()));
         String templateId = "8q_2E8_lBY0Djxg8uoQBfgP0W7yxhb8hmKOUcn8gZZM";
-        messageSendUtil.sendMsg(request, user, message, map, templateId);
+        //messageSendUtil.sendMsg(request, user, message, map, templateId);
+        
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.SPDD);
+        messageSendBo.setBusinessId(invoiceBO.getId());
+        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        messageSendBo.setWebMsg(content);
+        messageSendBo.setPhoneMsg(content);
+        messageSendBo.setTemplateid(templateId);
+        messageSendBo.setDataList(map);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(invoiceBO.getUserId());
+        messageSendBo.setUserIds(userIds);
+        
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     /**
