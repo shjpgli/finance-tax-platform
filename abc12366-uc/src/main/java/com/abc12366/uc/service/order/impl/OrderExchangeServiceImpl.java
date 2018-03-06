@@ -7,6 +7,7 @@ import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
 import com.abc12366.uc.model.Message;
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
@@ -20,6 +21,7 @@ import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.pay.RefundRes;
 import com.abc12366.uc.model.pay.bo.AliRefund;
+import com.abc12366.uc.service.IMsgSendV2service;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.PointsLogService;
 import com.abc12366.uc.service.PointsRuleService;
@@ -104,6 +106,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
 
     @Autowired
     private TradeRoMapper tradeRoMapper;
+    
+    @Autowired
+	private IMsgSendV2service msgSendV2Service;
 
     @Transactional("db1TxManager")
     @Override
@@ -247,18 +252,18 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                         throw new ServiceException(4102, "物流公司查询失败");
                     }
 
-                    User user = userMapper.selectOne(order.getUserId());
-                    Message message = new Message();
-                    message.setBusinessId(order.getOrderNo());
-                    message.setType("SPDD");
+                    //User user = userMapper.selectOne(order.getUserId());
+                    //Message message = new Message();
+                    //message.setBusinessId(order.getOrderNo());
+                    //message.setType("SPDD");
                     String content = RemindConstant.EXCHANGE_DELIVER_GOODS_PREFIX.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo()).replaceAll("\\{#DATA.COMP\\}", expressComp.getCompName()).replaceAll("\\{#DATA.EXPRESSNO\\}", data.getExpressNo());
-                    message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                    message.setContent(content);
-                    message.setUserId(order.getUserId());
+                    //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                    //message.setContent(content);
+                    //message.setUserId(order.getUserId());
 
                     Map<String, String> map = new HashMap<>();
-                    map.put("userId", user.getId());
-                    map.put("openId", user.getWxopenid());
+                    //map.put("userId", user.getId());
+                    //map.put("openId", user.getWxopenid());
                     map.put("first", "您好，您的订单已送出，请保持手机畅通，以便快递及时联系您！");
                     map.put("remark", "感谢您的使用。");
                     map.put("keyword1", order.getConsignee());
@@ -267,7 +272,24 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     map.put("keyword4", data.getExpressNo());
                     map.put("keyword5", order.getOrderNo());
                     String templateId = "lPhC6mRjGPBGSTq14Gwimpu61tvUA25OfmpxO4L8tas";
-                    messageSendUtil.sendMsg(request, user, message,map,templateId);
+                    //messageSendUtil.sendMsg(request, user, message,map,templateId);
+                    
+                    MessageSendBo messageSendBo =new MessageSendBo();
+                    messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+                    messageSendBo.setBusiType(MessageConstant.SPDD);
+                    messageSendBo.setBusinessId(order.getOrderNo());
+                    messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                    messageSendBo.setWebMsg(content);
+                    messageSendBo.setPhoneMsg(content);
+                    messageSendBo.setTemplateid(templateId);
+                    messageSendBo.setDataList(map);
+                    
+                    List<String> userIds =new ArrayList<String>();
+                    userIds.add(order.getUserId());
+                    messageSendBo.setUserIds(userIds);
+                    
+                    msgSendV2Service.sendMsgV2(messageSendBo);
+                    
                 }else {
                     LOGGER.warn("只有审批通过的数据才能进行导入：{}", data.getOrderNo());
                     throw new ServiceException(4102, "只有审批通过的数据才能进行导入");
@@ -464,25 +486,25 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                         orderExchangeMapper.update(oe);
 
-                                        User user = userMapper.selectOne(order.getUserId());
+                                        //User user = userMapper.selectOne(order.getUserId());
                                         //查询会员特权-业务提醒
                                         /*VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
                                         obj.setLevelId(user.getVipLevel());
                                         obj.setPrivilegeId(MessageConstant.YWTX_CODE);
                                         VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
 */
-                                        Message message = new Message();
-                                        message.setBusinessId(oe.getOrderNo());
-                                        message.setBusiType(MessageConstant.SPDD);
-                                        message.setType(MessageConstant.SYS_MESSAGE);
+                                        //Message message = new Message();
+                                        //message.setBusinessId(oe.getOrderNo());
+                                        //message.setBusiType(MessageConstant.SPDD);
+                                        //message.setType(MessageConstant.SYS_MESSAGE);
                                         String content = RemindConstant.REFUND_PREFIX + refundRes.getRefund_fee() + RemindConstant.REFUND_SUFFIX + order.getOrderNo();
-                                        message.setContent(content);
-                                        message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                                        message.setUserId(order.getUserId());
+                                        //message.setContent(content);
+                                        //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                                        //message.setUserId(order.getUserId());
 
                                         Map<String, String> map = new HashMap<>();
-                                        map.put("userId", user.getId());
-                                        map.put("openId", user.getWxopenid());
+                                        //map.put("userId", user.getId());
+                                        //map.put("openId", user.getWxopenid());
                                         map.put("first", "您好，欢迎使用财税平台");
                                         map.put("remark", "感谢使用财税平台，祝您生活愉快！");
                                         map.put("keyword1", content);
@@ -490,7 +512,24 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         map.put("keyword3", DateUtils.dateToStr(new Date()));
                                         String templateId = "NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM";
 
-                                        messageSendUtil.sendMsg(httpServletRequest, user, message,map,templateId);
+                                        //messageSendUtil.sendMsg(httpServletRequest, user, message,map,templateId);
+                                        
+                                        
+                                        MessageSendBo messageSendBo =new MessageSendBo();
+                                        messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+                                        messageSendBo.setBusiType(MessageConstant.SPDD);
+                                        messageSendBo.setBusinessId(order.getOrderNo());
+                                        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                                        messageSendBo.setWebMsg(content);
+                                        messageSendBo.setPhoneMsg(content);
+                                        messageSendBo.setTemplateid(templateId);
+                                        messageSendBo.setDataList(map);
+                                        
+                                        List<String> userIds =new ArrayList<String>();
+                                        userIds.add(order.getUserId());
+                                        messageSendBo.setUserIds(userIds);
+                                        
+                                        msgSendV2Service.sendMsgV2(messageSendBo);
                                         return ResponseEntity.ok(Utils.kv("data", refundRes));
                                     } else {
                                         return ResponseEntity.ok(Utils.bodyStatus(9999, response.getSubMsg()));
@@ -651,9 +690,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(4102, "订单信息查询失败");
             }
 
-            User user = userMapper.selectOne(order.getUserId());
+            //User user = userMapper.selectOne(order.getUserId());
             //服务类型：1-换货 2-退货
-            Message message = new Message();
+            //Message message = new Message();
             String content = "";
             if ("1".equals(oe.getType())) {
                 content = RemindConstant.EXCHANGE_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
@@ -661,21 +700,37 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             else if ("2".equals(oe.getType())) {
                 content = RemindConstant.RETREAT_CHECK_REFUSE.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
             }
-            message.setContent(content);
-            message.setBusinessId(oe.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setUserId(order.getUserId());
+            //message.setContent(content);
+            //message.setBusinessId(oe.getOrderNo());
+            //message.setBusiType(MessageConstant.SPDD);
+            //message.setType(MessageConstant.SYS_MESSAGE);
+            //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            //message.setUserId(order.getUserId());
             Map<String, String> map = new HashMap<>();
-            map.put("userId", user.getId());
-            map.put("openId", user.getWxopenid());
+            //map.put("userId", user.getId());
+            //map.put("openId", user.getWxopenid());
             map.put("first", "您好，审核结果如下");
             map.put("remark", "感谢您的使用。");
             map.put("keyword1", data.getId());
             map.put("keyword2", content);
             String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
-            messageSendUtil.sendMsg(request, user, message,map,templateId);
+            //messageSendUtil.sendMsg(request, user, message,map,templateId);
+            
+            MessageSendBo messageSendBo =new MessageSendBo();
+            messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+            messageSendBo.setBusiType(MessageConstant.SPDD);
+            messageSendBo.setBusinessId(order.getOrderNo());
+            messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            messageSendBo.setWebMsg(content);
+            messageSendBo.setPhoneMsg(content);
+            messageSendBo.setTemplateid(templateId);
+            messageSendBo.setDataList(map);
+            
+            List<String> userIds =new ArrayList<String>();
+            userIds.add(order.getUserId());
+            messageSendBo.setUserIds(userIds);
+            
+            msgSendV2Service.sendMsgV2(messageSendBo);
         }
         return oe;
     }
@@ -706,9 +761,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 LOGGER.warn("订单信息查询失败：{}");
                 throw new ServiceException(4102, "订单信息查询失败");
             }
-            User user = userMapper.selectOne(order.getUserId());
+            //User user = userMapper.selectOne(order.getUserId());
 
-            Message message = new Message();
+            //Message message = new Message();
             String content = "";
             //服务类型：1-换货 2-退货
             if ("1".equals(oe.getType())) {
@@ -717,23 +772,39 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 content = RemindConstant.RETREAT_CHECK_ADOPT.replaceAll("\\{#DATA.ORDER\\}", order.getOrderNo());
             }
             //web消息
-            message.setContent(content);
-            message.setBusinessId(oe.getOrderNo());
-            message.setBusiType(MessageConstant.SPDD);
-            message.setType(MessageConstant.SYS_MESSAGE);
-            message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-            message.setUserId(order.getUserId());
-            messageSendUtil.sendMessage(message, request);
+            //message.setContent(content);
+            //message.setBusinessId(oe.getOrderNo());
+            //message.setBusiType(MessageConstant.SPDD);
+            //message.setType(MessageConstant.SYS_MESSAGE);
+            //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            //message.setUserId(order.getUserId());
+            //messageSendUtil.sendMessage(message, request);
 
             Map<String, String> map = new HashMap<>();
-            map.put("userId", user.getId());
-            map.put("openId", user.getWxopenid());
+            //map.put("userId", user.getId());
+            //map.put("openId", user.getWxopenid());
             map.put("first", "您好，审核结果如下");
             map.put("remark", "感谢您的使用。");
             map.put("keyword1", data.getId());
             map.put("keyword2", content);
             String templateId = "W1udf26l5sI7OReFNlchAiGFbOV3z3dKoHb1MGSMVAc";
-            messageSendUtil.sendMsg(request, user, message,map,templateId);
+            //messageSendUtil.sendMsg(request, user, message,map,templateId);
+            
+            MessageSendBo messageSendBo =new MessageSendBo();
+            messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+            messageSendBo.setBusiType(MessageConstant.SPDD);
+            messageSendBo.setBusinessId(order.getOrderNo());
+            messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            messageSendBo.setWebMsg(content);
+            messageSendBo.setPhoneMsg(content);
+            messageSendBo.setTemplateid(templateId);
+            messageSendBo.setDataList(map);
+            
+            List<String> userIds =new ArrayList<String>();
+            userIds.add(order.getUserId());
+            messageSendBo.setUserIds(userIds);
+            
+            msgSendV2Service.sendMsgV2(messageSendBo);
         }
         return oe;
     }
