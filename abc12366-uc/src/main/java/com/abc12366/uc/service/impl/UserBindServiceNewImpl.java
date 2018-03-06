@@ -856,8 +856,10 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		int times = 0;
 		String userId = user.getId();
 		
-		//删除redis 2018-03-05
+		
+		//删除redis 2018-03-06
 		redisTemplate.delete(userId + "_DzsbList");
+		
 		
 		Date date = new Date();
 		for(UserDzsb userDzsb:batchBO.getUserDzsbs()){

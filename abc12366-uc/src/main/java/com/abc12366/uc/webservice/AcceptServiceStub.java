@@ -159,9 +159,11 @@ public class AcceptServiceStub extends org.apache.axis2.client.Stub {
             _operationClient.getOptions().setProperty(org.apache.axis2.transport.http.HTTPConstants
                     .CONNECTION_TIMEOUT,30000);
             
-            //axis2连接完毕释放资源 2018-03-05
+            
+            //axis2连接完毕释放资源 2018-03-06
             _operationClient.getOptions().setManageSession(true);   
             _operationClient.getOptions().setProperty(HTTPConstants.REUSE_HTTP_CLIENT,true); 
+            
             
             addPropertyToOperationClient(_operationClient, org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR, "&");
 
@@ -201,9 +203,11 @@ public class AcceptServiceStub extends org.apache.axis2.client.Stub {
                     com.abc12366.uc.webservice.AcceptServiceStub.AcceptResponse.class,
                     getEnvelopeNamespaces(_returnEnv));
 
-            //axis2连接完毕释放资源 2018-03-05
+            
+            //axis2连接完毕释放资源 2018-03-06
             _serviceClient.cleanupTransport(); 
 
+            
             return (com.abc12366.uc.webservice.AcceptServiceStub.AcceptResponse) object;
 
         } catch (org.apache.axis2.AxisFault f) {
