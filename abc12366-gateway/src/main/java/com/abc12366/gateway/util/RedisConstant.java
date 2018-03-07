@@ -8,6 +8,11 @@ package com.abc12366.gateway.util;
 public class RedisConstant {
 
     /**
+     * redis失效时间：1小时
+     */
+    public static final long HOUR_1 = 1;
+
+    /**
      * redis失效时间：1天
      */
     public static final long DAY_1 = 1;
