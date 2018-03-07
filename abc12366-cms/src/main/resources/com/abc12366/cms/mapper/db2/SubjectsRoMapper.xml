@@ -96,15 +96,33 @@
         </where>
     </select>
 
+    <resultMap type="com.abc12366.cms.model.bo.SubjectsdtxxtjBo" id="subjectsdtxxtjBoMap">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="cnt" property="cnt" jdbcType="INTEGER"/>
+        <collection property="dtlist" ofType="com.abc12366.cms.model.bo.AnswerdttjBo" column="id"
+                    select="getAnswerdttjBo"></collection>
+    </resultMap>
+
+    <resultMap type="com.abc12366.cms.model.bo.AnswerdttjBo" id="AnswerdttjBoMap">
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="cnt" property="cnt" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getAnswerdttjBo" parameterType="java.lang.String" resultMap="AnswerdttjBoMap">
+        SELECT a.content,COUNT(a.subjectsId) as cnt FROM cms_paper_answer a LEFT JOIN cms_paper_answer_log b ON a.answerLogId
+        = b.id
+        WHERE a.subjectsId = #{subjectsId}
+        GROUP BY a.content
+    </select>
+
     <!-- 根据条件查询所有题目 -->
-    <select id="selectListdttj" resultType="com.abc12366.cms.model.bo.SubjectsdtxxtjBo" parameterType="java.util.Map">
-        SELECT
-        id,title
-        FROM cms_paper_subjects
+    <select id="selectListdttj" resultMap="subjectsdtxxtjBoMap" parameterType="java.util.Map">
+        SELECT s.id,s.title ,count(m.subjectsId) as cnt from cms_paper_subjects s LEFT JOIN cms_paper_answer m ON s.id = m.subjectsId
         <where>
-            optionType IN (1,2)
+            s.optionType IN (1,2)
             <if test=" questionId != null and questionId != '' ">
-                and questionId = #{questionId}
+                and s.questionId = #{questionId}
             </if>
         </where>
     </select>

@@ -176,10 +176,14 @@ public class AnswerLogController {
             if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime() / 1000);
+            }else {
+                dataMap.put("startTime", null);
             }
             if (endTime != null && !"".equals(endTime)) {
                 Date startTime2 = sdf.parse(endTime);
                 dataMap.put("endTime", startTime2.getTime() / 1000);
+            }else {
+                dataMap.put("endTime", null);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);

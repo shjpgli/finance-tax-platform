@@ -339,14 +339,14 @@ public class SubjectsServiceImpl implements SubjectsService {
     @Override
     public List<SubjectsdtxxtjBo> selectListdttj(Map<String, Object> map) {
         List<SubjectsdtxxtjBo> sublist = subjectsRoMapper.selectListdttj(map);
-        for (SubjectsdtxxtjBo subjectsdttjBo : sublist) {
-            String id = subjectsdttjBo.getId();
-            map.put("subjectsId", id);
-            List<AnswerdttjBo> anslist = answerRoMapper.selectdttj(map);
-            Integer cnt = answerRoMapper.selectdttjs(map);
-            subjectsdttjBo.setCnt(cnt);
-            subjectsdttjBo.setDtlist(anslist);
-        }
+//        for (SubjectsdtxxtjBo subjectsdttjBo : sublist) {
+//            String id = subjectsdttjBo.getId();
+//            map.put("subjectsId", id);
+//            List<AnswerdttjBo> anslist = answerRoMapper.selectdttj(map);
+//            Integer cnt = answerRoMapper.selectdttjs(map);
+//            subjectsdttjBo.setCnt(cnt);
+//            subjectsdttjBo.setDtlist(anslist);
+//        }
         return sublist;
     }
 }

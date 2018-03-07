@@ -79,12 +79,16 @@ public class AccessLogController {
             if (startTime != null && !"".equals(startTime)) {
                 Date startTime1 = sdf.parse(startTime);
                 dataMap.put("startTime", startTime1.getTime() / 1000);
+            }else {
+                dataMap.put("startTime", null);
             }
             if (endTime != null && !"".equals(endTime)) {
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(sdf.parse(endTime));
                 calendar.add(Calendar.DATE, 1);
                 dataMap.put("endTime", calendar.getTime().getTime() / 1000);
+            }else {
+                dataMap.put("endTime", null);
             }
         } catch (ParseException e) {
             LOGGER.error("时间类转换异常：{}", e);
