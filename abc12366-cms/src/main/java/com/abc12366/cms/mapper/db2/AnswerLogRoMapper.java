@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.bo.AnswerLogRolltjBo;
+import com.abc12366.cms.model.bo.AnswerLogtjListBo;
 import com.abc12366.cms.model.questionnaire.AnswerLog;
 import com.abc12366.cms.model.questionnaire.bo.AnswerLogBO;
 import org.apache.ibatis.annotations.Param;
@@ -45,4 +46,6 @@ public interface AnswerLogRoMapper {
      * 查询（用户答题次数）
      **/
     Integer selectldtcnt(Map<String, Object> map);
+
+    AnswerLogtjListBo selectAnswerLogRolltjBo(Map<String, Object> map);
 }

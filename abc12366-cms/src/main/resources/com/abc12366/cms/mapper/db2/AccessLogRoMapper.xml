@@ -88,4 +88,73 @@
         </if>
     </select>
 
+    <resultMap id="AccessLogtjListBoMap" type="com.abc12366.cms.model.bo.AccessLogtjListBo">
+        <association property="llcnt" column="{questionId=questionId,startTime=startTime,endTime=endTime}" select="selectlltjs"/>
+        <association property="llcnts" column="{questionId=questionId,startTime=startTime,endTime=endTime}" select="selectlltjsbysj"/>
+        <collection property="list" ofType="com.abc12366.cms.model.bo.AccessLogRolltjBo" column="{questionId=questionId,startTime=startTime,endTime=endTime}"
+                    select="getAccessLogRolltjBo"></collection>
+        <collection property="pclist" ofType="com.abc12366.cms.model.bo.AccessLogRolltjBo" column="{questionId=questionId,startTime=startTime,endTime=endTime}"
+                    select="getAccessLogRolltjBoPC"></collection>
+        <collection property="mobileWeblist" ofType="com.abc12366.cms.model.bo.AccessLogRolltjBo" column="{questionId=questionId,startTime=startTime,endTime=endTime}"
+                    select="getAccessLogRolltjBoMB"></collection>
+    </resultMap>
+    <select id="selectAccessLogtjListBo" resultMap="AccessLogtjListBoMap" parameterType="java.util.Map">
+        SELECT questionId,#{startTime} as startTime,#{endTime} as endTime FROM cms_paper_access_log
+        WHERE 1=1
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &lt;= #{endTime}
+        </if>
+        GROUP BY DAY(createTime)
+    </select>
+    <!-- 浏览统计（全部）-->
+    <select id="getAccessLogRolltjBo" resultType="com.abc12366.cms.model.bo.AccessLogRolltjBo" parameterType="java.util.Map">
+        SELECT DATE_FORMAT(createTime, '%Y%m%d') tj,COUNT(id) cnt FROM cms_paper_access_log
+        WHERE 1=1
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &lt;= #{endTime}
+        </if>
+        GROUP BY DAY(createTime)
+    </select>
+    <!-- 浏览统计（PC）-->
+    <select id="getAccessLogRolltjBoPC" resultType="com.abc12366.cms.model.bo.AccessLogRolltjBo" parameterType="java.util.Map">
+        SELECT DATE_FORMAT(createTime, '%Y%m%d') tj,COUNT(id) cnt FROM cms_paper_access_log
+        WHERE accessTerminal = 'PC'
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &lt;= #{endTime}
+        </if>
+        GROUP BY DAY(createTime)
+    </select>
+    <!-- 浏览统计（手机）-->
+    <select id="getAccessLogRolltjBoMB" resultType="com.abc12366.cms.model.bo.AccessLogRolltjBo" parameterType="java.util.Map">
+        SELECT DATE_FORMAT(createTime, '%Y%m%d') tj,COUNT(id) cnt FROM cms_paper_access_log
+        WHERE accessTerminal = 'MobileWeb'
+        <if test="questionId != null and questionId != ''">
+            AND questionId = #{questionId}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            AND UNIX_TIMESTAMP(createTime) &lt;= #{endTime}
+        </if>
+        GROUP BY DAY(createTime)
+    </select>
 </mapper>
