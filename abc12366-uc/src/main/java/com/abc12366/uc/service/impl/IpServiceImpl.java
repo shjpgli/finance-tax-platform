@@ -10,6 +10,7 @@ import com.abc12366.uc.service.IpService;
 import com.abc12366.uc.service.UserExtendService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,6 @@ public class IpServiceImpl implements IpService {
                     BeanUtils.copyProperties(updateObj, o, "id");
                     o.setUpdateTime(now);
                     ipMapper.update(o);
-
-                    // 更新用户省市地址信息
-                    userExtendService.updateUserAddress(userId, o.getRegionId(), o.getCityId());
                 }
             }
         } else {
@@ -74,10 +72,14 @@ public class IpServiceImpl implements IpService {
                 bo.setCreateTime(now);
                 bo.setUpdateTime(now);
                 ipMapper.insert(bo);
-
-                // 更新用户省市地址信息
-                userExtendService.updateUserAddress(userId, bo.getRegionId(), bo.getCityId());
+                o = bo;
             }
+        }
+
+        LOGGER.info("更新用户省市地址信息:{}", userId);
+        boolean isOper = o != null && StringUtils.isNotEmpty(o.getRegionId()) && StringUtils.isNotEmpty(o.getCityId());
+        if (isOper) {
+            userExtendService.updateUserAddress(userId, o.getRegionId(), o.getCityId());
         }
     }
 
