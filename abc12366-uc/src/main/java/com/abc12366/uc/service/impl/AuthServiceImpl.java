@@ -700,7 +700,7 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    private void computeExp(String userId) {
+    public void computeExp(String userId) {
         //今日第一次登录才能获取经验值
 //        if (!isContinueLogin(userId, 0)) {
             //判断用户连续登录情况
@@ -755,7 +755,7 @@ public class AuthServiceImpl implements AuthService {
         return logList != null && logList.size() > 0;
     }
 
-    private void insertLoginLog(String userId) {
+    public void insertLoginLog(String userId) {
         UcUserLoginLog loginLog = new UcUserLoginLog();
         loginLog.setId(Utils.uuid());
         loginLog.setUserId(userId);
