@@ -2,6 +2,9 @@ package com.abc12366.uc.mapper.db1;
 
 
 import com.abc12366.uc.model.Token;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -19,4 +22,6 @@ public interface TokenMapper {
     Token selectOne(@Param("userId") String userId, @Param("appId") String appId);
 
     Token isAuthentication(String userToken);
+    
+    List<Token> getActiveToken();
 }
