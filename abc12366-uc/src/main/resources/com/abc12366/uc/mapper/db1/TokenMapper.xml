@@ -40,4 +40,12 @@
         from uc_token
         where token = #{token}
     </select>
+    
+    
+    <select id="getActiveToken" resultType="com.abc12366.uc.model.Token">
+        SELECT userid,min(lastTokenResetTime) as lastTokenResetTime  
+        FROM uc_token 
+        WHERE DATE_ADD(lastTokenResetTime,INTERVAL 2 HOUR) > now() 
+        GROUP BY userid;
+    </select>
 </mapper>

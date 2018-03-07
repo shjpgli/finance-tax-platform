@@ -90,4 +90,8 @@ public interface AuthService {
      * 登陆之后需要处理的业务
      */
     CompletableFuture<BodyStatus> todoAfterLogin(Map map);
+
+	void computeExp(String userId);
+
+	void insertLoginLog(String userId);
 }

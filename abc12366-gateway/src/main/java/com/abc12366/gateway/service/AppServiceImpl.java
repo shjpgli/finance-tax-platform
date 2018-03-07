@@ -263,7 +263,7 @@ public class AppServiceImpl implements AppService {
             LOGGER.warn("修改异常：{}", app);
             throw new ServiceException(4102);
         }
-        if (redisTemplate.hasKey(app.getName())) {
+        if (!StringUtils.isEmpty(app.getName()) && redisTemplate.hasKey(app.getName())) {
             redisTemplate.delete(app.getName());
         }
         return appBO;

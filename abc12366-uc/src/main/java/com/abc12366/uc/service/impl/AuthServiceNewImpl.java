@@ -484,4 +484,9 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 		return map;
 	}
 
+	@Override
+	public List<Token> getActiveToken() {
+		return tokenMapper.getActiveToken();
+	}
+
 }

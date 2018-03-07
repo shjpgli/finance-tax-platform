@@ -1,8 +1,11 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.Token;
 import com.abc12366.uc.model.bo.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 import java.util.Map;
 
 public interface AuthServiceNew {
@@ -17,5 +20,11 @@ public interface AuthServiceNew {
 	Boolean updatePassword(PasswordUpdateBO passwordUpdateBO, HttpServletRequest request);
 
 	Map dbAppUserLogin(String userToken);
+	
+	/**
+	 * 获取活动的token列表
+	 * @return
+	 */
+	List<Token> getActiveToken();
 
 }
