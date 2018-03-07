@@ -1,6 +1,7 @@
 package com.abc12366.cms.mapper.db2;
 
 import com.abc12366.cms.model.bo.AccessLogRolltjBo;
+import com.abc12366.cms.model.bo.AccessLogtjListBo;
 import com.abc12366.cms.model.questionnaire.AccessLog;
 import com.abc12366.cms.model.questionnaire.bo.AccessLogBO;
 import org.apache.ibatis.annotations.Param;
@@ -38,4 +39,6 @@ public interface AccessLogRoMapper {
      * 查询（浏览统计总数）
      **/
     Integer selectlltjs(Map<String, Object> map);
+
+    AccessLogtjListBo selectAccessLogtjListBo(Map<String, Object> map);
 }
