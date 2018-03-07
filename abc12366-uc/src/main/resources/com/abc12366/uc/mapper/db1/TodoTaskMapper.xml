@@ -41,6 +41,8 @@
         FROM uc_user_task_todo
         WHERE userId = #{userId}
         and sysTaskId = #{sysTaskId}
+        ORDER BY lastupdate DESC 
+        LIMIT 1
     </select>
     <!--查询一条特定日常任务：每天-->
     <select id="selectOneByDay" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
