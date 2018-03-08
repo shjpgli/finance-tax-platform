@@ -4,10 +4,12 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.service.AppService;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.MessageConstant;
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.job.DzsjWsxx;
 import com.abc12366.uc.model.job.WsxxInfo;
-import com.abc12366.uc.service.IMsgSendService;
+import com.abc12366.uc.service.IMsgSendV2service;
 import com.abc12366.uc.service.UserService;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.time.DateUtils;
@@ -30,7 +32,7 @@ import java.util.*;
  *
  * @author zhushuai 2017-11-10
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation", "restriction" })
 public class DzsjWsxxJob implements StatefulJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(DzsjWsxxJob.class);
 
@@ -43,7 +45,7 @@ public class DzsjWsxxJob implements StatefulJob {
     private UserService userService;
 
     @Autowired
-    private IMsgSendService msgSendService;
+	private IMsgSendV2service msgSendV2Service;
 
 
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -97,7 +99,22 @@ public class DzsjWsxxJob implements StatefulJob {
                                 dataList.put("keyword2", wsxxInfo.getLrrq());
                                 dataList.put("url", SpringCtxHolder.getProperty("mbxx.cszj.url"));
 
-                                msgSendService.sendMsg(user, sysMsg, "", "x0BXoANGCPnCb4GoA_Lm2hEPTJrdmW0QCUUvtjK5QRQ", dataList, dxmsg);
+                                //msgSendService.sendMsg(user, sysMsg, "", "x0BXoANGCPnCb4GoA_Lm2hEPTJrdmW0QCUUvtjK5QRQ", dataList, dxmsg);
+                                
+                                //2018-03-08
+                                MessageSendBo messageSendBo =new MessageSendBo();
+                                messageSendBo.setType(MessageConstant.RAX_MESSAGE);
+                                messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_DZSJ);
+                                messageSendBo.setBusinessId(user.getId());
+                                messageSendBo.setWebMsg(sysMsg);
+                                messageSendBo.setPhoneMsg(dxmsg);
+                                messageSendBo.setTemplateid("x0BXoANGCPnCb4GoA_Lm2hEPTJrdmW0QCUUvtjK5QRQ");
+                                messageSendBo.setDataList(dataList);
+                                
+                                List<String> userIds =new ArrayList<String>();
+                                userIds.add(user.getId());
+                                messageSendBo.setUserIds(userIds);
+                                msgSendV2Service.sendMsgV2(messageSendBo);
                             }
                         }
                         if (dzsjWsxx.getSl() == 0) {//没有剩余消息，退出循环
