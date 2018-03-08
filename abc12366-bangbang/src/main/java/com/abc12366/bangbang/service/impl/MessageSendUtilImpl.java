@@ -1,6 +1,7 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.model.Message;
+import com.abc12366.bangbang.model.MessageSendBo;
 import com.abc12366.bangbang.model.bo.MessageBO;
 import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
@@ -108,4 +109,18 @@ public class MessageSendUtilImpl implements MessageSendUtil {
         LOGGER.info("Response: {}, {}", url, responseEntity);
         return responseEntity != null ? responseEntity.getBody() : null;
     }
+
+	@Override
+	public String sendMsgBySubscriptions(MessageSendBo sendBo, HttpServletRequest request) {
+		LOGGER.info("{}:{}", sendBo, request);
+        String url = SpringCtxHolder.getProperty("abc12366.uc.url") + "/sendmsg/v2";
+
+        String responseStr;
+        try {
+            responseStr = restTemplateUtil.exchange(url, HttpMethod.POST, sendBo, request);
+        } catch (Exception e) {
+            throw new ServiceException(4821);
+        }
+        return responseStr;
+	}
 }

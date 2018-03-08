@@ -4,6 +4,7 @@ import com.abc12366.bangbang.mapper.db1.CurriculumApplyMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumApplyRoMapper;
 import com.abc12366.bangbang.mapper.db2.CurriculumRoMapper;
 import com.abc12366.bangbang.model.Message;
+import com.abc12366.bangbang.model.MessageSendBo;
 import com.abc12366.bangbang.model.curriculum.Curriculum;
 import com.abc12366.bangbang.model.curriculum.CurriculumApply;
 import com.abc12366.bangbang.model.curriculum.bo.CurriculumApplyBo;
@@ -11,6 +12,7 @@ import com.abc12366.bangbang.service.CurrApplyService;
 import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.MessageConstant;
+
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,15 +115,30 @@ public class CurrApplyServiceImpl implements CurrApplyService {
                 curriculumTitle = curriculum.getTitle();
                 if("live".equals(curriculum.getTeachingMethod())){
                     time = sdf.format(curriculum.getSignTimeBegin());
-                    Message message = new Message();
+                    /*Message message = new Message();
                     message.setBusinessId(applyBo.getApplyId());
                     message.setType(MessageConstant.KCBM);
 //            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
                     message.setContent("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间登录系统准时参加，感谢您的参与！");
                     message.setUserId(applyBo.getUserId());
-                    messageSendUtil.sendMessage(message, request);
+                    messageSendUtil.sendMessage(message, request);*/
+                    
+                    //2018-03-08
+                    MessageSendBo messageSendBo =new MessageSendBo();
+                    messageSendBo.setType(MessageConstant.USER_MESSAGE);
+                    messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_CLASS);
+                    messageSendBo.setBusinessId(applyBo.getApplyId());
+                    messageSendBo.setWebMsg("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间登录系统准时参加，感谢您的参与！");
+                    messageSendBo.setPhoneMsg("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间登录系统准时参加，感谢您的参与！");
+                    messageSendBo.setMoblieNoChargeVip(true);
+                    
+                    List<String> userIds =new ArrayList<String>();
+                    userIds.add(applyBo.getUserId());
+                    messageSendBo.setUserIds(userIds);
+                    
+                    messageSendUtil.sendMsgBySubscriptions(messageSendBo, request);
                 }else if("face".equals(curriculum.getTeachingMethod())){
-                    time = sdf.format(curriculum.getSignTimeBegin());
+                    /*time = sdf.format(curriculum.getSignTimeBegin());
                     site = curriculum.getTrainSite();
                     Message message = new Message();
                     message.setBusinessId(applyBo.getApplyId());
@@ -129,7 +146,22 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 //            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
                     message.setContent("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间"+site+"地点系统准时参加，感谢您的参与！");
                     message.setUserId(applyBo.getUserId());
-                    messageSendUtil.sendMessage(message, request);
+                    messageSendUtil.sendMessage(message, request);*/
+                	
+                	//2018-03-08
+                    MessageSendBo messageSendBo =new MessageSendBo();
+                    messageSendBo.setType(MessageConstant.USER_MESSAGE);
+                    messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_CLASS);
+                    messageSendBo.setBusinessId(applyBo.getApplyId());
+                    messageSendBo.setWebMsg("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间"+site+"地点系统准时参加，感谢您的参与！");
+                    messageSendBo.setPhoneMsg("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间"+site+"地点系统准时参加，感谢您的参与！");
+                    messageSendBo.setMoblieNoChargeVip(true);
+                    
+                    List<String> userIds =new ArrayList<String>();
+                    userIds.add(applyBo.getUserId());
+                    messageSendBo.setUserIds(userIds);
+                    
+                    messageSendUtil.sendMsgBySubscriptions(messageSendBo, request);
                 }
             }
 
