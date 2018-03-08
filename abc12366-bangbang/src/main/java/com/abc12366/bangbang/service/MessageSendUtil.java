@@ -1,7 +1,9 @@
 package com.abc12366.bangbang.service;
 
 import com.abc12366.bangbang.model.Message;
+import com.abc12366.bangbang.model.MessageSendBo;
 import com.abc12366.bangbang.model.bo.MessageBO;
+
 import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,5 +26,7 @@ public interface MessageSendUtil {
     MessageBO sendMessage(Message message);
 
     String sendMsg(String url, HttpMethod method, Map<String, Object> map);
+    
+    String sendMsgBySubscriptions(MessageSendBo sendBo, HttpServletRequest request);
 
 }
