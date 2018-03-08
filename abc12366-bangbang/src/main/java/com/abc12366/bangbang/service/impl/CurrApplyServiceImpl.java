@@ -123,6 +123,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
                     message.setUserId(applyBo.getUserId());
                     messageSendUtil.sendMessage(message, request);*/
                     
+                    
                     //2018-03-08
                     MessageSendBo messageSendBo =new MessageSendBo();
                     messageSendBo.setType(MessageConstant.USER_MESSAGE);
@@ -147,6 +148,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
                     message.setContent("您已报名成功"+curriculumTitle+"课程培训，请于"+time+"时间"+site+"地点系统准时参加，感谢您的参与！");
                     message.setUserId(applyBo.getUserId());
                     messageSendUtil.sendMessage(message, request);*/
+                	
                 	
                 	//2018-03-08
                     MessageSendBo messageSendBo =new MessageSendBo();
