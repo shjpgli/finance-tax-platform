@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.message.mapper.db1.SubscriptionMapper">
     <sql id="Base_Column">
-        id, type, busiType, hasWeb, webForce, hasWechat, wechatForce, hasMessage, messageForce, createTime, lastUpdate
+        id, type, busiType, hasWeb, webForce, hasWechat, wechatForce, hasMessage, messageForce, createTime, lastUpdate,remark
     </sql>
     
     <sql id="Base_user_Column">
@@ -14,7 +14,7 @@
         INSERT INTO msg_subscription_setting 
         (<include refid="Base_Column"/>) 
         VALUES
-        (#{id}, #{type}, #{busiType}, #{hasWeb}, #{webForce}, #{hasWechat}, #{wechatForce}, #{hasMessage}, #{messageForce}, #{createTime}, #{lastUpdate})
+        (#{id}, #{type}, #{busiType}, #{hasWeb}, #{webForce}, #{hasWechat}, #{wechatForce}, #{hasMessage}, #{messageForce}, #{createTime}, #{lastUpdate}, #{remark})
     </insert>
     
     <update id="updateOneSetting" parameterType="com.abc12366.message.model.Subscriptions">
@@ -29,6 +29,7 @@
             <if test="hasMessage != null">hasMessage = #{hasMessage},</if>
             <if test="messageForce != null">messageForce = #{messageForce},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
+            <if test="remark != null">remark = #{remark},</if>
         </set>
         WHERE id = #{id}
     </update>

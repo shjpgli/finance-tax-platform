@@ -17,6 +17,8 @@ public class UserSubscriptionInfo extends UserSubscription{
 	private Boolean hasMessage; // 是否有短信消息
 
 	private Boolean messageForce; // 是否强制订阅短信
+	
+	private String remark;//备注信息
 
 	public String getType() {
 		return type;
@@ -80,6 +82,14 @@ public class UserSubscriptionInfo extends UserSubscription{
 
 	public void setMessageForce(Boolean messageForce) {
 		this.messageForce = messageForce;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 	
 	
