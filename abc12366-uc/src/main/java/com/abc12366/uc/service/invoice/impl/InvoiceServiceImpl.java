@@ -445,7 +445,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             
             MessageSendBo messageSendBo =new MessageSendBo();
             messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-            messageSendBo.setBusiType(MessageConstant.ZZFPDD);
+            messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_INVOICE);
             messageSendBo.setBusinessId(invoiceTemp.getId());
             messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
                            "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
@@ -1040,7 +1040,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         
         MessageSendBo messageSendBo =new MessageSendBo();
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.ZZFPDD);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_INVOICE);
         messageSendBo.setBusinessId(invoiceBO.getId());
         messageSendBo.setWebMsg(content);
         messageSendBo.setPhoneMsg(content);
@@ -1096,7 +1096,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         
         MessageSendBo messageSendBo =new MessageSendBo();
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.DZFPDD);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_INVOICE);
         messageSendBo.setBusinessId(invoiceBO.getId());
         messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
                         "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
@@ -1155,7 +1155,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         
         MessageSendBo messageSendBo =new MessageSendBo();
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.DZFPDD);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_INVOICE);
         messageSendBo.setBusinessId(invoiceBO.getId());
         messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
                 "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");

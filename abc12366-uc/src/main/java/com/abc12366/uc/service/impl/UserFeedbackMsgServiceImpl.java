@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.RemindConstant;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.uc.mapper.db1.UserMapper;
@@ -12,6 +13,7 @@ import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.UcUserLoginLog;
 import com.abc12366.uc.model.bo.UserExtendBO;
 import com.abc12366.uc.service.IMsgSendService;
+import com.abc12366.uc.service.IMsgSendV2service;
 import com.abc12366.uc.service.TodoTaskService;
 import com.abc12366.uc.service.UserExtendService;
 import com.abc12366.uc.service.UserFeedbackMsgService;
@@ -45,6 +47,9 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
 
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+	private IMsgSendV2service msgSendV2Service;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserFeedbackMsgServiceImpl.class);
 
@@ -60,13 +65,30 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         dataList.put("keyword2", DateUtils.dateToStr(new Date()));
         dataList.put("remark", RemindConstant.UPDATE_PWD_SUCCESS_WX_4);
         //3.短信消息
-        MessageSendBo sendBo = new MessageSendBo();
+        /*MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setTemplateid("AYi8h8g7_bKN8Yr9wVDh4ZQ_CIOwsoIzX1A6tx1E5WE");
         sendBo.setDataList(dataList);
         sendBo.setPhoneMsg(RemindConstant.UPDATE_PWD_SUCCESS_DX.replace("{#DATA.DATE}", DateUtils.dateToStr(new Date())));
-        msgSendService.sendXtxx(sendBo);
+        msgSendService.sendXtxx(sendBo);*/
+        
+        //2018-03-08
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.USER_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_PWD);
+        messageSendBo.setBusinessId(userId);
+        messageSendBo.setWebMsg(sysMsg);
+        messageSendBo.setPhoneMsg(RemindConstant.UPDATE_PWD_SUCCESS_DX.replace("{#DATA.DATE}", DateUtils.dateToStr(new Date())));
+        messageSendBo.setTemplateid("AYi8h8g7_bKN8Yr9wVDh4ZQ_CIOwsoIzX1A6tx1E5WE");
+        messageSendBo.setDataList(dataList);
+        messageSendBo.setWxNoChargeVip(true);
+        messageSendBo.setMoblieNoChargeVip(true);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(userId);
+        messageSendBo.setUserIds(userIds);
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     @Override
@@ -88,11 +110,24 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         //2.微信消息.后改为不做
         //3.短信消息.后改为不做
 
-        MessageSendBo sendBo = new MessageSendBo();
+        /*MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
-        msgSendService.sendXtxx(sendBo);
+        msgSendService.sendXtxx(sendBo);*/
+        
+        //2018-03-08
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.USER_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_REALNAME);
+        messageSendBo.setBusinessId(userId);
+        messageSendBo.setWebMsg(sysMsg);
+        messageSendBo.setSkipUrl(skipUrl);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(userId);
+        messageSendBo.setUserIds(userIds);
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     @Override
@@ -118,11 +153,24 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/task.php'>马上做任务</a>";
         //2.微信消息,不做
         //3.短信消息，不做
-        MessageSendBo sendBo = new MessageSendBo();
+       /* MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
-        msgSendService.sendXtxx(sendBo);
+        msgSendService.sendXtxx(sendBo);*/
+        
+        //2018-03-08
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.USER_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_USERINFO);
+        messageSendBo.setBusinessId(userId);
+        messageSendBo.setWebMsg(sysMsg);
+        messageSendBo.setSkipUrl(skipUrl);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(userId);
+        messageSendBo.setUserIds(userIds);
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     @Override
@@ -137,11 +185,24 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/checkIn.php'>马上签到</a>";
         //2.微信消息,不做
         //3.短信消息，不做
-        MessageSendBo sendBo = new MessageSendBo();
-        sendBo.setUserId(userId);
-        sendBo.setWebMsg(sysMsg);
-        sendBo.setSkipUrl(skipUrl);
-        msgSendService.sendXtxx(sendBo);
+//        MessageSendBo sendBo = new MessageSendBo();
+//        sendBo.setUserId(userId);
+//        sendBo.setWebMsg(sysMsg);
+//        sendBo.setSkipUrl(skipUrl);
+//        msgSendService.sendXtxx(sendBo);
+        
+        //2018-03-08
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.USER_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_USERINFO);
+        messageSendBo.setBusinessId(userId);
+        messageSendBo.setWebMsg(sysMsg);
+        messageSendBo.setSkipUrl(skipUrl);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(userId);
+        messageSendBo.setUserIds(userIds);
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     @Override
@@ -152,11 +213,25 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         String skipUrl = "<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/userinfo/expLog.php'>查看详情</a>";
         //2.微信消息,不做
         //3.短信消息，不做
-        MessageSendBo sendBo = new MessageSendBo();
+       /* MessageSendBo sendBo = new MessageSendBo();
         sendBo.setUserId(userId);
         sendBo.setWebMsg(sysMsg);
         sendBo.setSkipUrl(skipUrl);
-        msgSendService.sendXtxx(sendBo);
+        msgSendService.sendXtxx(sendBo);*/
+        
+        
+        //2018-03-08
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.USER_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_USERINFO);
+        messageSendBo.setBusinessId(userId);
+        messageSendBo.setWebMsg(sysMsg);
+        messageSendBo.setSkipUrl(skipUrl);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(userId);
+        messageSendBo.setUserIds(userIds);
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     @Override
@@ -183,14 +258,29 @@ public class UserFeedbackMsgServiceImpl implements UserFeedbackMsgService {
         String dxMsg = RemindConstant.REALNAME_VALIDATE_DX.replace("{#DATA.RESULT}", (status.trim().equals(TaskConstant.USER_REALNAME_VALIDATED) ? "已通过" : "未通过"))
                 .replace("{#DATA.DATE}", DateUtils.dateToStr(new Date()));
 
-        MessageSendBo sendBo = new MessageSendBo();
-        sendBo.setUserId(userId);
-        sendBo.setWebMsg(sysMsg);
-        sendBo.setPhoneMsg(dxMsg);
-        sendBo.setDataList(dataList);
-        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
+//        MessageSendBo sendBo = new MessageSendBo();
+//        sendBo.setUserId(userId);
+//        sendBo.setWebMsg(sysMsg);
+//        sendBo.setPhoneMsg(dxMsg);
+//        sendBo.setDataList(dataList);
+//        sendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
 
-        msgSendService.sendXtxx(sendBo);
+        //msgSendService.sendXtxx(sendBo);
+        
+        //2018-03-08
+        MessageSendBo messageSendBo =new MessageSendBo();
+        messageSendBo.setType(MessageConstant.USER_MESSAGE);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_REALNAME);
+        messageSendBo.setBusinessId(userId);
+        messageSendBo.setWebMsg(sysMsg);
+        messageSendBo.setPhoneMsg(dxMsg);
+        messageSendBo.setTemplateid("JQUa0hyi-oKyG-hhuboC_4IKAeBTRn26w2ippsLUS-U");
+        messageSendBo.setDataList(dataList);
+        
+        List<String> userIds =new ArrayList<String>();
+        userIds.add(userId);
+        messageSendBo.setUserIds(userIds);
+        msgSendV2Service.sendMsgV2(messageSendBo);
     }
 
     private UserExtendBO getUserExtend(String userId) {

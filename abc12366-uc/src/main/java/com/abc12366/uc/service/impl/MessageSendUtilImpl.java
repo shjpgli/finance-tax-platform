@@ -130,7 +130,7 @@ public class MessageSendUtilImpl implements MessageSendUtil {
     public static void main(String[] args) {
         Message message = new Message();
         message.setBusinessId("cs");
-        message.setBusiType(MessageConstant.SPDD);
+        message.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         message.setType(MessageConstant.SYS_MESSAGE);
         message.setContent(RemindConstant.BUYING_MEMBERS_PREFIX + RemindConstant.BUYING_MEMBERS_SUFFIX + "。<a " +
                 "href=\"/member/member_rights.html\">会员权益详情查看</a>");

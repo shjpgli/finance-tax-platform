@@ -2,12 +2,13 @@ package com.abc12366.uc.job.dzsb;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.MessageConstant;
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.job.DzsbJob;
 import com.abc12366.uc.model.job.DzsbTime;
 import com.abc12366.uc.model.job.DzsbXxInfo;
-import com.abc12366.uc.service.IDzsbTimeService;
-import com.abc12366.uc.service.IMsgSendService;
+import com.abc12366.uc.service.IMsgSendV2service;
 import com.abc12366.uc.service.UserService;
 import com.abc12366.uc.webservice.AcceptClient;
 import com.alibaba.fastjson.JSONObject;
@@ -36,13 +37,10 @@ public class CjxxRemindJob implements StatefulJob {
     private AcceptClient client;
 
     @Autowired
-    private IDzsbTimeService dzsbTimeService;
-
-    @Autowired
-    private IMsgSendService msgSendService;
-
-    @Autowired
     private UserService userService;
+    
+    @Autowired
+	private IMsgSendV2service msgSendV2Service;
 
 
     @Override
@@ -135,10 +133,25 @@ public class CjxxRemindJob implements StatefulJob {
                                         dataList.put("keyword4Color", "#00DB00");
                                         dataList.put("url", SpringCtxHolder.getProperty("mbxx.cszj.url"));
 
+                                        //2018-03-08
+                                        MessageSendBo messageSendBo =new MessageSendBo();
+                                        messageSendBo.setType(MessageConstant.RAX_MESSAGE);
+                                        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_DZSB);
+                                        messageSendBo.setBusinessId(dzsbXxInfo.getNsrsbh());
+                                        messageSendBo.setWebMsg(sysMsg);
+                                        messageSendBo.setPhoneMsg(dxmsg);
+                                        messageSendBo.setTemplateid("ANmj1C1fjZ1ny4S2fhX76E7S7ttG6kYHf5Q0gNtwM5E");
+                                        messageSendBo.setDataList(map);
+                                        
+                                        List<String> userIds =new ArrayList<String>();
+                                        
                                         for (int j = 0; j < users.size(); j++) {
-                                            msgSendService.sendMsg(users.get(j), sysMsg, "",
-													"ANmj1C1fjZ1ny4S2fhX76E7S7ttG6kYHf5Q0gNtwM5E", dataList, dxmsg);
+                                            /*msgSendService.sendMsg(users.get(j), sysMsg, "",
+													"ANmj1C1fjZ1ny4S2fhX76E7S7ttG6kYHf5Q0gNtwM5E", dataList, dxmsg);*/
+                                        	userIds.add(users.get(j).getId());
                                         }
+                                        messageSendBo.setUserIds(userIds);
+                                        msgSendV2Service.sendMsgV2(messageSendBo);
                                     } else {
                                         LOGGER.info("查询当前录入日期[" + dzsbTime.getLasttime() + "]催缴信息，未查到相关用户信息,纳税人名称:" +
 												dzsbXxInfo.getNsrmc());

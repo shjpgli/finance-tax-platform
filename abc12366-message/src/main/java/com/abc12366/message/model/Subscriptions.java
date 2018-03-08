@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
@@ -32,6 +33,9 @@ public class Subscriptions {
 	private Boolean messageForce; // 是否强制订阅短信
 	private Date createTime; // 创建时间
 	private Date lastUpdate; // 更新时间
+	
+	@Length(max = 200)
+	private String remark;//备注信息
 
 	public String getId() {
 		return id;

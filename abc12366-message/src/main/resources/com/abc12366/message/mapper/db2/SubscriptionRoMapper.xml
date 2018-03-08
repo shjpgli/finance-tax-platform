@@ -4,7 +4,7 @@
 <mapper namespace="com.abc12366.message.mapper.db2.SubscriptionRoMapper">
     
     <sql id="Base_Column">
-        id, type, busiType, hasWeb, webForce, hasWechat, wechatForce, hasMessage, messageForce, createTime, lastUpdate
+        id, type, busiType, hasWeb, webForce, hasWechat, wechatForce, hasMessage, messageForce, createTime, lastUpdate, remark
     </sql>
 
     <select id="selectList" parameterType="java.util.Map" resultType="com.abc12366.message.model.Subscriptions">
@@ -26,7 +26,7 @@
     
     <select id="selectUserSubscriptionList" parameterType="java.util.Map" resultType="com.abc12366.message.model.UserSubscriptionInfo">
         SELECT 
-        s.type, s.busiType, s.hasWeb, s.webForce, s.hasWechat, s.wechatForce, s.hasMessage, s.messageForce,
+        s.type, s.busiType, s.hasWeb, s.webForce, s.hasWechat, s.wechatForce, s.hasMessage, s.messageForce,s.remark,
         u.userId, s.id as settingId, IFNULL(u.web,if(s.hasWeb = 1,1,0)) as web, IFNULL(u.wechat,if(s.hasWechat = 1,1,0)) as wechat, IFNULL(u.message,if(s.hasMessage = 1,1,0)) as message 
         FROM msg_subscription_setting s LEFT JOIN 
         ( select userId, settingId, web, wechat, message from msg_subscription_user where userId= #{userId} ) u 
