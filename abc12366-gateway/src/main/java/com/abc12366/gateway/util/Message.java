@@ -32,7 +32,7 @@ public class Message {
         if (properties == null) {
             properties = new Properties(MESSAGE);
         }
-
-        return properties.getValue(String.valueOf(key));
+        String value = properties.getValue(String.valueOf(key));
+        return  value != null ? value : "未知代码";
     }
 }
