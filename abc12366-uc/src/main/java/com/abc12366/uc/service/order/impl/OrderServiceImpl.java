@@ -808,7 +808,7 @@ public class OrderServiceImpl implements OrderService {
         
         MessageSendBo messageSendBo =new MessageSendBo();
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.SPDD);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         messageSendBo.setBusinessId(order.getOrderNo());
         messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">"
                         + MessageConstant.VIEW_DETAILS + "</a>");
@@ -855,7 +855,7 @@ public class OrderServiceImpl implements OrderService {
         
         MessageSendBo messageSendBo =new MessageSendBo();
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.SPDD);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         messageSendBo.setBusinessId(order.getOrderNo());
         messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">"
                         + MessageConstant.VIEW_DETAILS + "</a>");
@@ -1029,7 +1029,7 @@ public class OrderServiceImpl implements OrderService {
             insertOrderLog(data.getUserId(), order.getOrderNo(), "5", "管理员已发货", "0");
 
             //查询用户信息
-            User user = userMapper.selectOne(data.getUserId());
+            //User user = userMapper.selectOne(data.getUserId());
 
             //组装web消息
             ExpressComp expressComp = expressCompRoMapper.selectByPrimaryKey(expressCompId);
@@ -1061,7 +1061,7 @@ public class OrderServiceImpl implements OrderService {
             
             MessageSendBo messageSendBo =new MessageSendBo();
             messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-            messageSendBo.setBusiType(MessageConstant.SPDD);
+            messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
             messageSendBo.setBusinessId(order.getOrderNo());
             messageSendBo.setWebMsg(content);
             messageSendBo.setPhoneMsg(content);
@@ -1126,7 +1126,7 @@ public class OrderServiceImpl implements OrderService {
         
         
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.SPDD);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         messageSendBo.setBusinessId(order.getOrderNo());
         messageSendBo.setWebMsg(content);
         messageSendBo.setPhoneMsg(content);
@@ -1699,7 +1699,7 @@ public class OrderServiceImpl implements OrderService {
         
         MessageSendBo messageSendBo =new MessageSendBo();
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-        messageSendBo.setBusiType(MessageConstant.SPDD);
+        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         messageSendBo.setBusinessId(orderBO.getOrderNo());
         messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + orderBO.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
         messageSendBo.setWebMsg(content);
