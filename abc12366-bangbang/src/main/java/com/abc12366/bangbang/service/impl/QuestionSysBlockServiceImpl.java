@@ -3,18 +3,22 @@ package com.abc12366.bangbang.service.impl;
 import com.abc12366.bangbang.mapper.db1.*;
 import com.abc12366.bangbang.mapper.db2.QuestionSysBlockRoMapper;
 import com.abc12366.bangbang.model.Message;
+import com.abc12366.bangbang.model.MessageSendBo;
 import com.abc12366.bangbang.model.question.*;
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo;
 import com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo;
 import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.service.QuestionSysBlockService;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -97,20 +101,46 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
         }
 
         if("2".equals(status)){
-            Message message = new Message();
+            /*Message message = new Message();
             message.setUserId(record.getUserId());
             message.setContent("您"+ DateUtils.dateToStr(record.getCreateTime())+"发布的内容涉及到敏感词汇，已被系统屏蔽！");
             message.setType("2");
             message.setBusinessId(record.getId());
-            messageSendUtil.sendMessage(message, request);
+            messageSendUtil.sendMessage(message, request);*/
+            
+            // 2018-03-08
+    		MessageSendBo messageSendBo = new MessageSendBo();
+    		messageSendBo.setType(MessageConstant.USER_MESSAGE);
+    		messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_BANGBANG);
+    		messageSendBo.setBusinessId(record.getUserId());
+    		messageSendBo.setWebMsg("您"+ DateUtils.dateToStr(record.getCreateTime())+"发布的内容涉及到敏感词汇，已被系统屏蔽！");
+
+    		List<String> userIds = new ArrayList<String>();
+    		userIds.add(record.getUserId());
+    		messageSendBo.setUserIds(userIds);
+
+    		messageSendUtil.sendMsgBySubscriptions(messageSendBo, request);
         }
         if("0".equals(status)){
-            Message message = new Message();
+            /*Message message = new Message();
             message.setUserId(record.getUserId());
             message.setContent("您"+ DateUtils.dateToStr(record.getCreateTime())+"发布的内容涉及到敏感词汇，经管理员审核已取消屏蔽！");
             message.setType("2");
             message.setBusinessId(record.getId());
-            messageSendUtil.sendMessage(message, request);
+            messageSendUtil.sendMessage(message, request);*/
+            
+            // 2018-03-08
+    		MessageSendBo messageSendBo = new MessageSendBo();
+    		messageSendBo.setType(MessageConstant.USER_MESSAGE);
+    		messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_BANGBANG);
+    		messageSendBo.setBusinessId(record.getUserId());
+    		messageSendBo.setWebMsg("您"+ DateUtils.dateToStr(record.getCreateTime())+"发布的内容涉及到敏感词汇，经管理员审核已取消屏蔽！");
+
+    		List<String> userIds = new ArrayList<String>();
+    		userIds.add(record.getUserId());
+    		messageSendBo.setUserIds(userIds);
+
+    		messageSendUtil.sendMsgBySubscriptions(messageSendBo, request);
         }
 
     }
