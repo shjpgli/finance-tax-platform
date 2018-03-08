@@ -220,7 +220,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 
             String curriculumTitle = "";
             if(curriculum !=null){
-                curriculumTitle = curriculum.getTitle();
+                /*curriculumTitle = curriculum.getTitle();
                 Message message = new Message();
                 message.setBusinessId(applyBo.getApplyId());
                 message.setBusiType(MessageConstant.KCQD);
@@ -228,7 +228,20 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 //            message.setContent("<a href=\""+MessageConstant.ABCUC_URL+"/orderback/exchange/"+oe.getId()+"/"+order.getOrderNo()+"\">"+MessageConstant.EXCHANGE_CHECK_ADOPT+"</a>");
                 message.setContent("您已成功签到"+curriculumTitle+"课程培训，赶紧参加培训吧！");
                 message.setUserId(applyBo.getUserId());
-                messageSendUtil.sendMessage(message, request);
+                messageSendUtil.sendMessage(message, request);*/
+                
+                //2018-03-08
+                MessageSendBo messageSendBo =new MessageSendBo();
+                messageSendBo.setType(MessageConstant.USER_MESSAGE);
+                messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_CLASS);
+                messageSendBo.setBusinessId(applyBo.getApplyId());
+                messageSendBo.setWebMsg("您已成功签到"+curriculumTitle+"课程培训，赶紧参加培训吧！");
+                
+                List<String> userIds =new ArrayList<String>();
+                userIds.add(applyBo.getUserId());
+                messageSendBo.setUserIds(userIds);
+                
+                messageSendUtil.sendMsgBySubscriptions(messageSendBo, request);
             }
 
 
