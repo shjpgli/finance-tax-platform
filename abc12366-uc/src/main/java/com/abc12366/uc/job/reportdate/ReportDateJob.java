@@ -1,11 +1,13 @@
 package com.abc12366.uc.job.reportdate;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.RemindConstant;
+import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserBsrl;
 import com.abc12366.uc.model.bo.UserBO;
-import com.abc12366.uc.service.IMsgSendService;
+import com.abc12366.uc.service.IMsgSendV2service;
 import com.abc12366.uc.service.UserBsrlService;
 import com.abc12366.uc.service.UserService;
 import com.alibaba.fastjson.JSONObject;
@@ -35,11 +37,12 @@ public class ReportDateJob implements Job {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private IMsgSendService msgSendService;
 
 	@Autowired
 	private UserBsrlService userBsrlService;
+
+    @Autowired
+	private IMsgSendV2service msgSendV2Service;
 
 	private String shenqqix = "";// 申报期限
 
@@ -158,8 +161,24 @@ public class ReportDateJob implements Job {
 					String vdxMsg = RemindConstant.HYDQMSG.replaceAll("\\{#DATA.LEVEL\\}", userBO.getVipLevelName())
 							.replaceAll("\\{#DATA.DATE\\}", getFormat(userBO.getVipExpireDate()));
 
-					msgSendService.sendMsg(user, sysMsg, "", "tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList,
-							vdxMsg);
+					/*msgSendService.sendMsg(user, sysMsg, "", "tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8", dataList,
+							vdxMsg);*/
+					
+					//2018-03-08
+                    MessageSendBo messageSendBo =new MessageSendBo();
+                    messageSendBo.setType(MessageConstant.USER_MESSAGE);
+                    messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_CSW);
+                    messageSendBo.setBusinessId(userBO.getId());
+                    messageSendBo.setWebMsg(sysMsg);
+                    messageSendBo.setPhoneMsg(vdxMsg);
+                    messageSendBo.setTemplateid("tG9RgeqS3RNgx7lc0oQkBXf3xZ-WiDYk6rxE0WwPuA8");
+                    messageSendBo.setDataList(dataList);
+                    
+                    List<String> userIds =new ArrayList<String>();
+                    userIds.add(userBO.getId());
+                    messageSendBo.setUserIds(userIds);
+                    msgSendV2Service.sendMsgV2(messageSendBo);
+					
 				}
 
 				// 2.申报期信息发送
@@ -179,8 +198,24 @@ public class ReportDateJob implements Job {
 
 				String vdxMsg = RemindConstant.SBQXSJMSG.replaceAll("\\{#DATA.DATE\\}", shenqqix);
 
-				msgSendService.sendMsg(user, sysMsg, "", "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList,
-						vdxMsg);
+				/*msgSendService.sendMsg(user, sysMsg, "", "eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g", dataList,
+						vdxMsg);*/
+				
+				//2018-03-08
+                MessageSendBo messageSendBo =new MessageSendBo();
+                messageSendBo.setType(MessageConstant.RAX_MESSAGE);
+                messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_DZSB);
+                messageSendBo.setBusinessId(user.getId());
+                messageSendBo.setWebMsg(sysMsg);
+                messageSendBo.setPhoneMsg(vdxMsg);
+                messageSendBo.setTemplateid("eltMyMTpahpHEqH0uV_xVw-FuMAwdDlq_kLUkDynM2g");
+                messageSendBo.setDataList(dataList);
+                
+                List<String> userIds =new ArrayList<String>();
+                userIds.add(user.getId());
+                messageSendBo.setUserIds(userIds);
+                msgSendV2Service.sendMsgV2(messageSendBo);
+				
 			}
 			return 1;
 		}

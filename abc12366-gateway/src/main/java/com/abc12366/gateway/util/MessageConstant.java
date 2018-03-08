@@ -71,11 +71,16 @@ public class MessageConstant {
     public static final String HYLB_CODE = "A_HYLB";
 
 
-    //消息类型，1：系统消息，2：帮帮消息
+    //消息类型，1：系统消息，2：帮帮消息  3.用户提醒 4.涉税消息
     public static final String SYS_MESSAGE = "1";
     public final static String BB_MESSAGE = "2";
-    //业务类型：帮帮
+    public final static String USER_MESSAGE = "3";
+    public final static String RAX_MESSAGE = "4";
+    //业务类型：帮帮、电子申报、电子税局、财税网
     public final static String BUSI_TYPE_BANGBANG = "BANGBANG-AWARD";
+    public final static String BUSI_TYPE_DZSB = "CSZJ_DZSB";
+    public final static String BUSI_TYPE_DZSJ = "CSZJ_DZSJ";
+    public final static String BUSI_TYPE_CSW = "CSWXX";
     
     //阿里云短信验证码模板
     public final static String ALIYUNTEMP_YZM="SMS_100835124";
