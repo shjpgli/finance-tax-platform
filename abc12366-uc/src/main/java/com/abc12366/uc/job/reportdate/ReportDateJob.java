@@ -167,7 +167,7 @@ public class ReportDateJob implements Job {
 					//2018-03-08
                     MessageSendBo messageSendBo =new MessageSendBo();
                     messageSendBo.setType(MessageConstant.USER_MESSAGE);
-                    messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_CSW);
+                    messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_CSWHYDQ);
                     messageSendBo.setBusinessId(userBO.getId());
                     messageSendBo.setWebMsg(sysMsg);
                     messageSendBo.setPhoneMsg(vdxMsg);

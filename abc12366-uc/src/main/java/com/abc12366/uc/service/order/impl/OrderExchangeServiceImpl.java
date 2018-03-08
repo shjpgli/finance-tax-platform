@@ -276,7 +276,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     
                     MessageSendBo messageSendBo =new MessageSendBo();
                     messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-                    messageSendBo.setBusiType(MessageConstant.SPDD);
+                    messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
                     messageSendBo.setBusinessId(order.getOrderNo());
                     messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                     messageSendBo.setWebMsg(content);
@@ -519,7 +519,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         
                                         MessageSendBo messageSendBo =new MessageSendBo();
                                         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-                                        messageSendBo.setBusiType(MessageConstant.SPDD);
+                                        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
                                         messageSendBo.setBusinessId(order.getOrderNo());
                                         messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
                                         messageSendBo.setWebMsg(content);
@@ -720,7 +720,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             
             MessageSendBo messageSendBo =new MessageSendBo();
             messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-            messageSendBo.setBusiType(MessageConstant.SPDD);
+            messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
             messageSendBo.setBusinessId(order.getOrderNo());
             messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
             messageSendBo.setWebMsg(content);
@@ -794,7 +794,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             
             MessageSendBo messageSendBo =new MessageSendBo();
             messageSendBo.setType(MessageConstant.SYS_MESSAGE);
-            messageSendBo.setBusiType(MessageConstant.SPDD);
+            messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
             messageSendBo.setBusinessId(order.getOrderNo());
             messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
             messageSendBo.setWebMsg(content);
