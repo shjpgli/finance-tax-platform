@@ -406,9 +406,9 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         Order order = orderRoMapper.selectByPrimaryKey(oe.getOrderNo());
         //判断是RMB、积分
         if(order != null){
-            if (data.getAmount() >= order.getTotalPrice()) {
+            if (data.getAmount() > order.getTotalPrice()) {
                 LOGGER.info("退款金额不能大于订单成交总金额，{}", data.getAmount());
-                throw new ServiceException(4919);
+                throw new ServiceException(7150);
             }
             if ("RMB".equals(order.getTradeMethod())) {
                 if ("ALIPAY".equals(order.getPayMethod())) {

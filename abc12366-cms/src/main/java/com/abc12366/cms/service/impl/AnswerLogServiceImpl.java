@@ -224,7 +224,7 @@ public class AnswerLogServiceImpl implements AnswerLogService {
 
     @Override
     public AnswerLogtjListBo selecttj(Map<String, Object> map) {
-        /*AnswerLogtjListBo answerLogtjListBo = new AnswerLogtjListBo();
+        AnswerLogtjListBo answerLogtjListBo = new AnswerLogtjListBo();
         //浏览统计总数
         Integer llcnt = answerLogRoMapper.selectlltjs(map);
         answerLogtjListBo.setLlcnt(llcnt);
@@ -242,8 +242,8 @@ public class AnswerLogServiceImpl implements AnswerLogService {
         map.put("accessTerminal", "MobileWeb");
         List<AnswerLogRolltjBo> mobileWeblist = answerLogRoMapper.selectlltj(map);
         answerLogtjListBo.setMobileWeblist(mobileWeblist);
-        return answerLogtjListBo;*/
-        return answerLogRoMapper.selectAnswerLogRolltjBo(map);
+        return answerLogtjListBo;
+//        return answerLogRoMapper.selectAnswerLogRolltjBo(map);
     }
 
     @Override
