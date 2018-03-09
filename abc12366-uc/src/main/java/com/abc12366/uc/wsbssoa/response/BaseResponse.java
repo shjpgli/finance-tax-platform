@@ -19,6 +19,8 @@ public class BaseResponse implements java.io.Serializable {
     private String userToken;
 
     private String yjfpdm;
+    
+    private String message;
 
     public BaseResponse() {
     }
@@ -70,5 +72,13 @@ public class BaseResponse implements java.io.Serializable {
     public void setYjfpdm(String yjfpdm) {
         this.yjfpdm = yjfpdm;
     }
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 }
