@@ -103,10 +103,6 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
 	public ResponseEntity templateSend(String temp_id, Map<String, String> dataList) {
 		Template info=templateRoMapper.selectOne(temp_id);
 		if(info==null){
-			//记录微信模板消息发送日志
-			Date now =new Date();
-			templateMapper.insertLog(new TemplateSendLog(Utils.uuid(), temp_id, dataList.get("userId"), dataList.get("openId"), info.toSendJson(dataList),"9999", "没有找到对应的微信模板消息!", now, now));
-			
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "没有找到对应的模板消息!"));
 		}else{
 			String msg=info.toSendJson(dataList);
