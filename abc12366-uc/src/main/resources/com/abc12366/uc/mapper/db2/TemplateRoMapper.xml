@@ -50,5 +50,6 @@
               and date_format(l.createdate, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
           ]]>
         </if>
+        ORDER BY l.createdate DESC
     </select>
 </mapper>
