@@ -37,6 +37,14 @@ public class Subscriptions {
 	@Length(max = 200)
 	private String remark;//备注信息
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public String getId() {
 		return id;
 	}
