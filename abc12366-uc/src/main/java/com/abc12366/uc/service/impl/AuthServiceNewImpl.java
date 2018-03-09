@@ -478,6 +478,13 @@ public class AuthServiceNewImpl implements AuthServiceNew {
 			LOGGER.warn("登录失败，参数:{}", userToken);
 			throw new ServiceException(4021);
 		}
+		
+		// 用户重要信息模糊化处理:电话号码
+		String phone = userBO.getPhone();
+		if (!StringUtils.isEmpty(phone) && phone.length() >= 8) {
+			userBO.setPhone(new StringBuilder(phone).replace(3, phone.length() - 4, "****").toString());
+		}
+		
 		map.put("token", tokens);
 		map.put("expires_in", Constant.USER_TOKEN_VALID_SECONDS);
 		map.put("user", userBO);
