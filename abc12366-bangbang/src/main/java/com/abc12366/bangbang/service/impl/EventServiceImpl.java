@@ -108,39 +108,6 @@ public class EventServiceImpl implements EventService {
             String str = restTemplateUtil.exchange(url, HttpMethod.POST,map, request);
             data = JSON.parseObject(str,EventApplyBbDataBo.class);
             
-            //2018-03-12
-            if(data != null){
-            	
-            	EventIdBo eventIdBo = saveeventrecord(request,eventApplyBbBo.getEventId(),eventApplyBbBo.getUserid());
-            	
-            	Map<String, String> dataList = new HashMap<>();
-            	dataList.put("first", "您已报名成功:");
-            	dataList.put("remark", "请于" + DateUtils.dateToStr(eventIdBo.getBegintime()) + "时间准时参加，感谢您的参与！");
-            	dataList.put("keyword1", Utils.getUserInfo().getNickname());
-            	dataList.put("keyword2",
-						StringUtils.isNotEmpty(Utils.getUserInfo().getPhone())
-								? new StringBuilder(Utils.getUserInfo().getPhone())
-										.replace(3, Utils.getUserInfo().getPhone().length() - 4, "****").toString()
-								: "");
-            	dataList.put("keyword3", "财税网活动");
-				dataList.put("keyword4", eventIdBo.getTitle());
-				dataList.put("keyword5", DateUtils.dateToStr(eventApplyBbBo.getApplytime()));
-                 
-                MessageSendBo messageSendBo = new MessageSendBo();
-     			messageSendBo.setType(MessageConstant.USER_MESSAGE);
-     			messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ACTIVES);
-     			messageSendBo.setBusinessId(eventApplyBbBo.getEventId());
-     			messageSendBo.setWebMsg("您已报名成功"+eventIdBo.getTitle()+"活动，请于"+DateUtils.dateToStr(eventIdBo.getBegintime())+"准时参加，感谢您的参与");
-     			messageSendBo.setPhoneMsg("您已报名成功"+eventIdBo.getTitle()+"活动，请于"+DateUtils.dateToStr(eventIdBo.getBegintime())+"准时参加，感谢您的参与");
-     			messageSendBo.setTemplateid("-3PFGVQGFL9vH8mTKfYr_0YdAY-6uU924WP--4ZfG8A");
-     			messageSendBo.setDataList(dataList);
-                 
-                List<String> userIds = new ArrayList<String>();
-     			userIds.add(eventApplyBbBo.getUserid());
-     			messageSendBo.setUserIds(userIds);
-
-     			messageSendUtil.sendMsgBySubscriptions(messageSendBo, request);
-            }
             
         } catch (Exception e) {
             throw new ServiceException(4821);
