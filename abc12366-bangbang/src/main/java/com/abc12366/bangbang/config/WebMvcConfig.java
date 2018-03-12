@@ -184,6 +184,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/cheats/selectCheats/**")
                         //更新秘籍浏览量
                 .excludePathPatterns("/cheats/updateBrowseNum/**")
+                        //查询秘籍和话题总数
+                .excludePathPatterns("/cheats/selectCheatsAndQuestionCount")
                         //秘籍评论列表查询
                 .excludePathPatterns("/cheatsComment/selectList")
                         //帮邦用户列表查询
