@@ -23,4 +23,3 @@
 * 财税资讯类型(/contentType)：Cms_ContentTypeList
 * 财税网首页 最新问题、知识(/knowledgeBase/nearestList)：Bangb_NearestLists
 * 问题受理 统计查询(缓存)(/accepted/statiss)：Bangb_Accepted
-* App登录(/app/login)：应用名称作为key，如abc12366-uc

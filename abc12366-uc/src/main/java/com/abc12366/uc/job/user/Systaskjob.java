@@ -47,22 +47,27 @@ public class Systaskjob implements Job {
 
 		if (tokens != null && tokens.size() > 0) {
              for(Token token:tokens){
-            	 String userId = token.getUserId();
+            	 try {
+					 String userId = token.getUserId();
 
-                 LOGGER.info("如果用户当天定时任务没有完成，就在登录的时候生成:{}", userId);
-                 todoTaskService.generateAllTodoTaskList(userId);
-                 
-                 LOGGER.info("登录任务日志:{}", userId);
-                 boolean loginTask = todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
+					 LOGGER.info("如果用户当天定时任务没有完成，就在登录的时候生成:{}", userId);
+					 todoTaskService.generateAllTodoTaskList(userId);
+					 
+					 LOGGER.info("登录任务日志:{}", userId);
+					 boolean loginTask = todoTaskService.doTaskWithouComputeAward(userId, TaskConstant.SYS_TASK_LOGIN_CODE);
 
-                 LOGGER.info("用户完成登录任务结果：{}",loginTask);
-                 if (loginTask) {
-                     LOGGER.info("计算用户登录经验值变化:{}", userId);
-                     authService.computeExp(userId);
-                 }
+					 LOGGER.info("用户完成登录任务结果：{}",loginTask);
+					 if (loginTask) {
+					     LOGGER.info("计算用户登录经验值变化:{}", userId);
+					     authService.computeExp(userId);
+					 }
 
-                 LOGGER.info("记用户登录日志:{}", userId);
-                 authService.insertLoginLog(userId);
+					 LOGGER.info("记用户登录日志:{}", userId);
+					 authService.insertLoginLog(userId);
+				} catch (Exception e) {
+					LOGGER.info("生成用户日志异常,用户ID：{}", token.getUserId());
+					continue;
+				}
              }
 		}
 		

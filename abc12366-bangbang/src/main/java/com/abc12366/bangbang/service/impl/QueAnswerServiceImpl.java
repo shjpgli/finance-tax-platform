@@ -4,15 +4,19 @@ import com.abc12366.bangbang.mapper.db1.QuestionAnswerMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
 import com.abc12366.bangbang.mapper.db2.*;
+import com.abc12366.bangbang.model.MessageSendBo;
 import com.abc12366.bangbang.model.question.Question;
 import com.abc12366.bangbang.model.question.QuestionAnswer;
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
 import com.abc12366.bangbang.model.question.bo.QuestionAnswerBo;
 import com.abc12366.bangbang.model.question.bo.QuestionBo;
+import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.bangbang.service.QueAnswerService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.RestTemplateUtil;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
@@ -64,6 +68,9 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 
     @Autowired
     private RestTemplateUtil restTemplateUtil;
+    
+    @Autowired
+	private MessageSendUtil messageSendUtil;
 
     @Override
     public List<QuestionAnswerBo> selectList(Map<String,Object> map) {
@@ -204,7 +211,23 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             String userId = Utils.getUserId();
             String sysTaskId = TaskConstant.SYS_TASK_MRHDWT_CODE;
             restTemplateUtil.send(url, HttpMethod.POST, request, userId, sysTaskId);
+            
+            //问题回复新增消息
+            QuestionBo questionBo = questionRoMapper.selectQuestion(answer.getQuestionId());
+            
+            MessageSendBo messageSendBo = new MessageSendBo();
+			messageSendBo.setType(MessageConstant.USER_MESSAGE);
+			messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_BANGBANG);
+			messageSendBo.setBusinessId(questionBo.getId());
+			messageSendBo.setWebMsg("您问题的<"+questionBo.getTitle()+">有新的回复，请及时查看回复详情；");
+			messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.qd.sns.url") + "/topic/xiangqing/"+questionBo.getId()+"\">"
+                    + MessageConstant.VIEW_DETAILS + "</a>");
+            
+            List<String> userIds = new ArrayList<String>();
+			userIds.add(questionBo.getUserId());
+			messageSendBo.setUserIds(userIds);
 
+			messageSendUtil.sendMsgBySubscriptions(messageSendBo, request);
 
         } catch (Exception e) {
             LOGGER.error("新增问题回复信息异常：{}", e);
