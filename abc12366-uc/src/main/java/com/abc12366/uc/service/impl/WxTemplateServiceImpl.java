@@ -14,7 +14,10 @@ import com.abc12366.uc.service.IWxTemplateService;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxConnectFactory;
 import com.abc12366.uc.util.wx.WxGzhClient;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,24 +104,42 @@ public class WxTemplateServiceImpl implements IWxTemplateService {
 
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity templateSend(String temp_id, Map<String, String> dataList) {
+		
+		LOGGER.info("接收到微信模板消息信息:"+JSONObject.toJSONString(dataList));
+		
 		Template info=templateRoMapper.selectOne(temp_id);
 		if(info==null){
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "没有找到对应的模板消息!"));
 		}else{
-			String msg=info.toSendJson(dataList);
-			Map<String, String> headparamters = new HashMap<String, String>();
-			headparamters.put("access_token", WxGzhClient.getInstanceToken());
-			BaseWxRespon wxRespon=WxConnectFactory.post(WechatUrl.TEMPLATEMSG_SEND, headparamters,msg, BaseWxRespon.class);
-			
-			//记录微信模板消息发送日志
-			Date now =new Date();
-			templateMapper.insertLog(new TemplateSendLog(Utils.uuid(), temp_id, dataList.get("userId"), dataList.get("openId"), msg, wxRespon.getErrcode().toString(), wxRespon.getErrmsg(), now, now));
-			
-			if(wxRespon.getErrcode()!=0){
-				return ResponseEntity.ok(Utils.bodyStatus(9999, wxRespon.getErrmsg()));
-			}else{
-				return ResponseEntity.ok(Utils.kv());
+			boolean canFs = false;
+			//应要求添加校验
+			String[] keys=StringUtils.substringsBetween(info.getContent(),"{{", ".DATA}}");
+			for(String key:keys){
+				String s = dataList.get(key);
+				if((!"userId".equals(key) || !"openId".equals(key))
+						&& StringUtils.isNotEmpty(s)){
+					canFs = true;
+				}
 			}
+			if(canFs){
+				String msg=info.toSendJson(dataList);
+				Map<String, String> headparamters = new HashMap<String, String>();
+				headparamters.put("access_token", WxGzhClient.getInstanceToken());
+				BaseWxRespon wxRespon=WxConnectFactory.post(WechatUrl.TEMPLATEMSG_SEND, headparamters,msg, BaseWxRespon.class);
+				
+				//记录微信模板消息发送日志
+				Date now =new Date();
+				templateMapper.insertLog(new TemplateSendLog(Utils.uuid(), temp_id, dataList.get("userId"), dataList.get("openId"), msg, wxRespon.getErrcode().toString(), wxRespon.getErrmsg(), now, now));
+				
+				if(wxRespon.getErrcode()!=0){
+					return ResponseEntity.ok(Utils.bodyStatus(9999, wxRespon.getErrmsg()));
+				}else{
+					return ResponseEntity.ok(Utils.kv());
+				}
+			}else{
+				return ResponseEntity.ok(Utils.bodyStatus(9999, "内容为空，拒绝发送!"));
+			}
+			
 		}
 		
 	}
