@@ -45,6 +45,8 @@ public class QuestionryBo implements Serializable {
     /**简短回答内容**varchar(300)**/
     private String shortAnswer;
 
+    /**浏览数**/
+    private String browseNum;
 
 
     public String getId() {
@@ -133,5 +135,13 @@ public class QuestionryBo implements Serializable {
 
     public void setAnswerNum(Integer answerNum) {
         this.answerNum = answerNum;
+    }
+
+    public String getBrowseNum() {
+        return browseNum;
+    }
+
+    public void setBrowseNum(String browseNum) {
+        this.browseNum = browseNum;
     }
 }
