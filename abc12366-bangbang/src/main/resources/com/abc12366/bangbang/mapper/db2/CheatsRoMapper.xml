@@ -83,7 +83,11 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND c.classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY c.createTime DESC
+        ORDER BY
+        <if test="isImage == true">
+            c.cheatsImage desc,
+        </if>
+        c.createTime DESC
     </select>
 
     <!-- 查询（推荐阅读） -->
@@ -152,6 +156,15 @@
     <select id="selectfactionId" resultType="java.lang.String" parameterType="java.util.Map">
         SELECT factionId FROM bb_question_faction_classify where factionId in(SELECT factionId FROM bb_question_faction_member where userId = #{userId})
         and classifyId = #{classifyCode} limit 1
+    </select>
+
+    <select id="selectCheatsAndQuestionCount" resultType="java.lang.Integer">
+        select sum(a) from
+        (
+        select COUNT(1) as a from bb_question
+        union all
+        select COUNT(1) as a from bb_cheats
+        ) qc
     </select>
 
 

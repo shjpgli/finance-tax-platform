@@ -71,4 +71,6 @@ public interface CheatsRoMapper {
      **/
     String selectfactionId(Map<String, Object> map);
 
+    int selectCheatsAndQuestionCount();
+
 }

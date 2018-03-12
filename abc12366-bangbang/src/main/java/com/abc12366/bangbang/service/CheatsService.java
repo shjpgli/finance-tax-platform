@@ -38,4 +38,9 @@ public interface CheatsService {
 
     void recommend(String id, Boolean isRecommend);
 
+    /**
+     * 查询秘籍和话题总数
+     */
+    int selectCheatsAndQuestionCount();
+
 }

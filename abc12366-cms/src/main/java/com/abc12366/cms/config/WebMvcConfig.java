@@ -104,7 +104,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                         //获取推荐课程
                 .excludePathPatterns("/content/selectRecommend", "/content/selectRecommendForqt")
                         //帮帮活动查询接口
-                .excludePathPatterns("/bangbang/event/**")
+                .excludePathPatterns("/bangbang/event/saveeventrecord","/bangbang/event/singleevent","/bangbang/event/singleeventlist","/bangbang/event/details/{eventid}")
                 .excludePathPatterns("/bangbang/event/details/**")
                         // 财税专家客户端广告页、通知公告
                 .excludePathPatterns("/adpages", "adpages/**", "/notices", "/notices/**", "/noticesForqt")

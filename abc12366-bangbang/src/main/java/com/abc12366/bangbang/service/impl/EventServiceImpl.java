@@ -1,13 +1,19 @@
 package com.abc12366.bangbang.service.impl;
 
 import com.abc12366.bangbang.mapper.db1.EventMapper;
+import com.abc12366.bangbang.model.MessageSendBo;
 import com.abc12366.bangbang.model.event.*;
 import com.abc12366.bangbang.service.EventService;
+import com.abc12366.bangbang.service.MessageSendUtil;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.RestTemplateUtil;
+import com.abc12366.gateway.util.Utils;
 import com.alibaba.fastjson.JSON;
 import org.apache.commons.beanutils.BeanMap;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +21,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +41,9 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private RestTemplateUtil restTemplateUtil;
+    
+    @Autowired
+	private MessageSendUtil messageSendUtil;
 
     @Override
     public SingleEventBo singleEvent(HttpServletRequest request, String category) {
@@ -94,6 +107,8 @@ public class EventServiceImpl implements EventService {
             String url = SpringCtxHolder.getProperty("abc12366.api.url") + "/cms/bangbang/event/saveEventApply";
             String str = restTemplateUtil.exchange(url, HttpMethod.POST,map, request);
             data = JSON.parseObject(str,EventApplyBbDataBo.class);
+            
+            
         } catch (Exception e) {
             throw new ServiceException(4821);
         }

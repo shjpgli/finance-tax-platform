@@ -134,51 +134,101 @@
     </select>
     
     <select id="selectList" resultType="com.abc12366.uc.model.bo.UserListBO" parameterType="java.util.Map">
-        SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname, amount
-        FROM uc_user
-        <where>
-            <if test="status!=null">
-                status=#{status}
-            </if>
-            <if test="vipLevel != null and vipLevel != ''">
-                and vipLevel=#{vipLevel}
-            </if>
-            <if test="exp != null and exp != '' and expOper != null and expOper != ''">
-                and exp ${expOper} #{exp}
-            </if>
-            <if test="points != null and points != '' and pointsOper != null and pointsOper != ''">
-                and points ${pointsOper} #{points}
-            </if>
-            <if test="startDate !=null and startDate != ''">
-                and createTime >= #{startDate}
-            </if>
-            <if test="endDate !=null and endDate != ''">
-                and createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
-            </if>
-            <if test="tagId != null and tagId.size > 0">
-                and EXISTS (SELECT DISTINCT a.subjectId FROM
+        <choose>
+            <when test="tagId != null and tagId.size > 0">
+                SELECT u.id, u.username, u.phone, u.nickname, u.status, u.createTime, u.lastUpdate, u.points, u.exp, u.vipLevel, u.wxnickname, u.amount
+                FROM uc_user u RIGHT JOIN (SELECT DISTINCT a.subjectId FROM
                 <foreach item="item" collection="tagId" separator="union all" open="(" close=")" index="">
                     SELECT subjectId FROM uc_subject_tag WHERE tagId=#{item}
                 </foreach>
-                a WHERE a.subjectId = id group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount})
-            </if>
-            <if test="realName != null and realName != ''">
-                and id in (SELECT userId FROM abc12366_uc.uc_user_extend WHERE realName = #{realName})
-            </if>
-            <if test="username != null and username != ''">
-                and username=#{username}
-            </if>
-            <if test="phone != null and phone != ''">
-                and phone=#{phone}
-            </if>
-            <if test="nickname != null and nickname != ''">
-                and nickname=#{nickname}
-            </if>
-            <if test="id != null and id != ''">
-                and id=#{id}
-            </if>
-        </where>
-        ORDER BY createTime DESC
+                a group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount}) b ON b.subjectId = u.id
+                <where>
+                    u.id is not null
+                    <if test="status!=null">
+                        and u.status=#{status}
+                    </if>
+                    <if test="vipLevel != null and vipLevel != ''">
+                        and u.vipLevel=#{vipLevel}
+                    </if>
+                    <if test="exp != null and exp != '' and expOper != null and expOper != ''">
+                        and u.exp ${expOper} #{exp}
+                    </if>
+                    <if test="points != null and points != '' and pointsOper != null and pointsOper != ''">
+                        and u.points ${pointsOper} #{points}
+                    </if>
+                    <if test="startDate !=null and startDate != ''">
+                        and u.createTime >= #{startDate}
+                    </if>
+                    <if test="endDate !=null and endDate != ''">
+                        and u.createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
+                    </if>
+                    <if test="realName != null and realName != ''">
+                        and u.id in (SELECT userId FROM abc12366_uc.uc_user_extend WHERE realName = #{realName})
+                    </if>
+                    <if test="username != null and username != ''">
+                        and u.username=#{username}
+                    </if>
+                    <if test="phone != null and phone != ''">
+                        and u.phone=#{phone}
+                    </if>
+                    <if test="nickname != null and nickname != ''">
+                        and u.nickname=#{nickname}
+                    </if>
+                    <if test="id != null and id != ''">
+                        and u.id=#{id}
+                    </if>
+                </where>
+                ORDER BY createTime DESC
+            </when>
+            <when test="tagId != null and tagId.size == 0">
+                SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname, amount
+                FROM uc_user
+                <where>
+                    <if test="status!=null">
+                        status=#{status}
+                    </if>
+                    <if test="vipLevel != null and vipLevel != ''">
+                        and vipLevel=#{vipLevel}
+                    </if>
+                    <if test="exp != null and exp != '' and expOper != null and expOper != ''">
+                        and exp ${expOper} #{exp}
+                    </if>
+                    <if test="points != null and points != '' and pointsOper != null and pointsOper != ''">
+                        and points ${pointsOper} #{points}
+                    </if>
+                    <if test="startDate !=null and startDate != ''">
+                        and createTime >= #{startDate}
+                    </if>
+                    <if test="endDate !=null and endDate != ''">
+                        and createTime <![CDATA[<=]]> date_add(#{endDate}, INTERVAL 1 day)
+                    </if>
+                    <!--<if test="tagId != null and tagId.size > 0">
+                        and EXISTS (SELECT DISTINCT a.subjectId FROM
+                        <foreach item="item" collection="tagId" separator="union all" open="(" close=")" index="">
+                            SELECT subjectId FROM uc_subject_tag WHERE tagId=#{item}
+                        </foreach>
+                        a WHERE a.subjectId = id group by a.subjectId HAVING COUNT(subjectId) >= #{tagIdCount})
+                    </if>-->
+                    <if test="realName != null and realName != ''">
+                        and id in (SELECT userId FROM abc12366_uc.uc_user_extend WHERE realName = #{realName})
+                    </if>
+                    <if test="username != null and username != ''">
+                        and username=#{username}
+                    </if>
+                    <if test="phone != null and phone != ''">
+                        and phone=#{phone}
+                    </if>
+                    <if test="nickname != null and nickname != ''">
+                        and nickname=#{nickname}
+                    </if>
+                    <if test="id != null and id != ''">
+                        and id=#{id}
+                    </if>
+                </where>
+                ORDER BY createTime DESC
+            </when>
+        </choose>
+
     </select>
     
     <select id="selectOne" resultType="com.abc12366.uc.model.User" parameterType="java.lang.String">

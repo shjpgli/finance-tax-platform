@@ -75,7 +75,7 @@ public class EventBangBangController {
     @PostMapping(path = "/saveEventApply")
     public ResponseEntity saveeventrecord( HttpServletRequest request,@RequestBody EventApplyBbBo eventApplyBbBo) {
         LOGGER.info("{}", eventApplyBbBo);
-        eventApplyBbBo =eventService.saveEventApply(eventApplyBbBo);
+        eventApplyBbBo =eventService.saveEventApply(eventApplyBbBo,request);
         return ResponseEntity.ok(Utils.kv("data", eventApplyBbBo));
     }
 
