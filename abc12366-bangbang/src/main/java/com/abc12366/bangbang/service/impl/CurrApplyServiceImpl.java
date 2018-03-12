@@ -138,9 +138,9 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 					Map<String, String> map = new HashMap<>();
 					map.put("first", "您已报名成功" + curriculumTitle + "课程培训:");
 					map.put("remark", "请于" + time + "时间登录系统准时参加，感谢您的参与！");
-					map.put("keyword1", Utils.getUserInfo().getNickname());
+					map.put("keyword1", Utils.getUserInfo() !=null?Utils.getUserInfo().getNickname():"");
 					map.put("keyword2",
-							StringUtils.isNotEmpty(Utils.getUserInfo().getPhone())
+							(Utils.getUserInfo() !=null && StringUtils.isNotEmpty(Utils.getUserInfo().getPhone()))
 									? new StringBuilder(Utils.getUserInfo().getPhone())
 											.replace(3, Utils.getUserInfo().getPhone().length() - 4, "****").toString()
 									: "");

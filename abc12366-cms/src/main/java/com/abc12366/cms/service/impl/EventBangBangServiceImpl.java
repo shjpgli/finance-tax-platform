@@ -115,9 +115,9 @@ public class EventBangBangServiceImpl implements EventBangBangService{
 	    	Map<String, String> dataList = new HashMap<>();
 	    	dataList.put("first", "您已报名成功:");
 	    	dataList.put("remark", "请于" + DateUtils.dateToStr(eventIdBo.getBegintime()) + "时间准时参加，感谢您的参与！");
-	    	dataList.put("keyword1", Utils.getUserInfo().getNickname());
+	    	dataList.put("keyword1", Utils.getUserInfo() !=null?Utils.getUserInfo().getNickname():"");
 	    	dataList.put("keyword2",
-					StringUtils.isNotEmpty(Utils.getUserInfo().getPhone())
+	    			(Utils.getUserInfo() !=null && StringUtils.isNotEmpty(Utils.getUserInfo().getPhone()))
 							? new StringBuilder(Utils.getUserInfo().getPhone())
 									.replace(3, Utils.getUserInfo().getPhone().length() - 4, "****").toString()
 							: "");
