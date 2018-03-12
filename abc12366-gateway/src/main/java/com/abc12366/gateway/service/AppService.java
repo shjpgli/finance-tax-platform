@@ -31,14 +31,6 @@ public interface AppService {
     String login(AppBO appBO) throws Exception;
 
     /**
-     * App验证
-     *
-     * @param accessToken Access-Token
-     * @return true:已验证,false:未验证
-     */
-    boolean isAuthentication(String accessToken);
-
-    /**
      * App授权
      *
      * @param request HttpServletRequest
