@@ -215,13 +215,21 @@ public class QueAnswerServiceImpl implements QueAnswerService {
             //问题回复新增消息
             QuestionBo questionBo = questionRoMapper.selectQuestion(answer.getQuestionId());
             
+            Map<String, String> dataList = new HashMap<String, String>();
+            dataList.put("first", "您的问题有一条新的回复：");
+            dataList.put("remark", "请及时查看回复详情");
+            dataList.put("keyword1", questionBo.getTitle());
+            dataList.put("keyword2", DateUtils.dateToString(new Date()));
+            
             MessageSendBo messageSendBo = new MessageSendBo();
 			messageSendBo.setType(MessageConstant.USER_MESSAGE);
 			messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_BANGBANG);
 			messageSendBo.setBusinessId(questionBo.getId());
-			messageSendBo.setWebMsg("您问题的<"+questionBo.getTitle()+">有新的回复，请及时查看回复详情；");
+			messageSendBo.setWebMsg("您的问题<"+questionBo.getTitle()+">有新的回复，请及时查看回复详情；");
 			messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.qd.sns.url") + "/topic/xiangqing/"+questionBo.getId()+"\">"
                     + MessageConstant.VIEW_DETAILS + "</a>");
+			messageSendBo.setTemplateid("my0vhSJM36elRyqaaPhvxbHSVhMosVL13fgcSztHUmk");
+			messageSendBo.setDataList(dataList);
             
             List<String> userIds = new ArrayList<String>();
 			userIds.add(questionBo.getUserId());
