@@ -120,7 +120,7 @@ public class SbxxRemindJob implements StatefulJob {
                             messageSendBo.setWebMsg(sysMsg);
                             messageSendBo.setPhoneMsg(dxmsg);
                             messageSendBo.setTemplateid("lKA0THleGkAALhuYmzg3aX7lyFkfo8YBVSLk7QjWpQ4");
-                            messageSendBo.setDataList(map);
+                            messageSendBo.setDataList(dataList);
                             
                             List<String> userIds =new ArrayList<String>();
                             for (int j = 0; j < users.size(); j++) {
