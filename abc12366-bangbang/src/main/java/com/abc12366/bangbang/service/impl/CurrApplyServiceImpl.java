@@ -94,7 +94,7 @@ public class CurrApplyServiceImpl implements CurrApplyService {
 
 		int peopleLimit = curriculum.getPeopleLimit();
 
-		if (cnt >= peopleLimit) {
+		if (cnt >= peopleLimit && cnt > 0) {
 			// 报名人数已超过本次报名人数限制
 			throw new ServiceException(4376);
 		}
