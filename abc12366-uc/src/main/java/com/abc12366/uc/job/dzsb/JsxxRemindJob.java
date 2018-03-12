@@ -119,7 +119,7 @@ public class JsxxRemindJob implements StatefulJob {
                             messageSendBo.setWebMsg(sysMsg);
                             messageSendBo.setPhoneMsg(dxmsg);
                             messageSendBo.setTemplateid("aa2k1U-NBYQ6zdaubKhEdrZYPj2VS-j0PZfFDXPxKUE");
-                            messageSendBo.setDataList(map);
+                            messageSendBo.setDataList(dataList);
                             
                             List<String> userIds =new ArrayList<String>();
                             for (int j = 0; j < users.size(); j++) {

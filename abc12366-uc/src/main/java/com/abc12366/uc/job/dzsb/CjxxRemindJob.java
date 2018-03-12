@@ -141,7 +141,7 @@ public class CjxxRemindJob implements StatefulJob {
                                         messageSendBo.setWebMsg(sysMsg);
                                         messageSendBo.setPhoneMsg(dxmsg);
                                         messageSendBo.setTemplateid("ANmj1C1fjZ1ny4S2fhX76E7S7ttG6kYHf5Q0gNtwM5E");
-                                        messageSendBo.setDataList(map);
+                                        messageSendBo.setDataList(dataList);
                                         
                                         List<String> userIds =new ArrayList<String>();
                                         
