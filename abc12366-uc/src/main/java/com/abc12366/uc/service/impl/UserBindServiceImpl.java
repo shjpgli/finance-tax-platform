@@ -3,9 +3,11 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.DzsbServiceException;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.model.bo.UCUserBO;
 import com.abc12366.gateway.util.*;
 import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
+import com.abc12366.uc.model.NsrsbhPasswordLog;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
@@ -24,6 +26,8 @@ import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.MD5;
 import com.abc12366.uc.wsbssoa.utils.RSAUtil;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+
 import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
@@ -530,6 +534,19 @@ public class UserBindServiceImpl implements UserBindService {
         Map respMap = client.process(map);
         LOGGER.info("{}", respMap);
         analyzeXmlTY12(respMap, data.getNsrsbh());
+        
+        
+        //2018-03-12
+        NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+        passwordLog.setCreateTime(new Date());
+        passwordLog.setId(Utils.uuid());
+        passwordLog.setUserId(Utils.getUserId());
+        passwordLog.setNsrsbh(data.getNsrsbh());
+        passwordLog.setFrmc(data.getFrmc());
+        passwordLog.setFrzjh(data.getFrzjh());
+        passwordLog.setIp(Utils.getAddr(request));
+        
+        userBindMapper.insertRestPwdLog(passwordLog);
     }
 
     private void analyzeXmlTY12(Map resMap, String nsrsbh) throws ValidationException {
@@ -560,7 +577,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public void updatePassword(UpdatePwd data) throws ValidationException {
+    public void updatePassword(UpdatePwd data, HttpServletRequest request) throws ValidationException {
         Map<String, String> map = new HashMap<>(16);
         map.put("serviceid", "TY03");
         map.put("NSRSBH", data.getNsrsbh());
@@ -569,6 +586,18 @@ public class UserBindServiceImpl implements UserBindService {
         Map respMap = client.process(map);
         LOGGER.info("{}", respMap);
         analyzeXmlTY03(respMap, data.getNsrsbh());
+        
+        //2018-03-12
+        NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+        passwordLog.setCreateTime(new Date());
+        passwordLog.setId(Utils.uuid());
+        passwordLog.setUserId(Utils.getUserId());
+        passwordLog.setNsrsbh(data.getNsrsbh());
+        passwordLog.setFrmc("");
+        passwordLog.setFrzjh("");
+        passwordLog.setIp(Utils.getAddr(request));
+        
+        userBindMapper.insertRestPwdLog(passwordLog);
     }
 
     public TY21Xml2Object analyzeXmlTY21(Map resMap, String nsrsbh) throws ValidationException {
@@ -894,4 +923,12 @@ public class UserBindServiceImpl implements UserBindService {
     public UserHnds hndsDetail(String id) {
         return userBindMapper.userHndsSelectById(id);
     }
+
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public List<NsrsbhPasswordLog> restPwdLogList(Map map, int page, int size) {
+		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+		return userBindMapper.restPwdLogList(map);
+	}
 }
