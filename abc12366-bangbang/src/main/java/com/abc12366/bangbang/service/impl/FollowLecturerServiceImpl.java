@@ -38,13 +38,13 @@ public class FollowLecturerServiceImpl implements FollowLecturerService {
 
     @Override
     public FollowLecturerBO insert(FollowLecturerBO followLecturerBO) {
-        FollowLecturer followLecturer = new FollowLecturer();
         Map<String,Object> map = new HashMap<>();
         map.put("userId",followLecturerBO.getUserId());
         map.put("lecturerId", followLecturerBO.getLecturerId());
-        FollowLecturer data = followLecturerRoMapper.selectFollowLecturer(map);
+        FollowLecturer followLecturer = followLecturerRoMapper.selectFollowLecturer(map);
         //查找是否有关注，是：修改，否：新增
-        if(data == null){
+        if(followLecturer == null){
+            followLecturer = new FollowLecturer();
             followLecturerBO.setId(Utils.uuid());
             Date date = new Date();
             followLecturerBO.setCreateTime(date);
@@ -57,14 +57,14 @@ public class FollowLecturerServiceImpl implements FollowLecturerService {
                 throw new ServiceException(4101);
             }
         }else{
-            followLecturerBO.setLastUpdate(new Date());
-            BeanUtils.copyProperties(followLecturerBO,followLecturer);
+            followLecturer.setLastUpdate(new Date());
             int count = followLecturerMapper.update(followLecturer);
             if(count != 1){
                 LOGGER.info("修改失败{}"+count);
                 throw new ServiceException(4102);
             }
         }
+        BeanUtils.copyProperties(followLecturer,followLecturerBO);
         return followLecturerBO;
     }
 
@@ -88,7 +88,7 @@ public class FollowLecturerServiceImpl implements FollowLecturerService {
         FollowLecturer followLecturer = new FollowLecturer();
         Map<String,Object> map = new HashMap<>();
         map.put("userId",followLecturerBO.getUserId());
-        map.put("lecturerId",followLecturerBO.getLecturerId());
+        map.put("lecturerId", followLecturerBO.getLecturerId());
         FollowLecturer data = followLecturerRoMapper.selectFollowLecturer(map);
         //查找是否有关注，是：修改，否：新增
         if(data == null){
