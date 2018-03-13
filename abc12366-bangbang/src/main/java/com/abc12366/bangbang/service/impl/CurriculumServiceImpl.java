@@ -620,7 +620,11 @@ public class CurriculumServiceImpl implements CurriculumService {
                 curriculum.setIssueTime(null);
             }
         try {
-            curriculumMapper.updateStatus(curriculum);
+            int num = curriculumMapper.updateStatus(curriculum);
+            if(num ==1 && "1".equals(status)){
+            	Curriculum curriculum1 = curriculumRoMapper.selectByPrimaryKey(curriculumId);
+            	String teacheId = curriculum1.getLecturerId();
+            }
         } catch (Exception e) {
             LOGGER.error("更新课程信息异常：{}", e);
             throw new ServiceException(4323);
