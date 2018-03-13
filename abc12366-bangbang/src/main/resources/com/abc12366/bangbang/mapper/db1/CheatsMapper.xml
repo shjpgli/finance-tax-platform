@@ -257,7 +257,7 @@
 
 	<!-- 话题推荐 -->
 	<update id="recommend">
-		UPDATE bb_cheats SET isRecommend = #{isRecommend},recommendTime = now() WHERE id = #{id}
+		UPDATE bb_cheats SET isRecommend = #{isRecommend},cheatsImage=#{cheatsImage},recommendTime = now() WHERE id = #{id}
 	</update>
 
 
