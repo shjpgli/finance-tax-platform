@@ -4,8 +4,6 @@ import com.abc12366.bangbang.mapper.db1.CheatsMapper;
 import com.abc12366.bangbang.mapper.db1.CheatsTagMapper;
 import com.abc12366.bangbang.mapper.db1.QuestionSysBlockMapper;
 import com.abc12366.bangbang.mapper.db2.*;
-import com.abc12366.bangbang.model.KnowledgeCategory;
-import com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo;
 import com.abc12366.bangbang.model.question.Cheats;
 import com.abc12366.bangbang.model.question.CheatsTag;
 import com.abc12366.bangbang.model.question.QuestionSysBlock;
@@ -16,17 +14,12 @@ import com.abc12366.bangbang.service.CheatsService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.RedisConstant;
-import com.abc12366.gateway.util.Utils;
-import com.alibaba.fastjson.JSONArray;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -425,8 +418,8 @@ public class CheatsServiceImpl implements CheatsService {
     }
 
     @Override
-    public void recommend(String id, Boolean isRecommend) {
-        cheatsMapper.recommend(id, isRecommend);
+    public void recommend(String id, Boolean isRecommend, CheatsBo cheatsBo) {
+        cheatsMapper.recommend(id, isRecommend,cheatsBo.getCheatsImage());
     }
 
     @Override

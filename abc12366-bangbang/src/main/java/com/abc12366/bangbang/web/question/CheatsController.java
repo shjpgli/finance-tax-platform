@@ -294,8 +294,8 @@ public class CheatsController {
     }
 
     @PutMapping(path = "/recommend/{id}/{isRecommend}")
-    public ResponseEntity recommend(@PathVariable String id, @PathVariable Boolean isRecommend) {
-        cheatsService.recommend(id, isRecommend);
+    public ResponseEntity recommend(@PathVariable String id, @PathVariable Boolean isRecommend,@Valid @RequestBody CheatsBo cheatsBo) {
+        cheatsService.recommend(id, isRecommend,cheatsBo);
         return ResponseEntity.ok(Utils.kv());
     }
 
