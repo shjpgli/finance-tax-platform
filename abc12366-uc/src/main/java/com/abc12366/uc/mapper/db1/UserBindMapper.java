@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
+import com.abc12366.uc.model.NsrsbhPasswordLog;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
@@ -78,4 +79,8 @@ public interface UserBindMapper {
     List<String> selectListByDate(Date date);
 
     int deleteDzsb(String id);
+
+	void insertRestPwdLog(NsrsbhPasswordLog passwordLog);
+
+	List<NsrsbhPasswordLog> restPwdLogList(Map map);
 }

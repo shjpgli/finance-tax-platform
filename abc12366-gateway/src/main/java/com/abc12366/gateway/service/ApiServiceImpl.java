@@ -103,11 +103,11 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public List<ApiBO> selectBySettingList(String appId) {
         List<ApiBO> boList = apiRoMapper.selectBySettingList(appId);
-        if (boList != null && boList.size() != 0) {
+       /* if (boList != null && boList.size() != 0) {
             return boList;
         } else {
             boList = apiRoMapper.selectList(new Api());
-        }
+        }*/
         return boList;
     }
 }

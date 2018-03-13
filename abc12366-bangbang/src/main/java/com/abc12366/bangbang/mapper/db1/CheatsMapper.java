@@ -63,4 +63,6 @@ public interface CheatsMapper{
 	 * 话题推荐
 	 **/
 	void recommend(@Param("id")String id, @Param("isRecommend")Boolean isRecommend);
+
+
 }

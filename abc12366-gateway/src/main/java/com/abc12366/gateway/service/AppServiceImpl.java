@@ -10,23 +10,17 @@ import com.abc12366.gateway.model.bo.AppBO;
 import com.abc12366.gateway.model.bo.AppSettingBO;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
-import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -49,12 +43,6 @@ public class AppServiceImpl implements AppService {
 
     @Autowired
     private AppSettingRoMapper appSettingRoMapper;
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Resource(name = "redisTemplate")
-    private ValueOperations<String, String> valueOperations;
 
     @Override
     public AppBO register(AppBO bo) throws Exception {
@@ -88,12 +76,7 @@ public class AppServiceImpl implements AppService {
         App app = new App();
         app.setName(bo.getName());
         app.setStatus(true);
-        if (redisTemplate.hasKey(bo.getName())) {
-            app = JSON.parseObject(valueOperations.get(bo.getName()), App.class);
-        } else {
-            app = appRoMapper.selectByName(bo.getName());
-            valueOperations.set(app.getName(), JSON.toJSONString(app), RedisConstant.HOUR_1, TimeUnit.HOURS);
-        }
+        app = appRoMapper.selectByName(bo.getName());
         if (app == null) {
             LOGGER.warn("APP用户名不存在：{}", bo.getName());
             throw new ServiceException(4094);
@@ -112,26 +95,8 @@ public class AppServiceImpl implements AppService {
             app.setLastResetTokenTime(DateUtils.getLongToDate(lastResetTokenTime));
             app.setLastUpdate(new Date());
             appMapper.update(app);
-            if (redisTemplate.hasKey(app.getName())) {
-                redisTemplate.delete(app.getName());
-            }
         }
         return app.getAccessToken();
-    }
-
-    @Override
-    public boolean isAuthentication(String accessToken) {
-        LOGGER.info("{}", accessToken);
-        App app = new App();
-        app.setAccessToken(accessToken);
-        app.setStatus(true);
-        app = appMapper.selectOne(app);
-        //判断app是否正常
-        if (app == null) {
-            LOGGER.warn("APP不存在或APP未启用, accessToken: {}", accessToken);
-            throw new ServiceException(4035);
-        }
-        return true;
     }
 
     @Override
@@ -262,9 +227,6 @@ public class AppServiceImpl implements AppService {
         if (update != 1) {
             LOGGER.warn("修改异常：{}", app);
             throw new ServiceException(4102);
-        }
-        if (!StringUtils.isEmpty(app.getName()) && redisTemplate.hasKey(app.getName())) {
-            redisTemplate.delete(app.getName());
         }
         return appBO;
     }

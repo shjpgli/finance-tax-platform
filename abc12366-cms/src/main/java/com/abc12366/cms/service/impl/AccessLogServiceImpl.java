@@ -46,7 +46,7 @@ public class AccessLogServiceImpl implements AccessLogService {
 
     @Override
     public AccessLogtjListBo selecttj(Map<String, Object> map) {
-        /*AccessLogtjListBo accessLogtjListBo = new AccessLogtjListBo();
+        AccessLogtjListBo accessLogtjListBo = new AccessLogtjListBo();
         //浏览统计总数
         Integer llcnt = accessLogRoMapper.selectlltjs(map);
         accessLogtjListBo.setLlcnt(llcnt);
@@ -64,8 +64,8 @@ public class AccessLogServiceImpl implements AccessLogService {
         map.put("accessTerminal", "MobileWeb");
         List<AccessLogRolltjBo> mobileWeblist = accessLogRoMapper.selectlltj(map);
         accessLogtjListBo.setMobileWeblist(mobileWeblist);
-        return accessLogtjListBo;*/
-        return accessLogRoMapper.selectAccessLogtjListBo(map);
+        return accessLogtjListBo;
+//        return accessLogRoMapper.selectAccessLogtjListBo(map);
     }
 
     @Override
