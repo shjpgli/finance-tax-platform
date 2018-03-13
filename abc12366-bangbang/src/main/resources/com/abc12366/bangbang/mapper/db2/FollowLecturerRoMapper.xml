@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.abc12366.bangbang.mapper.db2.FollowLecturerRoMapper">
+
+	<!-- 通用查询结果列-->
+	<sql id="Base_Column_List">
+		 id,	userId,	lecturerId,	status,	createTime,	lastUpdate
+	</sql>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.FollowLecturer" parameterType="java.lang.String">
+		 SELECT
+		 <include refid="Base_Column_List" />
+		 FROM bb_follow_lecturer
+		 WHERE id = #{id}
+	</select>
+
+    <!--订单对象-->
+    <resultMap id="followLecturerBOMap" type="com.abc12366.bangbang.model.bo.FollowLecturerBO">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="lecturerId" property="lecturerId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="curriculumLecturer" javaType="com.abc12366.bangbang.model.curriculum.CurriculumLecturer">
+            <id column="lId" property="lecturerId" jdbcType="VARCHAR"/>
+            <result column="lUserId" property="userId" jdbcType="VARCHAR"/>
+            <result column="intro" property="intro" jdbcType="VARCHAR"/>
+            <result column="lecturerName" property="lecturerName" jdbcType="VARCHAR"/>
+            <result column="phone" property="phone" jdbcType="VARCHAR"/>
+            <result column="company" property="company" jdbcType="VARCHAR"/>
+            <result column="lecturerQQ" property="lecturerQQ" jdbcType="VARCHAR"/>
+            <result column="lecturerEmail" property="lecturerEmail" jdbcType="VARCHAR"/>
+            <result column="lecturerPicture" property="lecturerPicture" jdbcType="VARCHAR"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        </association>
+
+    </resultMap>
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectList" resultMap="followLecturerBOMap" parameterType="java.util.Map">
+		SELECT
+        a.id,	a.userId,	a.lecturerId,	a.status,	a.createTime,	a.lastUpdate,
+        b.lecturerId as lId,	b.userId as lUserId,	b.lecturerName,b.intro,	b.phone,	b.company,	b.lecturerQQ,	b.lecturerEmail,	b.lecturerPicture
+        FROM bb_follow_lecturer a LEFT JOIN bb_curriculum_lecturer b on b.lecturerId = a.lecturerId
+        <where>
+            1 = 1
+            <if test=" userId != null and userId != '' ">
+                and a.userId = #{userId}
+            </if>
+            <if test=" lecturerId != null and lecturerId != '' ">
+                and a.lecturerId = #{lecturerId}
+            </if>
+        </where>
+
+        order by lastUpdate desc
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectFollowLecturerBO"  resultMap="followLecturerBOMap" parameterType="java.lang.String">
+		SELECT
+        a.id,	a.userId,	a.lecturerId,	a.status,	a.createTime,	a.lastUpdate,
+        b.lecturerId as lId,	b.userId as lUserId,	b.lecturerName,b.createTime,b.updateTime,	b.intro,	b.phone,	b.company,	b.lecturerQQ,	b.lecturerEmail,	b.lecturerPicture
+        FROM bb_follow_lecturer a LEFT JOIN bb_curriculum_lecturer b on b.lecturerId = a.lecturerId
+		WHERE a.id = #{id}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectUserIdListByLecturerId"  resultType="java.lang.String" parameterType="java.lang.String">
+		SELECT a.userId FROM bb_curriculum_lecturer b LEFT JOIN bb_follow_lecturer a on a.lecturerId = b.lecturerId
+		WHERE b.userId= #{userId}
+	</select>
+
+</mapper>
