@@ -1,5 +1,6 @@
 package com.abc12366.uc.service;
 
+import com.abc12366.uc.model.NsrsbhPasswordLog;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
@@ -127,7 +128,7 @@ public interface UserBindService {
      * @param data 修改密码信息
      * @throws ValidationException 验证异常
      */
-    void updatePassword(UpdatePwd data) throws ValidationException;
+    void updatePassword(UpdatePwd data, HttpServletRequest request) throws ValidationException;
 
     /**
      * 电子税局纳税人登录绑定
@@ -208,4 +209,6 @@ public interface UserBindService {
      * @throws ValidationException
      */
     TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws ValidationException;
+
+	List<NsrsbhPasswordLog> restPwdLogList(Map map,int page,int size);
 }

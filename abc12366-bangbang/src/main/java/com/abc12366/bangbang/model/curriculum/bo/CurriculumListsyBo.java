@@ -17,6 +17,11 @@ public class CurriculumListsyBo implements Serializable {
     /**课程标题**varchar(200)**/
     private String title;
 
+    /**
+     * 授课方式
+     */
+    private String teachingMethod;
+
     /**销售价格**double**/
     private Double sellPrice;
 
@@ -65,6 +70,14 @@ public class CurriculumListsyBo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTeachingMethod() {
+        return teachingMethod;
+    }
+
+    public void setTeachingMethod(String teachingMethod) {
+        this.teachingMethod = teachingMethod;
     }
 
     public Integer getBrowseNum() {

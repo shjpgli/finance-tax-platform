@@ -6,6 +6,8 @@ import com.abc12366.bangbang.model.curriculum.bo.*;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface CurriculumService {
 
     List<CurriculumListBo> selectList(Map<String, Object> map);
@@ -36,7 +38,7 @@ public interface CurriculumService {
 
     CurriculumBo update(CurriculumBo curriculumBo);
 
-    String updateStatus(String curriculumId, String status);
+    String updateStatus(String curriculumId, String status, HttpServletRequest request);
 
     String delete(String curriculumId);
 

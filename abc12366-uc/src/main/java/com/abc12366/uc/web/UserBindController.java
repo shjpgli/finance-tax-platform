@@ -3,6 +3,7 @@ package com.abc12366.uc.web;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.NsrsbhPasswordLog;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
 import com.abc12366.uc.model.UserHngs;
@@ -361,9 +362,9 @@ public class UserBindController {
      * @throws ValidationException 验证异常
      */
     @PostMapping(path = "/shb/updatepassword")
-    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePwd data) throws ValidationException {
+    public ResponseEntity updatePassword(@Valid @RequestBody UpdatePwd data, HttpServletRequest request) throws ValidationException {
         LOGGER.info("用户修改纳税人登录电子申报密码，{}", data);
-        userBindService.updatePassword(data);
+        userBindService.updatePassword(data,request);
         return ResponseEntity.ok(Utils.kv());
     }
 
@@ -455,5 +456,23 @@ public class UserBindController {
         UserHnds userHnds = userBindService.hndsDetail(id);
         LOGGER.info("查询湖南地税绑定关系详情返回：{}");
         return ResponseEntity.ok(Utils.kv("data", userHnds));
+    }
+    
+    /**
+     * 电子申报修改密码记录列表
+     * @return
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping(path = "/shb/restpwdloglist")
+    public ResponseEntity restPwdLogList(
+    		@RequestParam(required = false) String nsrsbh,
+    		@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+    	Map map = new HashMap<>();
+    	map.put("nsrsbh", nsrsbh);
+    	List<NsrsbhPasswordLog> passwordLogs = userBindService.restPwdLogList(map,page,size);
+    	return (passwordLogs == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", passwordLogs, "total", passwordLogs.size()));
     }
 }
