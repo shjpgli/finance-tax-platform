@@ -262,7 +262,8 @@
     <!-- 查询收藏课程 -->
     <select id="selectListCollect" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListsyBo" parameterType="java.util.Map">
         SELECT
-        col.curriculumId,title,sellPrice,browseNum,watchNum,goodsId,cover,collectTime,issueTime,isFree,freeMember,curriculumidIntro,
+        col.curriculumId,title,c.teachingMethod,sellPrice,browseNum,watchNum,goodsId,cover,collectTime,issueTime,
+        isFree,freeMember,curriculumidIntro,
         (SELECT count(*) FROM bb_curriculum_membergrade where curriculumId = c.curriculumId) isVipFree,
         (select count(coursewareId) from bb_curriculum_courseware where curriculumId = c.curriculumId) coursewareNum
         FROM bb_curriculum_collect col left join bb_curriculum c on col.curriculumId = c.curriculumId
