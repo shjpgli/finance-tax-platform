@@ -37,7 +37,7 @@ public class FollowLecturerController {
     private FollowLecturerService followLecturerService;
 
     /**
-     * 新增
+     * 新增-关注和取消关注
      */
     @PostMapping
     public ResponseEntity insert(@Valid @RequestBody FollowLecturerBO followLecturerBO) {
@@ -53,12 +53,14 @@ public class FollowLecturerController {
     public ResponseEntity selectListForAdmin(
             @RequestParam(value = "userId", required = false) String userId,
             @RequestParam(value = "lecturerId", required = false) String lecturerId,
+            @RequestParam(value = "status", required = false) Integer status,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{}:{}:{}:{}:{}:{}", userId, page, size);
         Map<String,Object> map = new HashMap<>();
         map.put("userId",userId);
         map.put("lecturerId",lecturerId);
+        map.put("status",status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<FollowLecturerBO> FollowLecturerList = followLecturerService.selectList(map);
         PageInfo<FollowLecturerBO> pageInfo = new PageInfo<>(FollowLecturerList);

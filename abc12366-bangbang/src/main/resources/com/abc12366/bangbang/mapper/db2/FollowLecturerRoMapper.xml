@@ -53,6 +53,9 @@
             <if test=" lecturerId != null and lecturerId != '' ">
                 and a.lecturerId = #{lecturerId}
             </if>
+            <if test=" status != null">
+                and a.status = #{status}
+            </if>
         </where>
 
         order by lastUpdate desc
@@ -65,6 +68,14 @@
         b.lecturerId as lId,	b.userId as lUserId,	b.lecturerName,b.createTime,b.updateTime,	b.intro,	b.phone,	b.company,	b.lecturerQQ,	b.lecturerEmail,	b.lecturerPicture
         FROM bb_follow_lecturer a LEFT JOIN bb_curriculum_lecturer b on b.lecturerId = a.lecturerId
 		WHERE a.id = #{id}
+	</select>
+
+	<!-- 查询（根据主键ID查询） -->
+	<select id="selectFollowLecturer"  resultType="com.abc12366.bangbang.model.FollowLecturer" parameterType="java.util.Map">
+		SELECT
+        a.id,	a.userId,	a.lecturerId,	a.status,	a.createTime,	a.lastUpdate
+        FROM bb_follow_lecturer a
+        WHERE a.userId = #{userId} and a.lecturerId = #{lecturerId}
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->

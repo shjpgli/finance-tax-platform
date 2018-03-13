@@ -39,4 +39,6 @@ public interface FollowLecturerRoMapper{
      * @return 所有用户ID
      */
     List<String> selectUserIdListByLecturerId(@Param("userId") String userId);
+
+    FollowLecturer selectFollowLecturer(Map<String, Object> map);
 }
