@@ -114,13 +114,31 @@ public class WxActivity {
      */
     private Boolean outdated;
 
+    /**
+     * 是否赠送积分
+     */
+    @NotNull
+    private Boolean giftPoints;
+
+    /**
+     * 是否赠送优惠劵
+     */
+    @NotNull
+    private Boolean giftCoupon;
+
+    /**
+     * 优惠劵活动ID
+     */
+    @Length(min = 32, max = 64)
+    private String activityId;
+
     public WxActivity() {
     }
 
     public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType,
                       String rule, String amountType, Double amount, String probability, Boolean status, String
                               wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate,
-                      Integer sort) {
+                      Integer sort, Boolean giftPoints, Boolean giftCoupon, String activityId) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -139,6 +157,9 @@ public class WxActivity {
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
         this.sort = sort;
+        this.giftPoints = giftPoints;
+        this.giftCoupon = giftCoupon;
+        this.activityId = activityId;
     }
 
     private WxActivity(Builder builder) {
@@ -160,6 +181,9 @@ public class WxActivity {
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
         setSort(builder.sort);
+        setGiftPoints(builder.giftPoints);
+        setGiftCoupon(builder.giftCoupon);
+        setActivityId(builder.activityId);
     }
 
     public String getId() {
@@ -351,6 +375,30 @@ public class WxActivity {
         return now.before(startTime) || now.after(endTime);
     }
 
+    public Boolean getGiftPoints() {
+        return giftPoints;
+    }
+
+    public void setGiftPoints(Boolean giftPoints) {
+        this.giftPoints = giftPoints;
+    }
+
+    public Boolean getGiftCoupon() {
+        return giftCoupon;
+    }
+
+    public void setGiftCoupon(Boolean giftCoupon) {
+        this.giftCoupon = giftCoupon;
+    }
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
+    }
+
     @Override
     public String toString() {
         return "WxActivity{" +
@@ -372,7 +420,15 @@ public class WxActivity {
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", sort=" + sort +
+                ", sent=" + sent +
+                ", sentAmount=" + sentAmount +
+                ", received=" + received +
+                ", receivedAmount=" + receivedAmount +
+                ", nop=" + nop +
                 ", outdated=" + outdated +
+                ", giftPoints=" + giftPoints +
+                ", giftCoupon=" + giftCoupon +
+                ", activityId='" + activityId + '\'' +
                 '}';
     }
 
@@ -395,6 +451,10 @@ public class WxActivity {
         private Date createTime;
         private Date lastUpdate;
         private Integer sort;
+        private Boolean giftPoints;
+        private Integer points;
+        private Boolean giftCoupon;
+        private String activityId;
 
         public Builder() {
         }
@@ -486,6 +546,21 @@ public class WxActivity {
 
         public Builder sort(Integer val) {
             sort = val;
+            return this;
+        }
+
+        public Builder giftPoints(Boolean val) {
+            giftPoints = val;
+            return this;
+        }
+
+        public Builder giftCoupon(Boolean val) {
+            giftCoupon = val;
+            return this;
+        }
+
+        public Builder activityId(String val) {
+            activityId = val;
             return this;
         }
 

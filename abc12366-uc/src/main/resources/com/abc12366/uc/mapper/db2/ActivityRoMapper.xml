@@ -6,7 +6,8 @@
     <!-- 通用查询结果列-->
     <sql id="Base_Column_List">
         id, name, description, startTime, endTime, ruleType, rule, amountType, amount,
-        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort
+        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort, giftPoint,
+        giftCoupon, activityId
     </sql>
 
     <sql id="Base_RedEnvelop_List">

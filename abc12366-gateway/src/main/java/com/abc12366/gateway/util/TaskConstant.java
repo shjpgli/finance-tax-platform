@@ -300,7 +300,10 @@ public class TaskConstant {
     public final static String POINT_RULE_SCSCTX_CODE = "P-sctx";
     //22.首次实名认证
     public final static String POINT_RULE_SCSMRZ_CODE = "P-smrz";
-
+    /**
+     * 电子申报服务费
+     */
+    public final static String POINT_RULE_DZSB_CODE = "P-dzsb";
 
     //用户权益类型
     //1.用户财税经验证明印制

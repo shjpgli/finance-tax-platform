@@ -5,7 +5,8 @@
 
     <sql id="Base_Column_List">
         id, name, description, startTime, endTime, ruleType, rule, amountType, amount,
-        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort
+        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort, giftPoint,
+        giftCoupon, activityId
     </sql>
 
     <sql id="Base_RedEnvelop_List">
@@ -28,7 +29,8 @@
         (<include refid="Base_Column_List"/>)
         VALUES
         (#{id},#{name},#{description},#{startTime},#{endTime},#{ruleType},#{rule},#{amountType},#{amount},
-        #{probability},#{status}, #{wishing}, #{remark}, #{num}, #{times}, #{createTime},#{lastUpdate},#{sort})
+        #{probability},#{status}, #{wishing}, #{remark}, #{num}, #{times}, #{createTime},#{lastUpdate},#{sort},
+        #{giftPoint}, #{giftCoupon}, #{activityId})
     </insert>
 
     <update id="update">
@@ -50,6 +52,9 @@
             <if test="times != null">times = #{times},</if>
             <if test="lastUpdate != null">lastUpdate = #{lastUpdate},</if>
             <if test="sort != null">sort = #{sort},</if>
+            <if test="giftPoints != null">giftPoints = #{giftPoints},</if>
+            <if test="giftCoupon != null">giftCoupon = #{giftCoupon},</if>
+            <if test="activityId != null">activityId = #{activityId},</if>
         </set>
         where id = #{id}
     </update>
