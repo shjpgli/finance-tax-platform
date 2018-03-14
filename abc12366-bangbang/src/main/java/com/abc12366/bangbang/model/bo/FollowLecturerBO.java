@@ -1,9 +1,8 @@
 package com.abc12366.bangbang.model.bo;
-import com.abc12366.bangbang.model.curriculum.Curriculum;
-import com.abc12366.bangbang.model.curriculum.CurriculumLecturer;
+
+import com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -38,7 +37,8 @@ public class FollowLecturerBO implements Serializable {
 	/**更新时间**/
 	private java.util.Date lastUpdate;
 
-    private CurriculumLecturer curriculumLecturer;
+    private CurriculumLecturerBo curriculumLecturer;
+
 
 	public void setId(String id){
 		this.id = id;
@@ -88,11 +88,11 @@ public class FollowLecturerBO implements Serializable {
 		return this.lastUpdate;
 	}
 
-    public CurriculumLecturer getCurriculumLecturer() {
+    public CurriculumLecturerBo getCurriculumLecturer() {
         return curriculumLecturer;
     }
 
-    public void setCurriculumLecturer(CurriculumLecturer curriculumLecturer) {
+    public void setCurriculumLecturer(CurriculumLecturerBo curriculumLecturer) {
         this.curriculumLecturer = curriculumLecturer;
     }
 }

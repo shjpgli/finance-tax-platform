@@ -50,7 +50,7 @@ public class FollowLecturerController {
      * 查询列表
      */
     @GetMapping
-    public ResponseEntity selectListForAdmin(
+    public ResponseEntity selectList(
             @RequestParam(value = "userId", required = false) String userId,
             @RequestParam(value = "lecturerId", required = false) String lecturerId,
             @RequestParam(value = "status", required = false) Integer status,
@@ -63,6 +63,30 @@ public class FollowLecturerController {
         map.put("status",status);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<FollowLecturerBO> FollowLecturerList = followLecturerService.selectList(map);
+        PageInfo<FollowLecturerBO> pageInfo = new PageInfo<>(FollowLecturerList);
+        LOGGER.info("{}", FollowLecturerList);
+        return (FollowLecturerList == null) ?
+                ResponseEntity.ok(Utils.kv()) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
+    }
+
+    /**
+     * 查询列表详解
+     */
+    @GetMapping(path = "/list")
+    public ResponseEntity selectBOList(
+            @RequestParam(value = "userId", required = false) String userId,
+            @RequestParam(value = "lecturerId", required = false) String lecturerId,
+            @RequestParam(value = "status", required = false) Integer status,
+            @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
+            @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
+        LOGGER.info("{}:{}:{}:{}:{}:{}", userId, page, size);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId",userId);
+        map.put("lecturerId",lecturerId);
+        map.put("status",status);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<FollowLecturerBO> FollowLecturerList = followLecturerService.selectBOList(map);
         PageInfo<FollowLecturerBO> pageInfo = new PageInfo<>(FollowLecturerList);
         LOGGER.info("{}", FollowLecturerList);
         return (FollowLecturerList == null) ?

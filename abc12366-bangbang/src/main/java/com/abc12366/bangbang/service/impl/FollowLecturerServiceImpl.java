@@ -123,4 +123,9 @@ public class FollowLecturerServiceImpl implements FollowLecturerService {
             throw new ServiceException(4103);
         }
     }
+
+    @Override
+    public List<FollowLecturerBO> selectBOList(Map<String, Object> map) {
+        return followLecturerRoMapper.selectFollowLecturerBOList(map);
+    }
 }

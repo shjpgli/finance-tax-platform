@@ -45,4 +45,6 @@ public interface FollowLecturerService {
      * 删除
      */
     void delete(String id, String userId);
+
+    List<FollowLecturerBO> selectBOList(Map<String, Object> map);
 }

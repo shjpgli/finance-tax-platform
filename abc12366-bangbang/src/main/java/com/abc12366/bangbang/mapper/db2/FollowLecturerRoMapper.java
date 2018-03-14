@@ -41,4 +41,6 @@ public interface FollowLecturerRoMapper{
     List<String> selectUserIdListByLecturerId(@Param("userId") String userId);
 
     FollowLecturer selectFollowLecturer(Map<String, Object> map);
+
+    List<FollowLecturerBO> selectFollowLecturerBOList(Map<String, Object> map);
 }
