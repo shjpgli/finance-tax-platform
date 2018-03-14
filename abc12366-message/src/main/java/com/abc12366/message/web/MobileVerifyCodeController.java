@@ -12,6 +12,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse.SmsSendDetailDTO;
 import com.github.pagehelper.Page;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,22 +121,26 @@ public class MobileVerifyCodeController {
 				channelSendLogs.add(sendLog);
 			}
 		} else if ("yp".equals(channel)) {
-			JSONObject result = moboleVerifyCodeService.msgQueryYp(channel, phone, sendDate,page, size);
+			JSONObject result = moboleVerifyCodeService.msgQueryYp(channel, phone, sendDate, page, size);
 			total = result.getString("total");
 			JSONArray array = result.getJSONArray("messages");
-			for(int i = 0;i<array.size();i++){
+			for (int i = 0; i < array.size(); i++) {
 				JSONObject obj = array.getJSONObject(i);
 				String stas;
-				if("processing".equals(obj.getString("status"))){
+				if ("processing".equals(obj.getString("status"))) {
 					stas = "1";
-				}else if("success".equals(obj.getString("status"))){
+				} else if ("success".equals(obj.getString("status"))) {
 					stas = "3";
-				}else{
+				} else {
 					stas = "2";
 				}
-				MsgChannelSendLog sendLog = new MsgChannelSendLog(obj.getString("id"), obj.getString("mobile"),
-						stas, obj.getString("content"), obj.getString("sent_at").replace("T", " ").replace(".000Z", ""),
-						null, "yp");
+				MsgChannelSendLog sendLog = new MsgChannelSendLog(obj.getString("id"), obj.getString("mobile"), stas,
+						obj.getString("content"),
+						(StringUtils.isEmpty(obj.getString("created_at")) ? "-"
+								: obj.getString("created_at").replace("T", " ").replace(".000Z", "")),
+						(StringUtils.isEmpty(obj.getString("sent_at")) ? "-"
+								: obj.getString("sent_at").replace("T", " ").replace(".000Z", "")),
+						"yp");
 				channelSendLogs.add(sendLog);
 			}
 		} else {
