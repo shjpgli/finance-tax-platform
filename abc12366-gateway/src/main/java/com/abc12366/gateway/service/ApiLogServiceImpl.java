@@ -39,11 +39,21 @@ public class ApiLogServiceImpl implements ApiLogService {
 
     @Override
     public List<ApiLog> selectList() {
+        // 查询之前判断表是否存在
+        TableBO tableBO = new TableBO();
+        tableBO.setYyyyMMdd(DateUtils.getDataString());
+        apiLogMapper.create(tableBO);
+
         return apiLogRoMapper.selectList();
     }
 
     @Override
     public List<ApiLog> selectList(ApiLog apiLog) {
+        // 查询之前判断表是否存在
+        TableBO tableBO = new TableBO();
+        tableBO.setYyyyMMdd(DateUtils.getDataString());
+        apiLogMapper.create(tableBO);
+
         return apiLogRoMapper.selectListPage(apiLog);
     }
 
@@ -59,16 +69,31 @@ public class ApiLogServiceImpl implements ApiLogService {
 
     @Override
     public List<ApiLog> selectApiList(Map<String, Object> map) {
+        // 查询之前判断表是否存在
+        TableBO tableBO = new TableBO();
+        tableBO.setYyyyMMdd(DateUtils.getDataString());
+        apiLogMapper.create(tableBO);
+
         return apiLogRoMapper.selectApiList(map);
     }
 
     @Override
     public List<ApiLog> selectApiListByAppId(Map<String, Object> map) {
+        // 查询之前判断表是否存在
+        TableBO tableBO = new TableBO();
+        tableBO.setYyyyMMdd(DateUtils.getDataString());
+        apiLogMapper.create(tableBO);
+
         return apiLogRoMapper.selectApiListByAppId(map);
     }
 
     @Override
     public List<ApiLog> selectApiListByApiId(Map<String, Object> map) {
+        // 查询之前判断表是否存在
+        TableBO tableBO = new TableBO();
+        tableBO.setYyyyMMdd(DateUtils.getDataString());
+        apiLogMapper.create(tableBO);
+        
         return apiLogRoMapper.selectApiListByApiId(map);
     }
 }

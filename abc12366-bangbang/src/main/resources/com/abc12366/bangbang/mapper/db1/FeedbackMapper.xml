@@ -46,7 +46,7 @@
 			SELECT t3.content FROM bb_feedback t1
 			LEFT JOIN
 			(
-				SELECT a.* FROM abc12366_message.msg_business_message a WHERE busiType = 'FEEDBACK'
+				SELECT a.* FROM abc12366_message.msg_business_message a WHERE busiType = 'BANGBANG_YJFK'
 			)  t3
 			ON t1.id = t3.businessId
 		) aa

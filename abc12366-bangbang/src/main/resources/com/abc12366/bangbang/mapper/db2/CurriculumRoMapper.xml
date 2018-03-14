@@ -214,7 +214,7 @@
 
     <!-- 查询课程学习历史 -->
     <select id="selectStudyHistory" resultType="com.abc12366.bangbang.model.curriculum.bo.CurrMyStudyBo" parameterType="java.util.Map">
-        select s.curriculumId,s.userId,orderTime,orderPrice,orderIntegral,isIntegral,orderStatus,c.title,c.cover,c.isFree,
+        select s.curriculumId,s.userId,orderTime,orderPrice,orderIntegral,isIntegral,orderStatus,c.title,c.teachingMethod,c.cover,c.isFree,
             (select studyTime from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) studyTime,
             (select coursewareId from bb_curriculum_study where curriculumId = s.curriculumId order by studyTime desc limit 1) coursewareId,
             (SELECT count(evaluateId) FROM bb_curriculum_evaluate where curriculumId = s.curriculumId and userId = s.userId) evaluateNum
@@ -226,8 +226,6 @@
             group by curriculumId,userId order by studyTime desc) s
             left join bb_curriculum_order o on (s.curriculumId = o.curriculumId and s.userId = o.userId)
             left join bb_curriculum c on s.curriculumId = c.curriculumId
-        WHERE 1=1
-
     </select>
 
     <!-- 查询本月学习课程数 -->
