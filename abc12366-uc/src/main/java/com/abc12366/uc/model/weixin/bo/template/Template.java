@@ -43,7 +43,7 @@ public class Template implements Serializable {
 				json.append(",");
 			}
 			json.append("\""+key+"\":{");
-			json.append("\"value\":\""+dataList.get(key)+"\",");
+			json.append("\"value\":\""+(StringUtils.isEmpty(dataList.get(key))?"":dataList.get(key))+"\",");
 			json.append("\"color\":\""+(StringUtils.isEmpty(dataList.get(key+"Color"))?"#0000FF":dataList.get(key+"Color"))+"\"");
 			json.append("}");
 			i++;
