@@ -5,16 +5,11 @@ import com.abc12366.bangbang.mapper.db2.FollowLecturerRoMapper;
 import com.abc12366.bangbang.model.FollowLecturer;
 import com.abc12366.bangbang.model.bo.FollowLecturerBO;
 import com.abc12366.bangbang.service.FollowLecturerService;
-import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +22,6 @@ import java.util.Map;
  */
 @Service
 public class FollowLecturerServiceImpl implements FollowLecturerService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FollowLecturerServiceImpl.class);
 
     @Autowired
     private FollowLecturerRoMapper followLecturerRoMapper;
@@ -37,40 +31,25 @@ public class FollowLecturerServiceImpl implements FollowLecturerService {
 
 
     @Override
-    public FollowLecturerBO insert(FollowLecturerBO followLecturerBO) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("userId",followLecturerBO.getUserId());
-        map.put("lecturerId", followLecturerBO.getLecturerId());
-        FollowLecturer followLecturer = followLecturerRoMapper.selectFollowLecturer(map);
+    public boolean followOrUnfollow(FollowLecturer bo) {
+        FollowLecturer data = followLecturerRoMapper.selectOne(bo.getUserId(), bo.getLecturerId());
+        Date now = new Date();
         //查找是否有关注，是：修改，否：新增
-        if(followLecturer == null){
-            followLecturer = new FollowLecturer();
-            followLecturerBO.setId(Utils.uuid());
-            Date date = new Date();
-            followLecturerBO.setCreateTime(date);
-            followLecturerBO.setLastUpdate(date);
-            followLecturerBO.setStatus(1);
-            BeanUtils.copyProperties(followLecturerBO,followLecturer);
-            int count = followLecturerMapper.insert(followLecturer);
-            if(count != 1){
-                LOGGER.info("新增失败{}"+count);
-                throw new ServiceException(4101);
-            }
-        }else{
-            followLecturer.setLastUpdate(new Date());
-            int count = followLecturerMapper.update(followLecturer);
-            if(count != 1){
-                LOGGER.info("修改失败{}"+count);
-                throw new ServiceException(4102);
-            }
+        if (data == null) {
+            data = new FollowLecturer();
+            data.setId(Utils.uuid());
+            data.setUserId(bo.getUserId());
+            data.setLecturerId(bo.getLecturerId());
+            data.setCreateTime(now);
+            data.setLastUpdate(now);
+            data.setStatus(true);
+            followLecturerMapper.insert(data);
+        } else {
+            data.setStatus(!data.getStatus());
+            data.setLastUpdate(now);
+            followLecturerMapper.update(data);
         }
-        BeanUtils.copyProperties(followLecturer,followLecturerBO);
-        return followLecturerBO;
-    }
-
-    @Override
-    public List<FollowLecturerBO> selectList(Map<String, Object> map) {
-        return followLecturerRoMapper.selectList(map);
+        return data.getStatus();
     }
 
     @Override
@@ -79,48 +58,7 @@ public class FollowLecturerServiceImpl implements FollowLecturerService {
     }
 
     @Override
-    public FollowLecturerBO selectFollowLecturerBO(String id) {
-        return followLecturerRoMapper.selectFollowLecturerBO(id);
-    }
-
-    @Override
-    public FollowLecturerBO update(FollowLecturerBO followLecturerBO) {
-        FollowLecturer followLecturer = new FollowLecturer();
-        Map<String,Object> map = new HashMap<>();
-        map.put("userId",followLecturerBO.getUserId());
-        map.put("lecturerId", followLecturerBO.getLecturerId());
-        FollowLecturer data = followLecturerRoMapper.selectFollowLecturer(map);
-        //查找是否有关注，是：修改，否：新增
-        if(data == null){
-            followLecturerBO.setId(Utils.uuid());
-            Date date = new Date();
-            followLecturerBO.setCreateTime(date);
-            followLecturerBO.setLastUpdate(date);
-            followLecturerBO.setStatus(1);
-            BeanUtils.copyProperties(followLecturerBO,followLecturer);
-            int count = followLecturerMapper.insert(followLecturer);
-            if(count != 1){
-                LOGGER.info("新增失败{}"+count);
-                throw new ServiceException(4101);
-            }
-        }else{
-            followLecturerBO.setLastUpdate(new Date());
-            BeanUtils.copyProperties(followLecturerBO,followLecturer);
-            int count = followLecturerMapper.update(followLecturer);
-            if(count != 1){
-                LOGGER.info("修改失败{}"+count);
-                throw new ServiceException(4102);
-            }
-        }
-        return followLecturerBO;
-    }
-
-    @Override
-    public void delete(String id, String userId) {
-        int count = followLecturerMapper.delete(id, userId);
-        if(count != 1){
-            LOGGER.info("删除失败{}"+count);
-            throw new ServiceException(4103);
-        }
+    public List<FollowLecturerBO> selectList(Map<String, Object> map) {
+        return followLecturerRoMapper.selectFollowLecturerList(map);
     }
 }

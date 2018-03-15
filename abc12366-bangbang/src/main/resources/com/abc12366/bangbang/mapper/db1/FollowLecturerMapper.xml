@@ -3,13 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.bangbang.mapper.db1.FollowLecturerMapper">
 
-	<!--删除：根据主键ID删除-->
-	<delete id="delete" parameterType="java.lang.String">
-		 DELETE FROM bb_follow_lecturer
-		 WHERE id = #{id}
-	</delete>
-
-
 	<!-- 添加 （匹配有值的字段）-->
 	<insert id="insert" parameterType="com.abc12366.bangbang.model.FollowLecturer">
 		 INSERT INTO bb_follow_lecturer
