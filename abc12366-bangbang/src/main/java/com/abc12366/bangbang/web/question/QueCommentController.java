@@ -46,9 +46,9 @@ public class QueCommentController {
         if(userId == null || "".equals(userId)){
             userId = "11";
         }
-        dataMap.put("userId", userId);//
-        dataMap.put("questionId", questionId);//
-        dataMap.put("answerId", answerId);//
+        dataMap.put("userId", userId);
+        dataMap.put("questionId", questionId);
+        dataMap.put("answerId", answerId);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionCommentBo> dataList = queCommentService.selectList(dataMap);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
