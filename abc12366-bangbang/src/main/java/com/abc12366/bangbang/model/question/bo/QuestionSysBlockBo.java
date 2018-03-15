@@ -40,6 +40,11 @@ public class QuestionSysBlockBo {
     /**审核时间**/
     private java.util.Date updateTime;
 
+    /**
+     * 问题或秘籍ID，作为前端页面链接
+     */
+    private String linkId;
+
     public String getContent() {
         return content;
     }
@@ -131,5 +136,13 @@ public class QuestionSysBlockBo {
     public QuestionSysBlockBo setClassifyName(String classifyName) {
         this.classifyName = classifyName;
         return this;
+    }
+
+    public String getLinkId() {
+        return linkId;
+    }
+
+    public void setLinkId(String linkId) {
+        this.linkId = linkId;
     }
 }
