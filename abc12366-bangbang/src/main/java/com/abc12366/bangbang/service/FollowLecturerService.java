@@ -28,6 +28,10 @@ public interface FollowLecturerService {
      */
     boolean followOrUnfollow(FollowLecturer bo);
 
+    /**
+     * 查询讲师是否被关注
+     */
+    boolean selectIsFollow(FollowLecturer bo);
 
     /**
      * 查询用户关注讲师列表
