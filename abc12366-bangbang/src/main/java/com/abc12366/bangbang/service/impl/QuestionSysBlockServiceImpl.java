@@ -92,7 +92,7 @@ public class QuestionSysBlockServiceImpl implements QuestionSysBlockService {
             cheats.setStatus(status);
             cheats.setLastUpdate(new Date());
             cheatsMapper.updateByPrimaryKeySelective(cheats);
-        }else if("cheats".equals(record.getSourceType())){
+        }else if("cheats_comment".equals(record.getSourceType())){
             CheatsComment cheatsComment = new CheatsComment();
             cheatsComment.setId(record.getSourceId());
             cheatsComment.setStatus(status);
