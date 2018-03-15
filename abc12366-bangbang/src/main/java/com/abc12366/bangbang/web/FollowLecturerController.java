@@ -57,6 +57,18 @@ public class FollowLecturerController {
     }
 
     /**
+     * 查询讲师是否关注
+     */
+    @GetMapping(path = "/{lecturerId}")
+    public ResponseEntity selectIsFollow(@PathVariable String lecturerId, HttpServletRequest request) {
+        LOGGER.info("{}", lecturerId);
+        FollowLecturer bo = new FollowLecturer();
+        bo.setUserId(Utils.getUserId(request));
+        bo.setLecturerId(lecturerId);
+        return ResponseEntity.ok(Utils.kv("data",  followLecturerService.selectIsFollow(bo)));
+    }
+
+    /**
      * 关注和取消关注
      */
     @PutMapping(path = "/{lecturerId}")

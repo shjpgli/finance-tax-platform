@@ -53,6 +53,12 @@ public class FollowLecturerServiceImpl implements FollowLecturerService {
     }
 
     @Override
+    public boolean selectIsFollow(FollowLecturer bo) {
+        FollowLecturer data = followLecturerRoMapper.selectOne(bo.getUserId(), bo.getLecturerId());
+        return data != null && data.getStatus();
+    }
+
+    @Override
     public List<String> selectUserIdListByLecturerId(String userId) {
         return followLecturerRoMapper.selectUserIdListByLecturerId(userId);
     }

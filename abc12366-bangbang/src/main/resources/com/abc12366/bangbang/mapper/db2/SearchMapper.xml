@@ -5,7 +5,9 @@
 
     <!--搜索结果-->
     <select id="queryQuestionSearch" resultType="com.abc12366.bangbang.model.question.QuestionSearchBo" parameterType="java.lang.String">
-        SELECT id questionid,title,detail,userid,answerNum,collectNum FROM `bb_question` WHERE MATCH(`title`,`detail`) AGAINST(#{text} IN BOOLEAN MODE)
+        SELECT id questionid,title,detail,userid,answerNum,collectNum FROM `bb_question`
+        WHERE MATCH(`title`,`detail`) AGAINST(#{text} IN BOOLEAN MODE)
+        AND status = '0'
         ORDER BY createtime DESC
     </select>
 
@@ -35,7 +37,9 @@
     </select>
 
     <select id="queryCheats" parameterType="java.lang.String" resultType="com.abc12366.bangbang.model.question.CheatsSearchBo">
-        SELECT id cheatsId,userId,title,describ,commentNum,collectNum,likeNum,trampleNum FROM `bb_cheats` WHERE MATCH(`title`,`detail`,describ) AGAINST(#{text} IN BOOLEAN MODE)
+        SELECT id cheatsId,userId,title,describ,commentNum,collectNum,likeNum,trampleNum FROM `bb_cheats`
+        WHERE MATCH(`title`,`detail`,describ) AGAINST(#{text} IN BOOLEAN MODE)
+        AND status = '0'
         ORDER BY createtime DESC
     </select>
 
