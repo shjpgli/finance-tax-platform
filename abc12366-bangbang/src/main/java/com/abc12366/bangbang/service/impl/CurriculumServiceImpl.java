@@ -701,7 +701,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 		messageSendBo.setWebMsg("您关注的" + lecturerName + "讲师有新课程上线了，快来围观吧！");
 		messageSendBo
 				.setSkipUrl("<a target='view_window' href='" + SpringCtxHolder.getProperty("abc12366.qd.sns.url")
-						+ "/school/details/" + lecturerName + "?page=1'>" + MessageConstant.VIEW_DETAILS + "</a>");
+						+ "/school/details/" + curriculumId + "?page=1'>" + MessageConstant.VIEW_DETAILS + "</a>");
 		messageSendBo.setPhoneMsg("您关注的" + lecturerName + "讲师有新课程上线了,请及时登录系统查看课程详情！");
 		messageSendBo.setTemplateid("jfQJ8Oh_8KRs6t6KqFrOag5p89kgOUXKHo-Z6rmo3wM");
 		messageSendBo.setDataList(map);
