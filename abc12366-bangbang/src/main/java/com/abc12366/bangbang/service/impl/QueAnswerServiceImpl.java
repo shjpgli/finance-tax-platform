@@ -226,7 +226,7 @@ public class QueAnswerServiceImpl implements QueAnswerService {
 			messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_BANGBANG);
 			messageSendBo.setBusinessId(questionBo.getId());
 			messageSendBo.setWebMsg("您的问题<"+questionBo.getTitle()+">有新的回复，请及时查看回复详情；");
-			messageSendBo.setSkipUrl("<a target=\"view_window\" href=\"" + SpringCtxHolder.getProperty("abc12366.qd.sns.url") + "/topic/xiangqing/"+questionBo.getId()+"\">"
+			messageSendBo.setSkipUrl("<a target='view_window' href='" + SpringCtxHolder.getProperty("abc12366.qd.sns.url") + "/topic/xiangqing/"+questionBo.getId()+"'>"
                     + MessageConstant.VIEW_DETAILS + "</a>");
 			messageSendBo.setTemplateid("my0vhSJM36elRyqaaPhvxbHSVhMosVL13fgcSztHUmk");
 			messageSendBo.setDataList(dataList);

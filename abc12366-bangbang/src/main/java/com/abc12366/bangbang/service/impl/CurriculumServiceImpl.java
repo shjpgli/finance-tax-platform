@@ -12,6 +12,7 @@ import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.MessageConstant;
 import com.abc12366.gateway.util.Utils;
+
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -490,7 +491,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 	}
 
 	@Override
-	public CurriculumBo update(CurriculumBo curriculumBo) {
+	public CurriculumBo update(CurriculumBo curriculumBo,HttpServletRequest request) {
 		Map<String, Object> dataMap1 = new HashMap<>();
 		dataMap1.put("curriculumId", curriculumBo.getCurriculumId());
 		dataMap1.put("title", curriculumBo.getTitle());
@@ -598,6 +599,27 @@ public class CurriculumServiceImpl implements CurriculumService {
 				}
 			}
 
+            if (curriculumBo.getStatus() == 1) {
+				
+				// String teacheId = curriculum1.getLecturerId();
+
+				List<CurriculumLecturerBo> lecturerBoList = lecturerRoMapper.selectListByCurr(curriculumId);
+
+				if (lecturerBoList != null && lecturerBoList.size() > 0) {
+					for (CurriculumLecturerBo lecturerBo : lecturerBoList) {
+						List<String> userIds = followLecturerService
+								.selectUserIdListByLecturerId(lecturerBo.getUserId());
+						if (userIds != null && userIds.size() > 0) {
+							new Thread(new Runnable() {							
+								public void run() {
+									sendMsg(userIds, lecturerBo.getLecturerName(), curriculumId, request,
+											curriculum.getTitle(),curriculum.getUpdateTime());
+								}
+							}).start();
+						}
+					}
+				}
+			}
 		} catch (Exception e) {
 			LOGGER.error("更新课程信息异常：{}", e);
 			throw new ServiceException(4323);
@@ -638,8 +660,15 @@ public class CurriculumServiceImpl implements CurriculumService {
 						List<String> userIds = followLecturerService
 								.selectUserIdListByLecturerId(lecturerBo.getUserId());
 						if (userIds != null && userIds.size() > 0) {
-							sendMsg(userIds, lecturerBo.getLecturerName(), curriculumId, request,
-									curriculum.getTitle(),curriculum.getUpdateTime());
+							
+							new Thread(new Runnable() {							
+								public void run() {
+									sendMsg(userIds, lecturerBo.getLecturerName(), curriculumId, request,
+											curriculum.getTitle(),curriculum.getUpdateTime());
+								}
+							}).start();
+							
+							
 						}
 					}
 				}
@@ -656,7 +685,6 @@ public class CurriculumServiceImpl implements CurriculumService {
 	 * 
 	 * @param userIds
 	 */
-	@Async
 	public void sendMsg(List<String> userIds, String lecturerName, String curriculumId, HttpServletRequest request,
 			String title,Date updateTime) {
 		Map<String, String> map = new HashMap<>();
@@ -672,8 +700,8 @@ public class CurriculumServiceImpl implements CurriculumService {
 		messageSendBo.setBusinessId(curriculumId);
 		messageSendBo.setWebMsg("您关注的" + lecturerName + "讲师有新课程上线了，快来围观吧！");
 		messageSendBo
-				.setSkipUrl("<a target=\"view_window\" href=\"" + SpringCtxHolder.getProperty("abc12366.qd.sns.url")
-						+ "/school/details/" + lecturerName + "?page=1\">" + MessageConstant.VIEW_DETAILS + "</a>");
+				.setSkipUrl("<a target='view_window' href='" + SpringCtxHolder.getProperty("abc12366.qd.sns.url")
+						+ "/school/details/" + lecturerName + "?page=1'>" + MessageConstant.VIEW_DETAILS + "</a>");
 		messageSendBo.setPhoneMsg("您关注的" + lecturerName + "讲师有新课程上线了,请及时登录系统查看课程详情！");
 		messageSendBo.setTemplateid("jfQJ8Oh_8KRs6t6KqFrOag5p89kgOUXKHo-Z6rmo3wM");
 		messageSendBo.setDataList(map);

@@ -278,7 +278,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                     messageSendBo.setType(MessageConstant.SYS_MESSAGE);
                     messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
                     messageSendBo.setBusinessId(order.getOrderNo());
-                    messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                    messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
                     messageSendBo.setWebMsg(content);
                     messageSendBo.setPhoneMsg(content);
                     messageSendBo.setTemplateid(templateId);
@@ -521,7 +521,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
                                         messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
                                         messageSendBo.setBusinessId(order.getOrderNo());
-                                        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                                        messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
                                         messageSendBo.setWebMsg(content);
                                         messageSendBo.setPhoneMsg(content);
                                         messageSendBo.setTemplateid(templateId);
@@ -722,7 +722,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             messageSendBo.setType(MessageConstant.SYS_MESSAGE);
             messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
             messageSendBo.setBusinessId(order.getOrderNo());
-            messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
             messageSendBo.setWebMsg(content);
             messageSendBo.setPhoneMsg(content);
             messageSendBo.setTemplateid(templateId);
@@ -796,7 +796,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
             messageSendBo.setType(MessageConstant.SYS_MESSAGE);
             messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
             messageSendBo.setBusinessId(order.getOrderNo());
-            messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
             messageSendBo.setWebMsg(content);
             messageSendBo.setPhoneMsg(content);
             messageSendBo.setTemplateid(templateId);
