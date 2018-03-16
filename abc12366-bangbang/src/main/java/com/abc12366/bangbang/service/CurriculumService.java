@@ -36,7 +36,7 @@ public interface CurriculumService {
 
     CurriculumEvaluateTjBo selectEvaluateTj(String curriculumId);
 
-    CurriculumBo update(CurriculumBo curriculumBo);
+    CurriculumBo update(CurriculumBo curriculumBo,HttpServletRequest request);
 
     String updateStatus(String curriculumId, String status, HttpServletRequest request);
 
