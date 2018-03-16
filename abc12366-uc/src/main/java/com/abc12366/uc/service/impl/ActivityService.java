@@ -321,11 +321,19 @@ public class ActivityService implements IActivityService {
         if (redEnvelopList.size() > 0 && redEnvelopList.size() <= 1000) {
             List<WxRedEnvelop> dataList = new ArrayList<>();
             for (WxRedEnvelopBO redEnvelopBO : redEnvelopList) {
+
+                String url = StringUtils.isNotEmpty(redEnvelopBO.getBusinessId().trim()) ? Constant.WEIXIN_LOTTERY
+                        .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
+                        .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
+                        .replace("STATE", state(redEnvelopBO.getSecret(), redEnvelopBO.getActivityId())) : null;
+
                 WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                         .id(Utils.uuid())
                         .createTime(new Date())
                         .secret(redEnvelopBO.getSecret())
                         .activityId(redEnvelopBO.getActivityId().trim())
+                        .businessId(redEnvelopBO.getBusinessId().trim())
+                        .url(url)
                         .build();
                 dataList.add(redEnvelop);
             }
