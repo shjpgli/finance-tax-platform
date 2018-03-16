@@ -38,6 +38,11 @@ public class CurrMyStudyBo implements Serializable {
     /**课程标题**/
     private String title;
 
+    /**
+     * 授课方式
+     */
+    private String teachingMethod;
+
     /**课程封页**/
     private String cover;
 
@@ -120,6 +125,14 @@ public class CurrMyStudyBo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTeachingMethod() {
+        return teachingMethod;
+    }
+
+    public void setTeachingMethod(String teachingMethod) {
+        this.teachingMethod = teachingMethod;
     }
 
     public String getCover() {

@@ -125,6 +125,7 @@
                 and s.questionId = #{questionId}
             </if>
         </where>
+        GROUP BY s.id
     </select>
 
 </mapper>

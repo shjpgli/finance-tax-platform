@@ -61,7 +61,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/druid/**")
                 .excludePathPatterns("/hngs/getpublickey")
                 //.excludePathPatterns("/wsbs/login")
-                .excludePathPatterns("/test");
+                .excludePathPatterns("/test")
+                .excludePathPatterns("/channel/msgquery");
 
         //前台用户访问拦截器迁移到网关后的
         registry.addInterceptor(tokenInterceptor())
@@ -76,6 +77,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 .excludePathPatterns("/business/system")
                 .excludePathPatterns("/hngs/getpublickey","/hngs/get")
                 //.excludePathPatterns("/wsbs/login")
-                .excludePathPatterns("/test");
+                .excludePathPatterns("/test")
+                .excludePathPatterns("/channel/msgquery");
     }
 }

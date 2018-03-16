@@ -447,8 +447,8 @@ public class InvoiceServiceImpl implements InvoiceService {
             messageSendBo.setType(MessageConstant.SYS_MESSAGE);
             messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_INVOICE);
             messageSendBo.setBusinessId(invoiceTemp.getId());
-            messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                           "/userinfo/invoice/" + invoiceTemp.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+            messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                           "/userinfo/invoice/" + invoiceTemp.getId() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
             messageSendBo.setWebMsg(content);
             messageSendBo.setPhoneMsg(content);
             messageSendBo.setTemplateid(templateId);
@@ -1098,8 +1098,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
         messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_INVOICE);
         messageSendBo.setBusinessId(invoiceBO.getId());
-        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                        "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                        "/userinfo/invoice/" + invoiceBO.getId() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
         messageSendBo.setWebMsg(content);
         messageSendBo.setPhoneMsg(content);
         messageSendBo.setTemplateid(templateId);
@@ -1157,8 +1157,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
         messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_INVOICE);
         messageSendBo.setBusinessId(invoiceBO.getId());
-        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
-                "/userinfo/invoice/" + invoiceBO.getId() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") +
+                "/userinfo/invoice/" + invoiceBO.getId() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
         messageSendBo.setWebMsg(content);
         messageSendBo.setPhoneMsg(content);
         messageSendBo.setTemplateid(templateId);

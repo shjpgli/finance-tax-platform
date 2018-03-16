@@ -36,6 +36,11 @@ public interface CheatsService {
 
     String updateBrowseNum(String id);
 
-    void recommend(String id, Boolean isRecommend);
+    void recommend(String id, Boolean isRecommend, CheatsBo cheatsBo);
+
+    /**
+     * 查询秘籍和话题总数
+     */
+    int selectCheatsAndQuestionCount();
 
 }

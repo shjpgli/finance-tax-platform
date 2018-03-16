@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -31,11 +30,8 @@ public class EventBangBangController {
     @Autowired
     private EventBangBangService eventService;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     @GetMapping(path = "/singleevent")
-    public ResponseEntity singleevent( HttpServletRequest request, @RequestParam(defaultValue = "") String category) {
+    public ResponseEntity singleevent(@RequestParam(defaultValue = "") String category) {
         Map map = new HashMap<>();
         map.put("category",category);
         SingleEventBo singleevent = eventService.singleEvent(map);
@@ -44,7 +40,7 @@ public class EventBangBangController {
 
 
     @GetMapping(path = "/singleeventlist")
-    public ResponseEntity singleeventlist( HttpServletRequest request, @RequestParam(defaultValue = "") String category) {
+    public ResponseEntity singleeventlist(@RequestParam(defaultValue = "") String category) {
         Map map=new HashMap();
         map.put("category",category);
         List<SingleEventBo> dataList = eventService.singleEventList(map);
@@ -53,7 +49,7 @@ public class EventBangBangController {
 
 
     @PostMapping(path = "/saveeventrecord")
-    public ResponseEntity saveeventrecord( HttpServletRequest request,@RequestBody EventRecordBbBo eventRecordBbBo) {
+    public ResponseEntity saveeventrecord(@RequestBody EventRecordBbBo eventRecordBbBo) {
         LOGGER.info("{}", eventRecordBbBo);
         eventService.addEventRecord(eventRecordBbBo);
         return ResponseEntity.ok(Utils.kv("dataList", eventRecordBbBo));
@@ -61,7 +57,7 @@ public class EventBangBangController {
 
 
     @GetMapping(path = "/details/{eventid}")
-    public ResponseEntity saveeventrecord( HttpServletRequest request,@PathVariable String eventid,
+    public ResponseEntity saveeventrecord(@PathVariable String eventid,
                                            @RequestParam(value = "userid", defaultValue = "") String userid) {
         LOGGER.info("{}", eventid);
         Map map=new HashMap();
@@ -75,7 +71,7 @@ public class EventBangBangController {
     @PostMapping(path = "/saveEventApply")
     public ResponseEntity saveeventrecord( HttpServletRequest request,@RequestBody EventApplyBbBo eventApplyBbBo) {
         LOGGER.info("{}", eventApplyBbBo);
-        eventApplyBbBo =eventService.saveEventApply(eventApplyBbBo);
+        eventApplyBbBo =eventService.saveEventApply(eventApplyBbBo,request);
         return ResponseEntity.ok(Utils.kv("data", eventApplyBbBo));
     }
 

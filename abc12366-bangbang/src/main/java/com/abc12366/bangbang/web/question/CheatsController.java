@@ -86,20 +86,28 @@ public class CheatsController {
 
     /**
      * 推荐秘籍查询列表
+     * @param page 页数
+     * @param size 条数
+     * @param title 标题
+     * @param isImage 是否按照图片排序，true：是，false：否
+     * @param tag 标签
+     * @param classifyCode 秘籍分类
+     * @return
      */
     @GetMapping(path = "/selectListRecommend")
     public ResponseEntity selectListRecommend(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                                 @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                                 @RequestParam(value = "title", required = false) String title,
+                                                @RequestParam(value = "isImage", required = false) Boolean isImage,
                                                 @RequestParam(value = "tag", required = false) String tag,
                                                 @RequestParam(value = "classifyCode", required = false) String classifyCode) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("title", title);//
         dataMap.put("tag", tag);//
         dataMap.put("classifyCode", classifyCode);//s
+        dataMap.put("isImage", isImage);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectListRecommend(dataMap);
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         return (dataList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
@@ -122,7 +130,6 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatstjydBo> dataList = cheatsService.selectListRecommendTitle(dataMap);
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         return (dataList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
@@ -285,10 +292,19 @@ public class CheatsController {
     }
 
     @PutMapping(path = "/recommend/{id}/{isRecommend}")
-    public ResponseEntity recommend(@PathVariable String id, @PathVariable Boolean isRecommend) {
-        cheatsService.recommend(id, isRecommend);
+    public ResponseEntity recommend(@PathVariable String id, @PathVariable Boolean isRecommend,@Valid @RequestBody CheatsBo cheatsBo) {
+        cheatsService.recommend(id, isRecommend,cheatsBo);
         return ResponseEntity.ok(Utils.kv());
     }
 
+    /**
+     * 查询秘籍和话题总数
+     */
+    @GetMapping(path = "/selectCheatsAndQuestionCount")
+    public ResponseEntity selectCheatsAndQuestionCount() {
+        int count = cheatsService.selectCheatsAndQuestionCount();
+        return ResponseEntity.ok(Utils.kv("data", count));
+
+    }
 
 }

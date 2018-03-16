@@ -1,6 +1,7 @@
 package com.abc12366.message.service;
 
 import com.abc12366.message.model.bo.VerifyParam;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 
 import java.io.IOException;
@@ -55,4 +56,18 @@ public interface MobileVerifyCodeService {
      * @return QuerySendDetailsResponse.SmsSendDetailDTO
      */
     QuerySendDetailsResponse.SmsSendDetailDTO querySendDetails(String phone,String bizId, String logId, String sendDate);
+
+    /**
+     * 阿里云短信发送查询
+     * @param channel
+     * @param phone
+     * @param sendDate
+     * @param page
+     * @param size
+     * @return
+     */
+    QuerySendDetailsResponse msgQueryAli(String channel, String phone, String sendDate,int page,int  size);
+
+    
+    JSONObject msgQueryYp(String channel, String phone, String sendDate, int page, int size);
 }

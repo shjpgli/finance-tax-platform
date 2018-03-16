@@ -13,15 +13,18 @@ import com.abc12366.bangbang.model.question.bo.CheatstjydBo;
 import com.abc12366.bangbang.service.CheatsService;
 import com.abc12366.bangbang.util.BangBangDtLogUtil;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.RedisConstant;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by xieyanmao on 2017/9/14.
@@ -59,6 +62,9 @@ public class CheatsServiceImpl implements CheatsService {
 
     @Autowired
     private BangBangDtLogUtil bangBangDtLogUtil;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
     public List<CheatsBo> selectList(Map<String,Object> map) {
@@ -412,8 +418,22 @@ public class CheatsServiceImpl implements CheatsService {
     }
 
     @Override
-    public void recommend(String id, Boolean isRecommend) {
-        cheatsMapper.recommend(id, isRecommend);
+    public void recommend(String id, Boolean isRecommend, CheatsBo cheatsBo) {
+        cheatsMapper.recommend(id, isRecommend,cheatsBo.getCheatsImage());
+    }
+
+    @Override
+    public int selectCheatsAndQuestionCount() {
+        int count;
+        if(redisTemplate.hasKey("Bangb_CheatsAndQuestionCount")){
+            count= Integer.parseInt(redisTemplate.opsForValue().get("Bangb_CheatsAndQuestionCount"));
+            LOGGER.info("从Redis获取数据:"+count);
+            return count;
+        }else{
+            count= cheatsRoMapper.selectCheatsAndQuestionCount();
+            redisTemplate.opsForValue().set("Bangb_CheatsAndQuestionCount", String.valueOf(count), RedisConstant.HOUR_1, TimeUnit.HOURS);
+            return count;
+        }
     }
 
 

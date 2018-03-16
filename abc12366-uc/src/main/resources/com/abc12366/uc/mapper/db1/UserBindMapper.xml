@@ -239,4 +239,19 @@
     <delete id="deleteDzsb" parameterType="java.lang.String">
         delete from uc_user_dzsb where id = #{id}
     </delete>
+    
+    <insert id="insertRestPwdLog" parameterType="com.abc12366.uc.model.NsrsbhPasswordLog">
+        INSERT INTO uc_nsrsbh_password_log
+        (id, userId, nsrsbh, frmc, frzjh, createTime, ip ,code ,message)
+        VALUES
+        (#{id}, #{userId}, #{nsrsbh}, #{frmc}, #{frzjh}, #{createTime}, #{ip}, #{code}, #{message})
+    </insert>
+    
+    <select id="restPwdLogList" resultType="com.abc12366.uc.model.NsrsbhPasswordLog" parameterType="java.util.Map">
+        SELECT l.*,u.username,u.nickname 
+        FROM uc_nsrsbh_password_log l, uc_user u 
+        WHERE u.id = l.userId 
+        <if test="nsrsbh != null and nsrsbh != ''"> and l.nsrsbh =#{nsrsbh} </if>
+        ORDER BY l.createTime DESC
+    </select>
 </mapper>
