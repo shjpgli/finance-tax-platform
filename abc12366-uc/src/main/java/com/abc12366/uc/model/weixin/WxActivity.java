@@ -46,6 +46,13 @@ public class WxActivity {
     @NotEmpty
     @Length(min = 1, max = 1)
     private String amountType;
+
+    /**
+     * 随机金额-最小金额
+     */
+    @Min(1)
+    private Double minAmount;
+
     // 随机最大金额/固定金额
     @NotNull
     @Min(1)
@@ -138,7 +145,7 @@ public class WxActivity {
     public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType,
                       String rule, String amountType, Double amount, String probability, Boolean status, String
                               wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate,
-                      Integer sort, Boolean giftPoints, Boolean giftCoupon, String activityId) {
+                      Integer sort, Boolean giftPoints, Boolean giftCoupon, String activityId, Double minAmount) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -160,6 +167,7 @@ public class WxActivity {
         this.giftPoints = giftPoints;
         this.giftCoupon = giftCoupon;
         this.activityId = activityId;
+        this.minAmount = minAmount;
     }
 
     private WxActivity(Builder builder) {
@@ -171,6 +179,7 @@ public class WxActivity {
         setRuleType(builder.ruleType);
         setRule(builder.rule);
         setAmountType(builder.amountType);
+        setMinAmount(builder.minAmount);
         setAmount(builder.amount);
         setProbability(builder.probability);
         setStatus(builder.status);
@@ -248,6 +257,14 @@ public class WxActivity {
 
     public void setAmountType(String amountType) {
         this.amountType = amountType;
+    }
+
+    public Double getMinAmount() {
+        return minAmount;
+    }
+
+    public void setMinAmount(Double minAmount) {
+        this.minAmount = minAmount;
     }
 
     public Double getAmount() {
@@ -410,6 +427,7 @@ public class WxActivity {
                 ", ruleType='" + ruleType + '\'' +
                 ", rule='" + rule + '\'' +
                 ", amountType='" + amountType + '\'' +
+                ", minAmount=" + minAmount +
                 ", amount=" + amount +
                 ", probability='" + probability + '\'' +
                 ", status=" + status +
@@ -441,6 +459,7 @@ public class WxActivity {
         private String ruleType;
         private String rule;
         private String amountType;
+        private Double minAmount;
         private Double amount;
         private String probability;
         private Boolean status;
@@ -452,7 +471,6 @@ public class WxActivity {
         private Date lastUpdate;
         private Integer sort;
         private Boolean giftPoints;
-        private Integer points;
         private Boolean giftCoupon;
         private String activityId;
 
@@ -496,6 +514,11 @@ public class WxActivity {
 
         public Builder amountType(String val) {
             amountType = val;
+            return this;
+        }
+
+        public Builder minAmount(Double val) {
+            minAmount = val;
             return this;
         }
 

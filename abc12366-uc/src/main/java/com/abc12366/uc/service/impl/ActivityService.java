@@ -106,6 +106,8 @@ public class ActivityService implements IActivityService {
 
     @Override
     public WxActivity insert(WxActivity activity) {
+        checkInput(activity);
+
         activity.setId(Utils.uuid());
         Date now = new Date();
         activity.setLastUpdate(now);
@@ -114,8 +116,28 @@ public class ActivityService implements IActivityService {
         return activity;
     }
 
+    /**
+     * 活动输入校验
+     */
+    private void checkInput(WxActivity activity) {
+        // 活动的金额类型为随机金额时，必须指定金额的最小值和最大值
+        if (activity.getAmountType().equals("2")) {
+            if (activity.getMinAmount() == null || activity.getAmount() == null) {
+                throw new ServiceException(6014);
+            }
+        }
+        // 活动启用优惠劵时，必须指定优惠劵活动
+        if (activity.getGiftCoupon()) {
+            if (StringUtils.isEmpty(activity.getActivityId())) {
+                throw new ServiceException(6015);
+            }
+        }
+    }
+
     @Override
     public WxActivity update(WxActivity activity) {
+        checkInput(activity);
+
         activity.setLastUpdate(new Date());
         activityMapper.update(activity);
         return activity;
@@ -404,12 +426,14 @@ public class ActivityService implements IActivityService {
             // 中奖
             if (inProbability(probability)) {
                 LOGGER.info("中奖:{}", redEnvelop.getSecret());
-                redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
+                redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getMinAmount(), activity
+                        .getAmount()));
                 // 已中奖未发送
                 redEnvelop.setSendStatus("0");
                 redEnvelop.setSendTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setMinAmount(activity.getMinAmount());
                 redEnvelop.setAmount(activity.getAmount());
                 redEnvelop.setAmountType(activity.getAmountType());
                 redEnvelop.setProbability(activity.getProbability());
@@ -424,6 +448,7 @@ public class ActivityService implements IActivityService {
                 redEnvelop.setReceiveTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setMinAmount(activity.getMinAmount());
                 redEnvelop.setAmount(activity.getAmount());
                 redEnvelop.setAmountType(activity.getAmountType());
                 redEnvelop.setProbability(activity.getProbability());
@@ -520,16 +545,16 @@ public class ActivityService implements IActivityService {
     /**
      * 生成金额
      */
-    private Double amountRule(String amountType, Double amount) {
+    private Double amountRule(String amountType, Double minAmount, Double maxAmount) {
         // 固定金额
         if ("1".equals(amountType)) {
-            return amount;
+            return maxAmount;
         } else { // 随机金额
-            if (amount.intValue() == amount) {
-                return (double) ThreadLocalRandom.current().nextInt(1, amount.intValue());
+            if (minAmount.intValue() == minAmount && maxAmount.intValue() == maxAmount) {
+                return (double) ThreadLocalRandom.current().nextInt(minAmount.intValue(), maxAmount.intValue());
             } else {
                 DecimalFormat df = new DecimalFormat("#.##");
-                return Double.parseDouble(df.format(ThreadLocalRandom.current().nextDouble(1, amount)));
+                return Double.parseDouble(df.format(ThreadLocalRandom.current().nextDouble(minAmount, maxAmount)));
             }
         }
     }

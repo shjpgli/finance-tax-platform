@@ -5,13 +5,14 @@
 
     <sql id="Base_Column_List">
         id, name, description, startTime, endTime, ruleType, rule, amountType, amount,
-        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort, giftPoint,
-        giftCoupon, activityId
+        probability, status, wishing, remark, num, times, createTime, lastUpdate, sort, giftPoints,
+        giftCoupon, activityId, minAmount
     </sql>
 
     <sql id="Base_RedEnvelop_List">
         id, secret, createTime, activityId, startTime, endTime, amount, amountType, probability,
-        sendAmount, sendStatus, url, sendTime, receiveStatus, receiveTime, ip, openId, billno, businessId
+        sendAmount, sendStatus, url, sendTime, receiveStatus, receiveTime, ip, openId, billno, businessId,
+        minAmount
     </sql>
 
     <sql id="Base_LotteryLog_List">
@@ -30,7 +31,7 @@
         VALUES
         (#{id},#{name},#{description},#{startTime},#{endTime},#{ruleType},#{rule},#{amountType},#{amount},
         #{probability},#{status}, #{wishing}, #{remark}, #{num}, #{times}, #{createTime},#{lastUpdate},#{sort},
-        #{giftPoint}, #{giftCoupon}, #{activityId})
+        #{giftPoints}, #{giftCoupon}, #{activityId}, #{minAmount})
     </insert>
 
     <update id="update">
@@ -55,6 +56,7 @@
             <if test="giftPoints != null">giftPoints = #{giftPoints},</if>
             <if test="giftCoupon != null">giftCoupon = #{giftCoupon},</if>
             <if test="activityId != null">activityId = #{activityId},</if>
+            <if test="minAmount != null">minAmount = #{minAmount},</if>
         </set>
         where id = #{id}
     </update>
@@ -66,7 +68,7 @@
         (#{id}, #{secret}, #{createTime}, #{activityId}, #{startTime}, #{endTime}, #{amount}, #{amountType},
         #{probability},
         #{sendAmount}, #{sendStatus}, #{url}, #{sendTime}, #{receiveStatus}, #{receiveTime}, #{ip}, #{openId},
-        #{billno}, #{businessId})
+        #{billno}, #{businessId}, #{minAmount})
     </insert>
 
     <insert id="batchGenerateSecret" parameterType="java.util.List">
@@ -77,7 +79,7 @@
             (#{item.id}, #{item.secret}, #{item.createTime}, #{item.activityId}, #{item.startTime}, #{item.endTime},
             #{item.amount}, #{item.amountType}, #{item.probability}, #{item.sendAmount}, #{item.sendStatus},
             #{item.url}, #{item.sendTime}, #{item.receiveStatus}, #{item.receiveTime}, #{item.ip},
-            #{item.openId}, #{item.billno}, #{item.businessId})
+            #{item.openId}, #{item.billno}, #{item.businessId}, #{item.minAmount})
         </foreach>
     </insert>
 
@@ -100,6 +102,7 @@
             <if test="openId != null">openId = #{openId},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="billno != null">billno = #{billno},</if>
+            <if test="minAmount != null">minAmount = #{minAmount},</if>
         </set>
         where id = #{id}
     </update>
