@@ -254,9 +254,9 @@ public class CurriculumController {
 	 * 更新课程信息
 	 */
 	@PutMapping(path = "/{curriculumId}")
-	public ResponseEntity update(@PathVariable String curriculumId, @Valid @RequestBody CurriculumBo curriculumBo) {
+	public ResponseEntity update(@PathVariable String curriculumId, @Valid @RequestBody CurriculumBo curriculumBo,HttpServletRequest request) {
 		// 更新课程信息
-		curriculumBo = curriculumService.update(curriculumBo);
+		curriculumBo = curriculumService.update(curriculumBo,request);
 		redisTemplate.delete("Bangb_RecommendForqt");
 		return ResponseEntity.ok(Utils.kv("data", curriculumBo));
 	}
