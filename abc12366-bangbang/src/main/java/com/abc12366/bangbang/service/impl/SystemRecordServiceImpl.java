@@ -291,7 +291,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
     }
 
     @Override
-    public List<DzsbHngs> statisRecordCompanyList(Map<String, Object> map) {
+    public List<DzsbHngs> statisRecordCompanyList(Map<String, Object> map, int page, int size) {
         List<Date> datelist = DateUtils.findDates((Date) map.get("startTime"), (Date) map.get("endTime"));
         List<String> list = new ArrayList<>();
         for (Date date : datelist) {
@@ -309,6 +309,7 @@ public class SystemRecordServiceImpl implements SystemRecordService {
             }
         }
         map.put("list",list);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<DzsbHngs> dzsbHngsList;
         try {
             dzsbHngsList = systemRecordCompanyRoMapper.statisRecordCompanyList(map);

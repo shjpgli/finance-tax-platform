@@ -81,5 +81,5 @@ public interface SystemRecordService {
      */
     List<User> statisRecordUserList(Map<String, Object> map, int page, int size);
 
-    List<DzsbHngs> statisRecordCompanyList(Map<String, Object> map);
+    List<DzsbHngs> statisRecordCompanyList(Map<String, Object> map, int page, int size);
 }
