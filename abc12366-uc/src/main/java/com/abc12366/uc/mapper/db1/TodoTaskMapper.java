@@ -1,6 +1,8 @@
 package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.TodoTask;
+import com.abc12366.uc.model.TodoTaskFront;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,4 +39,17 @@ public interface TodoTaskMapper {
     List<TodoTask> selectListByYear(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
 
     List<TodoTask> selectTimeLimitedOneByUserIdAndSysTaskId(@Param("userId") String userId, @Param("sysTaskId") String sysTaskId);
+    
+    
+    
+    List<TodoTask> selectList(@Param("type") String type, @Param("userId") String userId);
+
+    List<TodoTaskFront> selectNormalTaskList(String userId);
+
+    List<TodoTaskFront> selectOnetimeTaskList(String userId);
+
+    List<TodoTaskFront> selectSpecialTaskList(String userId);
+
+    List<TodoTaskFront> selectBangbangTaskList(String userId);
+    
 }

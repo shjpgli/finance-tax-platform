@@ -299,7 +299,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     @Override
     public void generateTodoTaskList(String userId, String type) {
         //如果用户的日常任务已生成则返回
-        List<TodoTask> taskList = todoTaskRoMapper.selectList(type, userId);
+        List<TodoTask> taskList = todoTaskMapper.selectList(type, userId);
         if (taskList != null && taskList.size() > 0) {
             return;
         }
@@ -338,7 +338,7 @@ public class TodoTaskServiceImpl implements TodoTaskService {
     @Override
     public List<TodoTask> selectList(String type, String userId) {
         LOGGER.info("{}:{}", type, userId);
-        return todoTaskRoMapper.selectList(type, userId);
+        return todoTaskMapper.selectList(type, userId);
     }
 
     public void finishTask(String userId, TodoTask todoTask) {
@@ -409,22 +409,22 @@ public class TodoTaskServiceImpl implements TodoTaskService {
 
     @Override
     public List<TodoTaskFront> selectNormalTaskList(String userId) {
-        return todoTaskRoMapper.selectNormalTaskList(userId);
+        return todoTaskMapper.selectNormalTaskList(userId);
     }
 
     @Override
     public List<TodoTaskFront> selectSpecialTaskList(String userId) {
-        return todoTaskRoMapper.selectSpecialTaskList(userId);
+        return todoTaskMapper.selectSpecialTaskList(userId);
     }
 
     @Override
     public List<TodoTaskFront> selectOnetimeTaskList(String userId) {
-        return todoTaskRoMapper.selectOnetimeTaskList(userId);
+        return todoTaskMapper.selectOnetimeTaskList(userId);
     }
 
     @Override
     public List<TodoTaskFront> selectBangbangTaskList(String userId) {
-        return todoTaskRoMapper.selectBangbangTaskList(userId);
+        return todoTaskMapper.selectBangbangTaskList(userId);
     }
 
     @Override
