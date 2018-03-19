@@ -127,17 +127,7 @@
         and createTime &gt;= (SELECT DATE_SUB(CURDATE(),INTERVAL DAYOFYEAR(NOW())-1 DAY))
         and createTime &lt;(SELECT CONCAT(YEAR(NOW())+1,'-01-01'))
     </select>
-    <select id="selectTimeLimitedOneByUserIdAndSysTaskId" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM uc_user_task_todo
-        WHERE userId = #{userId}
-        and sysTaskId = #{sysTaskId}
-        and startTime IS NOT NULL
-        and endTime IS NOT NULL
-        and <![CDATA[  startTime < (SELECT CURDATE())]]>
-        and <![CDATA[  endTime > (SELECT CURDATE())]]>
-    </select>
+
 
     <select id="selectOneByDayBySysTaskId" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
         SELECT
@@ -145,8 +135,10 @@
         FROM uc_user_task_todo
         WHERE userId = #{userId}
         and sysTaskId = #{sysTaskId}
-        and createTime &gt;= (SELECT CURDATE())
-        and createTime &lt;(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
+        and <![CDATA[ createTime >= (SELECT CURDATE()) ]]>
+        and <![CDATA[ createTime  < (SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY)) ]]>
+        ORDER BY lastupdate DESC 
+        LIMIT 1
     </select>
     
     <select id="selectList" resultType="com.abc12366.uc.model.TodoTask" parameterType="java.lang.String">
