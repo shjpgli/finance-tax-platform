@@ -91,7 +91,6 @@ public class RecordStatisController {
                                      @RequestParam(value = "menuc", required = false) String menuc,
                                      @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
                                      @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         Map<String,Object> map = new HashMap<>();
         if (startTime != null && !"".equals(startTime)) {
             map.put("startTime", DateUtils.strToDate(startTime));
@@ -102,7 +101,7 @@ public class RecordStatisController {
         map.put("menua",menua);
         map.put("menub",menub);
         map.put("menuc",menuc);
-        List<User> data = systemRecordService.statisRecordUserList(map);
+        List<User> data = systemRecordService.statisRecordUserList(map,page,size);
         PageInfo<User> pageInfo = new PageInfo<>(data);
 
         LOGGER.info("{}", data);
