@@ -4,17 +4,22 @@ import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
+import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ActivityMapper;
 import com.abc12366.uc.mapper.db2.ActivityRoMapper;
 import com.abc12366.uc.model.User;
+import com.abc12366.uc.model.bo.PointCalculateBO;
+import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
 import com.abc12366.uc.model.weixin.bo.Id;
 import com.abc12366.uc.model.weixin.bo.redpack.*;
 import com.abc12366.uc.service.IActivityService;
+import com.abc12366.uc.service.PointsService;
 import com.abc12366.uc.service.UserService;
+import com.abc12366.uc.service.order.CouponService;
 import com.abc12366.uc.util.LocalIpAddressUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
@@ -26,7 +31,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
@@ -39,7 +47,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author lijun <ljun51@outlook.com>
- * @create 2017-09-14 11:24 AM
+ * @date 2017-09-14 11:24 AM
  * @since 1.0.0
  */
 @Service("activityService")
@@ -55,6 +63,12 @@ public class ActivityService implements IActivityService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CouponService couponService;
+
+    @Autowired
+    private PointsService pointsService;
 
     @Override
     public List<WxActivity> selectList(WxActivity activity, int page, int size) {
@@ -92,6 +106,8 @@ public class ActivityService implements IActivityService {
 
     @Override
     public WxActivity insert(WxActivity activity) {
+        checkInput(activity);
+
         activity.setId(Utils.uuid());
         Date now = new Date();
         activity.setLastUpdate(now);
@@ -100,8 +116,28 @@ public class ActivityService implements IActivityService {
         return activity;
     }
 
+    /**
+     * 活动输入校验
+     */
+    private void checkInput(WxActivity activity) {
+        // 活动的金额类型为随机金额时，必须指定金额的最小值和最大值
+        if (activity.getAmountType().equals("2")) {
+            if (activity.getMinAmount() == null || activity.getAmount() == null) {
+                throw new ServiceException(6014);
+            }
+        }
+        // 活动启用优惠劵时，必须指定优惠劵活动
+        if (activity.getGiftCoupon()) {
+            if (StringUtils.isEmpty(activity.getActivityId())) {
+                throw new ServiceException(6015);
+            }
+        }
+    }
+
     @Override
     public WxActivity update(WxActivity activity) {
+        checkInput(activity);
+
         activity.setLastUpdate(new Date());
         activityMapper.update(activity);
         return activity;
@@ -285,11 +321,19 @@ public class ActivityService implements IActivityService {
         if (redEnvelopList.size() > 0 && redEnvelopList.size() <= 1000) {
             List<WxRedEnvelop> dataList = new ArrayList<>();
             for (WxRedEnvelopBO redEnvelopBO : redEnvelopList) {
+
+                String url = StringUtils.isNotEmpty(redEnvelopBO.getBusinessId().trim()) ? Constant.WEIXIN_LOTTERY
+                        .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
+                        .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
+                        .replace("STATE", state(redEnvelopBO.getSecret(), redEnvelopBO.getActivityId())) : null;
+
                 WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                         .id(Utils.uuid())
                         .createTime(new Date())
                         .secret(redEnvelopBO.getSecret())
                         .activityId(redEnvelopBO.getActivityId().trim())
+                        .businessId(redEnvelopBO.getBusinessId().trim())
+                        .url(url)
                         .build();
                 dataList.add(redEnvelop);
             }
@@ -332,6 +376,7 @@ public class ActivityService implements IActivityService {
                     if ("SUCCESS".equals(rrp.getResult_code())) {
                         // 发送成功
                         redEnvelop.setSendStatus("1");
+                        processPointsAndCoupon(activity, redEnvelop.getOpenId());
                     } else {
                         // 发送失败
                         redEnvelop.setSendStatus("2");
@@ -389,12 +434,14 @@ public class ActivityService implements IActivityService {
             // 中奖
             if (inProbability(probability)) {
                 LOGGER.info("中奖:{}", redEnvelop.getSecret());
-                redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getAmount()));
+                redEnvelop.setSendAmount(amountRule(activity.getAmountType(), activity.getMinAmount(), activity
+                        .getAmount()));
                 // 已中奖未发送
                 redEnvelop.setSendStatus("0");
                 redEnvelop.setSendTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setMinAmount(activity.getMinAmount());
                 redEnvelop.setAmount(activity.getAmount());
                 redEnvelop.setAmountType(activity.getAmountType());
                 redEnvelop.setProbability(activity.getProbability());
@@ -409,6 +456,7 @@ public class ActivityService implements IActivityService {
                 redEnvelop.setReceiveTime(now);
                 redEnvelop.setStartTime(activity.getStartTime());
                 redEnvelop.setEndTime(activity.getEndTime());
+                redEnvelop.setMinAmount(activity.getMinAmount());
                 redEnvelop.setAmount(activity.getAmount());
                 redEnvelop.setAmountType(activity.getAmountType());
                 redEnvelop.setProbability(activity.getProbability());
@@ -505,16 +553,16 @@ public class ActivityService implements IActivityService {
     /**
      * 生成金额
      */
-    private Double amountRule(String amountType, Double amount) {
+    private Double amountRule(String amountType, Double minAmount, Double maxAmount) {
         // 固定金额
         if ("1".equals(amountType)) {
-            return amount;
+            return maxAmount;
         } else { // 随机金额
-            if (amount.intValue() == amount) {
-                return (double) ThreadLocalRandom.current().nextInt(1, amount.intValue());
+            if (minAmount.intValue() == minAmount && maxAmount.intValue() == maxAmount) {
+                return (double) ThreadLocalRandom.current().nextInt(minAmount.intValue(), maxAmount.intValue());
             } else {
                 DecimalFormat df = new DecimalFormat("#.##");
-                return Double.parseDouble(df.format(ThreadLocalRandom.current().nextDouble(1, amount)));
+                return Double.parseDouble(df.format(ThreadLocalRandom.current().nextDouble(minAmount, maxAmount)));
             }
         }
     }
@@ -567,5 +615,35 @@ public class ActivityService implements IActivityService {
             LOGGER.error("{}", e);
         }
         return Utils.encode(secret + "," + activityId);
+    }
+
+    /**
+     * 处理领取红包成功后的积分和优惠劵业务
+     *
+     * @param activity 优惠劵活动
+     * @param openId   微信openId
+     */
+    private void processPointsAndCoupon(WxActivity activity, String openId) {
+        LOGGER.info("开始处理领取红包成功后的积分和优惠劵业务openId:{}", openId);
+        if (activity.getGiftPoints() || activity.getGiftCoupon()) {
+            UserBO user = userService.selectByopenid(openId);
+            if (user != null) {
+                LOGGER.info("查询用户信息:{}", user.getId());
+                if (activity.getGiftPoints()) {
+                    PointCalculateBO bo = new PointCalculateBO();
+                    bo.setUserId(user.getId());
+                    bo.setRuleCode(TaskConstant.POINT_RULE_DZSB_CODE);
+                    bo.setRemark("电子申报服务费");
+                    LOGGER.info("处理积分业务:{}", bo);
+                    pointsService.calculate(bo);
+                }
+                if (activity.getGiftCoupon() && StringUtils.isNotEmpty(activity.getActivityId())) {
+                    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                            .getRequest();
+                    LOGGER.info("处理优惠劵业务userId:{}, activityId:{}", user.getId(), activity.getActivityId());
+                    couponService.userCollectCoupon(user.getId(), activity.getActivityId(), request);
+                }
+            }
+        }
     }
 }
