@@ -128,13 +128,18 @@ public class WxRedEnvelop {
      */
     private String phone;
 
+    /**
+     * 用户ID
+     */
+    private String userId;
+
     public WxRedEnvelop() {
     }
 
     public WxRedEnvelop(String id, String secret, Date createTime, String activityId, Date startTime, Date endTime,
                         Double amount, String amountType, String probability, Double sendAmount, String sendStatus,
-                        String url, Date sendTime, String receiveStatus, Date receiveTime, String ip, String
-                                openId, String remark, String billno, String businessId, Double minAmount) {
+                        String url, Date sendTime, String receiveStatus, Date receiveTime, String ip, String openId,
+                        String remark, String billno, String businessId, Double minAmount, String userId) {
         this.id = id;
         this.secret = secret;
         this.createTime = createTime;
@@ -156,6 +161,7 @@ public class WxRedEnvelop {
         this.billno = billno;
         this.businessId = businessId;
         this.minAmount = minAmount;
+        this.userId = userId;
     }
 
     private WxRedEnvelop(Builder builder) {
@@ -180,6 +186,7 @@ public class WxRedEnvelop {
         setRemark(builder.remark);
         setBillno(builder.billno);
         setBusinessId(builder.businessId);
+        setUserId(builder.userId);
     }
 
     public String getId() {
@@ -374,6 +381,14 @@ public class WxRedEnvelop {
         this.businessId = businessId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "WxRedEnvelop{" +
@@ -401,6 +416,7 @@ public class WxRedEnvelop {
                 ", billno='" + billno + '\'' +
                 ", wxnickname='" + wxnickname + '\'' +
                 ", phone='" + phone + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 
@@ -426,6 +442,7 @@ public class WxRedEnvelop {
         private String openId;
         private String remark;
         private String billno;
+        private String userId;
 
         public Builder() {
         }
@@ -532,6 +549,11 @@ public class WxRedEnvelop {
 
         public Builder businessId(String val) {
             businessId = val;
+            return this;
+        }
+
+        public Builder userId(String val) {
+            userId = val;
             return this;
         }
 
