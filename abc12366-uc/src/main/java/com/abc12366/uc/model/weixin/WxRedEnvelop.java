@@ -38,6 +38,13 @@ public class WxRedEnvelop {
     @NotNull
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
+
+    /**
+     * 随机金额-最小金额
+     */
+    @Min(1)
+    private Double minAmount;
+
     // 红包金额
     @NotNull
     @Min(1)
@@ -121,13 +128,18 @@ public class WxRedEnvelop {
      */
     private String phone;
 
+    /**
+     * 用户ID
+     */
+    private String userId;
+
     public WxRedEnvelop() {
     }
 
     public WxRedEnvelop(String id, String secret, Date createTime, String activityId, Date startTime, Date endTime,
                         Double amount, String amountType, String probability, Double sendAmount, String sendStatus,
-                        String url, Date sendTime, String receiveStatus, Date receiveTime, String ip, String
-                                openId, String remark, String billno, String businessId) {
+                        String url, Date sendTime, String receiveStatus, Date receiveTime, String ip, String openId,
+                        String remark, String billno, String businessId, Double minAmount, String userId) {
         this.id = id;
         this.secret = secret;
         this.createTime = createTime;
@@ -148,6 +160,8 @@ public class WxRedEnvelop {
         this.remark = remark;
         this.billno = billno;
         this.businessId = businessId;
+        this.minAmount = minAmount;
+        this.userId = userId;
     }
 
     private WxRedEnvelop(Builder builder) {
@@ -157,6 +171,7 @@ public class WxRedEnvelop {
         setActivityId(builder.activityId);
         setStartTime(builder.startTime);
         setEndTime(builder.endTime);
+        setMinAmount(builder.minAmount);
         setAmount(builder.amount);
         setAmountType(builder.amountType);
         setProbability(builder.probability);
@@ -171,6 +186,7 @@ public class WxRedEnvelop {
         setRemark(builder.remark);
         setBillno(builder.billno);
         setBusinessId(builder.businessId);
+        setUserId(builder.userId);
     }
 
     public String getId() {
@@ -219,6 +235,14 @@ public class WxRedEnvelop {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Double getMinAmount() {
+        return minAmount;
+    }
+
+    public void setMinAmount(Double minAmount) {
+        this.minAmount = minAmount;
     }
 
     public Double getAmount() {
@@ -357,6 +381,14 @@ public class WxRedEnvelop {
         this.businessId = businessId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "WxRedEnvelop{" +
@@ -366,6 +398,7 @@ public class WxRedEnvelop {
                 ", activityId='" + activityId + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
+                ", minAmount=" + minAmount +
                 ", amount=" + amount +
                 ", amountType='" + amountType + '\'' +
                 ", probability='" + probability + '\'' +
@@ -383,6 +416,7 @@ public class WxRedEnvelop {
                 ", billno='" + billno + '\'' +
                 ", wxnickname='" + wxnickname + '\'' +
                 ", phone='" + phone + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 
@@ -393,6 +427,7 @@ public class WxRedEnvelop {
         private String activityId;
         private Date startTime;
         private Date endTime;
+        private Double minAmount;
         private Double amount;
         private String amountType;
         private String probability;
@@ -407,6 +442,7 @@ public class WxRedEnvelop {
         private String openId;
         private String remark;
         private String billno;
+        private String userId;
 
         public Builder() {
         }
@@ -438,6 +474,11 @@ public class WxRedEnvelop {
 
         public Builder endTime(Date val) {
             endTime = val;
+            return this;
+        }
+
+        public Builder minAmount(Double val) {
+            minAmount = val;
             return this;
         }
 
@@ -508,6 +549,11 @@ public class WxRedEnvelop {
 
         public Builder businessId(String val) {
             businessId = val;
+            return this;
+        }
+
+        public Builder userId(String val) {
+            userId = val;
             return this;
         }
 

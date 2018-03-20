@@ -291,6 +291,7 @@ public class OrderController {
      * @param pageSize  条数
      * @param goodsId   商品ID
      * @param nickname  用户昵称
+     * @param username  用户名
      * @param startTime 开始时间
      * @param endTime   结束时间
      * @return 订单列表
@@ -302,6 +303,7 @@ public class OrderController {
                                                             int pageSize,
                                                     @RequestParam(value = "goodsId", required = true) String goodsId,
                                                     @RequestParam(value = "nickname", required = false) String nickname,
+                                                    @RequestParam(value = "username", required = false) String username,
                                                     @RequestParam(value = "startTime", required = false) String
                                                                 startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime) {
@@ -309,6 +311,7 @@ public class OrderController {
         OrderBO orderBO = new OrderBO();
         UserBO user = new UserBO();
         user.setNickname(nickname);
+        user.setUsername(username);
         orderBO.setUser(user);
         orderBO.setGoodsId(goodsId);
         if (startTime != null && !"".equals(startTime)) {

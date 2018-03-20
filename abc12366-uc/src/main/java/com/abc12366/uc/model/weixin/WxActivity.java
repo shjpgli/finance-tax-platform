@@ -46,6 +46,13 @@ public class WxActivity {
     @NotEmpty
     @Length(min = 1, max = 1)
     private String amountType;
+
+    /**
+     * 随机金额-最小金额
+     */
+    @Min(1)
+    private Double minAmount;
+
     // 随机最大金额/固定金额
     @NotNull
     @Min(1)
@@ -114,13 +121,37 @@ public class WxActivity {
      */
     private Boolean outdated;
 
+    /**
+     * 是否赠送积分
+     */
+    @NotNull
+    private Boolean giftPoints;
+
+    /**
+     * 赠送积分
+     */
+    private Integer points;
+
+    /**
+     * 是否赠送优惠劵
+     */
+    @NotNull
+    private Boolean giftCoupon;
+
+    /**
+     * 优惠劵活动ID
+     */
+    @Length(min = 32, max = 64)
+    private String activityId;
+
     public WxActivity() {
     }
 
     public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType,
                       String rule, String amountType, Double amount, String probability, Boolean status, String
                               wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate,
-                      Integer sort) {
+                      Integer sort, Boolean giftPoints, Boolean giftCoupon, String activityId, Double minAmount,
+                      Integer points) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -139,6 +170,11 @@ public class WxActivity {
         this.createTime = createTime;
         this.lastUpdate = lastUpdate;
         this.sort = sort;
+        this.giftPoints = giftPoints;
+        this.giftCoupon = giftCoupon;
+        this.activityId = activityId;
+        this.minAmount = minAmount;
+        this.points = points;
     }
 
     private WxActivity(Builder builder) {
@@ -150,6 +186,7 @@ public class WxActivity {
         setRuleType(builder.ruleType);
         setRule(builder.rule);
         setAmountType(builder.amountType);
+        setMinAmount(builder.minAmount);
         setAmount(builder.amount);
         setProbability(builder.probability);
         setStatus(builder.status);
@@ -160,6 +197,10 @@ public class WxActivity {
         setCreateTime(builder.createTime);
         setLastUpdate(builder.lastUpdate);
         setSort(builder.sort);
+        setGiftPoints(builder.giftPoints);
+        setGiftCoupon(builder.giftCoupon);
+        setActivityId(builder.activityId);
+        setPoints(builder.points);
     }
 
     public String getId() {
@@ -224,6 +265,14 @@ public class WxActivity {
 
     public void setAmountType(String amountType) {
         this.amountType = amountType;
+    }
+
+    public Double getMinAmount() {
+        return minAmount;
+    }
+
+    public void setMinAmount(Double minAmount) {
+        this.minAmount = minAmount;
     }
 
     public Double getAmount() {
@@ -351,6 +400,38 @@ public class WxActivity {
         return now.before(startTime) || now.after(endTime);
     }
 
+    public Boolean getGiftPoints() {
+        return giftPoints;
+    }
+
+    public void setGiftPoints(Boolean giftPoints) {
+        this.giftPoints = giftPoints;
+    }
+
+    public Boolean getGiftCoupon() {
+        return giftCoupon;
+    }
+
+    public void setGiftCoupon(Boolean giftCoupon) {
+        this.giftCoupon = giftCoupon;
+    }
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
     @Override
     public String toString() {
         return "WxActivity{" +
@@ -362,6 +443,7 @@ public class WxActivity {
                 ", ruleType='" + ruleType + '\'' +
                 ", rule='" + rule + '\'' +
                 ", amountType='" + amountType + '\'' +
+                ", minAmount=" + minAmount +
                 ", amount=" + amount +
                 ", probability='" + probability + '\'' +
                 ", status=" + status +
@@ -372,7 +454,16 @@ public class WxActivity {
                 ", createTime=" + createTime +
                 ", lastUpdate=" + lastUpdate +
                 ", sort=" + sort +
+                ", sent=" + sent +
+                ", sentAmount=" + sentAmount +
+                ", received=" + received +
+                ", receivedAmount=" + receivedAmount +
+                ", nop=" + nop +
                 ", outdated=" + outdated +
+                ", giftPoints=" + giftPoints +
+                ", giftCoupon=" + giftCoupon +
+                ", activityId='" + activityId + '\'' +
+                ", points='" + points + '\'' +
                 '}';
     }
 
@@ -385,6 +476,7 @@ public class WxActivity {
         private String ruleType;
         private String rule;
         private String amountType;
+        private Double minAmount;
         private Double amount;
         private String probability;
         private Boolean status;
@@ -395,6 +487,10 @@ public class WxActivity {
         private Date createTime;
         private Date lastUpdate;
         private Integer sort;
+        private Boolean giftPoints;
+        private Boolean giftCoupon;
+        private String activityId;
+        private Integer points;
 
         public Builder() {
         }
@@ -436,6 +532,11 @@ public class WxActivity {
 
         public Builder amountType(String val) {
             amountType = val;
+            return this;
+        }
+
+        public Builder minAmount(Double val) {
+            minAmount = val;
             return this;
         }
 
@@ -486,6 +587,26 @@ public class WxActivity {
 
         public Builder sort(Integer val) {
             sort = val;
+            return this;
+        }
+
+        public Builder giftPoints(Boolean val) {
+            giftPoints = val;
+            return this;
+        }
+
+        public Builder giftCoupon(Boolean val) {
+            giftCoupon = val;
+            return this;
+        }
+
+        public Builder activityId(String val) {
+            activityId = val;
+            return this;
+        }
+
+        public Builder points(Integer val) {
+            points = val;
             return this;
         }
 
