@@ -128,6 +128,11 @@ public class WxActivity {
     private Boolean giftPoints;
 
     /**
+     * 赠送积分
+     */
+    private Integer points;
+
+    /**
      * 是否赠送优惠劵
      */
     @NotNull
@@ -145,7 +150,8 @@ public class WxActivity {
     public WxActivity(String id, String name, String description, Date startTime, Date endTime, String ruleType,
                       String rule, String amountType, Double amount, String probability, Boolean status, String
                               wishing, String remark, Integer num, Integer times, Date createTime, Date lastUpdate,
-                      Integer sort, Boolean giftPoints, Boolean giftCoupon, String activityId, Double minAmount) {
+                      Integer sort, Boolean giftPoints, Boolean giftCoupon, String activityId, Double minAmount,
+                      Integer points) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -168,6 +174,7 @@ public class WxActivity {
         this.giftCoupon = giftCoupon;
         this.activityId = activityId;
         this.minAmount = minAmount;
+        this.points = points;
     }
 
     private WxActivity(Builder builder) {
@@ -193,6 +200,7 @@ public class WxActivity {
         setGiftPoints(builder.giftPoints);
         setGiftCoupon(builder.giftCoupon);
         setActivityId(builder.activityId);
+        setPoints(builder.points);
     }
 
     public String getId() {
@@ -416,6 +424,14 @@ public class WxActivity {
         this.activityId = activityId;
     }
 
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
     @Override
     public String toString() {
         return "WxActivity{" +
@@ -447,6 +463,7 @@ public class WxActivity {
                 ", giftPoints=" + giftPoints +
                 ", giftCoupon=" + giftCoupon +
                 ", activityId='" + activityId + '\'' +
+                ", points='" + points + '\'' +
                 '}';
     }
 
@@ -473,6 +490,7 @@ public class WxActivity {
         private Boolean giftPoints;
         private Boolean giftCoupon;
         private String activityId;
+        private Integer points;
 
         public Builder() {
         }
@@ -584,6 +602,11 @@ public class WxActivity {
 
         public Builder activityId(String val) {
             activityId = val;
+            return this;
+        }
+
+        public Builder points(Integer val) {
+            points = val;
             return this;
         }
 

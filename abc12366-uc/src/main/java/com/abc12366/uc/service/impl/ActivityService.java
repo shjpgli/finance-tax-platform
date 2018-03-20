@@ -11,6 +11,7 @@ import com.abc12366.uc.mapper.db2.ActivityRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointCalculateBO;
 import com.abc12366.uc.model.bo.UserBO;
+import com.abc12366.uc.model.bo.UserSimpleInfoBO;
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;
 import com.abc12366.uc.model.weixin.WxRedEnvelop;
@@ -126,6 +127,12 @@ public class ActivityService implements IActivityService {
                 throw new ServiceException(6014);
             }
         }
+        // 活动启用赠送积分时，必须输入大于0的积分数值
+        if (activity.getGiftPoints()) {
+            if (activity.getPoints() == null || activity.getPoints() < 1) {
+                throw new ServiceException(6016);
+            }
+        }
         // 活动启用优惠劵时，必须指定优惠劵活动
         if (activity.getGiftCoupon()) {
             if (StringUtils.isEmpty(activity.getActivityId())) {
@@ -153,6 +160,18 @@ public class ActivityService implements IActivityService {
      */
     @Override
     public WxRedEnvelopBO generateSecret(String activityId, String businessId) {
+        return getWxRedEnvelopBO(activityId, businessId, null);
+    }
+
+    /**
+     * 生成口令
+     */
+    @Override
+    public WxRedEnvelopBO generateSecret(String activityId, String businessId, String userId) {
+        return getWxRedEnvelopBO(activityId, businessId, userId);
+    }
+
+    private WxRedEnvelopBO getWxRedEnvelopBO(String activityId, String businessId, String userId) {
         WxActivity activity = selectOne(activityId);
         if (activity != null) {
             // 活动是否激活
@@ -169,6 +188,7 @@ public class ActivityService implements IActivityService {
                     .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
                     .createTime(new Date())
                     .activityId(activity.getId())
+                    .userId(userId)
                     .build();
             if (StringUtils.isNotEmpty(businessId)) {
                 WxRedEnvelop wre = new WxRedEnvelop.Builder()
@@ -376,7 +396,7 @@ public class ActivityService implements IActivityService {
                     if ("SUCCESS".equals(rrp.getResult_code())) {
                         // 发送成功
                         redEnvelop.setSendStatus("1");
-                        processPointsAndCoupon(activity, redEnvelop.getOpenId());
+                        processPointsAndCoupon(activity, redEnvelop.getUserId());
                     } else {
                         // 发送失败
                         redEnvelop.setSendStatus("2");
@@ -621,19 +641,20 @@ public class ActivityService implements IActivityService {
      * 处理领取红包成功后的积分和优惠劵业务
      *
      * @param activity 优惠劵活动
-     * @param openId   微信openId
+     * @param userId   用户Id
      */
-    private void processPointsAndCoupon(WxActivity activity, String openId) {
-        LOGGER.info("开始处理领取红包成功后的积分和优惠劵业务openId:{}", openId);
-        if (activity.getGiftPoints() || activity.getGiftCoupon()) {
-            UserBO user = userService.selectByopenid(openId);
+    private void processPointsAndCoupon(WxActivity activity, String userId) {
+        LOGGER.info("开始处理领取红包成功后的积分和优惠劵业务userId:{}", userId);
+        if (StringUtils.isNotEmpty(userId) && (activity.getGiftPoints() || activity.getGiftCoupon())) {
+            UserSimpleInfoBO user = userService.selectSimple(userId);
             if (user != null) {
-                LOGGER.info("查询用户信息:{}", user.getId());
+                LOGGER.info("查询用户信息:{}", userId);
                 if (activity.getGiftPoints()) {
                     PointCalculateBO bo = new PointCalculateBO();
-                    bo.setUserId(user.getId());
-                    bo.setRuleCode(TaskConstant.POINT_RULE_DZSB_CODE);
+                    bo.setUserId(userId);
+                    bo.setRuleCode(TaskConstant.POINT_RULE_WXHB_CODE);
                     bo.setRemark("电子申报服务费");
+                    bo.setPoints(activity.getPoints());
                     LOGGER.info("处理积分业务:{}", bo);
                     pointsService.calculate(bo);
                 }
