@@ -12,13 +12,5 @@ import java.util.List;
  * Time: 14:50
  */
 public interface TodoTaskRoMapper {
-    List<TodoTask> selectList(@Param("type") String type, @Param("userId") String userId);
-
-    List<TodoTaskFront> selectNormalTaskList(String userId);
-
-    List<TodoTaskFront> selectOnetimeTaskList(String userId);
-
-    List<TodoTaskFront> selectSpecialTaskList(String userId);
-
-    List<TodoTaskFront> selectBangbangTaskList(String userId);
+    
 }
