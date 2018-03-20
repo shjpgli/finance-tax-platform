@@ -11,8 +11,16 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockBo"
             parameterType="com.abc12366.bangbang.model.question.bo.QuestionSysBlockParamBo">
-        SELECT * FROM (
-        SELECT t.*,t_user.nickname AS username,t_classify.classifyName,
+        SELECT id, userId, sourceId, (case
+            when sourceType = 'question' then sourceId
+            when sourceType = 'answer' then answerQuestionId
+            when sourceType = 'cheats' then sourceId
+            when sourceType = 'cheats_comment' then cheatsId
+            when sourceType = 'comment' then commentQuestionId
+            end) as linkId,  sourceType, classifyCode, createTime, updateAdmin, updateTime, status, username, classifyName, content
+        FROM (
+        SELECT t.id, t.userId, t.sourceId, t2.questionId as answerQuestionId, t5.questionId as commentQuestionId, t4.cheatsId, t.sourceType, t.classifyCode, t.createTime, t.updateAdmin, t.updateTime, t.status,
+          t_user.nickname AS username,t_classify.classifyName,
           (CASE
             WHEN t1.title IS NOT NULL THEN CONCAT(t1.title,t1.detail)
             WHEN t2.answer IS NOT NULL THEN t2.answer
@@ -48,6 +56,7 @@
               and date_format(temp.createTime, '%Y%m%d') <= date_format(#{endTime}, '%Y%m%d')
               ]]>
         </if>
+        ORDER BY createTime DESC
     </select>
 
 

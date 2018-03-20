@@ -26,11 +26,11 @@ public class HndsLoginBo implements Serializable {
 	private String mm;
 	// Taxtype为1时有用，为国税网厅的角色ID，当Taxtype为1时不允许为空
 	private String roleid;
-	//用户ID
+	// 用户ID
 	private String userId;
-	//纳税人名称
-	private String nsrmc="";
-	
+	// 纳税人名称
+	private String nsrmc = "";
+
 	public String getTaxtype() {
 		return taxtype;
 	}
@@ -70,14 +70,18 @@ public class HndsLoginBo implements Serializable {
 	public void setRoleid(String roleid) {
 		this.roleid = roleid;
 	}
-	
-	public String getChangePwd(){
-		return new BASE64Encoder().encode(this.mm.toUpperCase().getBytes());
+
+	@SuppressWarnings("restriction")
+	public String getChangePwd() {
+		return org.apache.commons.lang3.StringUtils.isNotEmpty(this.mm)
+				? new BASE64Encoder().encode(this.mm.toUpperCase().getBytes()) : "";
 	}
 
 	/**
 	 * 拼接地址
-	 * @param urlfix 地址前缀
+	 * 
+	 * @param urlfix
+	 *            地址前缀
 	 * @return
 	 */
 	public String toLoginStr(String urlfix) {
@@ -85,10 +89,10 @@ public class HndsLoginBo implements Serializable {
 		url.append("&taxtype=" + this.taxtype);
 		url.append("&mainuserid=" + this.mainuserid);
 		url.append("&mm=" + getChangePwd());
-		if(!StringUtils.isEmpty(this.subuserid)){
+		if (!StringUtils.isEmpty(this.subuserid)) {
 			url.append("&subuserid=" + this.subuserid);
 		}
-		if(!StringUtils.isEmpty(this.roleid)){
+		if (!StringUtils.isEmpty(this.roleid)) {
 			url.append("&roleid=" + this.roleid);
 		}
 		return url.toString();
@@ -101,7 +105,7 @@ public class HndsLoginBo implements Serializable {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+
 	public static void main(String[] args) {
 	}
 

@@ -108,7 +108,6 @@ public class CheatsController {
         dataMap.put("isImage", isImage);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatsBo> dataList = cheatsService.selectListRecommend(dataMap);
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         return (dataList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal
@@ -131,7 +130,6 @@ public class CheatsController {
         dataMap.put("classifyCode", classifyCode);//s
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<CheatstjydBo> dataList = cheatsService.selectListRecommendTitle(dataMap);
-//        return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
         return (dataList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal

@@ -8,23 +8,15 @@
 		 id,	userId,	lecturerId,	status,	createTime,	lastUpdate
 	</sql>
 
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectByPrimaryKey" resultType="com.abc12366.bangbang.model.FollowLecturer" parameterType="java.lang.String">
-		 SELECT
-		 <include refid="Base_Column_List" />
-		 FROM bb_follow_lecturer
-		 WHERE id = #{id}
-	</select>
-
-    <!--订单对象-->
-    <resultMap id="followLecturerBOMap" type="com.abc12366.bangbang.model.bo.FollowLecturerBO">
+    <!--用户关注讲师-->
+    <resultMap id="followLecturerMap" type="com.abc12366.bangbang.model.bo.FollowLecturerBO">
         <result column="id" property="id" jdbcType="VARCHAR"/>
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="lecturerId" property="lecturerId" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
-        <association property="curriculumLecturer" javaType="com.abc12366.bangbang.model.curriculum.CurriculumLecturer">
+        <association property="curriculumLecturer" javaType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo">
             <id column="lId" property="lecturerId" jdbcType="VARCHAR"/>
             <result column="lUserId" property="userId" jdbcType="VARCHAR"/>
             <result column="intro" property="intro" jdbcType="VARCHAR"/>
@@ -37,16 +29,63 @@
             <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
             <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
         </association>
-
     </resultMap>
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectList" resultMap="followLecturerBOMap" parameterType="java.util.Map">
+
+    <resultMap id="followLecturerList" type="com.abc12366.bangbang.model.bo.FollowLecturerBO">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="lecturerId" property="lecturerId" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <association property="curriculumLecturer" javaType="com.abc12366.bangbang.model.curriculum.bo.CurriculumLecturerBo">
+            <id column="lId" property="lecturerId" jdbcType="VARCHAR"/>
+            <result column="lUserId" property="userId" jdbcType="VARCHAR"/>
+            <result column="intro" property="intro" jdbcType="VARCHAR"/>
+            <result column="lecturerName" property="lecturerName" jdbcType="VARCHAR"/>
+            <result column="phone" property="phone" jdbcType="VARCHAR"/>
+            <result column="company" property="company" jdbcType="VARCHAR"/>
+            <result column="lecturerQQ" property="lecturerQQ" jdbcType="VARCHAR"/>
+            <result column="lecturerEmail" property="lecturerEmail" jdbcType="VARCHAR"/>
+            <result column="lecturerPicture" property="lecturerPicture" jdbcType="VARCHAR"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+            <result column="praiseNum" property="praiseNum" jdbcType="INTEGER"/>
+            <result column="evaluateNum" property="evaluateNum" jdbcType="INTEGER"/>
+            <result column="currNum" property="currNum" jdbcType="INTEGER"/>
+            <result column="studentNum" property="studentNum" jdbcType="INTEGER"/>
+            <association property="praiseNum" column="lId" select="getPraiseNum"/>
+            <association property="evaluateNum" column="lId" select="getEvaluateNum"/>
+            <association property="currNum" column="lId" select="getCurrNum"/>
+            <association property="studentNum" column="lId" select="getStudentNum"/>
+        </association>
+    </resultMap>
+
+
+	<!-- 好评数 -->
+	<select id="getCurrNum" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(curriculumId) as currNum from bb_curriculum_lecturer_gx where lecturerId = #{lId}
+	</select>
+	<!-- 评论数 -->
+	<select id="getStudentNum" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT count(studyId) as studentNum FROM bb_curriculum_study where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = #{lId})
+	</select>
+	<!-- 课程数 -->
+	<select id="getEvaluateNum" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT count(evaluateId) as evaluateNum FROM bb_curriculum_evaluate where curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = #{lId})
+	</select>
+	<!-- 学生数 -->
+	<select id="getPraiseNum" resultType="java.lang.Integer" parameterType="java.lang.String">
+		SELECT count(evaluateId) FROM bb_curriculum_evaluate where grade in(4,5) and curriculumId in (select curriculumId from bb_curriculum_lecturer_gx where lecturerId = #{lId} )
+	</select>
+
+	<!-- 查询列表 -->
+	<select id="selectFollowLecturerList" resultMap="followLecturerList" parameterType="java.util.Map">
 		SELECT
         a.id,	a.userId,	a.lecturerId,	a.status,	a.createTime,	a.lastUpdate,
         b.lecturerId as lId,	b.userId as lUserId,	b.lecturerName,b.intro,	b.phone,	b.company,	b.lecturerQQ,	b.lecturerEmail,	b.lecturerPicture
         FROM bb_follow_lecturer a LEFT JOIN bb_curriculum_lecturer b on b.lecturerId = a.lecturerId
         <where>
-            1 = 1
             <if test=" userId != null and userId != '' ">
                 and a.userId = #{userId}
             </if>
@@ -62,16 +101,7 @@
 	</select>
 
 	<!-- 查询（根据主键ID查询） -->
-	<select id="selectFollowLecturerBO"  resultMap="followLecturerBOMap" parameterType="java.lang.String">
-		SELECT
-        a.id,	a.userId,	a.lecturerId,	a.status,	a.createTime,	a.lastUpdate,
-        b.lecturerId as lId,	b.userId as lUserId,	b.lecturerName,b.createTime,b.updateTime,	b.intro,	b.phone,	b.company,	b.lecturerQQ,	b.lecturerEmail,	b.lecturerPicture
-        FROM bb_follow_lecturer a LEFT JOIN bb_curriculum_lecturer b on b.lecturerId = a.lecturerId
-		WHERE a.id = #{id}
-	</select>
-
-	<!-- 查询（根据主键ID查询） -->
-	<select id="selectFollowLecturer"  resultType="com.abc12366.bangbang.model.FollowLecturer" parameterType="java.util.Map">
+	<select id="selectOne"  resultType="com.abc12366.bangbang.model.FollowLecturer" parameterType="java.lang.String">
 		SELECT
         a.id,	a.userId,	a.lecturerId,	a.status,	a.createTime,	a.lastUpdate
         FROM bb_follow_lecturer a

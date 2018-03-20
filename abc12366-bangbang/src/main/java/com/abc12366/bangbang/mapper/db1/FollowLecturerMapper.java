@@ -1,7 +1,6 @@
 package com.abc12366.bangbang.mapper.db1;
 
 import com.abc12366.bangbang.model.FollowLecturer;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 
@@ -10,15 +9,6 @@ import org.apache.ibatis.annotations.Param;
  **/
 
 public interface FollowLecturerMapper{
-
-
-
-	/**
-	 * 
-	 * 删除（根据主键ID删除）
-	 * 
-	 **/
-	int delete(String s, @Param("id") String id);
 
 	/**
 	 * 

@@ -810,7 +810,7 @@ public class OrderServiceImpl implements OrderService {
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
         messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         messageSendBo.setBusinessId(order.getOrderNo());
-        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html\">"
+        messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/member/member_rights.html'>"
                         + MessageConstant.VIEW_DETAILS + "</a>");
         messageSendBo.setWebMsg(content);
         messageSendBo.setPhoneMsg(content);
@@ -857,7 +857,7 @@ public class OrderServiceImpl implements OrderService {
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
         messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         messageSendBo.setBusinessId(order.getOrderNo());
-        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php\">"
+        messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/pointsExchange/points.php'>"
                         + MessageConstant.VIEW_DETAILS + "</a>");
         messageSendBo.setWebMsg(content);
         messageSendBo.setPhoneMsg(content);
@@ -1108,7 +1108,7 @@ public class OrderServiceImpl implements OrderService {
             content = RemindConstant.DELIVER_GOODS_PREFIX_NO + order.getOrderNo() + RemindConstant.SUFFIX;
             //message.setContent(content);
             messageSendBo.setSkipUrl
-                    ("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+                    ("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + order.getOrderNo() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
         }
 
         //User user = userMapper.selectOne(order.getUserId());
@@ -1701,7 +1701,7 @@ public class OrderServiceImpl implements OrderService {
         messageSendBo.setType(MessageConstant.SYS_MESSAGE);
         messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
         messageSendBo.setBusinessId(orderBO.getOrderNo());
-        messageSendBo.setSkipUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + orderBO.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
+        messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderDetail/" + orderBO.getOrderNo() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
         messageSendBo.setWebMsg(content);
         messageSendBo.setPhoneMsg(content);
         messageSendBo.setTemplateid(templateId);

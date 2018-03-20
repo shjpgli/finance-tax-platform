@@ -522,9 +522,33 @@ public class UserBindServiceImpl implements UserBindService {
         LOGGER.info("{}", object);
 
         if (StringUtils.isEmpty(object.getFRXM()) || StringUtils.isEmpty(object.getFRZJH())) {
+        	//2018-03-12
+            NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc(data.getFrmc());
+            passwordLog.setFrzjh(data.getFrzjh());
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4630");
+            passwordLog.setMessage("未找到对应的税号基础信息");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4630);
         }
         if (!object.getFRXM().equals(data.getFrmc().trim()) || !object.getFRZJH().equals(data.getFrzjh().trim())) {
+        	//2018-03-12
+            NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc(data.getFrmc());
+            passwordLog.setFrzjh(data.getFrzjh());
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4638");
+            passwordLog.setMessage("法人姓名和法人证件号码校验未通过");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4638);
         }
 
@@ -533,7 +557,7 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("NSRSBH", data.getNsrsbh());
         Map respMap = client.process(map);
         LOGGER.info("{}", respMap);
-        analyzeXmlTY12(respMap, data.getNsrsbh());
+        analyzeXmlTY12(respMap, data.getNsrsbh(),data,request);
         
         
         //2018-03-12
@@ -545,19 +569,56 @@ public class UserBindServiceImpl implements UserBindService {
         passwordLog.setFrmc(data.getFrmc());
         passwordLog.setFrzjh(data.getFrzjh());
         passwordLog.setIp(Utils.getAddr(request));
-        
+        passwordLog.setCode("0000");
+        passwordLog.setMessage("成功");
         userBindMapper.insertRestPwdLog(passwordLog);
     }
 
-    private void analyzeXmlTY12(Map resMap, String nsrsbh) throws ValidationException {
+    private void analyzeXmlTY12(Map resMap, String nsrsbh,NsrResetPwd data, HttpServletRequest request) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
+        	//2018-03-12
+            NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc(data.getFrmc());
+            passwordLog.setFrzjh(data.getFrzjh());
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4629");
+            passwordLog.setMessage("调用TDPS接口失败");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4629);
         }
 
         if (!"00000000".equals(resMap.get("rescode"))) {
+        	//2018-03-12
+            NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc(data.getFrmc());
+            passwordLog.setFrzjh(data.getFrzjh());
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode((String) resMap.get("rescode"));
+            passwordLog.setMessage((String) resMap.get("message"));
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
         }
         if (!resMap.containsKey("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")) {
+        	//2018-03-12
+            NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc(data.getFrmc());
+            passwordLog.setFrzjh(data.getFrzjh());
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4634");
+            passwordLog.setMessage("TDPS返回xml报文异常");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4634);
         }
 
@@ -565,13 +626,49 @@ public class UserBindServiceImpl implements UserBindService {
             NSRMMGX nsrmmgx = (NSRMMGX) XmlJavaParser.parseXmlToObject(NSRMMGX.class, String.valueOf(resMap.get
                     ("taxML_CRM_NSRMMGX_" + nsrsbh + ".xml")));
             if (nsrmmgx == null || nsrmmgx.getCLJG() == null) {
+            	//2018-03-12
+                NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+                passwordLog.setCreateTime(new Date());
+                passwordLog.setId(Utils.uuid());
+                passwordLog.setUserId(Utils.getUserId());
+                passwordLog.setNsrsbh(data.getNsrsbh());
+                passwordLog.setFrmc(data.getFrmc());
+                passwordLog.setFrzjh(data.getFrzjh());
+                passwordLog.setIp(Utils.getAddr(request));
+                passwordLog.setCode("4633");
+                passwordLog.setMessage("TDPS返回xml报文数据解析异常");
+                userBindMapper.insertRestPwdLog(passwordLog);
                 throw new ServiceException(4633);
             }
             if (!"0".equals(nsrmmgx.getCLJG().trim())) {
+            	//2018-03-12
+                NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+                passwordLog.setCreateTime(new Date());
+                passwordLog.setId(Utils.uuid());
+                passwordLog.setUserId(Utils.getUserId());
+                passwordLog.setNsrsbh(data.getNsrsbh());
+                passwordLog.setFrmc(data.getFrmc());
+                passwordLog.setFrzjh(data.getFrzjh());
+                passwordLog.setIp(Utils.getAddr(request));
+                passwordLog.setCode(nsrmmgx.getCLJG());
+                passwordLog.setMessage(nsrmmgx.getCWYY());
+                userBindMapper.insertRestPwdLog(passwordLog);
                 throw new ServiceException(nsrmmgx.getCLJG(), nsrmmgx.getCWYY());
             }
         } catch (org.exolab.castor.xml.MarshalException e) {
             e.printStackTrace();
+          //2018-03-12
+            NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc(data.getFrmc());
+            passwordLog.setFrzjh(data.getFrzjh());
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4633");
+            passwordLog.setMessage("TDPS返回xml报文数据解析异常");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4633);
         }
     }
@@ -585,7 +682,7 @@ public class UserBindServiceImpl implements UserBindService {
         map.put("NEWPASS", data.getNewpwd());
         Map respMap = client.process(map);
         LOGGER.info("{}", respMap);
-        analyzeXmlTY03(respMap, data.getNsrsbh());
+        analyzeXmlTY03(respMap, data.getNsrsbh(),data, request);
         
         //2018-03-12
         NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
@@ -596,7 +693,8 @@ public class UserBindServiceImpl implements UserBindService {
         passwordLog.setFrmc("");
         passwordLog.setFrzjh("");
         passwordLog.setIp(Utils.getAddr(request));
-        
+        passwordLog.setCode("0000");
+        passwordLog.setMessage("成功");
         userBindMapper.insertRestPwdLog(passwordLog);
     }
 
@@ -759,14 +857,47 @@ public class UserBindServiceImpl implements UserBindService {
         return new MD5(fristSbmm + TaskConstant.TDPS_LOGIN_PWD_APPOINT_CODE).compute().toUpperCase();
     }
 
-    private void analyzeXmlTY03(Map resMap, String nsrsbh) throws ValidationException {
+    private void analyzeXmlTY03(Map resMap, String nsrsbh,UpdatePwd data, HttpServletRequest request) throws ValidationException {
         if (resMap == null || resMap.isEmpty()) {
+        	NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc("");
+            passwordLog.setFrzjh("");
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4629");
+            passwordLog.setMessage("调用TDPS接口失败");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4629);
         }
         if (!"00000000".equals(resMap.get("rescode"))) {
+        	NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc("");
+            passwordLog.setFrzjh("");
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode((String) resMap.get("rescode"));
+            passwordLog.setMessage((String) resMap.get("message"));
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new DzsbServiceException((String) resMap.get("rescode"), (String) resMap.get("message"));
         }
         if (!resMap.containsKey("taxML_NSRAQSZ_" + nsrsbh + ".xml")) {
+        	NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc("");
+            passwordLog.setFrzjh("");
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4634");
+            passwordLog.setMessage("TDPS返回xml报文异常");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4634);
         }
 
@@ -774,10 +905,32 @@ public class UserBindServiceImpl implements UserBindService {
             XGJGS xgjgs = (XGJGS) XmlJavaParser.parseXmlToObject(XGJGS.class, String.valueOf(resMap.get
                     ("taxML_NSRAQSZ_" + nsrsbh + ".xml")));
             if (xgjgs == null || xgjgs.getXGJG() == null) {
+            	NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+                passwordLog.setCreateTime(new Date());
+                passwordLog.setId(Utils.uuid());
+                passwordLog.setUserId(Utils.getUserId());
+                passwordLog.setNsrsbh(data.getNsrsbh());
+                passwordLog.setFrmc("");
+                passwordLog.setFrzjh("");
+                passwordLog.setIp(Utils.getAddr(request));
+                passwordLog.setCode("4633");
+                passwordLog.setMessage("TDPS返回xml报文数据解析异常");
+                userBindMapper.insertRestPwdLog(passwordLog);
                 throw new ServiceException(4633);
             }
         } catch (org.exolab.castor.xml.MarshalException e) {
             e.printStackTrace();
+            NsrsbhPasswordLog passwordLog = new NsrsbhPasswordLog();
+            passwordLog.setCreateTime(new Date());
+            passwordLog.setId(Utils.uuid());
+            passwordLog.setUserId(Utils.getUserId());
+            passwordLog.setNsrsbh(data.getNsrsbh());
+            passwordLog.setFrmc("");
+            passwordLog.setFrzjh("");
+            passwordLog.setIp(Utils.getAddr(request));
+            passwordLog.setCode("4633");
+            passwordLog.setMessage("TDPS返回xml报文数据解析异常");
+            userBindMapper.insertRestPwdLog(passwordLog);
             throw new ServiceException(4633);
         }
 

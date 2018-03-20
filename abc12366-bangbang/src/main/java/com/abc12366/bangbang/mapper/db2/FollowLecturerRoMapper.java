@@ -8,37 +8,30 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * FollowLecturerMapper数据库操作接口类
- * 
  **/
 
-public interface FollowLecturerRoMapper{
-
-
-	/**
-	 * 
-	 * 查询（根据主键ID查询）
-	 * 
-	 **/
-	FollowLecturer  selectByPrimaryKey(@Param("id") String id);
-
-    /**
-     * 查询列表
-     */
-	List<FollowLecturerBO> selectList(Map<String, Object> map);
+public interface FollowLecturerRoMapper {
 
     /**
      * 单个查询
      */
-    FollowLecturerBO selectFollowLecturerBO(@Param("id") String id);
+    FollowLecturer selectOne(@Param("userId") String userId, @Param("lecturerId")String lecturerId);
 
     /**
      * 根据讲师UserId查询所有用户ID
+     *
      * @param userId 讲师UserId
      * @return 所有用户ID
      */
     List<String> selectUserIdListByLecturerId(@Param("userId") String userId);
 
-    FollowLecturer selectFollowLecturer(Map<String, Object> map);
+
+    /**
+     * 列表查询
+     *
+     * @param map 查询条件
+     * @return 用户关注见识列表
+     */
+    List<FollowLecturerBO> selectFollowLecturerList(Map<String, Object> map);
 }
