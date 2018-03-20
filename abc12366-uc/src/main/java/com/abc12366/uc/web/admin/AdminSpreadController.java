@@ -34,6 +34,18 @@ public class AdminSpreadController {
 	@Autowired
 	private IAdminSpreadService adminSpreadService;
 	
+	/**
+	 * 我的推广客户
+	 * @param recommend 工号
+	 * @param pageNum
+	 * @param pageSize
+	 * @param username 用户名
+	 * @param realname  真实姓名
+	 * @param phone 电话
+	 * @param nickname 昵称
+	 * @param createTime 注册时间
+	 * @return
+	 */
 	@GetMapping("/myconstomers")
 	public ResponseEntity myConstomers(@RequestParam String recommend,
 			                           @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
