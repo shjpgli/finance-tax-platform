@@ -1108,4 +1108,141 @@
         </where>
          GROUP BY orderMonth
     </select>
+
+    <!--订单列表对象-->
+    <resultMap id="myOrderBOMap" type="com.abc12366.uc.model.order.bo.OrderBO">
+        <result column="orderNo" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="orderStatus" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="deliveryMethod" property="deliveryMethod" jdbcType="VARCHAR"/>
+        <result column="payMethod" property="payMethod" jdbcType="VARCHAR"/>
+        <result column="nowVipLevel" property="nowVipLevel" jdbcType="VARCHAR"/>
+        <result column="nowVipLevelName" property="nowVipLevelName" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="lastUpdate" property="lastUpdate" jdbcType="TIMESTAMP"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="isShipping" property="isShipping" jdbcType="INTEGER"/>
+        <result column="isFreeShipping" property="isFreeShipping" jdbcType="INTEGER"/>
+        <result column="deliveryFee" property="deliveryFee" jdbcType="DOUBLE"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DOUBLE"/>
+        <result column="expressNo" property="expressNo" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="giftPoints" property="giftPoints" jdbcType="INTEGER"/>
+        <result column="tradeMethod" property="tradeMethod" jdbcType="VARCHAR"/>
+        <result column="isInvoice" property="isInvoice" jdbcType="TINYINT"/>
+        <result column="cancelId" property="cancelId" jdbcType="VARCHAR"/>
+        <result column="recommendUser" property="recommendUser" jdbcType="VARCHAR"/>
+        <result column="expressCompId" property="expressCompId" jdbcType="VARCHAR"/>
+        <result column="consignee" property="consignee" jdbcType="VARCHAR"/>
+        <result column="contactNumber" property="contactNumber" jdbcType="VARCHAR"/>
+        <result column="shippingAddress" property="shippingAddress" jdbcType="VARCHAR"/>
+        <result column="goodsId" property="goodsId" jdbcType="VARCHAR"/>
+        <result column="tradingChannels" property="tradingChannels" jdbcType="VARCHAR"/>
+
+        <association property="user" javaType="com.abc12366.uc.model.bo.UserBO">
+            <id column="uId" property="id"/>
+            <result column="uName" property="username"/>
+            <result column="nickname" property="nickname"/>
+            <result column="phone" property="phone"/>
+            <result column="vipLevel" property="vipLevel"/>
+            <result column="vipLevelName" property="vipLevelName"/>
+        </association>
+        <collection property="orderProductBOList" ofType="com.abc12366.uc.model.order.bo.OrderProductBO" column="{orderNo=orderNo,tradingChannels=tradingChannels}"
+                    select="getOrderProductMap"></collection>
+    </resultMap>
+    <!-- 我的销售订单（根据条件查询） -->
+    <select id="selectMyOrderList" resultMap="myOrderBOMap" parameterType="java.util.Map">
+        SELECT
+        o.orderNo,	o.userId,	o.orderStatus,	o.deliveryMethod,	o.payMethod,	o.nowVipLevel,	o.createTime,	o.lastUpdate,	o.username,	o.deliveryFee,	o.totalPrice,	o.expressNo,
+        o.remark,	o.giftPoints,	o.tradeMethod,	o.isInvoice,	o.cancelId,	o.recommendUser,	o.expressCompId,	o.consignee,	o.contactNumber,	o.shippingAddress,	o.isShipping,	o.isFreeShipping,
+        u.id as  uId,u.username as uName,insert(u.phone, 4, 4, '****') as phone,u.vipLevel,u.nickname,#{tradingChannels} as tradingChannels
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        <where>
+            1 = 1
+            <if test=" tradingChannels != null and tradingChannels != '' "> and orderNo in (select DISTINCT orderNo from  uc_order_product  where tradingChannels = #{tradingChannels}) </if>
+            <if test=" username != null and username != '' ">
+                and u.username = #{username}
+            </if>
+            <if test=" phone != null and phone != '' ">
+                and u.phone = #{phone}
+            </if>
+            <if test=" orderStatus != null and orderStatus != '' ">
+                and o.orderStatus = #{orderStatus}
+            </if>
+            <if test=" orderNo != null and orderNo != '' ">
+                and o.orderNo = #{orderNo}
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
+            </if>
+        </where>
+
+        order by o.lastUpdate desc
+
+    </select>
+
+    <!--获取产品和订单对应关系信息-->
+    <select id="getOrderProductMap" resultMap="orderProductBOMap" parameterType="java.util.Map">
+        SELECT
+        op.orderNo,	op.goodsPrice,	op.num,	op.dealPrice,	op.name,	op.categoryId,	op.category,	op.weight,	op.createTime,	op.lastUpdate,	op.productId,	op.goodsId,
+        op.specInfo,	op.isReturn,	op.isExchange,	op.imageUrl,	op.goodsType,	op.browseUrl,	op.tradingChannels
+        FROM uc_order_product op
+        <where>
+            <if test=" tradingChannels != null and tradingChannels != '' ">
+                and op.tradingChannels = #{tradingChannels}
+            </if>
+            <if test=" orderNo != null and orderNo != '' ">
+                and op.orderNo = #{orderNo}
+            </if>
+        </where>
+    </select>
+
+    <!-- 我的销售订单（根据条件查询） -->
+    <select id="selectMyOrderMoney" resultType="java.lang.Double" parameterType="java.util.Map">
+        SELECT sum(o.totalPrice)
+        FROM uc_order o
+        LEFT JOIN uc_user u ON u.id = o.userId
+        <where>
+            <if test=" tradeMethod != null and tradeMethod != '' ">
+                and o.tradeMethod = #{tradeMethod}
+            </if>
+            <if test=" tradingChannels != null and tradingChannels != '' "> and orderNo in (select DISTINCT orderNo from  uc_order_product  where tradingChannels = #{tradingChannels}) </if>
+
+            <if test=" username != null and username != '' ">
+                and u.username = #{username}
+            </if>
+            <if test=" phone != null and phone != '' ">
+                and u.phone = #{phone}
+            </if>
+            <if test=" orderStatus != null and orderStatus != '' ">
+                and o.orderStatus = #{orderStatus}
+            </if>
+            <if test=" orderNo != null and orderNo != '' ">
+                and o.orderNo = #{orderNo}
+            </if>
+            <if test="startTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') >= date_format(#{startTime}, '%Y-%m-%d')
+
+                ]]>
+            </if>
+            <if test="endTime != null">
+                <![CDATA[
+              and date_format(o.createTime, '%Y-%m-%d') <= date_format(#{endTime}, '%Y-%m-%d')
+              ]]>
+            </if>
+        </where>
+
+        order by o.lastUpdate desc
+
+    </select>
 </mapper>

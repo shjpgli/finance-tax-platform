@@ -122,4 +122,8 @@ public interface OrderRoMapper {
      * 微信端-查询订单详情
      */
     OrderBO selectWeChatByOrderNo(String orderNo);
+
+    List<OrderBO> selectMyOrderList(Map<String, Object> map);
+
+    Double selectMyOrderMoney(Map<String, Object> map);
 }

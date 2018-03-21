@@ -211,7 +211,7 @@ public class CurriculumController {
 	}
 
 	/**
-	 * 查询单个课程信息
+	 * 校验购买赠送活动
 	 */
 	@PostMapping(path = "/isOptional")
 	public ResponseEntity isOptional(@Valid @RequestBody List<CurriculumGiftBo> curriculumGiftBoList) {
