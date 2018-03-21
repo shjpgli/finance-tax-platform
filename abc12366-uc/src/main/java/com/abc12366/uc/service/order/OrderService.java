@@ -279,4 +279,8 @@ public interface OrderService {
      * @return 订单对象
      */
     OrderBO selectWeChatByOrderNo(String orderNo);
+
+    List<OrderBO> selectMyOrderList(Map<String, Object> map, int pageNum, int pageSize);
+
+    Double selectMyOrderMoney(Map<String, Object> map);
 }
