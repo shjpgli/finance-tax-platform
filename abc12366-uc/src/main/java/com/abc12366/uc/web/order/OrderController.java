@@ -776,6 +776,6 @@ public class OrderController {
         }
 
         Double myOrderMoney = orderService.selectMyOrderMoney(map);
-        return ResponseEntity.ok(Utils.kv("data",myOrderMoney));
+        return ResponseEntity.ok(Utils.kv("data",Utils.getTwoDouble(myOrderMoney)));
     }
 }

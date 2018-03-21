@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.HashMap;
@@ -295,5 +296,11 @@ public class Utils {
         filterRegistrationBean.addUrlPatterns("/*");
         filterRegistrationBean.addInitParameter("exclusions", "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*");
         return filterRegistrationBean;
+    }
+
+    //获取两位随机数
+    public static double getTwoDouble(double value){
+        BigDecimal b = new BigDecimal(value);
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 }
