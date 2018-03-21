@@ -431,7 +431,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateUserVipInfo(String userId, String vipLevel) {
+	public void updateUserVipInfo(String userId, String vipLevel, boolean isGive) {
 		if (StringUtils.isEmpty(vipLevel)) {
 			LOGGER.info("更新会员失败，因为传入的用户等级编码不在约定之中：{}", vipLevel);
 			return;
@@ -475,7 +475,7 @@ public class UserServiceImpl implements UserService {
 		obj.setPrivilegeId(MessageConstant.HYLB_CODE);
 		//查看会员礼包是否启用
 		VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-		if (findObj != null && findObj.getStatus()) {
+		if (findObj != null && findObj.getStatus() && isGive) {
 			UamountLog uamountLog = new UamountLog();
 			uamountLog.setId(Utils.uuid());
 			uamountLog.setBusinessId(MessageConstant.HYLB_CODE);

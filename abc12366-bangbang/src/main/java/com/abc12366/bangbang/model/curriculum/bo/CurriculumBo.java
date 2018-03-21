@@ -142,7 +142,7 @@ public class CurriculumBo implements Serializable {
 
     private List<CurriculumChapterBo> chapterBoList;
 
-    private List<CurriculumUvipPrice> uvipPriceList;
+    private List<CurriculumUvipPriceBo> uvipPriceBoList;
 
 
 
@@ -490,11 +490,11 @@ public class CurriculumBo implements Serializable {
         this.chapterBoList = chapterBoList;
     }
 
-    public List<CurriculumUvipPrice> getUvipPriceList() {
-        return uvipPriceList;
-    }
+	public List<CurriculumUvipPriceBo> getUvipPriceBoList() {
+		return uvipPriceBoList;
+	}
 
-    public void setUvipPriceList(List<CurriculumUvipPrice> uvipPriceList) {
-        this.uvipPriceList = uvipPriceList;
-    }
+	public void setUvipPriceBoList(List<CurriculumUvipPriceBo> uvipPriceBoList) {
+		this.uvipPriceBoList = uvipPriceBoList;
+	}
 }
