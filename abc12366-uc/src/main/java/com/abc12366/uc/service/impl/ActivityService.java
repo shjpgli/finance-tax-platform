@@ -653,7 +653,7 @@ public class ActivityService implements IActivityService {
                     PointCalculateBO bo = new PointCalculateBO();
                     bo.setUserId(userId);
                     bo.setRuleCode(TaskConstant.POINT_RULE_WXHB_CODE);
-                    bo.setRemark("电子申报服务费");
+                    bo.setRemark("微信红包赠送");
                     bo.setPoints(activity.getPoints());
                     LOGGER.info("处理积分业务:{}", bo);
                     pointsService.calculate(bo);
