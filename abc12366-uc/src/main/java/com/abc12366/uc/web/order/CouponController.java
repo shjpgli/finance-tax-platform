@@ -142,19 +142,23 @@ public class CouponController {
     public ResponseEntity selectActivityList(
             @RequestParam(value = "activityName", required = false) String activityName,
             @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "isOverdue", required = false) String isOverdue,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize) {
 
+        Map<String,Object> map = new HashMap<>();
         CouponActivity bo = new CouponActivity();
         if (StringUtils.isNotEmpty(activityName)) {
-            bo.setActivityName(activityName);
+//            bo.setActivityName(activityName);
+            map.put("activityName",activityName);
         }
         if (StringUtils.isNotEmpty(status)) {
-            bo.setStatus(status);
+//            bo.setStatus(status);
+            map.put("status",status);
         }
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
-        List<CouponActivityListBO> dataList = couponService.selectAdminActivityList(bo, pageNum, pageSize);
+        List<CouponActivityListBO> dataList = couponService.selectAdminActivityList(map, pageNum, pageSize);
         PageInfo<CouponActivityListBO> pageInfo = new PageInfo<>(dataList);
         return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", pageInfo.getTotal()));
     }
