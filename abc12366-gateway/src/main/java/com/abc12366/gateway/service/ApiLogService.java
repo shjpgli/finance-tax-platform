@@ -21,21 +21,6 @@ public interface ApiLogService {
     void insert(ApiLog log);
 
     /**
-     * 无参查询日志列表
-     *
-     * @return List
-     */
-    List<ApiLog> selectList();
-
-    /**
-     * 带参查询日志列表
-     *
-     * @param apiLog 日志对象
-     * @return
-     */
-    List<ApiLog> selectList(ApiLog apiLog);
-
-    /**
      * 查询接口访问次数
      *
      * @param apiLog 日志对象

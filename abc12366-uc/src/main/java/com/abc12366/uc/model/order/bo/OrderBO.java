@@ -183,8 +183,14 @@ public class OrderBO implements Serializable {
     //会员名称
     private String nowVipLevelName;
 
+    //交易渠道
+    private String tradingChannels;
+
     //条件：是否退还列表
     private Boolean isReturn;
+
+    //课堂优惠赠送
+    private List<OrderGiftBO> orderGiftBOList;
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
@@ -504,5 +510,21 @@ public class OrderBO implements Serializable {
 
     public void setTradeBOList(List<TradeBO> tradeBOList) {
         this.tradeBOList = tradeBOList;
+    }
+
+    public List<OrderGiftBO> getOrderGiftBOList() {
+        return orderGiftBOList;
+    }
+
+    public void setOrderGiftBOList(List<OrderGiftBO> orderGiftBOList) {
+        this.orderGiftBOList = orderGiftBOList;
+    }
+
+    public String getTradingChannels() {
+        return tradingChannels;
+    }
+
+    public void setTradingChannels(String tradingChannels) {
+        this.tradingChannels = tradingChannels;
     }
 }

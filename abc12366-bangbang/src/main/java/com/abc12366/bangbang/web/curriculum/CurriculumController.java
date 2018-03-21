@@ -211,6 +211,16 @@ public class CurriculumController {
 	}
 
 	/**
+	 * 校验购买赠送活动
+	 */
+	@PostMapping(path = "/isOptional")
+	public ResponseEntity isOptional(@Valid @RequestBody List<CurriculumGiftBo> curriculumGiftBoList) {
+		// 查询课程信息
+		boolean isOptional = curriculumService.isOptional(curriculumGiftBoList);
+		return ResponseEntity.ok(Utils.kv("data", isOptional));
+	}
+
+	/**
 	 * 查询商品是否已存在
 	 */
 	@GetMapping(path = "/selectCurrCntByGoodsId/{goodsId}")
