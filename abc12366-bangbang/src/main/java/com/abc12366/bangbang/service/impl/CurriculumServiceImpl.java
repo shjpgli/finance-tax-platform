@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.abc12366.bangbang.service.FollowLecturerService;
@@ -81,6 +80,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 	@Autowired
 	private CurriculumGiftMapper curriculumGiftMapper;
+
+	@Autowired
+	private CurriculumGiftRoMapper curriculumGiftRoMapper;
 
 	@Autowired
 	private CurriculumUvipPriceRoMapper uvipPriceRoMapper;
@@ -855,7 +857,8 @@ public class CurriculumServiceImpl implements CurriculumService {
     public boolean isOptional(List<CurriculumGiftBo> curriculumGiftBoList) {
         if(curriculumGiftBoList != null && curriculumGiftBoList.size() > 1){
             for(CurriculumGiftBo giftBo:curriculumGiftBoList){
-                if(StringUtils.isNotEmpty(giftBo.getOperSymbol()) && "or".equals(giftBo.getOperSymbol())){
+                CurriculumGift gift = curriculumGiftRoMapper.selectByPrimaryKey(giftBo.getId());
+                if(StringUtils.isNotEmpty(gift.getOperSymbol()) && "or".equals(gift.getOperSymbol())){
                     return false;
                 }
             }
