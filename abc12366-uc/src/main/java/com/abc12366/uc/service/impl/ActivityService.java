@@ -342,19 +342,21 @@ public class ActivityService implements IActivityService {
             List<WxRedEnvelop> dataList = new ArrayList<>();
             for (WxRedEnvelopBO redEnvelopBO : redEnvelopList) {
 
-                String url = StringUtils.isNotEmpty(redEnvelopBO.getBusinessId().trim()) ? Constant.WEIXIN_LOTTERY
-                        .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
-                        .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
-                        .replace("STATE", state(redEnvelopBO.getSecret(), redEnvelopBO.getActivityId())) : null;
-
                 WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                         .id(Utils.uuid())
                         .createTime(new Date())
                         .secret(redEnvelopBO.getSecret())
                         .activityId(redEnvelopBO.getActivityId().trim())
-                        .businessId(redEnvelopBO.getBusinessId().trim())
-                        .url(url)
                         .build();
+
+                if (StringUtils.isNotEmpty(redEnvelopBO.getBusinessId())) {
+                    String url = Constant.WEIXIN_LOTTERY
+                            .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
+                            .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
+                            .replace("STATE", state(redEnvelopBO.getSecret(), redEnvelopBO.getActivityId()));
+                    redEnvelop.setBusinessId(redEnvelopBO.getBusinessId().trim());
+                    redEnvelop.setUrl(url);
+                }
                 dataList.add(redEnvelop);
             }
             activityMapper.batchGenerateSecret(dataList);
