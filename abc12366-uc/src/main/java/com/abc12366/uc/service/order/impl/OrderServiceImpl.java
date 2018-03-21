@@ -1438,6 +1438,17 @@ public class OrderServiceImpl implements OrderService {
         return orderRoMapper.selectWeChatByOrderNo(orderNo);
     }
 
+    @Override
+    public List<OrderBO> selectMyOrderList(Map<String, Object> map, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
+        return orderRoMapper.selectMyOrderList(map);
+    }
+
+    @Override
+    public Double selectMyOrderMoney(Map<String, Object> map) {
+        return orderRoMapper.selectMyOrderMoney(map);
+    }
+
     /**
      * 发票作废
      */
