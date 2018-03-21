@@ -149,12 +149,13 @@ public class CouponController {
         Map<String,Object> map = new HashMap<>();
         CouponActivity bo = new CouponActivity();
         if (StringUtils.isNotEmpty(activityName)) {
-//            bo.setActivityName(activityName);
-            map.put("activityName",activityName);
+            map.put("activityName", activityName);
         }
         if (StringUtils.isNotEmpty(status)) {
-//            bo.setStatus(status);
             map.put("status",status);
+        }
+        if (StringUtils.isNotEmpty(isOverdue)) {
+            map.put("isOverdue", isOverdue);
         }
         LOGGER.info("{},{},{}", bo, pageNum, pageSize);
 
