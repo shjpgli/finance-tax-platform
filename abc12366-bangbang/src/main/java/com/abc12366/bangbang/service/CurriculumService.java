@@ -54,4 +54,5 @@ public interface CurriculumService {
 
     List<CurriculumListBo> selectByKnowledgeId(String knowledgeId, int num);
 
+    boolean isOptional(List<CurriculumGiftBo> curriculumGiftBoList);
 }

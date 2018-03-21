@@ -42,7 +42,7 @@ public interface UserService {
 
     void enableOrDisable(String id, String status);
 
-    void updateUserVipInfo(String userId, String vipLevel);
+    void updateUserVipInfo(String userId, String vipLevel, boolean isGive);
 
     UserBO selectByopenid(String openid);
 

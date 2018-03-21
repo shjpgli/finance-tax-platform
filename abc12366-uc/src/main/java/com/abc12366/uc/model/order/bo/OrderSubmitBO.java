@@ -1,5 +1,6 @@
 package com.abc12366.uc.model.order.bo;
 
+import com.abc12366.uc.model.order.OrderGift;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -117,6 +118,9 @@ public class OrderSubmitBO implements Serializable {
 
     //订单和商品对应关系
     private List<OrderProductBO> orderProductBOList;
+
+    //课堂优惠赠送
+    private List<OrderGiftBO> orderGiftBOList;
 
     public String getUserId() {
         return userId;
@@ -275,5 +279,13 @@ public class OrderSubmitBO implements Serializable {
 
     public void setUseCouponId(String useCouponId) {
         this.useCouponId = useCouponId;
+    }
+
+    public List<OrderGiftBO> getOrderGiftBOList() {
+        return orderGiftBOList;
+    }
+
+    public void setOrderGiftBOList(List<OrderGiftBO> orderGiftBOList) {
+        this.orderGiftBOList = orderGiftBOList;
     }
 }

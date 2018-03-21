@@ -6,19 +6,13 @@ import com.abc12366.gateway.util.*;
 import com.abc12366.uc.mapper.db1.*;
 import com.abc12366.uc.mapper.db2.*;
 import com.abc12366.uc.model.Dict;
-import com.abc12366.uc.model.Message;
 import com.abc12366.uc.model.MessageSendBo;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointsLogBO;
 import com.abc12366.uc.model.bo.PointsRuleBO;
 import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.model.bo.VipPrivilegeLevelBO;
-import com.abc12366.uc.model.dzfp.DzfpGetReq;
-import com.abc12366.uc.model.dzfp.Einvocie;
-import com.abc12366.uc.model.dzfp.InvoiceXm;
 import com.abc12366.uc.model.gift.UamountLog;
-import com.abc12366.uc.model.invoice.InvoiceDetail;
-import com.abc12366.uc.model.invoice.bo.InvoiceBO;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.pay.RefundRes;
@@ -28,13 +22,13 @@ import com.abc12366.uc.service.order.CouponService;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.CharUtil;
-import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -153,6 +147,15 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CouponRoMapper couponRoMapper;
 
+    /**
+     * 购买优惠赠送
+     */
+    @Autowired
+    private OrderGiftMapper orderGiftMapper;
+
+    @Autowired
+    private OrderGiftRoMapper orderGiftRoMapper;
+
 
     @Override
     public List<OrderBO> selectList(OrderBO orderBO, int pageNum, int pageSize) {
@@ -162,7 +165,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderBO selectByOrderNo(String orderNo) {
-        return orderRoMapper.selectById(orderNo);
+        OrderBO orderBO = orderRoMapper.selectById(orderNo);
+        List<OrderGiftBO> orderGiftBOList = orderGiftRoMapper.selectByOrderNo(orderNo);
+        if(orderGiftBOList != null && orderGiftBOList.size() > 0){
+            orderBO.setOrderGiftBOList(orderGiftBOList);
+        }
+        return orderBO;
     }
 
 
@@ -301,6 +309,19 @@ public class OrderServiceImpl implements OrderService {
                     order.setTotalPrice(couponService.userUseCoupon(couponOrderBO));
                 }
 
+                if(StringUtils.isNotEmpty(orderProductBO.getTradingChannels()) && "CSKT".equals(orderProductBO.getTradingChannels())){
+                    List<OrderGiftBO> orderGiftBOList = orderSubmitBO.getOrderGiftBOList();
+                    for(OrderGiftBO orderGiftBO:orderGiftBOList){
+                        orderGiftBO.setOrderNo(orderNo);
+                        OrderGift gift = new OrderGift();
+                        BeanUtils.copyProperties(orderGiftBO,gift);
+                        int gInt = orderGiftMapper.insert(gift);
+                        if (gInt != 1) {
+                            LOGGER.info("购买优惠赠送新增失败：{}", gift);
+                            throw new ServiceException(7151);
+                        }
+                    }
+                }
                 int insert = orderMapper.insert(order);
                 if (insert != 1) {
                     LOGGER.info("提交产品订单失败：{}", orderSubmitBO);
@@ -585,20 +606,20 @@ public class OrderServiceImpl implements OrderService {
                                 //修改订单状态
                                 updOrder(order);
 
-                                insertPoints(orderBO);
+                                insertPoints(orderBO,orderBO.getGiftPoints());
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功", "0");
                             } else if ("HYCZ".equals(trading)) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
                                 updOrder(order);
 
-                                insertPoints(orderBO);
+                                insertPoints(orderBO,orderBO.getGiftPoints());
 
                                 LOGGER.info("插入会员日志: {}", orderNo);
                                 insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
 
                                 LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                                userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
+                                userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo(),true);
 
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
@@ -608,14 +629,16 @@ public class OrderServiceImpl implements OrderService {
                                 //修改订单状态
                                 updOrder(order);
 
-                                insertPoints(orderBO);
+                                insertPoints(orderBO,orderBO.getGiftPoints());
+                                //付款成功，购买优惠赠送
+                                opertionGift(orderBO,request);
+
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                             } else if ("JFCZ".equals(trading)) {
                                 order.setOrderStatus("6");
                                 //修改订单状态
                                 updOrder(order);
-
-                                insertPoints(orderBO);
+                                insertPoints(orderBO,orderBO.getGiftPoints());
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功，完成订单", "0");
                                 //发送消息
                                 sendPointsMsg(orderProductBO, order, request);
@@ -647,7 +670,7 @@ public class OrderServiceImpl implements OrderService {
                             insertVipLog(orderNo, userId, orderProductBO.getSpecInfo());
 
                             LOGGER.info("查询是否为会员服务订单，支付成功则更新会员状态: {}", orderNo);
-                            userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo());
+                            userService.updateUserVipInfo(userId, orderProductBO.getSpecInfo(), true);
 
                             insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
                             sendMemberMsg(orderProductBO, order, request);
@@ -672,6 +695,64 @@ public class OrderServiceImpl implements OrderService {
                         //优惠劵设置已领取
                         couponOrderBO.setStatus("2");
                         couponService.userUseCoupon(couponOrderBO);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 操作购买优惠活动
+     */
+    private void opertionGift(OrderBO orderBO, HttpServletRequest request) {
+        List<OrderGiftBO> orderGiftBOList = orderGiftRoMapper.selectByOrderNo(orderBO.getOrderNo());
+        if(orderGiftBOList != null && orderGiftBOList.size() > 0){
+            //操作类型：POINTS-积分，COUPON-优惠券，VIP-会员，AMOUNT-礼包金额
+            for (OrderGiftBO bo : orderGiftBOList){
+                if(StringUtils.isNotEmpty(bo.getOperType())){
+                    if("POINTS".equals(bo.getOperType())){
+                        insertPoints(orderBO,Integer.parseInt(bo.getOperValue()));
+                    }else if("COUPON".equals(bo.getOperType())){
+                        couponService.userCollectCoupon(orderBO.getUserId(),bo.getOperValue(),request);
+                    }else if("VIP".equals(bo.getOperType())){
+                        User temp = userMapper.selectOne(orderBO.getUserId());
+                        //赠送会员不能小于当前会员等级
+                        if(temp != null && bo.getOperValue().compareTo(temp.getVipLevel()) >= 0){
+                            userService.updateUserVipInfo(orderBO.getUserId(), bo.getOperValue(),false);
+                        }
+                    }else if("AMOUNT".equals(bo.getOperType())){
+                        String userId = orderBO.getUserId();
+                        //查询会员礼包业务
+                        User temp = userMapper.selectOne(userId);
+                        double usable;
+
+                        UamountLog uamountLog = new UamountLog();
+                        uamountLog.setId(Utils.uuid());
+                        uamountLog.setBusinessId(MessageConstant.HYLB_CODE);
+                        uamountLog.setUserId(userId);
+                        uamountLog.setCreateTime(new Date());
+                        uamountLog.setRemark("购买优惠赠送，获得礼包金额");
+                        //赠送金额
+                        double income = Double.parseDouble(bo.getOperValue());
+                        double amount = 0;
+                        if (temp.getAmount() != null) {
+                            amount = temp.getAmount();
+                        }
+                        usable = amount + income;
+                        uamountLog.setIncome(income);
+                        uamountLog.setUsable(usable);
+                        //插入礼包金额记录
+                        uamountLogMapper.insert(uamountLog);
+                        //修改礼包金额
+
+                        User user = new User();
+                        user.setId(userId);
+//                        user.setVipLevel(vipLevel.trim().toUpperCase());
+//                        user.setVipExpireDate(calendar.getTime());
+                        user.setLastUpdate(new Date());
+                        //会员礼包金额
+                        user.setAmount(usable);
+                        userMapper.update(user);
                     }
                 }
             }
@@ -901,8 +982,8 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 插入可获得的积分
      */
-    private void insertPoints(OrderBO orderBO) {
-        if (orderBO != null && orderBO.getGiftPoints() != null && orderBO.getGiftPoints() > 0) {
+    private void insertPoints(OrderBO orderBO,Integer points) {
+        if (orderBO != null && points != null && points > 0) {
             //如果积分规则为空则返回
             PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_ORDER_CODE);
             if (pointsRuleBO == null) {
@@ -913,7 +994,7 @@ public class OrderServiceImpl implements OrderService {
             pointsLog.setUserId(orderBO.getUserId());
             pointsLog.setRuleId(pointsRuleBO.getId());
             pointsLog.setId(Utils.uuid());
-            pointsLog.setIncome(orderBO.getGiftPoints());
+            pointsLog.setIncome(points);
             pointsLog.setRemark("用户下单 - 订单号：" + orderBO.getOrderNo());
             pointsLog.setLogType("ORDER_INCOME");
             pointsLogService.insertByConsume(pointsLog, orderBO.getNowVipLevel());

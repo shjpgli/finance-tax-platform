@@ -186,6 +186,9 @@ public class OrderBO implements Serializable {
     //条件：是否退还列表
     private Boolean isReturn;
 
+    //课堂优惠赠送
+    private List<OrderGiftBO> orderGiftBOList;
+
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
@@ -504,5 +507,13 @@ public class OrderBO implements Serializable {
 
     public void setTradeBOList(List<TradeBO> tradeBOList) {
         this.tradeBOList = tradeBOList;
+    }
+
+    public List<OrderGiftBO> getOrderGiftBOList() {
+        return orderGiftBOList;
+    }
+
+    public void setOrderGiftBOList(List<OrderGiftBO> orderGiftBOList) {
+        this.orderGiftBOList = orderGiftBOList;
     }
 }
