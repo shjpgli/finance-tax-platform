@@ -781,7 +781,12 @@ public class OrderController {
         }
 
         Double myOrderMoney = orderService.selectMyOrderMoney(map);
-        BigDecimal b = new BigDecimal(myOrderMoney);
-        return ResponseEntity.ok(Utils.kv("data",b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+        if(myOrderMoney != null){
+            BigDecimal b = new BigDecimal(myOrderMoney);
+            return ResponseEntity.ok(Utils.kv("data",b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+        }else{
+            BigDecimal b = new BigDecimal(0d);
+            return ResponseEntity.ok(Utils.kv("data", b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+        }
     }
 }
