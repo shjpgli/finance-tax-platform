@@ -312,13 +312,14 @@ public class OrderServiceImpl implements OrderService {
                 if(StringUtils.isNotEmpty(orderProductBO.getTradingChannels()) && "CSKT".equals(orderProductBO.getTradingChannels())){
                     List<OrderGiftBO> orderGiftBOList = orderSubmitBO.getOrderGiftBOList();
                     for(OrderGiftBO orderGiftBO:orderGiftBOList){
-                        orderGiftBO.setOrderNo(orderNo);
-                        OrderGift gift = new OrderGift();
-                        BeanUtils.copyProperties(orderGiftBO,gift);
-                        int gInt = orderGiftMapper.insert(gift);
-                        if (gInt != 1) {
-                            LOGGER.info("购买优惠赠送新增失败：{}", gift);
-                            throw new ServiceException(7151);
+                        OrderGift gift = orderGiftRoMapper.selectById(orderGiftBO.getId());
+                        if(gift != null){
+                            gift.setOrderNo(orderNo);
+                            int gInt = orderGiftMapper.insert(gift);
+                            if (gInt != 1) {
+                                LOGGER.info("购买优惠赠送新增失败：{}", gift);
+                                throw new ServiceException(7151);
+                            }
                         }
                     }
                 }
