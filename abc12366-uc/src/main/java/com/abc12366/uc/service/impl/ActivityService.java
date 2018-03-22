@@ -398,7 +398,6 @@ public class ActivityService implements IActivityService {
                     if ("SUCCESS".equals(rrp.getResult_code())) {
                         // 发送成功
                         redEnvelop.setSendStatus("1");
-                        processPointsAndCoupon(activity, redEnvelop.getUserId());
                     } else {
                         // 发送失败
                         redEnvelop.setSendStatus("2");
@@ -472,6 +471,7 @@ public class ActivityService implements IActivityService {
 
                 LOGGER.info("发送微信红包");
                 send(redEnvelop.getId());
+                processPointsAndCoupon(activity, redEnvelop.getUserId());
             } else { // 未中奖
                 LOGGER.info("未中奖:{}", redEnvelop.getSecret());
                 redEnvelop.setReceiveStatus("NOT_WINNING");
