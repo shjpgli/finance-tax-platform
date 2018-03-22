@@ -21,4 +21,11 @@
 		FROM uc_order_gift
 		WHERE orderNo = #{orderNo}
 	</select>
+
+	<select id="selectCurriculumGift" resultType="com.abc12366.uc.model.order.OrderGift" parameterType="java.lang.String">
+		SELECT
+		id,	operSymbol,	operType,	operValue
+		FROM abc12366_bangbang.bb_curriculum_gift
+		WHERE id = #{id}
+	</select>
 </mapper>

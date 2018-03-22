@@ -312,7 +312,7 @@ public class OrderServiceImpl implements OrderService {
                 if(StringUtils.isNotEmpty(orderProductBO.getTradingChannels()) && "CSKT".equals(orderProductBO.getTradingChannels())){
                     List<OrderGiftBO> orderGiftBOList = orderSubmitBO.getOrderGiftBOList();
                     for(OrderGiftBO orderGiftBO:orderGiftBOList){
-                        OrderGift gift = orderGiftRoMapper.selectById(orderGiftBO.getId());
+                        OrderGift gift = orderGiftRoMapper.selectCurriculumGift(orderGiftBO.getId());
                         if(gift != null){
                             gift.setOrderNo(orderNo);
                             int gInt = orderGiftMapper.insert(gift);
