@@ -1426,12 +1426,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderBO selectOrderDetail(String orderNo) {
-        return orderRoMapper.selectOrderDetail(orderNo);
+//        return orderRoMapper.selectOrderDetail(orderNo);
+        OrderBO orderBO = orderRoMapper.selectOrderDetail(orderNo);
+        List<OrderGiftBO> orderGiftBOList = orderGiftRoMapper.selectByOrderNo(orderNo);
+        if(orderGiftBOList != null && orderGiftBOList.size() > 0){
+            orderBO.setOrderGiftBOList(orderGiftBOList);
+        }
+        return orderBO;
     }
 
     @Override
     public OrderBO selectWebByOrderNo(String orderNo) {
-        return orderRoMapper.selectWebByOrderNo(orderNo);
+//        return orderRoMapper.selectWebByOrderNo(orderNo);
+        OrderBO orderBO = orderRoMapper.selectWebByOrderNo(orderNo);
+        List<OrderGiftBO> orderGiftBOList = orderGiftRoMapper.selectByOrderNo(orderNo);
+        if(orderGiftBOList != null && orderGiftBOList.size() > 0){
+            orderBO.setOrderGiftBOList(orderGiftBOList);
+        }
+        return orderBO;
     }
 
     @Override
