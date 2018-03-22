@@ -4,20 +4,27 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.abc12366.gateway.exception.DzsbServiceException;
 import com.abc12366.gateway.exception.ServiceException;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.HsqjMapper;
+import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.model.HsqjBo;
+import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.IHsqjService;
 import com.abc12366.uc.service.UserBindService;
@@ -37,9 +44,15 @@ public class HsqjServiceImpl implements IHsqjService{
 	
 	@Autowired
 	private HsqjMapper hsqjMapper;
+	
+	@Autowired
+	private UserBindMapper userBindMapper;
+	
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
 
 	@Override
-	public void register(HsqjBo hsqjBo) throws ValidationException, ParseException {
+	public void register(HsqjBo hsqjBo,HttpServletRequest request) throws ValidationException, ParseException {
 		 Map<String, String> map = new HashMap<>();
 	     map.put("serviceid", "TY11");
 	     map.put("NSRSBH",hsqjBo.getNsrsbh());
@@ -82,6 +95,60 @@ public class HsqjServiceImpl implements IHsqjService{
 	        	mapO.put("createTime", new Date());
 	        	mapO.put("updateTime", new Date());
 	        	hsqjMapper.insert(mapO);
+	        	
+	        	//绑定电子申报信息到用户
+	        	String userId = Utils.getUserId(request);
+	        	if(StringUtils.isNotEmpty(userId)){
+	        		
+	        		redisTemplate.delete(userId + "_DzsbList");
+	        		Date date = new Date();
+	        		
+	        		UserDzsb userDzsb = new UserDzsb();
+	        		userDzsb.setUserId(userId);
+	        		userDzsb.setNsrsbh(object.getY_NSRSBH());
+	        		userDzsb.setLastUpdate(date);
+	    			userDzsb.setStatus(true);
+	    			userDzsb.setLastLoginTime(date);
+	    			
+	    			userDzsb.setDjxh(object.getDJXH());
+	    			userDzsb.setNsrmc(object.getNSRMC());
+	    			userDzsb.setShxydm(object.getSHXYDM());
+	    			userDzsb.setNsrlx(object.getNSRLX());
+	    			userDzsb.setSfgtjzh(object.getSFGTJZH());
+	    			if (object.getSHXYDM() == null || "".equals(object.getSHXYDM().trim())) {
+	    				userDzsb.setShxydm(object.getY_NSRSBH());
+	    			}
+	    			userDzsb.setSwjgMc(object.getSWJGMC());
+	    			userDzsb.setSwjgDm(object.getSWJGDM());
+	    			if (object.getRJDQR() != null && !"".equals(object.getRJDQR().trim())) {
+	    				userDzsb.setExpireTime(DateUtils.strToDate(object.getRJDQR()));
+	    			}
+	    			if (object.getYQDQR() != null && !"".equals(object.getYQDQR().trim())) {
+	    				userDzsb.setExpandExpireTime(DateUtils.strToDate(object.getYQDQR()));
+	    			}
+	    			userDzsb.setFrmc(object.getFRXM());
+	    			userDzsb.setFrzjh(object.getFRZJH());
+	    			userDzsb.setDjrq(object.getDJRQ());
+	    			
+	    			List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(userDzsb);
+	    			
+	    			if (nsrxxboList2 == null || nsrxxboList2.size() == 0) {
+	    				userDzsb.setId(Utils.uuid());
+	    				userDzsb.setCreateTime(date);
+	    				userBindMapper.dzsbBind(userDzsb);
+	    			} else if (nsrxxboList2.size() == 1) {
+	    				userDzsb.setId(nsrxxboList2.get(0).getId());
+	    				userBindMapper.update(userDzsb);
+	    			} else {
+	    				userDzsb.setId(nsrxxboList2.get(0).getId());
+	    				userBindMapper.update(userDzsb);
+	    				nsrxxboList2.remove(nsrxxboList2.get(0));
+	    				for (UserDzsb ud : nsrxxboList2) {
+	    					userBindMapper.deleteDzsb(ud.getId());
+	    				}
+	    			}
+	    			
+	        	}
 	        } 
 	     }
 	}
