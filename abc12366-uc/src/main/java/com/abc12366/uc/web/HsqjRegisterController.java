@@ -2,6 +2,8 @@ package com.abc12366.uc.web;
 
 import java.text.ParseException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.exolab.castor.xml.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +31,8 @@ public class HsqjRegisterController {
       
 	 @SuppressWarnings("rawtypes")
 	 @PostMapping(path = "/register")
-	 public ResponseEntity register(@RequestBody HsqjBo hsqjBo) throws ValidationException, ParseException{ 
-	     hsqjService.register(hsqjBo);
+	 public ResponseEntity register(@RequestBody HsqjBo hsqjBo,HttpServletRequest request) throws ValidationException, ParseException{ 
+	     hsqjService.register(hsqjBo, request);
 		 return ResponseEntity.ok(Utils.kv());
 	 }
 	 
