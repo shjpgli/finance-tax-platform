@@ -10,7 +10,6 @@ import com.abc12366.uc.mapper.db1.ActivityMapper;
 import com.abc12366.uc.mapper.db2.ActivityRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointCalculateBO;
-import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.UserSimpleInfoBO;
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;
@@ -160,18 +159,6 @@ public class ActivityService implements IActivityService {
      */
     @Override
     public WxRedEnvelopBO generateSecret(String activityId, String businessId) {
-        return getWxRedEnvelopBO(activityId, businessId, null);
-    }
-
-    /**
-     * 生成口令
-     */
-    @Override
-    public WxRedEnvelopBO generateSecret(String activityId, String businessId, String userId) {
-        return getWxRedEnvelopBO(activityId, businessId, userId);
-    }
-
-    private WxRedEnvelopBO getWxRedEnvelopBO(String activityId, String businessId, String userId) {
         WxActivity activity = selectOne(activityId);
         if (activity != null) {
             // 活动是否激活
@@ -183,12 +170,16 @@ public class ActivityService implements IActivityService {
             if (now.before(activity.getStartTime()) || now.after(activity.getEndTime())) {
                 throw new ServiceException(6002);
             }
+            String secret = secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase();
             WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                     .id(Utils.uuid())
-                    .secret(secretRule(activity.getRuleType(), activity.getRule(), activityId).toLowerCase())
+                    .secret(secret)
                     .createTime(new Date())
                     .activityId(activity.getId())
-                    .userId(userId)
+                    .url(Constant.WEIXIN_LOTTERY
+                            .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
+                            .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
+                            .replace("STATE", state(secret, activity.getId())))
                     .build();
             if (StringUtils.isNotEmpty(businessId)) {
                 WxRedEnvelop wre = new WxRedEnvelop.Builder()
@@ -200,11 +191,6 @@ public class ActivityService implements IActivityService {
                     throw new ServiceException(6012);
                 } else {
                     redEnvelop.setBusinessId(businessId);
-                    redEnvelop.setUrl(Constant.WEIXIN_LOTTERY
-                                    .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
-                                    .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
-                                    .replace("STATE", state(redEnvelop.getSecret(), redEnvelop.getActivityId()))
-                    );
                 }
             }
             activityMapper.generateSecret(redEnvelop);
@@ -280,8 +266,8 @@ public class ActivityService implements IActivityService {
         if (dataList.size() < 1) {
             throw new ServiceException(6003);
         } else {
+            // 用户已参与抽奖
             for (WxRedEnvelop redEnvelop : dataList) {
-                // 用户已参与抽奖
                 if (StringUtils.isNotEmpty(redEnvelop.getOpenId())) {
                     if (lotteryBO.getOpenId().equals(redEnvelop.getOpenId())) {
                         throw new ServiceException(6011);
@@ -291,6 +277,7 @@ public class ActivityService implements IActivityService {
                 } else {
                     // 未参与抽奖用户开始抽奖
                     redEnvelop.setOpenId(lotteryBO.getOpenId());
+                    redEnvelop.setUserId(StringUtils.isNotEmpty(lotteryBO.getUserId()) ? lotteryBO.getUserId() : null);
                     lottery(activity, redEnvelop, now);
                     return redEnvelop;
                 }
@@ -342,20 +329,22 @@ public class ActivityService implements IActivityService {
             List<WxRedEnvelop> dataList = new ArrayList<>();
             for (WxRedEnvelopBO redEnvelopBO : redEnvelopList) {
 
+                String url = StringUtils.isNotEmpty(redEnvelopBO.getUrl()) ? redEnvelopBO.getUrl() :
+                            Constant.WEIXIN_LOTTERY
+                            .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
+                            .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
+                            .replace("STATE", state(redEnvelopBO.getSecret(), redEnvelopBO.getActivityId()));
+
                 WxRedEnvelop redEnvelop = new WxRedEnvelop.Builder()
                         .id(Utils.uuid())
                         .createTime(new Date())
                         .secret(redEnvelopBO.getSecret())
                         .activityId(redEnvelopBO.getActivityId().trim())
+                        .url(url)
                         .build();
 
                 if (StringUtils.isNotEmpty(redEnvelopBO.getBusinessId())) {
-                    String url = Constant.WEIXIN_LOTTERY
-                            .replace("APPID", SpringCtxHolder.getProperty("abc.appid"))
-                            .replace("REDIRECT_URI", SpringCtxHolder.getProperty("abc.redirect_uri"))
-                            .replace("STATE", state(redEnvelopBO.getSecret(), redEnvelopBO.getActivityId()));
                     redEnvelop.setBusinessId(redEnvelopBO.getBusinessId().trim());
-                    redEnvelop.setUrl(url);
                 }
                 dataList.add(redEnvelop);
             }

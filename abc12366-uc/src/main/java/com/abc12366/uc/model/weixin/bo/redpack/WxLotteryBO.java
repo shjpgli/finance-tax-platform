@@ -22,6 +22,9 @@ public class WxLotteryBO {
     @Length(min = 16, max = 64)
     private String openId;
 
+    @Length(min = 32, max = 64)
+    private String userId;
+
     public String getActivityId() {
         return activityId;
     }
@@ -46,12 +49,21 @@ public class WxLotteryBO {
         this.openId = openId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
-        return "LotteryBO{" +
+        return "WxLotteryBO{" +
                 "activityId='" + activityId + '\'' +
                 ", secret='" + secret + '\'' +
                 ", openId='" + openId + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

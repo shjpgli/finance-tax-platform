@@ -78,16 +78,6 @@ public interface IActivityService {
     WxRedEnvelopBO generateSecret(String activityId, String businessId);
 
     /**
-     * 生成红包口令
-     *
-     * @param activityId 活动ID
-     * @param businessId 业务ID
-     * @param userId     用户ID
-     * @return WxRedEnvelopBO
-     */
-    WxRedEnvelopBO generateSecret(String activityId, String businessId, String userId);
-
-    /**
      * 抽奖
      *
      * @param lotteryBO WxLotteryBO
