@@ -81,10 +81,9 @@ public class RedEnvelopController {
      */
     @GetMapping("/{activityId}")
     public ResponseEntity generateSecret(@PathVariable("activityId") String activityId,
-                                         @RequestParam(value = "businessId", required = false) String businessId,
-                                         @RequestParam(value = "userId", required = false) String userId) {
+                                         @RequestParam(value = "businessId", required = false) String businessId) {
         LOGGER.info("{}", activityId);
-        WxRedEnvelopBO data = iActivityService.generateSecret(activityId, businessId, userId);
+        WxRedEnvelopBO data = iActivityService.generateSecret(activityId, businessId);
         ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("data", data));
 
         LOGGER.info("{}", responseEntity);
