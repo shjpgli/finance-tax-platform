@@ -696,6 +696,7 @@ public class OrderController {
                                             @RequestParam(value = "username", required = false) String username,
                                             @RequestParam(value = "phone", required = false) String phone,
                                             @RequestParam(value = "tradingChannels", required = false) String tradingChannels,
+                                            @RequestParam(value = "recommendUser", required = false) String recommendUser,
                                             @RequestParam(value = "startTime", required = false) String startTime,
                                             @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -712,6 +713,7 @@ public class OrderController {
         map.put("orderNo",orderNo);
         map.put("orderStatus",orderStatus);
         map.put("tradingChannels",tradingChannels);
+        map.put("recommendUser",recommendUser);
 
         if (startTime != null && !"".equals(startTime)) {
             map.put("startTime", DateUtils.strToDate(startTime));
@@ -751,6 +753,7 @@ public class OrderController {
                                             @RequestParam(value = "phone", required = false) String phone,
                                             @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                             @RequestParam(value = "tradingChannels", required = false) String tradingChannels,
+                                            @RequestParam(value = "recommendUser", required = false) String recommendUser,
                                             @RequestParam(value = "startTime", required = false) String startTime,
                                             @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -768,6 +771,7 @@ public class OrderController {
         map.put("orderStatus",orderStatus);
         map.put("tradingChannels",tradingChannels);
         map.put("tradeMethod",tradeMethod);
+        map.put("recommendUser",recommendUser);
 
         if (startTime != null && !"".equals(startTime)) {
             map.put("startTime", DateUtils.strToDate(startTime));
