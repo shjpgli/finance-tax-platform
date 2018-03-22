@@ -125,6 +125,9 @@ public class ActivityService implements IActivityService {
             if (activity.getMinAmount() == null || activity.getAmount() == null) {
                 throw new ServiceException(6014);
             }
+            if (activity.getMinAmount() >= activity.getAmount()) {
+                throw new ServiceException(6014);
+            }
         }
         // 活动启用赠送积分时，必须输入大于0的积分数值
         if (activity.getGiftPoints()) {
