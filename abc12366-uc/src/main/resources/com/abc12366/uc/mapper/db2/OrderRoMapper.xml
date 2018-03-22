@@ -1164,6 +1164,9 @@
             <if test=" username != null and username != '' ">
                 and u.username = #{username}
             </if>
+            <if test=" recommendUser != null and recommendUser != '' ">
+                and o.recommendUser = #{recommendUser}
+            </if>
             <if test=" phone != null and phone != '' ">
                 and u.phone = #{phone}
             </if>
@@ -1214,6 +1217,9 @@
         <where>
             <if test=" tradeMethod != null and tradeMethod != '' ">
                 and o.tradeMethod = #{tradeMethod}
+            </if>
+            <if test=" recommendUser != null and recommendUser != '' ">
+                and o.recommendUser = #{recommendUser}
             </if>
             <if test=" tradingChannels != null and tradingChannels != '' "> and orderNo in (select DISTINCT orderNo from  uc_order_product  where tradingChannels = #{tradingChannels}) </if>
 
