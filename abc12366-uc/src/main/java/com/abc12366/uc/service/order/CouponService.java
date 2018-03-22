@@ -37,7 +37,7 @@ public interface CouponService {
      * @param pageSize 每页大小
      * @return 优惠劵列表
      */
-    List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo, int pageNum, int pageSize);
+    List<CouponActivityListBO> selectAdminActivityList(Map<String, Object> bo, int pageNum, int pageSize);
 
     /**
      * 前台-查询优惠劵活动列表

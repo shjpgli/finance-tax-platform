@@ -23,7 +23,6 @@ import com.abc12366.uc.model.order.CouponUser;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.service.MessageSendUtil;
 import com.abc12366.uc.service.order.CouponService;
-import com.abc12366.uc.util.StringUtil;
 import com.abc12366.uc.web.order.CartController;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
@@ -234,9 +233,9 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo, int pageNum, int pageSize) {
+    public List<CouponActivityListBO> selectAdminActivityList(Map<String, Object> map, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, true).pageSizeZero(true).reasonable(true);
-        return couponRoMapper.selectAdminActivityList(bo);
+        return couponRoMapper.selectAdminActivityList(map);
     }
 
     @Override

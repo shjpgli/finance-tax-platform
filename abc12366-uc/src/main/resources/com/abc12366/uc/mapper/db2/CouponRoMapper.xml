@@ -130,6 +130,11 @@
             <if test="activityName != null and activityName != ''">ca.activityName LIKE
                 CONCAT('%',#{activityName},'%')
             </if>
+            <if test="isOverdue != null and isOverdue != ''">
+                <![CDATA[
+                  and date_format(ca.activityEndTime, '%Y-%m-%d') >= date_format(NOW(), '%Y-%m-%d')
+            ]]>
+            </if>
             <if test="couponId != null and couponId != ''">AND ca.couponId = #{couponId}</if>
             <choose>
                 <when test="status != null and status != ''">AND ca.status = #{status}</when>

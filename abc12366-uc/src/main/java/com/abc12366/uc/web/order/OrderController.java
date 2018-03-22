@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -776,6 +777,7 @@ public class OrderController {
         }
 
         Double myOrderMoney = orderService.selectMyOrderMoney(map);
-        return ResponseEntity.ok(Utils.kv("data",myOrderMoney));
+        BigDecimal b = new BigDecimal(myOrderMoney);
+        return ResponseEntity.ok(Utils.kv("data",b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
     }
 }

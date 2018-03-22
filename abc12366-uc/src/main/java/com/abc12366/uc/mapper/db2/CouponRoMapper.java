@@ -98,7 +98,7 @@ public interface CouponRoMapper {
      * @param bo 活动对象
      * @return 对象列表
      */
-    List<CouponActivityListBO> selectAdminActivityList(CouponActivity bo);
+    List<CouponActivityListBO> selectAdminActivityList(Map<String, Object> bo);
 
     /**
      * 前端-查看优惠劵活动
