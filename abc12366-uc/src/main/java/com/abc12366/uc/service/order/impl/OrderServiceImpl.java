@@ -1336,7 +1336,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderBO selectByOrderNoAdmin(String orderNo) {
-        return orderRoMapper.selectByOrderNoAdmin(orderNo);
+//        return orderRoMapper.selectByOrderNoAdmin(orderNo);
+        OrderBO orderBO = orderRoMapper.selectByOrderNoAdmin(orderNo);
+        List<OrderGiftBO> orderGiftBOList = orderGiftRoMapper.selectByOrderNo(orderNo);
+        if(orderGiftBOList != null && orderGiftBOList.size() > 0){
+            orderBO.setOrderGiftBOList(orderGiftBOList);
+        }
+        return orderBO;
     }
 
     @Override
