@@ -311,14 +311,17 @@ public class OrderServiceImpl implements OrderService {
 
                 if(StringUtils.isNotEmpty(orderProductBO.getTradingChannels()) && "CSKT".equals(orderProductBO.getTradingChannels())){
                     List<OrderGiftBO> orderGiftBOList = orderSubmitBO.getOrderGiftBOList();
-                    for(OrderGiftBO orderGiftBO:orderGiftBOList){
-                        OrderGift gift = orderGiftRoMapper.selectById(orderGiftBO.getId());
-                        if(gift != null){
-                            gift.setOrderNo(orderNo);
-                            int gInt = orderGiftMapper.insert(gift);
-                            if (gInt != 1) {
-                                LOGGER.info("购买优惠赠送新增失败：{}", gift);
-                                throw new ServiceException(7151);
+                    if(orderGiftBOList != null && orderGiftBOList.size() > 0){
+
+                        for(OrderGiftBO orderGiftBO:orderGiftBOList){
+                            OrderGift gift = orderGiftRoMapper.selectCurriculumGift(orderGiftBO.getId());
+                            if(gift != null){
+                                gift.setGiftId(orderNo);
+                                int gInt = orderGiftMapper.insert(gift);
+                                if (gInt != 1) {
+                                    LOGGER.info("购买优惠赠送新增失败：{}", gift);
+                                    throw new ServiceException(7151);
+                                }
                             }
                         }
                     }
@@ -1333,7 +1336,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderBO selectByOrderNoAdmin(String orderNo) {
-        return orderRoMapper.selectByOrderNoAdmin(orderNo);
+//        return orderRoMapper.selectByOrderNoAdmin(orderNo);
+        OrderBO orderBO = orderRoMapper.selectByOrderNoAdmin(orderNo);
+        List<OrderGiftBO> orderGiftBOList = orderGiftRoMapper.selectByOrderNo(orderNo);
+        if(orderGiftBOList != null && orderGiftBOList.size() > 0){
+            orderBO.setOrderGiftBOList(orderGiftBOList);
+        }
+        return orderBO;
     }
 
     @Override
