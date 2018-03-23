@@ -26,8 +26,11 @@
 		 <if test="realname != null and realname != ''">
 		 AND e.realName =  #{realname} 
 		 </if>
-		 <if test="createTime != null and createTime != ''">
-		 AND DATE_FORMAT(u.createTime,'%Y%m%d') = #{createTime} 
+		 <if test="createTimeB != null and createTimeB != ''">
+		 AND DATE_FORMAT(u.createTime,'%Y%m%d') >= #{createTimeB} 
+		 </if>  
+		 <if test="createTimeE != null and createTimeE != ''">
+		 <![CDATA[ AND DATE_FORMAT(u.createTime,'%Y%m%d') <= #{createTimeE} ]]>
 		 </if>     
          ORDER BY u.createTime DESC
    </select>
