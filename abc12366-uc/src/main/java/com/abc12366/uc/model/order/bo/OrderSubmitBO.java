@@ -1,6 +1,5 @@
 package com.abc12366.uc.model.order.bo;
 
-import com.abc12366.uc.model.order.OrderGift;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
@@ -250,6 +249,22 @@ public class OrderSubmitBO implements Serializable {
         this.orderProductBOList = orderProductBOList;
     }
 
+    public String getUseCouponId() {
+        return useCouponId;
+    }
+
+    public void setUseCouponId(String useCouponId) {
+        this.useCouponId = useCouponId;
+    }
+
+    public List<OrderGiftBO> getOrderGiftBOList() {
+        return orderGiftBOList;
+    }
+
+    public void setOrderGiftBOList(List<OrderGiftBO> orderGiftBOList) {
+        this.orderGiftBOList = orderGiftBOList;
+    }
+
     @Override
     public String toString() {
         return "OrderSubmitBO{" +
@@ -270,22 +285,7 @@ public class OrderSubmitBO implements Serializable {
                 ", isFreeShipping=" + isFreeShipping +
                 ", useCouponId='" + useCouponId + '\'' +
                 ", orderProductBOList=" + orderProductBOList +
+                ", orderGiftBOList=" + orderGiftBOList +
                 '}';
-    }
-
-    public String getUseCouponId() {
-        return useCouponId;
-    }
-
-    public void setUseCouponId(String useCouponId) {
-        this.useCouponId = useCouponId;
-    }
-
-    public List<OrderGiftBO> getOrderGiftBOList() {
-        return orderGiftBOList;
-    }
-
-    public void setOrderGiftBOList(List<OrderGiftBO> orderGiftBOList) {
-        this.orderGiftBOList = orderGiftBOList;
     }
 }
