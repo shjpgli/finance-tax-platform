@@ -273,7 +273,13 @@ public class ActivityService implements IActivityService {
             for (WxRedEnvelop redEnvelop : dataList) {
                 if (StringUtils.isNotEmpty(redEnvelop.getOpenId())) {
                     if (lotteryBO.getOpenId().equals(redEnvelop.getOpenId())) {
-                        throw new ServiceException(6011);
+                        if (StringUtils.isNotEmpty(redEnvelop.getReceiveStatus())
+                                && !"NOT_WINNING".equalsIgnoreCase(redEnvelop.getReceiveStatus())
+                                && !"UNUSED".equalsIgnoreCase(redEnvelop.getReceiveStatus())) {
+                            throw new ServiceException(6017);
+                        } else {
+                            throw new ServiceException(6011);
+                        }
                     } else {
                         throw new ServiceException(6013);
                     }
