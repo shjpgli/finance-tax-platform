@@ -314,7 +314,7 @@ public class OrderServiceImpl implements OrderService {
                     for(OrderGiftBO orderGiftBO:orderGiftBOList){
                         OrderGift gift = orderGiftRoMapper.selectCurriculumGift(orderGiftBO.getId());
                         if(gift != null){
-                            gift.setOrderNo(orderNo);
+                            gift.setGiftId(orderNo);
                             int gInt = orderGiftMapper.insert(gift);
                             if (gInt != 1) {
                                 LOGGER.info("购买优惠赠送新增失败：{}", gift);
