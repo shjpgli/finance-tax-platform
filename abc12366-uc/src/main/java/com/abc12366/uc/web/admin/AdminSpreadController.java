@@ -63,12 +63,12 @@ public class AdminSpreadController {
 	 *            电话
 	 * @param nickname
 	 *            昵称
-	 * @param createTime
+	 * @param createTimeB
 	 *            注册时间
 	 * @return
 	 */
 	@GetMapping("/myconstomers")
-	public ResponseEntity myConstomers(@RequestParam String recommend,
+	public ResponseEntity myConstomers(@RequestParam String recommend,@RequestParam String recommendPhone,
 			@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
 			@RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
 			@RequestParam(required = false) String username, @RequestParam(required = false) String realname,
@@ -78,6 +78,7 @@ public class AdminSpreadController {
 		LOGGER.info("查询我的客户信息:{},{},{},{},{},{},{}", recommend, username, realname, phone, nickname, createTimeB,createTimeE);
 		Map<String, Object> map = new HashMap<>(16);
 		map.put("recommend", recommend);
+		map.put("recommendPhone", recommendPhone);
 		map.put("username", username);
 		map.put("realname", realname);
 		map.put("phone", phone);
