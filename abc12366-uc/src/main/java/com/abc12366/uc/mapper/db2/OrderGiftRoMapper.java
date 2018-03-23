@@ -22,7 +22,7 @@ public interface OrderGiftRoMapper {
 	 **/
 	OrderGift selectById(@Param("id") String id);
 
-	List<OrderGiftBO> selectByOrderNo(@Param("orderNo")String orderNo);
+	List<OrderGiftBO> selectByOrderNo(@Param("giftId")String orderNo);
 
 	OrderGift selectCurriculumGift(String id);
 }

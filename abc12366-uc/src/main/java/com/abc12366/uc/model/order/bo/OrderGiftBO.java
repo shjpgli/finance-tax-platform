@@ -14,7 +14,7 @@ public class OrderGiftBO implements Serializable {
 	private String id;
 
 	/**关联uc_order的主键**/
-	private String orderNo;
+	private String giftId;
 
 	/**操作符号：or-或,and-和**/
 	private String operSymbol;
@@ -59,11 +59,11 @@ public class OrderGiftBO implements Serializable {
 		return this.operValue;
 	}
 
-	public String getOrderNo() {
-		return orderNo;
+	public String getGiftId() {
+		return giftId;
 	}
 
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
+	public void setGiftId(String giftId) {
+		this.giftId = giftId;
 	}
 }
