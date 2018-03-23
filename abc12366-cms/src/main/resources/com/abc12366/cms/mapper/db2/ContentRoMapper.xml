@@ -40,7 +40,7 @@
 			a.typeId typeId,
 			b.author author,
 			a.viewsDay views,
-			DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+			b.releaseDate releaseDate,
 			a.status STATUS,
 			b.needRegenerate needRegenerate,
 			b.staticLink,
@@ -103,7 +103,7 @@
         a.typeId typeId,
         b.author author,
         a.viewsDay views,
-        DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+        b.releaseDate releaseDate,
         a.status STATUS,
         b.needRegenerate needRegenerate,
         a.recommendLevel recommendLevel,
@@ -116,7 +116,7 @@
         LEFT JOIN cms_site d ON a.siteId = d.siteId
         LEFT JOIN cms_content_count e ON a.contentId = e.contentId
         WHERE a.status = 2 AND b.needRegenerate = 1
-        AND date(b.releaseDate) >= date_sub(curdate(), INTERVAL 7 DAY)
+        and date_sub(curdate(), INTERVAL 7 DAY) >= date(b.releaseDate)
       ]]>
         <if test="tagId != null and tagId != ''">
             AND a.contentType like CONCAT('%',#{channelId},'%')
@@ -185,7 +185,7 @@
 		a.typeId typeId,
 		b.author author,
         a.viewsDay views,
-		DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel,
@@ -297,7 +297,7 @@
 		a.typeId typeId,
 		b.author author,
         a.viewsDay views,
-		DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel,
@@ -359,7 +359,7 @@
         a.typeId typeId,
         b.author author,
         a.viewsDay views,
-        DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+        b.releaseDate releaseDate,
         a.status STATUS,
         b.needRegenerate needRegenerate,
         a.recommendLevel recommendLevel,
@@ -406,7 +406,7 @@
         a.typeId typeId,
         b.author author,
         a.viewsDay views,
-        DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+        b.releaseDate releaseDate,
         a.status STATUS,
         b.needRegenerate needRegenerate,
         a.recommendLevel recommendLevel,
@@ -445,7 +445,7 @@
 		a.typeId typeId,
 		b.author author,
         a.viewsDay views,
-		DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
 		a.recommendLevel recommendLevel,
@@ -511,7 +511,7 @@
 		a.typeId typeId,
 		b.author author,
 		a.viewsDay views,
-		DATE_FORMAT(IFNULL((select attrvalue from cms_content_attr where contentId = a.contentId and attrName ='releaseDate'),b.releaseDate),'%Y-%m-%d') releaseDate,
+		b.releaseDate releaseDate,
 		a.status STATUS,
 		b.needRegenerate needRegenerate,
 		b.staticLink,
