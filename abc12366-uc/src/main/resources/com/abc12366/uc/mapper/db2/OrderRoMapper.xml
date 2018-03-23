@@ -1165,7 +1165,11 @@
                 and u.username = #{username}
             </if>
             <if test=" recommendUser != null and recommendUser != '' ">
-                and o.recommendUser = #{recommendUser}
+                and (o.recommendUser = #{recommendUser}
+                    <if test=" recommendPhone != null and recommendPhone != '' ">
+                        or o.recommendUser = #{recommendPhone}
+                    </if>
+                )
             </if>
             <if test=" phone != null and phone != '' ">
                 and u.phone = #{phone}
