@@ -709,8 +709,8 @@ public class OrderServiceImpl implements OrderService {
                         //赠送会员不能小于当前会员等级
                         if (temp != null && bo.getOperValue().compareTo(temp.getVipLevel()) >= 0) {
                             userService.updateUserVipInfo(orderBO.getUserId(), bo.getOperValue(), false);
+                            LOGGER.info("插入会员日志: {}", bo.getOperValue());
                             insertVipLog(orderBO.getOrderNo(), orderBO.getUserId(), bo.getOperValue());
-                            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "购买课程赠送会员", "0");
                         }
                     } else if ("AMOUNT".equals(bo.getOperType())) {
                         String userId = orderBO.getUserId();
