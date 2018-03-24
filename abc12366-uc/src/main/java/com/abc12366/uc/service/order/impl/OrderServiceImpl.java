@@ -685,6 +685,8 @@ public class OrderServiceImpl implements OrderService {
                             order.setOrderStatus("6");
                             //修改订单状态
                             updOrder(order);
+                            //付款成功，购买优惠赠送
+                            opertionGift(orderBO,request);
                             insertDeductPoints(orderBO);
                             insertOrderLog(userId, orderNo, "6", "用户付款成功，完成订单", "0");
                         }
@@ -726,6 +728,7 @@ public class OrderServiceImpl implements OrderService {
                         //赠送会员不能小于当前会员等级
                         if(temp != null && bo.getOperValue().compareTo(temp.getVipLevel()) >= 0){
                             userService.updateUserVipInfo(orderBO.getUserId(), bo.getOperValue(),false);
+                            insertOrderLog(orderBO.getUserId(), orderBO.getOrderNo(), "6", "购买课程赠送会员", "0");
                         }
                     }else if("AMOUNT".equals(bo.getOperType())){
                         String userId = orderBO.getUserId();
