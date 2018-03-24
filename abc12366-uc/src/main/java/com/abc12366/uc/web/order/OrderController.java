@@ -3,6 +3,7 @@ package com.abc12366.uc.web.order;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.admin.Admin;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.model.order.Order;
@@ -697,6 +698,7 @@ public class OrderController {
                                             @RequestParam(value = "phone", required = false) String phone,
                                             @RequestParam(value = "tradingChannels", required = false) String tradingChannels,
                                             @RequestParam(value = "recommendUser", required = false) String recommendUser,
+                                            @RequestParam(value = "recommendPhone", required = false) String recommendPhone,
                                             @RequestParam(value = "startTime", required = false) String startTime,
                                             @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -714,6 +716,7 @@ public class OrderController {
         map.put("orderStatus",orderStatus);
         map.put("tradingChannels",tradingChannels);
         map.put("recommendUser",recommendUser);
+        map.put("recommendPhone",recommendPhone);
 
         if (startTime != null && !"".equals(startTime)) {
             map.put("startTime", DateUtils.strToDate(startTime));
@@ -754,6 +757,7 @@ public class OrderController {
                                             @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
                                             @RequestParam(value = "tradingChannels", required = false) String tradingChannels,
                                             @RequestParam(value = "recommendUser", required = false) String recommendUser,
+                                            @RequestParam(value = "recommendPhone", required = false) String recommendPhone,
                                             @RequestParam(value = "startTime", required = false) String startTime,
                                             @RequestParam(value = "endTime", required = false) String endTime) {
         LOGGER.info("{}:{}", pageNum, pageSize);
@@ -772,6 +776,7 @@ public class OrderController {
         map.put("tradingChannels",tradingChannels);
         map.put("tradeMethod",tradeMethod);
         map.put("recommendUser",recommendUser);
+        map.put("recommendPhone",recommendPhone);
 
         if (startTime != null && !"".equals(startTime)) {
             map.put("startTime", DateUtils.strToDate(startTime));

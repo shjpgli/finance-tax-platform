@@ -66,4 +66,15 @@ public class OrderGiftBO implements Serializable {
 	public void setGiftId(String giftId) {
 		this.giftId = giftId;
 	}
+
+	@Override
+	public String toString() {
+		return "OrderGiftBO{" +
+				"id='" + id + '\'' +
+				", giftId='" + giftId + '\'' +
+				", operSymbol='" + operSymbol + '\'' +
+				", operType='" + operType + '\'' +
+				", operValue='" + operValue + '\'' +
+				'}';
+	}
 }

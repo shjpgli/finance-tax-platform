@@ -238,6 +238,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderBO submitOrder(OrderSubmitBO orderSubmitBO) {
         //UCUserBO user = Utils.getUserInfo();
+        LOGGER.info("提交的订单信息：{}", orderSubmitBO);
         User user = userMapper.selectOne(orderSubmitBO.getUserId());
         orderSubmitBO.setNowVipLevel(user.getVipLevel());
         Date date = new Date();
@@ -297,6 +298,7 @@ public class OrderServiceImpl implements OrderService {
 //                    Map<String, Object> map = new HashMap<>();
 //                    map.put("useCouponId", orderSubmitBO.getUseCouponId());
 //                    map.put("userId", orderSubmitBO.getUserId());
+                    LOGGER.info("使用的优惠卷信息：{}", couponOrderBO);
                     CouponUser couponUser = couponRoMapper.selectUserCouponById(orderSubmitBO.getUseCouponId());
                     if (orderProductBO.getTradingChannels() != null
                             && !couponUser.getCategoryIds().contains(CouponServiceImpl.ALL)
@@ -314,6 +316,7 @@ public class OrderServiceImpl implements OrderService {
                     if(orderGiftBOList != null && orderGiftBOList.size() > 0){
 
                         for(OrderGiftBO orderGiftBO:orderGiftBOList){
+                            LOGGER.info("购买优惠赠送：{}", orderGiftBO);
                             OrderGift gift = orderGiftRoMapper.selectCurriculumGift(orderGiftBO.getId());
                             if(gift != null){
                                 gift.setGiftId(orderNo);

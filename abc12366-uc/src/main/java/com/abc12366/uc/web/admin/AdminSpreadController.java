@@ -63,25 +63,28 @@ public class AdminSpreadController {
 	 *            电话
 	 * @param nickname
 	 *            昵称
-	 * @param createTime
+	 * @param createTimeB
 	 *            注册时间
 	 * @return
 	 */
 	@GetMapping("/myconstomers")
-	public ResponseEntity myConstomers(@RequestParam String recommend,
+	public ResponseEntity myConstomers(@RequestParam String recommend,@RequestParam(value = "recommendPhone", required = false) String recommendPhone,
 			@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
 			@RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
 			@RequestParam(required = false) String username, @RequestParam(required = false) String realname,
 			@RequestParam(required = false) String phone, @RequestParam(required = false) String nickname,
-			@RequestParam(required = false) String createTime) {
-		LOGGER.info("查询我的客户信息:{},{},{},{},{},{}", recommend, username, realname, phone, nickname, createTime);
+			@RequestParam(required = false) String createTimeB,
+			@RequestParam(required = false) String createTimeE) {
+		LOGGER.info("查询我的客户信息:{},{},{},{},{},{},{}", recommend, username, realname, phone, nickname, createTimeB,createTimeE);
 		Map<String, Object> map = new HashMap<>(16);
 		map.put("recommend", recommend);
+		map.put("recommendPhone", recommendPhone);
 		map.put("username", username);
 		map.put("realname", realname);
 		map.put("phone", phone);
 		map.put("nickname", nickname);
-		map.put("createTime", createTime);
+		map.put("createTimeB", createTimeB);
+		map.put("createTimeE", createTimeE);
 		List<Map<String, Object>> dataList = adminSpreadService.myConstomers(map, pageNum, pageSize);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<>(dataList);
 		LOGGER.info("{}", JSONArray.toJSONString(pageInfo));
