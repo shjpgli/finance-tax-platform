@@ -68,7 +68,7 @@ public class AdminSpreadController {
 	 * @return
 	 */
 	@GetMapping("/myconstomers")
-	public ResponseEntity myConstomers(@RequestParam String recommend,@RequestParam String recommendPhone,
+	public ResponseEntity myConstomers(@RequestParam String recommend,@RequestParam(value = "recommendPhone", required = false) String recommendPhone,
 			@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
 			@RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
 			@RequestParam(required = false) String username, @RequestParam(required = false) String realname,
