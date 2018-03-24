@@ -54,6 +54,7 @@
         collectNum,answerNum,
         (select id from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerId,
         (select shortAnswer from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) shortAnswer,
+        (select answer from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answer,
         (select answerImage from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) answerImage,
         (select likeNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) likeNum,
         (select trampleNum from bb_question_answer where status = '0' and questionId = q.id order by likeNum desc limit 1) trampleNum,

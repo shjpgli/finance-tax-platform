@@ -23,8 +23,8 @@
         FROM bb_curriculum_study s left join bb_user u on s.userId = u.id
         left join bb_curriculum_courseware c on s.coursewareId = c.coursewareId
         WHERE 1=1
-        <if test="nickname != null and nickname != ''">
-            AND u.nickname like CONCAT('%',#{nickname},'%')
+        <if test="username != null and username != ''">
+            AND u.username like CONCAT('%',#{username},'%')
         </if>
         <if test="begintime != null">
             <![CDATA[

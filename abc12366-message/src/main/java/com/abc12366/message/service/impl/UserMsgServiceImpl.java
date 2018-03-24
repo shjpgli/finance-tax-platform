@@ -211,12 +211,17 @@ public class UserMsgServiceImpl implements UserMsgService {
 
     @Override
     public void batchUpdateToRead(BatchUpdateMsgToReadBO bo) {
-        if(bo==null||bo.getIds()==null||bo.getIds().size()<1){
+        if (bo == null || bo.getIds() == null || bo.getIds().size() < 1) {
             return;
         }
-        if(bo.getIds().size()>100){
+        if (bo.getIds().size() > 100) {
             throw new ServiceException(4206);
         }
         userMsgMapper.updateBatch(bo);
+
+        String key = Utils.getUserId() + USER_MSG_KEY;
+        if (redisTemplate.hasKey(key)) {
+            redisTemplate.delete(key);
+        }
     }
 }

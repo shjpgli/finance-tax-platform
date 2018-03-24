@@ -119,7 +119,7 @@ public class CurriculumsyBo implements Serializable {
     //相关课程
     List<CurriculumListsyBo> curriculumListBoList;
 
-    private List<CurriculumUvipPrice> uvipPriceList;
+    private List<CurriculumUvipPriceBo> uvipPriceBoList;
 
     public String getCurriculumId() {
         return curriculumId;
@@ -387,11 +387,11 @@ public class CurriculumsyBo implements Serializable {
         this.integralPrice = integralPrice;
     }
 
-    public List<CurriculumUvipPrice> getUvipPriceList() {
-        return uvipPriceList;
+    public List<CurriculumUvipPriceBo> getUvipPriceBoList() {
+        return uvipPriceBoList;
     }
 
-    public void setUvipPriceList(List<CurriculumUvipPrice> uvipPriceList) {
-        this.uvipPriceList = uvipPriceList;
+    public void setUvipPriceBoList(List<CurriculumUvipPriceBo> uvipPriceBoList) {
+        this.uvipPriceBoList = uvipPriceBoList;
     }
 }

@@ -62,6 +62,8 @@ public class PointCalculateBO {
         return "PointCalculateBO{" +
                 "userId='" + userId + '\'' +
                 ", ruleCode='" + ruleCode + '\'' +
+                ", points=" + points +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

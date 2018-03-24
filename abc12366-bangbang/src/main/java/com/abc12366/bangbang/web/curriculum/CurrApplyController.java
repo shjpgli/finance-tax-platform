@@ -41,11 +41,13 @@ public class CurrApplyController {
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      @RequestParam(value = "curriculumId", required = false) String curriculumId,
                                      @RequestParam(value = "nickname", required = false) String nickname,
+                                     @RequestParam(value = "username", required = false) String username,
                                      @RequestParam(value = "begintime", required = false) String begintime,
                                      @RequestParam(value = "endtime", required = false) String endtime) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("curriculumId",curriculumId);
         dataMap.put("nickname",nickname);
+        dataMap.put("username",username);
         if(begintime != null && !"".equals(begintime)){
             dataMap.put("begintime", begintime);//开始时间
         }

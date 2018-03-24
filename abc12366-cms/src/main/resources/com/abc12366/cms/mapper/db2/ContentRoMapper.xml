@@ -8,6 +8,7 @@
 		contentId,	channelId,	typeId,contentType,	modelId,	siteId,	sortDate,	topLevel,	hasTitleImg,	isRecommend,	status,	viewsDay,	commentsDay,	downloadsDay,	upsDay,username,userid,	recommendLevel
 	</sql>
 
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByPrimaryKey" resultType="com.abc12366.cms.model.Content" parameterType="java.lang.String">
 		 SELECT
@@ -16,13 +17,15 @@
 		 WHERE contentId = #{contentId}
 	</select>
 
+
 	<!-- 查询（根据主键ID查询） -->
 	<select id="selectByChannelId" resultType="java.lang.Long" parameterType="java.lang.String">
 		SELECT count(contentId) cnt
 		FROM cms_content
 		WHERE channelId like CONCAT(#{channelId},'%')
 	</select>
-
+    
+    
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectList" resultType="com.abc12366.cms.model.bo.ContentListBo" parameterType="java.util.Map">
 		SELECT
@@ -78,6 +81,7 @@
 		</if>
 		ORDER BY b.releaseDate DESC
 	</select>
+	
 
     <!-- 查询（根据查询条件查询） -->
     <select id="selectListByviews" resultType="com.abc12366.cms.model.bo.ContentViewListBo" parameterType="java.util.Map">
@@ -112,7 +116,7 @@
         LEFT JOIN cms_site d ON a.siteId = d.siteId
         LEFT JOIN cms_content_count e ON a.contentId = e.contentId
         WHERE a.status = 2 AND b.needRegenerate = 1
-        and date_sub(curdate(), INTERVAL 7 DAY) >= date(b.releaseDate)
+        AND date(b.releaseDate) >= date_sub(curdate(), INTERVAL 7 DAY)
       ]]>
         <if test="tagId != null and tagId != ''">
             AND a.contentType like CONCAT('%',#{channelId},'%')
@@ -128,6 +132,7 @@
 		</if>
         ORDER BY a.topLevel DESC,e.viewsDay DESC
     </select>
+
 
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListByTplContent" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">
@@ -159,6 +164,7 @@
 		</if>
 		ORDER BY a.topLevel DESC,a.recommendLevel DESC,b.releaseDate DESC
 	</select>
+
 
 	<!-- 查询（根据查询条件查询） -->
 	<select id="selectListByContentType" resultType="com.abc12366.cms.model.bo.ContentsListBo" parameterType="java.util.Map">

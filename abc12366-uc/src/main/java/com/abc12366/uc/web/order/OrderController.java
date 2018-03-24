@@ -3,6 +3,7 @@ package com.abc12366.uc.web.order;
 import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.admin.Admin;
 import com.abc12366.uc.model.bo.UserBO;
 import com.abc12366.uc.model.bo.VipLogBO;
 import com.abc12366.uc.model.order.Order;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -291,6 +293,7 @@ public class OrderController {
      * @param pageSize  条数
      * @param goodsId   商品ID
      * @param nickname  用户昵称
+     * @param username  用户名
      * @param startTime 开始时间
      * @param endTime   结束时间
      * @return 订单列表
@@ -302,6 +305,7 @@ public class OrderController {
                                                             int pageSize,
                                                     @RequestParam(value = "goodsId", required = true) String goodsId,
                                                     @RequestParam(value = "nickname", required = false) String nickname,
+                                                    @RequestParam(value = "username", required = false) String username,
                                                     @RequestParam(value = "startTime", required = false) String
                                                                 startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime) {
@@ -309,6 +313,7 @@ public class OrderController {
         OrderBO orderBO = new OrderBO();
         UserBO user = new UserBO();
         user.setNickname(nickname);
+        user.setUsername(username);
         orderBO.setUser(user);
         orderBO.setGoodsId(goodsId);
         if (startTime != null && !"".equals(startTime)) {
@@ -669,5 +674,124 @@ public class OrderController {
         map.put("vipLogBO",vipLogBO);
         orderService.updateOrderReturn(map,httpServletRequest);
         return ResponseEntity.ok(Utils.kv());
+    }
+
+    /**
+     * 我的销售订单列表
+     *
+     * @param pageNum     页数
+     * @param pageSize    条数
+     * @param orderNo     订单号
+     * @param username    用户名
+     * @param startTime   开始时间
+     * @param endTime     结束时间
+     * @param orderStatus 订单状态
+     * @param phone       电话号码
+     * @return 订单列表
+     */
+    @GetMapping(path = "/myOrder")
+    public ResponseEntity selectMyOrderList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                            @RequestParam(value = "orderNo", required = false) String orderNo,
+                                            @RequestParam(value = "orderStatus", required = false) String orderStatus,
+                                            @RequestParam(value = "username", required = false) String username,
+                                            @RequestParam(value = "phone", required = false) String phone,
+                                            @RequestParam(value = "tradingChannels", required = false) String tradingChannels,
+                                            @RequestParam(value = "recommendUser", required = false) String recommendUser,
+                                            @RequestParam(value = "recommendPhone", required = false) String recommendPhone,
+                                            @RequestParam(value = "startTime", required = false) String startTime,
+                                            @RequestParam(value = "endTime", required = false) String endTime) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        /*OrderBO orderBO = new OrderBO();
+        UserBO user = new UserBO();
+        user.setUsername(username);
+        user.setPhone(phone);
+        orderBO.setUser(user);
+        orderBO.setOrderNo(orderNo);
+        orderBO.setOrderStatus(orderStatus);*/
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",username);
+        map.put("phone",phone);
+        map.put("orderNo",orderNo);
+        map.put("orderStatus",orderStatus);
+        map.put("tradingChannels",tradingChannels);
+        map.put("recommendUser",recommendUser);
+        map.put("recommendPhone",recommendPhone);
+
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+
+        List<OrderBO> orderList = orderService.selectMyOrderList(map, pageNum, pageSize);
+        PageInfo<OrderBO> pageInfo = new PageInfo<>(orderList);
+        LOGGER.info("{}", orderList);
+        return (orderList == null) ?
+                new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
+                ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo
+                        .getTotal()));
+    }
+
+    /**
+     * 我的销售订单金额统计
+     *
+     * @param pageNum     页数
+     * @param pageSize    条数
+     * @param orderNo     订单号
+     * @param username    用户名
+     * @param startTime   开始时间
+     * @param endTime     结束时间
+     * @param orderStatus 订单状态
+     * @param phone       电话号码
+     * @return 订单列表
+     */
+    @GetMapping(path = "/myOrder/money")
+    public ResponseEntity selectMyOrderMoney(@RequestParam(value = "page", defaultValue = Constant.pageNum) int pageNum,
+                                            @RequestParam(value = "size", defaultValue = Constant.pageSize) int pageSize,
+                                            @RequestParam(value = "orderNo", required = false) String orderNo,
+                                            @RequestParam(value = "orderStatus", required = false) String orderStatus,
+                                            @RequestParam(value = "username", required = false) String username,
+                                            @RequestParam(value = "phone", required = false) String phone,
+                                            @RequestParam(value = "tradeMethod", required = false) String tradeMethod,
+                                            @RequestParam(value = "tradingChannels", required = false) String tradingChannels,
+                                            @RequestParam(value = "recommendUser", required = false) String recommendUser,
+                                            @RequestParam(value = "recommendPhone", required = false) String recommendPhone,
+                                            @RequestParam(value = "startTime", required = false) String startTime,
+                                            @RequestParam(value = "endTime", required = false) String endTime) {
+        LOGGER.info("{}:{}", pageNum, pageSize);
+        /*OrderBO orderBO = new OrderBO();
+        UserBO user = new UserBO();
+        user.setUsername(username);
+        user.setPhone(phone);
+        orderBO.setUser(user);
+        orderBO.setOrderNo(orderNo);
+        orderBO.setOrderStatus(orderStatus);*/
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",username);
+        map.put("phone",phone);
+        map.put("orderNo",orderNo);
+        map.put("orderStatus",orderStatus);
+        map.put("tradingChannels",tradingChannels);
+        map.put("tradeMethod",tradeMethod);
+        map.put("recommendUser",recommendUser);
+        map.put("recommendPhone",recommendPhone);
+
+        if (startTime != null && !"".equals(startTime)) {
+            map.put("startTime", DateUtils.strToDate(startTime));
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            map.put("endTime", DateUtils.strToDate(endTime));
+        }
+
+        Double myOrderMoney = orderService.selectMyOrderMoney(map);
+        if(myOrderMoney != null){
+            BigDecimal b = new BigDecimal(myOrderMoney);
+            return ResponseEntity.ok(Utils.kv("data",b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+        }else{
+            BigDecimal b = new BigDecimal(0d);
+            return ResponseEntity.ok(Utils.kv("data", b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
+        }
     }
 }

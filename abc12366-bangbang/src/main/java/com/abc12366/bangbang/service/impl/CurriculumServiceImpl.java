@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.abc12366.bangbang.service.FollowLecturerService;
@@ -78,6 +77,12 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 	@Autowired
 	private CurriculumUvipPriceMapper uvipPriceMapper;
+
+	@Autowired
+	private CurriculumGiftMapper curriculumGiftMapper;
+
+	@Autowired
+	private CurriculumGiftRoMapper curriculumGiftRoMapper;
 
 	@Autowired
 	private CurriculumUvipPriceRoMapper uvipPriceRoMapper;
@@ -227,12 +232,12 @@ public class CurriculumServiceImpl implements CurriculumService {
 			curriculumBo.setCreaterTime(new Date());
 			curriculumBo.setUpdateTime(new Date());
 			// 保存课程信息
-			String uuid = UUID.randomUUID().toString().replace("-", "");
+			String curriculumId = UUID.randomUUID().toString().replace("-", "");
 
 			String userId = Utils.getAdminId();
 
 			Curriculum curriculum = new Curriculum();
-			curriculumBo.setCurriculumId(uuid);
+			curriculumBo.setCurriculumId(curriculumId);
 			curriculumBo.setCreaterId(userId);
 			BeanUtils.copyProperties(curriculumBo, curriculum);
 			curriculumMapper.insert(curriculum);
@@ -241,7 +246,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 			if (labelList != null) {
 				for (CurriculumLabel label : labelList) {
-					label.setCurriculumId(uuid);
+					label.setCurriculumId(curriculumId);
 					curriculumLabelMapper.insert(label);
 				}
 			}
@@ -250,7 +255,7 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 			if (membergradeList != null) {
 				for (CurriculumMembergrade grade : membergradeList) {
-					grade.setCurriculumId(uuid);
+					grade.setCurriculumId(curriculumId);
 					curriculumMembergradeMapper.insert(grade);
 				}
 			}
@@ -259,19 +264,32 @@ public class CurriculumServiceImpl implements CurriculumService {
 
 			if (lecturerGxList != null) {
 				for (CurriculumLecturerGx lecturerGx : lecturerGxList) {
-					lecturerGx.setCurriculumId(uuid);
+					lecturerGx.setCurriculumId(curriculumId);
 					curriculumLecturerGxMapper.insert(lecturerGx);
 				}
 			}
 
 			// 会员价格表
-			List<CurriculumUvipPrice> uvipPriceList = curriculumBo.getUvipPriceList();
+			List<CurriculumUvipPriceBo> uvipPriceList = curriculumBo.getUvipPriceBoList();
 
 			if (uvipPriceList != null) {
-				for (CurriculumUvipPrice uvipPrice : uvipPriceList) {
-					uvipPrice.setId(UUID.randomUUID().toString().replace("-", ""));
-					uvipPrice.setCurriculumId(uuid);
+				for (CurriculumUvipPriceBo uvipPriceBo : uvipPriceList) {
+                    String vipId = Utils.uuid();
+					uvipPriceBo.setId(vipId);
+					uvipPriceBo.setCurriculumId(curriculumId);
+					CurriculumUvipPrice uvipPrice = new CurriculumUvipPrice();
+					BeanUtils.copyProperties(uvipPriceBo,uvipPrice);
 					uvipPriceMapper.insert(uvipPrice);
+                    List<CurriculumGiftBo> giftBoList = uvipPriceBo.getCurriculumGiftBoList();
+                    if(giftBoList != null && giftBoList.size() > 0){
+                        for(CurriculumGiftBo giftBo:giftBoList){
+                            giftBo.setId(Utils.uuid());
+                            giftBo.setGiftId(vipId);
+                            CurriculumGift gift = new CurriculumGift();
+                            BeanUtils.copyProperties(giftBo,gift);
+                            curriculumGiftMapper.insert(gift);
+                        }
+                    }
 				}
 			}
 
@@ -326,9 +344,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 			curriculumBo.setChapterBoList(chapterBoList);
 
 			// 会员价格
-			List<CurriculumUvipPrice> uvipPriceList = uvipPriceRoMapper.selectList(curriculumId);
+			List<CurriculumUvipPriceBo> uvipPriceList = uvipPriceRoMapper.selectList(curriculumId);
 
-			curriculumBo.setUvipPriceList(uvipPriceList);
+			curriculumBo.setUvipPriceBoList(uvipPriceList);
 
 		} catch (Exception e) {
 			LOGGER.error("查询单个课程信息异常：{}", e);
@@ -389,9 +407,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 			curriculumBo.setChapterBoList(chapterBoList);
 
 			// 会员价格
-			List<CurriculumUvipPrice> uvipPriceList = uvipPriceRoMapper.selectList(curriculumId);
+			List<CurriculumUvipPriceBo> uvipPriceList = uvipPriceRoMapper.selectList(curriculumId);
 
-			curriculumBo.setUvipPriceList(uvipPriceList);
+			curriculumBo.setUvipPriceBoList(uvipPriceList);
 
 			List<CurriculumListsyBo> curriculumListBoList;
 			// 查询相关课程列表
@@ -442,9 +460,9 @@ public class CurriculumServiceImpl implements CurriculumService {
 			curriculumBo.setLecturerList(lecturerBoList);
 
 			// 会员价格
-			List<CurriculumUvipPrice> uvipPriceList = uvipPriceRoMapper.selectList(curriculumId);
+			List<CurriculumUvipPriceBo> uvipPriceList = uvipPriceRoMapper.selectList(curriculumId);
 
-			curriculumBo.setUvipPriceList(uvipPriceList);
+			curriculumBo.setUvipPriceBoList(uvipPriceList);
 
 			Map<String, Object> dataMap1 = new HashMap<>();
 			dataMap1.put("curriculumId", curriculumId);
@@ -588,16 +606,47 @@ public class CurriculumServiceImpl implements CurriculumService {
 				}
 			}
 
-			// 会员价格表
-			List<CurriculumUvipPrice> uvipPriceList = curriculumBo.getUvipPriceList();
+
+            //先查会员价格表
+            List<CurriculumUvipPriceBo> oldUvipPriceList = uvipPriceRoMapper.selectList(curriculumId);
+            //删除老的会员价格表
 			uvipPriceMapper.deleteByPrimaryKey(curriculumId);
-			if (uvipPriceList != null) {
-				for (CurriculumUvipPrice uvipPrice : uvipPriceList) {
-					uvipPrice.setId(UUID.randomUUID().toString().replace("-", ""));
-					uvipPrice.setCurriculumId(curriculumId);
-					uvipPriceMapper.insert(uvipPrice);
-				}
-			}
+            //删除老的会员表价格对应的赠送权益信息
+            for(CurriculumUvipPriceBo priceBo:oldUvipPriceList){
+                curriculumGiftMapper.deleteByGiftId(priceBo.getId());
+            }
+//			if (uvipPriceList != null) {
+//				for (CurriculumUvipPriceBo bo : uvipPriceList) {
+//					bo.setId(UUID.randomUUID().toString().replace("-", ""));
+//					bo.setCurriculumId(curriculumId);
+//					CurriculumUvipPrice price = new CurriculumUvipPrice();
+//					BeanUtils.copyProperties(bo,price);
+//					uvipPriceMapper.insert(price);
+//				}
+//			}
+            // 会员价格表
+            List<CurriculumUvipPriceBo> uvipPriceList = curriculumBo.getUvipPriceBoList();
+            if (uvipPriceList != null) {
+                for (CurriculumUvipPriceBo uvipPriceBo : uvipPriceList) {
+                    String vipId = Utils.uuid();
+                    uvipPriceBo.setId(vipId);
+                    uvipPriceBo.setCurriculumId(curriculumId);
+                    CurriculumUvipPrice uvipPrice = new CurriculumUvipPrice();
+                    BeanUtils.copyProperties(uvipPriceBo,uvipPrice);
+                    uvipPriceMapper.insert(uvipPrice);
+                    List<CurriculumGiftBo> giftBoList = uvipPriceBo.getCurriculumGiftBoList();
+                    if(giftBoList != null && giftBoList.size() > 0){
+                        for(CurriculumGiftBo giftBo:giftBoList){
+                            giftBo.setId(Utils.uuid());
+                            giftBo.setGiftId(vipId);
+                            CurriculumGift gift = new CurriculumGift();
+                            BeanUtils.copyProperties(giftBo,gift);
+                            curriculumGiftMapper.insert(gift);
+                        }
+                    }
+                }
+            }
+
 
             if (curriculumBo.getStatus() == 1) {
 				
@@ -803,5 +852,18 @@ public class CurriculumServiceImpl implements CurriculumService {
 	public List<CurriculumListBo> selectByKnowledgeId(String knowledgeId, int num) {
 		return curriculumRoMapper.selectByKnowledgeId(knowledgeId, num);
 	}
+
+    @Override
+    public boolean isOptional(List<CurriculumGiftBo> curriculumGiftBoList) {
+        if(curriculumGiftBoList != null && curriculumGiftBoList.size() > 1){
+            for(CurriculumGiftBo giftBo:curriculumGiftBoList){
+                CurriculumGift gift = curriculumGiftRoMapper.selectByPrimaryKey(giftBo.getId());
+                if(StringUtils.isNotEmpty(gift.getOperSymbol()) && "or".equals(gift.getOperSymbol())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 }
