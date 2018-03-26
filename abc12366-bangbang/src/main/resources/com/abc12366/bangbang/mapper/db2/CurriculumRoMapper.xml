@@ -32,6 +32,9 @@
         <if test="status != null and status != ''">
             AND r.status = #{status}
         </if>
+        <if test="isFree != null and isFree != ''">
+            AND r.isFree = #{isFree}
+        </if>
         <if test="recommend != null">
             AND r.recommend = #{recommend}
         </if>
