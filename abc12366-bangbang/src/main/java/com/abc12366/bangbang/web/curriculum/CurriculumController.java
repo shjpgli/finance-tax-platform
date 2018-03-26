@@ -53,6 +53,7 @@ public class CurriculumController {
 	 * @param classify 课程分类
 	 * @param sortFieldName 排序条件
 	 * @param sortName 排序方式
+	 * @param isFree 是否收费
 	 * @return
 	 */
 	@GetMapping
@@ -63,6 +64,7 @@ public class CurriculumController {
 			@RequestParam(value = "label", required = false) String label,
 			@RequestParam(value = "recommend", required = false) String recommend,
 			@RequestParam(value = "sortName", required = false) String sortName,
+			@RequestParam(value = "isFree", required = false) String isFree,
 			@RequestParam(value = "sortFieldName", required = false) String sortFieldName,
 			@RequestParam(value = "classify", required = false) String classify) {
 		Map<String, Object> dataMap = new HashMap<>();
@@ -72,6 +74,7 @@ public class CurriculumController {
 		dataMap.put("classify", classify);// 课程分类
 		dataMap.put("sortName", sortName);
 		dataMap.put("sortFieldName", sortFieldName);
+		dataMap.put("isFree", isFree);
 		if(StringUtils.isNotEmpty(recommend)){
             if("putong".equals(recommend)){
                 dataMap.put("recommend", "");// 课程
