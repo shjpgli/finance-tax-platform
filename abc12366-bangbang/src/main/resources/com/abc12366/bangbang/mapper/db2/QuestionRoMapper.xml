@@ -44,7 +44,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY q.createTime DESC) aa left join bb_question_answer a on aa.answerId = a.id
+        ORDER BY q.createTime DESC, q.isRecommend DESC) aa left join bb_question_answer a on aa.answerId = a.id
     </select>
 
     <!-- 推荐问题 -->
