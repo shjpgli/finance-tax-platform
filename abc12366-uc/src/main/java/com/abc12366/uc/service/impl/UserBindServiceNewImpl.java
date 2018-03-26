@@ -8,6 +8,7 @@ import com.abc12366.uc.jrxt.model.util.XmlJavaParser;
 import com.abc12366.uc.mapper.db1.UserBindMapper;
 import com.abc12366.uc.mapper.db1.UserMapper;
 import com.abc12366.uc.mapper.db2.UserBindRoMapper;
+import com.abc12366.uc.model.DzsbRegisterStat;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHngs;
@@ -24,6 +25,8 @@ import com.abc12366.uc.wsbssoa.service.MainService;
 import com.abc12366.uc.wsbssoa.utils.MD5;
 import com.abc12366.uc.wsbssoa.utils.RSAUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+
 import org.exolab.castor.xml.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +46,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.interfaces.RSAPublicKey;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -888,5 +892,31 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		}
 		LOGGER.warn("批量插入绑定关系完毕，绑定成功数量:{}", times);
 		return times;
+	}
+
+	@Override
+	public List<DzsbRegisterStat> dzsbRegisterStat(Map<String, String> param) {
+		try {
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			List<DzsbRegisterStat> datalist = userBindMapper.dzsbRegisterStat(param);
+			for (DzsbRegisterStat registerStat : datalist) {
+				map.put(registerStat.getDjrq(), registerStat.getTotal());
+			}
+
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar tempStart = Calendar.getInstance();
+			tempStart.setTime(format.parse(param.get("beginDate")));
+			Calendar tempEnd = Calendar.getInstance();
+			tempEnd.setTime(format.parse(param.get("endDate")));
+			List<DzsbRegisterStat> resultlist = new ArrayList<DzsbRegisterStat>();
+			while (tempStart.compareTo(tempEnd) < 1) {
+				String date = format.format(tempStart.getTime());
+				resultlist.add(new DzsbRegisterStat(date, (map.containsKey(date) ? map.get(date) : 0)));
+				tempStart.add(Calendar.DAY_OF_YEAR, 1);
+			}
+			return resultlist;
+		} catch (Exception e) {
+			throw new ServiceException(9899, "格式化日期异常!");
+		}
 	}
 }

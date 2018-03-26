@@ -1,19 +1,22 @@
 package com.abc12366.uc.web;
 
 import com.abc12366.gateway.util.Utils;
+import com.abc12366.uc.model.DzsbRegisterStat;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.service.UserBindServiceNew;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 import com.alibaba.fastjson.JSONObject;
-
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -175,5 +178,24 @@ public class UserBindControllerNew {
         return ResponseEntity.ok(Utils.kv("data", num));
     }
 
+    /**
+     * 
+     * @param beginDate
+     * @param endDate
+     * @param request
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@GetMapping("/dzsbregisterstat")
+    public ResponseEntity dzsbRegisterStat(@RequestParam String beginDate,
+    		@RequestParam String endDate,HttpServletRequest request){
+    	LOGGER.info("企业注册情况统计:{},{}",beginDate , endDate);
+    	Map<String,String> param = new HashMap<String,String>();
+    	param.put("beginDate", beginDate);
+    	param.put("endDate", endDate);
+    	List<DzsbRegisterStat> dataList = userBindService.dzsbRegisterStat(param);
+    	
+    	return ResponseEntity.ok(Utils.kv("dataList", dataList));
+    }
    
 }
