@@ -19,9 +19,9 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo" parameterType="java.util.Map">
         SELECT
-          curriculumId,title,browseNum,sellPrice,watchNum,cover,cl.classifyName classify,teachingMethod,issueTime,isFree,c.status,nickname createrName,updateTime
-        FROM bb_curriculum c LEFT JOIN bb_curriculum_classify cl ON c.classify = cl.classifyId
-        LEFT JOIN abc12366_uc.uc_admin u ON c.createrId = u.id
+          curriculumId,title,browseNum,sellPrice,watchNum,cover,cl.classifyName classify,teachingMethod,issueTime,isFree,r.status,nickname createrName,updateTime
+        FROM bb_curriculum r LEFT JOIN bb_curriculum_classify cl ON r.classify = cl.classifyId
+        LEFT JOIN abc12366_uc.uc_admin u ON r.createrId = u.id
         WHERE 1=1
         <if test="title != null and title != ''">
             AND title like CONCAT('%',#{title},'%')
@@ -30,12 +30,22 @@
             AND label like CONCAT('%',#{label},'%')
         </if>
         <if test="status != null and status != ''">
-            AND c.status = #{status}
+            AND r.status = #{status}
+        </if>
+        <if test="recommend != null">
+            AND r.recommend = #{recommend}
         </if>
         <if test="classify != null and classify != ''">
             AND classify like CONCAT(#{classify},'%')
         </if>
-        ORDER BY updateTime DESC
+        <choose>
+            <when test="sortFieldName != null and sortFieldName != '' and sortName !=null and sortName !=''">
+                ORDER BY ${sortFieldName} ${sortName}
+            </when>
+            <otherwise>
+                ORDER BY updateTime DESC
+            </otherwise>
+        </choose>
     </select>
 
     <!-- 查询（根据主键ID查询） -->

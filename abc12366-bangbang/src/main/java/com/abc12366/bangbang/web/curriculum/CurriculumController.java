@@ -9,6 +9,7 @@ import com.abc12366.gateway.util.Utils;
 import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,16 @@ public class CurriculumController {
 
 	/**
 	 * 课程列表查询
+	 * @param page 页数
+	 * @param size 条数
+	 * @param title 标题
+	 * @param status 状态
+	 * @param label 标签
+	 * @param recommend 推荐类型
+	 * @param classify 课程分类
+	 * @param sortFieldName 排序条件
+	 * @param sortName 排序方式
+	 * @return
 	 */
 	@GetMapping
 	public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
@@ -50,12 +61,24 @@ public class CurriculumController {
 			@RequestParam(value = "title", required = false) String title,
 			@RequestParam(value = "status", required = false) String status,
 			@RequestParam(value = "label", required = false) String label,
+			@RequestParam(value = "recommend", required = false) String recommend,
+			@RequestParam(value = "sortName", required = false) String sortName,
+			@RequestParam(value = "sortFieldName", required = false) String sortFieldName,
 			@RequestParam(value = "classify", required = false) String classify) {
 		Map<String, Object> dataMap = new HashMap<>();
 		dataMap.put("status", status);// 状态
 		dataMap.put("title", title);// 标题
 		dataMap.put("label", label);// 标签
 		dataMap.put("classify", classify);// 课程分类
+		dataMap.put("sortName", sortName);
+		dataMap.put("sortFieldName", sortFieldName);
+		if(StringUtils.isNotEmpty(recommend)){
+            if("putong".equals(recommend)){
+                dataMap.put("recommend", "");// 课程
+            }else {
+                dataMap.put("recommend", recommend);// 课程
+            }
+		}
 		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 		List<CurriculumListBo> dataList = curriculumService.selectList(dataMap);
 		return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));

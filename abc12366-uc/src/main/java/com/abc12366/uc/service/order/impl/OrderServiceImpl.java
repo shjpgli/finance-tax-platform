@@ -703,7 +703,11 @@ public class OrderServiceImpl implements OrderService {
                     if ("POINTS".equals(bo.getOperType())) {
                         insertPoints(orderBO, Integer.parseInt(bo.getOperValue()));
                     } else if ("COUPON".equals(bo.getOperType())) {
-                        couponService.userCollectCoupon(orderBO.getUserId(), bo.getOperValue(), request);
+                        try{
+                            couponService.userCollectCoupon(orderBO.getUserId(), bo.getOperValue(), request);
+                        }catch (ServiceException e){
+                            LOGGER.info("购买赠送优惠卷失败: {}");
+                        }
                     } else if ("VIP".equals(bo.getOperType())) {
                         User temp = userMapper.selectOne(orderBO.getUserId());
                         //赠送会员不能小于当前会员等级
