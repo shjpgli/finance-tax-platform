@@ -5,6 +5,9 @@ import com.abc12366.uc.model.order.bo.RegsAndNsrloginStatBO;
 import com.abc12366.uc.model.tdps.TY21Xml2Object;
 import com.abc12366.uc.wsbssoa.response.HngsNsrLoginResponse;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 public interface UserBindServiceNew {
@@ -53,4 +56,6 @@ public interface UserBindServiceNew {
 	public void recordNsrLoginTimes();
 
 	int userBatchDzsbBind(UserDzsbBatchBO batchBO, HttpServletRequest request);
+
+	List<com.abc12366.uc.model.DzsbRegisterStat> dzsbRegisterStat(Map<String, String> param);
 }
