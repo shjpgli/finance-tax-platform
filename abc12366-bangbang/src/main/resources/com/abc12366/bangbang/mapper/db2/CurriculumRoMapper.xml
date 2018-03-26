@@ -19,7 +19,7 @@
     <!-- 查询（根据主键ID查询） -->
     <select id="selectList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumListBo" parameterType="java.util.Map">
         SELECT
-          curriculumId,title,browseNum,sellPrice,watchNum,cover,cl.classifyName classify,teachingMethod,issueTime,isFree,r.status,nickname createrName,updateTime
+          curriculumId,title,browseNum,sellPrice,watchNum,cover,recommend,cl.classifyName classify,teachingMethod,issueTime,isFree,r.status,nickname createrName,updateTime
         FROM bb_curriculum r LEFT JOIN bb_curriculum_classify cl ON r.classify = cl.classifyId
         LEFT JOIN abc12366_uc.uc_admin u ON r.createrId = u.id
         WHERE 1=1
