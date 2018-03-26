@@ -95,7 +95,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY q.createTime DESC
+        ORDER BY q.isRecommend DESC, q.createTime DESC
     </select>
 
     <!-- 热门问题 -->
@@ -120,7 +120,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY browseNum DESC
+        ORDER BY q.isRecommend DESC, browseNum DESC
     </select>
 
     <!-- 0回答问题 -->
@@ -139,7 +139,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY q.createTime DESC
+        ORDER BY q.isRecommend DESC, q.createTime DESC
     </select>
 
     <!-- 已解决问题 -->
@@ -164,7 +164,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY q.createTime DESC
+        ORDER BY q.isRecommend DESC, q.createTime DESC
     </select>
 
     <!-- 查询帮友热议 -->
