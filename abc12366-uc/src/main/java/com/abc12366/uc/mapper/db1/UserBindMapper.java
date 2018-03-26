@@ -86,4 +86,6 @@ public interface UserBindMapper {
 	List<NsrsbhPasswordLog> restPwdLogList(Map map);
 
 	List<DzsbRegisterStat> dzsbRegisterStat(Map<String, String> param);
+
+	List<DzsbRegisterStat> dzsbRegisterStatM(Map<String, String> param);
 }

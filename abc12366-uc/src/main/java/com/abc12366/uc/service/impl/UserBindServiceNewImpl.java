@@ -897,26 +897,66 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 	@Override
 	public List<DzsbRegisterStat> dzsbRegisterStat(Map<String, String> param) {
 		try {
-			Map<String, Integer> map = new HashMap<String, Integer>();
-			List<DzsbRegisterStat> datalist = userBindMapper.dzsbRegisterStat(param);
-			for (DzsbRegisterStat registerStat : datalist) {
-				map.put(registerStat.getDjrq(), registerStat.getTotal());
-			}
-
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar tempStart = Calendar.getInstance();
-			tempStart.setTime(format.parse(param.get("beginDate")));
+			tempStart.setTime(format1.parse(param.get("beginDate")));
 			Calendar tempEnd = Calendar.getInstance();
-			tempEnd.setTime(format.parse(param.get("endDate")));
+			tempEnd.setTime(format1.parse(param.get("endDate")));
 			List<DzsbRegisterStat> resultlist = new ArrayList<DzsbRegisterStat>();
-			while (tempStart.compareTo(tempEnd) < 1) {
-				String date = format.format(tempStart.getTime());
-				resultlist.add(new DzsbRegisterStat(date, (map.containsKey(date) ? map.get(date) : 0)));
-				tempStart.add(Calendar.DAY_OF_YEAR, 1);
+
+			if(differentDaysByMillisecond(tempStart.getTime(),tempEnd.getTime()) <= 30){
+				List<DzsbRegisterStat> datalist = userBindMapper.dzsbRegisterStat(param);
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				Map<String, Integer> map = new HashMap<String, Integer>();
+				for (DzsbRegisterStat registerStat : datalist) {
+					map.put(registerStat.getDjrq(), registerStat.getTotal());
+				}
+				while (tempStart.compareTo(tempEnd) < 1) {
+					String date = format.format(tempStart.getTime());
+					resultlist.add(new DzsbRegisterStat(date, (map.containsKey(date) ? map.get(date) : 0)));
+					tempStart.add(Calendar.DAY_OF_YEAR, 1);
+				}
+			}else{
+				List<DzsbRegisterStat> datalist = userBindMapper.dzsbRegisterStatM(param);
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+				Map<String, Integer> map = new HashMap<String, Integer>();
+				for (DzsbRegisterStat registerStat : datalist) {
+					map.put(registerStat.getDjrq(), registerStat.getTotal());
+				}
+				int n = getMonthDiff(tempEnd, tempStart);
+				for (int i=0;i<=n;i++) {
+					String date = format.format(tempStart.getTime());
+					resultlist.add(new DzsbRegisterStat(date, (map.containsKey(date) ? map.get(date) : 0)));
+					tempStart.add(Calendar.MONTH, 1);
+				}
+				
 			}
 			return resultlist;
 		} catch (Exception e) {
 			throw new ServiceException(9899, "格式化日期异常!");
 		}
 	}
+	
+	private int differentDaysByMillisecond(Date date1,Date date2){
+		return (int) ((date2.getTime() - date1.getTime()) / (1000*3600*24));
+	}
+	
+	public static int getMonthDiff(Calendar c1, Calendar c2) {  
+        if(c1.getTimeInMillis() < c2.getTimeInMillis()) return 0;  
+        int year1 = c1.get(Calendar.YEAR);  
+        int year2 = c2.get(Calendar.YEAR);  
+        int month1 = c1.get(Calendar.MONTH);  
+        int month2 = c2.get(Calendar.MONTH);  
+        int day1 = c1.get(Calendar.DAY_OF_MONTH);  
+        int day2 = c2.get(Calendar.DAY_OF_MONTH);  
+        // 获取年的差值 假设 d1 = 2015-8-16  d2 = 2011-9-30  
+        int yearInterval = year1 - year2;  
+        // 如果 d1的 月-日 小于 d2的 月-日 那么 yearInterval-- 这样就得到了相差的年数  
+        if(month1 < month2 || month1 == month2 && day1 < day2) yearInterval --;  
+        // 获取月数差值  
+        int monthInterval =  (month1 + 12) - month2  ;  
+        if(day1 < day2) monthInterval --;  
+        monthInterval %= 12;  
+        return yearInterval * 12 + monthInterval;  
+    }
 }
