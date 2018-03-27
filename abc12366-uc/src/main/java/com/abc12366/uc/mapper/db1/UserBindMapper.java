@@ -88,4 +88,6 @@ public interface UserBindMapper {
 	List<DzsbRegisterStat> dzsbRegisterStat(Map<String, String> param);
 
 	List<DzsbRegisterStat> dzsbRegisterStatM(Map<String, String> param);
+
+	List<Map<String, String>> dzsbRegisterStatInfo(String date);
 }
