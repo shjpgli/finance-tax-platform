@@ -941,7 +941,7 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		return (int) ((date2.getTime() - date1.getTime()) / (1000*3600*24));
 	}
 	
-	public static int getMonthDiff(Calendar c1, Calendar c2) {  
+	private int getMonthDiff(Calendar c1, Calendar c2) {  
         if(c1.getTimeInMillis() < c2.getTimeInMillis()) return 0;  
         int year1 = c1.get(Calendar.YEAR);  
         int year2 = c2.get(Calendar.YEAR);  
@@ -959,4 +959,9 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
         monthInterval %= 12;  
         return yearInterval * 12 + monthInterval;  
     }
+
+	@Override
+	public List<Map<String, String>> dzsbRegisterStatInfo(String date) {
+		return userBindMapper.dzsbRegisterStatInfo(date);
+	}
 }
