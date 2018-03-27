@@ -22,13 +22,17 @@ public class UserTaskjob implements Job {
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 
+		
 		try {
+			
 			LOGGER.info("开始归档两日前用户没完成每日任务，日期:{}", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 			int num = todoTaskService.tasksArchiving();
 			LOGGER.info("结束归档两日前用户没完成每日任务,处理数量:{}", num);
+			
 		} catch (Exception e) {
 			LOGGER.error("归档两日前用户没完成每日任务异常:", e);
 		}
+		
 	}
 
 }
