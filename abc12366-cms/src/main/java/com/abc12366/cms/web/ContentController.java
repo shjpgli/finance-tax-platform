@@ -600,7 +600,8 @@ public class ContentController {
     public ResponseEntity updateStatus2(@PathVariable String contentId) {
         LOGGER.info("{}", contentId);
         //文章发布
-        String rtn = contentService.updateStatus2(contentId);
+        //String rtn = contentService.updateStatus2(contentId);
+        String rtn = contentId;
         LOGGER.info("{}", rtn);
         return ResponseEntity.ok(Utils.kv("data", rtn));
     }
