@@ -47,6 +47,9 @@ public class CurriculumListBo implements Serializable {
 	/**创建人名称**varchar(30)**/
 	private String createrName;
 
+	/**推荐类型**/
+	private String recommend;
+
 	/**修改时间**datetime**/
 	private Date updateTime;
 
@@ -153,5 +156,13 @@ public class CurriculumListBo implements Serializable {
 
     public void setSellPrice(Double sellPrice) {
         this.sellPrice = sellPrice;
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(String recommend) {
+        this.recommend = recommend;
     }
 }

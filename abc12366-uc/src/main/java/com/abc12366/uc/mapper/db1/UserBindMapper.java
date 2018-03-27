@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db1;
 
+import com.abc12366.uc.model.DzsbRegisterStat;
 import com.abc12366.uc.model.NsrsbhPasswordLog;
 import com.abc12366.uc.model.UserDzsb;
 import com.abc12366.uc.model.UserHnds;
@@ -83,4 +84,10 @@ public interface UserBindMapper {
 	void insertRestPwdLog(NsrsbhPasswordLog passwordLog);
 
 	List<NsrsbhPasswordLog> restPwdLogList(Map map);
+
+	List<DzsbRegisterStat> dzsbRegisterStat(Map<String, String> param);
+
+	List<DzsbRegisterStat> dzsbRegisterStatM(Map<String, String> param);
+
+	List<Map<String, String>> dzsbRegisterStatInfo(String date);
 }

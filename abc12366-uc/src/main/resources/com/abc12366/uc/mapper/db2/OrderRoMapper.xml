@@ -1223,7 +1223,11 @@
                 and o.tradeMethod = #{tradeMethod}
             </if>
             <if test=" recommendUser != null and recommendUser != '' ">
-                and o.recommendUser = #{recommendUser}
+                and (o.recommendUser = #{recommendUser}
+                <if test=" recommendPhone != null and recommendPhone != '' ">
+                    or o.recommendUser = #{recommendPhone}
+                </if>
+                )
             </if>
             <if test=" tradingChannels != null and tradingChannels != '' "> and orderNo in (select DISTINCT orderNo from  uc_order_product  where tradingChannels = #{tradingChannels}) </if>
 
