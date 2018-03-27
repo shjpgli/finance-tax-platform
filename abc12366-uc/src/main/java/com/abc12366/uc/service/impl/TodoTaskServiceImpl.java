@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -449,4 +450,13 @@ public class TodoTaskServiceImpl implements TodoTaskService {
         todoTask.setEndTime(sysTaskBO.getEndTime());
         insert(todoTask);
     }
+
+    @Transactional("db1TxManager")
+	public int tasksArchiving() {
+		int n = todoTaskMapper.doTasksArchiving();
+		LOGGER.info("归档用户任务数量{}", n);
+		int m = todoTaskMapper.cleanTasks();
+		LOGGER.info("删除已归档用户任务数量{}", m);
+		return n;
+	}
 }

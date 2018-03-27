@@ -51,5 +51,9 @@ public interface TodoTaskMapper {
     List<TodoTaskFront> selectSpecialTaskList(String userId);
 
     List<TodoTaskFront> selectBangbangTaskList(String userId);
+
+	int doTasksArchiving();
+
+	int cleanTasks();
     
 }
