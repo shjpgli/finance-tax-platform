@@ -254,4 +254,35 @@
         <if test="nsrsbh != null and nsrsbh != ''"> and l.nsrsbh =#{nsrsbh} </if>
         ORDER BY l.createTime DESC
     </select>
+    
+    <select id="dzsbRegisterStat" resultType="com.abc12366.uc.model.DzsbRegisterStat" parameterType="java.util.Map">
+           SELECT djrq, count(id) as total 
+           FROM uc_user_dzsb 
+           <where>
+           <if test="beginDate != null and beginDate != ''"><![CDATA[ djrq >= #{beginDate} ]]></if>
+           <if test="endDate != null and endDate != ''"><![CDATA[ and djrq <= #{endDate} ]]></if>
+           </where>
+           GROUP BY djrq
+    </select>
+    
+    <select id="dzsbRegisterStatM" resultType="com.abc12366.uc.model.DzsbRegisterStat" parameterType="java.util.Map">
+           SELECT left(djrq,7) as djrq, count(id) as total 
+           FROM uc_user_dzsb 
+           <where>
+           <if test="beginDate != null and beginDate != ''"><![CDATA[ djrq >= #{beginDate} ]]></if>
+           <if test="endDate != null and endDate != ''"><![CDATA[ and djrq <= #{endDate} ]]></if>
+           </where>
+           GROUP BY left(djrq,7)
+    </select>
+    
+    <select id="dzsbRegisterStatInfo" resultType="java.util.Map" parameterType="java.lang.String">
+           SELECT * 
+           FROM uc_user_dzsb 
+           <where>
+           <if test="_parameter.length == 10"><![CDATA[ djrq = #{date} ]]></if>
+           <if test="_parameter.length == 7"><![CDATA[ left(djrq,7) = #{date} ]]></if>
+           </where>
+           GROUP BY id DESC
+    </select>
+    
 </mapper>
