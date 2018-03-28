@@ -207,7 +207,9 @@ public class ContentServiceImpl implements ContentService {
         //内容扩展项
         ContentExtBo contentExtBo = contentSaveBo.getContentExt();
         contentExtBo.setContentId(uuid);
-        contentExtBo.setReleaseDate(new Date());
+        if(contentExtBo !=null && contentExtBo.getReleaseDate()==null) {
+            contentExtBo.setReleaseDate(new Date());
+        }
         ContentExt contentExt = new ContentExt();
         try {
             BeanUtils.copyProperties(contentExtBo, contentExt);
