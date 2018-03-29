@@ -14,9 +14,7 @@ import java.util.Map;
  * Time: 11:41
  */
 public interface UserTaskService {
-    UserTaskBO insert(UserTaskInsertBO userTaskInsertBO, String userId);
 
-    UserTaskBO update(UserTaskUpdateBO userTaskUpdateBO, String userId, String id);
 
     //我的任务统计：UC我的任务模块顶排统计列表
     MyTaskBO selectMyTask(String userId);
