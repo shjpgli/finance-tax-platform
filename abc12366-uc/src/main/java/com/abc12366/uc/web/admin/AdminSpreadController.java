@@ -103,7 +103,7 @@ public class AdminSpreadController {
 		}
 			
 		String spreadurl = SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/extension.html?p="
-				+ new sun.misc.BASE64Encoder().encode((adminUsername +"|"+ url).getBytes()).replace("\r\n", "");
+				+ new sun.misc.BASE64Encoder().encode((adminUsername +"|"+ url).getBytes()).replaceAll("\r", "").replaceAll("\n", "");
 		String codeIo = QRCodeUtil.getCreatQRcodeString(spreadurl, 200, "bmp");
 		return ResponseEntity.ok(Utils.kv("qrcode", codeIo, "spreadurl", spreadurl));
 	}

@@ -701,7 +701,7 @@ public class OrderServiceImpl implements OrderService {
             for (OrderGiftBO bo : orderGiftBOList) {
                 if (StringUtils.isNotEmpty(bo.getOperType())) {
                     if ("POINTS".equals(bo.getOperType())) {
-                        insertPoints(orderBO, Integer.parseInt(bo.getOperValue()));
+                        insertGivePoints(orderBO, Integer.parseInt(bo.getOperValue()));
                     } else if ("COUPON".equals(bo.getOperType())) {
                         try{
                             couponService.userCollectCoupon(orderBO.getUserId(), bo.getOperValue(), request);
@@ -946,6 +946,27 @@ public class OrderServiceImpl implements OrderService {
         vipLogBO.setSource(orderNo);
         vipLogBO.setUserId(userId);
         vipLogService.insert(vipLogBO);
+    }
+
+    /**
+     * 购买CSKT赠送的积分
+     */
+    private void insertGivePoints(OrderBO orderBO, Integer points) {
+        if (orderBO != null && points != null && points > 0) {
+            //如果积分规则为空则返回
+            PointsRuleBO pointsRuleBO = pointsRuleService.selectValidOneByCode(TaskConstant.POINT_RULE_ORDER_CODE);
+            if (pointsRuleBO == null) {
+                return;
+            }
+            PointsLogBO pointsLog = new PointsLogBO();
+            pointsLog.setUserId(orderBO.getUserId());
+            pointsLog.setRuleId(pointsRuleBO.getId());
+            pointsLog.setId(Utils.uuid());
+            pointsLog.setIncome(points);
+            pointsLog.setRemark("购买赠送积分 - 订单号：" + orderBO.getOrderNo());
+            pointsLog.setLogType("ORDER_INCOME");
+            pointsLogService.insert(pointsLog);
+        }
     }
 
     /**
