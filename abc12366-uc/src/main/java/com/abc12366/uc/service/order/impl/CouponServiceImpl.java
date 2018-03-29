@@ -444,7 +444,6 @@ public class CouponServiceImpl implements CouponService {
         return getTwoDouble(max - Math.random() * (max - min));
     }
 
-    @Transactional(value = "db1TxManager")
     @Override
     public boolean userCollectCoupon(String userId, String activityId, HttpServletRequest request) {
         Assert.notNull(userId, "userId can not empty");
@@ -502,7 +501,6 @@ public class CouponServiceImpl implements CouponService {
         return false;
     }
 
-    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public double userUseCoupon(@Valid CouponOrderBO bo) {
         CouponCalculateBO cc = new CouponCalculateBO();

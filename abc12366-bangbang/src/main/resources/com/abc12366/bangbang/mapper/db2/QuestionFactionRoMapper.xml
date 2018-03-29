@@ -96,10 +96,11 @@
 
     <!-- 查询邦派动态 -->
     <select id="selectdtListByFactionId" resultType="com.abc12366.bangbang.model.question.bo.QuestionAnswerBo" parameterType="java.lang.String">
-       SELECT
+        SELECT
         a.id,	a.parentId,	a.questionId,q.title questionTitle,	a.userId,u.nickname,u.userPicturePath,	a.answerUserId,a.ip,	a.answer,	a.status,	a.createTime,	a.lastUpdate,	a.isAccept
         FROM bb_question_answer a left join bb_question q on a.questionId = q.id left join bb_user u on a.userId = u.id
-        WHERE a.status = '0' AND a.userId in(SELECT userId FROM bb_question_faction_member where factionId = #{factionId}) order by a.createTime desc
+        WHERE a.status = '0' AND a.factionId = #{factionId}  
+        AND a.userId in(SELECT userId FROM bb_question_faction_member where factionId = #{factionId}) order by a.createTime desc
     </select>
 
     <!-- 查询优秀邦派 -->

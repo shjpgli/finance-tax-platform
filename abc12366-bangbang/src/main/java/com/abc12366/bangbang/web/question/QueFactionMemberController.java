@@ -45,6 +45,13 @@ public class QueFactionMemberController {
         dataMap.put("status", status);//
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionMemberBo> dataList = queFactionMemberService.selectList(dataMap);
+        //计算帮派成员荣誉值
+        if(dataList !=null && dataList.size()>0){
+            for(QuestionFactionMemberBo memberBo : dataList){
+                int honor = 2*memberBo.getAnswerNum() + 1*memberBo.getDiscussNum() + 7*memberBo.getAdoptNum();
+                memberBo.setHonor(honor+"");
+            }
+        }
         return ResponseEntity.ok(Utils.kv("dataList", (Page) dataList, "total", ((Page) dataList).getTotal()));
 
     }

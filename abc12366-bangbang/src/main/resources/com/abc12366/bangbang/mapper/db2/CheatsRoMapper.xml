@@ -43,7 +43,7 @@
         <if test="classifyCode != null and classifyCode != ''">
             AND c.classifyCode like CONCAT(#{classifyCode},'%')
         </if>
-        ORDER BY isRecommend DESC,recommendTime DESC, c.createTime DESC
+        ORDER BY  c.createTime DESC
     </select>
 
     <!-- 查询（热门问题） -->
