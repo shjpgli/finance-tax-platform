@@ -7,7 +7,7 @@ import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.TaskConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.mapper.db1.ActivityMapper;
-import com.abc12366.uc.mapper.db2.ActivityRoMapper;
+import com.abc12366.uc.mapper.db1.ActivityRoMapper;
 import com.abc12366.uc.model.User;
 import com.abc12366.uc.model.bo.PointCalculateBO;
 import com.abc12366.uc.model.bo.UserSimpleInfoBO;

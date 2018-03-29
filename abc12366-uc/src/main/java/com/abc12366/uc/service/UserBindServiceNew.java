@@ -58,4 +58,6 @@ public interface UserBindServiceNew {
 	int userBatchDzsbBind(UserDzsbBatchBO batchBO, HttpServletRequest request);
 
 	List<com.abc12366.uc.model.DzsbRegisterStat> dzsbRegisterStat(Map<String, String> param);
+
+	List<Map<String, String>> dzsbRegisterStatInfo(String date);
 }

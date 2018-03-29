@@ -17,7 +17,7 @@
     </select>
 
     <select id="selectMyTask" parameterType="java.lang.String" resultType="com.abc12366.uc.model.bo.MyTaskBO">
-        SELECT
+        <!-- SELECT
         uu.points currentPoints,
         (SELECT SUM(uutt.award) FROM uc_user_task_todo uutt WHERE uutt.status=0 AND uutt.userId=uu.id and uutt.awardType = '1') unReceivePoints,
         NULL taskRange,
@@ -26,7 +26,34 @@
         DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) finishedTaskCount
         FROM
         uc_user uu
-        WHERE uu.id=#{userId}
+        WHERE uu.id=#{userId} -->
+        <![CDATA[
+            SELECT 
+            max(t.currentPoints) currentPoints,SUM(t.unReceivePoints) unReceivePoints,max(t.taskRange) taskRange,SUM(t.finishedTaskCount) finishedTaskCount 
+			FROM
+			(SELECT
+			        uu.points currentPoints,
+			        (SELECT SUM(uutt.award) FROM uc_user_task_todo uutt WHERE uutt.status=0 AND uutt.userId=uu.id and uutt.awardType = '1') unReceivePoints,
+			        NULL taskRange,
+			        (SELECT COUNT(1) finishedTaskCount FROM uc_user_task_todo uutt WHERE uutt.status=1 AND uutt.userId = uu.id AND
+			        uutt.createTime >=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uutt.createTime < (SELECT
+			        DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) finishedTaskCount
+			        FROM
+			        uc_user uu
+			        WHERE uu.id=#{userId}
+			UNION
+			SELECT
+			        uu.points currentPoints,
+			        (SELECT SUM(uutt.award) FROM uc_user_task_archive uutt WHERE uutt.status=0 AND uutt.userId=uu.id and uutt.awardType = '1') unReceivePoints,
+			        NULL taskRange,
+			        (SELECT COUNT(1) finishedTaskCount FROM uc_user_task_archive uutt WHERE uutt.status=1 AND uutt.userId = uu.id AND
+			        uutt.createTime >=(SELECT DATE_ADD(CURDATE(),INTERVAL -DAY(CURDATE())+1 DAY)) AND uutt.createTime < (SELECT
+			        DATE_ADD(CURDATE() - DAY(CURDATE()) + 1, INTERVAL 1 MONTH))) finishedTaskCount
+			        FROM
+			        uc_user uu
+			        WHERE uu.id=#{userId}
+			) t
+        ]]>
     </select>
 
     <select id="selectTaskRangeList" resultType="com.abc12366.uc.model.bo.TaskRangeBO">

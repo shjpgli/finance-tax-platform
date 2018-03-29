@@ -73,8 +73,9 @@ public class VipLogServiceImpl implements VipLogService {
                         && vipLogBO.getLevelId().equals(user.getVipLevel())) {
                     calendar.setTime(user.getVipExpireDate());
                 }
-            }
-            calendar.add(Calendar.YEAR, 1);
+            }else{
+            	calendar.add(Calendar.YEAR, 1);
+            } 
         }
         vipLog.setVipExpireDate(calendar.getTime());
         int result = vipLogMapper.insert(vipLog);
