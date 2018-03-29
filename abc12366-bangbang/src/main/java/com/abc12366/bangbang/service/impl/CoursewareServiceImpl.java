@@ -212,4 +212,9 @@ public class CoursewareServiceImpl implements CoursewareService {
         return "";
     }
 
+    @Override
+    public List<CurriculumCoursewareBo> selectCoursewareList(Map<String, Object> dataMap) {
+        return coursewareRoMapper.selectCoursewareList(dataMap);
+    }
+
 }

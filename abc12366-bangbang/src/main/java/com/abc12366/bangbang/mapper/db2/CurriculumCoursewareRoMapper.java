@@ -58,4 +58,5 @@ public interface CurriculumCoursewareRoMapper {
     int selectCoursewareCnt(Map<String, Object> map);
 
 
+    List<CurriculumCoursewareBo> selectCoursewareList(Map<String, Object> dataMap);
 }
