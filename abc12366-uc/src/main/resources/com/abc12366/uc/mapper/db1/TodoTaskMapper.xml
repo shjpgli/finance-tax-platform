@@ -232,6 +232,19 @@
         and b.startTime &lt;(SELECT CURDATE())
         and b.endTime &gt;=(SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))
     </select>
+    
+    
+    <insert id="doTasksArchiving" >
+       <![CDATA[
+        INSERT INTO uc_user_task_archive 
+        SELECT * FROM uc_user_task_todo 
+        WHERE status = 0 AND dateType = 'D'  AND createTime < date_sub(curdate(),interval 2 day)
+       ]]>
+    </insert>
 
+
+    <delete id="cleanTasks">
+        <![CDATA[ DELETE FROM uc_user_task_todo WHERE status = 0 AND dateType = 'D'  AND createTime < date_sub(curdate(),interval 2 day) ]]>
+    </delete>
     
 </mapper>

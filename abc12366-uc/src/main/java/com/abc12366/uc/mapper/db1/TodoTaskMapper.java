@@ -52,4 +52,10 @@ public interface TodoTaskMapper {
 
     List<TodoTaskFront> selectBangbangTaskList(String userId);
     
+    
+
+	int doTasksArchiving();
+
+	int cleanTasks();
+    
 }

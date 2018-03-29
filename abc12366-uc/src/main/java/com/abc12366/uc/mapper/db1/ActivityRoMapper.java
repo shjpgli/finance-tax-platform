@@ -1,4 +1,4 @@
-package com.abc12366.uc.mapper.db2;
+package com.abc12366.uc.mapper.db1;
 
 import com.abc12366.uc.model.weixin.WxActivity;
 import com.abc12366.uc.model.weixin.WxLotteryLog;

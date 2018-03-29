@@ -117,4 +117,7 @@ public interface TodoTaskService {
      * @return List<TodoTaskFront> {@linkplain com.abc12366.uc.model.TodoTaskFront}
      */
     List<TodoTaskFront> selectBangbangTaskList(String userId);
+
+    
+	int tasksArchiving();
 }
