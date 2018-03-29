@@ -74,7 +74,9 @@ public class NoticeController {
     }
     
     @GetMapping("/noticesForqt")
-    public ResponseEntity selectListForqtCszj() {
+    public ResponseEntity selectListForqtCszj(
+                @RequestParam(value = "page", defaultValue = "1") int page,
+                @RequestParam(value = "size", defaultValue = "9") int size) {
         
         if(redisTemplate.hasKey("CMS_NoticeListFqt")){
         	List<NoticeForqtBO> dataList = JSONArray.parseArray(redisTemplate.opsForValue().get("CMS_NoticeListFqt"),NoticeForqtBO.class);
@@ -82,7 +84,7 @@ public class NoticeController {
     		return ResponseEntity.ok(Utils.kv("dataList", dataList, "total", dataList.size()));
         }else{
         	 NoticeForqtBO notice = new NoticeForqtBO();
-             List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, 1, 9);
+             List<NoticeForqtBO> dataList = noticeService.selectListForqt(notice, page, size);
              redisTemplate.opsForValue().set("CMS_NoticeListFqt",JSONArray.toJSONString(dataList),RedisConstant.DAY_1, TimeUnit.DAYS);
              PageInfo<NoticeForqtBO> pageInfo = new PageInfo<NoticeForqtBO>(dataList);
              ResponseEntity responseEntity = ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(),
