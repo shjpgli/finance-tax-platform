@@ -3,18 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.abc12366.uc.mapper.db2.UserTaskRoMapper">
 
-    <select id="selectList" resultType="com.abc12366.uc.model.bo.UserTaskBO" parameterType="java.util.Map">
-        SELECT id,userId,taskId,status,createTime,lastUpdate
-        from uc_user_task
-        <where>
-            <if test="id!=null">
-                id=#{id}
-            </if>
-            <if test="id!=null">
-                and id=#{id}
-            </if>
-        </where>
-    </select>
 
     <select id="selectMyTask" parameterType="java.lang.String" resultType="com.abc12366.uc.model.bo.MyTaskBO">
         <!-- SELECT

@@ -18,8 +18,6 @@ public interface UserTaskService {
 
     UserTaskBO update(UserTaskUpdateBO userTaskUpdateBO, String userId, String id);
 
-    boolean delete(Map<String, String> map);
-
     //我的任务统计：UC我的任务模块顶排统计列表
     MyTaskBO selectMyTask(String userId);
 

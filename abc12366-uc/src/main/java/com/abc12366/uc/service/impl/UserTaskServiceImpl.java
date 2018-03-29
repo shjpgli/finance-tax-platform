@@ -95,23 +95,6 @@ public class UserTaskServiceImpl implements UserTaskService {
         return userTaskBO;
     }
 
-    @Override
-    public boolean delete(Map<String, String> map) {
-        List<UserTaskBO> userTaskBOList = userTaskRoMapper.selectList(map);
-        if (userTaskBOList.size() < 1) {
-            LOGGER.warn("删除失败，不存在可删除数据，参数:", map);
-            throw new ServiceException(4103);
-        }
-        int reuslt = userTaskMapper.delete(map);
-        if (reuslt < 1) {
-            LOGGER.warn("删除失败，参数:", map);
-            throw new ServiceException(4103);
-        }
-
-        // 删除redis用户信息
-        redisTemplate.delete(map.get("userId") + "_Tasks");
-        return true;
-    }
 
     @Override
     public MyTaskBO selectMyTask(String userId) {
