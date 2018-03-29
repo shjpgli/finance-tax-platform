@@ -706,7 +706,7 @@ public class OrderServiceImpl implements OrderService {
                         try{
                             couponService.userCollectCoupon(orderBO.getUserId(), bo.getOperValue(), request);
                         }catch (ServiceException e){
-                            LOGGER.info("购买赠送优惠卷失败: {}");
+                            LOGGER.error("购买赠送优惠卷失败: {}", e);
                         }
                     } else if ("VIP".equals(bo.getOperType())) {
                         User temp = userMapper.selectOne(orderBO.getUserId());
@@ -1189,6 +1189,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Transactional(value = "db1TxManager", rollbackFor = {SQLException.class, ServiceException.class})
     @Override
     public void automaticCancel() {
         Date date = DateUtils.getAddTime(Constant.ORDER_CANCEL_TIME);
