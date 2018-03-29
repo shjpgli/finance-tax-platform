@@ -183,10 +183,7 @@ public class SysTaskServiceImpl implements SysTaskService {
         return sysTaskRoMapper.selectListByType(type);
     }
 
-    @Override
-    public List<SysTaskListBO> selectDeployedListByType(Map<String, String> map) {
-        return sysTaskRoMapper.selectDeployedListByType(map);
-    }
+   
 
     @Override
     public List<SysTaskBO> selectValidListByTypeAndDateType(String type, String dateType) {

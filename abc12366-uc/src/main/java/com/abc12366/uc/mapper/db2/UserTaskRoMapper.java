@@ -14,7 +14,7 @@ import java.util.Map;
  * Time: 11:54
  */
 public interface UserTaskRoMapper {
-    List<UserTaskBO> selectList(Map<String, String> map);
+    
 
     MyTaskBO selectMyTask(String userId);
 

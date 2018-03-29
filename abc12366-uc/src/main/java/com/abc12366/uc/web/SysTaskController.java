@@ -152,35 +152,5 @@ public class SysTaskController {
         return ResponseEntity.ok(Utils.kv());
     }
 
-    /**
-     * 根据任务类型查询启用的任务列表
-     * @param request
-     * @param type 任务类型
-     * @param page 页数
-     * @param size 每页数据条数
-     * @return ResponseEntity {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
-     */
-    @GetMapping(path = "/tasks/{type}")
-    public ResponseEntity selectDeployedListByType(
-            HttpServletRequest request,
-            @PathVariable String type,
-            @RequestParam(required = false, defaultValue = Constant.pageNum) int page,
-            @RequestParam(required = false, defaultValue = Constant.pageSize) int size) {
-        LOGGER.info("{}:{}:{}", type, page, size);
-        Map<String, String> map = new HashMap<>();
-        if (type != null && StringUtils.isEmpty(type)) {
-            type = null;
-        }
-        map.put("type", type);
-        String userId = (String) request.getAttribute(Constant.USER_ID);
-        if (userId == null || userId.equals("")) {
-            throw new ServiceException(4193);
-        }
-        map.put("userId", userId);
-        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-        List<SysTaskListBO> taskList = sysTaskService.selectDeployedListByType(map);
-        return (taskList == null) ?
-                ResponseEntity.ok(Utils.kv()) :
-                ResponseEntity.ok(Utils.kv("dataList", (Page) taskList, "total", ((Page) taskList).getTotal()));
-    }
+    
 }
