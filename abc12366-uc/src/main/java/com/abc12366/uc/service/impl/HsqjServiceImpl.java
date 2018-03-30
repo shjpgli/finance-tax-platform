@@ -2,6 +2,7 @@ package com.abc12366.uc.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +63,20 @@ public class HsqjServiceImpl implements IHsqjService{
 	     TY21Xml2Object object = userBindService.analyzeXmlTY11(resMap, hsqjBo.getNsrsbh());
 	     LOGGER.info("获取纳税人信息:{}", JSONObject.toJSONString(object));
 	     if(object!=null){//纳税人信息存在
+	    	 
+	    	 if(!hsqjBo.getNsrmc().trim().equals(object.getNSRMC().trim())){
+	    		 throw new ServiceException(9999,"纳税人名称错误!");
+	    	 }
+	    	 
+	    	 if(StringUtils.isNoneEmpty(object.getRJDQR())){
+	    		 Date dqr= new SimpleDateFormat("yyyy-MM-dd").parse(object.getRJDQR());
+	    		 if(!dqr.before(new Date())){
+	    			 throw new ServiceException(9999,"您已经是电子申报用户，不需要做汇算清缴用户开户!");
+	    		 }
+	    	 }
+
+	    	 
+	    	 
 	    	 Map<String, String> mapTY06 = new HashMap<>();
 	    	 mapTY06.put("serviceid", "TY06");
 	    	 mapTY06.put("nsrsbh", hsqjBo.getNsrsbh());
