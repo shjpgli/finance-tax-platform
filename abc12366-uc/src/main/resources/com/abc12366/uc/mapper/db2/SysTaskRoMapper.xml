@@ -50,18 +50,7 @@
         where id = #{id}
     </select>
 
-    <select id="selectDeployedListByType" resultType="com.abc12366.uc.model.bo.SysTaskListBO"
-            parameterType="java.util.Map">
-        SELECT
-        id,name,startTime,endTime,rule,award,type,status,createTime,lastUpdate,imageUrl,ruleName,ruleCode,
-        count,skipURL,ruleId,awardType,remark,dateType,code,
-        (select count(1) from uc_user_task uut where uut.userId=#{userId} and uut.taskId=ust.id and uut.status='1' and
-        uut.createTime &gt;= (SELECT CURDATE()) and uut.createTime &lt; (SELECT DATE_SUB(CURDATE(),INTERVAL -1 DAY))) finishedCount
-        from uc_sys_task ust
-        where status=1
-        and type=#{type}
-        ORDER BY lastUpdate DESC
-    </select>
+  
 
     <select id="selectListByDateType" resultType="com.abc12366.uc.model.bo.SysTaskBO" parameterType="java.lang.String">
         SELECT

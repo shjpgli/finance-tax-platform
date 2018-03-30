@@ -64,12 +64,7 @@ public interface SysTaskService {
      */
     boolean delete(String id);
 
-    /**
-     * 根据任务类型查询启用的任务列表
-     * @param map {@linkplain java.util.Map}
-     * @return List<SysTaskListBO> {@linkplain com.abc12366.uc.model.bo.SysTaskBO}
-     */
-    List<SysTaskListBO> selectDeployedListByType(Map<String, String> map);
+    
 
     /**
      * 根据任务类型查询所有的任务列表

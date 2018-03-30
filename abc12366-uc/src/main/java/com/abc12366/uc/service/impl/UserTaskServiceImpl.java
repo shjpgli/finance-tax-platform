@@ -3,7 +3,6 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
-import com.abc12366.uc.mapper.db1.UserTaskMapper;
 import com.abc12366.uc.mapper.db2.UserTaskRoMapper;
 import com.abc12366.uc.model.MyTaskSurvey;
 import com.abc12366.uc.model.UserTask;
@@ -35,83 +34,10 @@ public class UserTaskServiceImpl implements UserTaskService {
     @Autowired
     private UserTaskRoMapper userTaskRoMapper;
 
-    @Autowired
-    private UserTaskMapper userTaskMapper;
-
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    @Override
-    public UserTaskBO insert(UserTaskInsertBO userTaskInsertBO, String userId) {
-        if (userTaskInsertBO == null) {
-            LOGGER.warn("新增失败，参数为：" + null);
-            throw new ServiceException(4101);
-        }
-        UserTask userTask = new UserTask();
-        BeanUtils.copyProperties(userTaskInsertBO, userTask);
-        Date date = new Date();
-        userTask.setId(Utils.uuid());
-        userTask.setUserId(userId);
-        userTask.setCreateTime(date);
-        userTask.setLastUpdate(date);
-        int result = userTaskMapper.insert(userTask);
-        if (result != 1) {
-            LOGGER.warn("新增失败，参数为：", userTask);
-            throw new ServiceException(4101);
-        }
-
-        // 删除redis用户信息
-        redisTemplate.delete(userId + "_Tasks");
-
-        UserTaskBO userTaskBO = new UserTaskBO();
-        BeanUtils.copyProperties(userTask, userTaskBO);
-        return userTaskBO;
-    }
-
-    @Override
-    public UserTaskBO update(UserTaskUpdateBO userTaskUpdateBO, String userId, String id) {
-        if (userTaskUpdateBO == null) {
-            LOGGER.warn("修改失败，参数:" + null);
-            throw new ServiceException(4102);
-        }
-
-        UserTask userTask = new UserTask();
-        BeanUtils.copyProperties(userTaskUpdateBO, userTask);
-        userTask.setId(id);
-        userTask.setUserId(userId);
-        userTask.setLastUpdate(new Date());
-        int result = userTaskMapper.update(userTask);
-        if (result < 1) {
-            LOGGER.warn("修改失败，参数:", userTask);
-            throw new ServiceException(4102);
-        }
-
-        // 删除redis用户信息
-        redisTemplate.delete(userId + "_Tasks");
-
-        UserTaskBO userTaskBO = new UserTaskBO();
-        BeanUtils.copyProperties(userTask, userTaskBO);
-        return userTaskBO;
-    }
-
-    @Override
-    public boolean delete(Map<String, String> map) {
-        List<UserTaskBO> userTaskBOList = userTaskRoMapper.selectList(map);
-        if (userTaskBOList.size() < 1) {
-            LOGGER.warn("删除失败，不存在可删除数据，参数:", map);
-            throw new ServiceException(4103);
-        }
-        int reuslt = userTaskMapper.delete(map);
-        if (reuslt < 1) {
-            LOGGER.warn("删除失败，参数:", map);
-            throw new ServiceException(4103);
-        }
-
-        // 删除redis用户信息
-        redisTemplate.delete(map.get("userId") + "_Tasks");
-        return true;
-    }
 
     @Override
     public MyTaskBO selectMyTask(String userId) {

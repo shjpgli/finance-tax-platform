@@ -43,6 +43,34 @@
         ORDER BY coursewareSeq ASC
     </select>
 
+    <!-- 查询（根据主键ID查询） -->
+    <select id="selectCoursewareList" resultType="com.abc12366.bangbang.model.curriculum.bo.CurriculumCoursewareBo" parameterType="java.util.Map">
+        SELECT
+        coursewareId,	curriculumId,isFree,	chapterId,type,	title,	uploadWay,	link,	fileName,	fileSite,	fileSize,	duration,	isDownload,coursewareSeq,createrId,createrName,	createTime,	updateTime
+        FROM bb_curriculum_courseware
+        WHERE 1=1
+        <if test="curriculumId != null and curriculumId != ''">
+            AND curriculumId = #{curriculumId}
+        </if>
+        <if test="chapterId != null and chapterId != ''">
+            AND chapterId = #{chapterId}
+        </if>
+        <if test="fileName != null and fileName != ''">
+            AND fileName like CONCAT('%',#{fileName},'%')
+        </if>
+        <if test="title != null and title != ''">
+            AND title like CONCAT('%',#{title},'%')
+        </if>
+        <if test="type != null and type != ''">
+            AND type = #{type}
+        </if>
+        <if test="uploadWay != null and uploadWay != ''">
+            AND uploadWay = #{uploadWay}
+        </if>
+        GROUP BY fileName,fileSite,fileSize
+        ORDER BY coursewareSeq ASC
+    </select>
+
 
 
     <!-- 查询课程是否免费 -->
