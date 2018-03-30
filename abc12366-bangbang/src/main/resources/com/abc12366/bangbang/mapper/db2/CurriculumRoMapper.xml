@@ -160,7 +160,7 @@
         <if test="isFree != null and isFree != ''">
             AND isFree = #{isFree}
         </if>
-        ORDER BY watchNum DESC,issueTime DESC
+        ORDER BY issueTime DESC
     </select>
 
     <!-- 查询授课情况 -->
