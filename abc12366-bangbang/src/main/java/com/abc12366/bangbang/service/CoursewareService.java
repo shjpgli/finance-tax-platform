@@ -22,4 +22,5 @@ public interface CoursewareService {
 
     String delete(String coursewareId);
 
+    List<CurriculumCoursewareBo> selectCoursewareList(Map<String, Object> dataMap);
 }

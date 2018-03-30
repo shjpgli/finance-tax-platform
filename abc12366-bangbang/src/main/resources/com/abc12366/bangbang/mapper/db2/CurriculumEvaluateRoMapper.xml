@@ -42,6 +42,7 @@
         <if test="curriculumId != null and curriculumId != ''">
             AND curriculumId = #{curriculumId}
         </if>
+        ORDER BY e.evaluateTime DESC
     </select>
 
     <!-- 查询评价次数 -->

@@ -594,7 +594,7 @@ public class OrderServiceImpl implements OrderService {
                                 //修改订单状态
                                 updOrder(order);
 
-                                insertPoints(orderBO, orderBO.getGiftPoints());
+                                insertGivePoints(orderBO, orderBO.getGiftPoints());
                                 insertOrderLog(userId, orderNo, order.getOrderStatus(), "用户付款成功", "0");
                             } else if ("HYCZ".equals(trading)) {
                                 order.setOrderStatus("6");
