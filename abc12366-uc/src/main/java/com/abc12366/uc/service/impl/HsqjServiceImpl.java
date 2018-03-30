@@ -67,21 +67,24 @@ public class HsqjServiceImpl implements IHsqjService {
 			if (!hsqjBo.getNsrmc().trim().equals(object.getNSRMC().trim())) {
 				throw new ServiceException(9999, "纳税人名称错误!");
 			}
-
+			SimpleDateFormat ff= new SimpleDateFormat("yyyy-MM-dd");
+			
 			if (StringUtils.isNotEmpty(object.getRJDQR())) {
-				Date dqr = new SimpleDateFormat("yyyy-MM-dd").parse(object.getRJDQR());
-				if ((new Date()).before(dqr)) {
+				Date dqr = ff.parse(object.getRJDQR());
+				if (ff.parse(ff.format(new Date())).before(dqr) ||
+						ff.format(new Date()).equals(object.getRJDQR())){
+					throw new ServiceException(9999, "您已经是电子申报用户或汇算清缴用户，不需要重复注册!");
+				}else{
 					if (StringUtils.isNotEmpty(object.getYQDQR())) {
-						Date ydqr = new SimpleDateFormat("yyyy-MM-dd").parse(object.getYQDQR());
-						if ((new Date()).before(ydqr)) {
+						Date ydqr = ff.parse(object.getYQDQR());
+						if (ff.parse(ff.format(new Date())).before(ydqr) || ff.format(new Date()).equals(object.getYQDQR())) {
 							throw new ServiceException(9999, "您已经是电子申报用户或汇算清缴用户，不需要重复注册!");
 						}
-					}else{
-						throw new ServiceException(9999, "您已经是电子申报用户或汇算清缴用户，不需要重复注册!");
+						
 					}
-
 				}
 			}
+			
 
 			Map<String, String> mapTY06 = new HashMap<>();
 			mapTY06.put("serviceid", "TY06");
