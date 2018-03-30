@@ -71,7 +71,7 @@ public class HsqjServiceImpl implements IHsqjService{
 	    	 if(StringUtils.isNoneEmpty(object.getRJDQR())){
 	    		 Date dqr= new SimpleDateFormat("yyyy-MM-dd").parse(object.getRJDQR());
 	    		 if(!dqr.before(new Date())){
-	    			 throw new ServiceException(9999,"您已经是电子申报用户，不需要做汇算清缴用户开户!");
+	    			 throw new ServiceException(9999,"您已经是电子申报用户或汇算清缴用户，不需要重复注册!");
 	    		 }
 	    	 }
 
