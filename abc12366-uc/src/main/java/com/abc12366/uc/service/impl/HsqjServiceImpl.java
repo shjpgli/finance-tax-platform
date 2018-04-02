@@ -80,7 +80,6 @@ public class HsqjServiceImpl implements IHsqjService {
 						if (ff.parse(ff.format(new Date())).before(ydqr) || ff.format(new Date()).equals(object.getYQDQR())) {
 							throw new ServiceException(9999, "您已经是电子申报用户或汇算清缴用户，不需要重复注册!");
 						}
-						
 					}
 				}
 			}
