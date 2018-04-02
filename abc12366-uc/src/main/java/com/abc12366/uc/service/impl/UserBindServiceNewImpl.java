@@ -805,8 +805,8 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		} else {
 			redisTemplate.delete(monthKey);
 			redisTemplate.opsForValue().set(monthKey, "1",
-					DateUtils.milliSecondsBetween(new Date(), DateUtils.getFirstDayOfLastMonth()),
-					TimeUnit.MILLISECONDS);
+					DateUtils.differentDaysByMillisecond(new Date(), DateUtils.getFirstDayOfLastMonth()),
+					TimeUnit.DAYS);
 		}
 	}
 
