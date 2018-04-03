@@ -11,7 +11,7 @@
 		LEFT JOIN abc12366_uc.uc_user t2 ON t1.feedbackUserId = t2.id
 		LEFT JOIN
 		(
-			SELECT a.* FROM abc12366_message.msg_business_message a
+			SELECT a.* FROM abc12366_message.msg_business_message_201803 a
 			WHERE busiType = 'BANGBANG_YJFK'
 		)  t3
 		ON t1.id = t3.businessId
@@ -46,7 +46,7 @@
 			SELECT t3.content FROM bb_feedback t1
 			LEFT JOIN
 			(
-				SELECT a.* FROM abc12366_message.msg_business_message a WHERE busiType = 'BANGBANG_YJFK'
+				SELECT a.* FROM abc12366_message.msg_business_message_201803 a WHERE busiType = 'BANGBANG_YJFK'
 			)  t3
 			ON t1.id = t3.businessId
 		) aa

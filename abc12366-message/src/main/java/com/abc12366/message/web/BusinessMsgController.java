@@ -51,6 +51,7 @@ public class BusinessMsgController {
     public ResponseEntity selectList(@RequestParam(required = false) String type,
                                      @RequestParam(required = false) String busiType,
                                      @RequestParam(required = false) String status,
+                                     @RequestParam(required = false) String dateStr,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
                                      HttpServletRequest request) {
@@ -63,6 +64,7 @@ public class BusinessMsgController {
         if (!StringUtils.isEmpty(userId)) {
             BusinessMessage bm = new BusinessMessage.Builder().userId(userId).type(type).busiType(busiType).status
                     (status).build();
+            bm.setDateStr(org.apache.commons.lang3.StringUtils.isNotEmpty(dateStr)?dateStr:DateUtils.getDateFormat(new Date(), "yyyyMM"));
             List<BusinessMessage> dataList = businessMsgService.selectList(bm, page, size);
 
             PageInfo<BusinessMessage> pageInfo = new PageInfo<>(dataList);
@@ -254,6 +256,7 @@ public class BusinessMsgController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String startDate,
             @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String dateStr,
             @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
             @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("根据用户名查询业务消息列表：username：{}，{},{}", username, page, size);
@@ -262,6 +265,7 @@ public class BusinessMsgController {
         map.put("type", StringUtils.isEmpty(type)?null:type.trim());
         map.put("busiType", StringUtils.isEmpty(busiType)?null:busiType.trim());
         map.put("status", StringUtils.isEmpty(status)?null:status.trim());
+        map.put("dateStr", org.apache.commons.lang3.StringUtils.isNotEmpty(dateStr)?dateStr:DateUtils.getDateFormat(new Date(), "yyyyMM"));
         if (!StringUtils.isEmpty(startDate)) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(DateUtils.strToDate(startDate));

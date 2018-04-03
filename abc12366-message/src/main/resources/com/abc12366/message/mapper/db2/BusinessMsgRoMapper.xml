@@ -10,7 +10,7 @@
     <select id="selectOne" resultType="com.abc12366.message.model.BusinessMessage">
         SELECT
         <include refid="Base_Column"/>
-        FROM msg_business_message
+        FROM msg_business_message_${dateStr} 
         WHERE id=#{id}
     </select>
 
@@ -19,7 +19,7 @@
             resultType="com.abc12366.message.model.BusinessMessage">
         SELECT
         <include refid="Base_Column"/>
-        FROM msg_business_message
+        FROM msg_business_message_${dateStr}
         WHERE userId = #{userId}
         <if test="type != null and type != ''">AND type = #{type}</if>
         <if test="busiType != null and busiType != ''">AND busiType = #{busiType}</if>
@@ -33,7 +33,7 @@
             resultType="com.abc12366.message.model.BusinessMessage">
         SELECT
         <include refid="Base_Column"/>
-        FROM msg_business_message
+        FROM msg_business_message_${dateStr}
         WHERE userId = #{userId}
         <if test="type != null and type != ''">AND type = #{type}</if>
         <if test="busiType != null and busiType != ''">AND busiType = #{busiType}</if>
@@ -47,7 +47,7 @@
         SELECT
         mbm.id, mbm.userId, mbm.businessId, mbm.content, mbm.status, mbm.type, mbm.createTime,
         mbm.lastUpdate, mbm.url,mbm.busiType
-        FROM msg_business_message mbm
+        FROM msg_business_message_${dateStr} mbm
         <if test="username!=null and username!='' ">join msg_uc_user muu on mbm.userId=muu.id</if>
         WHERE 1=1
         <if test="username!=null and username!='' ">and muu.username = #{username}</if>

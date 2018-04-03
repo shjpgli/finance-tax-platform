@@ -46,10 +46,20 @@ public class BusinessMessage {
 
     //消息业务类型
     private String busiType;
+    
+    private String dateStr;
 
 
 
-    public BusinessMessage() {
+    public String getDateStr() {
+		return dateStr;
+	}
+
+	public void setDateStr(String dateStr) {
+		this.dateStr = dateStr;
+	}
+
+	public BusinessMessage() {
     }
 
     public BusinessMessage(String id, String userId, String businessId, String content, String status, Timestamp
