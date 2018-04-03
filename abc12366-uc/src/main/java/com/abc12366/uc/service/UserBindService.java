@@ -211,4 +211,6 @@ public interface UserBindService {
     TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws ValidationException;
 
 	List<NsrsbhPasswordLog> restPwdLogList(Map map,int page,int size);
+
+	List<Map<String, String>> findBroup(String userId);
 }

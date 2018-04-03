@@ -1084,4 +1084,9 @@ public class UserBindServiceImpl implements UserBindService {
 		PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
 		return userBindMapper.restPwdLogList(map);
 	}
+
+	@Override
+	public List<Map<String, String>> findBroup(String userId) {
+		return userBindMapper.findBroup(userId);
+	}
 }
