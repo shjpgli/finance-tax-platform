@@ -236,15 +236,23 @@
     
     <insert id="doTasksArchiving" >
        <![CDATA[
-        INSERT INTO uc_user_task_archive 
-        SELECT * FROM uc_user_task_todo 
-        WHERE status = 0 AND dateType = 'D'  AND createTime < date_sub(curdate(),interval 2 day)
+	        INSERT INTO uc_user_task_archive 
+			SELECT * FROM uc_user_task_todo 
+			WHERE 
+			(dateType = 'D'  AND createTime < date_sub(curdate(),interval 2 day))
+			OR
+			(dateType = 'M'  AND DATE_FORMAT(createTime,'%Y%m') < DATE_FORMAT(curdate(),'%Y%m'))
        ]]>
     </insert>
 
 
     <delete id="cleanTasks">
-        <![CDATA[ DELETE FROM uc_user_task_todo WHERE status = 0 AND dateType = 'D'  AND createTime < date_sub(curdate(),interval 2 day) ]]>
+        <![CDATA[ 
+	        DELETE FROM uc_user_task_todo WHERE 
+			(dateType = 'D'  AND createTime < date_sub(curdate(),interval 2 day))
+			OR
+			(dateType = 'M'  AND DATE_FORMAT(createTime,'%Y%m') < DATE_FORMAT(curdate(),'%Y%m'))
+        ]]>
     </delete>
     
 </mapper>
