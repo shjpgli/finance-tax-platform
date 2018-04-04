@@ -6,11 +6,23 @@ package com.abc12366.uc.model.bo;
  * Time: 11:16
  */
 public class ExpLevelStatistic {
+
+    /**用户等级**/
     private String levelCode;
+
+    /**用户等级名称**/
     private String levelName;
+
+    /**当前级别用户总数**/
     private int all;
+
+    /**用户等级提升率**/
     private String increasePercent;
+
+    /**今年当前级别总数**/
     private float thisYearIncrease;
+
+    /**上一年用户等级数据**/
     private float lastYearAll;
 
     public int getAll() {

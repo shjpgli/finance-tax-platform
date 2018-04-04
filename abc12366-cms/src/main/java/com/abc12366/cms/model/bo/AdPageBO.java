@@ -17,7 +17,7 @@ public class AdPageBO {
     private String name;
     @Size(max = 128)
     private String url;
-    @Size(max = 128)
+    @Size(max = 300)
     private String link;
 
 
