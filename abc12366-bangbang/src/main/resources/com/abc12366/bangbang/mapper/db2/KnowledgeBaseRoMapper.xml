@@ -147,15 +147,15 @@
 	</select>
 
 	<!-- 列表查询 -->
-	<select id="selectList" resultType="com.abc12366.bangbang.model.KnowledgeBase"
+	<select id="selectList" resultType="com.abc12366.bangbang.model.bo.KnowledgeBaseListBO"
 			parameterType="com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO">
 		SELECT
-
 		t_base.id, t_base.categoryCode, t_base.type, t_base.recommend, t_base.subject, t_base.status, t_base.activeTime,
 		t_base.source, t_base.isOpen,t_base.pv, t_base.usefulVotes,
-		t_base.uselessVotes, t_base.shareNum, t_base.createTime, t_base.updateTime, t_base.createUser, t_base.updateUser,
+		t_base.uselessVotes, t_base.shareNum, t_base.createTime, t_base.updateTime, t_base.createUser, t_base.updateUser,a.nickname as updateUserName,
 		t_category.name AS categoryName
 		FROM bb_knowledge_base t_base JOIN bb_knowledge_category t_category
+		LEFT JOIN abc12366_uc.uc_admin a on a.id = t_base.updateUser
 		WHERE t_base.categoryCode = t_category.code
 		<if test="categoryCode != null and categoryCode !=''">
 			AND t_base.categoryCode LIKE CONCAT(#{categoryCode},'%')

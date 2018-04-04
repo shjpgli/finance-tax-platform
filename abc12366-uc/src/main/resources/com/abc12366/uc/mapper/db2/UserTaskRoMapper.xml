@@ -17,7 +17,7 @@
         WHERE uu.id=#{userId} -->
         <![CDATA[
             SELECT 
-            max(t.currentPoints) currentPoints,SUM(t.unReceivePoints) unReceivePoints,max(t.taskRange) taskRange,SUM(t.finishedTaskCount) finishedTaskCount 
+            max(t.currentPoints) currentPoints, sum(t.unReceivePoints)  unReceivePoints, max(t.taskRange)  taskRange, sum(t.finishedTaskCount)  finishedTaskCount 
 			FROM
 			(SELECT
 			        uu.points currentPoints,

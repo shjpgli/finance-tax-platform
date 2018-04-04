@@ -285,4 +285,11 @@
            GROUP BY id DESC
     </select>
     
+    <select id="findBroup" resultType="java.util.Map" parameterType="java.lang.String">
+           SELECT bdgroup FROM uc_user_dzsb 
+           WHERE userId= #{userId} AND bdgroup IS NOT NULL AND bdgroup !='' 
+           GROUP BY bdgroup 
+           ORDER BY bdgroup
+    </select>
+    
 </mapper>

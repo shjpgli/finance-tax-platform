@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class BatchUpdateMsgToReadBO {
     private List<String> ids;
+    
+    private String dateStr;
 
     public List<String> getIds() {
         return ids;
@@ -24,4 +26,12 @@ public class BatchUpdateMsgToReadBO {
                 "ids=" + ids +
                 '}';
     }
+
+	public String getDateStr() {
+		return dateStr;
+	}
+
+	public void setDateStr(String dateStr) {
+		this.dateStr = dateStr;
+	}
 }

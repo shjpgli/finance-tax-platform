@@ -1,11 +1,12 @@
 package com.abc12366.gateway.service;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.mapper.db1.UserTokenMapper;
 import com.abc12366.gateway.model.bo.LoginInfoBO;
 import com.abc12366.gateway.model.bo.ResultLoginInfo;
 import com.abc12366.gateway.model.bo.UCUserBO;
-import com.abc12366.gateway.model.bo.UserResponseBO;
 import com.abc12366.gateway.util.Constant;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.RestTemplateUtil;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,6 +40,9 @@ public class TokenServiceImpl implements TokenService {
 
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> valueOperations;
+
+    @Autowired
+    private UserTokenMapper userTokenMapper;
 
     @Override
     public boolean isAuthentication(String adminToken, String userToken, HttpServletRequest request) {
@@ -106,7 +111,7 @@ public class TokenServiceImpl implements TokenService {
      * @return true: 通过校验
      */
     private boolean userTokenAuth(String userToken, HttpServletRequest request) {
-        LOGGER.info("{}:{}", userToken, request);
+        LOGGER.info("{}", userToken);
         boolean isAuth = false;
         if (redisTemplate.hasKey(userToken)) {
             String userInfo = valueOperations.get(userToken);
@@ -118,23 +123,15 @@ public class TokenServiceImpl implements TokenService {
                 request.setAttribute(Constant.USER_INFO, user);
             }
         } else {
-            try {
-                //调用uc的token校验接口，如果校验通过刷新token并返回true
-                String abc12366_uc = SpringCtxHolder.getProperty("abc12366.uc.url");
-                String check_url = "/user/token/" + userToken;
-                String body = restTemplateUtil.send(abc12366_uc + check_url, HttpMethod.GET, request);
-                if (body != null) {
-                    UserResponseBO userResponseBO = JSON.parseObject(body, UserResponseBO.class);
-                    LOGGER.info("{}", userResponseBO);
-                    if (userResponseBO.getData() != null) {
-                        isAuth = true;
-                        // 设置USER_ID，USER_INFO
-                        request.setAttribute(Constant.USER_ID, userResponseBO.getData().getId());
-                        request.setAttribute(Constant.USER_INFO, userResponseBO.getData());
-                    }
-                }
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
+            // 查询uc的token校验接口，如果校验通过刷新token并返回true
+            Date lastResetTokenTime = new Date(System.currentTimeMillis() - Constant.USER_TOKEN_VALID_SECONDS * 1000);
+            String userId = userTokenMapper.isAuthentication(userToken, DateUtils.dateToStr(lastResetTokenTime));
+            if (!StringUtils.isEmpty(userId)) {
+                isAuth = true;
+                // 设置USER_ID
+                request.setAttribute(Constant.USER_ID, userId);
+                // 续期token
+                userTokenMapper.updateLastTokenResetTime(userToken);
             }
         }
         LOGGER.info("校验uc的token状态为: {}", isAuth);
