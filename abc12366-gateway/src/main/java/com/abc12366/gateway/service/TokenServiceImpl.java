@@ -121,6 +121,8 @@ public class TokenServiceImpl implements TokenService {
                 // 设置USER_ID，USER_INFO
                 request.setAttribute(Constant.USER_ID, user.getId());
                 request.setAttribute(Constant.USER_INFO, user);
+                // 续期token
+                userTokenMapper.updateLastTokenResetTime(userToken);
             }
         } else {
             // 查询uc的token校验接口，如果校验通过刷新token并返回true
