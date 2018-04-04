@@ -61,6 +61,8 @@ public class UserMsgController {
                                      @RequestParam(required = false) String toUserId,
                                      @RequestParam(required = false) String type,
                                      @RequestParam(required = false) String status,
+                                     @RequestParam(required = false) String startDate,
+                                     @RequestParam(required = false) String endDate,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
         LOGGER.info("{},{},{},{},{},{},{},{}", fromNickname, fromUserId, toNickname, toUserId, type, status, page,
@@ -74,6 +76,12 @@ public class UserMsgController {
                 .type(type)
                 .status(status)
                 .createTime(new Timestamp(System.currentTimeMillis())).build();
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(startDate)){
+        	um.setStartDate(DateUtils.strToDate(startDate+" 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+        }
+        if(org.apache.commons.lang3.StringUtils.isNotEmpty(endDate)){
+        	um.setEndDate(DateUtils.strToDate(endDate+" 23:59:59", "yyyy-MM-dd HH:mm:ss"));
+        }
         List<UserMessage> dataList = userMsgService.selectList(um, page, size);
 
         PageInfo<UserMessage> pageInfo = new PageInfo<>(dataList);
