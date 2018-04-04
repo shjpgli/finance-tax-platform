@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 用户消息对象
@@ -15,235 +16,245 @@ import java.sql.Timestamp;
  */
 public class UserMessage {
 
-    private String id;
+	private String id;
 
-    @NotEmpty
-    @Length(min = 1, max = 64)
-    private String fromUserId;
+	@NotEmpty
+	@Length(min = 1, max = 64)
+	private String fromUserId;
 
-    @NotEmpty
-    @Length(min = 1, max = 64)
-    private String toUserId;
+	@NotEmpty
+	@Length(min = 1, max = 64)
+	private String toUserId;
 
-    @NotEmpty
-    @Length(min = 1, max = 500)
-    private String content;
+	@NotEmpty
+	@Length(min = 1, max = 500)
+	private String content;
 
-    @Length(min = 1, max = 1)
-    private String status;
+	@Length(min = 1, max = 1)
+	private String status;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp createTime;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp createTime;
 
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp lastUpdate;
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp lastUpdate;
 
-    @Length(min = 1, max = 1)
-    private String type;
+	@Length(min = 1, max = 1)
+	private String type;
 
-    private String fromNickname;
-    private String toNickname;
+	private String fromNickname;
+	private String toNickname;
 
+	private Date startDate;
+	private Date endDate;
 
-    public UserMessage() {
-    }
+	public Date getStartDate() {
+		return startDate;
+	}
 
-    public UserMessage(String id, String fromUserId, String toUserId, String content, String status, Timestamp
-            createTime, Timestamp lastUpdate, String type, String fromNickname, String toNickname) {
-        this.id = id;
-        this.fromUserId = fromUserId;
-        this.toUserId = toUserId;
-        this.content = content;
-        this.status = status;
-        this.createTime = createTime;
-        this.lastUpdate = lastUpdate;
-        this.type = type;
-        this.fromNickname = fromNickname;
-        this.toNickname = toNickname;
-    }
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 
-    private UserMessage(Builder builder) {
-        setId(builder.id);
-        setFromUserId(builder.fromUserId);
-        setToUserId(builder.toUserId);
-        setContent(builder.content);
-        setStatus(builder.status);
-        setCreateTime(builder.createTime);
-        setLastUpdate(builder.lastUpdate);
-        setType(builder.type);
-        setFromNickname(builder.fromNickname);
-        setToNickname(builder.toNickname);
-    }
+	public Date getEndDate() {
+		return endDate;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public UserMessage() {
+	}
 
-    public String getFromUserId() {
-        return fromUserId;
-    }
+	public UserMessage(String id, String fromUserId, String toUserId, String content, String status,
+			Timestamp createTime, Timestamp lastUpdate, String type, String fromNickname, String toNickname) {
+		this.id = id;
+		this.fromUserId = fromUserId;
+		this.toUserId = toUserId;
+		this.content = content;
+		this.status = status;
+		this.createTime = createTime;
+		this.lastUpdate = lastUpdate;
+		this.type = type;
+		this.fromNickname = fromNickname;
+		this.toNickname = toNickname;
+	}
 
-    public void setFromUserId(String fromUserId) {
-        this.fromUserId = fromUserId;
-    }
+	private UserMessage(Builder builder) {
+		setId(builder.id);
+		setFromUserId(builder.fromUserId);
+		setToUserId(builder.toUserId);
+		setContent(builder.content);
+		setStatus(builder.status);
+		setCreateTime(builder.createTime);
+		setLastUpdate(builder.lastUpdate);
+		setType(builder.type);
+		setFromNickname(builder.fromNickname);
+		setToNickname(builder.toNickname);
+	}
 
-    public String getToUserId() {
-        return toUserId;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setToUserId(String toUserId) {
-        this.toUserId = toUserId;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public String getFromUserId() {
+		return fromUserId;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setFromUserId(String fromUserId) {
+		this.fromUserId = fromUserId;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getToUserId() {
+		return toUserId;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public void setToUserId(String toUserId) {
+		this.toUserId = toUserId;
+	}
 
-    public Timestamp getCreateTime() {
-        return createTime;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public Timestamp getLastUpdate() {
-        return lastUpdate;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setLastUpdate(Timestamp lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public Timestamp getCreateTime() {
+		return createTime;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
+	}
 
-    public String getFromNickname() {
-        return fromNickname;
-    }
+	public Timestamp getLastUpdate() {
+		return lastUpdate;
+	}
 
-    public void setFromNickname(String fromNickname) {
-        this.fromNickname = fromNickname;
-    }
+	public void setLastUpdate(Timestamp lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 
-    public String getToNickname() {
-        return toNickname;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setToNickname(String toNickname) {
-        this.toNickname = toNickname;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    @Override
-    public String toString() {
-        return "UserMessage{" +
-                "id='" + id + '\'' +
-                ", fromUserId='" + fromUserId + '\'' +
-                ", toUserId='" + toUserId + '\'' +
-                ", content='" + content + '\'' +
-                ", status='" + status + '\'' +
-                ", createTime=" + createTime +
-                ", lastUpdate=" + lastUpdate +
-                ", type='" + type + '\'' +
-                ", fromNickname='" + fromNickname + '\'' +
-                ", toNickname='" + toNickname + '\'' +
-                '}';
-    }
+	public String getFromNickname() {
+		return fromNickname;
+	}
 
-    public static final class Builder {
-        private String id;
-        private String fromUserId;
-        private String toUserId;
-        private String content;
-        private String status;
-        private Timestamp createTime;
-        private Timestamp lastUpdate;
-        private String type;
-        private String fromNickname;
-        private String toNickname;
-        private String nickname;
+	public void setFromNickname(String fromNickname) {
+		this.fromNickname = fromNickname;
+	}
 
-        public Builder() {
-        }
+	public String getToNickname() {
+		return toNickname;
+	}
 
-        public Builder id(String val) {
-            id = val;
-            return this;
-        }
+	public void setToNickname(String toNickname) {
+		this.toNickname = toNickname;
+	}
 
-        public Builder fromUserId(String val) {
-            fromUserId = val;
-            return this;
-        }
+	@Override
+	public String toString() {
+		return "UserMessage{" + "id='" + id + '\'' + ", fromUserId='" + fromUserId + '\'' + ", toUserId='" + toUserId
+				+ '\'' + ", content='" + content + '\'' + ", status='" + status + '\'' + ", createTime=" + createTime
+				+ ", lastUpdate=" + lastUpdate + ", type='" + type + '\'' + ", fromNickname='" + fromNickname + '\''
+				+ ", toNickname='" + toNickname + '\'' + '}';
+	}
 
-        public Builder toUserId(String val) {
-            toUserId = val;
-            return this;
-        }
+	public static final class Builder {
+		private String id;
+		private String fromUserId;
+		private String toUserId;
+		private String content;
+		private String status;
+		private Timestamp createTime;
+		private Timestamp lastUpdate;
+		private String type;
+		private String fromNickname;
+		private String toNickname;
+		private String nickname;
 
-        public Builder content(String val) {
-            content = val;
-            return this;
-        }
+		public Builder() {
+		}
 
-        public Builder status(String val) {
-            status = val;
-            return this;
-        }
+		public Builder id(String val) {
+			id = val;
+			return this;
+		}
 
-        public Builder createTime(Timestamp val) {
-            createTime = val;
-            return this;
-        }
+		public Builder fromUserId(String val) {
+			fromUserId = val;
+			return this;
+		}
 
-        public Builder lastUpdate(Timestamp val) {
-            lastUpdate = val;
-            return this;
-        }
+		public Builder toUserId(String val) {
+			toUserId = val;
+			return this;
+		}
 
-        public Builder type(String val) {
-            type = val;
-            return this;
-        }
+		public Builder content(String val) {
+			content = val;
+			return this;
+		}
 
-        public Builder fromNickname(String val) {
-            fromNickname = val;
-            return this;
-        }
+		public Builder status(String val) {
+			status = val;
+			return this;
+		}
 
-        public Builder toNickname(String val) {
-            toNickname = val;
-            return this;
-        }
+		public Builder createTime(Timestamp val) {
+			createTime = val;
+			return this;
+		}
 
-        public Builder nickname(String val) {
-            nickname = val;
-            return this;
-        }
+		public Builder lastUpdate(Timestamp val) {
+			lastUpdate = val;
+			return this;
+		}
 
-        public UserMessage build() {
-            return new UserMessage(this);
-        }
-    }
+		public Builder type(String val) {
+			type = val;
+			return this;
+		}
+
+		public Builder fromNickname(String val) {
+			fromNickname = val;
+			return this;
+		}
+
+		public Builder toNickname(String val) {
+			toNickname = val;
+			return this;
+		}
+
+		public Builder nickname(String val) {
+			nickname = val;
+			return this;
+		}
+
+		public UserMessage build() {
+			return new UserMessage(this);
+		}
+	}
 }
