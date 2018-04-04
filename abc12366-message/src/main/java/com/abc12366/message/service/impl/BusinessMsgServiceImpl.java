@@ -61,7 +61,9 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> selectList(BusinessMessage data, int page, int size) {
-    	businessMsgMapper.createTable(data.getDateStr());
+    	if(!"201803".equals(data.getDateStr())){
+    	   businessMsgMapper.createTable(data.getDateStr());
+    	}
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return businessMsgRoMapper.selectList(data);
     }
@@ -194,7 +196,9 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
-    	businessMsgMapper.createTable(map.get("dateStr").toString());
+    	if(!"201803".equals(map.get("dateStr").toString())){
+    	   businessMsgMapper.createTable(map.get("dateStr").toString());
+    	}
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<BusinessMessageAdmin> list = businessMsgRoMapper.selectListByUsername(map);
         for(BusinessMessageAdmin messageAdmin:list){
@@ -207,7 +211,9 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> selectUnreadList(BusinessMessage bm) {
-    	businessMsgMapper.createTable(bm.getDateStr());
+    	if(!"201803".equals(bm.getDateStr())){
+    	 businessMsgMapper.createTable(bm.getDateStr());
+    	}
     	bm.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
         String key = Utils.getUserId() + BUSINESS_MSG_KEY;
         List<BusinessMessage> dataList;
