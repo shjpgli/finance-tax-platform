@@ -4,6 +4,7 @@ import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseListBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public interface KnowledgeBaseService {
     List<KnowledgeBase> selectUCListByTag(KnowledgeBaseParamBO param);
 
     /* 知识库列表查询数据*/
-    List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
+    List<KnowledgeBaseListBO> selectList(KnowledgeBaseParamBO param);
 
     /* 根据知识ID 查询关联感兴趣的知识列表 */
     List<KnowledgeBase> interestedList(String id, int num);

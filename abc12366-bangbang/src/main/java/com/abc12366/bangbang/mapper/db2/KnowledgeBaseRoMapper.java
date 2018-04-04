@@ -2,6 +2,7 @@ package com.abc12366.bangbang.mapper.db2;
 
 import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseListBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import org.apache.ibatis.annotations.Param;
 
@@ -73,7 +74,7 @@ public interface KnowledgeBaseRoMapper {
     * 列表查询
     *
     **/
-    List<KnowledgeBase> selectList(KnowledgeBaseParamBO param);
+    List<KnowledgeBaseListBO> selectList(KnowledgeBaseParamBO param);
 
     /* 根据知识库分类id  查询知识库个数 */
     int selectCntByCategoryId(String categoryId);
