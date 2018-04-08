@@ -31,7 +31,8 @@ public enum WechatUrl {
     LONG2SHORT("长链接转短链接","/cgi-bin/shorturl"),
     // 商户平台接口
     SENDREDPACK("发放普通红包", "/mmpaymkttransfers/sendredpack"),
-    GETHBINFO("查询红包记录", "/mmpaymkttransfers/gethbinfo");
+    GETHBINFO("查询红包记录", "/mmpaymkttransfers/gethbinfo"), 
+    PAYORDER("微信统一下单", "/pay/unifiedorder");
 
 
 

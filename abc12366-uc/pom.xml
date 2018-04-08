@@ -189,6 +189,11 @@
             <classifier>jdk15</classifier>
         </dependency>
         <dependency>
+             <groupId>xom</groupId>
+             <artifactId>xom</artifactId>
+             <version>1.2.5</version>
+         </dependency>
+        <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
             <version>1.4.8</version>
@@ -199,6 +204,7 @@
             <version>4.3.4</version>
         </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
