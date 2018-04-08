@@ -95,7 +95,7 @@ public class PayReturnController {
 			if (wxpayreturn != null) {
 				if ("SUCCESS".equals(wxpayreturn.getReturn_code())) {
 					//if ("SUCCESS".equals(wxpayreturn.getResult_code())) {
-						String str = SignUtil.objectSort(wxpayreturn).replaceAll("&sign=.*&time", "&time");
+						String str = SignUtil.objectSort(wxpayreturn);
 						String sgin = Utils.md5(str + "&key=" + SpringCtxHolder.getProperty("abc.mch_key"))
 								.toUpperCase();
 						LOGGER.info("微信支付回调签名信息:{}", sgin);

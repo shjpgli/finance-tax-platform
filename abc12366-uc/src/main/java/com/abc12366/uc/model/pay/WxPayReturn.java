@@ -1,13 +1,12 @@
 package com.abc12366.uc.model.pay;
 
-public class WxPayReturn {
+public class WxPayReturn extends WxPayReturnBase{
 	private String return_code; // 返回状态码
 	private String return_msg; // 返回信息
 	private String appid; // 公众账号ID
 	private String mch_id; // 商户号
 	private String device_info; // 设备号
 	private String nonce_str; // 随机字符串
-	private String sign; // 签名
 	private String sign_type;// 签名类型
 	private String result_code; // 业务结果
 	private String err_code; // 错误代码
@@ -77,14 +76,6 @@ public class WxPayReturn {
 
 	public void setNonce_str(String nonce_str) {
 		this.nonce_str = nonce_str;
-	}
-
-	public String getSign() {
-		return sign;
-	}
-
-	public void setSign(String sign) {
-		this.sign = sign;
 	}
 
 	public String getSign_type() {
