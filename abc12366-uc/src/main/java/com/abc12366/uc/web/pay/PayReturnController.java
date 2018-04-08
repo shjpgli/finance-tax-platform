@@ -12,19 +12,28 @@ import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.wx.MessageUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,6 +55,8 @@ public class PayReturnController {
 	private TradeLogService tradeLogService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+    private RestTemplate restTemplate;
 
 	/**
 	 * uc支付宝回调信息签名校验
@@ -86,7 +97,7 @@ public class PayReturnController {
 			if (wxpayreturn != null) {
 				if ("SUCCESS".equals(wxpayreturn.getReturn_code())) {
 					//if ("SUCCESS".equals(wxpayreturn.getResult_code())) {
-						String str = SignUtil.objectSort(wxpayreturn).replaceAll("&key=.*&", "&");
+						String str = SignUtil.objectSort(wxpayreturn).replaceAll("&sign=.*&time", "&time");
 						String sgin = Utils.md5(str + "&key=" + SpringCtxHolder.getProperty("abc.mch_key"))
 								.toUpperCase();
 						LOGGER.info("微信支付回调签名信息:{}", sgin);
@@ -129,6 +140,9 @@ public class PayReturnController {
 									orderService.paymentOrder(orderPayBO, "RMB", request);
 									LOGGER.info("更新订单状态:{}", wxpayreturn.getOut_trade_no());
 								}
+							}
+							if("SUCCESS".equals(wxpayreturn.getResult_code()) && StringUtils.isNotEmpty(wxpayreturn.getAttach())){
+								new Thread(new CallBack(wxpayreturn.getAttach()+"?jylsh="+wxpayreturn.getOut_trade_no())).start();
 							}
 							return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
 						} else {
@@ -254,8 +268,27 @@ public class PayReturnController {
 		}
 	}
 
-	public static void main(String[] args) {
-		String s = "http://wwww.baidu.com?a=1111&b=2222222222&key=BBBBBB&tt=22222";
-		System.out.println(s.replaceAll("&key=.*&", "&"));
+	class CallBack implements Runnable {
+		private String url;
+
+		public CallBack(String url) {
+			this.url = url;
+		}
+
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
+		public void run() {
+			LOGGER.info("开始回调第三方地址:" + url);
+			HttpHeaders httpHeaders = new HttpHeaders();
+	        httpHeaders.add("Version", "1");
+			HttpEntity requestEntity = new HttpEntity(httpHeaders);
+			try {
+				restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+			} catch (Exception e) {
+				LOGGER.error("调第三方地址:", e);
+			}
+
+		}
+
 	}
 }
