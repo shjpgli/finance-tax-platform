@@ -22,22 +22,22 @@ public class WxPayOrder {
 	// 签名类型
 	private String sign_type = "MD5";
 	// 商品描述
-	@NotNull
+	@NotNull(message="body不能为空") 
 	private String body;
 	// 商品详情
 	private String detail;
 	// 附加数据
 	private String attach;
 	// 商户订单号
-	@NotNull 
+	@NotNull(message="out_trade_no不能为空") 
 	private String out_trade_no;
 	// 标价币种
 	private String fee_type = "CNY";
 	// 标价金额
-	@NotNull
+	@NotNull(message="total_fee不能为空")
 	private String total_fee;
 	// 终端IP APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP
-	@NotNull
+	@NotNull(message="spbill_create_ip不能为空")
 	private String spbill_create_ip;
 	// 交易起始时间
 	private String time_start;
@@ -48,7 +48,7 @@ public class WxPayOrder {
 	// 通知地址
 	private String notify_url;
 	// 交易类型 JSAPI 公众号支付NATIVE 扫码支付 APP APP支付
-	@NotNull 
+	@NotNull(message="trade_type不能为空") 
 	private String trade_type;
 	// 商品ID trade_type=NATIVE时（即扫码支付），此参数必传。此参数为二维码中包含的商品ID，商户自行定义。
 	private String product_id;
