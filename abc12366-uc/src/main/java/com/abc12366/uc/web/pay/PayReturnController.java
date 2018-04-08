@@ -107,7 +107,7 @@ public class PayReturnController {
 							if(tradeLogUpdate != null){
 								tradeLogUpdate.setTradeStatus(tradeStatus);
 								tradeLogUpdate.setTradeType("1");
-								tradeLogUpdate.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee()));
+								tradeLogUpdate.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee())/100);
 								tradeLogUpdate.setTradeTime(new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
 								Timestamp now = new Timestamp(new Date().getTime());
 								tradeLogUpdate.setLastUpdate(now);
@@ -123,7 +123,7 @@ public class PayReturnController {
 									tradeLog.setAliTrandeNo(wxpayreturn.getTransaction_id());
 									tradeLog.setTradeStatus(tradeStatus);
 									tradeLog.setTradeType("1");
-									tradeLog.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee()));
+									tradeLog.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee())/100);
 									tradeLog.setTradeTime(new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
 									Timestamp now = new Timestamp(new Date().getTime());
 									tradeLog.setCreateTime(now);
@@ -220,7 +220,7 @@ public class PayReturnController {
 					tradeLogUpdate.setTradeNo(out_trade_no);
 					tradeLogUpdate.setTradeStatus("1");
 					tradeLogUpdate.setTradeType("1");
-					tradeLogUpdate.setAmount(Double.parseDouble(total_amount)/100);
+					tradeLogUpdate.setAmount(Double.parseDouble(total_amount));
 					tradeLogUpdate.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
 					Timestamp now = new Timestamp(new Date().getTime());
 					tradeLogUpdate.setLastUpdate(now);
@@ -236,7 +236,7 @@ public class PayReturnController {
 						tradeLog.setAliTrandeNo(trade_no);
 						tradeLog.setTradeStatus("1");
 						tradeLog.setTradeType("1");
-						tradeLog.setAmount(Double.parseDouble(total_amount)/100);
+						tradeLog.setAmount(Double.parseDouble(total_amount));
 						tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
 						Timestamp now = new Timestamp(new Date().getTime());
 						tradeLog.setCreateTime(now);
