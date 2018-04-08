@@ -12,7 +12,6 @@ import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.wx.MessageUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +32,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -222,7 +220,7 @@ public class PayReturnController {
 					tradeLogUpdate.setTradeNo(out_trade_no);
 					tradeLogUpdate.setTradeStatus("1");
 					tradeLogUpdate.setTradeType("1");
-					tradeLogUpdate.setAmount(Double.parseDouble(total_amount));
+					tradeLogUpdate.setAmount(Double.parseDouble(total_amount)/100);
 					tradeLogUpdate.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
 					Timestamp now = new Timestamp(new Date().getTime());
 					tradeLogUpdate.setLastUpdate(now);
@@ -238,7 +236,7 @@ public class PayReturnController {
 						tradeLog.setAliTrandeNo(trade_no);
 						tradeLog.setTradeStatus("1");
 						tradeLog.setTradeType("1");
-						tradeLog.setAmount(Double.parseDouble(total_amount));
+						tradeLog.setAmount(Double.parseDouble(total_amount)/100);
 						tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
 						Timestamp now = new Timestamp(new Date().getTime());
 						tradeLog.setCreateTime(now);
