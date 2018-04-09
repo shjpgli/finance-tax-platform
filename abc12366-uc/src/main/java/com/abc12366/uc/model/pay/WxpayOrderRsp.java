@@ -16,14 +16,14 @@ public class WxpayOrderRsp extends WxRspBase {
 	private String code_url;
 	private String code_img;
 
-	public Map<String, String> getReturn() {
+	/*public Map<String, String> getReturn() {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("trade_type", trade_type);
 		map.put("prepay_id", prepay_id);
 		map.put("code_url", code_url);
 		map.put("code_img", code_img);
 		return map;
-	}
+	}*/
 
 	public String getTrade_type() {
 		return trade_type;
