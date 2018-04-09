@@ -61,7 +61,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> selectList(BusinessMessage data, int page, int size) {
-    	if(!"201803".equals(data.getDateStr())){
+    	if(StringUtils.isNotEmpty(data.getDateStr())){
     	   businessMsgMapper.createTable(data.getDateStr());
     	}
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -196,7 +196,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
-    	if(!"201803".equals(map.get("dateStr").toString())){
+    	if(StringUtils.isNotEmpty(map.get("dateStr").toString())){
     	   businessMsgMapper.createTable(map.get("dateStr").toString());
     	}
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
@@ -211,7 +211,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> selectUnreadList(BusinessMessage bm) {
-    	if(!"201803".equals(bm.getDateStr())){
+    	if(StringUtils.isNotEmpty(bm.getDateStr())){
     	 businessMsgMapper.createTable(bm.getDateStr());
     	}
     	bm.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
