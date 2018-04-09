@@ -7,6 +7,10 @@ package com.abc12366.uc.model.bo;
  */
 public class ExpLevelStatistic {
 
+    private Integer minValue;
+
+    private Integer maxValue;
+
     /**用户等级**/
     private String levelCode;
 
@@ -83,5 +87,21 @@ public class ExpLevelStatistic {
                 ", thisYearIncrease=" + thisYearIncrease +
                 ", lastYearAll=" + lastYearAll +
                 '}';
+    }
+
+    public Integer getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Integer minValue) {
+        this.minValue = minValue;
+    }
+
+    public Integer getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Integer maxValue) {
+        this.maxValue = maxValue;
     }
 }

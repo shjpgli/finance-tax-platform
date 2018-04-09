@@ -47,9 +47,10 @@
         ORDER BY uul.createTime DESC
     </select>
 
-    <select id="selectCount" resultType="java.lang.Float" parameterType="java.util.Map">
-        SELECT COUNT(1) FROM (
-        SELECT u.userId,MAX(u.createTime) createTime,u.usableExp
+    <select id="selectCount" resultType="java.util.Map" parameterType="java.util.Map">
+        select
+        SELECT COUNT(1) as num FROM (
+        SELECT u.userId
         FROM uc_uexp_log u
         <where>
             1=1
@@ -60,5 +61,18 @@
         </where>
         GROUP BY userId
         ) a
+
+        SELECT COUNT(1) as snum FROM (
+        SELECT u.userId
+        FROM uc_uexp_log u
+        <where>
+            1=1
+            <if test="last != null"> and u.createtime &gt;=#{last} </if>
+            <if test="start != null"> and u.createTime &lt; #{start} </if>
+            <if test="min != null"> AND u.usableExp &gt;= #{min} </if>
+            <if test="end != null"> AND u.usableExp &lt;= #{max} </if>
+        </where>
+        GROUP BY userId
+        ) b
     </select>
 </mapper>
