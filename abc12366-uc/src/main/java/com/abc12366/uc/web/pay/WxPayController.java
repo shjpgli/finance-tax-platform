@@ -1,11 +1,28 @@
 package com.abc12366.uc.web.pay;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.KeyStore;
 import java.util.Date;
+
+import javax.net.ssl.SSLContext;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +41,12 @@ import com.abc12366.uc.model.pay.WxRefundRsp;
 import com.abc12366.uc.model.pay.WxpayOrderRsp;
 import com.abc12366.uc.service.pay.IWxPayService;
 import com.abc12366.uc.util.QRCodeUtil;
+import com.abc12366.uc.util.wx.MessageUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxMchConnectFactory;
 import com.alibaba.fastjson.JSONObject;
-
+import com.abc12366.uc.model.pay.WxDownloadbill;
 /**
  * 微信支付
  * 
@@ -148,6 +166,71 @@ public class WxPayController {
 		} else {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "微信支付退款申请异常!!"));
 		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/wxdownloadbill")
+	public ResponseEntity WxDownloadbill(@RequestParam String bill_date,HttpServletResponse httpresponse) throws Exception{
+		WxDownloadbill wxdownloadbill = new WxDownloadbill();
+		wxdownloadbill.setBill_date(bill_date);
+		wxdownloadbill.setAppid(SpringCtxHolder.getProperty("abc.appid"));
+		wxdownloadbill.setMch_id(SpringCtxHolder.getProperty("abc.mch_id"));
+		wxdownloadbill.setNonce_str(SignUtil.getRandomString(30));
+		wxdownloadbill.setSign(SignUtil.signKey(wxdownloadbill));
+		
+		String outputStr = MessageUtil.objToXml(wxdownloadbill);
+		
+		KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        InputStream instream = new ClassPathResource("cer/apiclient_cert.p12").getInputStream();
+        String mch_id = SpringCtxHolder.getProperty("abc.mch_id");
+        try {
+            keyStore.load(instream, mch_id.toCharArray());
+        } finally {
+            instream.close();
+        }
+
+        SSLContext sslcontext = SSLContexts.custom()
+                .loadKeyMaterial(keyStore, mch_id.toCharArray())
+                .build();
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                new String[]{"TLSv1"},
+                null,
+                SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .build();
+        try {
+            HttpPost httpPost = new HttpPost(SpringCtxHolder.getProperty("abc.mch_url") + WechatUrl.WXDOWNBILL.uri);
+            httpPost.setEntity(new ByteArrayEntity(outputStr.getBytes()));
+
+            LOGGER.info("Request Body: {}", outputStr);
+
+            CloseableHttpResponse response = httpclient.execute(httpPost);
+            BufferedOutputStream bos = new BufferedOutputStream(httpresponse.getOutputStream());
+            try {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                	httpresponse.setContentType("text/plain");
+                    httpresponse.setHeader("Content-disposition","attachment; filename="+bill_date+".txt");
+                	
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(entity.getContent()));
+                    String text;
+                    
+                    while ((text = bufferedReader.readLine()) != null) {
+                    	bos.write(text.replaceAll("`", "").getBytes());
+                    	bos.write("\n".getBytes());
+                    }  
+                }
+            } finally {
+                response.close();
+                bos.close();
+            }
+        } finally {
+            httpclient.close();
+        }
+		
+		return null;
 	}
 
 }
