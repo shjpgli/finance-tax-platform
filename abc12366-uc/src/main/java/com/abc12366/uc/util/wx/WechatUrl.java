@@ -32,7 +32,8 @@ public enum WechatUrl {
     // 商户平台接口
     SENDREDPACK("发放普通红包", "/mmpaymkttransfers/sendredpack"),
     GETHBINFO("查询红包记录", "/mmpaymkttransfers/gethbinfo"), 
-    PAYORDER("微信统一下单", "/pay/unifiedorder");
+    PAYORDER("微信统一下单", "/pay/unifiedorder"), 
+    WXORDERQUERY("微信支付订单查询","/pay/orderquery");
 
 
 
