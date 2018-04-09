@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 逗号分隔的标签ID转为List
-	 * 
+	 *
 	 * @param tagId
 	 *            带逗号分隔的标签ID
 	 * @param split
@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
 	public User selectUser(String userId) {
 		// 新增优先查询redis
 		User user = userMapper.selectOne(userId);
-	
+
 		return user;
 	}
 
@@ -858,7 +858,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 调用message接口发送短信
-	 * 
+	 *
 	 * @param phone
 	 *            手机号
 	 * @param type
@@ -1110,21 +1110,21 @@ public class UserServiceImpl implements UserService {
 		return list;
 	}
 
-	@Override
-	public List<ExpLevelStatistic> userExpLevel(String year, int page, int size) {
-		Date start = DateUtils.strToDate(year, "yyyy");
-		Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
-		Date last = DateUtils.strToDate(Integer.parseInt(year) - 1 + "", "yyyy");
-		Map<String, Object> map = new HashMap<>();
-		map.put("last", last);
-		map.put("start", start);
-		map.put("end", end);
+    @Override
+    public List<ExpLevelStatistic> userExpLevel(String year, int page, int size) {
+        Date start = DateUtils.strToDate(year, "yyyy");
+        Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
+        Date last = DateUtils.strToDate(Integer.parseInt(year) - 1 + "", "yyyy");
+        Map<String, Object> map = new HashMap<>();
+        map.put("last", last);
+        map.put("start", start);
+        map.put("end", end);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
-		List<ExpLevelStatistic> experienceLevelBOList = experienceLevelRoMapper
-				.selectLevelList(map);
+        List<ExpLevelStatistic> experienceLevelBOList = experienceLevelRoMapper
+                .selectLevelList(map);
         PageInfo<ExpLevelStatistic> pageInfo = new PageInfo<>(experienceLevelBOList);
 
-		List<ExpLevelStatistic> expLevelStatisticList = new ArrayList<>();
+        List<ExpLevelStatistic> expLevelStatisticList = new ArrayList<>();
 
         int threadNum = (int) pageInfo.getTotal();
         List<Future<ExpLevelStatistic>> futureList = new ArrayList<>();
@@ -1168,8 +1168,8 @@ public class UserServiceImpl implements UserService {
         // 关闭线程池
         executorService.shutdown();
 
-		return expLevelStatisticList;
-	}
+        return expLevelStatisticList;
+    }
 
 
     public class UserLevelThread implements Callable<ExpLevelStatistic> {
@@ -1196,10 +1196,10 @@ public class UserServiceImpl implements UserService {
             long time = System.currentTimeMillis();
             float thisYearIncrease = experienceLogService.selectCount(hashMap);
             long time3 = System.currentTimeMillis();
-            LOGGER.info("执行SQL时间：" +  ",耗时：" + (time3 - time)+"; min = "+experienceLevelBO.getMinValue()+"; max = "+experienceLevelBO.getMaxValue());
+            LOGGER.info("执行SQL时间：" + ",耗时：" + (time3 - time)+"; min = "+experienceLevelBO.getMinValue()+"; max = "+experienceLevelBO.getMaxValue());
 
             Map<String, Object> lastYeaMap = new HashMap<>();
-            lastYeaMap.put("last", last);
+            lastYeaMap.put("start", last);
             lastYeaMap.put("end", start);
             lastYeaMap.put("min",experienceLevelBO.getMinValue());
             lastYeaMap.put("max", experienceLevelBO.getMaxValue());
@@ -1223,6 +1223,8 @@ public class UserServiceImpl implements UserService {
             return expLevelStatistic;
         }
     }
+
+
 
 	@Override
 	public List<VipLevelStatistic> userVip(String year) {
