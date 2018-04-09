@@ -33,7 +33,10 @@ public enum WechatUrl {
     SENDREDPACK("发放普通红包", "/mmpaymkttransfers/sendredpack"),
     GETHBINFO("查询红包记录", "/mmpaymkttransfers/gethbinfo"), 
     PAYORDER("微信统一下单", "/pay/unifiedorder"), 
-    WXORDERQUERY("微信支付订单查询","/pay/orderquery");
+    WXORDERQUERY("微信支付订单查询","/pay/orderquery"),
+    WXREFUND("微信支付退款申请","/secapi/pay/refund"),
+    WXREFUNDQUERY("微信支付退款查询","/pay/refundquery"),
+    WXDOWNBILL("微信下载对账单","/pay/downloadbill");
 
 
 
