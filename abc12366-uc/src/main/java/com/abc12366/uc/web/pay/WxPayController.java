@@ -25,7 +25,6 @@ import com.abc12366.uc.util.wx.SignUtil;
 import com.abc12366.uc.util.wx.WechatUrl;
 import com.abc12366.uc.util.wx.WxMchConnectFactory;
 import com.alibaba.fastjson.JSONObject;
-import com.abc12366.uc.model.pay.WxPayReturn;
 /**
  * 微信支付
  * 
