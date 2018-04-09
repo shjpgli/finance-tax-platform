@@ -18,7 +18,7 @@
 		LEFT JOIN bb_knowledge_base  t_base ON t_votelog.knowledgeId = t_base.id
 		LEFT JOIN
 		(
-			SELECT a.* FROM abc12366_message.msg_business_message_201803 a WHERE busiType = 'KNOWLEDGE_VOTE' GROUP BY businessId
+			SELECT a.* FROM abc12366_message.msg_business_message a WHERE busiType = 'KNOWLEDGE_VOTE' GROUP BY businessId
 		) t_vote_msg
 		ON t_votelog.id = t_vote_msg.businessId
 		WHERE 1=1
