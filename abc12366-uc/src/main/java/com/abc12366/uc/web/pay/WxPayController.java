@@ -168,6 +168,13 @@ public class WxPayController {
 		}
 	}
 	
+	/**
+	 * 微信对账单下载
+	 * @param bill_date
+	 * @param httpresponse
+	 * @return
+	 * @throws Exception
+	 */
 	@SuppressWarnings("rawtypes")
 	@GetMapping("/wxdownloadbill")
 	public ResponseEntity WxDownloadbill(@RequestParam String bill_date,HttpServletResponse httpresponse) throws Exception{
