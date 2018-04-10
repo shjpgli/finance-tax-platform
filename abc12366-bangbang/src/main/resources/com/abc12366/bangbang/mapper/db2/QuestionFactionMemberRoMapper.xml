@@ -36,6 +36,7 @@
     <select id="selectList" resultType="com.abc12366.bangbang.model.question.bo.QuestionFactionMemberBo" parameterType="java.util.Map">
         SELECT
         memberId,	factionId,	userId,	u.username,	u.nickname,	u.userPicturePath,u.status,duty,memberGrade,	m.createTime,	m.lastUpdate,
+        (SELECT count(*) FROM bb_question_attention where attentionUserId = m.userId and userId = #{userId})  isAttention,
         (SELECT count(id) FROM bb_question_answer where status = '0' and userId = m.userId and  userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = m.factionId) and factionId = m.factionId) answerNum,
 
         (SELECT count(id) FROM bb_question_comment where status = '0' and userId = m.userId and userId in(SELECT userId FROM abc12366_bangbang.bb_question_faction_member where factionId = m.factionId) and factionId = m.factionId) discussNum,

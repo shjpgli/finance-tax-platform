@@ -6,6 +6,7 @@ import com.abc12366.gateway.util.Constant;
 import com.abc12366.gateway.util.Utils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sun.org.apache.xml.internal.dtm.ref.sax2dtm.SAX2RTFDTM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,13 @@ public class QueFactionMemberController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "userId",required = false)String userId,
                                      @RequestParam(value = "factionId", required = false) String factionId,
                                      @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("factionId", factionId);//
         dataMap.put("status", status);//
+        dataMap.put("userId", userId);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionMemberBo> dataList = queFactionMemberService.selectList(dataMap);
         //计算帮派成员荣誉值
