@@ -20,6 +20,8 @@ import com.abc12366.uc.model.invoice.InvoiceDetail;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.pay.RefundRes;
+import com.abc12366.uc.model.pay.WxRefund;
+import com.abc12366.uc.model.pay.WxRefundRsp;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.IMsgSendV2service;
 import com.abc12366.uc.service.MessageSendUtil;
@@ -28,6 +30,9 @@ import com.abc12366.uc.service.PointsRuleService;
 import com.abc12366.uc.service.order.OrderExchangeService;
 import com.abc12366.uc.service.order.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
+import com.abc12366.uc.util.wx.SignUtil;
+import com.abc12366.uc.util.wx.WechatUrl;
+import com.abc12366.uc.util.wx.WxMchConnectFactory;
 import com.abc12366.uc.webservice.DzfpClient;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -411,14 +416,13 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                 throw new ServiceException(7150);
             }
             if ("RMB".equals(order.getTradeMethod())) {
+                // 查询交易日志中支付成功的订单
+                Trade tr = tradeRoMapper.selectOrderNo(order.getOrderNo());
+                if(tr == null){
+                    LOGGER.info("交易记录无法找到：{}",order.getOrderNo());
+                    throw new ServiceException(4102,"交易记录无法找到");
+                }
                 if ("ALIPAY".equals(order.getPayMethod())) {
-                    // 查询交易日志中支付成功的订单
-                    Trade tr = tradeRoMapper.selectOrderNo(order.getOrderNo());
-                    if(tr == null){
-                        LOGGER.info("交易记录无法找到：{}",order.getOrderNo());
-                        throw new ServiceException(4102,"交易记录无法找到");
-                    }
-
                     TradeLog log = new TradeLog();
                     log.setTradeNo(oe.getOrderNo());
                     log.setTradeStatus("1");
@@ -488,25 +492,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                         oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
                                         orderExchangeMapper.update(oe);
 
-                                        //User user = userMapper.selectOne(order.getUserId());
                                         //查询会员特权-业务提醒
-                                        /*VipPrivilegeLevelBO obj = new VipPrivilegeLevelBO();
-                                        obj.setLevelId(user.getVipLevel());
-                                        obj.setPrivilegeId(MessageConstant.YWTX_CODE);
-                                        VipPrivilegeLevelBO findObj = vipPrivilegeLevelRoMapper.selectLevelIdPrivilegeId(obj);
-*/
-                                        //Message message = new Message();
-                                        //message.setBusinessId(oe.getOrderNo());
-                                        //message.setBusiType(MessageConstant.SPDD);
-                                        //message.setType(MessageConstant.SYS_MESSAGE);
                                         String content = RemindConstant.REFUND_PREFIX + refundRes.getRefund_fee() + RemindConstant.REFUND_SUFFIX + order.getOrderNo();
-                                        //message.setContent(content);
-                                        //message.setUrl("<a href=\"" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "\">" + MessageConstant.VIEW_DETAILS + "</a>");
-                                        //message.setUserId(order.getUserId());
 
                                         Map<String, String> map = new HashMap<>();
-                                        //map.put("userId", user.getId());
-                                        //map.put("openId", user.getWxopenid());
                                         map.put("first", "您好，欢迎使用财税平台");
                                         map.put("remark", "感谢使用财税平台，祝您生活愉快！");
                                         map.put("keyword1", content);
@@ -540,6 +529,109 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                     LOGGER.error("支付宝退款失败：", e);
                                     return ResponseEntity.ok(Utils.bodyStatus(9999, e.getMessage()));
                                 }
+                            }
+                        }
+                    }
+
+                }else if ("WEIXIN".equals(order.getPayMethod())) {
+                    TradeLog log = new TradeLog();
+                    log.setTradeNo(oe.getOrderNo());
+                    log.setTradeStatus("1");
+                    log.setPayMethod("WEIXIN");
+                    List<TradeLog> logList = tradeLogRoMapper.selectList(log);
+
+                    if (logList.size() > 0) {
+                        for (int i = 0; i < logList.size(); i++) {
+                            if (logList.get(i).getAmount() >= data.getAmount()) {
+                                WxRefund wxRefund = new WxRefund();
+                                wxRefund.setTransaction_id(logList.get(i).getAliTrandeNo());
+                                wxRefund.setOut_trade_no(logList.get(i).getTradeNo());
+                                //商户退款单号
+                                String tradeNo = DateUtils.getJYLSH();
+                                wxRefund.setOut_refund_no(tradeNo);
+                                wxRefund.setRefund_fee(String.valueOf(data.getAmount()));
+                                wxRefund.setTotal_fee(String.valueOf(order.getTotalPrice()));
+
+                                //扣除订单获得的积分
+                                if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
+                                    insertPoints(order,0d,order.getGiftPoints());
+                                }
+
+                                // 插入订单日志-已完成
+                                insertLog(oe.getOrderNo(), "8", Utils.getAdminId(), "已完成退款", "1", oe.getId());
+
+                                //将订单状态改成已结束
+                                order.setOrderStatus("7");
+                                orderMapper.update(order);
+
+                                //微信退款
+                                wxRefund.setAppid(SpringCtxHolder.getProperty("abc.appid")).setMch_id(SpringCtxHolder.getProperty("abc.mch_id"))
+                                        .setNonce_str(SignUtil.getRandomString(30)).setSign(SignUtil.signKey(wxRefund));
+
+                                WxRefundRsp wxrefundrsp = WxMchConnectFactory.post(WechatUrl.WXREFUND, null, wxRefund, WxRefundRsp.class);
+                                LOGGER.info("微信退款返回信息{}", JSON.toJSONString(wxrefundrsp));
+                                if ("SUCCESS".equals(wxrefundrsp.getReturn_code())) {
+                                    if ("SUCCESS".equals(wxrefundrsp.getResult_code())) {
+                                        LOGGER.info("微信退款成功,插入退款流水记录");
+                                        Trade trade = new Trade();
+                                        trade.setOrderNo(oe.getOrderNo());
+                                        trade.setTradeNo(tradeNo);
+                                        Date date = new Date();
+                                        trade.setCreateTime(date);
+                                        tradeMapper.insert(trade);
+
+                                        TradeLog tradeLog = new TradeLog();
+                                        tradeLog.setTradeNo(tradeNo);
+                                        tradeLog.setAliTrandeNo(wxrefundrsp.getRefund_id());
+                                        tradeLog.setTradeStatus("1");
+                                        tradeLog.setTradeType("2");
+                                        tradeLog.setAmount(Double.parseDouble(wxrefundrsp.getRefund_fee()));
+                                        tradeLog.setTradeTime(date);
+                                        Timestamp now = new Timestamp(System.currentTimeMillis());
+                                        tradeLog.setCreateTime(now);
+                                        tradeLog.setLastUpdate(now);
+                                        tradeLog.setPayMethod("WEIXIN");
+                                        tradeLogService.insertTradeLog(tradeLog);
+
+                                        oe.setStatus("8");
+                                        oe.setRefundRemark(data.getRefundRemark());
+                                        oe.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+                                        orderExchangeMapper.update(oe);
+                                        String content = RemindConstant.REFUND_PREFIX + wxrefundrsp.getRefund_fee() + RemindConstant.REFUND_SUFFIX + order.getOrderNo();
+
+                                        Map<String, String> map = new HashMap<>();
+                                        map.put("first", "您好，欢迎使用财税平台");
+                                        map.put("remark", "感谢使用财税平台，祝您生活愉快！");
+                                        map.put("keyword1", content);
+                                        map.put("keyword2", wxrefundrsp.getRefund_fee());
+                                        map.put("keyword3", DateUtils.dateToStr(new Date()));
+                                        String templateId = "NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM";
+
+                                        MessageSendBo messageSendBo =new MessageSendBo();
+                                        messageSendBo.setType(MessageConstant.SYS_MESSAGE);
+                                        messageSendBo.setBusiType(MessageConstant.BUSI_TYPE_ORDER);
+                                        messageSendBo.setBusinessId(order.getOrderNo());
+                                        messageSendBo.setSkipUrl("<a href='" + SpringCtxHolder.getProperty("abc12366.api.url.uc") + "/orderback/exchange/" + oe.getId() + "/" + order.getOrderNo() + "'>" + MessageConstant.VIEW_DETAILS + "</a>");
+                                        messageSendBo.setWebMsg(content);
+                                        messageSendBo.setPhoneMsg(content);
+                                        messageSendBo.setTemplateid(templateId);
+                                        messageSendBo.setDataList(map);
+
+                                        List<String> userIds =new ArrayList<>();
+                                        userIds.add(order.getUserId());
+                                        messageSendBo.setUserIds(userIds);
+
+                                        msgSendV2Service.sendMsgV2(messageSendBo);
+                                        return ResponseEntity.ok(Utils.kv("data", wxrefundrsp));
+                                    }else{
+                                        LOGGER.error("微信退款失败：", wxrefundrsp.getErr_code_des());
+                                        return ResponseEntity.ok(Utils.bodyStatus(9999, wxrefundrsp.getReturn_msg()));
+                                    }
+                                }else {
+                                    LOGGER.error("微信退款失败：", wxrefundrsp.getReturn_msg());
+                                    return ResponseEntity.ok(Utils.bodyStatus(9999, wxrefundrsp.getReturn_msg()));
+                                }
+
                             }
                         }
                     }
@@ -589,6 +681,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
         }
         return ResponseEntity.ok(Utils.kv());
     }
+
 
     /**
      * 插入积分日志
