@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -73,6 +75,35 @@ public class PayReturnController {
 			LOGGER.error("验证回调信息签名异常,原因:", e);
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "验证回调信息签名异常:" + e.getMessage()));
 		}
+	}
+	
+	/**
+	 * 微信退款回调
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/wxrefund")
+	public @ResponseBody String wxrefund(HttpServletRequest request){
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+			StringBuffer buffer = new StringBuffer();
+			String text;
+			while ((text = bufferedReader.readLine()) != null) {
+				buffer.append(text);
+			}
+			LOGGER.info("微信退款回调信息:{}", buffer.toString());			
+			String dstr = Utils.decode(buffer.toString());
+			String key = Utils.md5(SpringCtxHolder.getProperty("abc.mch_key")).toLowerCase();
+			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+			SecretKeySpec secretkeyspec = new SecretKeySpec(key.getBytes(), "AES");
+			cipher.init(Cipher.DECRYPT_MODE, secretkeyspec);
+			String result = new String(cipher.doFinal(dstr.getBytes()));
+			LOGGER.info("微信退款回调解密后信息:{}", result);
+			
+		} catch (Exception e) {
+			LOGGER.error("微信退款回调异常:", e);
+		}
+		return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[WRONG]]></return_msg></xml>";	
 	}
 
 	/**
