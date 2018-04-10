@@ -1054,6 +1054,7 @@
     <select id="orderStat" resultType="com.abc12366.uc.model.order.bo.OrderStatBO">
         SELECT
           sum(case when orderStatus = '3' then 1 else 0 end) as 'orderStatus3',
+          sum(case when orderStatus = '2' then 1 else 0 end) as 'orderStatus2',
           sum(case when orderStatus = '4' then 1 else 0 end) as 'orderStatus4',
           sum(case when orderStatus = '6' then 1 else 0 end) as 'orderStatus6',
           sum(case when orderStatus = '7' then 1 else 0 end) as 'orderStatus7',
