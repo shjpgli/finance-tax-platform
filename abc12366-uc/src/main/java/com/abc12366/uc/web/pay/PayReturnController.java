@@ -117,26 +117,31 @@ public class PayReturnController {
 								TradeBillBO data = new TradeBillBO();
 								data.setTradeNo(wxpayreturn.getOut_trade_no());
 								TradeLog log = tradeLogService.selectOne(data);
+								
+								TradeLog tradeLog = new TradeLog();
+								tradeLog.setTradeNo(wxpayreturn.getOut_trade_no());
+								tradeLog.setAliTrandeNo(wxpayreturn.getTransaction_id());
+								tradeLog.setTradeStatus(tradeStatus);
+								tradeLog.setTradeType("1");
+								tradeLog.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee())/100);
+								tradeLog.setTradeTime(new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
+								Timestamp now = new Timestamp(new Date().getTime());
+								tradeLog.setCreateTime(now);
+								tradeLog.setLastUpdate(now);
+								tradeLog.setPayMethod("WEIXIN");
+								
 								if (log != null) {
-									TradeLog tradeLog = new TradeLog();
-									tradeLog.setTradeNo(wxpayreturn.getOut_trade_no());
-									tradeLog.setAliTrandeNo(wxpayreturn.getTransaction_id());
-									tradeLog.setTradeStatus(tradeStatus);
-									tradeLog.setTradeType("1");
-									tradeLog.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee())/100);
-									tradeLog.setTradeTime(new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
-									Timestamp now = new Timestamp(new Date().getTime());
-									tradeLog.setCreateTime(now);
-									tradeLog.setLastUpdate(now);
-									tradeLog.setPayMethod("WEIXIN");
 									tradeLogService.update(tradeLog);
-									LOGGER.info("支付宝回调信息:插入支付流水记录成功，开始更新订单状态");
+									LOGGER.info("微信回调信息:插入支付流水记录成功，开始更新订单状态");
 									OrderPayBO orderPayBO = new OrderPayBO();
 									orderPayBO.setTradeNo(wxpayreturn.getOut_trade_no());
 									orderPayBO.setIsPay(2);
 									orderPayBO.setPayMethod("WEIXIN");
 									orderService.paymentOrder(orderPayBO, "RMB", request);
 									LOGGER.info("更新订单状态:{}", wxpayreturn.getOut_trade_no());
+								}else{
+									tradeLogService.insertTradeLog(tradeLog);
+									LOGGER.info("微信回调信息:插入支付流水记录成功");
 								}
 							}
 							if("SUCCESS".equals(wxpayreturn.getResult_code()) && StringUtils.isNotEmpty(wxpayreturn.getAttach())){

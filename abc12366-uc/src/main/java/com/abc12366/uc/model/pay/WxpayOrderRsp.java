@@ -17,7 +17,7 @@ public class WxpayOrderRsp extends WxRspBase {
 	private String nonce_str; // 随机字符串
 	private String sign; // 签名
 	private String sign_type;// 签名类型
-
+    private String mweb_url;
 	
 
 	public String getAppid() {
@@ -82,6 +82,14 @@ public class WxpayOrderRsp extends WxRspBase {
 
 	public void setCode_img(String code_img) {
 		this.code_img = code_img;
+	}
+
+	public String getMweb_url() {
+		return mweb_url;
+	}
+
+	public void setMweb_url(String mweb_url) {
+		this.mweb_url = mweb_url;
 	}
 
 }
