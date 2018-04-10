@@ -376,8 +376,8 @@ public class GiftServiceImpl implements GiftService {
     }
 
     @Override
-    public Integer getGiftStatusCount() {
-        return ugiftApplyRoMapper.getGiftStatusCount();
+    public Integer getGiftStatusCount(String status) {
+        return ugiftApplyRoMapper.getGiftStatusCount(status);
     }
 
     /**

@@ -151,8 +151,8 @@ public interface GiftService {
 
     /**
      * 获取待审批礼包
-     * @return
+     * @param status 礼包状态
      */
-    Integer getGiftStatusCount();
+    Integer getGiftStatusCount(String status);
 
 }

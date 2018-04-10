@@ -47,6 +47,6 @@ public interface UgiftApplyRoMapper {
      */
     UgiftApplyBO selectUgiftApplyBO(Map<String, Object> map);
 
-    Integer getGiftStatusCount();
+    Integer getGiftStatusCount(@Param("status")String status);
 
 }

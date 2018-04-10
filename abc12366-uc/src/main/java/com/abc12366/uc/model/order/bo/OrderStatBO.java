@@ -9,6 +9,11 @@ package com.abc12366.uc.model.order.bo;
  */
 public class OrderStatBO {
     /**
+     * 2-待付款
+     */
+    private Integer orderStatus2;
+
+    /**
      * 3-付款中
      */
     private Integer orderStatus3;
@@ -79,5 +84,13 @@ public class OrderStatBO {
 
     public void setOrderStatus(Integer orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Integer getOrderStatus2() {
+        return orderStatus2;
+    }
+
+    public void setOrderStatus2(Integer orderStatus2) {
+        this.orderStatus2 = orderStatus2;
     }
 }

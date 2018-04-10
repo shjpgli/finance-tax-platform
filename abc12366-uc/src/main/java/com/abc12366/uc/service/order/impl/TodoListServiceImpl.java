@@ -86,7 +86,11 @@ public class TodoListServiceImpl implements TodoListService{
         map.put("regsMonth", statBO.getRegsMonth());
         map.put("dzsbLoginsDay", userBindServiceNew.getDzsbnsrLoginTimesDay());
         map.put("nsrLoginsMonth", userBindServiceNew.getNnsrLoginTimesMonth());
-        map.put("giftCount", giftService.getGiftStatusCount());
+        //待处理礼包
+        map.put("giftCount", giftService.getGiftStatusCount("1"));
+        //已处理礼包
+        map.put("giftSend", giftService.getGiftStatusCount("2"));
+
         return map;
     }
 
@@ -94,6 +98,7 @@ public class TodoListServiceImpl implements TodoListService{
     public Map<String, Integer> orderStat() {
         OrderStatBO orderStatBO = orderService.orderStat();
         Map<String, Integer> map = new HashMap<>(10);
+        map.put("orderStatus2", orderStatBO.getOrderStatus2());
         map.put("orderStatus3", orderStatBO.getOrderStatus3());
         map.put("orderStatus4", orderStatBO.getOrderStatus4());
         map.put("orderStatus6", orderStatBO.getOrderStatus6());

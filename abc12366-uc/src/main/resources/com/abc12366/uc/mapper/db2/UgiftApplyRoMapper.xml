@@ -126,10 +126,10 @@
     </select>
 
     <!-- 查询（待审批礼包） -->
-    <select id="getGiftStatusCount" resultType="java.lang.Integer">
+    <select id="getGiftStatusCount" resultType="java.lang.Integer" parameterType="java.lang.String">
         SELECT
         COUNT(u.applyId)
-        FROM uc_ugift_apply u where u.status = '1'
+        FROM uc_ugift_apply u where u.status = #{status}
     </select>
 
 
