@@ -1,21 +1,25 @@
 package com.abc12366.uc.web.pay;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.uc.model.bo.TradeBillBO;
 import com.abc12366.uc.model.order.TradeLog;
 import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.pay.WxPayReturn;
 import com.abc12366.uc.model.pay.WxrefundNotify;
+import com.abc12366.uc.model.pay.WxrefundNotifyResult;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.service.order.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.wx.MessageUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +41,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
@@ -98,13 +103,34 @@ public class PayReturnController {
 
 			if ("SUCCESS".equals(wxrefundnotify.getReturn_code())
 					&& StringUtils.isNoneEmpty(wxrefundnotify.getReq_info())) {
-				String dstr = Utils.decode(wxrefundnotify.getReq_info());
+				byte[] dstr = Base64.getDecoder().decode(wxrefundnotify.getReq_info());
 				String key = Utils.md5(SpringCtxHolder.getProperty("abc.mch_key")).toLowerCase();
-				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding",new BouncyCastleProvider());
 				SecretKeySpec secretkeyspec = new SecretKeySpec(key.getBytes(), "AES");
 				cipher.init(Cipher.DECRYPT_MODE, secretkeyspec);
-				String result = new String(cipher.doFinal(dstr.getBytes()));
+				String result = new String(cipher.doFinal(dstr));
 				LOGGER.info("微信退款回调解密后信息:{}", result);
+				
+				WxrefundNotifyResult wxrefundnotifyresult = JSON.parseObject(MessageUtil.xml2JSON(result),WxrefundNotifyResult.class);
+				
+				TradeBillBO tradebillbo = new TradeBillBO();
+				tradebillbo.setTradeNo(wxrefundnotifyresult.getOut_refund_no());
+				tradebillbo.setAliTrandeNo(wxrefundnotifyresult.getRefund_id());
+				TradeLog tradeLog = tradeLogService.selectOne(tradebillbo);
+				String sta = "1";
+				if("CHANGE".equals(wxrefundnotifyresult.getRefund_status())){
+					sta = "4";
+				}else if("REFUNDCLOSE".equals(wxrefundnotifyresult.getRefund_status())){
+					sta = "3";
+				}
+				if(tradeLog!=null){
+					tradeLog.setTradeStatus(sta);
+					Timestamp now = new Timestamp(new Date().getTime());
+					tradeLog.setTradeTime(DateUtils.strToDate(wxrefundnotifyresult.getSuccess_time(), "yyyy-MM-dd HH:mm:ss"));
+					tradeLog.setLastUpdate(now);
+					tradeLogService.update(tradeLog);
+				}
+				return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
 			}
 
 		} catch (Exception e) {
