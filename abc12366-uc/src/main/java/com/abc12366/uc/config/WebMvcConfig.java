@@ -54,7 +54,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 				// 微信服务回调地址
 				.excludePathPatterns("/wechatserver/*")
 				// 微信支付回调
-				.excludePathPatterns("/payreturn/wxpay");
+				.excludePathPatterns("/payreturn/wxpay","/payreturn/wxrefund");
 
 		// App验证、授权拦截
 		registry.addInterceptor(appInterceptor()).excludePathPatterns("/").excludePathPatterns("/app/**")
@@ -69,7 +69,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 				// 微信服务回调地址
 				.excludePathPatterns("/wechatserver/*")
 				// 微信支付回调
-				.excludePathPatterns("/payreturn/wxpay");
+				.excludePathPatterns("/payreturn/wxpay","/payreturn/wxrefund");
 
 		// 前台用户访问拦截器迁移到网关后的
 		registry.addInterceptor(tokenInterceptor()).excludePathPatterns("/").excludePathPatterns("/app/**")
@@ -121,6 +121,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 				// 汇算清缴注册
 				.excludePathPatterns("/v2/batch/bind/dzsb")
 				// 微信支付回调
-				.excludePathPatterns("/payreturn/wxpay");
+				.excludePathPatterns("/payreturn/wxpay","/payreturn/wxrefund");
 	}
 }

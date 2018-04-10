@@ -1,7 +1,6 @@
 package com.abc12366.uc.service.impl.pay;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -36,7 +35,9 @@ public class WxPayServiceImpl implements IWxPayService {
 	public WxRefundRsp doWxRefund(WxRefund wxrefund) {
 		LOGGER.info("微信支付退款申请:{}", JSONObject.toJSONString(wxrefund));
 		wxrefund.setAppid(SpringCtxHolder.getProperty("abc.appid")).setMch_id(SpringCtxHolder.getProperty("abc.mch_id"))
-				.setNonce_str(SignUtil.getRandomString(30)).setSign(SignUtil.signKey(wxrefund));
+				.setNonce_str(SignUtil.getRandomString(30))
+				.setNotify_url(SpringCtxHolder.getProperty("abc.mch_refund"))
+				.setSign(SignUtil.signKey(wxrefund));
 
 		WxRefundRsp wxrefundrsp = WxMchConnectFactory.post(WechatUrl.WXREFUND, null, wxrefund, WxRefundRsp.class);
 		if ("SUCCESS".equals(wxrefundrsp.getReturn_code())) {
