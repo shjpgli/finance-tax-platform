@@ -6,6 +6,7 @@ import com.abc12366.uc.model.bo.TradeBillBO;
 import com.abc12366.uc.model.order.TradeLog;
 import com.abc12366.uc.model.order.bo.OrderPayBO;
 import com.abc12366.uc.model.pay.WxPayReturn;
+import com.abc12366.uc.model.pay.WxrefundNotify;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.service.order.TradeLogService;
 import com.abc12366.uc.util.AliPayConfig;
@@ -39,7 +40,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-
 /**
  * 支付接口回调地址
  *
@@ -56,7 +56,7 @@ public class PayReturnController {
 	@Autowired
 	private OrderService orderService;
 	@Autowired
-    private RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 
 	/**
 	 * uc支付宝回调信息签名校验
@@ -76,14 +76,15 @@ public class PayReturnController {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "验证回调信息签名异常:" + e.getMessage()));
 		}
 	}
-	
+
 	/**
 	 * 微信退款回调
+	 * 
 	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/wxrefund")
-	public @ResponseBody String wxrefund(HttpServletRequest request){
+	public @ResponseBody String wxrefund(HttpServletRequest request) {
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(request.getInputStream()));
 			StringBuffer buffer = new StringBuffer();
@@ -91,19 +92,25 @@ public class PayReturnController {
 			while ((text = bufferedReader.readLine()) != null) {
 				buffer.append(text);
 			}
-			LOGGER.info("微信退款回调信息:{}", buffer.toString());			
-			String dstr = Utils.decode(buffer.toString());
-			String key = Utils.md5(SpringCtxHolder.getProperty("abc.mch_key")).toLowerCase();
-			Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
-			SecretKeySpec secretkeyspec = new SecretKeySpec(key.getBytes(), "AES");
-			cipher.init(Cipher.DECRYPT_MODE, secretkeyspec);
-			String result = new String(cipher.doFinal(dstr.getBytes()));
-			LOGGER.info("微信退款回调解密后信息:{}", result);
-			
+			LOGGER.info("微信退款回调信息:{}", buffer.toString());
+			WxrefundNotify wxrefundnotify = JSON.parseObject(MessageUtil.xml2JSON(buffer.toString()),
+					WxrefundNotify.class);
+
+			if ("SUCCESS".equals(wxrefundnotify.getReturn_code())
+					&& StringUtils.isNoneEmpty(wxrefundnotify.getReq_info())) {
+				String dstr = Utils.decode(wxrefundnotify.getReq_info());
+				String key = Utils.md5(SpringCtxHolder.getProperty("abc.mch_key")).toLowerCase();
+				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding");
+				SecretKeySpec secretkeyspec = new SecretKeySpec(key.getBytes(), "AES");
+				cipher.init(Cipher.DECRYPT_MODE, secretkeyspec);
+				String result = new String(cipher.doFinal(dstr.getBytes()));
+				LOGGER.info("微信退款回调解密后信息:{}", result);
+			}
+
 		} catch (Exception e) {
 			LOGGER.error("微信退款回调异常:", e);
 		}
-		return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[WRONG]]></return_msg></xml>";	
+		return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[WRONG]]></return_msg></xml>";
 	}
 
 	/**
@@ -125,66 +132,71 @@ public class PayReturnController {
 			WxPayReturn wxpayreturn = JSON.parseObject(MessageUtil.xml2JSON(buffer.toString()), WxPayReturn.class);
 			if (wxpayreturn != null) {
 				if ("SUCCESS".equals(wxpayreturn.getReturn_code())) {
-					//if ("SUCCESS".equals(wxpayreturn.getResult_code())) {
-						String str = SignUtil.objectSort(wxpayreturn);
-						String sgin = Utils.md5(str + "&key=" + SpringCtxHolder.getProperty("abc.mch_key"))
-								.toUpperCase();
-						LOGGER.info("微信支付回调签名信息:{}", sgin);
-						if (sgin.equals(wxpayreturn.getSign())) {
-							TradeBillBO tradeBillBO = new TradeBillBO();
-							tradeBillBO.setAliTrandeNo(wxpayreturn.getTransaction_id());
-							TradeLog tradeLogUpdate = tradeLogService.selectOne(tradeBillBO);
-							String tradeStatus = "SUCCESS".equals(wxpayreturn.getResult_code())?"1":"4";
-							if(tradeLogUpdate != null){
-								tradeLogUpdate.setTradeStatus(tradeStatus);
-								tradeLogUpdate.setTradeType("1");
-								tradeLogUpdate.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee())/100);
-								tradeLogUpdate.setTradeTime(new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
-								Timestamp now = new Timestamp(new Date().getTime());
-								tradeLogUpdate.setLastUpdate(now);
-								tradeLogUpdate.setPayMethod("WEIXIN");
-								tradeLogService.update(tradeLogUpdate);
-							}else{
-								TradeBillBO data = new TradeBillBO();
-								data.setTradeNo(wxpayreturn.getOut_trade_no());
-								TradeLog log = tradeLogService.selectOne(data);
-								
-								TradeLog tradeLog = new TradeLog();
-								tradeLog.setTradeNo(wxpayreturn.getOut_trade_no());
-								tradeLog.setAliTrandeNo(wxpayreturn.getTransaction_id());
-								tradeLog.setTradeStatus(tradeStatus);
-								tradeLog.setTradeType("1");
-								tradeLog.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee())/100);
-								tradeLog.setTradeTime(new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
-								Timestamp now = new Timestamp(new Date().getTime());
-								tradeLog.setCreateTime(now);
-								tradeLog.setLastUpdate(now);
-								tradeLog.setPayMethod("WEIXIN");
-								
-								if (log != null) {
-									tradeLogService.update(tradeLog);
-									LOGGER.info("微信回调信息:插入支付流水记录成功，开始更新订单状态");
-									OrderPayBO orderPayBO = new OrderPayBO();
-									orderPayBO.setTradeNo(wxpayreturn.getOut_trade_no());
-									orderPayBO.setIsPay(2);
-									orderPayBO.setPayMethod("WEIXIN");
-									orderService.paymentOrder(orderPayBO, "RMB", request);
-									LOGGER.info("更新订单状态:{}", wxpayreturn.getOut_trade_no());
-								}else{
-									tradeLogService.insertTradeLog(tradeLog);
-									LOGGER.info("微信回调信息:插入支付流水记录成功");
-								}
-							}
-							if("SUCCESS".equals(wxpayreturn.getResult_code()) && StringUtils.isNotEmpty(wxpayreturn.getAttach())){
-								new Thread(new CallBack(wxpayreturn.getAttach()+"?jylsh="+wxpayreturn.getOut_trade_no())).start();
-							}
-							return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+					// if ("SUCCESS".equals(wxpayreturn.getResult_code())) {
+					String str = SignUtil.objectSort(wxpayreturn);
+					String sgin = Utils.md5(str + "&key=" + SpringCtxHolder.getProperty("abc.mch_key")).toUpperCase();
+					LOGGER.info("微信支付回调签名信息:{}", sgin);
+					if (sgin.equals(wxpayreturn.getSign())) {
+						TradeBillBO tradeBillBO = new TradeBillBO();
+						tradeBillBO.setAliTrandeNo(wxpayreturn.getTransaction_id());
+						TradeLog tradeLogUpdate = tradeLogService.selectOne(tradeBillBO);
+						String tradeStatus = "SUCCESS".equals(wxpayreturn.getResult_code()) ? "1" : "4";
+						if (tradeLogUpdate != null) {
+							tradeLogUpdate.setTradeStatus(tradeStatus);
+							tradeLogUpdate.setTradeType("1");
+							tradeLogUpdate.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee()) / 100);
+							tradeLogUpdate.setTradeTime(
+									new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
+							Timestamp now = new Timestamp(new Date().getTime());
+							tradeLogUpdate.setLastUpdate(now);
+							tradeLogUpdate.setPayMethod("WEIXIN");
+							tradeLogService.update(tradeLogUpdate);
 						} else {
-							LOGGER.info("微信支付回调交易信息:校验签名失败");
+							TradeBillBO data = new TradeBillBO();
+							data.setTradeNo(wxpayreturn.getOut_trade_no());
+							TradeLog log = tradeLogService.selectOne(data);
+
+							TradeLog tradeLog = new TradeLog();
+							tradeLog.setTradeNo(wxpayreturn.getOut_trade_no());
+							tradeLog.setAliTrandeNo(wxpayreturn.getTransaction_id());
+							tradeLog.setTradeStatus(tradeStatus);
+							tradeLog.setTradeType("1");
+							tradeLog.setAmount(Double.parseDouble(wxpayreturn.getTotal_fee()) / 100);
+							tradeLog.setTradeTime(
+									new SimpleDateFormat("yyyyMMddHHmmss").parse(wxpayreturn.getTime_end()));
+							Timestamp now = new Timestamp(new Date().getTime());
+							tradeLog.setCreateTime(now);
+							tradeLog.setLastUpdate(now);
+							tradeLog.setPayMethod("WEIXIN");
+
+							if (log != null) {
+								tradeLogService.update(tradeLog);
+								LOGGER.info("微信回调信息:插入支付流水记录成功，开始更新订单状态");
+								OrderPayBO orderPayBO = new OrderPayBO();
+								orderPayBO.setTradeNo(wxpayreturn.getOut_trade_no());
+								orderPayBO.setIsPay(2);
+								orderPayBO.setPayMethod("WEIXIN");
+								orderService.paymentOrder(orderPayBO, "RMB", request);
+								LOGGER.info("更新订单状态:{}", wxpayreturn.getOut_trade_no());
+							} else {
+								tradeLogService.insertTradeLog(tradeLog);
+								LOGGER.info("微信回调信息:插入支付流水记录成功");
+							}
 						}
-					//} else {
-					//	LOGGER.info("微信支付回调交易信息:{}", wxpayreturn.getErr_code_des());
-					//}
+						if ("SUCCESS".equals(wxpayreturn.getResult_code())
+								&& StringUtils.isNotEmpty(wxpayreturn.getAttach())) {
+							new Thread(
+									new CallBack(wxpayreturn.getAttach() + "?jylsh=" + wxpayreturn.getOut_trade_no()))
+											.start();
+						}
+						return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+					} else {
+						LOGGER.info("微信支付回调交易信息:校验签名失败");
+					}
+					// } else {
+					// LOGGER.info("微信支付回调交易信息:{}",
+					// wxpayreturn.getErr_code_des());
+					// }
 				} else {
 					LOGGER.info("微信支付回调交易信息:{}", wxpayreturn.getReturn_msg());
 				}
@@ -314,7 +326,7 @@ public class PayReturnController {
 		public void run() {
 			LOGGER.info("开始回调第三方地址:" + url);
 			HttpHeaders httpHeaders = new HttpHeaders();
-	        httpHeaders.add("Version", "1");
+			httpHeaders.add("Version", "1");
 			HttpEntity requestEntity = new HttpEntity(httpHeaders);
 			try {
 				restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
