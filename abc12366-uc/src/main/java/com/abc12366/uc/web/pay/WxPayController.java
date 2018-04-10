@@ -39,6 +39,8 @@ import com.abc12366.uc.model.pay.WxPayOrder;
 import com.abc12366.uc.model.pay.WxRefund;
 import com.abc12366.uc.model.pay.WxRefundRsp;
 import com.abc12366.uc.model.pay.WxpayOrderRsp;
+import com.abc12366.uc.model.pay.Wxrefundquery;
+import com.abc12366.uc.model.pay.WxrefundqueryRsp;
 import com.abc12366.uc.service.pay.IWxPayService;
 import com.abc12366.uc.util.QRCodeUtil;
 import com.abc12366.uc.util.wx.MessageUtil;
@@ -167,6 +169,34 @@ public class WxPayController {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "微信支付退款申请异常!!"));
 		}
 	}
+	
+	/**
+	 * 微信退款查询
+	 * @param refund_id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@GetMapping("/dowxrefundquery")
+	public ResponseEntity doWxRefundQuery(@RequestParam String refund_id){
+		Wxrefundquery wxrefundquery = new Wxrefundquery();
+		wxrefundquery.setRefund_id(refund_id);
+		WxrefundqueryRsp wxrefundqueryrsp = wxPayServiceImpl.doWxRefundQuery(wxrefundquery);
+		if (wxrefundqueryrsp != null) {
+			if ("SUCCESS".equals(wxrefundqueryrsp.getReturn_code())) {
+				if ("SUCCESS".equals(wxrefundqueryrsp.getResult_code())) {
+					return ResponseEntity.ok(Utils.kv("data", wxrefundqueryrsp.getReturn()));
+				} else {
+					return ResponseEntity
+							.ok(Utils.bodyStatus(wxrefundqueryrsp.getResult_code(), wxrefundqueryrsp.getErr_code_des()));
+				}
+			} else {
+				return ResponseEntity.ok(Utils.bodyStatus(wxrefundqueryrsp.getReturn_code(), wxrefundqueryrsp.getReturn_msg()));
+			}
+		} else {
+			return ResponseEntity.ok(Utils.bodyStatus(9999, "微信支付退款查询异常!!"));
+		}
+	}
+	
 	
 	/**
 	 * 微信对账单下载

@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.abc12366.gateway.component.SpringCtxHolder;
-import com.abc12366.gateway.util.Utils;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.uc.model.bo.TradeBillBO;
 import com.abc12366.uc.model.order.TradeLog;
 import com.abc12366.uc.model.pay.WxRefund;
 import com.abc12366.uc.model.pay.WxRefundRsp;
+import com.abc12366.uc.model.pay.Wxrefundquery;
+import com.abc12366.uc.model.pay.WxrefundqueryRsp;
 import com.abc12366.uc.service.order.TradeLogService;
 import com.abc12366.uc.service.pay.IWxPayService;
 import com.abc12366.uc.util.wx.SignUtil;
@@ -71,6 +73,39 @@ public class WxPayServiceImpl implements IWxPayService {
 			}
 		}
 		return wxrefundrsp;
+	}
+
+	@Override
+	public WxrefundqueryRsp doWxRefundQuery(Wxrefundquery wxrefundquery) {
+		wxrefundquery.setAppid(SpringCtxHolder.getProperty("abc.appid"))
+				.setMch_id(SpringCtxHolder.getProperty("abc.mch_id")).setNonce_str(SignUtil.getRandomString(30))
+				.setSign(SignUtil.signKey(wxrefundquery));
+		
+		WxrefundqueryRsp wxrefundqueryrsp = WxMchConnectFactory.post(WechatUrl.WXREFUNDQUERY, null, wxrefundquery, WxrefundqueryRsp.class);
+		if ("SUCCESS".equals(wxrefundqueryrsp.getReturn_code())) {
+			if ("SUCCESS".equals(wxrefundqueryrsp.getResult_code())) {
+				TradeLog tradeLog = new TradeLog();
+				tradeLog.setTradeNo(wxrefundqueryrsp.getOut_refund_no_0());
+				tradeLog.setAliTrandeNo(wxrefundqueryrsp.getRefund_id_0());// 存储微信退款单号
+				String sta = "1";
+				if("REFUNDCLOSE".equals(wxrefundqueryrsp.getRefund_status_0())){
+					sta = "3";
+				}else if("CHANGE".equals(wxrefundqueryrsp.getRefund_status_0())){
+					sta = "4";
+				}else{
+					sta = "0";
+				}
+				tradeLog.setTradeStatus(sta);
+				tradeLog.setTradeType("2");
+				tradeLog.setAmount(Double.parseDouble("-" + wxrefundqueryrsp.getSettlement_refund_fee_0()) / 100);
+				Timestamp now = new Timestamp(new Date().getTime());
+				tradeLog.setTradeTime(DateUtils.strToDate(wxrefundqueryrsp.getRefund_success_time_0(), "yyyy-MM-dd HH:mm:ss"));
+				tradeLog.setLastUpdate(now);
+				tradeLog.setPayMethod("WEIXIN");
+				tradeLogService.update(tradeLog);
+			}
+		}
+		return wxrefundqueryrsp;
 	}
 
 }
