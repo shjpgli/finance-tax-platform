@@ -97,7 +97,7 @@ public class WxPayServiceImpl implements IWxPayService {
 				}
 				tradeLog.setTradeStatus(sta);
 				tradeLog.setTradeType("2");
-				tradeLog.setAmount(Double.parseDouble("-" + wxrefundqueryrsp.getSettlement_refund_fee_0()) / 100);
+				tradeLog.setAmount(Double.parseDouble("-" + wxrefundqueryrsp.getRefund_fee_0()) / 100);
 				Timestamp now = new Timestamp(new Date().getTime());
 				tradeLog.setTradeTime(DateUtils.strToDate(wxrefundqueryrsp.getRefund_success_time_0(), "yyyy-MM-dd HH:mm:ss"));
 				tradeLog.setLastUpdate(now);
