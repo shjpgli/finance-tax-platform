@@ -1,7 +1,5 @@
 package com.abc12366.uc.model.pay;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 微信统一下单返回实体类
@@ -15,14 +13,43 @@ public class WxpayOrderRsp extends WxRspBase {
 	private String prepay_id;
 	private String code_url;
 	private String code_img;
+	private String appid; // 公众账号ID
+	private String nonce_str; // 随机字符串
+	private String sign; // 签名
+	private String sign_type;// 签名类型
 
-	public Map<String, String> getReturn() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("trade_type", trade_type);
-		map.put("prepay_id", prepay_id);
-		map.put("code_url", code_url);
-		map.put("code_img", code_img);
-		return map;
+	
+
+	public String getAppid() {
+		return appid;
+	}
+
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
+
+	public String getNonce_str() {
+		return nonce_str;
+	}
+
+	public void setNonce_str(String nonce_str) {
+		this.nonce_str = nonce_str;
+	}
+
+	public String getSign() {
+		return sign;
+	}
+
+	public void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	public String getSign_type() {
+		return sign_type;
+	}
+
+	public void setSign_type(String sign_type) {
+		this.sign_type = sign_type;
 	}
 
 	public String getTrade_type() {

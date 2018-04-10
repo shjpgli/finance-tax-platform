@@ -14,62 +14,69 @@ public class WxOrderQuery {
 	private String out_trade_no;
 	private String nonce_str;
 	private String sign;
-	private String sign_type;
+	private String sign_type = "MD5";
 
 	public String getAppid() {
 		return appid;
 	}
 
-	public void setAppid(String appid) {
+	public WxOrderQuery setAppid(String appid) {
 		this.appid = appid;
+		return this;
 	}
 
 	public String getMch_id() {
 		return mch_id;
 	}
 
-	public void setMch_id(String mch_id) {
+	public WxOrderQuery setMch_id(String mch_id) {
 		this.mch_id = mch_id;
+		return this;
 	}
 
 	public String getTransaction_id() {
 		return transaction_id;
 	}
 
-	public void setTransaction_id(String transaction_id) {
+	public WxOrderQuery setTransaction_id(String transaction_id) {
 		this.transaction_id = transaction_id;
+		return this;
 	}
 
 	public String getOut_trade_no() {
 		return out_trade_no;
 	}
 
-	public void setOut_trade_no(String out_trade_no) {
+	public WxOrderQuery setOut_trade_no(String out_trade_no) {
 		this.out_trade_no = out_trade_no;
+		return this;
 	}
 
 	public String getNonce_str() {
 		return nonce_str;
 	}
 
-	public void setNonce_str(String nonce_str) {
+	public WxOrderQuery setNonce_str(String nonce_str) {
 		this.nonce_str = nonce_str;
+		return this;
 	}
 
 	public String getSign() {
 		return sign;
 	}
 
-	public void setSign(String sign) {
+	public WxOrderQuery setSign(String sign) {
 		this.sign = sign;
+		return this;
 	}
 
 	public String getSign_type() {
 		return sign_type;
 	}
 
-	public void setSign_type(String sign_type) {
+	public WxOrderQuery setSign_type(String sign_type) {
 		this.sign_type = sign_type;
+		return this;
 	}
 
 }

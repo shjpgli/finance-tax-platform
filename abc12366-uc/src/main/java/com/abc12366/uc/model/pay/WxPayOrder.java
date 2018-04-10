@@ -59,6 +59,7 @@ public class WxPayOrder {
 	// 场景信息 该字段用于上报场景信息，目前支持上报实际门店信息。该字段为JSON对象数据
 	private String scene_info;
 
+
 	public String getAppid() {
 		return appid;
 	}
@@ -256,5 +257,6 @@ public class WxPayOrder {
 		this.scene_info = scene_info;
 		return this;
 	}
+
 
 }
