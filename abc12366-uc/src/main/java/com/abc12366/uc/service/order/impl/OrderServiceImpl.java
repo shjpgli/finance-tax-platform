@@ -1596,7 +1596,7 @@ public class OrderServiceImpl implements OrderService {
 
             } else if ("WEIXIN".equals(orderBO.getPayMethod())) {
                 TradeLog log = new TradeLog();
-                log.setTradeNo(orderBO.getOrderNo());
+                log.setTradeNo(tradeList.get(0).getTradeNo());
                 log.setTradeStatus("1");
                 log.setPayMethod("WEIXIN");
                 TradeLog tradeLog = tradeLogRoMapper.selectTradeLog(log);
@@ -1611,8 +1611,9 @@ public class OrderServiceImpl implements OrderService {
                     //商户退款单号
                     String tradeNo = DateUtils.getJYLSH();
                     wxRefund.setOut_refund_no(tradeNo);
-                    wxRefund.setRefund_fee(String.valueOf(dealPrice*100));
-                    wxRefund.setTotal_fee(String.valueOf(dealPrice*100));
+                    int price = (int)(dealPrice*100);
+                    wxRefund.setRefund_fee(String.valueOf(price));
+                    wxRefund.setTotal_fee(String.valueOf(price));
 
                     User user = optUserAndOrder(orderBO, orderProductBO, vipLogBO);
 
