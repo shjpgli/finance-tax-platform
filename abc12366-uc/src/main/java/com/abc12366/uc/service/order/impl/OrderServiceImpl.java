@@ -1611,8 +1611,8 @@ public class OrderServiceImpl implements OrderService {
                     //商户退款单号
                     String tradeNo = DateUtils.getJYLSH();
                     wxRefund.setOut_refund_no(tradeNo);
-                    wxRefund.setRefund_fee(String.valueOf(dealPrice));
-                    wxRefund.setTotal_fee(String.valueOf(dealPrice));
+                    wxRefund.setRefund_fee(String.valueOf(dealPrice*100));
+                    wxRefund.setTotal_fee(String.valueOf(dealPrice*100));
 
                     User user = optUserAndOrder(orderBO, orderProductBO, vipLogBO);
 
