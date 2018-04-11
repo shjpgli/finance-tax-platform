@@ -15,7 +15,6 @@ import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.wx.MessageUtil;
 import com.abc12366.uc.util.wx.SignUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 
 import org.apache.commons.lang3.StringUtils;
