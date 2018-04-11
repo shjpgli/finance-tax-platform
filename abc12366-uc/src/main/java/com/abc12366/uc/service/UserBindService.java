@@ -213,4 +213,6 @@ public interface UserBindService {
 	List<NsrsbhPasswordLog> restPwdLogList(Map map,int page,int size);
 
 	List<Map<String, String>> findBroup(String userId);
+
+	int updateDzsbgroup(Map<String, String> map);
 }

@@ -210,6 +210,14 @@ public class UserBindController {
 		List<Map<String, String>> list = userBindService.findBroup(userId);
 		return ResponseEntity.ok(Utils.kv("dataList", list));
 	}
+	
+	
+	@SuppressWarnings("rawtypes")
+	@PutMapping(path = "/update/dzsb/group")
+	public ResponseEntity updateDzsbgroup(@RequestBody Map<String,String> map){
+		int num = userBindService.updateDzsbgroup(map);
+		return ResponseEntity.ok(Utils.kv("data", num));
+	}
 
 	/**
 	 * 根据用户ID查询电子税局绑定列表
