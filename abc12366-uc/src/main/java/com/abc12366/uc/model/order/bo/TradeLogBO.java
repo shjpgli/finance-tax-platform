@@ -54,6 +54,11 @@ public class TradeLogBO implements Serializable {
 
     private String orderNo;
 
+    /**
+     * 第三方交易流水号
+     */
+    private String aliTrandeNo;
+
     public Double getAmount() {
         return this.amount;
     }
@@ -140,5 +145,13 @@ public class TradeLogBO implements Serializable {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getAliTrandeNo() {
+        return aliTrandeNo;
+    }
+
+    public void setAliTrandeNo(String aliTrandeNo) {
+        this.aliTrandeNo = aliTrandeNo;
     }
 }

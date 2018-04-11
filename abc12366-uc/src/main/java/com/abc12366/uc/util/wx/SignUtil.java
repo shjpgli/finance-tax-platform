@@ -183,5 +183,22 @@ public class SignUtil {
     private static String create_timestamp() {
         return Long.toString(System.currentTimeMillis() / 1000);
     }
+    
+    /**
+	 * 获取指定位数随机字符串
+	 * 
+	 * @param length
+	 * @return
+	 */
+	public static String getRandomString(int length) {
+		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < length; ++i) {
+			int number = random.nextInt(52);
+			sb.append(str.charAt(number));
+		}
+		return sb.toString();
+	}
 
 }

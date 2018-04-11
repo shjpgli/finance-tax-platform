@@ -67,7 +67,7 @@ public class UserStatisController {
 
         List<UserStatisBO> list = userService.statisUserByMonth(map);
         PageInfo<UserStatisBO> pageInfo = new PageInfo<>(list);
-        LOGGER.info("{}", list);
+//        LOGGER.info("{}", list);
         return (list == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
@@ -81,7 +81,7 @@ public class UserStatisController {
     public ResponseEntity userLiveness(){
         LOGGER.info("查询用户活跃度概况统计");
         UserLivenessSurveyBO userLivenessSurveyBO = userService.userLivenessSurvey();
-        LOGGER.info("查询用户活跃度概况统计结果返回：{}", userLivenessSurveyBO);
+//        LOGGER.info("查询用户活跃度概况统计结果返回：{}", userLivenessSurveyBO);
         return ResponseEntity.ok(Utils.kv("dataList",userLivenessSurveyBO));
     }
 
@@ -96,7 +96,7 @@ public class UserStatisController {
     public ResponseEntity userLivenessDetail(@RequestParam String type,@RequestParam String start,@RequestParam String end){
         LOGGER.info("查询用户活跃度详情统计：{}:{}:{}", type,start,end);
         Object object = userService.userLivenessDetail(type, start, end);
-        LOGGER.info("查询用户活跃度详情统计结果返回：{}", object);
+//        LOGGER.info("查询用户活跃度详情统计结果返回：{}", object);
         return ResponseEntity.ok(Utils.kv("dataList",object));
     }
 
@@ -114,7 +114,7 @@ public class UserStatisController {
         LOGGER.info("查询用户活跃度详情包含的用户信息：{}:{}:{}", timeInterval,page,size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<UserListBO> dataList = userService.userLivenessDetailUinfo(timeInterval, page, size);
-        LOGGER.info("查询用户活跃度详情统计包含的用户信息结果返回：{}", dataList);
+//        LOGGER.info("查询用户活跃度详情统计包含的用户信息结果返回：{}", dataList);
         PageInfo<UserListBO> pageInfo = new PageInfo<>(dataList);
         LOGGER.info("{}", dataList);
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
@@ -132,10 +132,10 @@ public class UserStatisController {
         LOGGER.info("查询用户经验值等级统计：{}", year);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<ExpLevelStatistic> expLevelStatisticList = userService.userExpLevel(year,page,size);
-        LOGGER.info("查询用户经验值等级统计结果返回：{}", expLevelStatisticList);
+//        LOGGER.info("查询用户经验值等级统计结果返回：{}", expLevelStatisticList);
         PageInfo<ExpLevelStatistic> pageInfo = new PageInfo<>(expLevelStatisticList);
-        List<ExperienceLevelBO> experienceLevelBOList = experienceLevelService.selectList(null);
-        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", experienceLevelBOList.size()));
+//        List<ExperienceLevelBO> experienceLevelBOList = experienceLevelService.selectList(null);
+        return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
 
     /**
@@ -165,7 +165,7 @@ public class UserStatisController {
         LOGGER.info("查询会员等级统计新增用户详情：{}：{}", year,vipCode);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<User> userList = userStatisService.userVipIncreaseInfo(year, vipCode);
-        LOGGER.info("查询会员等级统计新增用户详情：{}", userList);
+//        LOGGER.info("查询会员等级统计新增用户详情：{}", userList);
         PageInfo<User> pageInfo = new PageInfo<>(userList);
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
@@ -182,7 +182,7 @@ public class UserStatisController {
         LOGGER.info("查询会员等级统计该等级全部用户详情：{}", vipCode);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<User> userList = userStatisService.userVipAllInfo(vipCode);
-        LOGGER.info("查询会员等级统计该等级全部用户详情：{}", userList);
+//        LOGGER.info("查询会员等级统计该等级全部用户详情：{}", userList);
         PageInfo<User> pageInfo = new PageInfo<>(userList);
         return ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
     }
@@ -230,7 +230,7 @@ public class UserStatisController {
         }
         List<UserRetainedRateListBO> list = userService.statisUserRetainedRate(map);
         PageInfo<UserRetainedRateListBO> pageInfo = new PageInfo<>(list);
-        LOGGER.info("{}", list);
+//        LOGGER.info("{}", list);
         return (list == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
@@ -278,7 +278,7 @@ public class UserStatisController {
         }
         List<UserExprotInfoBO> data = userService.statisUserConsumeLevel(map);
         PageInfo<UserExprotInfoBO> pageInfo = new PageInfo<>(data);
-        LOGGER.info("list{}", data);
+//        LOGGER.info("list{}", data);
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
@@ -304,7 +304,7 @@ public class UserStatisController {
         map.put("tradeMethod", tradeMethod);
         map.put("orderStatus", "6");
         UserRFMBO data = userService.statisUserRFM(map);
-        LOGGER.info("{}", data);
+//        LOGGER.info("{}", data);
         return ResponseEntity.ok(Utils.kv("data",data));
     }
 
@@ -346,7 +346,7 @@ public class UserStatisController {
         LOGGER.info("查询用户标签统计用户详情：{}：{}：{}：{}:{}:{}", type, start, end, tagName,page,size);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<User> tagUserStaticBOList = userStatisService.userTagUinfo(type, start, end, tagName);
-        LOGGER.info("查询用户标签统计用户详情返回：{}", tagUserStaticBOList);
+//        LOGGER.info("查询用户标签统计用户详情返回：{}", tagUserStaticBOList);
         return ResponseEntity.ok(Utils.kv("dataList", (Page) tagUserStaticBOList, "total", ((Page) tagUserStaticBOList).getTotal()));
     }
 
@@ -367,7 +367,7 @@ public class UserStatisController {
                                  ){
         LOGGER.info("用户区域统计：{}：{}：{}:{}:{}", type, start, end, province,tagName);
         List<RigionStatisBO> rigionStatisBOList = userStatisService.region(type, start, end, province,tagName);
-        LOGGER.info("用户区域统计返回：{}", rigionStatisBOList);
+//        LOGGER.info("用户区域统计返回：{}", rigionStatisBOList);
         return ResponseEntity.ok(Utils.kv("dataList",rigionStatisBOList));
     }
 
@@ -389,7 +389,7 @@ public class UserStatisController {
         LOGGER.info("用户区域统计查询用户详情：{}：{}：{}:{}", type, tagName,timeInterval, province);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<User> userList = userStatisService.regionUinfo(type, timeInterval, province,tagName);
-        LOGGER.info("用户区域统计查询用户详情返回：{}", userList);
+//        LOGGER.info("用户区域统计查询用户详情返回：{}", userList);
         return (userList == null) ?
                 ResponseEntity.ok(Utils.kv()) :
                 ResponseEntity.ok(Utils.kv("dataList", (Page) userList, "total", ((Page) userList).getTotal()));
@@ -413,7 +413,7 @@ public class UserStatisController {
         }
         List<UserAgeBO> data = userService.statisUserAge(map);
         PageInfo<UserAgeBO> pageInfo = new PageInfo<>(data);
-        LOGGER.info("list{}", data);
+//        LOGGER.info("list{}", data);
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
@@ -468,7 +468,7 @@ public class UserStatisController {
         }
         List<UserSexBO> data = userService.statisUserSex(map);
         PageInfo<UserSexBO> pageInfo = new PageInfo<>(data);
-        LOGGER.info("list{}", data);
+//        LOGGER.info("list{}", data);
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
@@ -497,7 +497,7 @@ public class UserStatisController {
         map.put("sex",sex);
         List<UserBO> data = userService.statisUserSexList(map);
         PageInfo<UserBO> pageInfo = new PageInfo<>(data);
-        LOGGER.info("list{}", data);
+//        LOGGER.info("list{}", data);
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));
@@ -520,7 +520,7 @@ public class UserStatisController {
             map.put("endTime", DateUtils.strToDate(endTime));
         }
         UserBindBO data = userService.statisUserBind(map);
-        LOGGER.info("list{}", data);
+//        LOGGER.info("list{}", data);
         return ResponseEntity.ok(Utils.kv("data",data));
     }
 
@@ -549,7 +549,7 @@ public class UserStatisController {
         map.put("endNum", endNum);
         List<UserBO> data = userService.statisUserBindList(map);
         PageInfo<UserBO> pageInfo = new PageInfo<>(data);
-        LOGGER.info("list{}", data);
+//        LOGGER.info("list{}", data);
         return (data == null) ?
                 new ResponseEntity<>(Utils.bodyStatus(4104), HttpStatus.BAD_REQUEST) :
                 ResponseEntity.ok(Utils.kv("dataList", pageInfo.getList(), "total", pageInfo.getTotal()));

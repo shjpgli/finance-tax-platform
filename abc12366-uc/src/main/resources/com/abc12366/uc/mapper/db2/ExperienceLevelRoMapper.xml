@@ -28,4 +28,13 @@
         from uc_uexp_level
         where #{exp} BETWEEN uc_uexp_level.minValue AND uc_uexp_level.maxValue
     </select>
+
+    <select id="selectLevelList" resultType="com.abc12366.uc.model.bo.ExpLevelStatistic" parameterType="java.util.Map">
+        SELECT b.name as levelCode,b.medal as levelName,b.maxValue,b.minValue,
+        IFNULL(d.tt,0) as `all` from uc_uexp_level b
+        LEFT JOIN (select uu.name,count(uu.tt) tt from (SELECT ul.name,u.id tt
+        FROM uc_user u LEFT JOIN uc_uexp_level ul on u.exp &gt; ul.minValue and u.exp &lt;= ul.maxValue
+        WHERE ul.name is not null) uu group by uu.name) d on b.name = d.name
+        order by b.minValue
+    </select>
 </mapper>
