@@ -27,6 +27,10 @@ public class GiftSendBO implements Serializable {
 	@Size(min = 2, max = 100)
 	private String expressComp;
 
+	/**备注*/
+	@Size( max = 60)
+	private String remark;
+
 	public String getApplyId() {
 		return applyId;
 	}
@@ -49,5 +53,13 @@ public class GiftSendBO implements Serializable {
 
 	public void setExpressComp(String expressComp) {
 		this.expressComp = expressComp;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

@@ -533,7 +533,7 @@ public class UserServiceImpl implements UserService {
 			bo.setLevelId(user.getVipLevel());
 			bo.setSource("系统管理员");
 			bo.setUserId(user.getId());
-			vipLogService.insert(bo);
+			vipLogService.insert(bo,2);
 
 		}
 	}

@@ -49,7 +49,7 @@ public class VipLogServiceImpl implements VipLogService {
     }
 
     @Override
-    public VipLogBO insert(VipLogBO vipLogBO) {
+    public VipLogBO insert(VipLogBO vipLogBO,int type) {
         if (vipLogBO == null) {
             LOGGER.warn("新增失败，参数：" + null);
             throw new ServiceException(4101);
@@ -66,16 +66,20 @@ public class VipLogServiceImpl implements VipLogService {
             // 普通用户到期时间为创建时间加10年
             calendar.add(Calendar.YEAR, 10);
         } else {
-            // 会员到期时间为创建时间加一年,加入是会员未到期再购买则在原有到期时间基础上再延长一年
-            if (!StringUtils.isEmpty(vipLogBO.getUserId()) && !StringUtils.isEmpty(vipLogBO.getLevelId())) {
-                User user = userMapper.selectOne(vipLogBO.getUserId());
-                if (user != null && user.getVipExpireDate() != null && !StringUtils.isEmpty(user.getVipLevel())
-                        && vipLogBO.getLevelId().equals(user.getVipLevel())) {
-                    calendar.setTime(user.getVipExpireDate());
+            //1：会员充值，2：会员退订
+            if(type == 1){
+                // 会员到期时间为创建时间加一年,加入是会员未到期再购买则在原有到期时间基础上再延长一年
+                if (!StringUtils.isEmpty(vipLogBO.getUserId()) && !StringUtils.isEmpty(vipLogBO.getLevelId())) {
+                    User user = userMapper.selectOne(vipLogBO.getUserId());
+                    if (user != null && user.getVipExpireDate() != null && !StringUtils.isEmpty(user.getVipLevel())
+                            && vipLogBO.getLevelId().equals(user.getVipLevel())) {
+                        calendar.setTime(user.getVipExpireDate());
+                    }
+                    calendar.add(Calendar.YEAR, 1);
                 }
-            }else{
-            	calendar.add(Calendar.YEAR, 1);
-            } 
+            }else if(type == 2){
+                calendar.setTime(vipLog.getVipExpireDate());
+            }
         }
         vipLog.setVipExpireDate(calendar.getTime());
         int result = vipLogMapper.insert(vipLog);

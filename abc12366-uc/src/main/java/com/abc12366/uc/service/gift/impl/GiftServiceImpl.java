@@ -316,7 +316,7 @@ public class GiftServiceImpl implements GiftService {
 
         // 加入礼包申请日志
         com.abc12366.gateway.model.User admin = Utils.getAdminInfo();
-        insertUgiftLog(ugiftApplyBO.getApplyId(), admin.getId(), admin.getNickname(), "申请单开始发货", "3");
+        insertUgiftLog(ugiftApplyBO.getApplyId(), admin.getId(), admin.getNickname(), giftSendBO.getRemark(), "3");
     }
 
     @Override
