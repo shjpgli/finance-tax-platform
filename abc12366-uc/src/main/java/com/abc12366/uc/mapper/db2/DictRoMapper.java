@@ -28,4 +28,8 @@ public interface DictRoMapper {
     List<Dict> selectListByDictName(Dict dict);
 
     Dict selectDict(DictBO dictBO);
+
+    DictBO selectByFieldValue(String id);
+
+    List<DictBO> selectByParentDictId(String id);
 }

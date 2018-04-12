@@ -496,9 +496,9 @@ public class UserBindServiceImpl implements UserBindService {
         queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
         List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
         if(nsrxxboList2.size()==1){
-            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
         } else if(nsrxxboList2.size()>1){
-            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+            updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
             nsrxxboList2.remove(nsrxxboList2.get(0));
             for(UserDzsb ud : nsrxxboList2){
                 userBindMapper.deleteDzsb(ud.getId());
@@ -1010,9 +1010,9 @@ public class UserBindServiceImpl implements UserBindService {
         if(nsrxxboList2==null||nsrxxboList2.size()<1){
             return null;
         }else if(nsrxxboList2.size()==1){
-            userDzsbRetu = updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+            userDzsbRetu = updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
         } else if(nsrxxboList2.size()>1){
-            userDzsbRetu = updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object);
+            userDzsbRetu = updateDzsb(nsrxxboList2.get(0).getId(),userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
             nsrxxboList2.remove(nsrxxboList2.get(0));
             for(UserDzsb ud : nsrxxboList2){
                 userBindMapper.deleteDzsb(ud.getId());
@@ -1024,7 +1024,7 @@ public class UserBindServiceImpl implements UserBindService {
     }
 
     @Override
-    public UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object) {
+    public UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object,String bdgroup) {
         redisTemplate.delete(userId + "_DzsbList");
 
         if (StringUtils.isEmpty(userId) || ty21Object == null || StringUtils.isEmpty(ty21Object.getY_NSRSBH()) ||
@@ -1038,6 +1038,7 @@ public class UserBindServiceImpl implements UserBindService {
         userDzsb.setStatus(true);
         userDzsb.setLastUpdate(date);
         userDzsb.setUserId(userId);
+        userDzsb.setBdgroup(bdgroup);
         userDzsb.setDjxh(ty21Object.getDJXH());
         userDzsb.setNsrsbh(ty21Object.getY_NSRSBH());
         userDzsb.setNsrmc(ty21Object.getNSRMC());
