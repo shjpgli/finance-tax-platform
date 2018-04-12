@@ -1089,4 +1089,9 @@ public class UserBindServiceImpl implements UserBindService {
 	public List<Map<String, String>> findBroup(String userId) {
 		return userBindMapper.findBroup(userId);
 	}
+
+	@Override
+	public int updateDzsbgroup(Map<String, String> map) {
+		return userBindMapper.updateDzsbgroup(map);
+	}
 }

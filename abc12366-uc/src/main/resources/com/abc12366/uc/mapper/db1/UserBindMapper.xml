@@ -292,4 +292,10 @@
            ORDER BY bdgroup
     </select>
     
+    <update id="updateDzsbgroup" parameterType="java.util.Map">
+        update uc_user_dzsb
+        SET bdgroup = #{bdgroup}
+        where id=#{id}
+    </update>
+    
 </mapper>

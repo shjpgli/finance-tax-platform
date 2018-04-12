@@ -92,4 +92,6 @@ public interface UserBindMapper {
 	List<Map<String, String>> dzsbRegisterStatInfo(String date);
 
 	List<Map<String, String>> findBroup(String userId);
+
+	int updateDzsbgroup(Map<String, String> map);
 }

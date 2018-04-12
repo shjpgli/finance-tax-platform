@@ -549,8 +549,10 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                 //商户退款单号
                                 String tradeNo = DateUtils.getJYLSH();
                                 wxRefund.setOut_refund_no(tradeNo);
-                                wxRefund.setRefund_fee(String.valueOf(data.getAmount()));
-                                wxRefund.setTotal_fee(String.valueOf(order.getTotalPrice()));
+                                int amount = (int)(data.getAmount()*100);
+                                int price = (int)(order.getTotalPrice()*100);
+                                wxRefund.setRefund_fee(String.valueOf(amount));
+                                wxRefund.setTotal_fee(String.valueOf(price));
 
                                 //扣除订单获得的积分
                                 if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
