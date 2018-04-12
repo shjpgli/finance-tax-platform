@@ -951,7 +951,7 @@ public class OrderServiceImpl implements OrderService {
         vipLogBO.setLevelId(memberLevel);
         vipLogBO.setSource(orderNo);
         vipLogBO.setUserId(userId);
-        vipLogService.insert(vipLogBO);
+        vipLogService.insert(vipLogBO,1);
     }
 
     /**
@@ -1575,7 +1575,7 @@ public class OrderServiceImpl implements OrderService {
 
                             LOGGER.info("支付宝退款成功,插入退款流水记录");
                             String tradeNo = DateUtils.getJYLSH();
-                            insertTrade(orderBO, tradeNo,refundRes.getTrade_no(),refundRes.getRefund_fee(),new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
+                            insertTrade(orderBO, tradeNo,refundRes.getTrade_no(),refundRes.getRefund_fee(),new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()),"ALIPAY");
 
                             sendReturnMessage(orderBO, httpServletRequest, refundRes.getRefund_fee(), user);
                         } else {
@@ -1627,7 +1627,7 @@ public class OrderServiceImpl implements OrderService {
                     if ("SUCCESS".equals(wxrefundrsp.getReturn_code())) {
                         if ("SUCCESS".equals(wxrefundrsp.getResult_code())) {
                             LOGGER.info("微信退款成功,插入退款流水记录");
-                            insertTrade(orderBO, tradeNo,wxrefundrsp.getRefund_id(),wxrefundrsp.getRefund_fee(),new Date());
+                            insertTrade(orderBO, tradeNo,wxrefundrsp.getRefund_id(),wxrefundrsp.getRefund_fee(),new Date(),"WEIXIN");
 
                             sendReturnMessage(orderBO, httpServletRequest, wxrefundrsp.getRefund_fee(), user);
                         }else{
@@ -1706,7 +1706,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @throws ParseException
      */
-    public void insertTrade(OrderBO orderBO,String tradeNo, String aliTrandeNo,String refundFee,Date gmtRefundPay){
+    public void insertTrade(OrderBO orderBO,String tradeNo, String aliTrandeNo,String refundFee,Date gmtRefundPay,String payMethod){
         Trade trade = new Trade();
         trade.setOrderNo(orderBO.getOrderNo());
         trade.setTradeNo(tradeNo);
@@ -1724,7 +1724,7 @@ public class OrderServiceImpl implements OrderService {
         tradeLog.setTradeTime(gmtRefundPay);
         tradeLog.setCreateTime(date);
         tradeLog.setLastUpdate(date);
-        tradeLog.setPayMethod("ALIPAY");
+        tradeLog.setPayMethod(payMethod);
         tradeLogMapper.insertTradeLog(tradeLog);
     }
 
@@ -1793,7 +1793,7 @@ public class OrderServiceImpl implements OrderService {
         }
         //更新会员日志
         vipLogBO.setSource("会员退订");
-        vipLogService.insert(vipLogBO);
+        vipLogService.insert(vipLogBO,2);
         //修改用户信息
         user.setVipLevel(vipLogBO.getLevelId());
         user.setVipExpireDate(vipLogBO.getVipExpireDate());
