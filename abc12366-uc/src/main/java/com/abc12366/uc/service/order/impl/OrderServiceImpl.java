@@ -1627,9 +1627,9 @@ public class OrderServiceImpl implements OrderService {
                     if ("SUCCESS".equals(wxrefundrsp.getReturn_code())) {
                         if ("SUCCESS".equals(wxrefundrsp.getResult_code())) {
                             LOGGER.info("微信退款成功,插入退款流水记录");
-                            insertTrade(orderBO, tradeNo,wxrefundrsp.getRefund_id(),wxrefundrsp.getRefund_fee(),new Date(),"WEIXIN");
+                            insertTrade(orderBO, tradeNo,wxrefundrsp.getRefund_id(),String.valueOf(Double.parseDouble(wxrefundrsp.getTotal_fee()) / 100),new Date(),"WEIXIN");
 
-                            sendReturnMessage(orderBO, httpServletRequest, wxrefundrsp.getRefund_fee(), user);
+                            sendReturnMessage(orderBO, httpServletRequest, String.valueOf(Double.parseDouble(wxrefundrsp.getTotal_fee()) / 100), user);
                         }else{
                             LOGGER.error("微信退款失败：", wxrefundrsp.getErr_code_des());
                             throw new ServiceException(9999, wxrefundrsp.getReturn_msg());
