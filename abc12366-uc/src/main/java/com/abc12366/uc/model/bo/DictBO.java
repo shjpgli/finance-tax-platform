@@ -4,7 +4,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author liuguiyao
@@ -28,6 +30,8 @@ public class DictBO implements Serializable {
     private Date lastUpdate;
     private String lastUser;
     private Integer sort;
+
+    private List<DictBO> nodes = new ArrayList<>();
 
     public DictBO() {
     }
@@ -149,5 +153,13 @@ public class DictBO implements Serializable {
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public List<DictBO> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(List<DictBO> nodes) {
+        this.nodes = nodes;
     }
 }
