@@ -214,8 +214,14 @@ public class UserBindController {
 	
 	@SuppressWarnings("rawtypes")
 	@PutMapping(path = "/update/dzsb/group")
-	public ResponseEntity updateDzsbgroup(@RequestBody Map<String,String> map){
+	public ResponseEntity updateDzsbgroup(@RequestBody Map<String,String> map,HttpServletRequest request){
+		
 		int num = userBindService.updateDzsbgroup(map);
+		//跟新分组删除缓存
+		String userId = Utils.getUserId(request);
+		if(StringUtils.isNotEmpty(userId)){
+			redisTemplate.delete(userId + "_DzsbList");
+		}
 		return ResponseEntity.ok(Utils.kv("data", num));
 	}
 
