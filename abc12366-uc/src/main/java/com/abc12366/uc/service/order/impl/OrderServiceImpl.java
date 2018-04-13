@@ -644,7 +644,10 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(userId, orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
-
+                        if (!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())) {
+                            LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}", orderBO.getOrderStatus());
+                            throw new ServiceException(4925);
+                        }
                         //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
                         //判断是否需要查询产品库存信息
                         if ("UCSC".equals(trading)) {
