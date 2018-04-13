@@ -45,4 +45,13 @@ public class GiftCheckBO implements Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+	@Override
+	public String toString() {
+		return "GiftCheckBO{" +
+				"applyId='" + applyId + '\'' +
+				", status=" + status +
+				", remark='" + remark + '\'' +
+				'}';
+	}
 }

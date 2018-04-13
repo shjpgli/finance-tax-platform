@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.KeyStore;
 import java.util.Date;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletResponse;
@@ -69,10 +70,11 @@ public class WxPayController {
 	 * 
 	 * @param wxpayorder
 	 * @return
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("rawtypes")
 	@PostMapping("/payorder")
-	public ResponseEntity wxPayOrder(@Valid @RequestBody WxPayOrder wxpayorder) {
+	public ResponseEntity wxPayOrder(@Valid @RequestBody WxPayOrder wxpayorder) throws Exception {
 		LOGGER.info("微信支付统一下单，收到信息:{}", JSONObject.toJSONString(wxpayorder));
 		Date date = new Date();
 		wxpayorder.setAppid(SpringCtxHolder.getProperty("abc.appid"))
@@ -99,7 +101,22 @@ public class WxPayController {
 				return ResponseEntity
 						.ok(Utils.bodyStatus(wxpayorderrsp.getReturn_code(), wxpayorderrsp.getReturn_msg()));
 			}
-			return ResponseEntity.ok(Utils.kv("data", wxpayorderrsp.getReturn()));
+			Map<String, Object> returnMap = wxpayorderrsp.getReturn();
+			if("MWEB".equalsIgnoreCase(returnMap.get("trade_type").toString())){
+				long timeStamp = System.currentTimeMillis();
+				String nonce_str = SignUtil.getRandomString(30);
+				StringBuffer buffer = new StringBuffer("appId=");
+				buffer.append(SpringCtxHolder.getProperty("abc.appid"))
+				.append("&nonceStr=").append(nonce_str)
+				.append("&package=prepay_id=").append(returnMap.get("prepay_id").toString())
+				.append("&signType=MD5").append("&timeStamp=").append(timeStamp);
+				returnMap.put("nonce_str", nonce_str);
+				returnMap.put("paySign", Utils.md5(buffer.toString() + "&key=" + SpringCtxHolder.getProperty("abc.mch_key")).toUpperCase());
+				returnMap.put("timeStamp", timeStamp);
+				return ResponseEntity.ok(Utils.kv("data", returnMap));
+			}else{
+				return ResponseEntity.ok(Utils.kv("data", returnMap));
+			}
 		} else {
 			return ResponseEntity.ok(Utils.bodyStatus(9999, "微信支付下单异常!!"));
 		}

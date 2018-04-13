@@ -623,7 +623,8 @@ public class AuthServiceImpl implements AuthService {
             LOGGER.info("发消息:{}", userId);
             userFeedbackMsgService.unrealname(userId);
             userFeedbackMsgService.check(userId);
-            userFeedbackMsgService.undotask(userId);
+            //暂时屏蔽未做任务消息提醒
+            //userFeedbackMsgService.undotask(userId);
             LOGGER.info("发送运营消息:{}", userId);
             operateMessageService.send(userId);
         } catch (Exception e) {
