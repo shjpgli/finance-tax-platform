@@ -134,6 +134,11 @@ public class TokenServiceImpl implements TokenService {
                 request.setAttribute(Constant.USER_ID, userId);
                 // 续期token
                 userTokenMapper.updateLastTokenResetTime(userToken);
+                // 设置用户信息·
+                UCUserBO user = userTokenMapper.selectOneByToken(userToken);
+                request.setAttribute(Constant.USER_INFO, user);
+                valueOperations.set(userToken, JSON.toJSONString(user), Constant.USER_TOKEN_VALID_SECONDS / 2,
+				TimeUnit.SECONDS);
             }
         }
         LOGGER.info("校验uc的token状态为: {}", isAuth);

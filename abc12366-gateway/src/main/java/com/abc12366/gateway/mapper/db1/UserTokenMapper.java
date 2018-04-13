@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 
+import com.abc12366.gateway.model.bo.UCUserBO;
+
 /**
  * 用户token mapper
  *
@@ -29,4 +31,9 @@ public interface UserTokenMapper {
      * @return 影响行数
      */
     int updateLastTokenResetTime(String token);
+
+    /**
+     * 根据用户token查询用户信息
+     */
+    UCUserBO selectOneByToken(String token);
 }
