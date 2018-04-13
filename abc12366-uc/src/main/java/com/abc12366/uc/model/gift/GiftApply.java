@@ -77,4 +77,16 @@ public class GiftApply implements Serializable {
     public void setGiftNum(int giftNum) {
         this.giftNum = giftNum;
     }
+
+	@Override
+	public String toString() {
+		return "GiftApply{" +
+				"id='" + id + '\'' +
+				", applyId='" + applyId + '\'' +
+				", giftId='" + giftId + '\'' +
+				", giftName='" + giftName + '\'' +
+				", giftAmount=" + giftAmount +
+				", giftNum=" + giftNum +
+				'}';
+	}
 }

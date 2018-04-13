@@ -9,6 +9,7 @@ import com.abc12366.bangbang.model.KnowledgeRel;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseListBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.exception.ServiceException;
@@ -84,12 +85,13 @@ public class KnowledgeBaseServiceImpl implements KnowledgeBaseService {
     }
 
     @Override
-    public List<KnowledgeBase> selectList(KnowledgeBaseParamBO param) {
-        List<KnowledgeBase> list = knowledgeBaseRoMapper.selectList(param);
+    public List<KnowledgeBaseListBO> selectList(KnowledgeBaseParamBO param) {
+        List<KnowledgeBaseListBO> list = knowledgeBaseRoMapper.selectList(param);
         if(!list.isEmpty()){
             Date now = new Date();
             List<String> ids = new ArrayList<>();
-            for (KnowledgeBase know: list){
+            for (KnowledgeBaseListBO know: list){
+
                 if(Boolean.TRUE == know.getStatus()){
                     if(know.getActiveTime() != null && know.getActiveTime().before(now)){
                         know.setStatus(Boolean.FALSE);//修改知识状态

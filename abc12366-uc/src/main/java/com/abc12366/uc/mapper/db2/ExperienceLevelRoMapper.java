@@ -1,5 +1,6 @@
 package com.abc12366.uc.mapper.db2;
 
+import com.abc12366.uc.model.bo.ExpLevelStatistic;
 import com.abc12366.uc.model.bo.ExperienceLevelBO;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ExperienceLevelRoMapper {
      * @return 经验值对象信息
      */
     ExperienceLevelBO selectOneByExp(int exp);
+
+    List<ExpLevelStatistic> selectLevelList(Map<String, Object> map);
 }

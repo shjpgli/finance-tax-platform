@@ -58,7 +58,7 @@
             <if test="min != null"> AND u.usableExp &gt;= #{min} </if>
             <if test="end != null"> AND u.usableExp &lt;= #{max} </if>
         </where>
-        GROUP BY userId
+        GROUP BY userId ORDER BY null
         ) a
     </select>
 </mapper>

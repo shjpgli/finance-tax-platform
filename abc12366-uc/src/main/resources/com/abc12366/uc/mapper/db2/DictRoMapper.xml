@@ -89,4 +89,20 @@
         </where>
         ORDER BY dictName ASC,sort ASC
     </select>
+
+    <select id="selectByParentDictId" resultType="com.abc12366.uc.model.bo.DictBO" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from uc_dict
+        where dictId = #{dictId}
+    </select>
+
+    <select id="selectByFieldValue" resultType="com.abc12366.uc.model.bo.DictBO" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from uc_dict
+        where fieldValue = #{fieldValue}
+    </select>
+
+
 </mapper>

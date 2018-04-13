@@ -16,12 +16,17 @@ import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.model.order.*;
 import com.abc12366.uc.model.order.bo.*;
 import com.abc12366.uc.model.pay.RefundRes;
+import com.abc12366.uc.model.pay.WxRefund;
+import com.abc12366.uc.model.pay.WxRefundRsp;
 import com.abc12366.uc.model.pay.bo.AliRefund;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.order.CouponService;
 import com.abc12366.uc.service.order.OrderService;
 import com.abc12366.uc.util.AliPayConfig;
 import com.abc12366.uc.util.CharUtil;
+import com.abc12366.uc.util.wx.SignUtil;
+import com.abc12366.uc.util.wx.WechatUrl;
+import com.abc12366.uc.util.wx.WxMchConnectFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayClient;
@@ -33,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -638,7 +644,10 @@ public class OrderServiceImpl implements OrderService {
                             insertOrderLog(userId, orderNo, "2", "等待用户付款", "0");
                         }
                     } else if ("POINTS".equals(type)) {
-
+                        if (!"2".equals(orderBO.getOrderStatus()) && !"3".equals(orderBO.getOrderStatus())) {
+                            LOGGER.warn("订单只有在待支付或支付中才能进行正常支付：{}", orderBO.getOrderStatus());
+                            throw new ServiceException(4925);
+                        }
                         //UC商城:UCSC，财税课堂:CSKT，积分充值:JFCZ，会员充值:HYCZ
                         //判断是否需要查询产品库存信息
                         if ("UCSC".equals(trading)) {
@@ -945,7 +954,7 @@ public class OrderServiceImpl implements OrderService {
         vipLogBO.setLevelId(memberLevel);
         vipLogBO.setSource(orderNo);
         vipLogBO.setUserId(userId);
-        vipLogService.insert(vipLogBO);
+        vipLogService.insert(vipLogBO,1);
     }
 
     /**
@@ -1523,17 +1532,17 @@ public class OrderServiceImpl implements OrderService {
         double dealPrice = orderBO.getTotalPrice();
         //判断是RMB、积分
         if ("RMB".equals(orderBO.getTradeMethod())) {
+            // 查询交易日志中支付成功的订单
+            List<Trade> tradeList = tradeRoMapper.selectList(orderBO.getOrderNo());
+            if (tradeList == null || tradeList.size() == 0) {
+                LOGGER.info("交易记录无法找到：{}", tradeList);
+                throw new ServiceException(4102, "交易记录无法找到");
+            }
+            if (tradeList.size() > 1) {
+                LOGGER.info("无法重复提交退单：{}", tradeList);
+                throw new ServiceException(4102, "无法重复提交退单");
+            }
             if ("ALIPAY".equals(orderBO.getPayMethod())) {
-                // 查询交易日志中支付成功的订单
-                List<Trade> tradeList = tradeRoMapper.selectList(orderBO.getOrderNo());
-                if (tradeList == null || tradeList.size() == 0) {
-                    LOGGER.info("交易记录无法找到：{}", tradeList);
-                    throw new ServiceException(4102, "交易记录无法找到");
-                }
-                if (tradeList.size() > 1) {
-                    LOGGER.info("无法重复提交退单：{}", tradeList);
-                    throw new ServiceException(4102, "无法重复提交退单");
-                }
                 TradeLog log = new TradeLog();
                 log.setTradeNo(tradeList.get(0).getTradeNo());
                 log.setTradeType("1");
@@ -1555,29 +1564,7 @@ public class OrderServiceImpl implements OrderService {
 
                     try {
                         //扣除订单获得的积分
-                        if (orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0) {
-                            LOGGER.info("扣除订单获得的积分");
-                            Order order = new Order();
-                            BeanUtils.copyProperties(orderBO, order);
-                            insertReturnPoints(order, 0d, order.getGiftPoints());
-                        }
-
-                        // 插入订单日志-已完成
-                        String remark;
-                        if (vipLogBO.getSource() != null) {
-                            remark = "已完成退款。回退到该订单：" + vipLogBO.getSource();
-                        } else {
-                            remark = "已完成退款。";
-                        }
-                        insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
-
-                        //将订单状态改成已退单
-                        orderBO.setOrderStatus("9");
-                        Order order = new Order();
-                        BeanUtils.copyProperties(orderBO, order);
-                        orderMapper.update(order);
-                        User user = userMapper.selectOne(orderBO.getUserId());
-                        updateVipInfo(vipLogBO, user, orderBO.getOrderNo(), orderProductBO.getSpecInfo());
+                        User user = optUserAndOrder(orderBO, orderProductBO, vipLogBO);
 
                         AlipayClient alipayClient = AliPayConfig.getInstance();
                         AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
@@ -1590,9 +1577,10 @@ public class OrderServiceImpl implements OrderService {
                             RefundRes refundRes = JSON.parseObject(object.getString("alipay_trade_refund_response"), RefundRes.class);
 
                             LOGGER.info("支付宝退款成功,插入退款流水记录");
-                            insertTrade(orderBO, refundRes);
+                            String tradeNo = DateUtils.getJYLSH();
+                            insertTrade(orderBO, tradeNo,refundRes.getTrade_no(),refundRes.getRefund_fee(),new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()),"ALIPAY");
 
-                            sendReturnMessage(orderBO, httpServletRequest, refundRes, user);
+                            sendReturnMessage(orderBO, httpServletRequest, refundRes.getRefund_fee(), user);
                         } else {
                             LOGGER.error("支付宝退款失败：");
                             throw new ServiceException(9999, response.getSubMsg());
@@ -1609,7 +1597,54 @@ public class OrderServiceImpl implements OrderService {
                     throw new ServiceException(7146);
                 }
 
-            } else {
+            } else if ("WEIXIN".equals(orderBO.getPayMethod())) {
+                TradeLog log = new TradeLog();
+                log.setTradeNo(tradeList.get(0).getTradeNo());
+                log.setTradeStatus("1");
+                log.setPayMethod("WEIXIN");
+                TradeLog tradeLog = tradeLogRoMapper.selectTradeLog(log);
+                if (tradeLog == null) {
+                    LOGGER.info("交易记录无法找到：{}", tradeList);
+                    throw new ServiceException(4102, "交易流水记录无法找到");
+                }
+                if (tradeLog.getAmount() >= dealPrice) {
+                    WxRefund wxRefund = new WxRefund();
+                    wxRefund.setTransaction_id(tradeLog.getAliTrandeNo());
+                    wxRefund.setOut_trade_no(tradeLog.getTradeNo());
+                    //商户退款单号
+                    String tradeNo = DateUtils.getJYLSH();
+                    wxRefund.setOut_refund_no(tradeNo);
+                    int price = (int)(dealPrice*100);
+                    wxRefund.setRefund_fee(String.valueOf(price));
+                    wxRefund.setTotal_fee(String.valueOf(price));
+                    wxRefund.setNotify_url(SpringCtxHolder.getProperty("abc.mch_refund"));
+
+                    User user = optUserAndOrder(orderBO, orderProductBO, vipLogBO);
+
+
+                    //微信退款
+                    wxRefund.setAppid(SpringCtxHolder.getProperty("abc.appid")).setMch_id(SpringCtxHolder.getProperty("abc.mch_id"))
+                            .setNonce_str(SignUtil.getRandomString(30)).setSign(SignUtil.signKey(wxRefund));
+
+                    WxRefundRsp wxrefundrsp = WxMchConnectFactory.post(WechatUrl.WXREFUND, null, wxRefund, WxRefundRsp.class);
+                    LOGGER.info("微信退款返回信息{}", JSON.toJSONString(wxrefundrsp));
+                    if ("SUCCESS".equals(wxrefundrsp.getReturn_code())) {
+                        if ("SUCCESS".equals(wxrefundrsp.getResult_code())) {
+                            LOGGER.info("微信退款成功,插入退款流水记录");
+                            insertTrade(orderBO, tradeNo,wxrefundrsp.getRefund_id(),String.valueOf(Double.parseDouble(wxrefundrsp.getTotal_fee()) / 100),new Date(),"WEIXIN");
+
+                            sendReturnMessage(orderBO, httpServletRequest, String.valueOf(Double.parseDouble(wxrefundrsp.getTotal_fee()) / 100), user);
+                        }else{
+                            LOGGER.error("微信退款失败：", wxrefundrsp.getErr_code_des());
+                            throw new ServiceException(9999, wxrefundrsp.getReturn_msg());
+                        }
+                    }else {
+                        LOGGER.error("微信退款失败：", wxrefundrsp.getReturn_msg());
+                        throw new ServiceException(9999, wxrefundrsp.getReturn_msg());
+                    }
+
+                }
+            }else {
                 throw new ServiceException(4956);
             }
         } else if ("POINTS".equals(orderBO.getTradeMethod())) {
@@ -1642,13 +1677,40 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    public User optUserAndOrder(OrderBO orderBO, OrderProductBO orderProductBO, VipLogBO vipLogBO) {
+        //扣除订单获得的积分
+        if(orderBO.getGiftPoints() != null && orderBO.getGiftPoints() != 0){
+            LOGGER.info("扣除订单获得的积分");
+            Order order = new Order();
+            BeanUtils.copyProperties(orderBO, order);
+            insertReturnPoints(order, 0d, order.getGiftPoints());
+        }
+
+        // 插入订单日志-已完成
+        String remark;
+        if (vipLogBO.getSource() != null) {
+            remark = "已完成退款。回退到该订单：" + vipLogBO.getSource();
+        } else {
+            remark = "已完成退款。";
+        }
+        insertLog(orderBO.getOrderNo(), "9", Utils.getAdminId(), remark, "0");
+
+        //将订单状态改成已退单
+        orderBO.setOrderStatus("9");
+        Order order = new Order();
+        BeanUtils.copyProperties(orderBO, order);
+        orderMapper.update(order);
+        User user = userMapper.selectOne(orderBO.getUserId());
+        updateVipInfo(vipLogBO, user, orderBO.getOrderNo(), orderProductBO.getSpecInfo());
+        return user;
+    }
+
     /**
      * 插入支付宝交易记录
      *
      * @throws ParseException
      */
-    public void insertTrade(OrderBO orderBO, RefundRes refundRes) throws ParseException {
-        String tradeNo = DateUtils.getJYLSH();
+    public void insertTrade(OrderBO orderBO,String tradeNo, String aliTrandeNo,String refundFee,Date gmtRefundPay,String payMethod){
         Trade trade = new Trade();
         trade.setOrderNo(orderBO.getOrderNo());
         trade.setTradeNo(tradeNo);
@@ -1659,14 +1721,14 @@ public class OrderServiceImpl implements OrderService {
 
         TradeLog tradeLog = new TradeLog();
         tradeLog.setTradeNo(tradeNo);
-        tradeLog.setAliTrandeNo(refundRes.getTrade_no());
+        tradeLog.setAliTrandeNo(aliTrandeNo);
         tradeLog.setTradeStatus("2");
         tradeLog.setTradeType("2");
-        tradeLog.setAmount(Double.parseDouble(refundRes.getRefund_fee()));
-        tradeLog.setTradeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(refundRes.getGmt_refund_pay()));
+        tradeLog.setAmount(Double.parseDouble(refundFee));
+        tradeLog.setTradeTime(gmtRefundPay);
         tradeLog.setCreateTime(date);
         tradeLog.setLastUpdate(date);
-        tradeLog.setPayMethod("ALIPAY");
+        tradeLog.setPayMethod(payMethod);
         tradeLogMapper.insertTradeLog(tradeLog);
     }
 
@@ -1735,7 +1797,7 @@ public class OrderServiceImpl implements OrderService {
         }
         //更新会员日志
         vipLogBO.setSource("会员退订");
-        vipLogService.insert(vipLogBO);
+        vipLogService.insert(vipLogBO,2);
         //修改用户信息
         user.setVipLevel(vipLogBO.getLevelId());
         user.setVipExpireDate(vipLogBO.getVipExpireDate());
@@ -1743,13 +1805,13 @@ public class OrderServiceImpl implements OrderService {
         LOGGER.info("OrderServiceImpl.updateVipInfo------End");
     }
 
-    public void sendReturnMessage(OrderBO orderBO, HttpServletRequest httpServletRequest, RefundRes refundRes, User user) {
-        String content = RemindConstant.REFUND_PREFIX + refundRes.getRefund_fee() + RemindConstant.REFUND_SUFFIX + orderBO.getOrderNo();
+    public void sendReturnMessage(OrderBO orderBO, HttpServletRequest httpServletRequest, String refundFee, User user) {
+        String content = RemindConstant.REFUND_PREFIX + refundFee + RemindConstant.REFUND_SUFFIX + orderBO.getOrderNo();
         Map<String, String> map = new HashMap<>();
         map.put("first", "您好，欢迎使用财税平台");
         map.put("remark", "感谢使用财税平台，祝您生活愉快！");
         map.put("keyword1", content);
-        map.put("keyword2", refundRes.getRefund_fee());
+        map.put("keyword2", refundFee);
         map.put("keyword3", DateUtils.dateToStr(new Date()));
         String templateId = "NkWLcHrxI0it-LZm9yuFinPpSVJFtbUCDxyvxXSKsaM";
 

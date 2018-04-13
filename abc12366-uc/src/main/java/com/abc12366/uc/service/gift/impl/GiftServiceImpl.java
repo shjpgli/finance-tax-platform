@@ -146,6 +146,7 @@ public class GiftServiceImpl implements GiftService {
     @Transactional(value = "db1TxManager", rollbackFor = {ServiceException.class, SQLException.class})
     @Override
     public void buyGift(Map<String, Object> map) {
+        LOGGER.info("礼包申请：{}",map);
         //查询礼物信息
         String userId = (String) map.get("userId");
         UgiftApplyBO ugiftApply = (UgiftApplyBO)map.get("ugiftApply");
@@ -207,6 +208,7 @@ public class GiftServiceImpl implements GiftService {
             tempApply.setGiftAmount(gift.getSellingPrice());
             tempApply.setGiftName(gift.getName());
             tempApply.setGiftNum(giftNum);
+            LOGGER.info("新增礼包申请表与礼包关联表：{}", tempApply.toString());
             int inst = giftApplyMapper.insert(tempApply);
             if(inst != 1){
                 LOGGER.info("新增礼包申请表与礼包关联表异常：{}", inst);
@@ -220,7 +222,7 @@ public class GiftServiceImpl implements GiftService {
 
     @Override
     public void checkGiftBuy(GiftCheckBO giftCheckBO, HttpServletRequest request) {
-
+        LOGGER.info("礼物申请审核:{}",giftCheckBO);
         com.abc12366.gateway.model.User user = Utils.getAdminInfo();
         //查找礼物申请信息
         UgiftApplyBO ugiftApplyBO = ugiftApplyRoMapper.selectByApplyId(giftCheckBO.getApplyId());
@@ -316,7 +318,7 @@ public class GiftServiceImpl implements GiftService {
 
         // 加入礼包申请日志
         com.abc12366.gateway.model.User admin = Utils.getAdminInfo();
-        insertUgiftLog(ugiftApplyBO.getApplyId(), admin.getId(), admin.getNickname(), "申请单开始发货", "3");
+        insertUgiftLog(ugiftApplyBO.getApplyId(), admin.getId(), admin.getNickname(), giftSendBO.getRemark(), "3");
     }
 
     @Override
@@ -376,8 +378,8 @@ public class GiftServiceImpl implements GiftService {
     }
 
     @Override
-    public Integer getGiftStatusCount() {
-        return ugiftApplyRoMapper.getGiftStatusCount();
+    public Integer getGiftStatusCount(String status) {
+        return ugiftApplyRoMapper.getGiftStatusCount(status);
     }
 
     /**

@@ -107,4 +107,11 @@ public interface DictService {
      * @see com.abc12366.uc.model.Dict
      */
     List<Dict> selectList(String dictId);
+
+    /**
+     * 根据字典名查找所有子节点
+     * @param dictId 字典
+     * @return
+     */
+    DictBO selectListByName(String dictId);
 }

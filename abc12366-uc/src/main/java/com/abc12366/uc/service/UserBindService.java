@@ -178,7 +178,7 @@ public interface UserBindService {
      * @param ty21Object 电子申报返回税号信息
      * @return UserDzsb
      */
-    UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object);
+    UserDzsb updateDzsb(String id,String userId, TY21Xml2Object ty21Object,String bdgroup);
 
     /**
      * 查询电子申报绑定关系详情
@@ -211,4 +211,8 @@ public interface UserBindService {
     TY21Xml2Object analyzeXmlTY11(Map resMap, String nsrsbh) throws ValidationException;
 
 	List<NsrsbhPasswordLog> restPwdLogList(Map map,int page,int size);
+
+	List<Map<String, String>> findBroup(String userId);
+
+	int updateDzsbgroup(Map<String, String> map);
 }

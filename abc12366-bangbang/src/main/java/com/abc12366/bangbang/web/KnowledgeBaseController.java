@@ -4,6 +4,7 @@ import com.abc12366.bangbang.model.KnowledgeBase;
 import com.abc12366.bangbang.model.KnowledgeTagRel;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseHotParamBO;
+import com.abc12366.bangbang.model.bo.KnowledgeBaseListBO;
 import com.abc12366.bangbang.model.bo.KnowledgeBaseParamBO;
 import com.abc12366.bangbang.service.KnowledgeBaseService;
 import com.abc12366.gateway.util.Constant;
@@ -184,7 +185,7 @@ public class KnowledgeBaseController {
         }
         KnowledgeBaseParamBO param = new KnowledgeBaseParamBO(categoryCode, type, keywords, isOpen, status, order);
         param.setRecommend(recommend);
-        List<KnowledgeBase> list = knowledgeBaseService.selectList(param);
+        List<KnowledgeBaseListBO> list = knowledgeBaseService.selectList(param);
 
         return (list == null) ?
                 ResponseEntity.ok(Utils.kv()) :

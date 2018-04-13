@@ -20,7 +20,7 @@ public interface BusinessMsgRoMapper {
      */
     List<BusinessMessage> selectUnreadList(BusinessMessage data);
 
-    BusinessMessage selectOne(String id);
+    BusinessMessage selectOne(BusinessMessage data);
 
     List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map);
 

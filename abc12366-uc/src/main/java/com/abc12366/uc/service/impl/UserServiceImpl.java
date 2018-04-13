@@ -3,6 +3,7 @@ package com.abc12366.uc.service.impl;
 import com.abc12366.gateway.component.SpringCtxHolder;
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.util.*;
+import com.abc12366.uc.job.reportdate.ReportDateJob;
 import com.abc12366.uc.mapper.db1.TokenMapper;
 import com.abc12366.uc.mapper.db1.UamountLogMapper;
 import com.abc12366.uc.mapper.db1.UserExtendMapper;
@@ -11,17 +12,15 @@ import com.abc12366.uc.mapper.db2.ExperienceLevelRoMapper;
 import com.abc12366.uc.mapper.db2.TokenRoMapper;
 import com.abc12366.uc.mapper.db2.UserRoMapper;
 import com.abc12366.uc.mapper.db2.VipPrivilegeLevelRoMapper;
-import com.abc12366.uc.model.BaseObject;
-import com.abc12366.uc.model.Token;
-import com.abc12366.uc.model.User;
-import com.abc12366.uc.model.UserExtend;
-import com.abc12366.uc.model.UserSubscriptionInfo;
+import com.abc12366.uc.model.*;
 import com.abc12366.uc.model.bo.*;
 import com.abc12366.uc.model.gift.UamountLog;
 import com.abc12366.uc.service.*;
 import com.abc12366.uc.service.admin.AdminOperationService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -37,12 +36,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -154,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 逗号分隔的标签ID转为List
-	 * 
+	 *
 	 * @param tagId
 	 *            带逗号分隔的标签ID
 	 * @param split
@@ -177,7 +178,7 @@ public class UserServiceImpl implements UserService {
 	public User selectUser(String userId) {
 		// 新增优先查询redis
 		User user = userMapper.selectOne(userId);
-	
+
 		return user;
 	}
 
@@ -532,7 +533,7 @@ public class UserServiceImpl implements UserService {
 			bo.setLevelId(user.getVipLevel());
 			bo.setSource("系统管理员");
 			bo.setUserId(user.getId());
-			vipLogService.insert(bo);
+			vipLogService.insert(bo,2);
 
 		}
 	}
@@ -857,7 +858,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 调用message接口发送短信
-	 * 
+	 *
 	 * @param phone
 	 *            手机号
 	 * @param type
@@ -1109,44 +1110,121 @@ public class UserServiceImpl implements UserService {
 		return list;
 	}
 
-	@Override
-	public List<ExpLevelStatistic> userExpLevel(String year, int page, int size) {
-		Date start = DateUtils.strToDate(year, "yyyy");
-		Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
-		List<ExperienceLevelBO> experienceLevelBOList = experienceLevelRoMapper
-				.selectList(null);
+    @Override
+    public List<ExpLevelStatistic> userExpLevel(String year, int page, int size) {
+        Date start = DateUtils.strToDate(year, "yyyy");
+        Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
+        Date last = DateUtils.strToDate(Integer.parseInt(year) - 1 + "", "yyyy");
+        Map<String, Object> map = new HashMap<>();
+        map.put("last", last);
+        map.put("start", start);
+        map.put("end", end);
+        PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
+        List<ExpLevelStatistic> experienceLevelBOList = experienceLevelRoMapper
+                .selectLevelList(map);
+        PageInfo<ExpLevelStatistic> pageInfo = new PageInfo<>(experienceLevelBOList);
 
-		List<ExpLevelStatistic> expLevelStatisticList = new ArrayList<>();
-		for (ExperienceLevelBO experienceLevelBO : experienceLevelBOList) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("start", start);
-			map.put("end", end);
-			map.put("min", experienceLevelBO.getMinValue());
-			map.put("max", experienceLevelBO.getMaxValue());
-			float thisYearIncrease = experienceLogService.selectCount(map);
+        List<ExpLevelStatistic> expLevelStatisticList = new ArrayList<>();
 
-			Map<String, Object> lastYeaMap = new HashMap<>();
-			lastYeaMap.put("end", start);
-			lastYeaMap.put("min",experienceLevelBO.getMinValue());
-			lastYeaMap.put("max", experienceLevelBO.getMaxValue());
-			float lastYearAll = experienceLogService.selectCount(lastYeaMap);
+        int threadNum = (int) pageInfo.getTotal();
+        List<Future<ExpLevelStatistic>> futureList = new ArrayList<>();
 
-			float all = userRoMapper.selectExpCount(map);
+        LOGGER.info("开始创建线程池.......");
+        long time = System.currentTimeMillis();
 
-			ExpLevelStatistic expLevelStatistic = new ExpLevelStatistic();
-			expLevelStatistic.setAll((int) all);
-			expLevelStatistic.setThisYearIncrease(thisYearIncrease);
-			expLevelStatistic.setLastYearAll(lastYearAll);
-			expLevelStatistic.setLevelCode(experienceLevelBO.getName());
-			expLevelStatistic.setLevelName(experienceLevelBO.getMedal());
-			expLevelStatistic.setIncreasePercent(lastYearAll == 0 ? "/"
-					: new DecimalFormat("#.##").format(thisYearIncrease
-							/ lastYearAll * 100)
-							+ "%");
-			expLevelStatisticList.add(expLevelStatistic);
-		}
-		return expLevelStatisticList;
-	}
+        // 创建线程池
+        ExecutorService executorService = new ThreadPoolExecutor(threadNum, threadNum, 0L, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<Runnable>(threadNum), new ThreadFactory() {
+
+            @Override
+            public Thread newThread(Runnable runnable) {
+                long ll = System.currentTimeMillis();
+                Thread t = new Thread(runnable, "ReportDateThread_" + ll);
+//                LOGGER.info("启用线程数{}"+"ReportDateThread_"+ll);
+                return t;
+            }
+        });
+
+        for (ExpLevelStatistic experienceLevelBO : pageInfo.getList()) {
+            Future<ExpLevelStatistic> future = executorService.submit(new UserLevelThread(year,experienceLevelBO));
+            futureList.add(future);
+        }
+
+        // 记录线程结果
+        for (int i = 0; i < futureList.size(); i++) {
+            try {
+                Future<ExpLevelStatistic> future = futureList.get(i);
+                ExpLevelStatistic result = future.get();
+                if(result != null){
+                    expLevelStatisticList.add(result);
+                }
+            } catch (Exception e) {
+                LOGGER.error("线程结果记录异常:", e);
+            }
+        }
+        long time2 = System.currentTimeMillis();
+        LOGGER.info("线程池处理完毕：" +  ",耗时：" + (time2 - time));
+
+        // 关闭线程池
+        executorService.shutdown();
+
+        return expLevelStatisticList;
+    }
+
+
+    public class UserLevelThread implements Callable<ExpLevelStatistic> {
+        private String year;
+        private ExpLevelStatistic experienceLevelBO;
+
+        public UserLevelThread(String year,ExpLevelStatistic experienceLevelBO) {
+            this.year = year;
+            this.experienceLevelBO = experienceLevelBO;
+        }
+
+        @Override
+        public ExpLevelStatistic call() {
+
+            Date start = DateUtils.strToDate(year, "yyyy");
+            Date end = DateUtils.strToDate(Integer.parseInt(year) + 1 + "", "yyyy");
+            Date last = DateUtils.strToDate(Integer.parseInt(year) - 1 + "", "yyyy");
+            Map<String, Object> hashMap = new HashMap<>();
+            hashMap.put("start", start);
+            hashMap.put("end", end);
+            hashMap.put("min", experienceLevelBO.getMinValue());
+            hashMap.put("max", experienceLevelBO.getMaxValue());
+            LOGGER.info("执行SQL时间.......");
+            long time = System.currentTimeMillis();
+            float thisYearIncrease = experienceLogService.selectCount(hashMap);
+            long time3 = System.currentTimeMillis();
+            LOGGER.info("执行SQL时间：" + ",耗时：" + (time3 - time)+"; min = "+experienceLevelBO.getMinValue()+"; max = "+experienceLevelBO.getMaxValue());
+
+            Map<String, Object> lastYeaMap = new HashMap<>();
+            lastYeaMap.put("start", last);
+            lastYeaMap.put("end", start);
+            lastYeaMap.put("min",experienceLevelBO.getMinValue());
+            lastYeaMap.put("max", experienceLevelBO.getMaxValue());
+            float lastYearAll = experienceLogService.selectCount(lastYeaMap);
+
+            //float all = userRoMapper.selectExpCount(map);
+
+            ExpLevelStatistic expLevelStatistic = new ExpLevelStatistic();
+            expLevelStatistic.setAll(experienceLevelBO.getAll());
+            expLevelStatistic.setThisYearIncrease(thisYearIncrease);
+            expLevelStatistic.setLastYearAll(lastYearAll);
+            expLevelStatistic.setLevelCode(experienceLevelBO.getLevelCode());
+            expLevelStatistic.setLevelName(experienceLevelBO.getLevelName());
+            expLevelStatistic.setIncreasePercent(lastYearAll == 0 ? "/"
+                    : new DecimalFormat("#.##").format(thisYearIncrease
+                    / lastYearAll * 100)
+                    + "%");
+//            expLevelStatisticList.add(expLevelStatistic);
+            long time2 = System.currentTimeMillis();
+            LOGGER.info("单个处理时间：" +  ",耗时：" + (time2 - time)+"; min = "+experienceLevelBO.getMinValue()+"; max = "+experienceLevelBO.getMaxValue());
+            return expLevelStatistic;
+        }
+    }
+
+
 
 	@Override
 	public List<VipLevelStatistic> userVip(String year) {

@@ -38,11 +38,13 @@ public class QueFactionMemberController {
     @GetMapping
     public ResponseEntity selectList(@RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size,
+                                     @RequestParam(value = "userId",required = false)String userId,
                                      @RequestParam(value = "factionId", required = false) String factionId,
                                      @RequestParam(value = "status", required = false) String status) {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("factionId", factionId);//
         dataMap.put("status", status);//
+        dataMap.put("userId", userId);
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<QuestionFactionMemberBo> dataList = queFactionMemberService.selectList(dataMap);
         //计算帮派成员荣誉值

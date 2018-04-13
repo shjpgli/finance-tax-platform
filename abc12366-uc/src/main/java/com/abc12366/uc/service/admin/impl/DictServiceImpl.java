@@ -54,6 +54,27 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
+    public DictBO selectListByName(String dictId) {
+        return recursiveTree(dictId);
+    }
+
+    /**
+     * 递归算法解析成树形结构
+     *
+     * @param id id
+     */
+    public DictBO recursiveTree(String id) {
+        DictBO node = dictRoMapper.selectByFieldValue(id);
+        List<DictBO> treeNodes = dictRoMapper.selectByParentDictId(id);
+        //遍历子节点
+        for (DictBO child : treeNodes) {
+            DictBO n = recursiveTree(child.getFieldValue()); //递归
+            node.getNodes().add(n);
+        }
+        return node;
+    }
+
+    @Override
     public List<DictBO> selectFirstLevel() {
         List<Dict> dicts = dictRoMapper.selectFirstLevel();
         if (dicts == null || dicts.size() == 0) {

@@ -180,7 +180,7 @@
                 </where>
                 ORDER BY createTime DESC
             </when>
-            <when test="tagId != null and tagId.size == 0">
+            <otherwise>
                 SELECT id, username, phone, nickname, status, createTime, lastUpdate, points, exp, vipLevel, wxnickname, amount
                 FROM uc_user
                 <where>
@@ -226,7 +226,7 @@
                     </if>
                 </where>
                 ORDER BY createTime DESC
-            </when>
+            </otherwise>
         </choose>
 
     </select>

@@ -199,6 +199,7 @@
         update uc_user_dzsb uud
         <set>
             uud.status = #{status},
+            uud.bdgroup = #{bdgroup},
             <if test="nsrsbh!=null and nsrsbh !=''">uud.nsrsbh = #{nsrsbh},</if>
             <if test="nsrmc!=null and nsrmc !=''">uud.nsrmc = #{nsrmc},</if>
             <if test="shxydm!=null  and shxydm !=''">uud.shxydm = #{shxydm},</if>
@@ -213,7 +214,6 @@
             <if test="nsrlx!=null and nsrlx !=''">uud.nsrlx = #{nsrlx},</if>
             <if test="sfgtjzh!=null and sfgtjzh !=''">uud.sfgtjzh = #{sfgtjzh},</if>
             <if test="djrq!=null and djrq !=''">uud.djrq = #{djrq},</if>
-            <if test="bdgroup!=null and bdgroup !=''">uud.bdgroup = #{bdgroup},</if>
             <if test="remark!=null and remark !=''">uud.remark = #{remark}</if>
         </set>
         where id=#{id}
@@ -284,5 +284,18 @@
            </where>
            GROUP BY id DESC
     </select>
+    
+    <select id="findBroup" resultType="java.util.Map" parameterType="java.lang.String">
+           SELECT bdgroup FROM uc_user_dzsb 
+           WHERE userId= #{userId} AND bdgroup IS NOT NULL AND bdgroup !='' AND status = 1
+           GROUP BY bdgroup 
+           ORDER BY bdgroup
+    </select>
+    
+    <update id="updateDzsbgroup" parameterType="java.util.Map">
+        update uc_user_dzsb
+        SET bdgroup = #{bdgroup}
+        where id=#{id}
+    </update>
     
 </mapper>

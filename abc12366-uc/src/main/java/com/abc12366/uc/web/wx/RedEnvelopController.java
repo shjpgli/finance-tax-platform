@@ -41,6 +41,7 @@ public class RedEnvelopController {
      * @param receiveStatus 接收状态
      * @param openId        微信OPENID
      * @param secret        红包口令
+     * @param businessId    业务ID
      * @param page          当前页
      * @param size          每页大小
      * @return ResponseEntity
@@ -51,6 +52,7 @@ public class RedEnvelopController {
                                      @RequestParam(value = "receiveStatus", required = false) String receiveStatus,
                                      @RequestParam(value = "openId", required = false) String openId,
                                      @RequestParam(value = "secret", required = false) String secret,
+                                     @RequestParam(value = "businessId", required = false) String businessId,
                                      @RequestParam(value = "page", defaultValue = Constant.pageNum) int page,
                                      @RequestParam(value = "size", defaultValue = Constant.pageSize) int size) {
 
@@ -60,6 +62,7 @@ public class RedEnvelopController {
                 .receiveStatus(receiveStatus)
                 .openId(openId)
                 .secret(secret)
+                .businessId(businessId)
                 .build();
         LOGGER.info("{},{},{}", redEnvelop, page, size);
         List<WxRedEnvelop> dataList = iActivityService.selectRedEnvelopList(redEnvelop, page, size);

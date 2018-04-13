@@ -789,7 +789,7 @@ public class ContentServiceImpl implements ContentService {
     @Transactional("db1TxManager")
     @Override
     public String updateStatus2(String contentId) {
-        //contentExtMapper.updateReleaseDate2(contentId);
+        contentExtMapper.updateReleaseDate2(contentId);
         contentMapper.updateStatus2(contentId);
         return "";
     }

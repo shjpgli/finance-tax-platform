@@ -27,9 +27,10 @@ public interface VipLogService {
      * 新增会员日期，会员期限加1年，普通用户（VIP0）为10年
      *
      * @param vipLogBO 日志对象
+     * @param type 1：会员充值，2：会员退订
      * @return {@linkplain com.abc12366.uc.model.bo.VipLogBO VipLogBO}日志对象
      */
-    VipLogBO insert(VipLogBO vipLogBO);
+    VipLogBO insert(VipLogBO vipLogBO,int type);
 
     /**
      * 根据编码查询会员日志列表

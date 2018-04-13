@@ -87,6 +87,17 @@ public class DictController {
     }
 
     /**
+     * 根据字典ID查找所有子节点
+     * @param dictId 字典ID
+     */
+    @GetMapping(path = "/tree")
+    public ResponseEntity selectListByName(@RequestParam(value = "dictId", required = false) String dictId) {
+        DictBO dictBO = dictService.selectListByName(dictId);
+        LOGGER.info("{}", dictBO);
+        return ResponseEntity.ok(Utils.kv("data", dictBO));
+    }
+
+    /**
      * 查找字典第一级列表
      *
      * @return ResponseEntity {@linkplain com.abc12366.uc.model.Dict Dict}列表响应实体

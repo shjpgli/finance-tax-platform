@@ -1,9 +1,9 @@
 package com.abc12366.uc.model.bo;
 
-import org.hibernate.validator.constraints.Email;
-
-import javax.validation.constraints.Pattern;
 import java.util.Date;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * @author lijun <ljun51@outlook.com>
@@ -13,11 +13,10 @@ import java.util.Date;
 public class UserUpdateBO {
 
     private String id;
-    @Pattern(regexp = "^[a-zA-Z0-9]{3,15}$", message = "请输入3-15位字母或数字的用户名！")
+
+    @Length(min = 2, max = 20)
     private String username;
-//    @Pattern(regexp = "^\\d{11}$",message = "手机号码格式不正确")
-//    @Size(min = 11, max = 11)
-//    private String phone;
+
     @Email
     private String regMail;
     private String regIP;

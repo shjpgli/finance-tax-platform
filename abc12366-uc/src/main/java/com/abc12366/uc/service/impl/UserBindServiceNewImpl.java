@@ -420,9 +420,9 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
 		List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
 		if (nsrxxboList2.size() == 1) {
-			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object);
+			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
 		} else if (nsrxxboList2.size() > 1) {
-			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object);
+			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
 			nsrxxboList2.remove(nsrxxboList2.get(0));
 			for (UserDzsb ud : nsrxxboList2) {
 				userBindMapper.deleteDzsb(ud.getId());
@@ -433,7 +433,7 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		return ty21Object;
 	}
 
-	public UserDzsb updateDzsb(String id, String userId, TY21Xml2Object ty21Object) {
+	public UserDzsb updateDzsb(String id, String userId, TY21Xml2Object ty21Object,String bdgroup) {
 		redisTemplate.delete(userId + "_DzsbList");
 
 		if (StringUtils.isEmpty(userId) || ty21Object == null || StringUtils.isEmpty(ty21Object.getY_NSRSBH())
@@ -722,9 +722,9 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		queryParam.setNsrsbh(ty21Object.getY_NSRSBH());
 		List<UserDzsb> nsrxxboList2 = userBindMapper.selectListByUserIdAndNsrsbh(queryParam);
 		if (nsrxxboList2.size() == 1) {
-			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object);
+			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
 		} else if (nsrxxboList2.size() > 1) {
-			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object);
+			updateDzsb(nsrxxboList2.get(0).getId(), userId, ty21Object,nsrxxboList2.get(0).getBdgroup());
 			nsrxxboList2.remove(nsrxxboList2.get(0));
 			for (UserDzsb ud : nsrxxboList2) {
 				userBindMapper.deleteDzsb(ud.getId());
@@ -805,8 +805,8 @@ public class UserBindServiceNewImpl implements UserBindServiceNew {
 		} else {
 			redisTemplate.delete(monthKey);
 			redisTemplate.opsForValue().set(monthKey, "1",
-					DateUtils.milliSecondsBetween(new Date(), DateUtils.getFirstDayOfLastMonth()),
-					TimeUnit.MILLISECONDS);
+					DateUtils.differentDaysByMillisecond(new Date(), DateUtils.getFirstDayOfLastMonth()),
+					TimeUnit.DAYS);
 		}
 	}
 

@@ -2,6 +2,7 @@ package com.abc12366.message.service.impl;
 
 import com.abc12366.gateway.exception.ServiceException;
 import com.abc12366.gateway.model.BodyStatus;
+import com.abc12366.gateway.util.DateUtils;
 import com.abc12366.gateway.util.RedisConstant;
 import com.abc12366.gateway.util.Utils;
 import com.abc12366.message.mapper.db1.BusinessMsgMapper;
@@ -16,6 +17,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -57,16 +61,24 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> selectList(BusinessMessage data, int page, int size) {
+    	if(StringUtils.isNotEmpty(data.getDateStr())){
+    	   businessMsgMapper.createTable(data.getDateStr());
+    	}
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         return businessMsgRoMapper.selectList(data);
     }
 
     @Override
-    public BusinessMessage insert(BusinessMessage data) {
+    public BusinessMessage insert(BusinessMessage data) {  	
         if (data != null) {
+        	Timestamp now = new Timestamp(System.currentTimeMillis());
+        	if(StringUtils.isEmpty(data.getDateStr())){
+        		data.setDateStr(DateUtils.getDateFormat(now, "yyyyMM"));
+        	}
+        	businessMsgMapper.createTable(data.getDateStr());
+        	
             data.setId(Utils.uuid());
             data.setStatus("1");
-            Timestamp now = new Timestamp(System.currentTimeMillis());
             data.setCreateTime(now);
             data.setLastUpdate(now);
             businessMsgMapper.insert(data);
@@ -81,11 +93,14 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> insert(BusinessBatchMessage data) {
+    	Timestamp now = new Timestamp(System.currentTimeMillis());
+    	businessMsgMapper.createTable(DateUtils.getDateFormat(now, "yyyyMM"));
+    	  	
         List<BusinessMessage> dataList = null;
         if (data != null && data.getUserIds().size() > 0) {
             dataList = new ArrayList<>();
             for (String userId : data.getUserIds()) {
-                Timestamp now = new Timestamp(System.currentTimeMillis());
+                
                 BusinessMessage bm = new BusinessMessage.Builder()
                         .id(Utils.uuid())
                         .userId(userId)
@@ -97,6 +112,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
                         .type(data.getType())
                         .url(data.getUrl())
                         .build();
+                bm.setDateStr(DateUtils.getDateFormat(now, "yyyyMM"));
                 dataList.add(bm);
 
                 String key = userId + BUSINESS_MSG_KEY;
@@ -104,7 +120,8 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
                     redisTemplate.delete(key);
                 }
             }
-            businessMsgMapper.batchInsert(dataList);
+            
+            businessMsgMapper.batchInsert(dataList,DateUtils.getDateFormat(now, "yyyyMM"));
         }
         return dataList;
     }
@@ -118,10 +135,14 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public BusinessMessage update(BusinessMessage data) {
-        BusinessMessage bm = businessMsgRoMapper.selectOne(data.getId());
+    	
+    	businessMsgMapper.createTable(DateUtils.getDateFormat(new Date(), "yyyyMM"));
+    	data.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
+        BusinessMessage bm = businessMsgRoMapper.selectOne(data);
         if (bm != null) {
             bm.setStatus(data.getStatus());
             bm.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+            bm.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
             businessMsgMapper.update(bm);
 
             String key = bm.getUserId() + BUSINESS_MSG_KEY;
@@ -134,10 +155,16 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public BusinessMessage selectOne(String id) {
-        BusinessMessage data = businessMsgRoMapper.selectOne(id);
+    	
+    	businessMsgMapper.createTable(DateUtils.getDateFormat(new Date(), "yyyyMM"));
+    	BusinessMessage data = new BusinessMessage();
+    	data.setId(id);
+    	data.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
+        data = businessMsgRoMapper.selectOne(data);
         // 如果消息未读，置为已读
         if ("1".equals(data.getStatus())) {
             data.setStatus("2");
+            data.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
             this.update(data);
 
             String key = data.getUserId() + BUSINESS_MSG_KEY;
@@ -150,6 +177,7 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public BodyStatus delete(BusinessMessage data) {
+    	businessMsgMapper.createTable(DateUtils.getDateFormat(new Date(), "yyyyMM"));
         BusinessMessage bm = this.selectOne(data.getId());
         // 是否为本人操作
         if (data.getUserId().equals(bm.getUserId())) {
@@ -168,6 +196,9 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessageAdmin> selectListByUsername(Map<String, Object> map, int page, int size) {
+    	if(StringUtils.isNotEmpty(map.get("dateStr").toString())){
+    	   businessMsgMapper.createTable(map.get("dateStr").toString());
+    	}
         PageHelper.startPage(page, size, true).pageSizeZero(true).reasonable(true);
         List<BusinessMessageAdmin> list = businessMsgRoMapper.selectListByUsername(map);
         for(BusinessMessageAdmin messageAdmin:list){
@@ -180,6 +211,10 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public List<BusinessMessage> selectUnreadList(BusinessMessage bm) {
+    	if(StringUtils.isNotEmpty(bm.getDateStr())){
+    	 businessMsgMapper.createTable(bm.getDateStr());
+    	}
+    	bm.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
         String key = Utils.getUserId() + BUSINESS_MSG_KEY;
         List<BusinessMessage> dataList;
         if (redisTemplate.hasKey(key)) {
@@ -197,6 +232,8 @@ public class BusinessMsgServiceImpl implements BusinessMsgService {
 
     @Override
     public void batchUpdateToRead(BatchUpdateMsgToReadBO bo) {
+    	businessMsgMapper.createTable(DateUtils.getDateFormat(new Date(), "yyyyMM"));
+    	bo.setDateStr(DateUtils.getDateFormat(new Date(), "yyyyMM"));
         if (bo == null || bo.getIds() == null || bo.getIds().size() < 1) {
             return;
         }
