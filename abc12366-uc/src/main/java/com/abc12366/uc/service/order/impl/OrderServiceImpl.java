@@ -1614,6 +1614,7 @@ public class OrderServiceImpl implements OrderService {
                     int price = (int)(dealPrice*100);
                     wxRefund.setRefund_fee(String.valueOf(price));
                     wxRefund.setTotal_fee(String.valueOf(price));
+                    wxRefund.setNotify_url(SpringCtxHolder.getProperty("abc.mch_refund"));
 
                     User user = optUserAndOrder(orderBO, orderProductBO, vipLogBO);
 

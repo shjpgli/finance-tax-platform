@@ -18,6 +18,7 @@ public class WxpayOrderRsp extends WxRspBase {
 	private String sign; // 签名
 	private String sign_type;// 签名类型
     private String mweb_url;
+
 	
 
 	public String getAppid() {
