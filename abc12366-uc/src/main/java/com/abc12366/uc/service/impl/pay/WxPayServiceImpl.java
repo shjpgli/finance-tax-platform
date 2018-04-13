@@ -103,7 +103,7 @@ public class WxPayServiceImpl implements IWxPayService {
 				tradeLog.setTradeTime(DateUtils.strToDate(wxrefundqueryrsp.getRefund_success_time_0(), "yyyy-MM-dd HH:mm:ss"));
 				tradeLog.setLastUpdate(now);
 				tradeLog.setPayMethod("WEIXIN");
-				tradeLogService.update(tradeLog);
+//				tradeLogService.update(tradeLog);
 			}
 		}
 		return wxrefundqueryrsp;

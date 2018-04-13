@@ -553,6 +553,7 @@ public class OrderExchangeServiceImpl implements OrderExchangeService {
                                 int price = (int)(order.getTotalPrice()*100);
                                 wxRefund.setRefund_fee(String.valueOf(amount));
                                 wxRefund.setTotal_fee(String.valueOf(price));
+                                wxRefund.setNotify_url(SpringCtxHolder.getProperty("abc.mch_refund"));
 
                                 //扣除订单获得的积分
                                 if(order.getGiftPoints() != null && order.getGiftPoints() != 0){
